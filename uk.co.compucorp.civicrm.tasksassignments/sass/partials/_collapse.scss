@@ -1,0 +1,1 @@
+a.btn-collapse {  background: none;  border: 0 none;  padding: 0;  cursor: pointer;  vertical-align: baseline;  &:active {    @include box-shadow(none);  }  .fa {    margin-right: 3px;  }}
