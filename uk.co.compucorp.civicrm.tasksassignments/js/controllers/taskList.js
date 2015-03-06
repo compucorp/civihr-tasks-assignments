@@ -1,0 +1,1 @@
+define(['controllers/controllers'], function(controllers){    controllers.controller('TaskListCtrl',['$scope', '$log', 'taskList',        function($scope, $log, taskList){            $log.debug('Controller: TaskListCtrl');            $scope.taskList = taskList;        }]);});
