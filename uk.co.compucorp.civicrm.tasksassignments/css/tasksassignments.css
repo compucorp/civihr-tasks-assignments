@@ -9707,6 +9707,10 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .x-ng-cloak {
   display: none !important;
 }
+/* line 1, ../sass/modules/_utils.scss */
+#civitasks .text-normal {
+  font-weight: normal;
+}
 /* line 11, ../sass/partials/_global.scss */
 #civitasks .container {
   background-color: #fff;
@@ -9731,6 +9735,10 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 12, ../sass/partials/_collapse.scss */
 #civitasks a.btn-collapse .fa {
   margin-right: 3px;
+}
+/* line 7, ../sass/partials/_forms.scss */
+#civitasks .form-task h3 {
+  margin-top: 0;
 }
 /* line 1, ../sass/partials/_dropdowns.scss */
 #civitasks .dropdown-menu {
@@ -9828,6 +9836,18 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 86, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-assignment-type {
   margin-right: 15px;
+}
+/* line 3, ../sass/partials/_modals.scss */
+#civitasks .modal-content .row,
+#civitasks .modal-content .form-horizontal .form-group {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+/* line 11, ../sass/partials/_modals.scss */
+#civitasks .modal-content [class^="col-"],
+#civitasks .modal-content [class*=" col-"] {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 /* line 1, ../sass/partials/_panels.scss */
 #civitasks .panel {

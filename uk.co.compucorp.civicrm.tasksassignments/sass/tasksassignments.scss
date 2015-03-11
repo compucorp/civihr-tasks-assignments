@@ -76,6 +76,7 @@
   @import "modules/print";
   @import "modules/fontawesome";
   @import "modules/angular";
+  @import "modules/utils";
 
   @import "partials/global";
   @include global;
@@ -83,5 +84,6 @@
   @import "partials/forms";
   @import "partials/dropdowns";
   @import "partials/lists";
+  @import "partials/modals";
   @import "partials/panels";
 }
