@@ -9857,3 +9857,11 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   width: auto;
   background-position: 0 0;
 }
+/* line 1, ../sass/partials/_tables.scss */
+#civitasks [datepicker-popup-wrap] {
+  padding: 10px;
+}
+/* line 4, ../sass/partials/_tables.scss */
+#civitasks [datepicker-popup-wrap] table > thead > tr > th {
+  vertical-align: middle;
+}

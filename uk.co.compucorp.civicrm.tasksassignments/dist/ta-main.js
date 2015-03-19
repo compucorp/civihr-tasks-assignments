@@ -1,0 +1,1 @@
+define("ta-main",function(){});
