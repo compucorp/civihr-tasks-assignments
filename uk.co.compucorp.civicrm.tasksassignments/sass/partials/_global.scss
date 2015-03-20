@@ -1,1 +1,1 @@
-@mixin global {  padding-top: 20px;}
+@mixin global {  padding: {    bottom: floor(($grid-gutter-width / 2));    left: floor(($grid-gutter-width / 2));    right: floor(($grid-gutter-width / 2));    top: floor(($grid-gutter-width / 2));  }  padding-bottom: floor(($grid-gutter-width / 2));  padding-top: floor(($grid-gutter-width / 2));  .container {    background-color: #fff;    max-width: 100%;    padding-top: floor(($grid-gutter-width / 2));    @include box-shadow(0 3px 5px 0px rgba(220, 219, 223, 1));  }}

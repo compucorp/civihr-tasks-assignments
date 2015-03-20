@@ -1,6 +1,7 @@
 @import "modules/config";
 
 @import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
 @import "compass/css3/animation";
 @import "compass/css3/transform";
 
@@ -75,11 +76,15 @@
   @import "modules/print";
   @import "modules/fontawesome";
   @import "modules/angular";
+  @import "modules/utils";
 
   @import "partials/global";
   @include global;
   @import "partials/collapse";
   @import "partials/forms";
+  @import "partials/dropdowns";
   @import "partials/lists";
+  @import "partials/modals";
   @import "partials/panels";
+  @import "partials/tables";
 }
