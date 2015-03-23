@@ -1,6 +1,7 @@
 *
 !.gitignore
-!uk.co.compucorp.civicrm.tasksassignments
+!uk.co.compucorp.civicrm.tasksassignments/
+!uk.co.compucorp.civicrm.tasksassignments/*
 uk.co.compucorp.civicrm.tasksassignments/.sass-cache
 uk.co.compucorp.civicrm.tasksassignments/.sass-cache/*
 .idea
