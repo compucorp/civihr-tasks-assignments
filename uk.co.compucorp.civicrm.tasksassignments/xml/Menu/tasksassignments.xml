@@ -12,4 +12,10 @@
     <title>Tasks</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/admin/options/activity_type</path>
+    <page_callback>CRM_Tasksassignments_Page_Options</page_callback>
+    <title>Options</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

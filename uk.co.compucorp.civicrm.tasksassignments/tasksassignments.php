@@ -108,6 +108,17 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
 }
 
 /**
+ * Implementation of hook_civicrm_entityTypes
+ */
+function tasksassignments_civicrm_entityTypes(&$entityTypes) {
+  $entityTypes[] = array(
+    'name' => 'Task',
+    'class' => 'CRM_Tasksassignments_DAO_Task',
+    'table' => 'civicrm_activity',
+  );
+}
+
+/**
  * Implementation of hook_civicrm_pageRun
  */
 function tasksassignments_civicrm_pageRun($page) {
