@@ -32,7 +32,7 @@
  */
 require_once 'CRM/Core/DAO.php';
 require_once 'CRM/Utils/Type.php';
-class CRM_Tasksassignments_DAO_Task extends CRM_Core_DAO
+class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
 {
   /**
    * static instance to hold the table name
@@ -560,9 +560,10 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Core_DAO
   {
     if (!(self::$_fieldKeys)) {
       self::$_fieldKeys = array(
-        'id' => 'activity_id',
+        'id' => 'task_id',
         //'source_record_id' => 'source_record_id',
-        'type_id' => 'task_type_id',
+        'activity_type_id' => 'task_type_id',
+          //'activity_type_id' => 'activity_type_id',
         'subject' => 'task_subject',
         'date_time' => 'activity_date_time',
         //'duration' => 'activity_duration',

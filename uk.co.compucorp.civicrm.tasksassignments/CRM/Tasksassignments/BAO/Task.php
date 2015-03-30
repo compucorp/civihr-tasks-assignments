@@ -1,7 +1,7 @@
 <?php
 
-class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
-
+class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task
+{
   /**
    * Create a new Task based on array-data
    *

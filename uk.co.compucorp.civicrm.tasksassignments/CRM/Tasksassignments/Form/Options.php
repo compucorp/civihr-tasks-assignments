@@ -60,7 +60,18 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
     foreach ($options as $value) {
       $newOptions[$value['attr']['value']] = $value['text'];
     }
-    $newOptions['key1'] = 'value1';
+    
+    $civiDocumentId = CRM_Core_Component::getComponentID('CiviDocument');
+    if ($civiDocumentId !== null)
+    {
+        $newOptions[$civiDocumentId] = t('Documents and Assignments');
+    }
+    
+    $civiTaskId = CRM_Core_Component::getComponentID('CiviTask');
+    if ($civiTaskId !== null)
+    {
+        $newOptions[$civiTaskId] = t('Tasks and Assignments');
+    }
     
     $this->add('select',
       'component_id',
