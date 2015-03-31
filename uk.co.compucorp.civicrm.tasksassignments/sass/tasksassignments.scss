@@ -78,6 +78,7 @@
   @import "modules/fonts";
   @import "modules/angular";
   @import "modules/utils";
+  @import "modules/select";
 
   @import "partials/global";
   @include global;
@@ -87,5 +88,6 @@
   @import "partials/lists";
   @import "partials/modals";
   @import "partials/panels";
+  @import "partials/select";
   @import "partials/tables";
 }
