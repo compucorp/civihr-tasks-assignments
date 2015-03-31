@@ -430,3 +430,57 @@ function _civicrm_api3_task_getlist_output($result, $request) {
   return $output;
 }
 
+function civicrm_api3_task_gettypesbycomponent($params) {
+    
+    if (!isset($params['component'])) {
+        throw new API_Exception(ts("Please specify 'component' value."));
+    }
+    $component = $params['component'];
+    
+    $optionGroup = civicrm_api3('OptionGroup', 'get', array(
+      'sequential' => 1,
+      'name' => "activity_type",
+    ));
+
+    if (!isset($optionGroup['id'])) {
+      throw new API_Exception(ts("Cannot find OptionGroup with 'name' = 'activity_type'."));
+    }
+    
+    $componentQuery = 'SELECT * FROM civicrm_component WHERE name = %1';
+    $componentParams = array(
+        1 => array($component, 'String'),
+    );
+    $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
+    if ($componentResult->fetch())
+    {
+        $componentId = $componentResult->id;
+        
+        $result = civicrm_api3('OptionValue', 'get', array(
+          'sequential' => 1,
+          'option_group_id' => $optionGroup['id'],
+          'component_id' => $componentId,
+        ));
+        
+        return $result;
+    }
+    
+    throw new API_Exception(ts("Cannot find given component."));
+}
+
+function civicrm_api3_task_getbycomponent($params) {
+    
+    $types = civicrm_api3_task_gettypesbycomponent($params);
+    $typesIds = array();
+    
+    if (!empty($types['values'])) {
+        foreach ($types['values'] as $type) {
+            $typesIds[] = $type['value'];
+        }
+        
+        return civicrm_api3('Activity', 'get', array(
+            'activity_type_id' => array('IN' => $typesIds),
+        ));
+    }
+    
+    return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
+}
