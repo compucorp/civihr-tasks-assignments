@@ -437,6 +437,8 @@ function civicrm_api3_document_gettypesbycomponent($params) {
     }
     $component = $params['component'];
     
+    $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
+    
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
       'sequential' => 1,
       'name' => "activity_type",
@@ -456,7 +458,7 @@ function civicrm_api3_document_gettypesbycomponent($params) {
         $componentId = $componentResult->id;
         
         $result = civicrm_api3('OptionValue', 'get', array(
-          'sequential' => 1,
+          'sequential' => $sequential,
           'option_group_id' => $optionGroup['id'],
           'component_id' => $componentId,
         ));
