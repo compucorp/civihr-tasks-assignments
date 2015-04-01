@@ -471,7 +471,7 @@ function civicrm_api3_document_gettypesbycomponent($params) {
 
 function civicrm_api3_document_getbycomponent($params) {
     
-    $types = civicrm_api3_document_gettypesbycomponent($params);
+    $types = civicrm_api3_document_gettypesbycomponent(array_merge($params, array('sequential' => 1)));
     $typesIds = array();
     
     if (!empty($types['values'])) {
