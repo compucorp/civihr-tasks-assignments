@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
 <table>
-  <base>CRM/Tasksassignments</base>
+  <base>CRM/Documentsassignments</base>
   <class>Task</class>
   <name>civicrm_activity</name>
   <comment>FIXME</comment>

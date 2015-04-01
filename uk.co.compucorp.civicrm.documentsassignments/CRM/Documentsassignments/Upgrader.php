@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
+class CRM_Documentsassignments_Upgrader extends CRM_Documentsassignments_Upgrader_Base {
 
   public function install() {
       
@@ -18,23 +18,24 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
   
   public function upgrade_0001() {
       
-        $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'task_status', 'id', 'name');
+        $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'document_status', 'id', 'name');
         if (!$optionGroupID) {
             $params = array(
-              'name' => 'task_status',
-              'title' => 'CiviTask Status',
+              'name' => 'document_status',
+              'title' => 'CiviDocument Status',
               'is_active' => 1,
               'is_reserved' => 1,
             );
             civicrm_api3('OptionGroup', 'create', $params);
             $optionsValue = array(
-                1 => 'Task sample status 1',
-                2 => 'Task sample status 2',
-                3 => 'Task sample status 3',
+                1 => 'awaiting upload',
+                2 => 'awaiting approval',
+                3 => 'approved',
+                4 => 'rejected',
             );
             foreach ($optionsValue as $key => $value) {
               $opValueParams = array(
-                'option_group_id' => 'task_status',
+                'option_group_id' => 'document_status',
                 'name' => $value,
                 'label' => $value,
                 'value' => $key,

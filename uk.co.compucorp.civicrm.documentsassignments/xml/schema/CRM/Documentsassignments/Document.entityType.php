@@ -4,8 +4,8 @@
 return array (
   0 => 
   array (
-    'name' => 'Task',
-    'class' => 'CRM_Tasksassignments_DAO_Task',
+    'name' => 'Document',
+    'class' => 'CRM_Documentsassignments_DAO_Document',
     'table' => 'civicrm_activity',
   ),
 );
