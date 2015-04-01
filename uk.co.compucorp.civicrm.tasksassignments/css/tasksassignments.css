@@ -30,6 +30,37 @@
   /* makes the font 33% larger relative to the icon container */
   /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
      readers do not read off random characters that represent icons */
+  /*!
+   * ui-select
+   * http://github.com/angular-ui/ui-select
+   * Version: 0.11.2 - 2015-03-17T04:08:46.478Z
+   * License: MIT
+   */
+  /* Style when highlighting a search. */
+  /* Select2 theme */
+  /* Mark invalid Select2 */
+  /* Selectize theme */
+  /* Helper class to show styles when focus */
+  /* Fix input width for Selectize theme */
+  /* Fix dropdown width for Selectize theme */
+  /* Mark invalid Selectize */
+  /* Bootstrap theme */
+  /* Helper class to show styles when focus */
+  /* Fix Bootstrap dropdown position when inside a input-group */
+  /* See Scrollable Menu with Bootstrap 3 http://stackoverflow.com/questions/19227496 */
+  /* fix hide/show angular animation */
+  /* Mark invalid Bootstrap */
+  /*
+  @license textAngular
+  Author : Austin Anderson
+  License : 2013 MIT
+  Version 1.3.7
+  
+  See README.md or https://github.com/fraywing/textAngular/wiki for requirements and use.
+  */
+  /* add generic styling for the editor */
+  /* add the styling for the awesomness of the resizer */
+  /* copy the popover code from bootstrap so this will work even without it */
   padding-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
@@ -1628,7 +1659,7 @@
 }
 /* line 102, ../../../../../../../../../../../../var/lib/gems/1.9.1/gems/bootstrap-sass-3.3.0.1/assets/stylesheets/bootstrap/_type.scss */
 #civitasks .text-muted {
-  color: #d4d8e3;
+  color: #757b8e;
 }
 /* line 5, ../../../../../../../../../../../../var/lib/gems/1.9.1/gems/bootstrap-sass-3.3.0.1/assets/stylesheets/bootstrap/mixins/_text-emphasis.scss */
 #civitasks .text-primary {
@@ -2841,7 +2872,7 @@
 #civitasks caption {
   padding-top: 8px;
   padding-bottom: 8px;
-  color: #d4d8e3;
+  color: #757b8e;
   text-align: left;
 }
 /* line 15, ../../../../../../../../../../../../var/lib/gems/1.9.1/gems/bootstrap-sass-3.3.0.1/assets/stylesheets/bootstrap/_tables.scss */
@@ -9828,6 +9859,408 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .text-normal {
   font-weight: normal;
 }
+/* line 10, ../sass/modules/_select.scss */
+#civitasks .ui-select-highlight {
+  font-weight: bold;
+}
+/* line 14, ../sass/modules/_select.scss */
+#civitasks .ui-select-offscreen {
+  clip: rect(0 0 0 0) !important;
+  width: 1px !important;
+  height: 1px !important;
+  border: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  outline: 0 !important;
+  left: 0px !important;
+  top: 0px !important;
+}
+/* line 31, ../sass/modules/_select.scss */
+#civitasks .ng-dirty.ng-invalid > a.select2-choice {
+  border-color: #D44950;
+}
+/* line 35, ../sass/modules/_select.scss */
+#civitasks .select2-result-single {
+  padding-left: 0;
+}
+/* line 39, ../sass/modules/_select.scss */
+#civitasks .select2-locked > .select2-search-choice-close {
+  display: none;
+}
+/* line 43, ../sass/modules/_select.scss */
+#civitasks .select-locked > .ui-select-match-close {
+  display: none;
+}
+/* line 47, ../sass/modules/_select.scss */
+#civitasks body > .select2-container.open {
+  z-index: 9999;
+  /* The z-index Select2 applies to the select2-drop */
+}
+/* line 54, ../sass/modules/_select.scss */
+#civitasks .selectize-input.selectize-focus {
+  border-color: #007FBB !important;
+}
+/* line 59, ../sass/modules/_select.scss */
+#civitasks .selectize-control > .selectize-input > input {
+  width: 100%;
+}
+/* line 64, ../sass/modules/_select.scss */
+#civitasks .selectize-control > .selectize-dropdown {
+  width: 100%;
+}
+/* line 69, ../sass/modules/_select.scss */
+#civitasks .ng-dirty.ng-invalid > div.selectize-input {
+  border-color: #D44950;
+}
+/* line 77, ../sass/modules/_select.scss */
+#civitasks .btn-default-focus {
+  color: #333;
+  background-color: #EBEBEB;
+  border-color: #ADADAD;
+  text-decoration: none;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+/* line 87, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-toggle {
+  position: relative;
+}
+/* line 91, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-toggle > .caret {
+  position: absolute;
+  height: 10px;
+  top: 50%;
+  right: 10px;
+  margin-top: -2px;
+}
+/* line 100, ../sass/modules/_select.scss */
+#civitasks .input-group > .ui-select-bootstrap.dropdown {
+  /* Instead of relative */
+  position: static;
+}
+/* line 105, ../sass/modules/_select.scss */
+#civitasks .input-group > .ui-select-bootstrap > input.ui-select-search.form-control {
+  border-radius: 4px;
+  /* FIXME hardcoded value :-/ */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+/* line 111, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap > .ui-select-match > .btn {
+  /* Instead of center because of .btn */
+  text-align: left !important;
+}
+/* line 116, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap > .ui-select-match > .caret {
+  position: absolute;
+  top: 45%;
+  right: 15px;
+}
+/* line 123, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap > .ui-select-choices {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+  margin-top: -1px;
+}
+/* line 131, ../sass/modules/_select.scss */
+#civitasks body > .ui-select-bootstrap.open {
+  z-index: 1000;
+  /* Standard Bootstrap dropdown z-index */
+}
+/* line 135, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap {
+  height: auto;
+  padding: 3px 3px 0 3px;
+}
+/* line 140, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
+  background-color: transparent !important;
+  /* To prevent double background when disabled */
+  border: none;
+  outline: none;
+  height: 1.666666em;
+  margin-bottom: 3px;
+}
+/* line 148, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+  font-size: 1.6em;
+  line-height: 0.75;
+}
+/* line 153, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+  outline: 0;
+  margin: 0 3px 3px 0;
+}
+/* line 158, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple .ui-select-match-item {
+  position: relative;
+}
+/* line 162, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple .ui-select-match-item.dropping-before:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 100%;
+  height: 100%;
+  margin-right: 2px;
+  border-left: 1px solid #428bca;
+}
+/* line 172, ../sass/modules/_select.scss */
+#civitasks .ui-select-multiple .ui-select-match-item.dropping-after:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 100%;
+  height: 100%;
+  margin-left: 2px;
+  border-right: 1px solid #428bca;
+}
+/* line 182, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-choices-row > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+/* line 192, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-choices-row > a:hover, #civitasks .ui-select-bootstrap .ui-select-choices-row > a:focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: #f5f5f5;
+}
+/* line 198, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-choices-row.active > a {
+  color: #fff;
+  text-decoration: none;
+  outline: 0;
+  background-color: #428bca;
+}
+/* line 205, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-choices-row.disabled > a,
+#civitasks .ui-select-bootstrap .ui-select-choices-row.active.disabled > a {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+}
+/* line 213, ../sass/modules/_select.scss */
+#civitasks .ui-select-match.ng-hide-add,
+#civitasks .ui-select-search.ng-hide-add {
+  display: none !important;
+}
+/* line 219, ../sass/modules/_select.scss */
+#civitasks .ui-select-bootstrap.ng-dirty.ng-invalid > button.btn.ui-select-match {
+  border-color: #D44950;
+}
+/* line 10, ../sass/modules/_textangular.scss */
+#civitasks .ta-hidden-input {
+  width: 1px;
+  height: 1px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  opacity: 0;
+  overflow: hidden;
+}
+/* line 24, ../sass/modules/_textangular.scss */
+#civitasks .ta-root.focussed > .ta-scroll-window.form-control {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+/* line 32, ../sass/modules/_textangular.scss */
+#civitasks .ta-editor.ta-html, #civitasks .ta-scroll-window.form-control {
+  min-height: 300px;
+  height: auto;
+  overflow: auto;
+  font-family: inherit;
+  font-size: 100%;
+}
+/* line 40, ../sass/modules/_textangular.scss */
+#civitasks .ta-scroll-window.form-control {
+  position: relative;
+  padding: 0;
+}
+/* line 45, ../sass/modules/_textangular.scss */
+#civitasks .ta-scroll-window > .ta-bind {
+  height: auto;
+  min-height: 300px;
+  padding: 6px 12px;
+}
+/* line 51, ../sass/modules/_textangular.scss */
+#civitasks .ta-editor:focus {
+  user-select: text;
+}
+/* line 56, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay {
+  z-index: 100;
+  position: absolute;
+  display: none;
+}
+/* line 62, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-info {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  border: 1px solid black;
+  background-color: #FFF;
+  padding: 0 4px;
+  opacity: 0.7;
+}
+/* line 72, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-background {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  left: 5px;
+  top: 5px;
+  border: 1px solid black;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+/* line 82, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-corner {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+}
+/* line 88, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tl {
+  top: 0;
+  left: 0;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+}
+/* line 95, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tr {
+  top: 0;
+  right: 0;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+}
+/* line 102, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+}
+/* line 109, ../sass/modules/_textangular.scss */
+#civitasks .ta-resizer-handle-overlay > .ta-resizer-handle-corner-br {
+  bottom: 0;
+  right: 0;
+  border: 1px solid black;
+  cursor: se-resize;
+  background-color: white;
+}
+/* line 118, ../sass/modules/_textangular.scss */
+#civitasks .popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1060;
+  display: none;
+  max-width: 276px;
+  padding: 1px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: left;
+  white-space: normal;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+/* line 140, ../sass/modules/_textangular.scss */
+#civitasks .popover.top {
+  margin-top: -10px;
+}
+/* line 143, ../sass/modules/_textangular.scss */
+#civitasks .popover.bottom {
+  margin-top: 10px;
+}
+/* line 146, ../sass/modules/_textangular.scss */
+#civitasks .popover-title {
+  padding: 8px 14px;
+  margin: 0;
+  font-size: 14px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ebebeb;
+  border-radius: 5px 5px 0 0;
+}
+/* line 154, ../sass/modules/_textangular.scss */
+#civitasks .popover-content {
+  padding: 9px 14px;
+}
+/* line 157, ../sass/modules/_textangular.scss */
+#civitasks .popover > .arrow,
+#civitasks .popover > .arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+/* line 166, ../sass/modules/_textangular.scss */
+#civitasks .popover > .arrow {
+  border-width: 11px;
+}
+/* line 169, ../sass/modules/_textangular.scss */
+#civitasks .popover > .arrow:after {
+  content: "";
+  border-width: 10px;
+}
+/* line 173, ../sass/modules/_textangular.scss */
+#civitasks .popover.top > .arrow {
+  bottom: -11px;
+  left: 50%;
+  margin-left: -11px;
+  border-top-color: #999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  border-bottom-width: 0;
+}
+/* line 181, ../sass/modules/_textangular.scss */
+#civitasks .popover.top > .arrow:after {
+  bottom: 1px;
+  margin-left: -10px;
+  content: " ";
+  border-top-color: #fff;
+  border-bottom-width: 0;
+}
+/* line 188, ../sass/modules/_textangular.scss */
+#civitasks .popover.bottom > .arrow {
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: #999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+}
+/* line 196, ../sass/modules/_textangular.scss */
+#civitasks .popover.bottom > .arrow:after {
+  top: 1px;
+  margin-left: -10px;
+  content: " ";
+  border-top-width: 0;
+  border-bottom-color: #fff;
+}
 /* line 11, ../sass/partials/_global.scss */
 #civitasks .container {
   background-color: #fff;
@@ -9859,6 +10292,23 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 7, ../sass/partials/_forms.scss */
 #civitasks .form-task h3 {
   margin-top: 0;
+}
+/* line 12, ../sass/partials/_forms.scss */
+#civitasks .ta-editor.ta-html,
+#civitasks .ta-scroll-window.form-control {
+  min-height: 120px;
+}
+/* line 17, ../sass/partials/_forms.scss */
+#civitasks .ta-scroll-window > .ta-bind {
+  min-height: 120px;
+}
+/* line 21, ../sass/partials/_forms.scss */
+#civitasks .ta-toolbar {
+  background-color: #eeeded;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid #ccc;
+  margin-bottom: -1px;
 }
 /* line 1, ../sass/partials/_dropdowns.scss */
 #civitasks .dropdown-menu {
@@ -9978,11 +10428,15 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .ct-list-task .ct-task-details {
   background-color: #fff;
   border: 1px solid #d4d8e3;
-  padding: 4px 8px 6px;
+  padding: 4px 8px 0;
   margin-bottom: 14px;
   font-size: 12px;
 }
-/* line 106, ../sass/partials/_lists.scss */
+/* line 105, ../sass/partials/_lists.scss */
+#civitasks .ct-list-task .ct-task-details > * {
+  margin-bottom: 6px;
+}
+/* line 110, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-subject {
   margin-bottom: 17px;
 }
@@ -10005,6 +10459,10 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   background-image: none;
   width: auto;
   background-position: 0 0;
+}
+/* line 4, ../sass/partials/_select.scss */
+#civitasks .ui-select-bootstrap .ui-select-choices-row:not(.active) > a small {
+  color: #757b8e;
 }
 /* line 1, ../sass/partials/_tables.scss */
 #civitasks [datepicker-popup-wrap] {

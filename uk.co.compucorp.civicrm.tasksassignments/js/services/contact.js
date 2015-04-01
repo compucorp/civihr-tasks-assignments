@@ -1,8 +1,8 @@
 define(['services/services',
         'services/utils'], function (services) {
 
-    services.factory('ContactService', ['$resource', 'settings', '$q', 'UtilsService','$log',
-        function ($resource, settings, $q, UtilsService, $log) {
+    services.factory('ContactService', ['$resource', 'settings', '$q', '$filter', '$rootScope','UtilsService','$log',
+        function ($resource, settings, $q, $filter, $rootScope, UtilsService, $log) {
             $log.debug('Service: ContactService');
 
         var Contact = $resource(settings.pathRest, {
@@ -20,9 +20,11 @@ define(['services/services',
 
                 var deferred = $q.defer();
 
-                Contact.get({json: {
-                    'id': id,
-                    'debug': settings.debug
+                Contact.get({
+                    'json': {
+                        'id': id,
+                        'return': 'sort_name, id, contact_id, contact_type, email',
+                        'debug': settings.debug
                 }}, function(data){
 
                     if (UtilsService.errorHandler(data,'Unable to fetch contacts',deferred)) {
@@ -38,8 +40,7 @@ define(['services/services',
             },
             search: function(input, params){
 
-                if ((!input || typeof input === 'undefined') ||
-                    (params && typeof params !== 'object')) {
+                if (params && typeof params !== 'object') {
                     return null
                 }
 
@@ -65,6 +66,33 @@ define(['services/services',
                 });
 
                 return deferred.promise;
+            },
+            updateCache: function(data){
+                var obj = data || {}, arr = [], arrSearch = [], contact, contactId;
+
+                angular.extend($rootScope.cache.contact.obj,data);
+
+                for (contactId in obj) {
+                    contact = obj[contactId];
+
+                    arr.push(contact);
+
+                    arrSearch.push({
+                        description: contact.email ? [contact.email] : [],
+                        label: contact.sort_name,
+                        icon_class: contact.contact_type,
+                        id: contact.contact_id
+                    });
+                }
+
+                arr = $filter('orderBy')(arr, 'sort_name');
+                arrSearch = $filter('orderBy')(arrSearch, 'label');
+
+                $rootScope.cache.contact = {
+                    arr: arr,
+                    obj: obj,
+                    arrSearch: arrSearch
+                };
             }
         }
 
