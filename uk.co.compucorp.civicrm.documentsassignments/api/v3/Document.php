@@ -21,7 +21,7 @@ function civicrm_api3_document_create($params) {
     );
   }
 
-  $errors = _civicrm_api3_activity_check_params($params);
+  $errors = _civicrm_api3_document_check_params($params);
 
   if (!empty($errors)) {
     return $errors;
