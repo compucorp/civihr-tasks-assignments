@@ -477,8 +477,11 @@ function civicrm_api3_document_getbycomponent($params) {
             $typesIds[] = $type['value'];
         }
         
-        return civicrm_api3('Activity', 'get', array(
-            'activity_type_id' => array('IN' => $typesIds),
+        return civicrm_api3('Activity', 'get', array_merge(
+            $params,
+            array(
+                'activity_type_id' => array('IN' => $typesIds),
+            )
         ));
     }
     
