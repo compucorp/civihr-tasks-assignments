@@ -156,40 +156,6 @@ function _civicrm_api3_document_create_spec(&$params) {
 }
 
 /**
- * Gets a CiviCRM activity according to parameters
- *
- * @param array  $params       Associative array of property name/value
- *                             pairs for the activity.
- *
- * @return array
- *
- * {@getfields activity_get}
- * @example ActivityGet.php Basic example
- * @example Activity/DateTimeHigh.php Example get with date filtering
- * {@example ActivityGet.php 0}
- */
-function civicrm_api3_document_get($params) {
-  if (!empty($params['contact_id'])) {
-    $activities = CRM_Activity_BAO_Activity::getContactActivity($params['contact_id']);
-    //BAO function doesn't actually return a contact ID - hack api for now & add to test so when api re-write happens it won't get missed
-    foreach ($activities as $key => $activityArray) {
-      $activities[$key]['id'] = $key;
-    }
-  }
-  else {
-    $activities = _civicrm_api3_basic_get(_civicrm_api3_get_BAO(__FUNCTION__), $params, FALSE);
-  }
-  $options = _civicrm_api3_get_options_from_params($params, FALSE,'activity','get');
-  if($options['is_count']) {
-    return civicrm_api3_create_success($activities, $params, 'activity', 'get');
-  }
-
-  $activities = _civicrm_api3_document_get_formatResult($params, $activities);
-  //legacy custom data get - so previous formatted response is still returned too
-  return civicrm_api3_create_success($activities, $params, 'activity', 'get');
-}
-
-/**
  * Given a list of activities, append any extra data requested about the activities
  *
  * NOTE: Called by civicrm-core and CiviHR
@@ -430,14 +396,57 @@ function _civicrm_api3_document_getlist_output($result, $request) {
   return $output;
 }
 
-function civicrm_api3_document_gettypesbycomponent($params) {
+function civicrm_api3_document_get($params) {
     
-    if (!isset($params['component'])) {
-        throw new API_Exception(ts("Please specify 'component' value."));
+    $types = _civicrm_api3_document_gettypesbycomponent('CiviDocument');
+    $typesIds = array();
+    
+    if (!empty($types['values'])) {
+        foreach ($types['values'] as $type) {
+            $typesIds[] = $type['value'];
+        }
+        
+        return civicrm_api3('Activity', 'get', array_merge(
+            $params,
+            array(
+                'activity_type_id' => array('IN' => $typesIds),
+            )
+        ));
     }
-    $component = $params['component'];
     
-    $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
+    return civicrm_api3_create_success(array(), $params, 'document', 'getbycomponent');
+}
+
+function civicrm_api3_document_getoptions($params) {
+    
+    if ($params['field'] == 'activity_type_id') {
+        $result = array();
+        $options = civicrm_api3('Activity', 'getoptions', array(
+          'sequential' => 0,
+          'field' => "activity_type_id",
+        ));
+        $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
+
+        $types = _civicrm_api3_document_gettypesbycomponent('CiviDocument');
+
+        foreach ($types['values'] as $type) {
+            if (!$sequential) {
+                $result[$type['value']] = $options['values'][$type['value']];
+            } else {
+                $result[] = array(
+                    'key' => $type['value'],
+                    'value' => $options['values'][$type['value']],
+                );
+            }
+        }
+
+        return civicrm_api3_create_success($result, $params, 'document', 'get');
+    }
+
+    return civicrm_api3_generic_getoptions(array('entity' => 'Document', 'params' => $params));
+}
+
+function _civicrm_api3_document_gettypesbycomponent($component, $sequential = 1) {
     
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
       'sequential' => 1,
@@ -466,26 +475,5 @@ function civicrm_api3_document_gettypesbycomponent($params) {
         return $result;
     }
     
-    throw new API_Exception(ts("Cannot find given component."));
-}
-
-function civicrm_api3_document_getbycomponent($params) {
-    
-    $types = civicrm_api3_document_gettypesbycomponent(array_merge($params, array('sequential' => 1)));
-    $typesIds = array();
-    
-    if (!empty($types['values'])) {
-        foreach ($types['values'] as $type) {
-            $typesIds[] = $type['value'];
-        }
-        
-        return civicrm_api3('Activity', 'get', array_merge(
-            $params,
-            array(
-                'activity_type_id' => array('IN' => $typesIds),
-            )
-        ));
-    }
-    
-    return civicrm_api3_create_success(array(), $params, 'document', 'getbycomponent');
+    return null;
 }

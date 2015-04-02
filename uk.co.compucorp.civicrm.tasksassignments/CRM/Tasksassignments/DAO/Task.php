@@ -265,7 +265,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
   {
     if (!(self::$_fields)) {
       self::$_fields = array(
-        'task_id' => array(
+        'activity_id' => array(
           'name' => 'id',
           'type' => CRM_Utils_Type::T_INT,
           'title' => ts('Task ID') ,
@@ -281,7 +281,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
           'type' => CRM_Utils_Type::T_INT,
           'title' => ts('Source Record') ,
         ) ,*/
-        'task_type_id' => array(
+        'activity_type_id' => array(
           'name' => 'activity_type_id',
           'type' => CRM_Utils_Type::T_INT,
           'title' => ts('Task Type') ,
@@ -299,7 +299,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
             'optionGroupName' => 'activity_type',
           )
         ) ,
-        'task_subject' => array(
+        'activity_subject' => array(
           'name' => 'subject',
           'type' => CRM_Utils_Type::T_STRING,
           'title' => ts('Subject') ,
@@ -314,7 +314,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
             'type' => 'Text',
           ) ,
         ) ,
-        'task_date_time' => array(
+        'activity_date_time' => array(
           'name' => 'activity_date_time',
           'type' => CRM_Utils_Type::T_DATE + CRM_Utils_Type::T_TIME,
           'title' => ts('Task Date') ,
@@ -374,7 +374,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
             'type' => 'Text',
           ) ,
         ) ,*/
-        'task_details' => array(
+        'activity_details' => array(
           'name' => 'details',
           'type' => CRM_Utils_Type::T_TEXT,
           'title' => ts('Details') ,
@@ -389,7 +389,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
             'type' => 'RichTextEditor',
           ) ,
         ) ,
-        'task_status_id' => array(
+        'activity_status_id' => array(
           'name' => 'status_id',
           'type' => CRM_Utils_Type::T_INT,
           'title' => ts('Task Status') ,
@@ -490,7 +490,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
             'type' => 'Text',
           ) ,
         ) ,*/
-        'task_is_deleted' => array(
+        'activity_is_deleted' => array(
           'name' => 'is_deleted',
           'type' => CRM_Utils_Type::T_BOOLEAN,
           'title' => ts('Task is in the Trash') ,
@@ -561,18 +561,18 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
   {
     if (!(self::$_fieldKeys)) {
       self::$_fieldKeys = array(
-        'id' => 'task_id',
+        'id' => 'activity_id',
         //'source_record_id' => 'source_record_id',
-        'activity_type_id' => 'task_type_id',
+        'activity_type_id' => 'activity_type_id',
           //'activity_type_id' => 'activity_type_id',
-        'subject' => 'task_subject',
+        'subject' => 'activity_subject',
         'date_time' => 'activity_date_time',
         //'duration' => 'activity_duration',
         //'location' => 'activity_location',
         //'phone_id' => 'phone_id',
         //'phone_number' => 'phone_number',
-        'details' => 'task_details',
-        'status_id' => 'task_status_id',
+        'details' => 'activity_details',
+        'status_id' => 'activity_status_id',
         //'priority_id' => 'priority_id',
         //'parent_id' => 'parent_id',
         //'is_test' => 'activity_is_test',
@@ -582,7 +582,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
         //'is_current_revision' => 'is_current_revision',
         //'original_id' => 'original_id',
         //'result' => 'activity_result',
-        'is_deleted' => 'task_is_deleted',
+        'is_deleted' => 'activity_is_deleted',
         //'campaign_id' => 'activity_campaign_id',
         //'engagement_level' => 'activity_engagement_level',
         //'weight' => 'weight',
