@@ -10297,12 +10297,13 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .ta-editor.ta-html,
 #civitasks .ta-scroll-window.form-control {
   min-height: 120px;
+  overflow: visible;
 }
-/* line 17, ../sass/partials/_forms.scss */
+/* line 18, ../sass/partials/_forms.scss */
 #civitasks .ta-scroll-window > .ta-bind {
   min-height: 120px;
 }
-/* line 21, ../sass/partials/_forms.scss */
+/* line 22, ../sass/partials/_forms.scss */
 #civitasks .ta-toolbar {
   background-color: #eeeded;
   padding: 5px;

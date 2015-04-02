@@ -123,21 +123,7 @@ function documentsassignments_civicrm_entityTypes(&$entityTypes) {
  */
 function documentsassignments_civicrm_pageRun($page) {
     if ($page instanceof CRM_Contact_Page_View_Summary) {
-/*
-        CRM_Core_Region::instance('page-footer')->add(array(
-            'type' => 'markup',
-            'markup' => '<script data-main="'
-                .CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.documentsassignments', CRM_Core_Config::singleton()->debug ? 'js/ta-main' : 'dist/ta-main', FALSE).
-                '" src="'
-                .CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.documentsassignments', 'js/vendor/require.js', TRUE).
-                '"></script>',
-            'weight' => 1003
-        ));
-*/
-        CRM_Core_Resources::singleton()
-            ->addScriptFile('uk.co.compucorp.civicrm.documentsassignments', CRM_Core_Config::singleton()->debug ? 'js/ta-main.js' : 'js/ta-main.js',1010);
-        CRM_Core_Resources::singleton()
-            ->addStyleFile('uk.co.compucorp.civicrm.documentsassignments', 'css/documentsassignments.css');
+
     }
 }
 

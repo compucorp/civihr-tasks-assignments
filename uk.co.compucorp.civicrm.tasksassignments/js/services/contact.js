@@ -68,9 +68,9 @@ define(['services/services',
                 return deferred.promise;
             },
             updateCache: function(data){
-                var obj = data || {}, arr = [], arrSearch = [], contact, contactId;
+                var obj = $rootScope.cache.contact.obj || {}, arr = [], arrSearch = [], contact, contactId;
 
-                angular.extend($rootScope.cache.contact.obj,data);
+                angular.extend(obj,data);
 
                 for (contactId in obj) {
                     contact = obj[contactId];
