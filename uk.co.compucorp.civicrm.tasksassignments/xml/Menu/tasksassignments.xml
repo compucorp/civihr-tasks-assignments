@@ -18,4 +18,10 @@
     <title>Options</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/tasksassignments/dashboard</path>
+    <page_callback>CRM_Tasksassignments_Page_Dashboard</page_callback>
+    <title>Dashboard</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

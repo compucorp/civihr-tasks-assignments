@@ -1,1 +1,1 @@
-.panel {  display: block;  position: static;  background-image: none;  width: auto;  background-position: 0 0;}
+.panel {  display: block;  position: static;  background-image: none;  width: auto;  background-position: 0 0;}.panel-heading {  .btn-group-xs {    margin-top: -7px;    margin-bottom: -2px;  }}.panel-light {  border: 0 none;  @include box-shadow(0 0 0 0);  > .panel-heading {    border-bottom: 1px solid $body-bg;  }  > .panel-footer {    border-top: 1px solid $body-bg;  }}

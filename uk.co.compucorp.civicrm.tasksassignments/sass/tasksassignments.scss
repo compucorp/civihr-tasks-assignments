@@ -83,12 +83,19 @@
 
   @import "partials/global";
   @include global;
+  @import "partials/badge";
+  @import "partials/breadcrumb";
+  @import "partials/buttons";
   @import "partials/collapse";
+  @import "partials/dashboard";
+  @import "partials/filters";
   @import "partials/forms";
   @import "partials/dropdowns";
   @import "partials/lists";
   @import "partials/modals";
+  @import "partials/navs";
   @import "partials/panels";
   @import "partials/select";
+  @import "partials/sidebar";
   @import "partials/tables";
 }

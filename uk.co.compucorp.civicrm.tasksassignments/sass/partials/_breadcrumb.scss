@@ -1,0 +1,1 @@
+.#{$prefix}top-panel {  @include box-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.50));  background-color: $breadcrumb-bg;  position: relative;  z-index: 99;  .btn-group {    padding: 10px 18px 8px;  }  a {    color: #fff;  }}.breadcrumb {  font-size: 18px;  margin-bottom: 0;}
