@@ -1,4 +1,4 @@
 define(function(){
     'use strict'
-    return angular.module('filters',[]);
+    return angular.module('civitasks.filters',[]);
 })

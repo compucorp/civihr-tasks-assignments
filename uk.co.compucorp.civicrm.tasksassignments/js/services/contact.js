@@ -1,11 +1,11 @@
 define(['services/services',
         'services/utils'], function (services) {
 
-    services.factory('ContactService', ['$resource', 'settings', '$q', '$filter', '$rootScope','UtilsService','$log',
-        function ($resource, settings, $q, $filter, $rootScope, UtilsService, $log) {
+    services.factory('ContactService', ['$resource', 'config', '$q', '$filter', '$rootScope','UtilsService','$log',
+        function ($resource, config, $q, $filter, $rootScope, UtilsService, $log) {
             $log.debug('Service: ContactService');
 
-        var Contact = $resource(settings.pathRest, {
+        var Contact = $resource(config.path.REST, {
             action: 'get',
             entity: 'contact',
             json: {}
@@ -24,7 +24,7 @@ define(['services/services',
                     'json': {
                         'id': id,
                         'return': 'sort_name, id, contact_id, contact_type, email',
-                        'debug': settings.debug
+                        'debug': config.DEBUG
                 }}, function(data){
 
                     if (UtilsService.errorHandler(data,'Unable to fetch contacts',deferred)) {
@@ -52,7 +52,7 @@ define(['services/services',
                     json: {
                         input: input,
                         params: params,
-                        debug: settings.debug
+                        debug: config.DEBUG
                 }}, function(data){
 
                     if (UtilsService.errorHandler(data,'Unable to fetch contact list',deferred)) {

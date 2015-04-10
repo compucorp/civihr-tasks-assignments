@@ -7,6 +7,14 @@
 </div>
 {literal}
     <script type="text/javascript">
-        document.dispatchEvent(new CustomEvent('taLoad'));
+        /*
+        var evt = document.createEvent("CustomEvent");
+         document.dispatchEvent(new CustomEvent('taInit')) || evt.initCustomEvent('taInit', false, false, {
+            'details': 'appContact'
+        });
+*/
+        document.dispatchEvent(new CustomEvent('taInit', {
+            'detail': 'appContact'
+        }));
     </script>
 {/literal}

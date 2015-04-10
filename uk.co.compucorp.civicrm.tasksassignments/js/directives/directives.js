@@ -1,4 +1,4 @@
 define(function(){
     'use strict'
-    return angular.module('directives',[]);
+    return angular.module('civitasks.directives',[]);
 })

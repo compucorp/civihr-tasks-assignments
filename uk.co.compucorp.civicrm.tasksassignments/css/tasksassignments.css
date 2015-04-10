@@ -10265,13 +10265,12 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   border-top-width: 0;
   border-bottom-color: #fff;
 }
-/* line 30, ../sass/partials/_global.scss */
-#branding {
+/* line 35, ../sass/partials/_global.scss */
+.page-civicrm-tasksassignments-dashboard #branding {
   display: none;
 }
-
-/* line 34, ../sass/partials/_global.scss */
-#page {
+/* line 39, ../sass/partials/_global.scss */
+.page-civicrm-tasksassignments-dashboard #page {
   padding: 0;
   margin: 0;
 }
@@ -10286,7 +10285,7 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   @include box-shadow(0 3px 5px 0px rgba(220, 219, 223, 1));
   */
 }
-/* line 23, ../sass/partials/_global.scss */
+/* line 27, ../sass/partials/_global.scss */
 #civitasks hr {
   margin-bottom: 20px;
   margin-top: 20px;
@@ -10425,25 +10424,26 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .ct-filter-due .nav > li {
   margin-top: 0;
 }
-/* line 11, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li.active > a {
-  color: #fff;
-}
-/* line 15, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li.active .badge {
-  background-color: #fff;
-  color: #42b0cb;
-}
-/* line 21, ../sass/partials/_filters.scss */
+/* line 9, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-due .nav > li > a {
   color: #4c4c5d;
   padding: 9px 20px 8px 23px;
 }
-/* line 26, ../sass/partials/_filters.scss */
+/* line 13, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-due .nav > li > a.active {
+  background-color: #42b0cb;
+  color: #fff;
+}
+/* line 17, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-due .nav > li > a.active .badge:not(.badge-danger) {
+  background-color: #fff;
+  color: #42b0cb;
+}
+/* line 24, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-due .nav > li .badge {
   float: right;
 }
-/* line 30, ../sass/partials/_filters.scss */
+/* line 28, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-due .nav > li .fa {
   position: absolute;
   right: 67px;
@@ -10664,6 +10664,14 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 46, ../sass/partials/_navs.scss */
 #civitasks .ct-sidebar-main > li.active > a:hover, #civitasks .ct-sidebar-main > li.active > a:focus {
   background-color: #dee0e3;
+}
+/* line 1, ../sass/partials/_page-contact.scss */
+#civitasks .ct-page-contact {
+  padding: 20px;
+}
+/* line 4, ../sass/partials/_page-contact.scss */
+#civitasks .ct-page-contact .ct-list-task {
+  margin-bottom: 20px;
 }
 /* line 1, ../sass/partials/_panels.scss */
 #civitasks .panel {

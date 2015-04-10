@@ -1,1 +1,0 @@
-define(['angularSelect', 'textAngular', 'controllers/controllers', 'directives/directives',    'filters/filters', 'services/services'], function(){    return angular.module('civitasks',['ngRoute','ngResource','ngSanitize','ui.bootstrap','ui.select','textAngular',                                        'controllers','directives','filters','services']);});
