@@ -402,8 +402,7 @@ class CRM_Tasksassignments_DAO_Task extends CRM_Activity_BAO_Activity
             'type' => 'Select',
           ) ,
           'pseudoconstant' => array(
-            //'optionGroupName' => 'activity_status',
-            'optionGroupName' => 'task_status',
+            'optionGroupName' => 'activity_status',
           )
         ) ,
         /*'priority_id' => array(

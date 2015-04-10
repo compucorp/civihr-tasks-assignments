@@ -146,6 +146,8 @@ function tasksassignments_civicrm_pageRun($page) {
  */
 
 function tasksassignments_civicrm_tabs(&$tabs) {
+    CRM_Tasksassignments_Page_Tasks::registerScripts();
+    
     $tabs[] = Array(
         'id'        => 'civitasks',
         'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
