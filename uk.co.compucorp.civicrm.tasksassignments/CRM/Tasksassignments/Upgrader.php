@@ -57,7 +57,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
             'domain_id'  => CRM_Core_Config::domainID(),
             'label'      => ts('Tasks and Assignments'),
             'name'       => 'tasksassignments',
-            'url'        => '/todo',
+            'url'        => 'civicrm/tasksassignments/dashboard#/tasks',
             'parent_id'  => null,
             'weight'     => $weight+1,
             //'permission' => 'access Tasksassignments',
