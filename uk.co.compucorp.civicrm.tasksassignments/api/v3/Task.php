@@ -446,6 +446,19 @@ function civicrm_api3_task_getoptions($params) {
     return civicrm_api3_generic_getoptions(array('entity' => 'Task', 'params' => $params));
 }
 
+function civicrm_api3_task_getstatuses($params) {
+    
+    $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
+    
+    if ($optionGroupID) {
+        return $result = civicrm_api3('OptionValue', 'get', array_merge($params, array(
+          'option_group_id' => $optionGroupID,
+        )));
+    }
+    
+    return null;
+}
+
 function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
     
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
