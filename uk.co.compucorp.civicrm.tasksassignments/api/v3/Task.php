@@ -398,6 +398,41 @@ function _civicrm_api3_task_getlist_output($result, $request) {
 
 function civicrm_api3_task_get($params) {
     
+    $activityIds = array();
+    
+    $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
+    $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
+    
+    if ($assigneeContactId) {
+        $result = civicrm_api3('ActivityContact', 'get', array(
+          'sequential' => 1,
+          'return' => 'activity_id',
+          'contact_id' => array('IN' => $assigneeContactId),
+          'record_type_id' => 1,
+          'options' => array('limit' => 0),
+        ));
+        foreach ($result['values'] as $value) {
+            $activityIds[] = $value['activity_id'];
+        }
+    }
+    
+    if ($sourceContactId) {
+        $result = civicrm_api3('ActivityContact', 'get', array(
+          'sequential' => 1,
+          'return' => 'activity_id',
+          'contact_id' => array('IN' => $sourceContactId),
+          'record_type_id' => 2,
+          'options' => array('limit' => 0),
+        ));
+        foreach ($result['values'] as $value) {
+            $activityIds[] = $value['activity_id'];
+        }
+    }
+    
+    if (!isset($params['id'])) {
+        $params['id'] = array('IN' => $activityIds);
+    }
+    
     $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
     $typesIds = array();
     
