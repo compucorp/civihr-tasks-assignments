@@ -128,6 +128,21 @@ function tasksassignments_civicrm_pageRun($page) {
             ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/ta-main.js' : 'js/ta-main.js',1010);
         CRM_Core_Resources::singleton()
             ->addStyleFile('uk.co.compucorp.civicrm.tasksassignments', 'css/tasksassignments.css');
+
+        CRM_Core_Resources::singleton()
+            ->addSettingsFactory(function () {
+                global $user;
+                $config = CRM_Core_Config::singleton();
+                return array(
+                    'Tasksassignments' => array(
+                        'extensionPath' => CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.tasksassignments'),
+                    ),
+                    'adminId' => CRM_Core_Session::getLoggedInContactID(),
+                    'contactId' => CRM_Utils_Request::retrieve('cid', 'Integer'),
+                    'debug' => $config->debug,
+                );
+            });
+
 //    }
 }
 

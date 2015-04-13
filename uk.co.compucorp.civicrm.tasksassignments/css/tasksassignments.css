@@ -134,7 +134,7 @@
       }
     }
   
-    .ct-task-done {
+    .ct-task-completed {
       @extend .ct-task-resolved;
   
       .ct-task-title:not(:hover) {
@@ -10520,7 +10520,7 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   color: #db6c86;
 }
 /* line 27, ../sass/partials/_lists.scss */
-#civitasks .ct-list-task > li.ct-task-done .ct-task-title {
+#civitasks .ct-list-task > li.ct-task-completed .ct-task-title {
   text-decoration: line-through;
 }
 /* line 33, ../sass/partials/_lists.scss */
