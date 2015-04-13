@@ -429,7 +429,7 @@ function civicrm_api3_task_get($params) {
         }
     }
     
-    if (!empty($params['id'])) {
+    if (!isset($params['id']) && !empty($activityIds)) {
         $params['id'] = array('IN' => $activityIds);
     }
     
