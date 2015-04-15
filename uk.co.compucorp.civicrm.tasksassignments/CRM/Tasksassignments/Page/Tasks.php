@@ -14,7 +14,7 @@ class CRM_Tasksassignments_Page_Tasks extends CRM_Core_Page {
   }
 
   static function registerScripts() {
-      /*
+
     static $loaded = FALSE;
     if ($loaded) {
       return;
@@ -34,7 +34,7 @@ class CRM_Tasksassignments_Page_Tasks extends CRM_Core_Page {
         'debug' => $config->debug,
       );
     });
-      */
+
   }
 
 }
