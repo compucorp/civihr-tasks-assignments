@@ -66,30 +66,6 @@ function civicrm_api3_assignment_create($params) {
     CRM_Case_BAO_Case::addCaseToContact($contactParams);
   }
 
-  // Initialize XML processor with $params
-  $xmlProcessor = new CRM_Case_XMLProcessor_Process();
-  $xmlProcessorParams = array(
-    'clientID' => $params['contact_id'],
-    'creatorID' => $params['creator_id'],
-    'standardTimeline' => 1,
-    'activityTypeName' => 'Open Case',
-    'caseID' => $caseBAO->id,
-    'subject' => $params['subject'],
-    'location' => CRM_Utils_Array::value('location', $params),
-    'activity_date_time' => $params['start_date'],
-    'duration' => CRM_Utils_Array::value('duration', $params),
-    'medium_id' => CRM_Utils_Array::value('medium_id', $params),
-    'details' => CRM_Utils_Array::value('details', $params),
-    'custom' => array(),
-  );
-  
-  if (isset($params['activity_set_name'])) {
-    $xmlProcessorParams['standardTimeline'] = 0;
-    $xmlProcessorParams['activitySetName'] = $params['activity_set_name'];
-  }
-
-  $xmlProcessor->run($params['case_type'], $xmlProcessorParams);
-
   $values = array();
   _civicrm_api3_object_to_array($caseBAO, $values[$caseBAO->id]);
 
