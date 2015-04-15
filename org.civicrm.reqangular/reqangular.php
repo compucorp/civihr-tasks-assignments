@@ -125,6 +125,6 @@ function reqangular_civicrm_pageRun($page) {
         'requireLib' => $url . '/src/require',
         'reqangular' => $url . '/reqangular',
     ));
-
-    CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.reqangular','reqangular.js', 1000);
+    
+    CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.reqangular','reqangular.js', 1000, 'html-header');
 }
