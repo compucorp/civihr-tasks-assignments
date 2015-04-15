@@ -1,7 +1,7 @@
 <form novalidate name="assignmentForm" class="form-assignment form-horizontal" role="form" ng-submit="confirm()">
     <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" ng-bind="cache.contact.obj[assignment.target_contact_id[0]].sort_name || 'No target contact'"></h4>
+        <h4 class="modal-title" ng-bind="cache.contact.obj[assignment.contact_id].sort_name || 'No target contact'"></h4>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -31,23 +31,25 @@
                         <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
                                 ng-model="taskSet"
                                 ng-options="taskSet.label for taskSet in cache.assignmentType[assignment.case_type_id].definition.activitySets"
-                                ng-disabled="!taskSet"
+                                ng-disabled="!taskList.length"
                                 class="form-control">
                         </select>
                     </div>
                 </div>
                 <hr>
-                <h4>Tasks:</h4>
-                <div class="form-group" ng-repeat="task in taskSet.activityTypes">
+                <h4 ng-show="taskList.length">Tasks:</h4>
+                <div class="form-group" ng-repeat="task in taskList" ng-controller="ModalAssignmentTaskCtrl">
                     <div class="checkbox col-xs-12 col-sm-3">
                         <label>
-                            <input type="checkbox"> {{task.name}}
+                            <input type="checkbox" ng-model="task.create"> {{task.name}}
                         </label>
                     </div>
                     <label class="col-xs-12 col-sm-2 control-label">Assigned to:</label>
                     <div class="col-xs-6 col-sm-4">
                         <div class="input-group">
-                            <ui-select allow-clear ng-model="task.assignee_contact_id">
+                            <ui-select allow-clear
+                                       ng-model="task.assignee_contact_id"
+                                       on-select="cacheContact($item)">
                                 <ui-select-match
                                         placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
                                 <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
@@ -69,6 +71,7 @@
                            ng-model="task.due"
                            is-open="dpOpened[$index]"
                            datepicker-popup
+                           ng-change="setAssignmentDueDate()"
                            ng-click="dpOpen($event, $index);">{{(task.due | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                     <input type="hidden" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.due" name="assignmentDue">
                 </div>

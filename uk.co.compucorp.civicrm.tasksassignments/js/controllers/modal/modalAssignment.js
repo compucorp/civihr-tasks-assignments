@@ -1,8 +1,10 @@
 define(['controllers/controllers',
+        'services/contact',
         'services/assignment'], function(controllers){
     controllers.controller('ModalAssignmentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-         'AssignmentService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, data, config){
+         'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
+        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, ContactService,
+                 data, config){
             $log.debug('Controller: ModalAssignmentCtrl');
 
             $scope.assignment = {};
@@ -14,17 +16,20 @@ define(['controllers/controllers',
             $scope.assignment.target_contact_id = $scope.assignment.target_contact_id || [config.CONTACT_ID];
 
             */
-            $scope.assignment.status_id = $scope.assignment.status_id || 1;
-            $scope.assignment.contact_id = $scope.assignment.contact_id || config.CONTACT_ID;
-            $scope.assignment.client_id = $scope.assignment.client_id || config.CONTACT_ID;
+            $scope.assignment.status_id = 1;
+            $scope.assignment.contact_id = config.CONTACT_ID;
+            $scope.assignment.client_id = config.CONTACT_ID;
+            $scope.assignment.subject = '';
 
             $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.dpOpened = {};
             $scope.showCId = !config.CONTACT_ID;
+            $scope.taskSet = {};
+            $scope.taskList = [];
 
             $scope.setData = function() {
                 var assignmentType = $rootScope.cache.assignmentType[$scope.assignment.case_type_id];
-                $scope.taskSet = assignmentType ? assignmentType.definition.activitySets[0] : null;
+                $scope.taskSet = assignmentType ? assignmentType.definition.activitySets[0] : {};
                 $scope.assignment.subject = $rootScope.cache.assignmentType[$scope.assignment.case_type_id].title;
             }
 
@@ -36,16 +41,36 @@ define(['controllers/controllers',
 
             }
 
+            $scope.refreshContacts = function(input){
+                if (!input) {
+                    return
+                }
+
+                ContactService.search(input).then(function(results){
+                    $scope.contacts = results;
+                });
+            }
+
             $scope.cancel = function(){
                 $modalInstance.dismiss('cancel');
             }
 
             $scope.confirm = function(){
-                console.log($scope.assignment);
 
                 AssignmentService.save($scope.assignment).then(function(results){
                     console.log(results);
-                    //$modalInstance.close(angular.extend(results,$scope.assignment));
+
+                    var promiseTaskCreate = [];
+
+                    angular.forEach($scope.taskList, function(task){
+                        promiseTaskCreate.push(TaskService.save(task));
+                    });
+
+                    $q.all(promiseTaskCreate).then(function(results){
+                        console.log(results)
+                        $modalInstance.close(angular.copy($scope.taskList));
+                    });
+
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
@@ -53,6 +78,31 @@ define(['controllers/controllers',
                 });
 
             }
+
+            $scope.$watch('taskSet',function(taskSet){
+                angular.copy(taskSet.activityTypes, $scope.taskList);
+            });
+
+        }]);
+
+    controllers.controller('ModalAssignmentTaskCtrl',['$scope', '$log',
+        function($scope, $log){
+            $log.debug('Controller: ModalAssignmentTaskCtrl');
+
+            $scope.task.create = true;
+            $scope.task.status_id = 1;
+
+            $scope.setAssignmentDueDate = function(){
+                if (!$scope.$parent.assignment.end_date || $scope.$parent.assignment.end_date < $scope.task.due) {
+                    $scope.$parent.assignment.end_date = $scope.task.due;
+                }
+            }
+
+            $scope.$watch('$parent.assignment.end_date',function(assignmentDueDate){
+                if (!$scope.task.due || $scope.task.due > assignmentDueDate) {
+                    $scope.task.due = assignmentDueDate;
+                }
+            });
 
         }]);
 });

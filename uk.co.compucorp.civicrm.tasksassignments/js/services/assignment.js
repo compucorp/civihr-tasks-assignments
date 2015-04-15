@@ -6,7 +6,7 @@ define(['services/services',
 
         return $resource(config.path.REST,{
             'action': 'get',
-            'entity': 'Case',
+            'entity': 'Assignment',
             'json': {}
         });
 
