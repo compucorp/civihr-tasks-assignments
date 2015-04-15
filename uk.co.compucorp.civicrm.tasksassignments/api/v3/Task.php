@@ -402,6 +402,7 @@ function civicrm_api3_task_get($params) {
     
     $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
     $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
+    $caseId = isset($params['case_id']) ? $params['case_id'] : null;
     
     if ($assigneeContactId) {
         $result = civicrm_api3('ActivityContact', 'get', array(
@@ -426,6 +427,14 @@ function civicrm_api3_task_get($params) {
         ));
         foreach ($result['values'] as $value) {
             $activityIds[] = $value['activity_id'];
+        }
+    }
+    
+    if ($caseId) {
+        $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
+        $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
+        if (empty($activityIds)) {
+            $activityIds[] = 0;
         }
     }
     
