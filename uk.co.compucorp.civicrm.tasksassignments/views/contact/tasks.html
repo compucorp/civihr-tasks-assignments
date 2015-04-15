@@ -1,1 +1,87 @@
-<div class="{{prefix}}page-contact">    <form name="formTasks">        <div class="panel panel-default">            <div class="panel-body">                <button class="btn btn-default btn-primary" ng-click="modalTask()">                    <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task                </button>                &nbsp;                <button class="btn btn-default btn-primary" ng-click="modalAssignment()">                    <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment                </button>            </div>        </div>        <h4>Ongoing:</h4>        <ul class="{{prefix}}list-task">            <li ng-repeat="task in taskList"                ng-controller="TaskCtrl"                ng-class="{                    '{{prefix}}task-completed': task.completed,                    '{{prefix}}task-due': task.due                }"                ng-if="!task.resolved"                ng-include                src="'task.html'">            </li>        </ul>        <h4>Resolved:</h4>        <ul class="{{prefix}}list-task">            <li ng-repeat="task in taskList"                ng-controller="TaskCtrl"                ng-class="'{{prefix}}task-resolved'"                ng-if="task.resolved"                ng-include                src="'task.html'">            </li>        </ul>    </form></div><script type="text/ng-template" id="task.html">    <header class="row">        <div class="col-xs-7">            <input type="checkbox"                   ng-change="changeStatus(2)"                   ng-disabled="task.completed"                   ng-model="task.completed"                   class="{{prefix}}task-checkbox"                   name="task">            <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>        </div>        <div class="col-xs-2 text-right">            <a href class="{{prefix}}assignment-type">Exiting</a>        </div>        <div class="col-xs-2 text-right">            <a href class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>        </div>        <div class="col-xs-1">            <div class="dropdown" dropdown>                <a href class="dropdown-toggle pull-right" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>                <ul class="dropdown-menu pull-right">                    <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>                    <li><a href><i class="fa fa-envelope-o"></i> Send reminder</a></li>                    <li><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>                </ul>            </div>        </div>    </header>    <div class="row">        <div class="col-xs-12">            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> Subject: {{task.subject}}</p>        </div>    </div>    <div class="row">        <div class="col-xs-12">            <p><a href="" ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span                    class="fa"                    ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"                    aria-hidden="true"></span> Details</a></p>            <article class="row" collapse="isCollapsed">                <div class="col-xs-12">                    <div ta-bind class="{{prefix}}task-details" ng-model="task.details"></div>                    <p class="{{prefix}}task-contact-source">Assigned by:&nbsp; <a href><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span> - Ongoing</a></p>                </div>            </article>        </div>    </div></script>
+<div class="{{prefix}}page-contact">
+    <form name="formTasks">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <button class="btn btn-default btn-primary" ng-click="modalTask()">
+                    <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
+                </button>
+                &nbsp;
+                <button class="btn btn-default btn-primary" ng-click="modalAssignment()">
+                    <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
+                </button>
+            </div>
+        </div>
+        <h4>Ongoing:</h4>
+        <ul class="{{prefix}}list-task">
+            <li ng-repeat="task in taskList"
+                ng-controller="TaskCtrl"
+                ng-class="{
+                    '{{prefix}}task-completed': task.completed,
+                    '{{prefix}}task-due': task.due
+                }"
+                ng-if="!task.resolved"
+                ng-include
+                src="'task.html'">
+            </li>
+        </ul>
+        <h4>Resolved:</h4>
+        <ul class="{{prefix}}list-task">
+            <li ng-repeat="task in taskList"
+                ng-controller="TaskCtrl"
+                ng-class="'{{prefix}}task-resolved'"
+                ng-if="task.resolved"
+                ng-include
+                src="'task.html'">
+            </li>
+        </ul>
+    </form>
+</div>
+
+<script type="text/ng-template" id="task.html">
+    <header class="row">
+        <div class="col-xs-7">
+            <input type="checkbox"
+                   ng-change="changeStatus(2)"
+                   ng-disabled="task.completed"
+                   ng-model="task.completed"
+                   class="{{prefix}}task-checkbox"
+                   name="task">
+            <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
+        </div>
+        <div class="col-xs-2 text-right">
+            <a href class="{{prefix}}assignment-type">Exiting</a>
+        </div>
+        <div class="col-xs-2 text-right">
+            <a href class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>
+        </div>
+        <div class="col-xs-1">
+            <div class="dropdown" dropdown>
+                <a href class="dropdown-toggle pull-right" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
+                <ul class="dropdown-menu pull-right">
+                    <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>
+                    <li><a href><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+                    <li><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="row">
+        <div class="col-xs-12">
+            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> Subject: {{task.subject}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <p><a href="" ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
+                    class="fa"
+                    ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
+                    aria-hidden="true"></span> Details</a></p>
+            <article class="row" collapse="isCollapsed">
+                <div class="col-xs-12">
+                    <div ta-bind class="{{prefix}}task-details" ng-model="task.details"></div>
+                    <p class="{{prefix}}task-contact-source">Assigned by:&nbsp; <a href><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span> - Ongoing</a></p>
+                </div>
+            </article>
+        </div>
+    </div>
+</script>

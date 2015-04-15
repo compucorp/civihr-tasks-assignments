@@ -1,1 +1,9 @@
-.ui-select-bootstrap {  .ui-select-choices-row:not(.active) {    > a {      small {        color: $gray;      }    }  }}
+.ui-select-bootstrap {
+  .ui-select-choices-row:not(.active) {
+    > a {
+      small {
+        color: $gray;
+      }
+    }
+  }
+}
