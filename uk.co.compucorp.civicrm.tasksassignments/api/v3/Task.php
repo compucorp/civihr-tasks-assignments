@@ -12,6 +12,10 @@
  */
 function civicrm_api3_task_create($params) {
 
+  if (!empty($params['task'])) {
+      return civicrm_api3_task_create_multiple($params);
+  }
+    
   if (empty($params['id'])) {
     civicrm_api3_verify_one_mandatory($params,
       NULL,
