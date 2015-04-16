@@ -26,7 +26,5 @@ define(['controllers/controllers',
                 $scope.task.due = new Date(taskDateTime).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
             });
 
-            console.log($scope.task);
-
         }]);
 });

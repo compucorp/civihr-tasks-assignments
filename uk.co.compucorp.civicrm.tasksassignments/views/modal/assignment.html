@@ -48,7 +48,7 @@
                     <div class="col-xs-6 col-sm-4">
                         <div class="input-group">
                             <ui-select allow-clear
-                                       ng-model="task.assignee_contact_id"
+                                       ng-model="task.assignee_contact_id[0]"
                                        ng-disabled="isDisabled"
                                        on-select="cacheContact($item)">
                                 <ui-select-match
@@ -75,33 +75,8 @@
                            ng-change="setAssignmentDueDate(task.activity_date_time)"
                            ng-click="dpOpen($event, $index);"
                            ng-disabled="isDisabled">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                    <input type="hidden" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.due" name="assignmentDue">
+                    <input type="hidden" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.activity_date_time" name="assignmentDue">
                 </div>
-
-                <!--
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 control-label">Assignee:</label>
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="input-group">
-                            <ui-select allow-clear ng-model="task.assignee_contact_id">
-                                <ui-select-match
-                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                                    refresh="refreshContacts($select.search)"
-                                                    refresh-delay="0">
-                                    <div ng-bind="contact.label"></div>
-                                    <small ng-bind="contact.description[0]"></small>
-                                </ui-select-choices>
-                            </ui-select>
-                            <span class="input-group-btn">
-                              <a ng-click="task.assignee_contact_id = undefined" class="btn btn-default">
-                                  <span class="fa fa-remove"></span>
-                              </a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                -->
             </div>
         </div>
     </div>

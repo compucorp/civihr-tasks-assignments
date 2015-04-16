@@ -8,15 +8,7 @@ define(['controllers/controllers',
             $log.debug('Controller: ModalAssignmentCtrl');
 
             $scope.assignment = {};
-
-            //angular.copy(data,$scope.assignment);
-/*
-            $scope.assignment.assignee_contact_id = $scope.assignment.assignee_contact_id || [];
-            $scope.assignment.source_contact_id = $scope.assignment.source_contact_id || config.LOGGED_IN_CONTACT_ID;
-            $scope.assignment.target_contact_id = $scope.assignment.target_contact_id || [config.CONTACT_ID];
-
-            */
-            $scope.assignment.status_id = 1;
+            $scope.assignment.status_id = '1';
             $scope.assignment.contact_id = config.CONTACT_ID;
             $scope.assignment.client_id = config.CONTACT_ID;
             $scope.assignment.subject = '';
@@ -27,24 +19,12 @@ define(['controllers/controllers',
             $scope.taskSet = {};
             $scope.taskList = [];
 
-            $scope.setData = function() {
-                var assignmentType = $rootScope.cache.assignmentType[$scope.assignment.case_type_id];
-                $scope.taskSet = assignmentType ? assignmentType.definition.activitySets[0] : {};
-                $scope.assignment.subject = $rootScope.cache.assignmentType[$scope.assignment.case_type_id].title;
-            }
-
             $scope.dpOpen = function($event, key){
                 $event.preventDefault();
                 $event.stopPropagation();
 
                 $scope.dpOpened[key] = true;
 
-            }
-
-            $scope.setAssignmentDueDate = function(taskDateDue){
-                if (!$scope.assignment.end_date || $scope.assignment.end_date < taskDateDue) {
-                    $scope.assignment.end_date = taskDateDue;
-                }
             }
 
             $scope.refreshContacts = function(input){
@@ -57,7 +37,6 @@ define(['controllers/controllers',
                 });
             }
 
-
             $scope.cacheContact = function($item){
                 var obj = {};
 
@@ -69,9 +48,19 @@ define(['controllers/controllers',
                 };
 
                 ContactService.updateCache(obj);
-                console.log($item);
-                console.log($rootScope.cache.contact);
             };
+
+            $scope.setAssignmentDueDate = function(taskDateDue){
+                if (!$scope.assignment.end_date || $scope.assignment.end_date < taskDateDue) {
+                    $scope.assignment.end_date = taskDateDue;
+                }
+            }
+
+            $scope.setData = function() {
+                var assignmentType = $rootScope.cache.assignmentType[$scope.assignment.case_type_id];
+                $scope.taskSet = assignmentType ? assignmentType.definition.activitySets[0] : {};
+                $scope.assignment.subject = $rootScope.cache.assignmentType[$scope.assignment.case_type_id].title;
+            }
 
             $scope.cancel = function(){
                 $modalInstance.dismiss('cancel');
@@ -101,9 +90,12 @@ define(['controllers/controllers',
 
                         return $q.all(promiseTaskAssign);
 
-                    }).then(function(results){
-                        console.log($scope.taskList);
-                        $modalInstance.close(angular.copy($scope.taskList));
+                    }, function(reason){
+                        CRM.alert(reason, 'Error', 'error');
+                        $modalInstance.dismiss();
+                        return $q.reject();
+                    }).then(function(){
+                        $modalInstance.close($filter('filter')($scope.taskList, { create: true }, true));
                     });
 
                 },function(reason){
@@ -128,9 +120,9 @@ define(['controllers/controllers',
 
             $scope.isDisabled = !taskType;
             $scope.task.create = !!taskType;
-            $scope.task.status_id = 1;
+            $scope.task.status_id = '1';
             $scope.task.activity_type_id = taskType ? taskType.key : null;
-            $scope.task.target_contact_id = $scope.$parent.assignment.contact_id;
+            $scope.task.target_contact_id = [$scope.$parent.assignment.contact_id];
             $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
 
             $scope.$watch('$parent.assignment.end_date',function(assignmentDueDate){
