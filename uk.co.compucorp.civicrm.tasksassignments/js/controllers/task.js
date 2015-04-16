@@ -1,11 +1,12 @@
 define(['controllers/controllers',
-        'services/task'], function(controllers){
+        'moment',
+        'services/task'], function(controllers, moment){
     controllers.controller('TaskCtrl',['$scope', '$log', '$rootScope', '$filter', '$timeout', 'TaskService',
         function($scope, $log, $rootScope, $filter, $timeout, TaskService){
             $log.debug('Controller: TaskCtrl');
 
             $scope.isCollapsed = true;
-            $scope.task.activity_date_time = new Date($scope.task.activity_date_time);
+            $scope.task.activity_date_time = moment($scope.task.activity_date_time).toDate();
 
             $scope.changeStatus = function(statusId){
                 TaskService.save({
