@@ -4,22 +4,18 @@ define(['controllers/controllers',
         'services/assignment'], function(controllers){
 
     controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$filter', '$log', 'taskList',
-        'config', 'ContactService', 'TaskService', 'AssignmentService',
-        function($scope, $modal, $rootElement, $rootScope, $filter, $log, taskList, config, ContactService, TaskService,
-                 AssignmentService){
+        'config', 'ContactService', 'TaskService',
+        function($scope, $modal, $rootElement, $rootScope, $filter, $log, taskList, config, ContactService, TaskService){
             $log.debug('Controller: TaskListCtrl');
 
             this.init = function(){
                 var contactIds = this.contactIds;
 
-                if (taskList.length) {
-                    this.collectCId(taskList);
-                }
+                this.collectCId(taskList);
 
                 if (contactIds && contactIds.length) {
                     ContactService.get({'IN': contactIds}).then(function(data){
                         ContactService.updateCache(data);
-                        console.log($rootScope.cache);
                     });
                 }
             }
@@ -28,6 +24,12 @@ define(['controllers/controllers',
 
             this.collectCId = function(taskList){
                 var contactIds = this.contactIds;
+
+                contactIds.push(config.LOGGED_IN_CONTACT_ID);
+
+                if (config.CONTACT_ID) {
+                    contactIds.push(config.CONTACT_ID);
+                }
 
                 angular.forEach(taskList,function(task){
                     contactIds.push(task.source_contact_id);
