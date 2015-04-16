@@ -120,6 +120,33 @@ function civicrm_api3_task_create($params) {
   }
 }
 
+function civicrm_api3_task_copy_to_assignment($params) {
+    
+    if (empty($params['id'])) {
+        throw new API_Exception(ts("Please specify 'id' value(s)."));
+    }
+    if (empty($params['case_id'])) {
+        throw new API_Exception(ts("Please specify 'case_id' value."));
+    }
+    
+    $ids = (array)$params['id'];
+    $caseId = (int)$params['case_id'];
+    
+    $result = 0;
+    foreach ($ids as $id) {
+        $createResult = civicrm_api3('Task', 'create', array(
+          'sequential' => 1,
+          'id' => $id,
+          'case_id' => $caseId,
+        ));
+        if ($createResult['count']) {
+            $result++;
+        }
+    }
+    
+    return civicrm_api3_create_success($result, $params);
+}
+
 /**
  * Specify Meta data for create. Note that this data is retrievable via the getfields function
  * and is used for pre-filling defaults and ensuring mandatory requirements are met.
