@@ -112,7 +112,7 @@ define(['controllers/controllers',
                     });
 
                 modalInstance.result.then(function(results){
-                    console.log(results);
+                    Array.prototype.push.apply($scope.taskList,results);
                 }, function(){
                     $log.info('Modal dismissed');
                 });

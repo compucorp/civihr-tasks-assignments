@@ -41,7 +41,7 @@
                 <div class="form-group" ng-repeat="task in taskList" ng-controller="ModalAssignmentTaskCtrl">
                     <div class="checkbox col-xs-12 col-sm-3">
                         <label>
-                            <input type="checkbox" ng-model="task.create"> {{task.name}}
+                            <input type="checkbox" ng-model="task.create" ng-disabled="isDisabled"> {{task.name}}
                         </label>
                     </div>
                     <label class="col-xs-12 col-sm-2 control-label">Assigned to:</label>
@@ -49,6 +49,7 @@
                         <div class="input-group">
                             <ui-select allow-clear
                                        ng-model="task.assignee_contact_id"
+                                       ng-disabled="isDisabled"
                                        on-select="cacheContact($item)">
                                 <ui-select-match
                                         placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
@@ -68,11 +69,12 @@
                     </div>
                     <label for="{{prefix}}assignment-task-due-{{$index}}" class="col-xs-6 col-sm-2 control-label">
                         <a href="" class="text-normal"
-                           ng-model="task.due"
+                           ng-model="task.activity_date_time"
                            is-open="dpOpened[$index]"
                            datepicker-popup
-                           ng-change="setAssignmentDueDate()"
-                           ng-click="dpOpen($event, $index);">{{(task.due | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                           ng-change="setAssignmentDueDate(task.activity_date_time)"
+                           ng-click="dpOpen($event, $index);"
+                           ng-disabled="isDisabled">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                     <input type="hidden" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.due" name="assignmentDue">
                 </div>
 

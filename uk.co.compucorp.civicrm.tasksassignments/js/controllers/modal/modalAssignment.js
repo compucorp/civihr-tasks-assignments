@@ -41,6 +41,12 @@ define(['controllers/controllers',
 
             }
 
+            $scope.setAssignmentDueDate = function(taskDateDue){
+                if (!$scope.assignment.end_date || $scope.assignment.end_date < taskDateDue) {
+                    $scope.assignment.end_date = taskDateDue;
+                }
+            }
+
             $scope.refreshContacts = function(input){
                 if (!input) {
                     return
@@ -51,23 +57,52 @@ define(['controllers/controllers',
                 });
             }
 
+
+            $scope.cacheContact = function($item){
+                var obj = {};
+
+                obj[$item.id] = {
+                    contact_id: $item.id,
+                    contact_type: $item.icon_class,
+                    sort_name: $item.label,
+                    email: $item.description.length ? $item.description[0] : ''
+                };
+
+                ContactService.updateCache(obj);
+                console.log($item);
+                console.log($rootScope.cache.contact);
+            };
+
             $scope.cancel = function(){
                 $modalInstance.dismiss('cancel');
             }
 
             $scope.confirm = function(){
 
-                AssignmentService.save($scope.assignment).then(function(results){
-                    console.log(results);
+                AssignmentService.save($scope.assignment).then(function(resultAssignment){
 
-                    var promiseTaskCreate = [];
+                    var promiseTaskCreate = [], promiseTaskAssign = [];
 
                     angular.forEach($scope.taskList, function(task){
-                        promiseTaskCreate.push(TaskService.save(task));
+                        if (task.create) {
+                            promiseTaskCreate.push(TaskService.save(task));
+                        }
                     });
 
-                    $q.all(promiseTaskCreate).then(function(results){
-                        console.log(results)
+                    $q.all(promiseTaskCreate).then(function(resultTask){
+                        angular.forEach(resultTask, function(task){
+                            promiseTaskAssign.push(TaskService.save({
+                                    sequential: 1,
+                                    id: task.id,
+                                    case_id: resultAssignment.id
+                                }
+                            ));
+                        });
+
+                        return $q.all(promiseTaskAssign);
+
+                    }).then(function(results){
+                        console.log($scope.taskList);
                         $modalInstance.close(angular.copy($scope.taskList));
                     });
 
@@ -85,22 +120,22 @@ define(['controllers/controllers',
 
         }]);
 
-    controllers.controller('ModalAssignmentTaskCtrl',['$scope', '$log',
-        function($scope, $log){
+    controllers.controller('ModalAssignmentTaskCtrl',['$scope', '$log', '$filter', '$rootScope', 'config',
+        function($scope, $log, $filter, $rootScope, config){
             $log.debug('Controller: ModalAssignmentTaskCtrl');
 
-            $scope.task.create = true;
-            $scope.task.status_id = 1;
+            var taskType = $filter('filter')($rootScope.cache.taskType.arr, { value: $scope.task.name }, true)[0];
 
-            $scope.setAssignmentDueDate = function(){
-                if (!$scope.$parent.assignment.end_date || $scope.$parent.assignment.end_date < $scope.task.due) {
-                    $scope.$parent.assignment.end_date = $scope.task.due;
-                }
-            }
+            $scope.isDisabled = !taskType;
+            $scope.task.create = !!taskType;
+            $scope.task.status_id = 1;
+            $scope.task.activity_type_id = taskType ? taskType.key : null;
+            $scope.task.target_contact_id = $scope.$parent.assignment.contact_id;
+            $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
 
             $scope.$watch('$parent.assignment.end_date',function(assignmentDueDate){
-                if (!$scope.task.due || $scope.task.due > assignmentDueDate) {
-                    $scope.task.due = assignmentDueDate;
+                if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {
+                    $scope.task.activity_date_time = assignmentDueDate;
                 }
             });
 

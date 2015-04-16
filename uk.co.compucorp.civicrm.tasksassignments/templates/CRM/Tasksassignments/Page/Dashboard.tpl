@@ -17,7 +17,7 @@
                             <a class="btn" ng-click="modalTask()">
                                 <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
                             </a>
-                            <a class="btn" ng-click="modalAssignment()">
+                            <a class="btn" ng-click="modalAssignment()" disabled>
                                 <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
                             </a>
                         </div>
