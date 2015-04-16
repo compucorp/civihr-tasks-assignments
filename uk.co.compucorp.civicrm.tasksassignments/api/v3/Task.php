@@ -12,6 +12,10 @@
  */
 function civicrm_api3_task_create($params) {
 
+  if (!empty($params['task'])) {
+      return civicrm_api3_task_create_multiple($params);
+  }
+    
   if (empty($params['id'])) {
     civicrm_api3_verify_one_mandatory($params,
       NULL,
@@ -131,7 +135,6 @@ function civicrm_api3_task_copy_to_assignment($params) {
     
     $ids = (array)$params['id'];
     $caseId = (int)$params['case_id'];
-    
     $result = 0;
     foreach ($ids as $id) {
         $createResult = civicrm_api3('Task', 'create', array(
@@ -139,6 +142,24 @@ function civicrm_api3_task_copy_to_assignment($params) {
           'id' => $id,
           'case_id' => $caseId,
         ));
+        if ($createResult['count']) {
+            $result++;
+        }
+    }
+    
+    return civicrm_api3_create_success($result, $params);
+}
+
+function civicrm_api3_task_create_multiple($params) {
+    
+    if (empty($params['task'])) {
+        throw new API_Exception(ts("Please specify 'task' array."));
+    }
+    
+    $tasks = (array)$params['task'];
+    $result = 0;
+    foreach ($tasks as $task) {
+        $createResult = civicrm_api3('Task', 'create', $task);
         if ($createResult['count']) {
             $result++;
         }
