@@ -133,17 +133,26 @@ function civicrm_api3_task_copy_to_assignment($params) {
         throw new API_Exception(ts("Please specify 'case_id' value."));
     }
     
+    if (empty($params['sequential'])) {
+        $params['sequential'] = 0;
+    }
+    if (empty($params['debug'])) {
+        $params['debug'] = 0;
+    }
+    
     $ids = (array)$params['id'];
     $caseId = (int)$params['case_id'];
-    $result = 0;
+    $result = array();
     foreach ($ids as $id) {
-        $createResult = civicrm_api3('Task', 'create', array(
-          'sequential' => 1,
+        $taskToAssignment = array(
+          'sequential' => $params['sequential'],
+          'debug' => $params['debug'],
           'id' => $id,
           'case_id' => $caseId,
-        ));
+        );
+        $createResult = civicrm_api3('Task', 'create', $taskToAssignment);
         if ($createResult['count']) {
-            $result++;
+            $result[] = array_shift($createResult['values']);
         }
     }
     
