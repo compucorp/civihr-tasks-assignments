@@ -68,34 +68,26 @@ define(['controllers/controllers',
 
             $scope.confirm = function(){
 
-                AssignmentService.save($scope.assignment).then(function(resultAssignment){
+                var taskListAssignment = $filter('filter')($scope.taskList, {create: true}, true);
 
-                    var promiseTaskCreate = [], promiseTaskAssign = [];
+                AssignmentService.save($scope.assignment).then(function(resultAssignment) {
 
-                    angular.forEach($scope.taskList, function(task){
-                        if (task.create) {
-                            promiseTaskCreate.push(TaskService.save(task));
+                    TaskService.saveMultiple(taskListAssignment).then(function(resultTask){
+                        var i = 0, len = resultTask.length, taskArr = [];
+
+                        for (i; i < len; i++) {
+                            taskArr.push(resultTask[i].id)
                         }
-                    });
 
-                    $q.all(promiseTaskCreate).then(function(resultTask){
-                        angular.forEach(resultTask, function(task){
-                            promiseTaskAssign.push(TaskService.save({
-                                    sequential: 1,
-                                    id: task.id,
-                                    case_id: resultAssignment.id
-                                }
-                            ));
-                        });
+                        return TaskService.assign(taskArr, resultAssignment.id);
 
-                        return $q.all(promiseTaskAssign);
-
-                    }, function(reason){
+                    },function(reason){
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
                         return $q.reject();
-                    }).then(function(){
-                        $modalInstance.close($filter('filter')($scope.taskList, { create: true }, true));
+                    }).then(function(results){
+                        console.log(results);
+                        $modalInstance.close(taskListAssignment);
                     });
 
                 },function(reason){

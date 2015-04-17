@@ -17,6 +17,36 @@ define(['services/services',
         $log.debug('Service: TaskService');
 
         return {
+            assign: function(taskArr, assignmentId){
+
+                if ((!taskArr || !angular.isArray(taskArr)) ||
+                    (!assignmentId || typeof +assignmentId !== 'number')) {
+                    return null;
+                }
+
+                var deferred = $q.defer();
+
+                Task.save({
+                    action: 'copy_to_assignment',
+                    json: {
+                        sequential: 1,
+                        debug: config.DEBUG,
+                        id: taskArr,
+                        case_id: assignmentId
+                    }
+                }, null, function(data){
+
+                    if (UtilsService.errorHandler(data,'Unable to assign tasks',deferred)) {
+                        return
+                    }
+
+                    deferred.resolve(data.values);
+                },function(){
+                    deferred.reject('Unable to assign tasks');
+                });
+
+                return deferred.promise;
+            },
             get: function(params){
                 var deferred = $q.defer();
 
@@ -126,6 +156,34 @@ define(['services/services',
                     deferred.resolve(val.length == 1 ? val[0] : null);
                 },function(){
                     deferred.reject('Unable to save task');
+                });
+
+                return deferred.promise;
+            },
+            saveMultiple: function(taskArr){
+
+                if (!taskArr || !angular.isArray(taskArr)) {
+                    return null;
+                }
+
+                var deferred = $q.defer();
+
+                Task.save({
+                    action: 'create_multiple',
+                    json: {
+                        sequential: 1,
+                        debug: config.DEBUG,
+                        task: taskArr
+                    }
+                }, null, function(data){
+
+                    if (UtilsService.errorHandler(data,'Unable to save tasks',deferred)) {
+                        return
+                    }
+
+                    deferred.resolve(data.values);
+                },function(){
+                    deferred.reject('Unable to save tasks');
                 });
 
                 return deferred.promise;
