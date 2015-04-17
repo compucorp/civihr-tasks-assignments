@@ -4,6 +4,7 @@ var module, reqTa = require.config({
     urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
         angularSelect: 'vendor/angular/select',
+        moment: 'vendor/moment.min',
         requireLib: CRM.vars.reqAngular.requireLib,
         textAngular: 'vendor/angular/textAngular.min',
         textAngularRangy: 'vendor/angular/textAngular-rangy.min',
@@ -24,6 +25,7 @@ reqTa([
     'controllers/dashboard/navMain',
     'controllers/modal/modalTask',
     'controllers/modal/modalAssignment',
+    'filters/dateParse',
     'requireLib'
 ],function(){
     'use strict';
