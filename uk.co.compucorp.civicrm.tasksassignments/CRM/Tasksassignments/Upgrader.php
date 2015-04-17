@@ -102,4 +102,150 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       return TRUE;
   }
   
+  /*
+   * Install Task Types and Case Types
+   */
+  public function upgrade_0004() {
+      
+      $this->_installTypes();
+      return TRUE;
+  }
+  
+    function _installTypes()
+    {
+        $types = array(
+            'Joining' => array(
+                'Schedule joining date',
+                'Probation appraisal (start probation workflow)',
+                'Group Orientation to organization, values, policies',
+                'Enter employee data in CiviHR',
+                'Issue appointment letter',
+                'Fill Employee Details Form',
+                'Submission of ID/Residence proofs and photos',
+                'Program and work induction by program supervisor',
+            ),
+            'Exiting' => array(
+                'Schedule Exit Interview',
+                'Conduct Exit Interview',
+                'Get "No Dues" certification',
+                'Revoke Access to Database',
+                'Block work email ID',
+            ),
+        );
+
+        $componentId = null;
+        $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
+        $componentParams = array(
+            1 => array('CiviTask', 'String'),
+        );
+        $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
+        if ($componentResult->fetch())
+        {
+            $componentId = $componentResult->id;
+        }
+
+        if (!$componentId)
+        {
+            throw new Exception('CiviTask Component not found.');
+        }
+
+        $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
+        if (!$optionGroupID) {
+            $params = array(
+                'name' => 'activity_type',
+                'title' => 'Activity Type',
+                'is_active' => 1,
+            );
+            civicrm_api3('OptionGroup', 'create', $params);
+            $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
+        }
+
+        // Create the types:
+
+        $selectActivityTypeQuery = 'SELECT id FROM civicrm_option_value WHERE option_group_id = %1 AND name = %2';
+        foreach ($types as $caseType => $taskTypes)
+        {
+            foreach ($taskTypes as $taskType)
+            {
+                $selectActivityTypeParams = array(
+                    1 => array($optionGroupID, 'Integer'),
+                    2 => array($taskType, 'String'),
+                );
+
+                $selectActivityTypeResult = CRM_Core_DAO::executeQuery($selectActivityTypeQuery, $selectActivityTypeParams);
+                if (!$selectActivityTypeResult->fetch())
+                {
+                    $result = civicrm_api3('OptionValue', 'create', array(
+                        'sequential' => 1,
+                        'option_group_id' => $optionGroupID,
+                        'component_id' => $componentId,
+                        'label' => $taskType,
+                        'name' => $taskType,
+                    ));
+                }
+            }
+
+            $this->_createCaseType($caseType, $taskTypes);
+        }
+    }
+
+    function _createCaseType($name, array $types)
+    {
+        $result = civicrm_api3('CaseType', 'get', array(
+          'sequential' => 1,
+          'name' => $name,
+        ));
+
+        if ($result['count'])
+        {
+            return false;
+        }
+
+        $activityTypes = array();
+        $activitySets = array(
+            array(
+                'name' => 'standard_timeline',
+                'label' => 'Standard Timeline',
+                'timeline' => 1,
+                'activityTypes' => array(),
+            )
+        );
+        $caseRoles = array(
+            array(
+                'name' => 'Case Coordinator',
+                'creator' => 1,
+                'manager' => 1,
+            ),
+        );
+
+        foreach ($types as $type)
+        {
+            $activityTypes[] = array(
+                'name' => $type,
+            );
+
+            $activitySets[0]['activityTypes'][] = array(
+                'name' => $type,
+                'status' => 'Scheduled',
+                //'reference_activity' => '',
+                //'reference_offset' => 1,
+                //'reference_select' => 'newest',
+            );
+        }
+
+        $result = civicrm_api3('CaseType', 'create', array(
+            'sequential' => 1,
+            'title' => $name,
+            'name' => $name,
+            'is_active' => 1,
+            'weight' => 1,
+            'definition' => array(
+                'activityTypes' => $activityTypes,
+                'activitySets' => $activitySets,
+                'caseRoles' => $caseRoles,
+                )
+        ));
+
+        return $result;
+    }
 }
