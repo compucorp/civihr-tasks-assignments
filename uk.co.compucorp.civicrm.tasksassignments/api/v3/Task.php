@@ -170,7 +170,7 @@ function civicrm_api3_task_create_multiple($params) {
         $task['debug'] = $params['debug'];
         $createResult = civicrm_api3('Task', 'create', $task);
         if ($createResult['count']) {
-            $result[] = $createResult['values'];
+            $result[] = array_shift($createResult['values']);
         }
     }
     
