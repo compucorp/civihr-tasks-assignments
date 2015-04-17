@@ -161,7 +161,7 @@ function civicrm_api3_task_create_multiple($params) {
     foreach ($tasks as $task) {
         $createResult = civicrm_api3('Task', 'create', $task);
         if ($createResult['count']) {
-            $result[] = $createResult['values'];
+            $result[$createResult['id']] = $createResult['values'];
         }
     }
     
