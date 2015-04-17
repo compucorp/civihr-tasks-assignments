@@ -156,9 +156,18 @@ function civicrm_api3_task_create_multiple($params) {
         throw new API_Exception(ts("Please specify 'task' array."));
     }
     
+    if (empty($params['sequential'])) {
+        $params['sequential'] = 0;
+    }
+    if (empty($params['debug'])) {
+        $params['debug'] = 0;
+    }
+    
     $tasks = (array)$params['task'];
     $result = array();
     foreach ($tasks as $task) {
+        $task['sequential'] = $params['sequential'];
+        $task['debug'] = $params['debug'];
         $createResult = civicrm_api3('Task', 'create', $task);
         if ($createResult['count']) {
             $result[] = $createResult['values'];
