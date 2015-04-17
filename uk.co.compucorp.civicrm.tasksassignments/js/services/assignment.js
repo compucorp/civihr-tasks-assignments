@@ -4,7 +4,7 @@ define(['services/services',
     services.factory('Assignment',['$resource', 'config', '$log', function($resource, config, $log){
         $log.debug('Service: Assignment');
 
-        return $resource(config.path.REST,{
+        return $resource(config.url.REST,{
             'action': 'get',
             'entity': 'Assignment',
             'json': {}
@@ -15,7 +15,7 @@ define(['services/services',
     services.factory('AssignmentType',['$resource', 'config', '$log', function($resource, config, $log){
         $log.debug('Service: AssignmentType');
 
-        return $resource(config.path.REST,{
+        return $resource(config.url.REST,{
             'action': 'get',
             'entity': 'CaseType',
             'json': {}

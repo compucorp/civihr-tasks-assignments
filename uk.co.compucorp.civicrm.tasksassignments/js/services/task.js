@@ -4,7 +4,7 @@ define(['services/services',
     services.factory('Task',['$resource', 'config', '$log', function($resource, config, $log){
         $log.debug('Service: Task');
 
-        return $resource(config.path.REST,{
+        return $resource(config.url.REST,{
             'action': 'get',
             'entity': 'Task',
             'json': {}

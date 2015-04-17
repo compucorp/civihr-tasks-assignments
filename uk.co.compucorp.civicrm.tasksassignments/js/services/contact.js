@@ -5,7 +5,7 @@ define(['services/services',
         function ($resource, config, $q, $filter, $rootScope, UtilsService, $log) {
             $log.debug('Service: ContactService');
 
-        var Contact = $resource(config.path.REST, {
+        var Contact = $resource(config.url.REST, {
             action: 'get',
             entity: 'contact',
             json: {}

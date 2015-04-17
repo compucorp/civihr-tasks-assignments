@@ -25,6 +25,8 @@ reqTa([
     'controllers/dashboard/navMain',
     'controllers/modal/modalTask',
     'controllers/modal/modalAssignment',
+    'controllers/assignments',
+    'directives/iframe',
     'filters/dateParse',
     'requireLib'
 ],function(){

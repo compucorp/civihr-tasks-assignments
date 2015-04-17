@@ -55,6 +55,7 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                     templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime())
                 }).
                 when('/assignments', {
+                    controller: 'AssignmentsCtrl',
                     templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
                 }).
                 when('/calendar', {
