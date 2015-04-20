@@ -516,12 +516,26 @@ function civicrm_api3_task_get($params) {
             $typesIds[] = $type['value'];
         }
         
-        return civicrm_api3('Activity', 'get', array_merge(
+        $getResult = civicrm_api3('Activity', 'get', array_merge(
             $params,
             array(
                 'activity_type_id' => array('IN' => $typesIds),
             )
         ));
+        
+        $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
+        foreach ($getResult['values'] as $key => $value) {
+            $caseActivityParams = array(
+                1 => array($value['id'], 'Integer'),
+            );
+            $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
+            $getResult['values'][$key]['case_id'] = null;
+            if ($caseActivityResult->fetch())
+            {
+                $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
+            }
+        }
+        return $getResult;
     }
     
     return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
