@@ -86,7 +86,6 @@ define(['controllers/controllers',
                         $modalInstance.dismiss();
                         return $q.reject();
                     }).then(function(results){
-                        console.log(results);
                         $modalInstance.close(taskListAssignment);
                     });
 

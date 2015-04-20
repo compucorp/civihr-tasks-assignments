@@ -10,8 +10,11 @@ define(function(){
         LOGGED_IN_CONTACT_ID: CRM.adminId ||null,
         path: {
             EXT: CRM.Tasksassignments.extensionPath,
-            TPL: CRM.Tasksassignments.extensionPath + 'views/',
-            REST: CRM.url('civicrm/ajax/rest')
+            TPL: CRM.Tasksassignments.extensionPath + 'views/'
+        },
+        url: {
+            REST: CRM.url('civicrm/ajax/rest'),
+            ASSIGNMENTS: CRM.url('civicrm/contact/view/case')
         }
     });
 
