@@ -3,9 +3,10 @@ define(['controllers/controllers',
         'services/task',
         'services/assignment'], function(controllers){
 
-    controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$filter', '$log', 'taskList',
-        'config', 'ContactService', 'TaskService',
-        function($scope, $modal, $rootElement, $rootScope, $filter, $log, taskList, config, ContactService, TaskService){
+    controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
+        '$log', 'taskList', 'config', 'ContactService', 'TaskService',
+        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, taskList, config, ContactService,
+                 TaskService){
             $log.debug('Controller: TaskListCtrl');
 
             this.init = function(){
@@ -126,6 +127,22 @@ define(['controllers/controllers',
                      $scope.taskList.splice($scope.taskList.indexOf(task),1);
                  });
             }
+
+            $scope.$on('crmFormSuccess',function(e, data){
+                console.log(e);
+                console.log(data);
+                if (data.status == 'success')  {
+                    var pattern = /case|activity/i;
+
+                    if (pattern.test(data.title) ||
+                        data.crmMessages.length &&
+                        (pattern.test(data.crmMessages[0].title) ||
+                        pattern.test(data.crmMessages[0].text))) {
+                        $route.reload();
+                        console.log('route reloaded');
+                    }
+                }
+            });
 
             this.init();
 

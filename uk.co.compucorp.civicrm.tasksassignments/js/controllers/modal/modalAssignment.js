@@ -85,7 +85,8 @@ define(['controllers/controllers',
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
                         return $q.reject();
-                    }).then(function(results){
+                    }).then(function(){
+                        AssignmentService.updateTab(1);
                         $modalInstance.close(taskListAssignment);
                     });
 

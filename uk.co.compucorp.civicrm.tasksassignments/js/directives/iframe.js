@@ -1,5 +1,5 @@
 define(['directives/directives'], function(directives){
-    directives.directive('taIframe',['$rootScope','$log','config', function($rootScope, $log, config){
+    directives.directive('taIframe',['$rootScope','$log', function($rootScope, $log){
         $log.debug('Directive: taIframe');
 
         return {
@@ -20,7 +20,6 @@ define(['directives/directives'], function(directives){
                     }
 
                     document.getElementsByTagName('body')[0].style.paddingTop = '10px'
-
                 }
 
             }

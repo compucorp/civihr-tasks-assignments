@@ -3,8 +3,9 @@ define(['controllers/controllers',
         'services/task'], function(controllers){
 
     controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-        'TaskService', 'ContactService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, TaskService, ContactService, data, config){
+        'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
+        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, ContactService,
+                 data, config){
             $log.debug('Controller: ModalTaskCtrl');
 
             $scope.task = {}
@@ -59,6 +60,7 @@ define(['controllers/controllers',
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 
                 TaskService.save($scope.task).then(function(results){
+                    AssignmentService.updateTab();
                     $modalInstance.close(angular.extend(results,$scope.task));
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');

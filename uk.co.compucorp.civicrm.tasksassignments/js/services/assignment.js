@@ -35,18 +35,17 @@ define(['services/services',
 
                 AssignmentType.get({}, function(data){
 
-                if (UtilsService.errorHandler(data,'Unable to fetch assignment types',deferred)) {
-                    return
-                }
+                    if (UtilsService.errorHandler(data,'Unable to fetch assignment types',deferred)) {
+                        return
+                    }
 
-                deferred.resolve(data.values);
-            },function(){
-                deferred.reject('Unable to fetch assignment types');
-            });
+                    deferred.resolve(data.values);
+
+                },function(){
+                    deferred.reject('Unable to fetch assignment types');
+                });
 
                 return deferred.promise;
-            },
-            getOptions: function(){
             },
             save: function(assignment){
 
@@ -77,6 +76,18 @@ define(['services/services',
                 });
 
                 return deferred.promise;
+
+            },
+            updateTab: function(count) {
+
+                if (angular.element('.CRM_Case_Form_Search').length) {
+                    CRM.refreshParent('.CRM_Case_Form_Search');
+                    return;
+                }
+
+                if (angular.element('#tab_case').length) {
+                    CRM.tabHeader.updateCount('#tab_case', CRM.tabHeader.getCount('#tab_case')+(count || 0));
+                }
 
             },
             delete: function() {
