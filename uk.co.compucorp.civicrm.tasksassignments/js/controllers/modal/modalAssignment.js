@@ -10,7 +10,7 @@ define(['controllers/controllers',
             $scope.assignment = {};
             $scope.assignment.status_id = '1';
             $scope.assignment.contact_id = config.CONTACT_ID;
-            $scope.assignment.client_id = config.CONTACT_ID;
+            $scope.assignment.client_id = $scope.assignment.contact_id;
             $scope.assignment.subject = '';
 
             $scope.contacts = $rootScope.cache.contact.arrSearch;
@@ -79,7 +79,10 @@ define(['controllers/controllers',
                             taskArr.push(resultTask[i].id)
                         }
 
-                        return TaskService.assign(taskArr, resultAssignment.id);
+                        return $q.all([
+                            TaskService.assign(taskArr, resultAssignment.id),
+                            AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
+                        ]);
 
                     },function(reason){
                         CRM.alert(reason, 'Error', 'error');
@@ -114,6 +117,7 @@ define(['controllers/controllers',
             $scope.task.create = !!taskType;
             $scope.task.status_id = '1';
             $scope.task.activity_type_id = taskType ? taskType.key : null;
+            $scope.task.assignee_contact_id = [];
             $scope.task.target_contact_id = [$scope.$parent.assignment.contact_id];
             $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
 

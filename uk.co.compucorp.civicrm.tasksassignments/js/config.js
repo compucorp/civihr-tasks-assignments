@@ -14,7 +14,7 @@ define(function(){
         },
         url: {
             REST: CRM.url('civicrm/ajax/rest'),
-            ASSIGNMENTS: CRM.url('civicrm/contact/view/case')
+            ASSIGNMENTS: CRM.url('civicrm/case')
         }
     });
 

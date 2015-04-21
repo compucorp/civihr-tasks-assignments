@@ -6,6 +6,32 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-xs-12">
+                <div class="form-group" ng-if="showCId">
+                    <label class="col-xs-12 col-sm-3 control-label">Target:</label>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="input-group">
+                            <ui-select
+                                    allow-clear
+                                    ng-model="assignment.contact_id"
+                                    ng-change="assignment.client_id=assignment.contact_id"
+                                    on-select="cacheContact($item)">
+                                <ui-select-match
+                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                                    refresh="refreshContacts($select.search)"
+                                                    refresh-delay="0">
+                                    <div ng-bind="contact.label"></div>
+                                    <small ng-bind="contact.description[0]"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                              <a ng-click="assignment.contact_id = ''" class="btn btn-default">
+                                  <span class="fa fa-remove"></span>
+                              </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="{{prefix}}assignment-type" class="col-xs-12 col-sm-3 control-label">Assignment Type:</label>
                     <div class="col-xs-6 col-sm-4">

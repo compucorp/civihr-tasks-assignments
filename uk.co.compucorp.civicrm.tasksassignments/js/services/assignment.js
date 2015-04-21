@@ -1,6 +1,17 @@
 define(['services/services',
         'services/utils'], function (services) {
 
+    services.factory('Relationship',['$resource', 'config', '$log', function($resource, config, $log){
+        $log.debug('Service: Relationship');
+
+        return $resource(config.url.REST,{
+            'action': 'get',
+            'entity': 'Relationship',
+            'json': {}
+        });
+
+    }]);
+
     services.factory('Assignment',['$resource', 'config', '$log', function($resource, config, $log){
         $log.debug('Service: Assignment');
 
@@ -23,12 +34,42 @@ define(['services/services',
 
     }]);
 
-    services.factory('AssignmentService',['Assignment', 'AssignmentType', '$q', 'config', 'UtilsService', '$log',
-        function(Assignment, AssignmentType, $q, config, UtilsService, $log){
+    services.factory('AssignmentService',['Relationship', 'Assignment', 'AssignmentType', '$q', 'config', 'UtilsService', '$location',
+        '$route', '$log',
+        function(Relationship, Assignment, AssignmentType, $q, config, UtilsService, $location, $route, $log){
         $log.debug('Service: AssignmentService');
 
         return {
-            get: function(){
+            assignCoordinator: function(contactId, assignmentId){
+
+                if ((!contactId || typeof +contactId !== 'number') ||
+                    (!assignmentId || typeof +assignmentId !== 'number')) {
+                    return null;
+                }
+
+                var deferred = $q.defer();
+
+                Relationship.save({
+                    action: 'create',
+                    json: {
+                        sequential: 1,
+                        contact_id_a: contactId,
+                        contact_id_b: config.LOGGED_IN_CONTACT_ID,
+                        relationship_type_id: 9,
+                        case_id: assignmentId
+                    }
+                }, null, function(data){
+
+                    if (UtilsService.errorHandler(data,'Unable to assign coordinator',deferred)) {
+                        return
+                    }
+
+                    deferred.resolve(data.values);
+                },function(){
+                    deferred.reject('Unable to assign coordinator');
+                });
+
+                return deferred.promise;
             },
             getTypes: function(){
                 var deferred = $q.defer();
@@ -87,12 +128,15 @@ define(['services/services',
 
                 if (angular.element('#tab_case').length) {
                     CRM.tabHeader.updateCount('#tab_case', CRM.tabHeader.getCount('#tab_case')+(count || 0));
+                    return
                 }
 
-            },
-            delete: function() {
+                if ($location.path() == '/assignments') {
+                    $route.reload();
+                }
 
             }
+
         }
 
     }]);

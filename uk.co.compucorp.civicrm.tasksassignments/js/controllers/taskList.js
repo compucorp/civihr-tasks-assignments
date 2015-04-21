@@ -129,8 +129,6 @@ define(['controllers/controllers',
             }
 
             $scope.$on('crmFormSuccess',function(e, data){
-                console.log(e);
-                console.log(data);
                 if (data.status == 'success')  {
                     var pattern = /case|activity/i;
 
@@ -139,7 +137,6 @@ define(['controllers/controllers',
                         (pattern.test(data.crmMessages[0].title) ||
                         pattern.test(data.crmMessages[0].text))) {
                         $route.reload();
-                        console.log('route reloaded');
                     }
                 }
             });
