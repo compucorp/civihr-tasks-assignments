@@ -55,13 +55,14 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                     templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime())
                 }).
                 when('/assignments', {
-                    controller: 'AssignmentsCtrl',
+                    controller: 'ExternalPageCtrl',
                     templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
                 }).
                 when('/calendar', {
                     templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime())
                 }).
                 when('/reports', {
+                    controller: 'ExternalPageCtrl',
                     templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
                 }).
                 when('/key-dates', {

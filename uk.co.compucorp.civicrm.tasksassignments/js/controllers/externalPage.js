@@ -1,9 +1,10 @@
 define(['controllers/controllers'], function(controllers){
-    controllers.controller('AssignmentsCtrl',['$scope', '$log', '$modal', '$rootElement', '$rootScope', 'config',
+    controllers.controller('ExternalPageCtrl',['$scope', '$log', '$modal', '$rootElement', '$rootScope', 'config',
         function($scope, $log, $modal, $rootElement, $rootScope, config){
-            $log.debug('Controller: AssignmentsCtrl');
+            $log.debug('Controller: ExternalPageCtrl');
 
             $scope.assignmentsUrl = config.url.ASSIGNMENTS+'?reset=1';
+            $scope.reportsUrl = config.url.CIVI_DASHBOARD+'?reset=1';
 
             $rootScope.modalAssignment = function(data) {
                 var data = data || {};
