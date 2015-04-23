@@ -50,16 +50,16 @@ define(['controllers/controllers',
                 ContactService.updateCache(obj);
             };
 
-            $scope.setAssignmentDueDate = function(taskDateDue){
-                if (!$scope.assignment.end_date || $scope.assignment.end_date < taskDateDue) {
-                    $scope.assignment.end_date = taskDateDue;
+            $scope.setAssignmentDueDate = function(taskDueDate){
+                if (!$scope.assignment.dueDate || $scope.assignment.dueDate < taskDueDate) {
+                    $scope.assignment.dueDate = taskDueDate;
                 }
             }
 
             $scope.setData = function() {
-                var assignmentType = $rootScope.cache.assignmentType[$scope.assignment.case_type_id];
+                var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
                 $scope.taskSet = assignmentType ? assignmentType.definition.activitySets[0] : {};
-                $scope.assignment.subject = $rootScope.cache.assignmentType[$scope.assignment.case_type_id].title;
+                $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
             }
 
             $scope.cancel = function(){
@@ -68,27 +68,68 @@ define(['controllers/controllers',
 
             $scope.confirm = function(){
 
-                var taskListAssignment = $filter('filter')($scope.taskList, {create: true}, true);
+                var taskListAssignment = [], taskArr = [], cacheAssignmentObj = {}, i, len;
+
+                $scope.assignment.start_date = new Date();
 
                 AssignmentService.save($scope.assignment).then(function(resultAssignment) {
 
+                    angular.forEach($scope.taskList, function(task){
+                        if (task.create) {
+                            task.case_id = resultAssignment.id;
+                            this.push(task);
+                        }
+                    },taskListAssignment);
+
                     TaskService.saveMultiple(taskListAssignment).then(function(resultTask){
-                        var i = 0, len = resultTask.length, taskArr = [];
+                        i = 0, len = resultTask.length;
 
                         for (i; i < len; i++) {
                             taskArr.push(resultTask[i].id)
                         }
 
-                        return $q.all([
-                            TaskService.assign(taskArr, resultAssignment.id),
-                            AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
-                        ]);
+                        return $q.all({
+                            assignedTasks: TaskService.assign(taskArr, resultAssignment.id),
+                            relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
+                        });
 
                     },function(reason){
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
                         return $q.reject();
-                    }).then(function(){
+                    }).then(function(results){
+                        i = 0, len = results.assignedTasks.length;
+
+                        for (i; i < len; i++) {
+                            taskArr.push(results.assignedTasks[i].id)
+                        }
+
+                        cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment),{
+                            id: resultAssignment.id,
+                            client_id: {
+                                '1': $scope.assignment.client_id
+                            },
+                            contact_id: {
+                                '1': $scope.assignment.contact_id
+                            },
+                            contacts: [
+                                {
+                                    sort_name: $rootScope.cache.contact.obj[$scope.assignment.contact_id].sort_name,
+                                    contact_id: $scope.assignment.contact_id,
+                                    role: 'Client'
+                                },
+                                {
+                                    sort_name: $rootScope.cache.contact.obj[config.LOGGED_IN_CONTACT_ID].sort_name,
+                                    contact_id: config.LOGGED_IN_CONTACT_ID,
+                                    role: 'Case Coordinator'
+                                }
+                            ],
+                            is_deleted: '0',
+                            end_date: '',
+                            activities: taskArr
+                        });
+
+                        AssignmentService.updateCache(cacheAssignmentObj);
                         AssignmentService.updateTab(1);
                         $modalInstance.close(taskListAssignment);
                     });
@@ -121,7 +162,7 @@ define(['controllers/controllers',
             $scope.task.target_contact_id = [$scope.$parent.assignment.contact_id];
             $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
 
-            $scope.$watch('$parent.assignment.end_date',function(assignmentDueDate){
+            $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
                 if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {
                     $scope.task.activity_date_time = assignmentDueDate;
                 }

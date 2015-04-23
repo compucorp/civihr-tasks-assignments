@@ -38,17 +38,17 @@
                         <select id="{{prefix}}assignment-type" class="form-control" name="assignmentType"
                                 ng-change="setData()"
                                 ng-model="assignment.case_type_id"
-                                ng-options="key as value.title for (key, value) in cache.assignmentType">
+                                ng-options="key as value.title for (key, value) in cache.assignmentType.obj">
                             <option value="">- select - </option>
                         </select>
                     </div>
                     <label for="{{prefix}}assignment-due" class="col-xs-6 col-sm-4 control-label">Due Date:
                         <a href="" class="text-normal"
-                           ng-model="assignment.end_date"
+                           ng-model="assignment.dueDate"
                            is-open="dpOpened.assignmentDue"
                            datepicker-popup
-                           ng-click="dpOpen($event, 'assignmentDue');">{{(assignment.end_date | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                    <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.end_date" name="assignmentDue">
+                           ng-click="dpOpen($event, 'assignmentDue');">{{(assignment.dueDate | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                    <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="assignmentDue">
                 </div>
                 <hr>
                 <div class="form-group">
@@ -56,7 +56,7 @@
                     <div class="col-xs-12 col-sm-6">
                         <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
                                 ng-model="taskSet"
-                                ng-options="taskSet.label for taskSet in cache.assignmentType[assignment.case_type_id].definition.activitySets"
+                                ng-options="taskSet.label for taskSet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
                                 ng-disabled="!taskList.length"
                                 class="form-control">
                         </select>

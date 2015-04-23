@@ -90,7 +90,14 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                     arr: [],
                     addSearch: []
                 },
-                assignmentType: {},
+                assignment: {
+                    obj: {},
+                    arr: []
+                },
+                assignmentType: {
+                    obj: {},
+                    arr: []
+                },
                 taskType: {
                     obj: {},
                     arr: []
@@ -108,7 +115,10 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
             });
 
             AssignmentService.getTypes().then(function(types){
-                angular.extend($rootScope.cache.assignmentType,types);
+                angular.extend($rootScope.cache.assignmentType.obj,types);
+                angular.forEach(types, function(type) {
+                    this.push(type);
+                }, $rootScope.cache.assignmentType.arr);
             });
 
         }
