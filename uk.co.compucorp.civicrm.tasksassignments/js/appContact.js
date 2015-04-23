@@ -50,11 +50,12 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                 contact: {
                     obj: {},
                     arr: [],
-                    addSearch: []
+                    arrSearch: []
                 },
                 assignment: {
                     obj: {},
-                    arr: []
+                    arr: [],
+                    arrSearch: []
                 },
                 assignmentType: {
                     obj: {},

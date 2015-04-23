@@ -24,9 +24,10 @@ define(['controllers/controllers',
                 if (assignmentIds && assignmentIds.length) {
                     AssignmentService.get({'IN': assignmentIds}).then(function(data){
                         AssignmentService.updateCache(data);
-                        console.log($rootScope.cache);
                     });
                 }
+
+                console.log($rootScope.cache);
             }
 
             this.assignmentIds = [];
@@ -156,6 +157,7 @@ define(['controllers/controllers',
                         data.crmMessages.length &&
                         (pattern.test(data.crmMessages[0].title) ||
                         pattern.test(data.crmMessages[0].text))) {
+                        $rootScope.cache.assignment = {};
                         $route.reload();
                     }
                 }
