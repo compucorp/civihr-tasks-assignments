@@ -121,7 +121,10 @@ function civicrm_api3_task_create($params) {
 
     _civicrm_api3_object_to_array($activityBAO, $activityArray[$activityBAO->id]);
     //return civicrm_api3_create_success($activityArray, $params, 'activity', 'get', $activityBAO);
-    return civicrm_api3_task_get(array('id' => $activityBAO->id));
+    return civicrm_api3_task_get(array(
+        'sequential' => isset($params['sequential']) ? $params['sequential'] : 0,
+        'id' => $activityBAO->id
+    ));
   }
 }
 
