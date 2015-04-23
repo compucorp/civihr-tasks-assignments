@@ -1,27 +1,28 @@
 define(['directives/directives'], function(directives){
-    directives.directive('taIframe',['$rootScope','$log','config', function($rootScope, $log, config){
+    directives.directive('taIframe',['$rootScope','$log', function($rootScope, $log){
         $log.debug('Directive: taIframe');
 
         return {
             link: function ($scope, el, attrs) {
 
-                var hideElements = ['branding',
-                                    'toolbar',
-                                    'civicrm-menu',
-                                    'civicrm-footer',
-                                    'access'],
-                    i = 0, len = hideElements.length;
+                var iframeEl = el[0];
 
-                el[0].onload = function() {
-                    var document = frames[attrs.name].document;
+                iframeEl.addEventListener('load',function(){
+                    var document = frames[attrs.name].document,
+                        hideElements = ['branding',
+                            'toolbar',
+                            'civicrm-menu',
+                            'civicrm-footer',
+                            'access'],
+                        i = 0, len = hideElements.length;
 
                     for (i; i < len; i++) {
                         document.getElementById(hideElements[i]).style.display = 'none';
                     }
 
-                    document.getElementsByTagName('body')[0].style.paddingTop = '10px'
-
-                }
+                    document.body.style.paddingTop = '10px';
+                    iframeEl.height = document.body.scrollHeight+'px';
+                });
 
             }
         }

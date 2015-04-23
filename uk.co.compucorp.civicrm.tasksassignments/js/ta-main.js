@@ -25,7 +25,8 @@ reqTa([
     'controllers/dashboard/navMain',
     'controllers/modal/modalTask',
     'controllers/modal/modalAssignment',
-    'controllers/assignments',
+    'controllers/externalPage',
+    'directives/civiEvents',
     'directives/iframe',
     'filters/dateParse',
     'requireLib'

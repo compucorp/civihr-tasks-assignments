@@ -1,4 +1,4 @@
-<div class="{{prefix}}page-contact">
+<div class="{{prefix}}page-contact" ta-civi-events>
     <form name="formTasks">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -11,29 +11,31 @@
                 </button>
             </div>
         </div>
-        <h4>Ongoing:</h4>
-        <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskList"
-                ng-controller="TaskCtrl"
-                ng-class="{
-                    '{{prefix}}task-completed': task.completed,
-                    '{{prefix}}task-due': task.due
-                }"
-                ng-if="!task.resolved"
-                ng-include
-                src="'task.html'">
-            </li>
-        </ul>
-        <h4>Resolved:</h4>
-        <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskList"
-                ng-controller="TaskCtrl"
-                ng-class="'{{prefix}}task-resolved'"
-                ng-if="task.resolved"
-                ng-include
-                src="'task.html'">
-            </li>
-        </ul>
+        <div ng-show="taskList.length">
+            <h4>Ongoing:</h4>
+            <ul class="{{prefix}}list-task">
+                <li ng-repeat="task in taskList"
+                    ng-controller="TaskCtrl"
+                    ng-class="{
+                        '{{prefix}}task-completed': task.completed,
+                        '{{prefix}}task-due': task.due
+                    }"
+                    ng-if="!task.resolved"
+                    ng-include
+                    src="'task.html'">
+                </li>
+            </ul>
+            <h4>Resolved:</h4>
+            <ul class="{{prefix}}list-task">
+                <li ng-repeat="task in taskList"
+                    ng-controller="TaskCtrl"
+                    ng-class="'{{prefix}}task-resolved'"
+                    ng-if="task.resolved"
+                    ng-include
+                    src="'task.html'">
+                </li>
+            </ul>
+        </div>
     </form>
 </div>
 
@@ -49,7 +51,7 @@
             <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
         </div>
         <div class="col-xs-2 text-right">
-            <a href class="{{prefix}}assignment-type">Exiting</a>
+            <span class="{{prefix}}assignment-type" ng-bind="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title"></span>
         </div>
         <div class="col-xs-2 text-right">
             <a href class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>

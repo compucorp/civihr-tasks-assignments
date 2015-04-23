@@ -3,27 +3,38 @@ define(['controllers/controllers',
         'services/task',
         'services/assignment'], function(controllers){
 
-    controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$filter', '$log', 'taskList',
-        'config', 'ContactService', 'TaskService',
-        function($scope, $modal, $rootElement, $rootScope, $filter, $log, taskList, config, ContactService, TaskService){
+    controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
+        '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
+        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, taskList, config, ContactService,
+                 AssignmentService, TaskService){
             $log.debug('Controller: TaskListCtrl');
 
             this.init = function(){
-                var contactIds = this.contactIds;
+                var contactIds = this.contactIds,
+                    assignmentIds = this.assignmentIds;
 
-                this.collectCId(taskList);
+                this.collectId(taskList);
 
                 if (contactIds && contactIds.length) {
                     ContactService.get({'IN': contactIds}).then(function(data){
                         ContactService.updateCache(data);
                     });
                 }
+
+                if (assignmentIds && assignmentIds.length) {
+                    AssignmentService.get({'IN': assignmentIds}).then(function(data){
+                        AssignmentService.updateCache(data);
+                        console.log($rootScope.cache);
+                    });
+                }
             }
 
+            this.assignmentIds = [];
             this.contactIds = [];
 
-            this.collectCId = function(taskList){
-                var contactIds = this.contactIds;
+            this.collectId = function(taskList){
+                var contactIds = this.contactIds,
+                    assignmentIds = this.assignmentIds;
 
                 contactIds.push(config.LOGGED_IN_CONTACT_ID);
 
@@ -31,7 +42,7 @@ define(['controllers/controllers',
                     contactIds.push(config.CONTACT_ID);
                 }
 
-                angular.forEach(taskList,function(task){
+                function collectCId(task) {
                     contactIds.push(task.source_contact_id);
 
                     if (task.assignee_contact_id && task.assignee_contact_id.length) {
@@ -41,7 +52,17 @@ define(['controllers/controllers',
                     if (task.target_contact_id && task.target_contact_id.length) {
                         contactIds.push(task.target_contact_id[0]);
                     }
+                }
 
+                function collectAId(task) {
+                    if (task.case_id) {
+                        assignmentIds.push(task.case_id);
+                    }
+                }
+
+                angular.forEach(taskList,function(task){
+                    collectCId(task);
+                    collectAId(task);
                 });
             }
 
@@ -126,6 +147,19 @@ define(['controllers/controllers',
                      $scope.taskList.splice($scope.taskList.indexOf(task),1);
                  });
             }
+
+            $scope.$on('crmFormSuccess',function(e, data){
+                if (data.status == 'success')  {
+                    var pattern = /case|activity/i;
+
+                    if (pattern.test(data.title) ||
+                        data.crmMessages.length &&
+                        (pattern.test(data.crmMessages[0].title) ||
+                        pattern.test(data.crmMessages[0].text))) {
+                        $route.reload();
+                    }
+                }
+            });
 
             this.init();
 

@@ -55,13 +55,14 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                     templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime())
                 }).
                 when('/assignments', {
-                    controller: 'AssignmentsCtrl',
+                    controller: 'ExternalPageCtrl',
                     templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
                 }).
                 when('/calendar', {
                     templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime())
                 }).
                 when('/reports', {
+                    controller: 'ExternalPageCtrl',
                     templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
                 }).
                 when('/key-dates', {
@@ -89,7 +90,14 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                     arr: [],
                     addSearch: []
                 },
-                assignmentType: {},
+                assignment: {
+                    obj: {},
+                    arr: []
+                },
+                assignmentType: {
+                    obj: {},
+                    arr: []
+                },
                 taskType: {
                     obj: {},
                     arr: []
@@ -107,7 +115,10 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
             });
 
             AssignmentService.getTypes().then(function(types){
-                angular.extend($rootScope.cache.assignmentType,types);
+                angular.extend($rootScope.cache.assignmentType.obj,types);
+                angular.forEach(types, function(type) {
+                    this.push(type);
+                }, $rootScope.cache.assignmentType.arr);
             });
 
         }

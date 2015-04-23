@@ -71,95 +71,6 @@
   padding-bottom: floor(($grid-gutter-width / 2));
   padding-top: floor(($grid-gutter-width / 2));
 */
-  /*.ct-list-task {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  
-    > li {
-      margin-bottom: 10px;
-      padding-left: 20px;
-    }
-  
-    h5 {
-      margin-top: 3px;
-    }
-  
-    header {
-      .col-xs-12 {
-        margin-bottom: 10px;
-      }
-    }
-  
-    .btn-collapse {
-      margin-left: -12px;
-    }
-  
-    .ct-task-subject {
-      color: $gray;
-      font-size: 12px;
-    }
-  
-    .ct-task-due {
-      .label {
-        background-color: #db6c86;
-  
-        &:hover,
-        &:focus {
-          background-color: darken($brand-danger, 10%);
-        }
-      }
-  
-      .ct-task-title,
-      h5,
-      p {
-        color: #db6c86;
-      }
-    }
-  
-    .ct-task-resolved {
-      .label {
-        background-color: $gray;
-  
-        &:hover,
-        &:focus {
-          background-color: darken($gray, 10%);
-        }
-      }
-  
-      .ct-task-title,
-      h5,
-      p {
-        color: $gray;
-      }
-    }
-  
-    .ct-task-completed {
-      @extend .ct-task-resolved;
-  
-      .ct-task-title:not(:hover) {
-        text-decoration: line-through;
-      }
-    }
-  
-    .ct-task-checkbox {
-      margin-top: 0;
-      margin-left: -19px;
-      margin-right: 2px;
-      position: relative;
-      top: 1px;
-    }
-  
-    .ct-task-title {
-      color: #333333;
-      margin-right: 15px;
-    }
-  
-    .ct-assignment-type {
-      margin-right: 15px;
-    }
-  }
-  */
 }
 /* line 7, ../sass/modules/_unset.scss */
 #civitasks html,
@@ -10581,10 +10492,14 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   top: 2px;
 }
 /* line 89, ../sass/partials/_lists.scss */
+#civitasks .ct-list-task .ct-task-contact-assignee {
+  word-break: break-word;
+}
+/* line 93, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-contact-source {
   font-size: 11px;
 }
-/* line 93, ../sass/partials/_lists.scss */
+/* line 97, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-details {
   background-color: #f0f1f4;
   border: 1px solid #f0f1f4;
@@ -10592,16 +10507,16 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   margin-bottom: 14px;
   font-size: 12px;
 }
-/* line 100, ../sass/partials/_lists.scss */
+/* line 104, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-details > * {
   margin-bottom: 6px;
 }
-/* line 105, ../sass/partials/_lists.scss */
+/* line 109, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-subject {
   font-size: 12px;
   margin-bottom: 17px;
 }
-/* line 109, ../sass/partials/_lists.scss */
+/* line 113, ../sass/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-subject time {
   margin-right: 12px;
 }
