@@ -191,7 +191,15 @@ define(['services/services',
                     arrSearch.push({
                         label: assignment.contacts[0].sort_name + ' - ' + assignmentType + (assignment.end_date ? ' (closed)' : ''),
                         label_class: +assignment.is_deleted || assignment.end_date ? 'strikethrough' : '',
-                        id: assignmentId
+                        id: assignmentId,
+                        extra: {
+                            case_subject: assignment.subject,
+                            case_type: assignmentType,
+                            contact_id: assignment.contacts[0].contact_id,
+                            end_date: assignment.end_date,
+                            sort_name: assignment.contacts[0].sort_name,
+                            start_date: assignment.start_date
+                        }
                     });
 
                 }

@@ -20,6 +20,11 @@ define(['controllers/controllers',
             $scope.showCId = !config.CONTACT_ID;
 
             $scope.cacheAssignment = function($item){
+
+                if ($rootScope.cache.assignment.obj[$item.id]) {
+                    return
+                }
+
                 var obj = {};
 
                 obj[$item.id] = {
