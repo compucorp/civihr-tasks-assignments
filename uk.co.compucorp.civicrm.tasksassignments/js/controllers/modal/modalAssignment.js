@@ -19,6 +19,14 @@ define(['controllers/controllers',
             $scope.taskSet = {};
             $scope.taskList = [];
 
+            $scope.addTask = function(){
+
+                $scope.taskList.push({
+                    isAdded: true
+                });
+
+            }
+
             $scope.dpOpen = function($event, key){
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -32,7 +40,9 @@ define(['controllers/controllers',
                     return
                 }
 
-                ContactService.search(input).then(function(results){
+                ContactService.search(input, {
+                    contact_type: 'Individual'
+                }).then(function(results){
                     $scope.contacts = results;
                 });
             }
@@ -132,6 +142,10 @@ define(['controllers/controllers',
                         AssignmentService.updateCache(cacheAssignmentObj);
                         AssignmentService.updateTab(1);
                         $modalInstance.close(taskListAssignment);
+                    },function(reason){
+                        CRM.alert(reason, 'Error', 'error');
+                        $modalInstance.dismiss();
+                        return $q.reject();
                     });
 
                 },function(reason){
@@ -152,10 +166,10 @@ define(['controllers/controllers',
         function($scope, $log, $filter, $rootScope, config){
             $log.debug('Controller: ModalAssignmentTaskCtrl');
 
-            var taskType = $filter('filter')($rootScope.cache.taskType.arr, { value: $scope.task.name }, true)[0];
+            var taskType = $scope.task.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: $scope.task.name }, true)[0] : '';
 
-            $scope.isDisabled = !taskType;
-            $scope.task.create = !!taskType;
+            $scope.isDisabled = !taskType && !$scope.task.isAdded;
+            $scope.task.create = !$scope.isDisabled;
             $scope.task.status_id = '1';
             $scope.task.activity_type_id = taskType ? taskType.key : null;
             $scope.task.assignee_contact_id = [];

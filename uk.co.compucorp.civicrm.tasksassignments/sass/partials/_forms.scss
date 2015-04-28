@@ -35,3 +35,19 @@
     }
   }
 }
+
+.ui-select-multiple.ui-select-bootstrap {
+  height: $input-height-base;
+
+  input.ui-select-search {
+    height: 1.9em;
+  }
+
+  .btn-xs {
+    padding: 2px 8px;
+  }
+
+  .ui-select-match .close {
+    line-height: 0.8;
+  }
+}

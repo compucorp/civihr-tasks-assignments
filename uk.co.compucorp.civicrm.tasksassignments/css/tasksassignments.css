@@ -10388,6 +10388,22 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .modal-dialog .form-assignment input[type="checkbox"] {
   margin-top: 2px;
 }
+/* line 39, ../sass/partials/_forms.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap {
+  height: 32px;
+}
+/* line 42, ../sass/partials/_forms.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
+  height: 1.9em;
+}
+/* line 46, ../sass/partials/_forms.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap .btn-xs, #civitasks .ui-select-multiple.ui-select-bootstrap .btn-group-xs > .btn {
+  padding: 2px 8px;
+}
+/* line 50, ../sass/partials/_forms.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+  line-height: 0.8;
+}
 /* line 1, ../sass/partials/_dropdowns.scss */
 #civitasks .dropdown-menu {
   padding: 0;

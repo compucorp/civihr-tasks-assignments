@@ -65,10 +65,20 @@
                 <hr>
                 <h4 ng-show="taskList.length">Tasks:</h4>
                 <div class="form-group" ng-repeat="task in taskList" ng-controller="ModalAssignmentTaskCtrl">
-                    <div class="checkbox col-xs-12 col-sm-3">
+                    <div class="checkbox col-xs-12 col-sm-3" ng-if="!task.isAdded">
                         <label>
                             <input type="checkbox" ng-model="task.create" ng-disabled="isDisabled"> {{task.name}}
                         </label>
+                    </div>
+                    <div class="col-xs-8 col-sm-3" ng-if="task.isAdded">
+                        <ui-select ng-model="task.activity_type_id">
+                            <ui-select-match
+                                    placeholder="Select task type">{{$select.selected.value}}</ui-select-match>
+                            <ui-select-choices
+                                    repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                                <div ng-bind="type.value"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
                     <label class="col-xs-12 col-sm-2 control-label">Assigned to:</label>
                     <div class="col-xs-6 col-sm-4">
@@ -102,6 +112,13 @@
                            ng-click="dpOpen($event, $index);"
                            ng-disabled="isDisabled">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                     <input type="hidden" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.activity_date_time" name="assignmentDue">
+                </div>
+                <div class="row" ng-show="taskList.length">
+                    <div class="col-xs-12">
+                        <a href class="btn btn-default btn-primary" ng-click="addTask()">
+                            <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a task
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

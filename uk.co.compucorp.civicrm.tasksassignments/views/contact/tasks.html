@@ -2,19 +2,32 @@
     <form name="formTasks">
         <div class="panel panel-default">
             <div class="panel-body">
-                <button class="btn btn-default btn-primary" ng-click="modalTask()">
-                    <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
-                </button>
-                &nbsp;
-                <button class="btn btn-default btn-primary" ng-click="modalAssignment()">
-                    <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
-                </button>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-lg-8">
+                        <button class="btn btn-default btn-primary" ng-click="modalTask()">
+                            <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
+                        </button>
+                        &nbsp;
+                        <button class="btn btn-default btn-primary" ng-click="modalAssignment()">
+                            <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
+                        </button>
+                        {{filterByAssignmentType}}
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                        <ui-select multiple ng-model="filterByAssignmentType">
+                            <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr | filter">
+                                <div ng-bind-html="type.title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
             </div>
         </div>
         <div ng-show="taskList.length">
             <h4>Ongoing:</h4>
             <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskList"
+                <li ng-repeat="task in taskList | filter: tasksFilterFn.assignmentType | orderBy: 'activity_date_time'"
                     ng-controller="TaskCtrl"
                     ng-class="{
                         '{{prefix}}task-completed': task.completed,

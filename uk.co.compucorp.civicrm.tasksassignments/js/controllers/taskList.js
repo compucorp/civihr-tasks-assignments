@@ -68,6 +68,7 @@ define(['controllers/controllers',
             }
 
             $scope.filterByContact = null;
+            //$scope.filterByAssignmentType = [];
 
             $scope.taskList = taskList;
 
@@ -94,6 +95,14 @@ define(['controllers/controllers',
                 delegatedTasks: function(task){
                     return task.source_contact_id == config.LOGGED_IN_CONTACT_ID
                 }
+                /*
+                ,
+                assignmentType: function(task){
+                    console.log(task.case_id);
+                    console.log($scope.filterByAssignmentType);
+                    //return $scope.filterByAssignmentType.indexOf(task.case_id) !== -1
+                }
+                */
             }
 
             $scope.dueToday = 0;
@@ -162,6 +171,14 @@ define(['controllers/controllers',
                     }
                 }
             });
+
+            //$scope.filterByAssignmentType = [];
+            /*
+            $scope.$watchCollection('filterByAssignmentType.selected',function(newVal, oldVal){
+                console.log(newVal);
+                console.log(oldVal);
+            });
+            */
 
             this.init();
 

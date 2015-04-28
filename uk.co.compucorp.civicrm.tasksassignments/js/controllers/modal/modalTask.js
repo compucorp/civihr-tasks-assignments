@@ -79,7 +79,9 @@ define(['controllers/controllers',
                     return
                 }
 
-                ContactService.search(input).then(function(results){
+                ContactService.search(input, {
+                    contact_type: 'Individual'
+                }).then(function(results){
                     $scope.contacts = results;
                 });
             }
