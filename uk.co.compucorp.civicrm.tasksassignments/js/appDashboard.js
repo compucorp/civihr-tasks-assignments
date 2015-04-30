@@ -1,4 +1,4 @@
-define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
+define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
     'filters/filters', 'services/services'], function(){
     var app = angular.module('civitasks.appDashboard',[
         'ngRoute',
@@ -7,6 +7,7 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
         'ui.bootstrap',
         'ui.select',
         'textAngular',
+        'crmUi',
         'civitasks.config',
         'civitasks.controllers',
         'civitasks.directives',
@@ -84,6 +85,7 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
 
             $rootScope.pathTpl = config.path.TPL;
             $rootScope.prefix = config.CLASS_NAME_PREFIX;
+            $rootScope.url = config.url;
             $rootScope.cache = {
                 contact: {
                     obj: {},
@@ -92,7 +94,8 @@ define(['angularSelect', 'textAngular', 'config', 'controllers/controllers', 'di
                 },
                 assignment: {
                     obj: {},
-                    arr: []
+                    arr: [],
+                    arrSearch: []
                 },
                 assignmentType: {
                     obj: {},

@@ -67,10 +67,24 @@ define(['controllers/controllers',
                 });
             }
 
-            $scope.filterByContact = null;
-            //$scope.filterByAssignmentType = [];
-
+            $scope.dueToday = 0;
+            $scope.dueThisWeek = 0;
+            $scope.overdue = 0;
             $scope.taskList = taskList;
+            $scope.isCollapsed = true;
+
+            $scope.filterBy = {
+                contactId: null,
+                userRole: null,
+                due: null,
+                assignmentType: []
+            };
+
+            $scope.label = {
+                overdue: 'Overdue',
+                dueToday: 'Due Today',
+                dueThisWeek: 'Due This Week'
+            }
 
             $scope.tasksFilterFn = {
                 overdue: function(task){
@@ -95,19 +109,27 @@ define(['controllers/controllers',
                 delegatedTasks: function(task){
                     return task.source_contact_id == config.LOGGED_IN_CONTACT_ID
                 }
-                /*
                 ,
                 assignmentType: function(task){
-                    console.log(task.case_id);
-                    console.log($scope.filterByAssignmentType);
-                    //return $scope.filterByAssignmentType.indexOf(task.case_id) !== -1
+                    var assignment = $rootScope.cache.assignment.obj[task.case_id];
+
+                    if (!$scope.filterBy.assignmentType.length) {
+                        return true;
+                    }
+
+                    if (assignment) {
+                        return $scope.filterBy.assignmentType.indexOf(assignment.case_type_id) !== -1
+                    }
+
+                    return false;
+                },
+                contactId: function(task) {
+                    var contactId = $scope.filterBy.contactId;
+                    return !contactId || +task.assignee_contact_id[0] === +contactId || +task.source_contact_id === +contactId || +task.target_contact_id === +contactId;
                 }
-                */
             }
 
-            $scope.dueToday = 0;
-            $scope.dueThisWeek = 0;
-            $scope.overdue = 0;
+
 
             $rootScope.modalTask = function(data) {
                     var data = data || {},
@@ -166,19 +188,14 @@ define(['controllers/controllers',
                         data.crmMessages.length &&
                         (pattern.test(data.crmMessages[0].title) ||
                         pattern.test(data.crmMessages[0].text))) {
-                        $rootScope.cache.assignment = {};
+                        $rootScope.cache.assignment = {
+                            obj: {},
+                            arr: []
+                        };
                         $route.reload();
                     }
                 }
             });
-
-            //$scope.filterByAssignmentType = [];
-            /*
-            $scope.$watchCollection('filterByAssignmentType.selected',function(newVal, oldVal){
-                console.log(newVal);
-                console.log(oldVal);
-            });
-            */
 
             this.init();
 

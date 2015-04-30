@@ -4,6 +4,7 @@ var module, reqTa = require.config({
     urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
         angularSelect: 'vendor/angular/select',
+        crmUi: 'vendor/angular/crmUi',
         moment: 'vendor/moment.min',
         requireLib: CRM.vars.reqAngular.requireLib,
         textAngular: 'vendor/angular/textAngular.min',

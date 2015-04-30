@@ -10361,6 +10361,14 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   top: 13px;
   font-size: 11px;
 }
+/* line 38, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-advanced {
+  margin-top: 20px;
+}
+/* line 41, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-advanced .form-group {
+  margin-bottom: 0;
+}
 /* line 7, ../sass/partials/_forms.scss */
 #civitasks .form-task h3 {
   margin-top: 0;
@@ -10390,7 +10398,7 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 }
 /* line 39, ../sass/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap {
-  height: 32px;
+  min-height: 32px;
 }
 /* line 42, ../sass/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
@@ -10403,6 +10411,10 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 50, ../sass/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
   line-height: 0.8;
+}
+/* line 54, ../sass/partials/_forms.scss */
+#civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+  margin-bottom: 2px;
 }
 /* line 1, ../sass/partials/_dropdowns.scss */
 #civitasks .dropdown-menu {

@@ -34,3 +34,11 @@
     }
   }
 }
+
+.#{$prefix}filter-advanced {
+  margin-top: 20px;
+
+  .form-group {
+    margin-bottom: 0;
+  }
+}

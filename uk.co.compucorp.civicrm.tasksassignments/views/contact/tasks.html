@@ -11,12 +11,13 @@
                         <button class="btn btn-default btn-primary" ng-click="modalAssignment()">
                             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
                         </button>
-                        {{filterByAssignmentType}}
                     </div>
                     <div class="col-xs-12 col-sm-6 col-lg-4">
-                        <ui-select multiple ng-model="filterByAssignmentType">
+                        <ui-select
+                                multiple
+                                ng-model="filterBy.assignmentType">
                             <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
-                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr | filter">
+                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
                                 <div ng-bind-html="type.title | highlight: $select.search"></div>
                             </ui-select-choices>
                         </ui-select>
@@ -24,10 +25,10 @@
                 </div>
             </div>
         </div>
-        <div ng-show="taskList.length">
+        <div ng-show="taskListFiltered.length">
             <h4>Ongoing:</h4>
             <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskList | filter: tasksFilterFn.assignmentType | orderBy: 'activity_date_time'"
+                <li ng-repeat="task in taskListFiltered = (taskList | filter: tasksFilterFn.assignmentType | orderBy: 'activity_date_time')"
                     ng-controller="TaskCtrl"
                     ng-class="{
                         '{{prefix}}task-completed': task.completed,
@@ -40,7 +41,7 @@
             </ul>
             <h4>Resolved:</h4>
             <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskList"
+                <li ng-repeat="task in taskListFiltered"
                     ng-controller="TaskCtrl"
                     ng-class="'{{prefix}}task-resolved'"
                     ng-if="task.resolved"
@@ -67,7 +68,7 @@
             <span class="{{prefix}}assignment-type" ng-bind="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title"></span>
         </div>
         <div class="col-xs-2 text-right">
-            <a href class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>
+            <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}" class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>
         </div>
         <div class="col-xs-1">
             <div class="dropdown" dropdown>
@@ -87,14 +88,14 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <p><a href="" ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
+            <p><a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
                     class="fa"
                     ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
                     aria-hidden="true"></span> Details</a></p>
             <article class="row" collapse="isCollapsed">
                 <div class="col-xs-12">
                     <div ta-bind class="{{prefix}}task-details" ng-if="!!task.details" ng-model="task.details"></div>
-                    <p class="{{prefix}}task-contact-source">Assigned by:&nbsp; <a href><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span> - Ongoing</a></p>
+                    <p class="{{prefix}}task-contact-source">Assigned by:&nbsp; <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}"><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span></a></p>
                 </div>
             </article>
         </div>

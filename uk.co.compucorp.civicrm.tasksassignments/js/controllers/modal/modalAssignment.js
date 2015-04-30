@@ -95,7 +95,8 @@ define(['controllers/controllers',
                         i = 0, len = resultTask.length;
 
                         for (i; i < len; i++) {
-                            taskArr.push(resultTask[i].id)
+                            taskListAssignment[i].id = resultTask[i].id;
+                            taskArr.push(resultTask[i].id);
                         }
 
                         return $q.all({

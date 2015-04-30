@@ -37,7 +37,7 @@
 }
 
 .ui-select-multiple.ui-select-bootstrap {
-  height: $input-height-base;
+  min-height: $input-height-base;
 
   input.ui-select-search {
     height: 1.9em;
@@ -49,5 +49,9 @@
 
   .ui-select-match .close {
     line-height: 0.8;
+  }
+
+  .ui-select-match-item {
+    margin-bottom: 2px;
   }
 }

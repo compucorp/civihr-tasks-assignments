@@ -7,9 +7,9 @@
             <div class="panel-body">
                 <div class="{{prefix}}filter-due">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href ng-model="filterByDue" btn-radio="'overdue'" uncheckable>Overdue <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskList | filter: tasksFilterFn.overdue | filter: tasksFilterFn[filterByContact]).length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterByDue" btn-radio="'dueToday'" uncheckable>Due Today <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueToday | filter: tasksFilterFn[filterByContact]).length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterByDue"  btn-radio="'dueThisWeek'" uncheckable>Due This Week <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueThisWeek | filter: tasksFilterFn[filterByContact]).length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskList | filter: tasksFilterFn.overdue | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueToday | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterBy.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueThisWeek | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
                     </ul>
                     <hr>
                 </div>
@@ -22,31 +22,78 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-12 col-sm-2">
-                            Due Today:
+                            {{label[filterBy.due]}}
                         </div>
                         <div class="col-xs-12 col-sm-8 text-center">
-                            <div class="{{prefix}}filter-contact">
+                            <div class="{{prefix}}filter-user-role">
                                 <div class="btn-group btn-group-xs">
                                     <button type="button" class="btn btn-gray active"
-                                            ng-model="filterByContact"
+                                            ng-model="filterBy.userRole"
                                             btn-radio="'myTasks'">My Tasks ({{(taskList | filter: tasksFilterFn.myTasks).length}})</button>
                                     <button type="button" class="btn btn-gray"
-                                            ng-model="filterByContact"
+                                            ng-model="filterBy.userRole"
                                             btn-radio="'delegatedTasks'">Delegated Tasks ({{(taskList | filter: tasksFilterFn.delegatedTasks).length}})</button>
                                     <button type="button" class="btn btn-gray"
-                                            ng-model="filterByContact"
+                                            ng-model="filterBy.userRole"
                                             btn-radio="null">All</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-2 text-right">
-                            <a href class="btn btn-collapse"><span class="fa fa-chevron-right" aria-hidden="true"></span> Filter Tasks</a>
+                            <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
+                                    class="fa"
+                                    ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
+                                    aria-hidden="true"></span> Filter Tasks</a>
+                        </div>
+                    </div>
+                    <div class="row form-horizontal" collapse="isCollapsed">
+                        <div class="{{prefix}}filter-advanced">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="col-xs-12 col-sm-3 control-label">Contact:</label>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <div class="input-group">
+                                            <ui-select
+                                                    allow-clear
+                                                    ng-model="filterBy.contactId">
+                                                <ui-select-match
+                                                        placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
+                                                <ui-select-choices  repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
+                                                                    refresh-delay="0">
+                                                    <div ng-bind="contact.label"></div>
+                                                    <small ng-bind="contact.description[0]"></small>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        <span class="input-group-btn">
+                                          <a ng-click="filterBy.contactId = ''" class="btn btn-default">
+                                              <span class="fa fa-remove"></span>
+                                          </a>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="col-xs-12 col-sm-4 control-label">Assignmnet Type:</label>
+                                    <div class="col-xs-12 col-sm-8">
+                                        <ui-select
+                                                multiple
+                                                ng-model="filterBy.assignmentType">
+                                            <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                                                <div ng-bind-html="type.title | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskList | filter: tasksFilterFn[filterByDue] | filter: tasksFilterFn[filterByContact] | orderBy: 'activity_date_time'"
+                <li ng-repeat="task in taskList | filter: tasksFilterFn[filterBy.due] | filter: tasksFilterFn[filterBy.userRole] | filter: tasksFilterFn.assignmentType | filter: tasksFilterFn.contactId | orderBy: 'activity_date_time'"
                     ng-controller="TaskCtrl"
                     ng-class="{
                         '{{prefix}}task-completed': task.completed,
@@ -75,7 +122,7 @@
             <span class="{{prefix}}assignment-type" ng-bind="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title"></span>
         </div>
         <div class="col-xs-2 text-right">
-            <a href class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>
+            <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}" class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>
         </div>
         <div class="col-xs-1">
             <div class="dropdown" dropdown>
@@ -95,14 +142,14 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <p><a href="" ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
+            <p><a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
                     class="fa"
                     ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
                     aria-hidden="true"></span> Details</a></p>
             <article class="row" collapse="isCollapsed">
                 <div class="col-xs-12">
                     <div ta-bind class="{{prefix}}task-details" ng-if="!!task.details" ng-model="task.details"></div>
-                    <p class="{{prefix}}task-contact-source">Assigned by:&nbsp; <a href><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span> - Ongoing</a></p>
+                    <p class="{{prefix}}task-contact-source">Assigned by:&nbsp; <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}"><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span></a></p>
                 </div>
             </article>
         </div>
