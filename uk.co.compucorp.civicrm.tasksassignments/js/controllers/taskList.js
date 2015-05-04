@@ -71,11 +71,23 @@ define(['controllers/controllers',
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
             $scope.taskList = taskList;
-            $scope.isCollapsed = true;
+
+            $scope.dpOpened = {
+                filterDates: {}
+            }
+
+            $scope.isCollapsed = {
+                filterAdvanced: true,
+                filterDates: true
+            };
 
             $scope.filterBy = {
                 contactId: null,
                 userRole: null,
+                date: {
+                    from: null,
+                    until: null
+                },
                 due: null,
                 assignmentType: []
             };
@@ -83,10 +95,33 @@ define(['controllers/controllers',
             $scope.label = {
                 overdue: 'Overdue',
                 dueToday: 'Due Today',
-                dueThisWeek: 'Due This Week'
+                dueThisWeek: 'Due This Week',
+                dateRange: ''
+            };
+
+            $scope.labelDateRange = function(){
+                var filterDateTimeFrom = $filter('date')($scope.filterBy.date.from, 'dd/MM/yyyy') || '',
+                    filterDateTimeUntil = $filter('date')($scope.filterBy.date.until, 'dd/MM/yyyy') || '';
+
+                if (filterDateTimeUntil) {
+                    filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
+                }
+
+                if (filterDateTimeFrom) {
+                    filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
+                }
+
+                $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
             }
 
             $scope.tasksFilterFn = {
+                dateRange: function(task){
+                    var taskDateTime = new Date(task.activity_date_time).setHours(0, 0, 0, 0),
+                        filterDateTimeFrom = $scope.filterBy.date.from ? new Date($scope.filterBy.date.from).setHours(0, 0, 0, 0) : -Infinity,
+                        filterDateTimeUntil = $scope.filterBy.date.until ? new Date($scope.filterBy.date.until).setHours(0, 0, 0, 0) : Infinity;
+
+                    return  taskDateTime >= filterDateTimeFrom && taskDateTime <= filterDateTimeUntil;
+                },
                 overdue: function(task){
                     return new Date(task.activity_date_time).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
                 },

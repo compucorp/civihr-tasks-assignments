@@ -10327,45 +10327,62 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   margin-bottom: 0;
 }
 /* line 2, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav {
+#civitasks .ct-filter-date .nav {
   margin-left: -20px;
   margin-right: -20px;
 }
 /* line 6, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li {
+#civitasks .ct-filter-date .nav > li {
   margin-top: 0;
 }
 /* line 9, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li > a {
+#civitasks .ct-filter-date .nav > li > a {
   color: #4c4c5d;
   padding: 9px 20px 8px 23px;
 }
 /* line 13, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li > a.active {
+#civitasks .ct-filter-date .nav > li > a.active {
   background-color: #42b0cb;
   color: #fff;
 }
 /* line 17, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li > a.active .badge:not(.badge-danger) {
+#civitasks .ct-filter-date .nav > li > a.active .badge:not(.badge-danger) {
   background-color: #fff;
   color: #42b0cb;
 }
 /* line 24, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li .badge {
+#civitasks .ct-filter-date .nav > li .badge {
   float: right;
 }
 /* line 28, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-due .nav > li .fa {
+#civitasks .ct-filter-date .nav > li .fa {
   position: absolute;
   right: 67px;
   top: 13px;
   font-size: 11px;
 }
-/* line 38, ../sass/partials/_filters.scss */
+/* line 37, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-date .ct-select-dates {
+  color: #4c4c5d;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 9px 20px 8px 23px;
+  text-align: left;
+  width: auto;
+}
+/* line 45, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-date .ct-select-dates em {
+  color: #757b8e;
+}
+/* line 49, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-date .ct-select-dates .fa {
+  float: right;
+}
+/* line 55, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-advanced {
   margin-top: 20px;
 }
-/* line 41, ../sass/partials/_filters.scss */
+/* line 58, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-advanced .form-group {
   margin-bottom: 0;
 }
