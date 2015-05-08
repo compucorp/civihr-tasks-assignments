@@ -619,3 +619,25 @@ function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
     
     return null;
 }
+
+/*
+ * Task Reminder on demand.
+ */
+function civicrm_api3_task_sendreminder($params) {
+    
+    if (empty($params['activity_id'])) {
+        throw new API_Exception(ts("Please specify 'activity_id' value."));
+    }
+    
+    $result = CRM_Tasksassignments_BAO_Task::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '');
+    return civicrm_api3_create_success($result, $params, 'task', 'reminder');
+}
+
+/*
+ * Daily Task Reminder.
+ */
+function civicrm_api3_task_senddailyreminder($params) {
+    
+    CRM_Tasksassignments_BAO_Task::sendDailyReminder();
+    return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
+}
