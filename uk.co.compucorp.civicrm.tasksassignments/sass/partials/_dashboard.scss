@@ -16,7 +16,7 @@
   }
 
   .#{$prefix}container-inner {
-    background-color: $panel-bg;
+    background-color: $brand-secondary;
 
     &:before,
     &:after {

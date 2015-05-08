@@ -81,6 +81,7 @@
   @import "modules/select";
   @import "modules/textangular";
 
+  @import "partials/typography";
   @import "partials/global";
   @include global;
   @import "partials/badge";
@@ -88,6 +89,7 @@
   @import "partials/buttons";
   @import "partials/collapse";
   @import "partials/dashboard";
+  @import "partials/datepicker";
   @import "partials/filters";
   @import "partials/forms";
   @import "partials/dropdowns";

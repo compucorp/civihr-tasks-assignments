@@ -30,19 +30,19 @@
 
   + .#{$prefix}content-wrapper {
     > .#{$prefix}content {
-      padding: 10px;
+      padding: 15px;
       min-height: $content-min-height;
     }
   }
 }
 
 .#{$prefix}sidebar-inner {
-  width: 239px;
+  width: 225px;
 
   + .#{$prefix}content-wrapper {
     > .#{$prefix}content {
       border-left: 1px solid $body-bg;
-      margin-left: 239px;
+      margin-left: 225px;
       min-height: $content-min-height - 20px;
     }
   }

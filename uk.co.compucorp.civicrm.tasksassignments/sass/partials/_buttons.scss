@@ -1,3 +1,19 @@
+.btn {
+  text-transform: uppercase;
+  font-size: $btn-font-size;
+  line-height: $btn-line-height;
+}
+
+.btn-lg {
+  font-size: $font-size-large;
+  line-height: $line-height-large;
+}
+.btn-sm,
+.btn-xs {
+  font-size: $font-size-small;
+  line-height: $line-height-small;
+}
+
 .btn-gray {
   color: #767e8f;
   background-color: #fff;

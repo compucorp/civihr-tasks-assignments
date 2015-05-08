@@ -1,3 +1,14 @@
+.form-control {
+  font-size: 11px;
+}
+
+.control-label {
+  color: $headings-color;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 11px;
+}
+
 .checkbox-label,
 .radio-label {
   @extend label;
@@ -41,10 +52,6 @@
 
   input.ui-select-search {
     height: 1.9em;
-  }
-
-  .btn-xs {
-    padding: 2px 8px;
   }
 
   .ui-select-match .close {

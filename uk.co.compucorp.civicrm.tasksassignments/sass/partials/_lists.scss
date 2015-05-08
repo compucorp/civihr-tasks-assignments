@@ -10,9 +10,9 @@
     margin-top: 10px;
     padding: {
       bottom: 2px;
-      left: 37px;
+      left: 35px;
       right: 20px;
-      top: 13px;
+      top: 17px;
     };
 
     &.#{$prefix}task-due {
@@ -31,26 +31,44 @@
   }
 
   .btn-collapse {
+    color: $text-color;
+    font-size: $font-size-base;
+    font-weight: normal;
     margin-bottom: 3px;
     margin-left: -20px;
+    text-transform: none;
 
     .fa {
       font-size: 11px;
       margin-right: 9px;
+      top: 0;
 
       &.fa-chevron-down {
         margin-right: 6px;
       }
     }
+
+    &:hover,
+    &:focus {
+      color: darken($text-color, 15%);
+    }
   }
 
   header {
+    font-size: 11px;
     font-weight: bold;
-    margin-bottom: 7px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
   }
 
   time {
     color: $brand-success;
+  }
+
+  .dropdown {
+    float: right;
+    width: 10%;
+    display: inline-block;
   }
 
   .dropdown-toggle {
@@ -66,10 +84,6 @@
     }
   }
 
-  .dropdown-menu {
-    margin-top: 22px;
-  }
-
   .#{$prefix}assignment-type,
   .#{$prefix}task-title {
     color: $gray-dark;
@@ -80,14 +94,17 @@
   }
 
   .#{$prefix}task-checkbox {
-    margin-left: -21px;
+    margin-left: -20px;
     margin-right: 4px;
-    position: relative;
-    top: 2px;
+    float: left;
+    margin-top: 2px;
   }
 
   .#{$prefix}task-contact-assignee {
+    padding-left: 10px;
     word-break: break-word;
+    width: 90%;
+    display: inline-block;
   }
 
   .#{$prefix}task-contact-source {
@@ -108,7 +125,7 @@
 
   .#{$prefix}task-subject {
     font-size: 12px;
-    margin-bottom: 17px;
+    margin-bottom: 12px;
 
     time {
       margin-right: 12px;

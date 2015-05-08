@@ -4,12 +4,12 @@
 <div id="{$module}" class="{$prefix}page-loading">
     <div class="container-fluid">
         <div id="{$prefix}dashboard">
-            <div class="{$prefix}top-panel">
+            <div class="{$prefix}top-bar">
                 <div class="row">
                     <div class="col-xs-12 col-sm-9">
                         <ol class="breadcrumb">
                             <li><a href="#">CiviHR</a></li>
-                            <li class="active">Task Dashboard</li>
+                            <li class="active">Dashboard</li>
                         </ol>
                     </div>
                     <div class="col-xs-12 col-sm-3">
