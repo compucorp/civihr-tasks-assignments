@@ -53,7 +53,13 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     }
                 }).
                 when('/documents', {
-                    templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime())
+                    controller: 'TaskListCtrl',
+                    templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime()),
+                    resolve: {
+                        taskList: function() {
+                            return []
+                        }
+                    }
                 }).
                 when('/assignments', {
                     controller: 'ExternalPageCtrl',
