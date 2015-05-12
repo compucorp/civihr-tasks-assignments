@@ -10481,18 +10481,28 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 }
 /* line 76, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-advanced {
-  margin-top: 20px;
+  max-width: 817px;
 }
 /* line 79, ../sass/partials/_filters.scss */
-#civitasks .ct-filter-advanced .form-group {
+#civitasks .ct-filter-advanced .row,
+#civitasks .ct-filter-advanced .form-horizontal .form-group {
   margin-bottom: 0;
+  margin-left: -5px;
+  margin-right: -5px;
+  margin-top: 10px;
 }
-/* line 84, ../sass/partials/_filters.scss */
+/* line 89, ../sass/partials/_filters.scss */
+#civitasks .ct-filter-advanced [class^="col-"],
+#civitasks .ct-filter-advanced [class*=" col-"] {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+/* line 99, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-user-role {
   margin-top: -6px;
   margin-bottom: -6px;
 }
-/* line 89, ../sass/partials/_filters.scss */
+/* line 104, ../sass/partials/_filters.scss */
 #civitasks .ct-filter-user-role .btn-group-sm > .btn {
   padding: 7px 13px 6px;
 }
@@ -10549,6 +10559,26 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 61, ../sass/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
   margin-bottom: 2px;
+}
+/* line 66, ../sass/partials/_forms.scss */
+#civitasks .ct-form-action {
+  margin-top: -12px;
+  margin-bottom: -12px;
+  max-width: 817px;
+  float: left;
+}
+/* line 73, ../sass/partials/_forms.scss */
+#civitasks .ct-form-action .row,
+#civitasks .ct-form-action .form-horizontal .form-group {
+  margin-bottom: 0;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+/* line 82, ../sass/partials/_forms.scss */
+#civitasks .ct-form-action [class^="col-"],
+#civitasks .ct-form-action [class*=" col-"] {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 /* line 1, ../sass/partials/_dropdowns.scss */
 #civitasks .dropdown-menu {
