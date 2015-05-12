@@ -29,7 +29,8 @@
     }
   }
 
-  .#{$prefix}list-task {
+  .#{$prefix}list-task,
+  .#{$prefix}list-key-dates {
     margin-left: 10px;
   }
 

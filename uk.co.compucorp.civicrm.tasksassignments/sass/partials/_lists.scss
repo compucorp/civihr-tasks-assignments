@@ -133,3 +133,42 @@
   }
 
 }
+
+.#{$prefix}list-key-dates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  strong {
+    font-size: 11px;
+    padding-right: 5px;
+    text-transform: uppercase;
+  }
+
+  time {
+    font-size: 11px;
+  }
+
+  > li {
+    margin-top: 10px;
+  }
+
+  .panel {
+    > .list-group {
+      .list-group-item {
+        border-width: 0;
+        margin: 0;
+        padding: 0 15px 13px;
+
+        &:first-child {
+          padding-top: 13px;
+        }
+      }
+    }
+  }
+
+  .panel-heading {
+    padding: 11px 15px 12px;
+  }
+
+}

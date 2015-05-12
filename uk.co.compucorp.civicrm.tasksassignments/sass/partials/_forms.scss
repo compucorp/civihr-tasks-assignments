@@ -1,8 +1,21 @@
+input[type="radio"],
+input[type="checkbox"],
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"]  {
+  margin-top: 2px;
+}
+
 .form-control {
   font-size: 11px;
 }
 
-.control-label {
+.control-label,
+.checkbox-inline,
+.radio-inline,
+.checkbox-label,
+.radio-labe {
   color: $headings-color;
   text-transform: uppercase;
   font-weight: bold;
@@ -36,15 +49,6 @@
   margin: 0;
   border: 1px solid $input-border;
   margin-bottom: -1px;
-}
-
-.modal-dialog {
-  .form-assignment {
-    input[type="radio"],
-    input[type="checkbox"] {
-      margin-top: 2px;
-    }
-  }
 }
 
 .ui-select-multiple.ui-select-bootstrap {

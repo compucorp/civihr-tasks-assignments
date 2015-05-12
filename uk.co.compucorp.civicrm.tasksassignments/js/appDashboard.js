@@ -73,7 +73,13 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
                 }).
                 when('/key-dates', {
-                    templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime())
+                    controller: 'TaskListCtrl',
+                    templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
+                    resolve: {
+                        taskList: function() {
+                            return []
+                        }
+                    }
                 }).
                 otherwise({redirectTo:'/tasks'});
 

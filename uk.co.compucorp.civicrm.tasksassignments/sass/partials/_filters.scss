@@ -74,26 +74,25 @@
 }
 
 .#{$prefix}filter-advanced {
-max-width: 817px;
+  max-width: 817px;
 
-  .row,
+  @include grid-condensed(5px);
+
   .form-horizontal .form-group {
-    margin: {
-      bottom: 0;
-      left: -5px;
-      right: -5px;
-      top: 10px;
-    };
+    margin-bottom: 0;
+    margin-top: 20px;
   }
+}
 
-  [class^="col-"],
-  [class*=" col-"] {
-    padding: {
-      left: 5px;
-      right: 5px;
-    }
+.#{$prefix}filter-date-type {
+  margin-top: -6px;
+  margin-bottom: -7px;
+
+  @include grid-condensed(5px);
+
+  .form-horizontal .form-group {
+    margin-bottom: 0;
   }
-
 }
 
 .ct-filter-user-role {

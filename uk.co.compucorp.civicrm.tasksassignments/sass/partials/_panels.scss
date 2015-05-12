@@ -8,9 +8,13 @@
 
 .panel-heading {
   color: $headings-color;
-  font-size: $font-size-h1;
   font-weight: $headings-font-weight;
   text-transform: uppercase;
+}
+
+.panel-title {
+  font-size: $font-size-h1;
+  line-height: $line-height-base;
 }
 
 .panel-light {
@@ -27,7 +31,9 @@
 }
 
 .panel-secondary {
-  > .panel-body {
+  > .panel-body,
+  .list-group,
+  .list-group-item {
     background-color: $brand-secondary;
   }
 }
