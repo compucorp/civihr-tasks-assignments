@@ -108,8 +108,10 @@ table {
   border-spacing: initial;
 
   td, th {
-      color: initial;
+      color: inherit;
+      font-size: inherit;
   }
+
 }
 
 /**

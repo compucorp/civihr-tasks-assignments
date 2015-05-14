@@ -71,17 +71,8 @@
     display: inline-block;
   }
 
-  .dropdown-toggle {
-    color: $gray;
-    padding: 0px 10px;
-    text-align: center;
-    display: inline-block;
+  .#{$prefix}context-menu-toggle  {
     margin-right: -9px;
-    font-size: 14px;
-
-    &:hover {
-      color: $brand-primary;
-    }
   }
 
   .#{$prefix}assignment-type,
