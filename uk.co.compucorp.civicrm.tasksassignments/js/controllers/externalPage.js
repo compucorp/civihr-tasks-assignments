@@ -22,5 +22,10 @@ define(['controllers/controllers'], function(controllers){
                     });
 
             };
+
+            $scope.$on('iframe-ready',function(){
+                $rootScope.$broadcast('ct-spinner-hide');
+            });
+
         }]);
 });

@@ -46,6 +46,7 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                                 }
 
                                 deferred.resolve(taskList);
+
                             });
 
                             return deferred.promise;
@@ -63,7 +64,7 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                 }).
                 when('/assignments', {
                     controller: 'ExternalPageCtrl',
-                    templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
+                    templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime()),
                 }).
                 when('/calendar', {
                     templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime())
@@ -91,8 +92,8 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
         }
     ]);
 
-    app.run(['config', '$rootScope','$q', 'TaskService', 'AssignmentService', '$log',
-        function(config, $rootScope, $q, TaskService, AssignmentService, $log){
+    app.run(['config', '$rootScope', '$rootElement', '$q', 'TaskService', 'AssignmentService', '$log',
+        function(config, $rootScope, $rootElement, $q, TaskService, AssignmentService, $log){
             $log.debug('appDashboard.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -134,6 +135,10 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                 angular.forEach(types, function(type) {
                     this.push(type);
                 }, $rootScope.cache.assignmentType.arr);
+            });
+
+            $rootScope.$on('$routeChangeSuccess', function() {
+                $rootElement.removeClass('ct-page-loading');
             });
 
         }

@@ -10177,6 +10177,82 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   border-top-width: 0;
   border-bottom-color: #fff;
 }
+@-moz-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* line 8, ../sass/modules/_animate.scss */
+#civitasks .fade-in {
+  -webkit-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+}
+@-moz-keyframes fadeInUp {
+  0% {
+    -moz-transform: translateY(15px);
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  100% {
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeInUp {
+  0% {
+    -webkit-transform: translateY(15px);
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fadeInUp {
+  0% {
+    -moz-transform: translateY(15px);
+    -ms-transform: translateY(15px);
+    -webkit-transform: translateY(15px);
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  100% {
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+/* line 21, ../sass/modules/_animate.scss */
+#civitasks .fade-in-up {
+  -webkit-animation: fadeInUp 0.5s;
+  -o-animation: fadeInUp 0.5s;
+  animation: fadeInUp 0.5s;
+}
 /* line 1, ../sass/partials/_typography.scss */
 #civitasks h1, #civitasks h2, #civitasks h3, #civitasks h4, #civitasks h5, #civitasks h6 {
   text-transform: uppercase;
@@ -10213,11 +10289,11 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks a.text-danger-light:hover {
   color: #d14364;
 }
-/* line 35, ../sass/partials/_global.scss */
+/* line 42, ../sass/partials/_global.scss */
 .page-civicrm-tasksassignments-dashboard #branding {
   display: none;
 }
-/* line 39, ../sass/partials/_global.scss */
+/* line 46, ../sass/partials/_global.scss */
 .page-civicrm-tasksassignments-dashboard #page {
   padding: 0;
   margin: 0;
@@ -10233,7 +10309,18 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   @include box-shadow(0 3px 5px 0px rgba(220, 219, 223, 1));
   */
 }
-/* line 27, ../sass/partials/_global.scss */
+/* line 23, ../sass/partials/_global.scss */
+#civitasks.ct-page-loading {
+  background-color: #fff;
+  z-index: 0;
+  min-height: 475px;
+}
+/* line 28, ../sass/partials/_global.scss */
+#civitasks.ct-page-loading .container,
+#civitasks.ct-page-loading .container-fluid {
+  display: none;
+}
+/* line 34, ../sass/partials/_global.scss */
 #civitasks hr {
   margin-bottom: 20px;
   margin-top: 20px;
@@ -10369,6 +10456,10 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 /* line 73, ../sass/partials/_buttons.scss */
 #civitasks .ct-context-menu-toggle:hover {
   color: #42b0cb;
+}
+/* line 1, ../sass/partials/_documents.scss */
+#civitasks .ct-documents-container {
+  background-color: #fff;
 }
 /* line 1, ../sass/partials/_dashboard.scss */
 #civitasks #ct-dashboard {
@@ -10630,6 +10721,17 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   padding-left: 5px;
   padding-right: 5px;
 }
+/* line 1, ../sass/partials/_iframe.scss */
+#civitasks .ct-iframe {
+  opacity: 0;
+}
+/* line 4, ../sass/partials/_iframe.scss */
+#civitasks .ct-iframe.ct-iframe-ready {
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  opacity: 1;
+}
 /* line 1, ../sass/partials/_dropdowns.scss */
 #civitasks .dropdown-menu {
   padding: 0;
@@ -10855,6 +10957,10 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .ct-page-contact .ct-list-task {
   margin-bottom: 20px;
 }
+/* line 1, ../sass/partials/_pagination.scss */
+#civitasks .pagination {
+  margin-top: 0;
+}
 /* line 1, ../sass/partials/_panels.scss */
 #civitasks .panel {
   display: block;
@@ -10942,6 +11048,44 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
   border-left: 1px solid #e8eef0;
   margin-left: 225px;
   min-height: 530px;
+}
+/* line 2, ../sass/partials/_spinner.scss */
+.ct-spinner-cover {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: white !important;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1039;
+  -webkit-animation: fadeIn 0.3s;
+  -o-animation: fadeIn 0.3s;
+  animation: fadeIn 0.3s;
+}
+
+/* line 15, ../sass/partials/_spinner.scss */
+.ct-spinner-img {
+  background-image: url("../img/loading-overlay.gif") !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+}
+
+/* line 21, ../sass/partials/_spinner.scss */
+.ct-spinner {
+  height: 32px;
+  margin-left: -16px;
+  margin-top: -16px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  z-index: 1040;
+  -webkit-animation: fadeIn 0.3s;
+  -o-animation: fadeIn 0.3s;
+  animation: fadeIn 0.3s;
 }
 /* line 7, ../sass/partials/_tables.scss */
 #civitasks .table > tbody > tr > th,
