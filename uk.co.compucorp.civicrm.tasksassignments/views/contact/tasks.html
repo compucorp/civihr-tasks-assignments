@@ -28,7 +28,7 @@
         <div ng-show="taskListFiltered.length">
             <h4>Ongoing:</h4>
             <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskListFiltered = (taskList | filter: tasksFilterFn.assignmentType | orderBy: 'activity_date_time')"
+                <li ng-repeat="task in taskListFiltered = (taskList | assignmentType:filterBy.assignmentType | orderBy: 'activity_date_time')"
                     ng-controller="TaskCtrl"
                     ng-class="{
                         '{{prefix}}task-completed': task.completed,

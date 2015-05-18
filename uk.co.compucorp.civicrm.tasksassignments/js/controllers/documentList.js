@@ -126,42 +126,6 @@ define(['controllers/controllers',
 
                     return  taskDateTime >= filterDateTimeFrom && taskDateTime <= filterDateTimeUntil;
                 },
-                overdue: function(task){
-                    return new Date(task.activity_date_time).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
-                },
-                dueToday: function(task){
-                    return new Date(task.activity_date_time).setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0);
-                },
-                dueThisWeek: function(task){
-                    var d = new Date(),
-                        day = d.getDay(),
-                        diff = d.getDate() - day + (day == 0 ? -6:1),
-                        mon = new Date(d.setDate(diff)),
-                        sun = new Date(d.setDate(mon.getDate()+7)),
-                        taskDateTime = new Date(task.activity_date_time).setHours(0, 0, 0, 0);
-
-                    return  taskDateTime >= mon.setHours(0, 0, 0, 0) && taskDateTime < sun.setHours(0, 0, 0, 0);
-                },
-                myTasks: function(task){
-                    return task.assignee_contact_id == config.LOGGED_IN_CONTACT_ID
-                },
-                delegatedTasks: function(task){
-                    return task.source_contact_id == config.LOGGED_IN_CONTACT_ID
-                }
-                ,
-                assignmentType: function(task){
-                    var assignment = $rootScope.cache.assignment.obj[task.case_id];
-
-                    if (!$scope.filterBy.assignmentType.length) {
-                        return true;
-                    }
-
-                    if (assignment) {
-                        return $scope.filterBy.assignmentType.indexOf(assignment.case_type_id) !== -1
-                    }
-
-                    return false;
-                },
                 contactId: function(task) {
                     var contactId = $scope.filterBy.contactId;
                     return !contactId || +task.assignee_contact_id[0] === +contactId || +task.source_contact_id === +contactId || +task.target_contact_id === +contactId;

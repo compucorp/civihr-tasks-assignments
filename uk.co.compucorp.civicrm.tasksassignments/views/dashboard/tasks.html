@@ -6,9 +6,9 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskList | filter: tasksFilterFn.overdue | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueToday | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterBy.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueThisWeek | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskList | due:'overdue' | userRole:filterBy.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | due:'dueToday' | userRole:filterBy.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterBy.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | due:'dueThisWeek' | userRole:filterBy.userRole).length"></span></a></li>
                 </ul>
                 <hr>
                 <a href
@@ -62,10 +62,10 @@
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-gray active"
                                         ng-model="filterBy.userRole"
-                                        btn-radio="'myTasks'">My Tasks ({{(taskList | filter: tasksFilterFn.myTasks).length}})</button>
+                                        btn-radio="'assignee_contact_id'">My Tasks ({{(taskList | userRole:'assignee_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterBy.userRole"
-                                        btn-radio="'delegatedTasks'">Delegated Tasks ({{(taskList | filter: tasksFilterFn.delegatedTasks).length}})</button>
+                                        btn-radio="'source_contact_id'">Delegated Tasks ({{(taskList | userRole:'source_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterBy.userRole"
                                         btn-radio="null">All</button>
@@ -126,7 +126,7 @@
             </div>
         </div>
         <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskList | filter: tasksFilterFn[filterBy.due] | filter: tasksFilterFn[filterBy.userRole] | filter: tasksFilterFn.assignmentType | filter: tasksFilterFn.contactId | orderBy: 'activity_date_time'"
+            <li ng-repeat="task in taskList | due:filterBy.due | userRole:filterBy.userRole | assignmentType:filterBy.assignmentType | filter: tasksFilterFn.contactId | orderBy: 'activity_date_time'"
                 ng-controller="TaskCtrl"
                 ng-class="{
                     '{{prefix}}task-completed': task.completed,

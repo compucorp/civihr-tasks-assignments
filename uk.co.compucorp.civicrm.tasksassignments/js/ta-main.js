@@ -34,7 +34,10 @@ reqTa([
     'directives/civiEvents',
     'directives/iframe',
     'directives/spinner',
+    'filters/assignmentType',
     'filters/dateParse',
+    'filters/due',
+    'filters/userRole',
     'requireLib'
 ],function(){
     'use strict';
