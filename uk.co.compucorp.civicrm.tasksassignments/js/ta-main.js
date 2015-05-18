@@ -29,6 +29,7 @@ reqTa([
     'controllers/externalPage',
     'directives/civiEvents',
     'directives/iframe',
+    'directives/spinner',
     'filters/dateParse',
     'requireLib'
 ],function(){

@@ -80,23 +80,31 @@
   @import "modules/utils";
   @import "modules/select";
   @import "modules/textangular";
+  @import "modules/mixins";
+  @import "modules/animate";
 
+  @import "partials/typography";
   @import "partials/global";
   @include global;
   @import "partials/badge";
   @import "partials/breadcrumb";
   @import "partials/buttons";
   @import "partials/collapse";
+  @import "partials/documents";
   @import "partials/dashboard";
+  @import "partials/datepicker";
   @import "partials/filters";
   @import "partials/forms";
+  @import "partials/iframe";
   @import "partials/dropdowns";
   @import "partials/lists";
   @import "partials/modals";
   @import "partials/navs";
   @import "partials/page-contact";
+  @import "partials/pagination";
   @import "partials/panels";
   @import "partials/select";
   @import "partials/sidebar";
+  @import "partials/spinner";
   @import "partials/tables";
 }

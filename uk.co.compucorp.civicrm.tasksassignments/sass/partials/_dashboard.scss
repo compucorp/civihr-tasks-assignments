@@ -16,7 +16,7 @@
   }
 
   .#{$prefix}container-inner {
-    background-color: $panel-bg;
+    background-color: $brand-secondary;
 
     &:before,
     &:after {
@@ -29,7 +29,8 @@
     }
   }
 
-  .#{$prefix}list-task {
+  .#{$prefix}list-task,
+  .#{$prefix}list-key-dates {
     margin-left: 10px;
   }
 

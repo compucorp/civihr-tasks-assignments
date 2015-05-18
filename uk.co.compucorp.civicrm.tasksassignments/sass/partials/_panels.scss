@@ -7,10 +7,14 @@
 }
 
 .panel-heading {
-  .btn-group-xs {
-    margin-top: -7px;
-    margin-bottom: -2px;
-  }
+  color: $headings-color;
+  font-weight: $headings-font-weight;
+  text-transform: uppercase;
+}
+
+.panel-title {
+  font-size: $font-size-h1;
+  line-height: $line-height-base;
 }
 
 .panel-light {
@@ -18,10 +22,18 @@
   @include box-shadow(0 0 0 0);
 
   > .panel-heading {
-    border-bottom: 1px solid $body-bg;
+    border-bottom: 0 none;
   }
 
   > .panel-footer {
     border-top: 1px solid $body-bg;
+  }
+}
+
+.panel-secondary {
+  > .panel-body,
+  .list-group,
+  .list-group-item {
+    background-color: $brand-secondary;
   }
 }

@@ -1,3 +1,27 @@
+input[type="radio"],
+input[type="checkbox"],
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"]  {
+  margin-top: 2px;
+}
+
+.form-control {
+  font-size: 11px;
+}
+
+.control-label,
+.checkbox-inline,
+.radio-inline,
+.checkbox-label,
+.radio-labe {
+  color: $headings-color;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 11px;
+}
+
 .checkbox-label,
 .radio-label {
   @extend label;
@@ -27,24 +51,11 @@
   margin-bottom: -1px;
 }
 
-.modal-dialog {
-  .form-assignment {
-    input[type="radio"],
-    input[type="checkbox"] {
-      margin-top: 2px;
-    }
-  }
-}
-
 .ui-select-multiple.ui-select-bootstrap {
   min-height: $input-height-base;
 
   input.ui-select-search {
     height: 1.9em;
-  }
-
-  .btn-xs {
-    padding: 2px 8px;
   }
 
   .ui-select-match .close {
@@ -53,5 +64,30 @@
 
   .ui-select-match-item {
     margin-bottom: 2px;
+  }
+}
+
+.#{$prefix}form-action {
+  margin-top: -12px;
+  margin-bottom: -12px;
+  max-width: 817px;
+  float: left;
+
+
+  .row,
+  .form-horizontal .form-group {
+    margin: {
+      bottom: 0;
+      left: -5px;
+      right: -5px;
+    };
+  }
+
+  [class^="col-"],
+  [class*=" col-"] {
+    padding: {
+      left: 5px;
+      right: 5px;
+    }
   }
 }

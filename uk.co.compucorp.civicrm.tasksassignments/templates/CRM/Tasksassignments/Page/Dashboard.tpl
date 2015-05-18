@@ -1,15 +1,15 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" class="{$prefix}page-loading">
+<div id="{$module}" class="{$prefix}page-loading" ct-spinner  ct-spinner-show>
     <div class="container-fluid">
         <div id="{$prefix}dashboard">
-            <div class="{$prefix}top-panel">
+            <div class="{$prefix}top-bar">
                 <div class="row">
                     <div class="col-xs-12 col-sm-9">
                         <ol class="breadcrumb">
                             <li><a href="#">CiviHR</a></li>
-                            <li class="active">Task Dashboard</li>
+                            <li class="active">Dashboard</li>
                         </ol>
                     </div>
                     <div class="col-xs-12 col-sm-3">
@@ -64,7 +64,10 @@
                     </li>
                 </ul>
                 <div class="{$prefix}content-wrapper">
-                    <div class="{$prefix}content" ng-view>
+                    <div class="{$prefix}content">
+                        <div class="{$prefix}container-inner fade-in-up"  ct-spinner ng-view>
+
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,11 @@
 .#{$prefix}filter-date {
+  margin-top: -15px;
+
+  hr {
+    margin-bottom: 5px;
+    margin-top: 4px;
+  }
+
   .nav {
     margin-left: -$panel-body-padding;
     margin-right: -$panel-body-padding;
@@ -7,8 +14,11 @@
       margin-top: 0;
 
       > a {
-        color: $text-color;
-        padding: 9px 20px 8px 23px;
+        color: $headings-color;
+        font-size: $btn-font-size;
+        font-weight: $btn-font-weight;
+        padding: 12px 20px 13px 19px;
+        text-transform: uppercase;
 
         &.active {
           background-color: $brand-primary;
@@ -27,18 +37,20 @@
 
       .fa {
         position: absolute;
-        right: 67px;
-        top: 13px;
+        right: 58px;
+        top: 15px;
         font-size: 11px;
       }
     }
   }
 
   .#{$prefix}select-dates {
-    color: $text-color;
+    color: $headings-color;
+    font-size: $btn-font-size;
+    margin-bottom: 8px;
     margin-left: -$panel-body-padding;
     margin-right: -$panel-body-padding;
-    padding: 9px 20px 8px 23px;
+    padding: 9px 14px 8px 16px;
     text-align: left;
     width: auto;
 
@@ -48,14 +60,48 @@
 
     .fa {
       float: right;
+      line-height: 1.6;
+    }
+
+    &:active {
+      @include box-shadow(0 0 0 0);
+    }
+
+    &:hover {
+      color: darken($headings-color, 15%);
     }
   }
 }
 
 .#{$prefix}filter-advanced {
-  margin-top: 20px;
+  max-width: 817px;
 
-  .form-group {
+  @include grid-condensed(5px);
+
+  .form-horizontal .form-group {
     margin-bottom: 0;
+    margin-top: 20px;
+  }
+}
+
+.#{$prefix}filter-date-type {
+  margin-top: -6px;
+  margin-bottom: -7px;
+
+  @include grid-condensed(5px);
+
+  .form-horizontal .form-group {
+    margin-bottom: 0;
+  }
+}
+
+.ct-filter-user-role {
+  margin-top: -6px;
+  margin-bottom: -6px;
+
+  .btn-group-sm {
+    > .btn {
+      padding: 7px 13px 6px;
+    }
   }
 }

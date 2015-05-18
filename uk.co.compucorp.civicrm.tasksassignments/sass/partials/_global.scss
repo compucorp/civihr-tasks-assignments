@@ -21,7 +21,14 @@
   }
 
   &.#{$prefix}page-loading {
+    background-color: #fff;
+    z-index: 0;
+    min-height: 475px;
 
+    .container,
+    .container-fluid {
+      display: none;
+    }
   }
 
   hr {

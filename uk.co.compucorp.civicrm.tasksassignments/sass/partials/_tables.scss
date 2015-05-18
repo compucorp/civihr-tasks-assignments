@@ -1,7 +1,1 @@
-[datepicker-popup-wrap] {
-  padding: 10px;
-
-  table > thead > tr > th {
-    vertical-align: middle;
-  }
-}
+.table {  > tbody,  > tfoot {    > tr {      > th {        border-top: 0 none;      }      > td {        border-top: 0 none;        .#{$prefix}context-menu-toggle {          margin: -2px 0;          position: relative;          top: 1px;        }      }    }  }  > thead {    > tr {      > th {        border: 0 none;        color: $headings-color;        font-size: $font-size-h3;        font-weight: bold;        padding: {          bottom: 12px;          top: 10px;        };      }      > td {        border-top: 0 none;      }    }  }}.#{$prefix}table-documents {  .#{$prefix}col-select {    text-align: center;  }  input[type="checkbox"] {    margin-left: 7px;  }}

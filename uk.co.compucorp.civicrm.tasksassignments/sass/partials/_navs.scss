@@ -1,50 +1,33 @@
 .#{$prefix}sidebar-main {
   > li {
-    padding-bottom: 1px;
-
-    &:after {
-      content: " ";
-      width: 78px;
-      height: 1px;
-      display: block;
-      background-color: #878b95;
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      margin-left: -39px;
-      z-index: 0;
-    }
 
     > a {
-      color: #fff;
-      padding: 21px 15px 18px;
-      text-align: center;
+      color: $headings-color;
+      font-weight: $btn-font-weight;
+      line-height: $btn-line-height;
+      padding: 16px 17px 15px;
       position: relative;
+      text-transform: uppercase;
       z-index: 1;
+
 
       &:hover,
       &:focus {
         background-color: darken($sidebar-main-bg, 10%);
       }
 
-      .fa {
-        margin-bottom: 9px;
-      }
-
       .#{$prefix}sidebar-main-title {
-        display: block;
-        font-size: 12px;
-        text-align: center;
+        font-size: $btn-font-size;
+        padding-left: 13px;
       }
     }
 
     &.active {
       > a {
         background-color: $body-bg;
-        color: $gray-dark;
+        color: $link-color;
 
-        &:hover,
-        &:focus {
+        &:hover {
           background-color: darken($body-bg, 5%);
         }
       }

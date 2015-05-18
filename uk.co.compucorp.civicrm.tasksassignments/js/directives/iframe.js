@@ -22,6 +22,8 @@ define(['directives/directives'], function(directives){
 
                     document.body.style.paddingTop = '10px';
                     iframeEl.height = document.body.scrollHeight+'px';
+                    el.addClass('ct-iframe-ready');
+                    $rootScope.$broadcast('iframe-ready');
                 });
 
             }
