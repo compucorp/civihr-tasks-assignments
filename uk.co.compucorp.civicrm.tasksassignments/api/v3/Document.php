@@ -12,6 +12,10 @@
  */
 function civicrm_api3_document_create($params) {
 
+  if (!empty($params['document'])) {
+      return civicrm_api3_document_create_multiple($params);
+  }
+    
   if (empty($params['id'])) {
     civicrm_api3_verify_one_mandatory($params,
       NULL,
@@ -105,8 +109,8 @@ function civicrm_api3_document_create($params) {
     }
   }
 
-  // create activity
-  $activityBAO = CRM_Activity_BAO_Activity::create($params);
+  // create Document
+  $activityBAO = CRM_Tasksassignments_BAO_Document::create($params);
 
   if (isset($activityBAO->id)) {
     if ($case_id && !$createRevision) {
@@ -116,8 +120,75 @@ function civicrm_api3_document_create($params) {
     }
 
     _civicrm_api3_object_to_array($activityBAO, $activityArray[$activityBAO->id]);
-    return civicrm_api3_create_success($activityArray, $params, 'activity', 'get', $activityBAO);
+    //return civicrm_api3_create_success($activityArray, $params, 'activity', 'get', $activityBAO);
+    return civicrm_api3_document_get(array(
+        'sequential' => isset($params['sequential']) ? $params['sequential'] : 0,
+        'debug' => isset($params['debug']) ? $params['debug'] : 0,
+        'id' => $activityBAO->id
+    ));
   }
+}
+
+function civicrm_api3_document_copy_to_assignment($params) {
+    
+    if (empty($params['id'])) {
+        throw new API_Exception(ts("Please specify 'id' value(s)."));
+    }
+    if (empty($params['case_id'])) {
+        throw new API_Exception(ts("Please specify 'case_id' value."));
+    }
+    
+    if (empty($params['sequential'])) {
+        $params['sequential'] = 0;
+    }
+    if (empty($params['debug'])) {
+        $params['debug'] = 0;
+    }
+    
+    $ids = (array)$params['id'];
+    $caseId = (int)$params['case_id'];
+    $result = array();
+    foreach ($ids as $id) {
+        $documentToAssignment = array(
+          'sequential' => $params['sequential'],
+          'debug' => $params['debug'],
+          'id' => $id,
+          'case_id' => $caseId,
+        );
+        $createResult = civicrm_api3('Document', 'create', $documentToAssignment);
+        if ($createResult['count']) {
+            $result[] = array_shift($createResult['values']);
+        }
+    }
+    
+    return civicrm_api3_create_success($result, $params);
+}
+
+function civicrm_api3_document_create_multiple($params) {
+    
+    if (empty($params['document'])) {
+        throw new API_Exception(ts("Please specify 'document' array."));
+    }
+    
+    if (empty($params['sequential'])) {
+        $params['sequential'] = 0;
+    }
+    if (empty($params['debug'])) {
+        $params['debug'] = 0;
+    }
+    
+    $documents = (array)$params['document'];
+    $result = array();
+    foreach ($documents as $document) {
+        $document['sequential'] = $params['sequential'];
+        $document['debug'] = $params['debug'];
+        $createResult = civicrm_api3('Document', 'create', $document);
+        if ($createResult['count']) {
+            $result[] = array_shift($createResult['values']);
+        }
+    }
+    
+    return civicrm_api3_create_success($result, $params);
 }
 
 /**
@@ -398,6 +469,50 @@ function _civicrm_api3_document_getlist_output($result, $request) {
 
 function civicrm_api3_document_get($params) {
     
+    $activityIds = array();
+    
+    $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
+    $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
+    $caseId = isset($params['case_id']) ? $params['case_id'] : null;
+    
+    if ($assigneeContactId) {
+        $result = civicrm_api3('ActivityContact', 'get', array(
+          'sequential' => 1,
+          'return' => 'activity_id',
+          'contact_id' => array('IN' => $assigneeContactId),
+          'record_type_id' => 1,
+          'options' => array('limit' => 0),
+        ));
+        foreach ($result['values'] as $value) {
+            $activityIds[] = $value['activity_id'];
+        }
+    }
+    
+    if ($sourceContactId) {
+        $result = civicrm_api3('ActivityContact', 'get', array(
+          'sequential' => 1,
+          'return' => 'activity_id',
+          'contact_id' => array('IN' => $sourceContactId),
+          'record_type_id' => 2,
+          'options' => array('limit' => 0),
+        ));
+        foreach ($result['values'] as $value) {
+            $activityIds[] = $value['activity_id'];
+        }
+    }
+    
+    if ($caseId) {
+        $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
+        $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
+        if (empty($activityIds)) {
+            $activityIds[] = 0;
+        }
+    }
+    
+    if (!isset($params['id']) && !empty($activityIds)) {
+        $params['id'] = array('IN' => $activityIds);
+    }
+    
     $types = _civicrm_api3_document_gettypesbycomponent('CiviDocument');
     $typesIds = array();
     
@@ -406,12 +521,26 @@ function civicrm_api3_document_get($params) {
             $typesIds[] = $type['value'];
         }
         
-        return civicrm_api3('Activity', 'get', array_merge(
+        $getResult = civicrm_api3('Activity', 'get', array_merge(
             $params,
             array(
                 'activity_type_id' => array('IN' => $typesIds),
             )
         ));
+        
+        $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
+        foreach ($getResult['values'] as $key => $value) {
+            $caseActivityParams = array(
+                1 => array($value['id'], 'Integer'),
+            );
+            $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
+            $getResult['values'][$key]['case_id'] = null;
+            if ($caseActivityResult->fetch())
+            {
+                $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
+            }
+        }
+        return $getResult;
     }
     
     return civicrm_api3_create_success(array(), $params, 'document', 'getbycomponent');
@@ -446,6 +575,19 @@ function civicrm_api3_document_getoptions($params) {
     return civicrm_api3_generic_getoptions(array('entity' => 'Document', 'params' => $params));
 }
 
+function civicrm_api3_document_getstatuses($params) {
+    
+    $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
+    
+    if ($optionGroupID) {
+        return $result = civicrm_api3('OptionValue', 'get', array_merge($params, array(
+          'option_group_id' => $optionGroupID,
+        )));
+    }
+    
+    return null;
+}
+
 function _civicrm_api3_document_gettypesbycomponent($component, $sequential = 1) {
     
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
@@ -476,4 +618,26 @@ function _civicrm_api3_document_gettypesbycomponent($component, $sequential = 1)
     }
     
     return null;
+}
+
+/*
+ * Document Reminder on demand.
+ */
+function civicrm_api3_document_sendreminder($params) {
+    
+    if (empty($params['activity_id'])) {
+        throw new API_Exception(ts("Please specify 'activity_id' value."));
+    }
+    
+    $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '');
+    return civicrm_api3_create_success($result, $params, 'document', 'reminder');
+}
+
+/*
+ * Daily Document Reminder.
+ */
+function civicrm_api3_document_senddailyreminder($params) {
+    
+    CRM_Tasksassignments_Reminder::sendDailyReminder();
+    return civicrm_api3_create_success(1, $params, 'document', 'dailyreminder');
 }

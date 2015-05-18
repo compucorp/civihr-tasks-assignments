@@ -5,7 +5,7 @@ return array (
   0 => 
   array (
     'name' => 'Document',
-    'class' => 'CRM_Documentsassignments_DAO_Document',
+    'class' => 'CRM_Tasksassignments_DAO_Document',
     'table' => 'civicrm_activity',
   ),
 );

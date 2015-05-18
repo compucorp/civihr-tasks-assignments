@@ -117,6 +117,11 @@ function tasksassignments_civicrm_entityTypes(&$entityTypes) {
     'table' => 'civicrm_activity',
   );
   $entityTypes[] = array(
+    'name' => 'Document',
+    'class' => 'CRM_Tasksassignments_DAO_Document',
+    'table' => 'civicrm_activity',
+  );
+  $entityTypes[] = array(
     'name' => 'Assignment',
     'class' => 'CRM_Tasksassignments_DAO_Assignment',
     'table' => 'civicrm_case',

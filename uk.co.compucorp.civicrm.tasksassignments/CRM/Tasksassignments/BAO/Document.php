@@ -1,16 +1,16 @@
 <?php
 
-class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task
+class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Document
 {
     /**
-     * Create a new Task based on array-data
+     * Create a new Document based on array-data
      *
      * @param array $params key-value pairs
-     * @return CRM_Tasksassignments_DAO_Task|NULL
+     * @return CRM_Tasksassignments_DAO_Document|NULL
      */
     public static function create($params)
     {
-        $entityName = 'Task';
+        $entityName = 'Document';
         $hook = empty($params['id']) ? 'create' : 'edit';
         CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
         

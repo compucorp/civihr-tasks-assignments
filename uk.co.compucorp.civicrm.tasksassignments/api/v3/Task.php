@@ -109,8 +109,8 @@ function civicrm_api3_task_create($params) {
     }
   }
 
-  // create activity
-  $activityBAO = CRM_Activity_BAO_Activity::create($params);
+  // create Task
+  $activityBAO = CRM_Tasksassignments_BAO_Task::create($params);
 
   if (isset($activityBAO->id)) {
     if ($case_id && !$createRevision) {

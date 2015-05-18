@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
 <table>
-  <base>CRM/Documentsassignments</base>
-  <class>Task</class>
+  <base>CRM/Tasksassignments</base>
+  <class>Document</class>
   <name>civicrm_activity</name>
   <comment>FIXME</comment>
   <add>4.4</add>
@@ -12,7 +12,7 @@
     <name>id</name>
     <type>int unsigned</type>
     <required>true</required>
-    <comment>Unique Task ID</comment>
+    <comment>Unique Document ID</comment>
     <add>4.4</add>
   </field>
   <primaryKey>
