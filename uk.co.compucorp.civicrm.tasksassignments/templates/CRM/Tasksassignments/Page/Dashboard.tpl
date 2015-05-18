@@ -4,19 +4,20 @@
 <div id="{$module}" class="{$prefix}page-loading" ct-spinner  ct-spinner-show>
     <div class="container-fluid">
         <div id="{$prefix}dashboard">
-            <div class="{$prefix}top-bar">
+            <div class="{$prefix}top-bar" ng-controller="TopBarCtrl">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-9">
+                    <div class="col-xs-12 col-sm-8">
                         <ol class="breadcrumb">
                             <li><a href="#">CiviHR</a></li>
                             <li class="active">Dashboard</li>
                         </ol>
                     </div>
-                    <div class="col-xs-12 col-sm-3">
+                    <div class="col-xs-12 col-sm-4">
                         <div class="btn-group pull-right">
-                            <a class="btn" ng-click="modalTask()">
-                                <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
+                            <a class="btn" ng-click="itemAdd.fn()">
+                                <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;{literal}{{itemAdd.label()}}{/literal}
                             </a>
+
                             <a class="btn" ng-click="modalAssignment()">
                                 <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
                             </a>

@@ -54,12 +54,36 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     }
                 }).
                 when('/documents', {
-                    controller: 'TaskListCtrl',
+                    controller: 'DocumentListCtrl',
                     templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime()),
                     resolve: {
-                        taskList: function() {
-                            return []
-                        }
+                        documentList: ['$q', 'DocumentService',function($q, DocumentService){
+                            var deferred = $q.defer();
+
+                            $q.all([
+                                DocumentService.get({
+                                    'sequential': 0,
+                                    'assignee_contact_id': config.LOGGED_IN_CONTACT_ID
+                                }),
+                                DocumentService.get({
+                                    'sequential': 0,
+                                    'source_contact_id': config.LOGGED_IN_CONTACT_ID
+                                })
+                            ]).then(function(results){
+                                var documentId, documentList = [];
+
+                                angular.extend(results[0],results[1]);
+
+                                for (documentId in results[0]) {
+                                    documentList.push(results[0][documentId]);
+                                }
+
+                                deferred.resolve(documentList);
+
+                            });
+
+                            return deferred.promise;
+                        }]
                     }
                 }).
                 when('/assignments', {
@@ -92,13 +116,15 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
         }
     ]);
 
-    app.run(['config', '$rootScope', '$rootElement', '$q', 'TaskService', 'AssignmentService', '$log',
-        function(config, $rootScope, $rootElement, $q, TaskService, AssignmentService, $log){
+    app.run(['config', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService', 'TaskService',
+        'AssignmentService', '$log',
+        function(config, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService, $log){
             $log.debug('appDashboard.run');
 
             $rootScope.pathTpl = config.path.TPL;
             $rootScope.prefix = config.CLASS_NAME_PREFIX;
             $rootScope.url = config.url;
+            $rootScope.location = $location;
             $rootScope.cache = {
                 contact: {
                     obj: {},
@@ -111,6 +137,10 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     arrSearch: []
                 },
                 assignmentType: {
+                    obj: {},
+                    arr: []
+                },
+                documentType: {
                     obj: {},
                     arr: []
                 },
@@ -127,6 +157,10 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
             };
 
             TaskService.getOptions().then(function(options){
+                angular.extend($rootScope.cache,options);
+            });
+
+            DocumentService.getOptions().then(function(options){
                 angular.extend($rootScope.cache,options);
             });
 

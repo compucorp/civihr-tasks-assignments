@@ -1,21 +1,21 @@
 define(['controllers/controllers',
         'services/contact',
-        'services/task',
+        'services/document',
         'services/assignment'], function(controllers){
 
-    controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
-        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, taskList, config, ContactService,
-                 AssignmentService, TaskService){
-            $log.debug('Controller: TaskListCtrl');
+    controllers.controller('DocumentListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
+        '$log', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
+        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, documentList, config, ContactService,
+                 AssignmentService, DocumentService){
+            $log.debug('Controller: DocumentListCtrl');
 
-            $rootScope.test = '213124';
+            console.log(documentList);
 
             this.init = function(){
                 var contactIds = this.contactIds,
                     assignmentIds = this.assignmentIds;
 
-                this.collectId(taskList);
+                this.collectId(documentList);
 
                 if (contactIds && contactIds.length) {
                     ContactService.get({'IN': contactIds}).then(function(data){
@@ -36,7 +36,7 @@ define(['controllers/controllers',
             this.assignmentIds = [];
             this.contactIds = [];
 
-            this.collectId = function(taskList){
+            this.collectId = function(documentList){
                 var contactIds = this.contactIds,
                     assignmentIds = this.assignmentIds;
 
@@ -46,34 +46,34 @@ define(['controllers/controllers',
                     contactIds.push(config.CONTACT_ID);
                 }
 
-                function collectCId(task) {
-                    contactIds.push(task.source_contact_id);
+                function collectCId(document) {
+                    contactIds.push(document.source_contact_id);
 
-                    if (task.assignee_contact_id && task.assignee_contact_id.length) {
-                        contactIds.push(task.assignee_contact_id[0]);
+                    if (document.assignee_contact_id && document.assignee_contact_id.length) {
+                        contactIds.push(document.assignee_contact_id[0]);
                     }
 
-                    if (task.target_contact_id && task.target_contact_id.length) {
-                        contactIds.push(task.target_contact_id[0]);
-                    }
-                }
-
-                function collectAId(task) {
-                    if (task.case_id) {
-                        assignmentIds.push(task.case_id);
+                    if (document.target_contact_id && document.target_contact_id.length) {
+                        contactIds.push(document.target_contact_id[0]);
                     }
                 }
 
-                angular.forEach(taskList,function(task){
-                    collectCId(task);
-                    collectAId(task);
+                function collectAId(document) {
+                    if (document.case_id) {
+                        assignmentIds.push(document.case_id);
+                    }
+                }
+
+                angular.forEach(documentList,function(document){
+                    collectCId(document);
+                    collectAId(document);
                 });
             }
 
             $scope.dueToday = 0;
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
-            $scope.taskList = taskList;
+            $scope.documentList = documentList;
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -96,6 +96,7 @@ define(['controllers/controllers',
             };
 
             $scope.label = {
+                addNew: 'Add Document',
                 overdue: 'Overdue',
                 dueToday: 'Due Today',
                 dueThisWeek: 'Due This Week',
@@ -169,12 +170,12 @@ define(['controllers/controllers',
 
 
 
-            $rootScope.modalTask = function(data) {
+            $rootScope.modalDocument = function(data) {
                     var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/task.html?v='+(new Date().getTime()),
-                        controller: 'ModalTaskCtrl',
+                        templateUrl: config.path.TPL+'modal/document.html?v='+(new Date().getTime()),
+                        controller: 'ModalDocumentCtrl',
                         resolve: {
                             data: function(){
                                 return data;
@@ -183,7 +184,7 @@ define(['controllers/controllers',
                     });
 
                 modalInstance.result.then(function(results){
-                    angular.equals({}, data) ? $scope.taskList.push(results) : angular.extend(data,results);
+                    angular.equals({}, data) ? $scope.documentList.push(results) : angular.extend(data,results);
                 }, function(){
                     $log.info('Modal dismissed');
                 });
@@ -205,16 +206,16 @@ define(['controllers/controllers',
                     });
 
                 modalInstance.result.then(function(results){
-                    Array.prototype.push.apply($scope.taskList,results);
+                    Array.prototype.push.apply($scope.documentList,results);
                 }, function(){
                     $log.info('Modal dismissed');
                 });
 
             };
 
-            $scope.deleteTask = function(task){
-                 TaskService.delete(task.id).then(function(results){
-                     $scope.taskList.splice($scope.taskList.indexOf(task),1);
+            $scope.deleteDocument = function(document){
+                 DocumentService.delete(document.id).then(function(results){
+                     $scope.documentList.splice($scope.documentList.indexOf(document),1);
                  });
             }
 

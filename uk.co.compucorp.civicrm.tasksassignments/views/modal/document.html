@@ -1,0 +1,139 @@
+<form novalidate name="documentForm" class="form-horizontal form-document" role="form" ng-submit="confirm()">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name || 'No target contact'"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 control-label">Type:</label>
+                    <div class="col-xs-8 col-sm-5">
+                        <ui-select ng-model="document.activity_type_id">
+                            <ui-select-match
+                                    placeholder="Select document type">{{$select.selected.value}}</ui-select-match>
+                            <ui-select-choices
+                                    repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+                                <div ng-bind="type.value"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <label for="{{prefix}}document-due" class="col-xs-4 col-sm-3 control-label">Due:
+                        <a href="" class="text-normal"
+                           ng-model="document.activity_date_time"
+                           is-open="dpOpened"
+                           datepicker-popup
+                           ng-click="dpOpen($event);">{{(document.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                    <input type="hidden" id="{{prefix}}document-due" ng-model="document.activity_date_time" name="documentDue">
+                </div>
+                <div class="form-group">
+                    <label for="{{prefix}}document-subject" class="col-xs-12 col-sm-3 control-label">Subject:</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input id="{{prefix}}document-subject" class="form-control" name="documentSubject"
+                                ng-model="document.subject">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 control-label">Assignee:</label>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="input-group">
+                            <ui-select
+                                    allow-clear
+                                    ng-model="document.assignee_contact_id[0]"
+                                    on-select="cacheContact($item)">
+                                <ui-select-match
+                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                                    refresh="refreshContacts($select.search)"
+                                                    refresh-delay="0">
+                                    <div ng-bind="contact.label"></div>
+                                    <small ng-bind="contact.description[0]"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                              <a ng-click="document.assignee_contact_id = ''" class="btn btn-default">
+                                  <span class="fa fa-remove"></span>
+                              </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="showCId">
+                    <label class="col-xs-12 col-sm-3 control-label">Target:</label>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="input-group">
+                            <ui-select
+                                    allow-clear
+                                    ng-model="document.target_contact_id[0]"
+                                    on-select="cacheContact($item)">
+                                <ui-select-match
+                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                                    refresh="refreshContacts($select.search)"
+                                                    refresh-delay="0">
+                                    <div ng-bind="contact.label"></div>
+                                    <small ng-bind="contact.description[0]"></small>
+                                </ui-select-choices>
+                            </ui-select>
+                            <span class="input-group-btn">
+                              <a ng-click="document.target_contact_id = ''" class="btn btn-default">
+                                  <span class="fa fa-remove"></span>
+                              </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="{{prefix}}document-status" class="col-xs-12 col-sm-3 control-label">Status:</label>
+                    <div class="col-xs-12 col-sm-5">
+                        <select id="{{prefix}}document-status" class="form-control" name="documentStatus"
+                                ng-model="document.status_id"
+                                ng-options="key as value for (key, value) in cache.documentStatus.obj">
+                            <option value="">- select -</option>
+                        </select>
+                    </div>
+                </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label">Details:</label>
+                <div class="col-xs-12 col-sm-9">
+                    <div text-angular
+                            ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
+                            ng-model="document.details"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label">Assignment:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <ui-select
+                                allow-clear
+                                ng-model="document.case_id"
+                                on-select="cacheAssignment($item)">
+                            <ui-select-match
+                                    placeholder="Enter search term...">{{$select.selected.label}}</ui-select-match>
+                            <ui-select-choices  repeat="assignment.id as assignment in assignments"
+                                                refresh="refreshAssignments($select.search)"
+                                                refresh-delay="0">
+                                <div ng-class="assignment.label_class" ng-bind="assignment.label"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <span class="input-group-btn">
+                          <a ng-click="document.case_id = ''" class="btn btn-default">
+                              <span class="fa fa-remove"></span>
+                          </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <span class="fa fa-remove" aria-hidden="true"></span> Cancel
+        </button>
+        <button type="button" class="btn btn-default btn-primary" ng-click="confirm()">
+            <span class="fa fa-check" aria-hidden="true"></span> Save
+        </button>
+    </div>
+</form>

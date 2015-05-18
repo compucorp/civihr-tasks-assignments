@@ -11117,11 +11117,15 @@ a.list-group-item.active > #civitasks .badge, .nav-pills > .active > a > #civita
 #civitasks .table > thead > tr > td {
   border-top: 0 none;
 }
-/* line 46, ../sass/partials/_tables.scss */
+/* line 47, ../sass/partials/_tables.scss */
+#civitasks .ct-table-documents .dropdown {
+  text-transform: capitalize;
+}
+/* line 51, ../sass/partials/_tables.scss */
 #civitasks .ct-table-documents .ct-col-select {
   text-align: center;
 }
-/* line 50, ../sass/partials/_tables.scss */
+/* line 55, ../sass/partials/_tables.scss */
 #civitasks .ct-table-documents input[type="checkbox"] {
   margin-left: 7px;
 }

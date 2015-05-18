@@ -21,9 +21,13 @@ var module, reqTa = require.config({
 reqTa([
     'appContact',
     'appDashboard',
+    'controllers/documentList',
+    'controllers/document',
     'controllers/taskList',
     'controllers/task',
     'controllers/dashboard/navMain',
+    'controllers/dashboard/topBar',
+    'controllers/modal/modalDocument',
     'controllers/modal/modalTask',
     'controllers/modal/modalAssignment',
     'controllers/externalPage',
