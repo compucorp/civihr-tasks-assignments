@@ -15,7 +15,7 @@
                     <div class="col-xs-12 col-sm-6 col-lg-4">
                         <ui-select
                                 multiple
-                                ng-model="filterBy.assignmentType">
+                                ng-model="filterParams.assignmentType">
                             <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
                             <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
                                 <div ng-bind-html="type.title | highlight: $select.search"></div>
@@ -28,7 +28,7 @@
         <div ng-show="taskListFiltered.length">
             <h4>Ongoing:</h4>
             <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskListFiltered = (taskList | assignmentType:filterBy.assignmentType | orderBy: 'activity_date_time')"
+                <li ng-repeat="task in taskListFiltered = (taskList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time')"
                     ng-controller="TaskCtrl"
                     ng-class="{
                         '{{prefix}}task-completed': task.completed,

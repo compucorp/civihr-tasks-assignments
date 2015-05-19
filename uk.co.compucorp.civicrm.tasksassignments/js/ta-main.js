@@ -35,6 +35,7 @@ reqTa([
     'directives/iframe',
     'directives/spinner',
     'filters/assignmentType',
+    'filters/contactId',
     'filters/dateParse',
     'filters/due',
     'filters/userRole',

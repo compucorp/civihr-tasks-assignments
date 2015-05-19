@@ -1,6 +1,6 @@
 define(['filters/filters'], function(filters){
-    filters.filter('userRole',['$filter', 'config', '$log', function($filter, config, $log){
-        $log.debug('Filter: userRole');
+    filters.filter('filterBy.userRole',['$filter', 'config', '$log', function($filter, config, $log){
+        $log.debug('Filter: filterBy.userRole');
 
         return function(inputArr, contactTypeField) {
             var filteredArr = [],

@@ -1,6 +1,6 @@
 define(['filters/filters'], function(filters){
-    filters.filter('assignmentType',['$filter', '$rootScope', '$log', function($filter, $rootScope, $log){
-        $log.debug('Filter: assignmentType');
+    filters.filter('filterBy.assignmentType',['$filter', '$rootScope', '$log', function($filter, $rootScope, $log){
+        $log.debug('Filter: filterBy.assignmentType');
 
         return function(inputArr, assignmentTypeArr) {
             var assignment,

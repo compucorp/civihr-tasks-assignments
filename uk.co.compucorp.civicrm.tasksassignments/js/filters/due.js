@@ -1,8 +1,8 @@
 define(['filters/filters'], function(filters){
-    filters.filter('due',['$filter', '$log', function($filter, $log){
-        $log.debug('Filter: due');
+    filters.filter('filterBy.due',['$filter', '$log', function($filter, $log){
+        $log.debug('Filter: filterBy.due');
 
-        return function(inputArr, type) {
+        return function(inputArr, type, dateRange) {
             var filteredArr = [],
                 i = 0,
                 inputArrlen = inputArr.length,
@@ -21,6 +21,24 @@ define(['filters/filters'], function(filters){
                     }
                     break;
 
+                case 'dateRange':
+
+                    if (!dateRange || typeof dateRange !== 'object') {
+                        return inputArr;
+                    }
+
+                    var itemDateTime,
+                        filterDateTimeFrom = dateRange.from ? new Date(dateRange.from).setHours(0, 0, 0, 0) : -Infinity,
+                        filterDateTimeUntil = dateRange.until ? new Date(dateRange.until).setHours(0, 0, 0, 0) : Infinity;
+
+                    for (i; i < inputArrlen; i++) {
+                        itemDateTime = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
+                        if (itemDateTime >= filterDateTimeFrom && itemDateTime <= filterDateTimeUntil) {
+                            filteredArr.push(inputArr[i]);
+                        }
+                    }
+
+                    break;
                 case 'dueToday':
                     for (i; i < inputArrlen; i++) {
                         if (new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) == today) {

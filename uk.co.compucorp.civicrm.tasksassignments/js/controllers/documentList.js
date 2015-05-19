@@ -84,10 +84,10 @@ define(['controllers/controllers',
                 filterDates: true
             };
 
-            $scope.filterBy = {
+            $scope.filterParams = {
                 contactId: null,
                 userRole: null,
-                date: {
+                dateRange: {
                     from: null,
                     until: null
                 },
@@ -104,8 +104,8 @@ define(['controllers/controllers',
             };
 
             $scope.labelDateRange = function(){
-                var filterDateTimeFrom = $filter('date')($scope.filterBy.date.from, 'dd/MM/yyyy') || '',
-                    filterDateTimeUntil = $filter('date')($scope.filterBy.date.until, 'dd/MM/yyyy') || '';
+                var filterDateTimeFrom = $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '',
+                    filterDateTimeUntil = $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
 
                 if (filterDateTimeUntil) {
                     filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
@@ -117,22 +117,6 @@ define(['controllers/controllers',
 
                 $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
             }
-
-            $scope.tasksFilterFn = {
-                dateRange: function(task){
-                    var taskDateTime = new Date(task.activity_date_time).setHours(0, 0, 0, 0),
-                        filterDateTimeFrom = $scope.filterBy.date.from ? new Date($scope.filterBy.date.from).setHours(0, 0, 0, 0) : -Infinity,
-                        filterDateTimeUntil = $scope.filterBy.date.until ? new Date($scope.filterBy.date.until).setHours(0, 0, 0, 0) : Infinity;
-
-                    return  taskDateTime >= filterDateTimeFrom && taskDateTime <= filterDateTimeUntil;
-                },
-                contactId: function(task) {
-                    var contactId = $scope.filterBy.contactId;
-                    return !contactId || +task.assignee_contact_id[0] === +contactId || +task.source_contact_id === +contactId || +task.target_contact_id === +contactId;
-                }
-            }
-
-
 
             $rootScope.modalDocument = function(data) {
                     var data = data || {},
