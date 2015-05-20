@@ -144,6 +144,12 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     obj: {},
                     arr: []
                 },
+                documentStatus: {
+                    obj: {},
+                    arr: []
+                },
+                //TODO
+                documentStatusResolve: ['3', '4'],
                 taskType: {
                     obj: {},
                     arr: []

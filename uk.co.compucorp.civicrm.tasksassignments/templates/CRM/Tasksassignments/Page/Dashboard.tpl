@@ -79,7 +79,10 @@
     <script type="text/javascript">
         document.addEventListener('taReady', function(){
             document.dispatchEvent(new CustomEvent('taInit', {
-                'detail': 'appDashboard'
+                'detail': {
+                    'app': 'appDashboard',
+                    'module': 'civitasks'
+                }
             }));
         });
     </script>

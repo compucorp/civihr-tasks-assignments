@@ -14,7 +14,10 @@
         });
 */
         document.dispatchEvent(new CustomEvent('taInit', {
-            'detail': 'appContact'
+            'detail': {
+                'app': 'appTasks',
+                'module': 'civitasks'
+            }
         }));
     </script>
 {/literal}

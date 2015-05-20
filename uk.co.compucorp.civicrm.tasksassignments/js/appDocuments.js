@@ -1,6 +1,6 @@
 define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
     'filters/filters', 'services/services'], function(){
-    var app = angular.module('civitasks.appContact',[
+    var app = angular.module('civitasks.appDocuments',[
         'ngRoute',
         'ngResource',
         'ngSanitize',
@@ -21,13 +21,35 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
 
             $routeProvider.
                 when('/', {
-                    controller: 'TaskListCtrl',
-                    templateUrl: config.path.TPL+'contact/tasks.html?v='+(new Date().getTime()),
+                    controller: 'DocumentListCtrl',
+                    templateUrl: config.path.TPL+'contact/documents.html?v='+(new Date().getTime()),
                     resolve: {
-                        taskList: ['TaskService',function(TaskService){
-                            return TaskService.get({
-                                'target_contact_id': config.CONTACT_ID
+                        documentList: ['$q', 'DocumentService',function($q, DocumentService){
+                            var deferred = $q.defer();
+
+                            $q.all([
+                                DocumentService.get({
+                                    'sequential': 0,
+                                    'assignee_contact_id': config.LOGGED_IN_CONTACT_ID
+                                }),
+                                DocumentService.get({
+                                    'sequential': 0,
+                                    'source_contact_id': config.LOGGED_IN_CONTACT_ID
+                                })
+                            ]).then(function(results){
+                                var documentId, documentList = [];
+
+                                angular.extend(results[0],results[1]);
+
+                                for (documentId in results[0]) {
+                                    documentList.push(results[0][documentId]);
+                                }
+
+                                deferred.resolve(documentList);
+
                             });
+
+                            return deferred.promise;
                         }]
                     }
                 }
@@ -41,8 +63,8 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
         }
     ]);
 
-    app.run(['config', '$rootScope','$q', 'TaskService', 'AssignmentService', '$log',
-        function(config, $rootScope, $q, TaskService, AssignmentService, $log){
+    app.run(['config', '$rootScope','$q', 'DocumentService', 'AssignmentService', '$log',
+        function(config, $rootScope, $q, DocumentService, AssignmentService, $log){
             $log.debug('appContact.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -63,19 +85,19 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     obj: {},
                     arr: []
                 },
-                taskType: {
+                documentType: {
                     obj: {},
                     arr: []
                 },
-                taskStatus: {
+                documentStatus: {
                     obj: {},
                     arr: []
                 },
                 //TODO
-                taskStatusResolve: ['2', '3', '6', '8']
+                documentStatusResolve: ['3', '4']
             };
 
-            TaskService.getOptions().then(function(options){
+            DocumentService.getOptions().then(function(options){
                 angular.extend($rootScope.cache,options);
             });
 
