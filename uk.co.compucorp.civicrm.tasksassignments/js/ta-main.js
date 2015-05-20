@@ -39,6 +39,7 @@ reqTa([
     'filters/dateParse',
     'filters/due',
     'filters/userRole',
+    'filters/status',
     'requireLib'
 ],function(){
     'use strict';

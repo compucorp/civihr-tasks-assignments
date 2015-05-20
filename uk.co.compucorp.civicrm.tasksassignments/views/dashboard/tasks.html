@@ -24,8 +24,8 @@
                                     is-open="dpOpened.filterDates.from"
                                     datepicker-popup="dd/MM/yyyy"
                                     ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
-                                    ng-model="filterParams.dateRangeHolder.from"
-                                    max-date="filterParams.dateRangeHolder.until"
+                                    ng-model="filterParamsHolder.dateRange.from"
+                                    max-date="filterParamsHolder.dateRange.until"
                                     id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
                         </div>
                     </div>
@@ -35,15 +35,15 @@
                             <input
                                     is-open="dpOpened.filterDates.until"
                                     datepicker-popup="dd/MM/yyyy"
-                                    min-date="filterParams.dateRangeHolder.from"
+                                    min-date="filterParamsHolder.dateRange.from"
                                     ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
-                                    ng-model="filterParams.dateRangeHolder.until"
+                                    ng-model="filterParamsHolder.dateRange.until"
                                     id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
                         </div>
                     </div>
                     <button class="btn btn-default btn-primary btn-block"
-                            ng-click="filterParams.dateRange.from = filterParams.dateRangeHolder.from;
-                                      filterParams.dateRange.until = filterParams.dateRangeHolder.until;
+                            ng-click="filterParams.dateRange.from = filterParamsHolder.dateRange.from;
+                                      filterParams.dateRange.until = filterParamsHolder.dateRange.until;
                                       filterParams.due = 'dateRange';
                                       labelDateRange()">Show Date Range</button>
                 </div>

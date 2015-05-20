@@ -159,12 +159,13 @@ define(['services/services',
             },
             updateTab: function(count) {
 
-                if (angular.element('.CRM_Case_Form_Search').length) {
+
+                if (document.getElementsByClassName('CRM_Case_Form_Search').length) {
                     CRM.refreshParent('.CRM_Case_Form_Search');
                     return;
                 }
 
-                if (angular.element('#tab_case').length) {
+                if (!!document.getElementById('tab_case')) {
                     CRM.tabHeader.updateCount('#tab_case', CRM.tabHeader.getCount('#tab_case')+(count || 0));
                     return
                 }

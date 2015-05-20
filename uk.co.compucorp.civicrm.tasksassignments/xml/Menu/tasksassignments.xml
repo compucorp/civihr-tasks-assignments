@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <menu>
   <item>
-    <path>civicrm/contact/view/assignments</path>
-    <page_callback>CRM_Tasksassignments_Page_Assignments</page_callback>
-    <title>Assignments</title>
-    <access_arguments>access CiviCRM</access_arguments>
-  </item>
-  <item>
     <path>civicrm/contact/view/tasks</path>
     <page_callback>CRM_Tasksassignments_Page_Tasks</page_callback>
     <title>Tasks</title>
@@ -22,6 +16,12 @@
     <path>civicrm/tasksassignments/dashboard</path>
     <page_callback>CRM_Tasksassignments_Page_Dashboard</page_callback>
     <title>Dashboard</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/contact/view/documents</path>
+    <page_callback>CRM_Tasksassignments_Page_Documents</page_callback>
+    <title>Documents</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
 </menu>

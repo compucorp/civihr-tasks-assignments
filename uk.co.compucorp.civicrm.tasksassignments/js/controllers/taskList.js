@@ -1,7 +1,8 @@
 define(['controllers/controllers',
         'services/contact',
         'services/task',
-        'services/assignment'], function(controllers){
+        'services/assignment',
+        'moment'], function(controllers){
 
     controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
         '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
@@ -92,6 +93,13 @@ define(['controllers/controllers',
                 due: null,
                 assignmentType: []
             };
+
+            $scope.filterParamsHolder = {
+                dateRange: {
+                    from: new Date().setHours(0, 0, 0, 0),
+                    until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
+                }
+            }
 
             $scope.label = {
                 overdue: 'Overdue',
