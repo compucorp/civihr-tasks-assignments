@@ -1,1 +1,33 @@
-@at-root {  .#{$prefix}spinner-cover {    @include border-radius($border-radius-base);    background-color: rgba(255, 255, 255, 1) !important;    position: absolute;    width: 100%;    height: 100%;    top: 0;    left: 0;    z-index: 1039;    @include animation(fadeIn 0.3s);  }  .#{$prefix}spinner-img {    background-image: url('../img/loading-overlay.gif') !important;    background-repeat: no-repeat !important;    background-position: center center !important;  }  .#{$prefix}spinner {    height: 32px;    margin-left: -16px;    margin-top: -16px;    position: fixed;    top: 50%;    left: 50%;    width: 32px;    z-index: 1040;    @include animation(fadeIn 0.3s);  }}
+@at-root {
+  .#{$prefix}spinner-cover {
+    @include border-radius($border-radius-base);
+    background-color: rgba(255, 255, 255, 1) !important;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1039;
+
+    @include animation(fadeIn 0.3s);
+  }
+
+  .#{$prefix}spinner-img {
+    background-image: url('../img/loading-overlay.gif') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+  }
+
+  .#{$prefix}spinner {
+    height: 32px;
+    margin-left: -16px;
+    margin-top: -16px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    z-index: 1040;
+
+    @include animation(fadeIn 0.3s);
+  }
+}
