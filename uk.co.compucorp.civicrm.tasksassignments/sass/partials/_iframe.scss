@@ -1,1 +1,8 @@
-.#{$prefix}iframe {  opacity: 0;  &.#{$prefix}iframe-ready {    @include transition(opacity .5s);    opacity: 1;  }}
+.#{$prefix}iframe {
+  opacity: 0;
+
+  &.#{$prefix}iframe-ready {
+    @include transition(opacity .5s);
+    opacity: 1;
+  }
+}

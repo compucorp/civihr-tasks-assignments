@@ -157,4 +157,12 @@ function tasksassignments_civicrm_tabs(&$tabs) {
         'weight'    => 1
     );
 
+
+    $tabs[] = Array(
+        'id'        => 'cividocuments',
+        'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
+        'title'     => ts('Documents'),
+        'weight'    => 2
+    );
+
 }

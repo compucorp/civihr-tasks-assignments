@@ -8,6 +8,7 @@ require_once 'CRM/Core/Component/Info.php';
  * abstract class.
  *
  */
+
 class CRM_CiviTask_Info extends CRM_Core_Component_Info {
 
   // docs inherited from interface

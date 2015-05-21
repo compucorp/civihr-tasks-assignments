@@ -19,8 +19,7 @@ var module, reqTa = require.config({
 });
 
 reqTa([
-    'appContact',
-    'appDashboard',
+    'app',
     'controllers/documentList',
     'controllers/document',
     'controllers/taskList',
@@ -45,7 +44,8 @@ reqTa([
     'use strict';
 
     document.addEventListener('taInit', function(e){
-        angular.bootstrap(document.getElementById('civitasks'), ['civitasks.'+ e.detail]);
+        angular.bootstrap(document.getElementById(e.detail.module),
+            ['civitasks.'+ e.detail.app]);
     });
 
     document.dispatchEvent(new CustomEvent('taReady'));

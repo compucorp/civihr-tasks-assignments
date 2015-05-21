@@ -1,0 +1,88 @@
+<div class="{{prefix}}page-contact" ta-civi-events>
+    <form name="formDocuments">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-lg-8">
+                        <button class="btn btn-default btn-primary" ng-click="modalDocument()">
+                            <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Document
+                        </button>
+                        &nbsp;
+                        <button class="btn btn-default btn-primary" ng-click="modalAssignment()">
+                            <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
+                        </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                        <ui-select
+                                multiple
+                                ng-model="filterParams.assignmentType">
+                            <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                                <div ng-bind-html="type.title | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="documentListFiltered.length">
+            <h4>Ongoing:</h4>
+            <table class="table table-striped {{prefix}}table-documents">
+                <thead>
+                    <tr>
+                        <th class="{{prefix}}col-select"><input type="checkbox" name="selectDocumentAll" disabled></th>
+                        <th>Type</th>
+                        <th>Contact</th>
+                        <th>Assignment</th>
+                        <th>Due Date</th>
+                        <th>Expiry Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="document in documentListFiltered = (documentList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time')"
+                        ng-controller="DocumentCtrl"
+                        ng-include
+                        src="'document.html'">
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Resolved:</h4>
+        </div>
+    </form>
+</div>
+
+<script type="text/ng-template" id="document.html">
+    <td class="{{prefix}}col-select"><input type="checkbox" name="selectDocument1" disabled></td>
+    <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
+    <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
+    <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
+    <td ng-bind="document.activity_date_time | date: 'dd/MM/yyyy'"></td>
+    <td>-</td>
+    <td>
+        <div class="dropdown" dropdown>
+            <a href class="dropdown-toggle"
+               ng-class="{
+                'text-danger-light': (document.status_id == 4),
+                'text-success-light': (document.status_id == 3),
+                'text-warning-light': (document.status_id == 1 || document.status_id == 2)
+            }" dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
+            <ul class="dropdown-menu">
+                <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(status.key)"></a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <div class="dropdown" dropdown>
+            <a href class="dropdown-toggle {{prefix}}context-menu-toggle" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
+            <ul class="dropdown-menu pull-right">
+                <li><a href ng-click=""><i class="fa fa-download"></i> Download</a></li>
+                <li><a href ng-click="modalDocument(document);"><i class="fa fa-pencil"></i> Edit</a></li>
+                <li><a href><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+                <li><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
+            </ul>
+        </div>
+    </td>
+</script>

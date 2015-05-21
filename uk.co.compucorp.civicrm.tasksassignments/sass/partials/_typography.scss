@@ -1,1 +1,8 @@
-h1, h2, h3, h4, h5, h6 {  text-transform: uppercase;}@include text-emphasis-variant('.text-success-light', $brand-success);@include text-emphasis-variant('.text-info-light', $brand-info);@include text-emphasis-variant('.text-warning-light', $brand-warning);@include text-emphasis-variant('.text-danger-light', $brand-danger);
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
+}
+
+@include text-emphasis-variant('.text-success-light', $brand-success);
+@include text-emphasis-variant('.text-info-light', $brand-info);
+@include text-emphasis-variant('.text-warning-light', $brand-warning);
+@include text-emphasis-variant('.text-danger-light', $brand-danger);
