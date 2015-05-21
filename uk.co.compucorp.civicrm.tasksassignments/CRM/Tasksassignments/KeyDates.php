@@ -52,14 +52,14 @@ class CRM_Tasksassignments_KeyDates
         if ($tableExists['civicrm_hrjobcontract_details'])
         {
             $queries[] = "
-                SELECT hrjc.contact_id as contact_id, c.sort_name as contact_name, period_start_date as keydate, 'period_start_date' as type FROM civicrm_hrjobcontract_details hrjc_d
+                SELECT hrjc.contact_id as contact_id, c.sort_name as contact_name, DATE(period_start_date) as keydate, 'period_start_date' as type FROM civicrm_hrjobcontract_details hrjc_d
                 LEFT JOIN civicrm_hrjobcontract_revision hrjc_r ON hrjc_d.jobcontract_revision_id = hrjc_r.details_revision_id
                 LEFT JOIN civicrm_hrjobcontract hrjc ON hrjc_r.jobcontract_id = hrjc.id
                 LEFT JOIN civicrm_contact c ON hrjc.contact_id = c.id
                 WHERE period_start_date IS NOT NULL
             " . self::_buildWhereDateRange('period_start_date', $startDate, $endDate);
             $queries[] = "
-                SELECT hrjc.contact_id as contact_id, c.sort_name as contact_name, period_end_date as keydate, 'period_end_date' as type FROM civicrm_hrjobcontract_details hrjc_d
+                SELECT hrjc.contact_id as contact_id, c.sort_name as contact_name, DATE(period_end_date) as keydate, 'period_end_date' as type FROM civicrm_hrjobcontract_details hrjc_d
                 LEFT JOIN civicrm_hrjobcontract_revision hrjc_r ON hrjc_d.jobcontract_revision_id = hrjc_r.details_revision_id
                 LEFT JOIN civicrm_hrjobcontract hrjc ON hrjc_r.jobcontract_id = hrjc.id
                 LEFT JOIN civicrm_contact c ON hrjc.contact_id = c.id
@@ -69,19 +69,19 @@ class CRM_Tasksassignments_KeyDates
         if ($tableExists['civicrm_contact'])
         {
             $queries[] = "
-                SELECT id as contact_id, sort_name as contact_name, birth_date as keydate, 'birth_date' as type FROM civicrm_contact
+                SELECT id as contact_id, sort_name as contact_name, DATE(birth_date) as keydate, 'birth_date' as type FROM civicrm_contact
                 WHERE birth_date IS NOT NULL
             " . self::_buildWhereDateRange('birth_date', $startDate, $endDate); 
         }
         if ($tableExists['civicrm_value_job_summary_10'])
         {
             $queries[] = "
-                SELECT entity_id as contact_id, c.sort_name as contact_name, initial_join_date_56 as keydate, 'initial_join_date' as type FROM civicrm_value_job_summary_10 vjs
+                SELECT entity_id as contact_id, c.sort_name as contact_name, DATE(initial_join_date_56) as keydate, 'initial_join_date' as type FROM civicrm_value_job_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE initial_join_date_56 IS NOT NULL
             " . self::_buildWhereDateRange('initial_join_date_56', $startDate, $endDate);
             $queries[] = "
-                SELECT entity_id as contact_id, c.sort_name as contact_name, final_termination_date_57 as keydate, 'final_termination_date' as type FROM civicrm_value_job_summary_10 vjs
+                SELECT entity_id as contact_id, c.sort_name as contact_name, DATE(final_termination_date_57) as keydate, 'final_termination_date' as type FROM civicrm_value_job_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE final_termination_date_57 IS NOT NULL
             " . self::_buildWhereDateRange('final_termination_date_57', $startDate, $endDate);
