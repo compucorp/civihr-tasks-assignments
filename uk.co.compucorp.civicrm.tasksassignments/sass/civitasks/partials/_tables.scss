@@ -1,0 +1,14 @@
+.#{$prefix}table-documents {
+
+  .dropdown {
+    text-transform: capitalize;
+  }
+
+  .#{$prefix}col-select {
+    text-align: center;
+  }
+
+  input[type="checkbox"] {
+    margin-left: 7px;
+  }
+}

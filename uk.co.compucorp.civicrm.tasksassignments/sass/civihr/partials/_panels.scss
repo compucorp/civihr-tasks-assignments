@@ -4,6 +4,7 @@
   background-image: none;
   width: auto;
   background-position: 0 0;
+  @include box-shadow($box-shadow-global);
 }
 
 .panel-heading {

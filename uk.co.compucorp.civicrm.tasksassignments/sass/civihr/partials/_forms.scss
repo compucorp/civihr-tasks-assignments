@@ -11,11 +11,72 @@ input[type="checkbox"],
   font-size: 11px;
 }
 
+.form-control-file {
+  padding: 6px 12px;
+}
+
+.form-control-static {
+  padding: {
+    bottom: 8px;
+    top: 6px;
+  }
+  .subfield {
+    display: block;
+  }
+}
+
+.form-horizontal {
+  .control-label {
+    text-align: left;
+
+    &.control-label-line-2 {
+      margin-top: -3px;
+      padding-top: 0;
+    }
+  }
+
+  .has-feedback {
+    select + .form-control-feedback {
+      right: 28px;
+    }
+
+    [datepicker-popup] + .form-control-feedback {
+      right: 41px;
+    }
+
+    .form-inline {
+      float: left;
+      position: relative;
+
+      select + .form-control-feedback {
+        right: 10px;
+      }
+    }
+  }
+
+  .well {
+    .form-group {
+      margin-bottom: 0;
+
+      + .form-group {
+        margin-top: 15px;
+      }
+    }
+  }
+}
+
+.form-group.required {
+  .control-label:after {
+    content:"*";
+    color:red;
+  }
+}
+
 .control-label,
 .checkbox-inline,
 .radio-inline,
 .checkbox-label,
-.radio-labe {
+.radio-label {
   color: $headings-color;
   text-transform: uppercase;
   font-weight: bold;
@@ -25,12 +86,6 @@ input[type="checkbox"],
 .checkbox-label,
 .radio-label {
   @extend label;
-}
-
-.form-task {
-  h3 {
-    margin-top: 0;
-  }
 }
 
 .ta-editor.ta-html,
@@ -64,30 +119,5 @@ input[type="checkbox"],
 
   .ui-select-match-item {
     margin-bottom: 2px;
-  }
-}
-
-.#{$prefix}form-action {
-  margin-top: -12px;
-  margin-bottom: -12px;
-  max-width: 817px;
-  float: left;
-
-
-  .row,
-  .form-horizontal .form-group {
-    margin: {
-      bottom: 0;
-      left: -5px;
-      right: -5px;
-    };
-  }
-
-  [class^="col-"],
-  [class*=" col-"] {
-    padding: {
-      left: 5px;
-      right: 5px;
-    }
   }
 }
