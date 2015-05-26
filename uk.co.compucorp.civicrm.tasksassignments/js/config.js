@@ -15,7 +15,7 @@ define(function(){
         url: {
             REST: CRM.url('civicrm/ajax/rest'),
             ASSIGNMENTS: CRM.url('civicrm/case'),
-            CIVI_DASHBOARD: CRM.url('civicrm'),
+            CIVI_DASHBOARD: CRM.url('civicrm/'),
             CONTACT: CRM.url('civicrm/contact/view')
         }
     });
