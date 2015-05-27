@@ -87,11 +87,6 @@ class CRM_Tasksassignments_KeyDates
         }
         if ($tableExists['civicrm_contact'])
         {
-            $query = "
-                SELECT id as contact_id, sort_name as contact_name, DATE(birth_date) as keydate, 'birth_date' as type FROM civicrm_contact
-                WHERE birth_date IS NOT NULL
-            ";
-            
             $whereDate = array();
             $sy = 0;
             $ey = 0;
@@ -111,6 +106,15 @@ class CRM_Tasksassignments_KeyDates
             {
                 $con = ' OR ';
             }
+            
+            $query = "
+                SELECT id as contact_id, sort_name as contact_name,  
+                    IF( DATE_FORMAT(  `birth_date` ,  '%m-%d' ) <  '{$sm}-{$sd}',
+                      CONCAT( {$sy} +1,  '-', DATE_FORMAT(  `birth_date` ,  '%m-%d' ) ) ,
+                      CONCAT( {$sy} ,  '-', DATE_FORMAT(  `birth_date` ,  '%m-%d' ) )
+                    ) AS keydate, 'birth_date' as type FROM civicrm_contact
+                WHERE birth_date IS NOT NULL
+            ";
             
             if (!empty($whereDate))
             {
