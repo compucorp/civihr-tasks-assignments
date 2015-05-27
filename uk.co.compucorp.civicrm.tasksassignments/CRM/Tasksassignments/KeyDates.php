@@ -93,20 +93,28 @@ class CRM_Tasksassignments_KeyDates
             ";
             
             $whereDate = array();
+            $sy = 0;
+            $ey = 0;
             if ($startDate)
             {
-                list(, $sm, $sd) = explode('-', $startDate);
+                list($sy, $sm, $sd) = explode('-', $startDate);
                 $whereDate[] = " DATE_FORMAT(`birth_date` , '%m-%d') >=  '{$sm}-{$sd}' ";
             }
             if ($endDate)
             {
-                list(, $em, $ed) = explode('-', $endDate);
+                list($ey, $em, $ed) = explode('-', $endDate);
                 $whereDate[] = " DATE_FORMAT(`birth_date` , '%m-%d') <=  '{$em}-{$ed}' ";
+            }
+            
+            $con = ' AND ';
+            if ($ey > $sy)
+            {
+                $con = ' OR ';
             }
             
             if (!empty($whereDate))
             {
-                $query .= ' AND (' . implode(' OR ', $whereDate) . ')';
+                $query .= ' AND (' . implode($con, $whereDate) . ')';
             }
             
             $queries[] = $query;
