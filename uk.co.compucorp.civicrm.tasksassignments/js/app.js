@@ -1,5 +1,5 @@
-define(['crmUi','angularSelect', 'textAngular', 'config', 'moment', 'controllers/controllers', 'directives/directives',
-    'filters/filters', 'services/services'], function(){
+define(['moment', 'crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
+    'filters/filters', 'services/services'], function(moment){
 
     angular.module('civitasks.run',[
         'ngRoute',
@@ -174,8 +174,8 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'moment', 'controllers
                         controller: 'DateListCtrl',
                         templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
                         resolve: {
-                            dateList: ['KeyDateService',function(KeyDateService){
-                                return KeyDateService.get(moment().startOf('isoWeek'),moment().endOf('isoWeek'));
+                            contactList: ['KeyDateService',function(KeyDateService){
+                                return KeyDateService.get(moment().startOf('year'),moment().endOf('year'));
                             }]
                         }
                     }).

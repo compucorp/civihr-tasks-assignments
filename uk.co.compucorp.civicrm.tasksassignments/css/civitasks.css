@@ -12043,14 +12043,14 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   animation: fadeIn 0.3s;
 }
 
-/* line 15, ../sass/civitasks/partials/_spinner.scss */
+/* line 16, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner-img {
   background-image: url("../img/loading-overlay.gif") !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
 }
 
-/* line 21, ../sass/civitasks/partials/_spinner.scss */
+/* line 22, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner {
   height: 32px;
   margin-left: -16px;

@@ -46,6 +46,7 @@ define(['directives/directives'], function(directives){
                     });
 
                     $rootScope.$on('$routeChangeSuccess', function() {
+                        removeSpinner();
                         spinner.remove();
                     });
 

@@ -83,54 +83,12 @@
                 </div>
             </div>
             <ul class="{{prefix}}list-key-dates">
-                <li class="panel panel-light panel-secondary">
+                <li ng-repeat="(date, dateTypeList) in dateList" class="panel panel-light panel-secondary">
                     <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
+                        <time>{{date | date: 'EEE d MMMM'}} <span>{{date | date: 'yyyy'}}</span></time>
                     </header>
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
+                        <li class="list-group-item" ng-repeat="dateType in dateTypeList"><strong>{{dateType.type}}</strong> {{dateType.contact_name}}</li>
                     </ul>
                 </li>
             </ul>

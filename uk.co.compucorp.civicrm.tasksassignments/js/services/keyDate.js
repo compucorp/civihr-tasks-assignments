@@ -1,5 +1,6 @@
 +define(['services/services',
-        'services/utils'], function (services) {
+        'moment',
+        'services/utils'], function (services, moment) {
 
     services.factory('KeyDate',['$resource', 'config', '$log', function($resource, config, $log){
         $log.debug('Service: KeyDate');

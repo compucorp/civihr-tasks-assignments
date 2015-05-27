@@ -15,6 +15,11 @@ var module, reqTa = require.config({
         textAngular: {
             deps: ['textAngularRangy','textAngularSanitize']
         }
+    },
+    config: {
+        moment: {
+            noGlobal: true
+        }
     }
 });
 
