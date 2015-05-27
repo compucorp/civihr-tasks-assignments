@@ -24,4 +24,10 @@
     <title>Documents</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/tasksassignments/keydatescsv</path>
+    <page_callback>CRM_Tasksassignments_Page_KeyDatesCsv</page_callback>
+    <title>KeyDatesCsv</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>
