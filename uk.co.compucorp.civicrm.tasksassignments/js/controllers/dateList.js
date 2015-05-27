@@ -25,8 +25,6 @@ define(['controllers/controllers',
                     dateObj[contactList[i].keydate].push(contactList[i]);
                 }
 
-                console.log(dateObj);
-
                 for (date in dateObj) {
                     dateList.push({
                         date: date,
@@ -34,7 +32,6 @@ define(['controllers/controllers',
                     });
                 }
 
-                console.log(dateList);
                 return dateList;
             };
 

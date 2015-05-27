@@ -68,7 +68,7 @@
                                         <div class="col-xs-12 col-sm-10">
                                             <ui-select
                                                     multiple
-                                                    ng-model="filterBy.dateType">
+                                                    ng-model="filterParams.dateType">
                                                 <ui-select-match placeholder="Select date type...">{{$item.value}}</ui-select-match>
                                                 <ui-select-choices repeat="type.key as type in cache.dateType.arr">
                                                     <div ng-bind-html="type.value | highlight: $select.search"></div>
@@ -83,7 +83,7 @@
                 </div>
             </div>
             <ul class="{{prefix}}list-key-dates">
-                <li ng-repeat="dateObj in dateList | filterBy.date:filterParams.date" class="panel panel-light panel-secondary">
+                <li ng-repeat="dateObj in dateList | filterBy.date:filterParams.date | filterBy.dateType:filterParams.dateType" class="panel panel-light panel-secondary">
                     <header class="panel-heading">
                         <time>{{dateObj.date | date: 'EEE d MMMM'}} <span>{{dateObj.date | date: 'yyyy'}}</span></time>
                     </header>

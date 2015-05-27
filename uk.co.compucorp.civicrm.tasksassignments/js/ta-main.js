@@ -43,6 +43,7 @@ reqTa([
     'filters/contactId',
     'filters/date',
     'filters/dateParse',
+    'filters/dateType',
     'filters/due',
     'filters/userRole',
     'filters/status',
