@@ -18,14 +18,33 @@ class CRM_Tasksassignments_KeyDates
             return $result;
         }
         
+        if ($startDate)
+        {
+            list($sy, $sm, $sd) = explode('-', $startDate);
+        }
+        
         $keyDates = CRM_Core_DAO::executeQuery($query);
         while ($keyDates->fetch())
         {
+            $keydate = $keyDates->keydate;
+            if ($keyDates->type === 'birth_date' && $startDate)
+            {
+                list(, $km, $kd) = explode('-', $keyDates->keydate);
+                if ($km . '-' . $kd >= $sm . '-' . $sd)
+                {
+                    $keydate = $sy . '-' . $km . '-' . $kd;
+                }
+                else
+                {
+                    $keydate = $sy + 1 . '-' . $km . '-' . $kd;
+                }
+            }
+            
             $result[] = array(
                 'contact_id' => $keyDates->contact_id,
                 'contact_name' => $keyDates->contact_name,
                 'contact_url' => CRM_Report_Utils_Report::getNextUrl('contact/detail', 'reset=1&force=&id_op=eq&id_value=' . $keyDates->contact_id),
-                'keydate' => $keyDates->keydate,
+                'keydate' => $keydate,
                 'type' => $keyDates->type,
             );
         }
@@ -68,10 +87,29 @@ class CRM_Tasksassignments_KeyDates
         }
         if ($tableExists['civicrm_contact'])
         {
-            $queries[] = "
+            $query = "
                 SELECT id as contact_id, sort_name as contact_name, DATE(birth_date) as keydate, 'birth_date' as type FROM civicrm_contact
                 WHERE birth_date IS NOT NULL
-            " . self::_buildWhereDateRange('birth_date', $startDate, $endDate); 
+            ";
+            
+            $whereDate = array();
+            if ($startDate)
+            {
+                list(, $sm, $sd) = explode('-', $startDate);
+                $whereDate[] = " DATE_FORMAT(`birth_date` , '%m-%d') >=  '{$sm}-{$sd}' ";
+            }
+            if ($endDate)
+            {
+                list(, $em, $ed) = explode('-', $endDate);
+                $whereDate[] = " DATE_FORMAT(`birth_date` , '%m-%d') <=  '{$em}-{$ed}' ";
+            }
+            
+            if (!empty($whereDate))
+            {
+                $query .= ' AND (' . implode(' OR ', $whereDate) . ')';
+            }
+            
+            $queries[] = $query;
         }
         if ($tableExists['civicrm_value_job_summary_10'])
         {
