@@ -88,7 +88,7 @@
                         <time>{{date | date: 'EEE d MMMM'}} <span>{{date | date: 'yyyy'}}</span></time>
                     </header>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="dateType in dateTypeList"><strong>{{dateType.type}}</strong> {{dateType.contact_name}}</li>
+                        <li class="list-group-item" ng-repeat="dateType in dateTypeList"><strong>{{cache.dateType.obj[dateType.type]}}</strong> {{dateType.contact_name}}</li>
                     </ul>
                 </li>
             </ul>

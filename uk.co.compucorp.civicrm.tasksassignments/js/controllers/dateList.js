@@ -8,7 +8,7 @@ define(['controllers/controllers',
         function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, contactList, config, ContactService){
             $log.debug('Controller: DateListCtrl');
 
-            this.contactList = contactList.slice(0, 20);
+            this.contactList = contactList;
 
             this.init = function(){
 
