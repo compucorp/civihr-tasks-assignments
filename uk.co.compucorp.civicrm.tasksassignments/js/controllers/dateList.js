@@ -19,12 +19,22 @@ define(['controllers/controllers',
             }
 
             this.createDateList = function(){
-                var i = 0, contactList = this.contactList, len = contactList.length, dateList = {};
+                var i = 0, contactList = this.contactList, len = contactList.length, date, dateObj = {}, dateList = [];
                 for (; i < len; i++) {
-                    dateList[contactList[i].keydate] = dateList[contactList[i].keydate] || [];
-                    dateList[contactList[i].keydate].push(contactList[i]);
+                    dateObj[contactList[i].keydate] = dateObj[contactList[i].keydate] || [];
+                    dateObj[contactList[i].keydate].push(contactList[i]);
                 }
 
+                console.log(dateObj);
+
+                for (date in dateObj) {
+                    dateList.push({
+                        date: date,
+                        dateContactList: dateObj[date]
+                    });
+                }
+
+                console.log(dateList);
                 return dateList;
             };
 
@@ -43,7 +53,7 @@ define(['controllers/controllers',
                     from: null,
                     until: null
                 },
-                date: null,
+                date: 'month',
                 dateType: []
             };
 
@@ -55,7 +65,7 @@ define(['controllers/controllers',
             }
 
             $scope.label = {
-                week: 'Week',
+                isoWeek: 'Week',
                 month: 'Month',
                 year: 'Year',
                 dateRange: ''

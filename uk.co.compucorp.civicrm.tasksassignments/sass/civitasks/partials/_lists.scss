@@ -131,7 +131,16 @@
   margin: 0;
   padding: 0;
 
+  a {
+    color: $text-color;
+
+    &:hover {
+      color: darken($text-color, 15%);
+    }
+  }
+
   strong {
+    color: #5b6779;
     font-size: 11px;
     padding-right: 5px;
     text-transform: uppercase;
@@ -139,10 +148,23 @@
 
   time {
     font-size: 11px;
+    font-weight: bold;
+
+    span {
+      color: $text-color;
+    }
   }
 
   > li {
     margin-top: 10px;
+  }
+
+  .period_start_date {
+    color: #eca67f;
+  }
+
+  .period_end_date {
+    color: #c096aa;
   }
 
   .panel {

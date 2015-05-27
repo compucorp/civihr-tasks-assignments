@@ -7,7 +7,7 @@
             <div class="panel-body">
                 <div class="{{prefix}}filter-date">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'week'" uncheckable>{{label.week}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(dateList | filterBy.date:'week').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'isoWeek'" uncheckable>{{label.isoWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'isoWeek').length"></span></a></li>
                         <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'month'" uncheckable>{{label.month}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'month').length"></span></a></li>
                         <li role="presentation"><a href ng-model="filterParams.date"  btn-radio="'year'" uncheckable>{{label.year}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'year').length"></span></a></li>
                     </ul>
@@ -69,9 +69,9 @@
                                             <ui-select
                                                     multiple
                                                     ng-model="filterBy.dateType">
-                                                <ui-select-match placeholder="Select date type...">{{$item.title}}</ui-select-match>
-                                                <ui-select-choices repeat="type.id as type in cache.dateType.arr">
-                                                    <div ng-bind-html="type.title | highlight: $select.search"></div>
+                                                <ui-select-match placeholder="Select date type...">{{$item.value}}</ui-select-match>
+                                                <ui-select-choices repeat="type.key as type in cache.dateType.arr">
+                                                    <div ng-bind-html="type.value | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>
                                         </div>
@@ -83,12 +83,12 @@
                 </div>
             </div>
             <ul class="{{prefix}}list-key-dates">
-                <li ng-repeat="(date, dateTypeList) in dateList" class="panel panel-light panel-secondary">
+                <li ng-repeat="dateObj in dateList | filterBy.date:filterParams.date" class="panel panel-light panel-secondary">
                     <header class="panel-heading">
-                        <time>{{date | date: 'EEE d MMMM'}} <span>{{date | date: 'yyyy'}}</span></time>
+                        <time>{{dateObj.date | date: 'EEE d MMMM'}} <span>{{dateObj.date | date: 'yyyy'}}</span></time>
                     </header>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="dateType in dateTypeList"><strong>{{cache.dateType.obj[dateType.type]}}</strong> {{dateType.contact_name}}</li>
+                        <li class="list-group-item" ng-repeat="dateContact in dateObj.dateContactList"><strong class="{{dateContact.type}}" ng-bind="cache.dateType.obj[dateContact.type]"></strong> <a href ng-href="{{url.CONTACT+'?reset=1&cid='+dateContact.contact_id}}" ng-bind="dateContact.contact_name"></a></li>
                     </ul>
                 </li>
             </ul>

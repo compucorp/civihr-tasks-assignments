@@ -11917,35 +11917,57 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding: 0;
 }
 /* line 134, ../sass/civitasks/partials/_lists.scss */
+#civitasks .ct-list-key-dates a, #cividocuments .ct-list-key-dates a {
+  color: #727e8a;
+}
+/* line 137, ../sass/civitasks/partials/_lists.scss */
+#civitasks .ct-list-key-dates a:hover, #cividocuments .ct-list-key-dates a:hover {
+  color: #4f5860;
+}
+/* line 142, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates strong, #cividocuments .ct-list-key-dates strong {
+  color: #5b6779;
   font-size: 11px;
   padding-right: 5px;
   text-transform: uppercase;
 }
-/* line 140, ../sass/civitasks/partials/_lists.scss */
+/* line 149, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates time, #cividocuments .ct-list-key-dates time {
   font-size: 11px;
+  font-weight: bold;
 }
-/* line 144, ../sass/civitasks/partials/_lists.scss */
+/* line 153, ../sass/civitasks/partials/_lists.scss */
+#civitasks .ct-list-key-dates time span, #cividocuments .ct-list-key-dates time span {
+  color: #727e8a;
+}
+/* line 158, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates > li, #cividocuments .ct-list-key-dates > li {
   margin-top: 10px;
 }
-/* line 148, ../sass/civitasks/partials/_lists.scss */
+/* line 162, ../sass/civitasks/partials/_lists.scss */
+#civitasks .ct-list-key-dates .period_start_date, #cividocuments .ct-list-key-dates .period_start_date {
+  color: #eca67f;
+}
+/* line 166, ../sass/civitasks/partials/_lists.scss */
+#civitasks .ct-list-key-dates .period_end_date, #cividocuments .ct-list-key-dates .period_end_date {
+  color: #c096aa;
+}
+/* line 170, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel, #cividocuments .ct-list-key-dates .panel {
   -webkit-box-shadow: -3px 5px 17px 0px rgba(0, 0, 0, 0.03);
   box-shadow: -3px 5px 17px 0px rgba(0, 0, 0, 0.03);
 }
-/* line 152, ../sass/civitasks/partials/_lists.scss */
+/* line 174, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel > .list-group .list-group-item, #cividocuments .ct-list-key-dates .panel > .list-group .list-group-item {
   border-width: 0;
   margin: 0;
   padding: 0 15px 13px;
 }
-/* line 157, ../sass/civitasks/partials/_lists.scss */
+/* line 179, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel > .list-group .list-group-item:first-child, #cividocuments .ct-list-key-dates .panel > .list-group .list-group-item:first-child {
   padding-top: 13px;
 }
-/* line 164, ../sass/civitasks/partials/_lists.scss */
+/* line 186, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel-heading, #cividocuments .ct-list-key-dates .panel-heading {
   padding: 11px 15px 12px;
 }
@@ -12043,14 +12065,14 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   animation: fadeIn 0.3s;
 }
 
-/* line 16, ../sass/civitasks/partials/_spinner.scss */
+/* line 15, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner-img {
   background-image: url("../img/loading-overlay.gif") !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
 }
 
-/* line 22, ../sass/civitasks/partials/_spinner.scss */
+/* line 21, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner {
   height: 32px;
   margin-left: -16px;
