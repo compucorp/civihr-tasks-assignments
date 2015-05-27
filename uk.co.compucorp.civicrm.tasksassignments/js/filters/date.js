@@ -1,6 +1,6 @@
 define(['filters/filters'], function(filters){
-    filters.filter('filterBy.due',['$filter', '$log', function($filter, $log){
-        $log.debug('Filter: filterBy.due');
+    filters.filter('filterBy.date',['$filter', '$log', function($filter, $log){
+        $log.debug('Filter: filterBy.date');
 
         return function(inputArr, type, dateRange) {
 
@@ -18,14 +18,6 @@ define(['filters/filters'], function(filters){
             }
 
             switch(type){
-                case 'overdue':
-                    for (i; i < inputArrlen; i++) {
-                        if (new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) < today) {
-                            filteredArr.push(inputArr[i]);
-                        }
-                    }
-                    break;
-
                 case 'dateRange':
 
                     if (!dateRange || typeof dateRange !== 'object') {
@@ -44,7 +36,8 @@ define(['filters/filters'], function(filters){
                     }
 
                     break;
-                case 'dueToday':
+
+                case 'month':
                     for (i; i < inputArrlen; i++) {
                         if (new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) == today) {
                             filteredArr.push(inputArr[i]);
@@ -52,7 +45,15 @@ define(['filters/filters'], function(filters){
                     }
                     break;
 
-                case 'dueThisWeek':
+                case 'year':
+                    for (i; i < inputArrlen; i++) {
+                        if (new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) < today) {
+                            filteredArr.push(inputArr[i]);
+                        }
+                    }
+                    break;
+
+                case 'week':
                     var d = new Date(),
                         day = d.getDay(),
                         diff = d.getDate() - day + (day == 0 ? -6:1),

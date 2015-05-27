@@ -1,4 +1,4 @@
-define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
+define(['crmUi','angularSelect', 'textAngular', 'config', 'moment', 'controllers/controllers', 'directives/directives',
     'filters/filters', 'services/services'], function(){
 
     angular.module('civitasks.run',[
@@ -15,8 +15,9 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
         'civitasks.filters',
         'civitasks.services'
     ]).run(['config', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
-        'TaskService', 'AssignmentService', '$log',
-        function(config, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService, $log){
+        'TaskService', 'AssignmentService', 'KeyDateService', '$log',
+        function(config, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
+                 KeyDateService, $log){
             $log.debug('civitasks.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -35,6 +36,10 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     arrSearch: []
                 },
                 assignmentType: {
+                    obj: {},
+                    arr: []
+                },
+                dateType: {
                     obj: {},
                     arr: []
                 },
@@ -166,12 +171,12 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                         templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
                     }).
                     when('/key-dates', {
-                        controller: 'TaskListCtrl',
+                        controller: 'DateListCtrl',
                         templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
                         resolve: {
-                            taskList: function() {
-                                return []
-                            }
+                            dateList: ['KeyDateService',function(KeyDateService){
+                                return KeyDateService.get(moment().startOf('isoWeek'),moment().endOf('isoWeek'));
+                            }]
                         }
                     }).
                     otherwise({redirectTo:'/tasks'});

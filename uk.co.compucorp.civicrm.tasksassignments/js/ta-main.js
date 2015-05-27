@@ -20,6 +20,7 @@ var module, reqTa = require.config({
 
 reqTa([
     'app',
+    'controllers/dateList',
     'controllers/documentList',
     'controllers/document',
     'controllers/taskList',
@@ -35,6 +36,7 @@ reqTa([
     'directives/spinner',
     'filters/assignmentType',
     'filters/contactId',
+    'filters/date',
     'filters/dateParse',
     'filters/due',
     'filters/userRole',
