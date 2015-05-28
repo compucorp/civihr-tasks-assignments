@@ -214,32 +214,10 @@ define(['moment', 'crmUi','angularSelect', 'textAngular', 'config', 'controllers
                         controller: 'DocumentListCtrl',
                         templateUrl: config.path.TPL+'contact/documents.html?v='+(new Date().getTime()),
                         resolve: {
-                            documentList: ['$q', 'DocumentService',function($q, DocumentService){
-                                var deferred = $q.defer();
-
-                                $q.all([
-                                    DocumentService.get({
-                                        'sequential': 0,
-                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID
-                                    }),
-                                    DocumentService.get({
-                                        'sequential': 0,
-                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID
-                                    })
-                                ]).then(function(results){
-                                    var documentId, documentList = [];
-
-                                    angular.extend(results[0],results[1]);
-
-                                    for (documentId in results[0]) {
-                                        documentList.push(results[0][documentId]);
-                                    }
-
-                                    deferred.resolve(documentList);
-
+                            documentList: ['DocumentService',function(DocumentService){
+                                return DocumentService.get({
+                                    'target_contact_id': config.CONTACT_ID
                                 });
-
-                                return deferred.promise;
                             }]
                         }
                     }
