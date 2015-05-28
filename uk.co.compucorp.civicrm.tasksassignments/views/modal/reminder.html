@@ -1,0 +1,52 @@
+<form novalidate name="reminderForm" class="form-horizontal" role="form" ng-submit="confirm()">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" ng-bind="cache.contact.obj[task.target_contact_id[0]].sort_name"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 control-label">Task:</label>
+                    <div class="col-xs-8 col-sm-6">
+                        <p class="form-control-static" ng-bind="cache.taskType.obj[task.activity_type_id]"></p>
+                    </div>
+                    <label class="col-xs-4 col-sm-4 control-label">Due:
+                        {{task.activity_date_time | date: 'MMM d, yyyy'}}</label>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 control-label">Assignee:</label>
+                    <div class="col-xs-12 col-sm-6">
+                        <p class="form-control-static"
+                           ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></p>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="showCId">
+                    <label class="col-xs-12 col-sm-2 control-label">Target:</label>
+                    <div class="col-xs-12 col-sm-6">
+                        <p class="form-control-static"
+                                ng-bind="cache.contact.obj[task.target_contact_id[0]].sort_name">
+                        </p>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 control-label">Notes:</label>
+                    <div class="col-xs-12 col-sm-10">
+                        <div text-angular
+                                ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
+                                ng-model="reminder.notes"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <span class="fa fa-remove" aria-hidden="true"></span> Cancel
+        </button>
+        <button type="button" class="btn btn-default btn-primary" ng-click="confirm()">
+            <span class="fa fa-check" aria-hidden="true"></span> Send Reminder
+        </button>
+    </div>
+</form>

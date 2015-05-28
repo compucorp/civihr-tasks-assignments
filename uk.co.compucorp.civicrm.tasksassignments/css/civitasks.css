@@ -11089,7 +11089,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   margin-bottom: 15px;
   margin-top: 0;
   padding: 12px 20px;
-  width: 100%;
+  max-width: 100%;
 }
 /* line 21, ../sass/civihr/partials/_typography.scss */
 #civitasks .header-bar.header-bar-primary, #cividocuments .header-bar.header-bar-primary {
@@ -11417,19 +11417,17 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   font-size: 13px;
 }
 /* line 29, ../sass/civihr/partials/_modals.scss */
-#civitasks .modal-content .row .form-group, #cividocuments .modal-content .row .form-group,
+#civitasks .modal-content .form-horizontal .row, #cividocuments .modal-content .form-horizontal .row,
 #civitasks .modal-content .form-horizontal .form-group,
 #cividocuments .modal-content .form-horizontal .form-group {
   margin-left: -15px;
   margin-right: -15px;
 }
-/* line 36, ../sass/civihr/partials/_modals.scss */
-#civitasks .modal-content .row .modal-body, #cividocuments .modal-content .row .modal-body,
-#civitasks .modal-content .form-horizontal .modal-body,
-#cividocuments .modal-content .form-horizontal .modal-body {
+/* line 37, ../sass/civihr/partials/_modals.scss */
+#civitasks .modal-content .form-horizontal .modal-body, #cividocuments .modal-content .form-horizontal .modal-body {
   padding-bottom: 0;
 }
-/* line 41, ../sass/civihr/partials/_modals.scss */
+/* line 42, ../sass/civihr/partials/_modals.scss */
 #civitasks .modal-content [class^="col-"], #cividocuments .modal-content [class^="col-"],
 #civitasks .modal-content [class*=" col-"],
 #cividocuments .modal-content [class*=" col-"] {
@@ -11437,7 +11435,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-right: 15px;
 }
 @media (min-width: 768px) {
-  /* line 51, ../sass/civihr/partials/_modals.scss */
+  /* line 52, ../sass/civihr/partials/_modals.scss */
   #civitasks .modal-dialog, #cividocuments .modal-dialog {
     margin: 60px auto;
   }
@@ -12342,11 +12340,13 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 }
 /* line 32, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-list-task, #cividocuments #ct-dashboard .ct-list-task,
+#civitasks #ct-dashboard .ct-list-task + .header-bar,
+#cividocuments #ct-dashboard .ct-list-task + .header-bar,
 #civitasks #ct-dashboard .ct-list-key-dates,
 #cividocuments #ct-dashboard .ct-list-key-dates {
   margin-left: 10px;
 }
-/* line 37, ../sass/civitasks/partials/_dashboard.scss */
+/* line 38, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .panel, #cividocuments #ct-dashboard .panel {
   margin-bottom: 0;
 }
@@ -12642,64 +12642,68 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .ct-list-task .ct-task-subject time, #cividocuments .ct-list-task .ct-task-subject time {
   margin-right: 12px;
 }
-/* line 129, ../sass/civitasks/partials/_lists.scss */
+/* line 127, ../sass/civitasks/partials/_lists.scss */
+#civitasks .ct-list-task + .header-bar, #cividocuments .ct-list-task + .header-bar {
+  margin-top: 15px;
+}
+/* line 133, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates, #cividocuments .ct-list-key-dates {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-/* line 134, ../sass/civitasks/partials/_lists.scss */
+/* line 138, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates a, #cividocuments .ct-list-key-dates a {
   color: #727e8a;
 }
-/* line 137, ../sass/civitasks/partials/_lists.scss */
+/* line 141, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates a:hover, #cividocuments .ct-list-key-dates a:hover {
   color: #4f5860;
 }
-/* line 142, ../sass/civitasks/partials/_lists.scss */
+/* line 146, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates strong, #cividocuments .ct-list-key-dates strong {
   color: #5b6779;
   font-size: 11px;
   padding-right: 5px;
   text-transform: uppercase;
 }
-/* line 149, ../sass/civitasks/partials/_lists.scss */
+/* line 153, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates time, #cividocuments .ct-list-key-dates time {
   font-size: 11px;
   font-weight: bold;
 }
-/* line 153, ../sass/civitasks/partials/_lists.scss */
+/* line 157, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates time span, #cividocuments .ct-list-key-dates time span {
   color: #727e8a;
 }
-/* line 158, ../sass/civitasks/partials/_lists.scss */
+/* line 162, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates > li, #cividocuments .ct-list-key-dates > li {
   margin-top: 10px;
 }
-/* line 162, ../sass/civitasks/partials/_lists.scss */
+/* line 166, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .period_start_date, #cividocuments .ct-list-key-dates .period_start_date {
   color: #eca67f;
 }
-/* line 166, ../sass/civitasks/partials/_lists.scss */
+/* line 170, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .period_end_date, #cividocuments .ct-list-key-dates .period_end_date {
   color: #c096aa;
 }
-/* line 170, ../sass/civitasks/partials/_lists.scss */
+/* line 174, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel, #cividocuments .ct-list-key-dates .panel {
   -webkit-box-shadow: -3px 5px 17px 0px rgba(0, 0, 0, 0.03);
   box-shadow: -3px 5px 17px 0px rgba(0, 0, 0, 0.03);
 }
-/* line 174, ../sass/civitasks/partials/_lists.scss */
+/* line 178, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel > .list-group .list-group-item, #cividocuments .ct-list-key-dates .panel > .list-group .list-group-item {
   border-width: 0;
   margin: 0;
   padding: 0 15px 13px;
 }
-/* line 179, ../sass/civitasks/partials/_lists.scss */
+/* line 183, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel > .list-group .list-group-item:first-child, #cividocuments .ct-list-key-dates .panel > .list-group .list-group-item:first-child {
   padding-top: 13px;
 }
-/* line 186, ../sass/civitasks/partials/_lists.scss */
+/* line 190, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel-heading, #cividocuments .ct-list-key-dates .panel-heading {
   padding: 11px 15px 12px;
 }
@@ -12730,10 +12734,6 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 /* line 30, ../sass/civitasks/partials/_navs.scss */
 #civitasks .ct-sidebar-main > li.active > a:hover, #cividocuments .ct-sidebar-main > li.active > a:hover {
   background-color: #d9e3e6;
-}
-/* line 2, ../sass/civitasks/partials/_page-contact.scss */
-#civitasks .ct-page-contact .ct-list-task, #cividocuments .ct-page-contact .ct-list-task {
-  margin-bottom: 20px;
 }
 /* line 1, ../sass/civitasks/partials/_sidebar.scss */
 #civitasks .ct-sidebar, #cividocuments .ct-sidebar {

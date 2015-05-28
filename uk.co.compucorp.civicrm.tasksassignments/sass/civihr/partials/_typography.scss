@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6 {
     top: 0;
   };
   padding: $header-bar-padding;
-  width: 100%;
+  max-width: 100%;
 
   &.header-bar-primary {
     background-color: $brand-primary;

@@ -128,12 +128,23 @@
             </div>
         </div>
         <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskList | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time'"
+            <li ng-repeat="task in taskListFiltered = (taskList | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time')"
                 ng-controller="TaskCtrl"
                 ng-class="{
                     '{{prefix}}task-completed': task.completed,
                     '{{prefix}}task-due': task.due
                 }"
+                ng-if="!task.resolved"
+                ng-include
+                src="'task.html'">
+            </li>
+        </ul>
+        <h4 class="header-bar header-bar-danger" ng-show="taskListFiltered.length">Resolved:</h4>
+        <ul class="{{prefix}}list-task">
+            <li ng-repeat="task in taskListFiltered"
+                ng-controller="TaskCtrl"
+                ng-class="'{{prefix}}task-resolved'"
+                ng-if="task.resolved"
                 ng-include
                 src="'task.html'">
             </li>
@@ -162,7 +173,7 @@
                         <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
                         <ul class="dropdown-menu pull-right">
                             <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>
-                            <li><a href><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+                            <li><a href ng-click="modalReminder(task);"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
                             <li><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
                         </ul>
                     </div>

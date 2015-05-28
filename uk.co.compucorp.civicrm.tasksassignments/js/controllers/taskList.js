@@ -124,22 +124,38 @@ define(['controllers/controllers',
             }
 
             $rootScope.modalTask = function(data) {
-                    var data = data || {},
+                var data = data || {},
                     modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/task.html?v='+(new Date().getTime()),
-                        controller: 'ModalTaskCtrl',
-                        resolve: {
-                            data: function(){
-                                return data;
-                            }
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/task.html?v='+(new Date().getTime()),
+                    controller: 'ModalTaskCtrl',
+                    resolve: {
+                        data: function(){
+                            return data;
                         }
-                    });
+                    }
+                });
 
                 modalInstance.result.then(function(results){
                     angular.equals({}, data) ? $scope.taskList.push(results) : angular.extend(data,results);
                 }, function(){
                     $log.info('Modal dismissed');
+                });
+
+            };
+
+            $rootScope.modalReminder = function(data) {
+                var data = data || {};
+
+                $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/reminder.html?v='+(new Date().getTime()),
+                    controller: 'ModalReminderCtrl',
+                    resolve: {
+                        data: function(){
+                            return data;
+                        }
+                    }
                 });
 
             };

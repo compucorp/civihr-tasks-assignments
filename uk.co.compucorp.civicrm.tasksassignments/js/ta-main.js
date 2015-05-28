@@ -36,6 +36,7 @@ reqTa([
     'controllers/dashboard/topBar',
     'controllers/modal/modalDocument',
     'controllers/modal/modalTask',
+    'controllers/modal/modalReminder',
     'controllers/modal/modalAssignment',
     'controllers/externalPage',
     'directives/civiEvents',

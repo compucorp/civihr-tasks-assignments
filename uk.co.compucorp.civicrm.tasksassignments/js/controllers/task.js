@@ -19,6 +19,7 @@ define(['controllers/controllers',
 
             $scope.$watch('task.status_id',function(statusId){
                 var isResolved = $rootScope.cache.taskStatusResolve.indexOf(statusId) > -1;
+
                 $scope.task.resolved = isResolved;
                 $scope.task.completed = isResolved;
             });

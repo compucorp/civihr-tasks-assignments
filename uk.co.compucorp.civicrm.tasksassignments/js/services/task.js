@@ -54,6 +54,9 @@ define(['services/services',
 
                 params = angular.extend({
                     'component': 'CiviTask',
+                    'options': {
+                        'limit': 0
+                    },
                     'is_current_revision': '1',
                     'is_deleted': '0',
                     'sequential': '1',
@@ -184,6 +187,36 @@ define(['services/services',
                     deferred.resolve(data.values);
                 },function(){
                     deferred.reject('Unable to save tasks');
+                });
+
+                return deferred.promise;
+            },
+            sendReminder: function(taskId, notes){
+
+                if (!taskId || typeof +taskId !== 'number') {
+                    return null;
+                }
+
+                var deferred = $q.defer();
+
+                Task.save({
+                    action: 'sendreminder',
+                    json: {
+                        sequential: 1,
+                        debug: config.DEBUG,
+                        activity_id: taskId,
+                        notes: notes || ''
+                    }
+                }, null, function(data){
+                    console.log(data);
+
+                    if (UtilsService.errorHandler(data,'Unable to send a reminder',deferred)) {
+                        return
+                    }
+
+                    deferred.resolve(data);
+                },function(){
+                    deferred.reject('Unable to send a reminder');
                 });
 
                 return deferred.promise;

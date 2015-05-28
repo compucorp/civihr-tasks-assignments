@@ -30,6 +30,7 @@
   }
 
   .#{$prefix}list-task,
+  .#{$prefix}list-task + .header-bar,
   .#{$prefix}list-key-dates {
     margin-left: 10px;
   }
