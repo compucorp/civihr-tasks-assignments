@@ -1,5 +1,5 @@
-define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
-    'filters/filters', 'services/services'], function(){
+define(['moment', 'crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
+    'filters/filters', 'services/services'], function(moment){
 
     angular.module('civitasks.run',[
         'ngRoute',
@@ -15,8 +15,9 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
         'civitasks.filters',
         'civitasks.services'
     ]).run(['config', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
-        'TaskService', 'AssignmentService', '$log',
-        function(config, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService, $log){
+        'TaskService', 'AssignmentService', 'KeyDateService', '$log',
+        function(config, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
+                 KeyDateService, $log){
             $log.debug('civitasks.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -36,6 +37,18 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                 },
                 assignmentType: {
                     obj: {},
+                    arr: []
+                },
+                //TODO
+                dateType: {
+                    obj: {
+                        period_start_date: 'Contract Start Date',
+                        period_end_date: 'Contract End Date',
+                        birth_date: 'Birthday',
+                        initial_join_date: 'Initial Join Date',
+                        final_termination_date: 'Final Termination Date',
+                        probation_end_date: 'Probation End Date'
+                    },
                     arr: []
                 },
                 documentType: {
@@ -74,6 +87,13 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                     this.push(type);
                 }, $rootScope.cache.assignmentType.arr);
             });
+
+            angular.forEach($rootScope.cache.dateType.obj, function(value, key){
+                this.push({
+                    key: key,
+                    value: value
+                })
+            },$rootScope.cache.dateType.arr);
 
             $rootScope.$on('$routeChangeSuccess', function() {
                 $rootElement.removeClass('ct-page-loading');
@@ -166,12 +186,12 @@ define(['crmUi','angularSelect', 'textAngular', 'config', 'controllers/controlle
                         templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
                     }).
                     when('/key-dates', {
-                        controller: 'TaskListCtrl',
+                        controller: 'DateListCtrl',
                         templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
                         resolve: {
-                            taskList: function() {
-                                return []
-                            }
+                            contactList: ['KeyDateService',function(KeyDateService){
+                                return KeyDateService.get(moment().startOf('year'),moment().endOf('year'));
+                            }]
                         }
                     }).
                     otherwise({redirectTo:'/tasks'});

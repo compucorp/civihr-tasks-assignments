@@ -7,9 +7,9 @@
             <div class="panel-body">
                 <div class="{{prefix}}filter-date">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskList | filter: tasksFilterFn.overdue | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterBy.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueToday | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterBy.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskList | filter: tasksFilterFn.dueThisWeek | filter: tasksFilterFn[filterBy.userRole]).length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'isoWeek'" uncheckable>{{label.isoWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'isoWeek').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'month'" uncheckable>{{label.month}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'month').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date"  btn-radio="'year'" uncheckable>{{label.year}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'year').length"></span></a></li>
                     </ul>
                     <hr>
                     <a href
@@ -24,10 +24,9 @@
                                 <input
                                         is-open="dpOpened.filterDates.from"
                                         datepicker-popup="dd/MM/yyyy"
-                                        ng-change="labelDateRange()"
                                         ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
-                                        ng-model="filterBy.date.from"
-                                        max-date="filterBy.date.until"
+                                        ng-model="filterParamsHolder.dateRange.from"
+                                        max-date="filterParamsHolder.dateRange.until"
                                         id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
                             </div>
                         </div>
@@ -37,14 +36,17 @@
                                 <input
                                         is-open="dpOpened.filterDates.until"
                                         datepicker-popup="dd/MM/yyyy"
-                                        min-date="filterBy.date.from"
-                                        ng-change="labelDateRange()"
+                                        min-date="filterParamsHolder.dateRange.from"
                                         ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
-                                        ng-model="filterBy.date.until"
+                                        ng-model="filterParamsHolder.dateRange.until"
                                         id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
                             </div>
                         </div>
-                        <button class="btn btn-default btn-primary btn-block" ng-click="filterBy.due = 'dateRange'">Show Date Range</button>
+                        <button class="btn btn-default btn-primary btn-block"
+                                ng-click="filterParams.dateRange.from = filterParamsHolder.dateRange.from;
+                                      filterParams.dateRange.until = filterParamsHolder.dateRange.until;
+                                      filterParams.date = 'dateRange';
+                                      labelDateRange()">Show Date Range</button>
                     </div>
                 </div>
             </div>
@@ -56,7 +58,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-12 col-sm-5">
-                            <h3 class="panel-title">{{label[filterBy.due]}}</h3>
+                            <h3 class="panel-title" ng-bind="(filterParams.date && filterParams.date != 'dateRange' ? 'This ' : '') + label[filterParams.date]"></h3>
                         </div>
                         <div class="col-xs-12 col-sm-7">
                             <div class="{{prefix}}filter-date-type">
@@ -66,10 +68,10 @@
                                         <div class="col-xs-12 col-sm-10">
                                             <ui-select
                                                     multiple
-                                                    ng-model="filterBy.assignmentType">
-                                                <ui-select-match placeholder="Select date type...">{{$item.title}}</ui-select-match>
-                                                <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
-                                                    <div ng-bind-html="type.title | highlight: $select.search"></div>
+                                                    ng-model="filterParams.dateType">
+                                                <ui-select-match placeholder="Select date type...">{{$item.value}}</ui-select-match>
+                                                <ui-select-choices repeat="type.key as type in cache.dateType.arr">
+                                                    <div ng-bind-html="type.value | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>
                                         </div>
@@ -81,54 +83,12 @@
                 </div>
             </div>
             <ul class="{{prefix}}list-key-dates">
-                <li class="panel panel-light panel-secondary">
+                <li ng-repeat="dateObj in dateList | filterBy.date:filterParams.date | filterBy.dateType:filterParams.dateType" class="panel panel-light panel-secondary">
                     <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
+                        <time>{{dateObj.date | date: 'EEE d MMMM'}} <span>{{dateObj.date | date: 'yyyy'}}</span></time>
                     </header>
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
-                    </ul>
-                </li>
-                <li class="panel panel-light panel-secondary">
-                    <header class="panel-heading">
-                        <time>MON 26 JANUARY <span>2015</span></time>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Birthday</strong> Stephen Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> Emma Anderson</li>
-                        <li class="list-group-item"><strong>Contract End Date</strong> John Anderson</li>
+                        <li class="list-group-item" ng-repeat="dateContact in dateObj.dateContactList"><strong class="{{dateContact.type}}" ng-bind="cache.dateType.obj[dateContact.type]"></strong> <a href ng-href="{{url.CONTACT+'?reset=1&cid='+dateContact.contact_id}}" ng-bind="dateContact.contact_name"></a></li>
                     </ul>
                 </li>
             </ul>

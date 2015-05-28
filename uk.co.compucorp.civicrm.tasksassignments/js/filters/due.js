@@ -3,6 +3,11 @@ define(['filters/filters'], function(filters){
         $log.debug('Filter: filterBy.due');
 
         return function(inputArr, type, dateRange) {
+
+            if (!inputArr) {
+                return null;
+            }
+
             var filteredArr = [],
                 i = 0,
                 inputArrlen = inputArr.length,

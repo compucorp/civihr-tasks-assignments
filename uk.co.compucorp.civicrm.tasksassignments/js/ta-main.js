@@ -15,11 +15,17 @@ var module, reqTa = require.config({
         textAngular: {
             deps: ['textAngularRangy','textAngularSanitize']
         }
+    },
+    config: {
+        moment: {
+            noGlobal: true
+        }
     }
 });
 
 reqTa([
     'app',
+    'controllers/dateList',
     'controllers/documentList',
     'controllers/document',
     'controllers/taskList',
@@ -35,7 +41,9 @@ reqTa([
     'directives/spinner',
     'filters/assignmentType',
     'filters/contactId',
+    'filters/date',
     'filters/dateParse',
+    'filters/dateType',
     'filters/due',
     'filters/userRole',
     'filters/status',

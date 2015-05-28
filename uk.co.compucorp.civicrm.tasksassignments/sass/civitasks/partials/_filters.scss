@@ -25,7 +25,7 @@
           color: $panel-bg;
 
           .badge:not(.badge-danger) {
-            background-color: $panel-bg;
+            background-color: $panel-bg !important;
             color: $brand-primary;
           }
         }

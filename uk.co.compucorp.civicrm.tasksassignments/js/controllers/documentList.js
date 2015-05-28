@@ -1,8 +1,9 @@
 define(['controllers/controllers',
+        'moment',
         'services/contact',
         'services/document',
         'services/assignment',
-        'moment'], function(controllers){
+        'moment'], function(controllers, moment){
 
     controllers.controller('DocumentListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
         '$log', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',

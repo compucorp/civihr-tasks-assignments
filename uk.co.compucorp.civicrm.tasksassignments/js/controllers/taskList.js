@@ -1,8 +1,8 @@
 define(['controllers/controllers',
+        'moment',
         'services/contact',
         'services/task',
-        'services/assignment',
-        'moment'], function(controllers){
+        'services/assignment'], function(controllers, moment){
 
     controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
         '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
