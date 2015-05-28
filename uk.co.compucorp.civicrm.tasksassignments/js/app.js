@@ -1,4 +1,4 @@
-define(['moment', 'crmUi','angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
+define(['moment', 'crmUi','angularBootstrapCalendar', 'angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
     'filters/filters', 'services/services'], function(moment){
 
     angular.module('civitasks.run',[
@@ -7,6 +7,7 @@ define(['moment', 'crmUi','angularSelect', 'textAngular', 'config', 'controllers
         'ngSanitize',
         'ui.bootstrap',
         'ui.select',
+        'mwl.calendar',
         'textAngular',
         'crmUi',
         'civitasks.config',
@@ -179,6 +180,7 @@ define(['moment', 'crmUi','angularSelect', 'textAngular', 'config', 'controllers
                         templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
                     }).
                     when('/calendar', {
+                        controller: 'CalendarCtrl',
                         templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime())
                     }).
                     when('/reports', {

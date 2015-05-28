@@ -4,6 +4,7 @@ var module, reqTa = require.config({
     urlArgs: "bust=" + (new Date()).getTime(),
     paths: {
         angularSelect: 'vendor/angular/select',
+        angularBootstrapCalendar: 'vendor/angular/angular-bootstrap-calendar-tpls-custom',
         crmUi: 'vendor/angular/crmUi',
         moment: 'vendor/moment.min',
         requireLib: CRM.vars.reqAngular.requireLib,
@@ -25,6 +26,7 @@ var module, reqTa = require.config({
 
 reqTa([
     'app',
+    'controllers/calendar',
     'controllers/dateList',
     'controllers/documentList',
     'controllers/document',

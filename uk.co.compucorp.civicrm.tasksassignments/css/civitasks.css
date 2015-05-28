@@ -61,6 +61,12 @@
   /* add generic styling for the editor */
   /* add the styling for the awesomness of the resizer */
   /* copy the popover code from bootstrap so this will work even without it */
+  /**
+   * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
+   * @version v0.10.6
+   * @link https://github.com/mattlewis92/angular-bootstrap-calendar
+   * @license MIT
+   */
 }
 /* line 7, ../sass/civihr/modules/_unset.scss */
 #civitasks html, #cividocuments html,
@@ -11527,6 +11533,721 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .well, #cividocuments .well {
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+/* line 7, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks [class*="cal-cell"], #cividocuments [class*="cal-cell"] {
+  float: left;
+  margin-left: 0;
+  min-height: 1px;
+}
+/* line 12, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid, #cividocuments .cal-row-fluid {
+  width: 100%;
+  *zoom: 1;
+}
+/* line 16, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid:before, #cividocuments .cal-row-fluid:before,
+#civitasks .cal-row-fluid:after,
+#cividocuments .cal-row-fluid:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+/* line 22, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid:after, #cividocuments .cal-row-fluid:after {
+  clear: both;
+}
+/* line 25, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid [class*="cal-cell"], #cividocuments .cal-row-fluid [class*="cal-cell"] {
+  display: block;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  margin-left: 0%;
+  *margin-left: -0.05213764%;
+}
+/* line 35, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid [class*="cal-cell"]:first-child, #cividocuments .cal-row-fluid [class*="cal-cell"]:first-child {
+  margin-left: 0;
+}
+/* line 38, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .controls-row [class*="cal-cell"] + [class*="cal-cell"], #cividocuments .cal-row-fluid .controls-row [class*="cal-cell"] + [class*="cal-cell"] {
+  margin-left: 0%;
+}
+/* line 41, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell7, #cividocuments .cal-row-fluid .cal-cell7 {
+  width: 100%;
+  *width: 99.94669509594883%;
+}
+/* line 45, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell6, #cividocuments .cal-row-fluid .cal-cell6 {
+  width: 85.71428571428571%;
+  *width: 85.66098081023453%;
+}
+/* line 49, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell5, #cividocuments .cal-row-fluid .cal-cell5 {
+  width: 71.42857142857142%;
+  *width: 71.37526652452024%;
+}
+/* line 53, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell4, #cividocuments .cal-row-fluid .cal-cell4 {
+  width: 57.14285714285714%;
+  *width: 57.089552238805965%;
+}
+/* line 57, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell3, #cividocuments .cal-row-fluid .cal-cell3 {
+  width: 42.857142857142854%;
+  *width: 42.80383795309168%;
+}
+/* line 61, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell2, #cividocuments .cal-row-fluid .cal-cell2 {
+  width: 28.57142857142857%;
+  *width: 28.518123667377395%;
+}
+/* line 65, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell1, #cividocuments .cal-row-fluid .cal-cell1 {
+  width: 14.285714285714285%;
+  *width: 14.232409381663112%;
+}
+/* line 69, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset7, #cividocuments .cal-week-box .cal-offset7,
+#civitasks .cal-row-fluid .cal-offset7,
+#cividocuments .cal-row-fluid .cal-offset7,
+#civitasks .cal-row-fluid .cal-offset7:first-child,
+#cividocuments .cal-row-fluid .cal-offset7:first-child {
+  margin-left: 100%;
+  *margin-left: 99.89339019189765%;
+}
+/* line 75, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset6, #cividocuments .cal-week-box .cal-offset6,
+#civitasks .cal-row-fluid .cal-offset6,
+#cividocuments .cal-row-fluid .cal-offset6,
+#civitasks .cal-row-fluid .cal-offset6:first-child,
+#cividocuments .cal-row-fluid .cal-offset6:first-child {
+  margin-left: 85.71428571428571%;
+  *margin-left: 85.60767590618336%;
+}
+/* line 81, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset5, #cividocuments .cal-week-box .cal-offset5,
+#civitasks .cal-row-fluid .cal-offset5,
+#cividocuments .cal-row-fluid .cal-offset5,
+#civitasks .cal-row-fluid .cal-offset5:first-child,
+#cividocuments .cal-row-fluid .cal-offset5:first-child {
+  margin-left: 71.42857142857142%;
+  *margin-left: 71.32196162046907%;
+}
+/* line 87, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset4, #cividocuments .cal-week-box .cal-offset4,
+#civitasks .cal-row-fluid .cal-offset4,
+#cividocuments .cal-row-fluid .cal-offset4,
+#civitasks .cal-row-fluid .cal-offset4:first-child,
+#cividocuments .cal-row-fluid .cal-offset4:first-child {
+  margin-left: 57.14285714285714%;
+  *margin-left: 57.03624733475479%;
+}
+/* line 93, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset3, #cividocuments .cal-week-box .cal-offset3,
+#civitasks .cal-row-fluid .cal-offset3,
+#cividocuments .cal-row-fluid .cal-offset3,
+#civitasks .cal-row-fluid .cal-offset3:first-child,
+#cividocuments .cal-row-fluid .cal-offset3:first-child {
+  margin-left: 42.857142857142854%;
+  *margin-left: 42.750533049040506%;
+}
+/* line 99, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset2, #cividocuments .cal-week-box .cal-offset2,
+#civitasks .cal-row-fluid .cal-offset2,
+#cividocuments .cal-row-fluid .cal-offset2,
+#civitasks .cal-row-fluid .cal-offset2:first-child,
+#cividocuments .cal-row-fluid .cal-offset2:first-child {
+  margin-left: 28.57142857142857%;
+  *margin-left: 28.46481876332622%;
+}
+/* line 105, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-offset1, #cividocuments .cal-week-box .cal-offset1,
+#civitasks .cal-row-fluid .cal-offset1,
+#cividocuments .cal-row-fluid .cal-offset1,
+#civitasks .cal-row-fluid .cal-offset1:first-child,
+#cividocuments .cal-row-fluid .cal-offset1:first-child {
+  margin-left: 14.285714285714285%;
+  *margin-left: 14.17910447761194%;
+}
+/* line 111, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-fluid .cal-cell1, #cividocuments .cal-row-fluid .cal-cell1 {
+  width: 14.285714285714285%;
+  *width: 14.233576642335766%;
+}
+/* line 115, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks [class*="cal-cell"].hide, #cividocuments [class*="cal-cell"].hide,
+#civitasks .cal-row-fluid [class*="cal-cell"].hide,
+#cividocuments .cal-row-fluid [class*="cal-cell"].hide {
+  display: none;
+}
+/* line 119, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks [class*="cal-cell"].pull-right, #cividocuments [class*="cal-cell"].pull-right,
+#civitasks .cal-row-fluid [class*="cal-cell"].pull-right,
+#cividocuments .cal-row-fluid [class*="cal-cell"].pull-right {
+  float: right;
+}
+/* line 123, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-head [class*="cal-cell"]:first-child, #cividocuments .cal-row-head [class*="cal-cell"]:first-child,
+#civitasks .cal-row-head [class*="cal-cell"],
+#cividocuments .cal-row-head [class*="cal-cell"] {
+  min-height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* line 129, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-events-num, #cividocuments .cal-events-num {
+  margin-top: 20px;
+}
+/* line 132, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-month-day, #cividocuments .cal-month-day {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+/* line 137, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-month-day .cal-events-num, #cividocuments .cal-month-day .cal-events-num {
+  margin-left: 10px;
+  margin-top: 18px;
+}
+/* line 141, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks #cal-week-box, #cividocuments #cal-week-box {
+  position: absolute;
+  width: 70px;
+  left: -71px;
+  top: -1px;
+  padding: 8px 5px;
+  cursor: pointer;
+}
+/* line 149, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-tick, #cividocuments .cal-day-tick {
+  position: absolute;
+  right: 50%;
+  bottom: -21px;
+  padding: 0px 5px;
+  cursor: pointer;
+  z-index: 5;
+  text-align: center;
+  width: 26px;
+  margin-right: -17px;
+}
+/* line 160, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box #cal-day-tick, #cividocuments .cal-year-box #cal-day-tick {
+  margin-right: -7px;
+}
+/* line 163, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-box, #cividocuments .cal-slide-box {
+  position: relative;
+}
+/* line 166, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick, #cividocuments .cal-slide-tick {
+  position: absolute;
+  width: 16px;
+  margin-left: -7px;
+  height: 9px;
+  top: -1px;
+  z-index: 1;
+}
+/* line 174, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-month1, #cividocuments .cal-slide-tick.tick-month1 {
+  left: 12.5%;
+}
+/* line 177, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-month2, #cividocuments .cal-slide-tick.tick-month2 {
+  left: 37.5%;
+}
+/* line 180, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-month3, #cividocuments .cal-slide-tick.tick-month3 {
+  left: 62.5%;
+}
+/* line 183, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-month4, #cividocuments .cal-slide-tick.tick-month4 {
+  left: 87.5%;
+}
+/* line 186, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day1, #cividocuments .cal-slide-tick.tick-day1 {
+  left: 7.14285714285715%;
+}
+/* line 189, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day2, #cividocuments .cal-slide-tick.tick-day2 {
+  left: 21.42857142857143%;
+}
+/* line 192, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day3, #cividocuments .cal-slide-tick.tick-day3 {
+  left: 35.71428571428572%;
+}
+/* line 195, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day4, #cividocuments .cal-slide-tick.tick-day4 {
+  left: 50%;
+}
+/* line 198, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day5, #cividocuments .cal-slide-tick.tick-day5 {
+  left: 64.2857142857143%;
+}
+/* line 201, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day6, #cividocuments .cal-slide-tick.tick-day6 {
+  left: 78.57142857142859%;
+}
+/* line 204, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-tick.tick-day7, #cividocuments .cal-slide-tick.tick-day7 {
+  left: 92.85714285714285%;
+}
+/* line 207, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .events-list, #cividocuments .events-list {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+/* line 213, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-content ul.unstyled, #cividocuments .cal-slide-content ul.unstyled {
+  margin-bottom: 0;
+}
+/* line 216, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box, #cividocuments .cal-week-box {
+  position: relative;
+}
+/* line 219, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box [data-event-class], #cividocuments .cal-week-box [data-event-class] {
+  white-space: nowrap;
+  height: 30px;
+  margin: 1px 1px;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-left: 10px;
+}
+/* line 228, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-column, #cividocuments .cal-week-box .cal-column {
+  position: absolute;
+  height: 100%;
+  z-index: -1;
+}
+/* line 233, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .arrow-before, #cividocuments .cal-week-box .arrow-before,
+#civitasks .cal-week-box .arrow-after,
+#cividocuments .cal-week-box .arrow-after {
+  position: relative;
+}
+/* line 237, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .arrow-after:after, #cividocuments .cal-week-box .arrow-after:after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  width: 0;
+  height: 0;
+  right: 0;
+  border-top: 15px solid #ffffff;
+  border-left: 8px solid;
+  border-bottom: 15px solid #FFFFFF;
+}
+/* line 248, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .arrow-before:before, #cividocuments .cal-week-box .arrow-before:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  width: 0;
+  height: 0;
+  left: 1px;
+  border-top: 15px solid transparent;
+  border-left: 8px solid #FFFFFF;
+  border-bottom: 15px solid transparent;
+}
+/* line 259, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box, #cividocuments .cal-day-box {
+  text-wrap: none;
+  overflow-x: auto !important;
+}
+/* line 263, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .cal-day-hour-part, #cividocuments .cal-day-box .cal-day-hour-part {
+  height: 30px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-bottom: thin dashed #e1e1e1;
+}
+/* line 270, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .cal-day-hour .day-highlight, #cividocuments .cal-day-box .cal-day-hour .day-highlight {
+  height: 30px;
+}
+/* line 273, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .cal-hours, #cividocuments .cal-day-box .cal-hours {
+  font-weight: bolder;
+}
+/* line 276, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .cal-day-hour:nth-child(odd), #cividocuments .cal-day-box .cal-day-hour:nth-child(odd) {
+  background-color: #fafafa;
+}
+/* line 279, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .cal-day-panel, #cividocuments .cal-day-box .cal-day-panel {
+  position: relative;
+  padding-left: 60px;
+}
+/* line 283, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .cal-day-panel-hour, #cividocuments .cal-day-box .cal-day-panel-hour {
+  position: absolute;
+  width: 100%;
+  margin-left: -60px;
+}
+/* line 288, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-event, #cividocuments .cal-day-box .day-event {
+  position: absolute;
+  width: 150px;
+  overflow: hidden;
+}
+/* line 293, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-event a, #cividocuments .cal-day-box .day-event a {
+  font-size: 12px;
+}
+/* line 296, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight, #cividocuments .cal-day-box .day-highlight {
+  padding-top: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 1px solid #c3c3c3;
+  margin: 1px 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* line 308, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight.dh-event-important, #cividocuments .cal-day-box .day-highlight.dh-event-important {
+  border: 1px solid #ad2121;
+}
+/* line 311, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight.dh-event-warning, #cividocuments .cal-day-box .day-highlight.dh-event-warning {
+  border: 1px solid #e3bc08;
+}
+/* line 314, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight.dh-event-info, #cividocuments .cal-day-box .day-highlight.dh-event-info {
+  border: 1px solid dodgerblue;
+}
+/* line 317, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight.dh-event-inverse, #cividocuments .cal-day-box .day-highlight.dh-event-inverse {
+  border: 1px solid #1b1b1b;
+}
+/* line 320, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight.dh-event-success, #cividocuments .cal-day-box .day-highlight.dh-event-success {
+  border: 1px solid darkgreen;
+}
+/* line 323, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-box .day-highlight.dh-event-special, #cividocuments .cal-day-box .day-highlight.dh-event-special {
+  background-color: #ffe6ff;
+  border: 1px solid #800080;
+}
+/* line 327, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event, #cividocuments .event {
+  display: block;
+  background-color: #c3c3c3;
+  width: 12px;
+  height: 12px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  border: 1px solid #ffffff;
+}
+/* line 339, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-block, #cividocuments .event-block {
+  display: block;
+  background-color: #c3c3c3;
+  width: 20px;
+  height: 100%;
+}
+/* line 345, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-event-list .event.pull-left, #cividocuments .cal-event-list .event.pull-left {
+  margin-top: 3px;
+}
+/* line 348, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-important, #cividocuments .event-important {
+  background-color: #ad2121;
+}
+/* line 351, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-info, #cividocuments .event-info {
+  background-color: dodgerblue;
+}
+/* line 354, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-warning, #cividocuments .event-warning {
+  background-color: #e3bc08;
+}
+/* line 357, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-inverse, #cividocuments .event-inverse {
+  background-color: #1b1b1b;
+}
+/* line 360, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-success, #cividocuments .event-success {
+  background-color: darkgreen;
+}
+/* line 363, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .event-special, #cividocuments .event-special {
+  background-color: #800080;
+}
+/* line 366, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight:hover, #cividocuments .day-highlight:hover,
+#civitasks .day-highlight,
+#cividocuments .day-highlight {
+  background-color: #dddddd;
+}
+/* line 370, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight.dh-event-important:hover, #cividocuments .day-highlight.dh-event-important:hover,
+#civitasks .day-highlight.dh-event-important,
+#cividocuments .day-highlight.dh-event-important {
+  background-color: #fae3e3;
+}
+/* line 374, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight.dh-event-warning:hover, #cividocuments .day-highlight.dh-event-warning:hover,
+#civitasks .day-highlight.dh-event-warning,
+#cividocuments .day-highlight.dh-event-warning {
+  background-color: #fdf1ba;
+}
+/* line 378, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight.dh-event-info:hover, #cividocuments .day-highlight.dh-event-info:hover,
+#civitasks .day-highlight.dh-event-info,
+#cividocuments .day-highlight.dh-event-info {
+  background-color: #d1e8ff;
+}
+/* line 382, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight.dh-event-inverse:hover, #cividocuments .day-highlight.dh-event-inverse:hover,
+#civitasks .day-highlight.dh-event-inverse,
+#cividocuments .day-highlight.dh-event-inverse {
+  background-color: #c1c1c1;
+}
+/* line 386, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight.dh-event-success:hover, #cividocuments .day-highlight.dh-event-success:hover,
+#civitasks .day-highlight.dh-event-success,
+#cividocuments .day-highlight.dh-event-success {
+  background-color: #caffca;
+}
+/* line 390, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .day-highlight.dh-event-special:hover, #cividocuments .day-highlight.dh-event-special:hover,
+#civitasks .day-highlight.dh-event-special,
+#cividocuments .day-highlight.dh-event-special {
+  background-color: #ffe6ff;
+}
+/* line 394, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-head [class*="cal-cell"]:first-child, #cividocuments .cal-row-head [class*="cal-cell"]:first-child,
+#civitasks .cal-row-head [class*="cal-cell"],
+#cividocuments .cal-row-head [class*="cal-cell"] {
+  font-weight: bolder;
+  text-align: center;
+  border: 0px solid;
+  padding: 5px 0;
+}
+/* line 401, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-row-head [class*="cal-cell"] small, #cividocuments .cal-row-head [class*="cal-cell"] small {
+  font-weight: normal;
+}
+/* line 404, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box .row:hover, #cividocuments .cal-year-box .row:hover,
+#civitasks .cal-row-fluid:hover,
+#cividocuments .cal-row-fluid:hover {
+  background-color: #fafafa;
+}
+/* line 408, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-month-day, #cividocuments .cal-month-day {
+  height: 100px;
+}
+/* line 411, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks [class*="cal-cell"]:hover, #cividocuments [class*="cal-cell"]:hover,
+#civitasks .cell-focus,
+#cividocuments .cell-focus {
+  background-color: #ededed;
+}
+/* line 415, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box [class*="span"], #cividocuments .cal-year-box [class*="span"],
+#civitasks .cal-month-box [class*="cal-cell"],
+#cividocuments .cal-month-box [class*="cal-cell"] {
+  min-height: 100px;
+  border-right: 1px solid #e1e1e1;
+  position: relative;
+}
+/* line 421, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box [class*="span"], #cividocuments .cal-year-box [class*="span"] {
+  min-height: 60px;
+}
+/* line 424, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box .row [class*="col-"]:last-child, #cividocuments .cal-year-box .row [class*="col-"]:last-child,
+#civitasks .cal-month-box .cal-row [class*="cal-cell"]:last-child,
+#cividocuments .cal-month-box .cal-row [class*="cal-cell"]:last-child {
+  border-right: 0px;
+}
+/* line 428, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box .row, #cividocuments .cal-year-box .row,
+#civitasks .cal-month-box .cal-row-fluid,
+#cividocuments .cal-month-box .cal-row-fluid {
+  border-bottom: 1px solid #e1e1e1;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+/* line 434, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box .row:last-child, #cividocuments .cal-year-box .row:last-child,
+#civitasks .cal-month-box .cal-row-fluid:last-child,
+#cividocuments .cal-month-box .cal-row-fluid:last-child {
+  border-bottom: 0px;
+}
+/* line 438, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-month-box, #cividocuments .cal-month-box,
+#civitasks .cal-year-box,
+#cividocuments .cal-year-box,
+#civitasks .cal-week-box,
+#cividocuments .cal-week-box {
+  border-top: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
+  border-radius: 2px;
+}
+/* line 447, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-month-box, #cividocuments .cal-month-box {
+  border-right: 0px;
+  border-bottom: 0px;
+}
+/* line 451, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks span[data-cal-date], #cividocuments span[data-cal-date] {
+  font-size: 1.2em;
+  font-weight: normal;
+  opacity: 0.5;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+/* line 463, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks span[data-cal-date]:hover, #cividocuments span[data-cal-date]:hover {
+  opacity: 1;
+}
+/* line 466, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-outmonth span[data-cal-date], #cividocuments .cal-day-outmonth span[data-cal-date] {
+  opacity: 0.1;
+  cursor: default;
+}
+/* line 470, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-today, #cividocuments .cal-day-today {
+  background-color: #e8fde7;
+}
+/* line 473, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-today span[data-cal-date], #cividocuments .cal-day-today span[data-cal-date] {
+  color: darkgreen;
+}
+/* line 476, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-month-box .cal-day-today span[data-cal-date], #cividocuments .cal-month-box .cal-day-today span[data-cal-date] {
+  font-size: 1.9em;
+}
+/* line 479, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-holiday span[data-cal-date], #cividocuments .cal-day-holiday span[data-cal-date] {
+  color: #800080;
+}
+/* line 482, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-weekend span[data-cal-date], #cividocuments .cal-day-weekend span[data-cal-date] {
+  color: darkred;
+}
+/* line 485, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks #cal-week-box, #cividocuments #cal-week-box {
+  border: 1px solid #e1e1e1;
+  border-right: 0px;
+  border-radius: 5px 0 0 5px;
+  background-color: #fafafa;
+  text-align: right;
+}
+/* line 492, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-week-box .cal-row-head, #cividocuments .cal-week-box .cal-row-head {
+  border-bottom: 1px solid #e1e1e1;
+}
+/* line 495, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-tick, #cividocuments .cal-day-tick {
+  border: 1px solid #e1e1e1;
+  border-top: 0px solid;
+  border-radius: 0 0 5px 5px;
+  background-color: #ededed;
+  text-align: center;
+}
+/* line 502, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-day-tick .fa, #cividocuments .cal-day-tick .fa {
+  display: none;
+}
+/* line 505, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-box, #cividocuments .cal-slide-box {
+  border-top: 0px solid #8c8c8c;
+}
+/* line 508, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-content, #cividocuments .cal-slide-content {
+  padding: 20px;
+  color: #ffffff;
+  background-color: #555555;
+  -webkit-box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+}
+/* line 515, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-slide-content a.event-item, #cividocuments .cal-slide-content a.event-item {
+  color: #ffffff;
+  font-weight: normal;
+}
+/* line 519, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks a.event-item-edit, #cividocuments a.event-item-edit,
+#civitasks a.event-item-delete,
+#cividocuments a.event-item-delete {
+  padding-left: 5px;
+}
+/* line 523, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box .cal-slide-content a.event-item, #cividocuments .cal-year-box .cal-slide-content a.event-item,
+#civitasks .cal-year-box a.event-item-edit,
+#cividocuments .cal-year-box a.event-item-edit,
+#civitasks .cal-year-box a.event-item-delete,
+#cividocuments .cal-year-box a.event-item-delete {
+  position: relative;
+  top: -3px;
+}
+/* line 529, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .events-list, #cividocuments .events-list {
+  max-height: 47px;
+  padding-left: 5px;
+}
+/* line 533, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-column, #cividocuments .cal-column {
+  border-left: 1px solid #e1e1e1;
+}
+/* line 536, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks a.cal-event-week, #cividocuments a.cal-event-week {
+  text-decoration: none;
+  color: #151515;
+}
+/* line 540, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .badge-important, #cividocuments .badge-important {
+  background-color: #b94a48;
+}
+/* line 543, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .pointer, #cividocuments .pointer {
+  cursor: pointer;
+}
+/* line 546, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-year-box:last-child, #cividocuments .cal-year-box:last-child {
+  border-bottom: 0px;
+}
+/* line 549, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+#civitasks .cal-context, #cividocuments .cal-context {
+  width: 100%;
+}
+@media (max-width: 991px) {
+  /* line 553, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+  #civitasks .cal-year-box [class*="span"]:nth-child(2), #cividocuments .cal-year-box [class*="span"]:nth-child(2) {
+    border-right: 0px;
+  }
+  /* line 556, ../sass/civitasks/modules/_bootstrap-calendar.scss */
+  #civitasks .cal-year-box [class*="span"]:nth-child(1), #cividocuments .cal-year-box [class*="span"]:nth-child(1),
+  #civitasks .cal-year-box [class*="span"]:nth-child(2),
+  #cividocuments .cal-year-box [class*="span"]:nth-child(2) {
+    border-bottom: 1px solid #e1e1e1;
+  }
 }
 /* line 18, ../sass/civitasks/partials/_global.scss */
 .page-civicrm-tasksassignments-dashboard #branding {
