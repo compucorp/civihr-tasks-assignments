@@ -53,7 +53,7 @@ class CRM_Tasksassignments_KeyDates
                 'contact_id' => $keyDates->contact_id,
                 'contact_external_identifier' => $keyDates->external_identifier,
                 'contact_name' => $keyDates->contact_name,
-                'contact_url' => CRM_Report_Utils_Report::getNextUrl('contact/detail', 'reset=1&force=&id_op=eq&id_value=' . $keyDates->contact_id),
+                'contact_url' => '/civicrm/contact/view?reset=1&cid=' . $keyDates->contact_id,
                 'keydate' => $keydate,
                 'type' => $keyDates->type,
             );
