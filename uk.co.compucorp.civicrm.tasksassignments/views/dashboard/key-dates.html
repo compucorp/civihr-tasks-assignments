@@ -9,7 +9,7 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'isoWeek'" uncheckable>{{label.isoWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'isoWeek').length"></span></a></li>
                         <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'month'" uncheckable>{{label.month}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'month').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date"  btn-radio="'year'" uncheckable>{{label.year}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'year').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date"  btn-radio="'year'" uncheckable>{{label.year}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterBy.date:'year').length"></span></a></li>
                     </ul>
                     <hr>
                     <a href

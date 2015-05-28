@@ -4,18 +4,27 @@ define(['controllers/controllers',
         'services/contact'], function(controllers, moment){
 
     controllers.controller('DateListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', 'contactList', 'config', 'ContactService',
-        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, contactList, config, ContactService){
+        '$log', 'contactList','KeyDateService',
+        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, contactList,KeyDateService){
             $log.debug('Controller: DateListCtrl');
 
             this.contactList = contactList;
 
             this.init = function(){
 
-                $scope.dateList = this.createDateList();
+                this.createDateList();
 
                 $rootScope.$broadcast('ct-spinner-hide');
-                console.log($rootScope.cache);
+
+                this.backgroundLoading();
+            }
+
+            this.backgroundLoading = function(){
+                KeyDateService.get(moment().startOf('year'),moment().endOf('year')).then(function(contactList){
+                    this.contactList = contactList;
+                    this.createDateList();
+                    $scope.dataLoading = false;
+                }.bind(this));
             }
 
             this.createDateList = function(){
@@ -32,10 +41,11 @@ define(['controllers/controllers',
                     });
                 }
 
-                return dateList;
+                $scope.dateList = dateList;
             };
 
-            $scope.dateList = {};
+            $scope.dataLoading = true;
+            $scope.dateList = [];
 
             $scope.dpOpened = {
                 filterDates: {}

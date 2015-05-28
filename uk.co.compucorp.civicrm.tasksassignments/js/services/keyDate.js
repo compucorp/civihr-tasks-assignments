@@ -38,9 +38,6 @@
                 });
 
                 return deferred.promise;
-            },
-            getOptions: function(){
-
             }
         }
 
