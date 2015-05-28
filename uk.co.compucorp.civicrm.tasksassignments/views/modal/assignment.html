@@ -50,20 +50,22 @@
                            ng-click="dpOpen($event, 'assignmentDue');">{{(assignment.dueDate | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                     <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="assignmentDue">
                 </div>
-                <hr>
-                <div class="form-group">
-                    <label for="{{prefix}}assignment-task-list" class="col-xs-12 col-sm-3 control-label">Select a task list:</label>
-                    <div class="col-xs-12 col-sm-6">
-                        <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
-                                ng-model="taskSet"
-                                ng-options="taskSet.label for taskSet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
-                                ng-disabled="!taskList.length"
-                                class="form-control">
-                        </select>
+                <div ng-show="assignment.case_type_id">
+                    <hr>
+                    <div class="form-group">
+                        <label for="{{prefix}}assignment-task-list" class="col-xs-12 col-sm-3 control-label">Select a task list:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
+                                    ng-model="taskSet"
+                                    ng-options="taskSet.label for taskSet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
+                                    ng-disabled="!taskList.length"
+                                    class="form-control">
+                            </select>
+                        </div>
                     </div>
+                    <hr>
+                    <h4>Tasks:</h4>
                 </div>
-                <hr>
-                <h4 ng-show="taskList.length">Tasks:</h4>
                 <div class="form-group" ng-repeat="task in taskList" ng-controller="ModalAssignmentTaskCtrl">
                     <div class="checkbox col-xs-12 col-sm-3" ng-if="!task.isAdded">
                         <label>
@@ -113,7 +115,7 @@
                            ng-disabled="isDisabled">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                     <input type="hidden" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.activity_date_time" name="assignmentDue">
                 </div>
-                <div class="row" ng-show="taskList.length">
+                <div class="form-group" ng-show="taskList.length">
                     <div class="col-xs-12">
                         <a href class="btn btn-default btn-primary" ng-click="addTask()">
                             <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a task

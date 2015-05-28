@@ -67,8 +67,17 @@ define(['controllers/controllers',
             }
 
             $scope.setData = function() {
+
                 var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
-                $scope.taskSet = assignmentType ? assignmentType.definition.activitySets[0] : {};
+
+                if (!assignmentType) {
+                    $scope.taskSet = {};
+                    $scope.assignment.subject = '';
+
+                    return;
+                }
+
+                $scope.taskSet = assignmentType.definition.activitySets[0];
                 $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
             }
 
