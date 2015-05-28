@@ -38,7 +38,7 @@ class CRM_Tasksassignments_KeyDates
             $keydate = $keyDates->keydate;
             if ($keyDates->type === 'birth_date' && $startDate)
             {
-                list(, $km, $kd) = explode('-', $keyDates->keydate);
+                list(, $km, $kd) = explode('-', $keydate);
                 if ($km . '-' . $kd >= $sm . '-' . $sd)
                 {
                     $keydate = $sy . '-' . $km . '-' . $kd;
@@ -49,14 +49,9 @@ class CRM_Tasksassignments_KeyDates
                 }
             }
             
-            $result[] = array(
-                'contact_id' => $keyDates->contact_id,
-                'contact_external_identifier' => $keyDates->external_identifier,
-                'contact_name' => $keyDates->contact_name,
-                'contact_url' => '/civicrm/contact/view?reset=1&cid=' . $keyDates->contact_id,
-                'keydate' => $keydate,
-                'type' => $keyDates->type,
-            );
+            $row = $keyDates->toArray();
+            $row['keydate'] = $keydate;
+            $result[] = $row;
         }
         
         return $result;
@@ -68,14 +63,14 @@ class CRM_Tasksassignments_KeyDates
         $startDate = isset($_REQUEST['start_date']) ? $_REQUEST['start_date'] : null;
         $endDate = isset($_REQUEST['end_date']) ? $_REQUEST['end_date'] : null;
         $fields = array(
-            'contact_id',
-            'contact_external_identifier',
-            'contact_name',
-            'contact_url',
-            'keydate',
-            'type',
+            'Contact ID',
+            'Contact External Identifier',
+            'Contact Sort Name',
+            'Contact Url',
+            'Keydate',
+            'Type',
         );
-        $out = fopen("php://output", 'w');///
+        $out = fopen("php://output", 'w');
         
         $keyDates = self::get($startDate, $endDate);
         
@@ -87,7 +82,15 @@ class CRM_Tasksassignments_KeyDates
         
         foreach ($keyDates as $keyDate)
         {
-            fputcsv($out, $keyDate, $config->fieldSeparator, '"');
+            $row = array(
+                $keyDate['contact_id'],
+                $keyDate['contact_external_identifier'],
+                $keyDate['contact_name'],
+                '/civicrm/contact/view?reset=1&cid=' . $keyDate['contact_id'],
+                $keyDate['keydate'],
+                $keyDate['type'],
+            );
+            fputcsv($out, $row, $config->fieldSeparator, '"');
         }
         
         fclose($out);
