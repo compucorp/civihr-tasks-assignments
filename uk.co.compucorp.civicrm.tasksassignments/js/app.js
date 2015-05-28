@@ -192,7 +192,7 @@ define(['moment', 'crmUi','angularBootstrapCalendar', 'angularSelect', 'textAngu
                         templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
                         resolve: {
                             contactList: ['KeyDateService',function(KeyDateService){
-                                return KeyDateService.get(moment().startOf('year'),moment().endOf('year'));
+                                return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
                             }]
                         }
                     }).
