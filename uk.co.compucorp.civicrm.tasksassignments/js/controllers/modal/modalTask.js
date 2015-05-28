@@ -2,9 +2,9 @@ define(['controllers/controllers',
         'services/contact',
         'services/task'], function(controllers){
 
-    controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-        'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, ContactService,
+    controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
+        '$modal', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
+        function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, AssignmentService, TaskService, ContactService,
                  data, config){
             $log.debug('Controller: ModalTaskCtrl');
 
@@ -96,12 +96,46 @@ define(['controllers/controllers',
             }
 
             $scope.cancel = function(){
-                $modalInstance.dismiss('cancel');
+
+                if (angular.equals(data,$scope.task)) {
+                    $modalInstance.dismiss('cancel');
+                    return
+                }
+
+                var modalInstance = $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/modalDialog.html',
+                    size: 'sm',
+                    controller: 'ModalDialogCtrl',
+                    resolve: {
+                        content: function(){
+                            return {
+                                copyCancel: 'No',
+                                title: 'Alert',
+                                msg: 'Are you sure you want to cancel? Changes will be lost!'
+                            };
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(confirm){
+
+                    if (!confirm) {
+                         return
+                    }
+
+                    $scope.$broadcast('ct-spinner-hide');
+                    $modalInstance.dismiss('cancel');
+                });
+
             }
 
             $scope.confirm = function(){
-                console.log($scope.task);
-                console.log(angular.equals($scope.task,data));
+
+                if (angular.equals(data,$scope.task)) {
+                    $modalInstance.dismiss('cancel');
+                    return
+                }
 
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 

@@ -34,6 +34,7 @@ reqTa([
     'controllers/task',
     'controllers/dashboard/navMain',
     'controllers/dashboard/topBar',
+    'controllers/modal/modalDialog',
     'controllers/modal/modalDocument',
     'controllers/modal/modalTask',
     'controllers/modal/modalReminder',

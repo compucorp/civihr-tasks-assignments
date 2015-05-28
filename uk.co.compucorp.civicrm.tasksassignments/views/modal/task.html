@@ -55,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-2 control-label">Assignee:</label>
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-7">
                         <span class="form-control-static" ng-show="data.assignee_contact_id[0] && !showFieldAssignee">
                             {{cache.contact.obj[task.assignee_contact_id[0]].sort_name}} <a href class="btn" ng-click="showFieldAssignee = true;">Edit</a>
                         </span>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="form-group" ng-if="showCId">
                     <label class="col-xs-12 col-sm-2 control-label">Target:</label>
-                    <div class="col-xs-12 col-sm-6">
+                    <div class="col-xs-12 col-sm-7">
                         <span class="form-control-static" ng-show="data.target_contact_id[0] && !showFieldTarget">
                             {{cache.contact.obj[task.target_contact_id[0]].sort_name}} <a href class="btn" ng-click="showFieldTarget = true;">Edit</a>
                         </span>
@@ -146,7 +146,7 @@
                     </div>
                     <div ng-show="data.case_id || showFieldAssignment">
                         <label class="col-xs-12 col-sm-2 control-label">Assignment:</label>
-                        <div class="col-xs-12 col-sm-7" >
+                        <div class="col-xs-12 col-sm-8" >
                             <span class="form-control-static" ng-show="data.case_id && !showFieldAssignment">
                                 {{cache.assignment.obj[task.case_id].contacts[0].sort_name + ' - ' + cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
                                 <a href class="btn" ng-click="showFieldAssignment = true">Edit {{showAssignment}}</a>
