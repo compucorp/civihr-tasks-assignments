@@ -77,7 +77,7 @@ class CRM_Tasksassignments_Reminder
             
             foreach ($contactResult['values'] as $contactKey => $contactValue)
             {
-                $url = CRM_Report_Utils_Report::getNextUrl('contact/detail', 'reset=1&force=&id_op=eq&id_value=' . $contactKey);
+                $url = '/civicrm/contact/view?reset=1&cid=' . $contactKey;
                 $links[] = '<a href="' . $url . '">' . $contactValue['sort_name'] . '</a>';
             }
             
@@ -209,7 +209,7 @@ class CRM_Tasksassignments_Reminder
             {
                 list($type, $cId, $cSortName) = explode(':', $value);
                 
-                $contactUrl = CRM_Report_Utils_Report::getNextUrl('contact/detail', 'reset=1&force=&id_op=eq&id_value=' . $cId);
+                $contactUrl = '/civicrm/contact/view?reset=1&cid=' . $cId;
                 $activityContact[$type][$cId] = '<a href="' . $contactUrl . '">' . $cSortName . '</a>';;
             }
             
