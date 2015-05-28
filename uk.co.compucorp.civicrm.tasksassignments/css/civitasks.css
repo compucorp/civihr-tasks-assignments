@@ -11416,14 +11416,20 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .modal-title, #cividocuments .modal-title {
   font-size: 13px;
 }
-/* line 27, ../sass/civihr/partials/_modals.scss */
-#civitasks .modal-content .row, #cividocuments .modal-content .row,
+/* line 29, ../sass/civihr/partials/_modals.scss */
+#civitasks .modal-content .row .form-group, #cividocuments .modal-content .row .form-group,
 #civitasks .modal-content .form-horizontal .form-group,
 #cividocuments .modal-content .form-horizontal .form-group {
   margin-left: -15px;
   margin-right: -15px;
 }
-/* line 35, ../sass/civihr/partials/_modals.scss */
+/* line 36, ../sass/civihr/partials/_modals.scss */
+#civitasks .modal-content .row .modal-body, #cividocuments .modal-content .row .modal-body,
+#civitasks .modal-content .form-horizontal .modal-body,
+#cividocuments .modal-content .form-horizontal .modal-body {
+  padding-bottom: 0;
+}
+/* line 41, ../sass/civihr/partials/_modals.scss */
 #civitasks .modal-content [class^="col-"], #cividocuments .modal-content [class^="col-"],
 #civitasks .modal-content [class*=" col-"],
 #cividocuments .modal-content [class*=" col-"] {
@@ -11431,7 +11437,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-right: 15px;
 }
 @media (min-width: 768px) {
-  /* line 45, ../sass/civihr/partials/_modals.scss */
+  /* line 51, ../sass/civihr/partials/_modals.scss */
   #civitasks .modal-dialog, #cividocuments .modal-dialog {
     margin: 60px auto;
   }
@@ -12389,14 +12395,14 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   float: right;
   position: relative;
 }
-/* line 40, ../sass/civitasks/partials/_filters.scss */
+/* line 39, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .nav > li .fa, #cividocuments .ct-filter-date .nav > li .fa {
   position: absolute;
   right: 58px;
   top: 15px;
   font-size: 11px;
 }
-/* line 49, ../sass/civitasks/partials/_filters.scss */
+/* line 48, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates, #cividocuments .ct-filter-date .ct-select-dates {
   color: #525966;
   font-size: 11px;
@@ -12407,25 +12413,25 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   text-align: left;
   width: auto;
 }
-/* line 59, ../sass/civitasks/partials/_filters.scss */
+/* line 58, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates em, #cividocuments .ct-filter-date .ct-select-dates em {
   color: #586277;
 }
-/* line 63, ../sass/civitasks/partials/_filters.scss */
+/* line 62, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates .fa, #cividocuments .ct-filter-date .ct-select-dates .fa {
   float: right;
   line-height: 1.6;
 }
-/* line 68, ../sass/civitasks/partials/_filters.scss */
+/* line 67, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates:active, #cividocuments .ct-filter-date .ct-select-dates:active {
   -webkit-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
 }
-/* line 72, ../sass/civitasks/partials/_filters.scss */
+/* line 71, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates:hover, #cividocuments .ct-filter-date .ct-select-dates:hover {
   color: #30343c;
 }
-/* line 78, ../sass/civitasks/partials/_filters.scss */
+/* line 77, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-advanced, #cividocuments .ct-filter-advanced {
   max-width: 817px;
 }
@@ -12443,12 +12449,12 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-left: 5px;
   padding-right: 5px;
 }
-/* line 83, ../sass/civitasks/partials/_filters.scss */
+/* line 82, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-advanced .form-horizontal .form-group, #cividocuments .ct-filter-advanced .form-horizontal .form-group {
   margin-bottom: 0;
   margin-top: 20px;
 }
-/* line 89, ../sass/civitasks/partials/_filters.scss */
+/* line 88, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date-type, #cividocuments .ct-filter-date-type {
   margin-top: -6px;
   margin-bottom: -7px;
@@ -12467,16 +12473,16 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-left: 5px;
   padding-right: 5px;
 }
-/* line 95, ../sass/civitasks/partials/_filters.scss */
+/* line 94, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date-type .form-horizontal .form-group, #cividocuments .ct-filter-date-type .form-horizontal .form-group {
   margin-bottom: 0;
 }
-/* line 100, ../sass/civitasks/partials/_filters.scss */
+/* line 99, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-user-role, #cividocuments .ct-filter-user-role {
   margin-top: -6px;
   margin-bottom: -6px;
 }
-/* line 105, ../sass/civitasks/partials/_filters.scss */
+/* line 104, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-user-role .btn-group-sm > .btn, #cividocuments .ct-filter-user-role .btn-group-sm > .btn {
   padding: 7px 13px 6px;
 }
@@ -12484,14 +12490,18 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .form-task h3, #cividocuments .form-task h3 {
   margin-top: 0;
 }
-/* line 7, ../sass/civitasks/partials/_forms.scss */
+/* line 6, ../sass/civitasks/partials/_forms.scss */
+#civitasks .form-task .btn-indent, #cividocuments .form-task .btn-indent {
+  margin-left: -13px;
+}
+/* line 11, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action, #cividocuments .ct-form-action {
   margin-top: -12px;
   margin-bottom: -12px;
   max-width: 817px;
   float: left;
 }
-/* line 14, ../sass/civitasks/partials/_forms.scss */
+/* line 18, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action .row, #cividocuments .ct-form-action .row,
 #civitasks .ct-form-action .form-horizontal .form-group,
 #cividocuments .ct-form-action .form-horizontal .form-group {
@@ -12499,7 +12509,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   margin-left: -5px;
   margin-right: -5px;
 }
-/* line 23, ../sass/civitasks/partials/_forms.scss */
+/* line 27, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action [class^="col-"], #cividocuments .ct-form-action [class^="col-"],
 #civitasks .ct-form-action [class*=" col-"],
 #cividocuments .ct-form-action [class*=" col-"] {

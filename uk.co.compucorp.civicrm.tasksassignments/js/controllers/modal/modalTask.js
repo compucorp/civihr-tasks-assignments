@@ -8,6 +8,7 @@ define(['controllers/controllers',
                  data, config){
             $log.debug('Controller: ModalTaskCtrl');
 
+            $scope.data = data;
             $scope.task = {}
 
             angular.copy(data,$scope.task);

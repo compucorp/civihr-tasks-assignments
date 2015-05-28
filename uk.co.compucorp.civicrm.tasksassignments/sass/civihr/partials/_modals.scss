@@ -25,11 +25,17 @@
 
 .modal-content {
   .row,
-  .form-horizontal .form-group {
-    margin: {
-      left: -$modal-inner-padding;
-      right: -$modal-inner-padding;
-    };
+  .form-horizontal {
+    .form-group{
+      margin: {
+        left: -$modal-inner-padding;
+        right: -$modal-inner-padding;
+      };
+    }
+
+    .modal-body {
+      padding-bottom: 0;
+    }
   }
 
   [class^="col-"],
