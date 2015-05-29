@@ -97,7 +97,7 @@ define(['controllers/controllers',
 
             $scope.cancel = function(){
 
-                if (angular.equals(data,$scope.task)) {
+                if ($scope.taskForm.$pristine) {
                     $modalInstance.dismiss('cancel');
                     return
                 }

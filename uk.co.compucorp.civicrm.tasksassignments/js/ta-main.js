@@ -43,6 +43,7 @@ reqTa([
     'directives/civiEvents',
     'directives/iframe',
     'directives/spinner',
+    'directives/validate',
     'filters/assignmentType',
     'filters/contactId',
     'filters/date',
