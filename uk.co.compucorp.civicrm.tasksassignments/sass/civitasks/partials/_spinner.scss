@@ -1,7 +1,7 @@
 @at-root {
   .#{$prefix}spinner-cover {
     @include border-radius($border-radius-base);
-    background-color: rgba(255, 255, 255, 1) !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -29,5 +29,11 @@
     z-index: 1040;
 
     @include animation(fadeIn 0.3s);
+  }
+
+  .ct-page-loading {
+    .#{$prefix}spinner-cover {
+      background-color: rgba(255, 255, 255, 1) !important;
+    }
   }
 }

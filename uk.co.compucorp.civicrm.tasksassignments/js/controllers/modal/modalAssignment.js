@@ -86,6 +86,7 @@ define(['controllers/controllers',
             }
 
             $scope.confirm = function(){
+                $scope.$broadcast('ct-spinner-show');
 
                 var taskListAssignment = [], taskArr = [], cacheAssignmentObj = {}, i, len;
 
@@ -116,6 +117,7 @@ define(['controllers/controllers',
                     },function(reason){
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
+                        $scope.$broadcast('ct-spinner-hide');
                         return $q.reject();
                     }).then(function(results){
                         i = 0, len = results.assignedTasks.length;
@@ -152,15 +154,19 @@ define(['controllers/controllers',
                         AssignmentService.updateCache(cacheAssignmentObj);
                         AssignmentService.updateTab(1);
                         $modalInstance.close(taskListAssignment);
+                        $scope.$broadcast('ct-spinner-hide');
+                        return
                     },function(reason){
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
+                        $scope.$broadcast('ct-spinner-hide');
                         return $q.reject();
                     });
 
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
+                    $scope.$broadcast('ct-spinner-hide');
                     return $q.reject();
                 });
 
@@ -185,6 +191,10 @@ define(['controllers/controllers',
             $scope.task.assignee_contact_id = [];
             $scope.task.target_contact_id = [$scope.$parent.assignment.contact_id];
             $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
+
+            if ($scope.isDisabled) {
+                return
+            }
 
             $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
                 if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {
