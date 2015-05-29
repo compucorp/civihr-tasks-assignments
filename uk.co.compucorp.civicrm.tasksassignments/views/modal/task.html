@@ -1,4 +1,4 @@
-<form novalidate name="taskForm" class="form-horizontal form-task" role="form" ng-submit="confirm()">
+<form novalidate name="taskForm" class="form-horizontal form-task" role="form" ng-submit="confirm()" ta-spinner>
     <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" ng-bind="cache.contact.obj[task.target_contact_id[0]].sort_name || 'No target contact'"></h4>
@@ -14,16 +14,19 @@
                         </div>
                     </div>
                     <div class="col-xs-8 col-sm-8" ng-show="!data.activity_type_id">
-                        <ui-select
-                                ng-model="task.activity_type_id"
-                                ng-validate="!!task.activity_type_id">
-                            <ui-select-match
-                                    placeholder="Select task type">{{$select.selected.value}}</ui-select-match>
-                            <ui-select-choices
-                                    repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                                <div ng-bind="type.value"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                        <div class="ui-select-required">
+                            <ui-select
+                                    ng-model="task.activity_type_id"
+                                    ng-required="true">
+                                    ng-class="test"
+                                <ui-select-match
+                                        placeholder="Select task type">{{$select.selected.value}}</ui-select-match>
+                                <ui-select-choices
+                                        repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                                    <div ng-bind="type.value"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
                     </div>
                     <label for="{{prefix}}task-due" class="col-xs-4 col-sm-4 control-label">Due:
                         <a href="" class="text-normal"
@@ -89,7 +92,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group" ng-if="showCId">
+                <div class="form-group required" ng-if="showCId">
                     <label class="col-xs-12 col-sm-2 control-label">Target:</label>
                     <div class="col-xs-12 col-sm-7">
                         <span class="form-control-static" ng-show="data.target_contact_id[0] && !showFieldTarget">
@@ -99,7 +102,8 @@
                             <ui-select
                                     allow-clear
                                     ng-model="task.target_contact_id[0]"
-                                    on-select="cacheContact($item)">
+                                    on-select="cacheContact($item)"
+                                    ng-required="true">
                                 <ui-select-match
                                         placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
                                 <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
@@ -188,7 +192,7 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <span class="fa fa-remove" aria-hidden="true"></span> Cancel
         </button>
-        <button type="button" class="btn btn-default btn-primary" ng-click="confirm()">
+        <button type="submit" class="btn btn-default btn-primary" ng-disabled="!taskForm.$valid" ng-click="confirm()">
             <span class="fa fa-check" aria-hidden="true"></span> Save
         </button>
     </div>

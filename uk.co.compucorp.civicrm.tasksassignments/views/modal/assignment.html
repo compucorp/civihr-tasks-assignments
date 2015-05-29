@@ -1,4 +1,4 @@
-<form novalidate name="assignmentForm" class="form-assignment form-horizontal" role="form" ng-submit="confirm()">
+<form novalidate name="assignmentForm" class="form-assignment form-horizontal" role="form" ng-submit="confirm()" ta-spinner>
     <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" ng-bind="cache.contact.obj[assignment.contact_id].sort_name || 'No target contact'"></h4>
@@ -6,49 +6,63 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-xs-12">
-                <div class="form-group" ng-if="showCId">
-                    <label class="col-xs-12 col-sm-3 control-label">Target:</label>
-                    <div class="col-xs-12 col-sm-4">
-                        <div class="input-group">
-                            <ui-select
-                                    allow-clear
-                                    ng-model="assignment.contact_id"
-                                    ng-change="assignment.client_id=assignment.contact_id"
-                                    on-select="cacheContact($item)">
-                                <ui-select-match
-                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                                    refresh="refreshContacts($select.search)"
-                                                    refresh-delay="0">
-                                    <div ng-bind="contact.label"></div>
-                                    <small ng-bind="contact.description[0]"></small>
-                                </ui-select-choices>
-                            </ui-select>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="form-group required" ng-if="showCId">
+                            <label class="col-xs-12 col-sm-4 control-label">Target:</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="input-group">
+                                    <ui-select
+                                            allow-clear
+                                            ng-model="assignment.contact_id"
+                                            ng-change="assignment.client_id=assignment.contact_id"
+                                            on-select="cacheContact($item)"
+                                            ng-required="true">
+                                        <ui-select-match
+                                                placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                                        <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                                            refresh="refreshContacts($select.search)"
+                                                            refresh-delay="0">
+                                            <div ng-bind="contact.label"></div>
+                                            <small ng-bind="contact.description[0]"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
                             <span class="input-group-btn">
                               <a ng-click="assignment.contact_id = ''" class="btn btn-default">
                                   <span class="fa fa-remove"></span>
                               </a>
                             </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="{{prefix}}assignment-type" class="col-xs-12 col-sm-3 control-label">Assignment Type:</label>
-                    <div class="col-xs-6 col-sm-4">
-                        <select id="{{prefix}}assignment-type" class="form-control" name="assignmentType"
-                                ng-change="setData()"
-                                ng-model="assignment.case_type_id"
-                                ng-options="key as value.title for (key, value) in cache.assignmentType.obj">
-                            <option value="">- select - </option>
-                        </select>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-8">
+                        <div class="form-group required">
+                            <label for="{{prefix}}assignment-type" class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
+                            <div class="col-xs-6 col-sm-8">
+                                <select id="{{prefix}}assignment-type" class="form-control" name="assignmentType"
+                                        ng-change="setData()"
+                                        ng-model="assignment.case_type_id"
+                                        ng-required="true"
+                                        ng-options="key as value.title for (key, value) in cache.assignmentType.obj">
+                                    <option value="">- select - </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <label for="{{prefix}}assignment-due" class="col-xs-6 col-sm-4 control-label">Due Date:
-                        <a href="" class="text-normal"
-                           ng-model="assignment.dueDate"
-                           is-open="dpOpened.assignmentDue"
-                           datepicker-popup
-                           ng-click="dpOpen($event, 'assignmentDue');">{{(assignment.dueDate | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                    <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="assignmentDue">
+                    <div class="col-xs-6 col-sm-4">
+                        <div class="form-group">
+                            <label for="{{prefix}}assignment-due" class="col-xs-12 control-label">Due Date:
+                                <a href="" class="text-normal"
+                                   ng-model="assignment.dueDate"
+                                   is-open="dpOpened.assignmentDue"
+                                   datepicker-popup
+                                   ng-click="dpOpen($event, 'assignmentDue');">{{(assignment.dueDate | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                            <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="assignmentDue">
+                        </div>
+                    </div>
                 </div>
                 <div ng-show="assignment.case_type_id">
                     <hr>
@@ -129,7 +143,7 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <span class="fa fa-remove" aria-hidden="true"></span> Cancel
         </button>
-        <button type="button" class="btn btn-default btn-primary" ng-click="confirm()">
+        <button type="submit" class="btn btn-default btn-primary" ng-disabled="!assignmentForm.$valid" ng-click="confirm()">
             <span class="fa fa-check" aria-hidden="true"></span> Save
         </button>
     </div>
