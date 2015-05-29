@@ -29,7 +29,7 @@ define(['controllers/controllers',
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 
                 TaskService.sendReminder($scope.task.id, $scope.reminder.notes).then(function(){
-                    CRM.alert('Message sent to: '+$rootScope.cache.contact.obj[task.assignee_contact_id[0]].sort_name,
+                    CRM.alert('Message sent to: '+$rootScope.cache.contact.obj[$scope.task.assignee_contact_id[0]].sort_name,
                         'Reminder sent','success');
                     $modalInstance.close();
                 },function(reason){
