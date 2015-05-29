@@ -629,7 +629,7 @@ function civicrm_api3_task_sendreminder($params) {
         throw new API_Exception(ts("Please specify 'activity_id' value."));
     }
     
-    $result = CRM_Tasksassignments_BAO_Task::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '');
+    $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '');
     return civicrm_api3_create_success($result, $params, 'task', 'reminder');
 }
 
@@ -638,6 +638,6 @@ function civicrm_api3_task_sendreminder($params) {
  */
 function civicrm_api3_task_senddailyreminder($params) {
     
-    CRM_Tasksassignments_BAO_Task::sendDailyReminder();
+    CRM_Tasksassignments_Reminder::sendDailyReminder();
     return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
 }
