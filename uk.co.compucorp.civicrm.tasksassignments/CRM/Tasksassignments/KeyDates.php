@@ -2,7 +2,7 @@
 
 class CRM_Tasksassignments_KeyDates
 {
-    public static function get($startDate = null, $endDate = null)
+    public static function get($startDate = null, $endDate = null, $contactId = null)
     {
         $tableExists = self::_checkTableExists(array(
             'civicrm_hrjobcontract_details',
@@ -20,7 +20,7 @@ class CRM_Tasksassignments_KeyDates
             $endDate = date('Y') . '-12-31';
         }
         
-        $query = self::_buildQuery($tableExists, $startDate, $endDate);
+        $query = self::_buildQuery($tableExists, $startDate, $endDate, $contactId);
         
         if (!$query)
         {
@@ -110,7 +110,7 @@ class CRM_Tasksassignments_KeyDates
         return $result;
     }
     
-    private static function _buildQuery(array $tableExists, $startDate, $endDate)
+    private static function _buildQuery(array $tableExists, $startDate, $endDate, $contactId = null)
     {
         $queries = array();
         
@@ -122,14 +122,16 @@ class CRM_Tasksassignments_KeyDates
                 LEFT JOIN civicrm_hrjobcontract hrjc ON hrjc_r.jobcontract_id = hrjc.id
                 LEFT JOIN civicrm_contact c ON hrjc.contact_id = c.id
                 WHERE period_start_date IS NOT NULL
-            " . self::_buildWhereDateRange('period_start_date', $startDate, $endDate);
+            " . self::_buildWhereDateRange('period_start_date', $startDate, $endDate)
+              . self::_buildWhereContactId('contact_id', $contactId);
             $queries[] = "
                 SELECT hrjc.contact_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(period_end_date) as keydate, 'period_end_date' as type FROM civicrm_hrjobcontract_details hrjc_d
                 LEFT JOIN civicrm_hrjobcontract_revision hrjc_r ON hrjc_d.jobcontract_revision_id = hrjc_r.details_revision_id
                 LEFT JOIN civicrm_hrjobcontract hrjc ON hrjc_r.jobcontract_id = hrjc.id
                 LEFT JOIN civicrm_contact c ON hrjc.contact_id = c.id
                 WHERE period_end_date IS NOT NULL
-            " . self::_buildWhereDateRange('period_end_date', $startDate, $endDate);
+            " . self::_buildWhereDateRange('period_end_date', $startDate, $endDate)
+              . self::_buildWhereContactId('contact_id', $contactId);
         }
         if ($tableExists['civicrm_contact'])
         {
@@ -160,7 +162,7 @@ class CRM_Tasksassignments_KeyDates
                       CONCAT( {$sy} ,  '-', DATE_FORMAT(  `birth_date` ,  '%m-%d' ) )
                     ) AS keydate, 'birth_date' as type FROM civicrm_contact
                 WHERE birth_date IS NOT NULL
-            ";
+            " . self::_buildWhereContactId('id', $contactId);
             
             if (!empty($whereDate))
             {
@@ -175,12 +177,14 @@ class CRM_Tasksassignments_KeyDates
                 SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(initial_join_date_56) as keydate, 'initial_join_date' as type FROM civicrm_value_job_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE initial_join_date_56 IS NOT NULL
-            " . self::_buildWhereDateRange('initial_join_date_56', $startDate, $endDate);
+            " . self::_buildWhereDateRange('initial_join_date_56', $startDate, $endDate)
+              . self::_buildWhereContactId('entity_id', $contactId);
             $queries[] = "
                 SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(final_termination_date_57) as keydate, 'final_termination_date' as type FROM civicrm_value_job_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE final_termination_date_57 IS NOT NULL
-            " . self::_buildWhereDateRange('final_termination_date_57', $startDate, $endDate);
+            " . self::_buildWhereDateRange('final_termination_date_57', $startDate, $endDate)
+              . self::_buildWhereContactId('entity_id', $contactId);
         }
         
         return implode(' UNION ', $queries) . ' ORDER BY keydate ASC ';
@@ -205,5 +209,15 @@ class CRM_Tasksassignments_KeyDates
         }
         
         return null;
+    }
+    
+    private static function _buildWhereContactId($field, $contactId)
+    {
+        if (!$contactId)
+        {
+            return '';
+        }
+        
+        return ' AND ' . $field . ' = ' . $contactId . ' ';
     }
 }

@@ -111,6 +111,7 @@ class CRM_Tasksassignments_Reminder
                 'activityDue' => $activityResult['activity_date_time'],
                 'activitySubject' => $activityResult['subject'],
                 'activityDetails' => $activityResult['details'],
+                'baseUrl' => CIVICRM_UF_BASEURL,
                 'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId . '&selectedChild=civitasks',
                 'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId . '&selectedChild=cividocuments',
             ));
@@ -149,7 +150,7 @@ class CRM_Tasksassignments_Reminder
             WHERE activity_date_time <= %1
             AND a.status_id IN (" . implode(',', $incompleteStatuses) . ")
             AND ac.record_type_id IN (1,2)
-            AND e.is_primary =1
+            AND e.is_primary = 1
             GROUP BY ac.contact_id";
         $contactsParams = array(
             1 => array($to, 'String'),
@@ -158,21 +159,21 @@ class CRM_Tasksassignments_Reminder
         $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery, $contactsParams);
         while ($contactsResult->fetch())
         {
-            $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids));
+            $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids), $to);
             
             $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
                 'reminder' => $reminderData,
+                'baseUrl' => CIVICRM_UF_BASEURL,
                 'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactsResult->contact_id . '&selectedChild=civitasks',
                 'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactsResult->contact_id . '&selectedChild=cividocuments',
             ));
-            
             self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
         }
         
         return true;
     }
     
-    private static function _getContactDailyReminderData($contactId, array $activityIds)
+    private static function _getContactDailyReminderData($contactId, array $activityIds, $to = null)
     {
         $reminderData = array(
             'overdue' => array(),
@@ -180,6 +181,13 @@ class CRM_Tasksassignments_Reminder
             'today_others' => array(),
             'coming_up' => array(),
             'upcoming_keydates' => array(),
+        );
+        $keyDateLabels = array(
+            'period_start_date' => 'Perion start date',
+            'period_end_date' => 'Period end date',
+            'initial_join_date' => 'Initial join date',
+            'final_termination_date' => 'Final termination date',
+            'birth_date' => 'Birthday',
         );
         $now = date('Y-m-d');
         
@@ -210,7 +218,7 @@ class CRM_Tasksassignments_Reminder
                 list($type, $cId, $cSortName) = explode(':', $value);
                 
                 $contactUrl = '/civicrm/contact/view?reset=1&cid=' . $cId;
-                $activityContact[$type][$cId] = '<a href="' . $contactUrl . '">' . $cSortName . '</a>';;
+                $activityContact[$type][$cId] = '<a href="' . $contactUrl . '">' . $cSortName . '</a>';
             }
             
             $reminderKeys = array();
@@ -251,6 +259,24 @@ class CRM_Tasksassignments_Reminder
                 );
             }
         }
+        
+        $today = date('Y-m-d');
+        $todayKeydatesCount = 0;
+        $keyDates = CRM_Tasksassignments_KeyDates::get($today, $to, $contactId);
+        foreach ($keyDates as $keyDate)
+        {
+            $reminderData['upcoming_keydates'][] = array_merge(
+                $keyDate,
+                array(
+                    'label' => $keyDateLabels[$keyDate['type']],
+                )
+            );
+            if ($keyDate['keydate'] == $today)
+            {
+                $todayKeydatesCount++;
+            }
+        }
+        $reminderData['today_keydates_count'] = $todayKeydatesCount;
         
         return $reminderData;
     }
