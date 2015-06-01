@@ -32,3 +32,23 @@
     }
   }
 }
+
+.ui-select-required {
+  display: table;
+  max-width: 100%;
+  position: relative;
+  width: 100%;
+
+  .ui-select-container {
+    display: table-cell;
+  }
+
+  &:after {
+    content: "*";
+    color: red;
+    display: table-cell;
+    padding-left: 3px;
+    position: absolute;
+    top: 0;
+  }
+}

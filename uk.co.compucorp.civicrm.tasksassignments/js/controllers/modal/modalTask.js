@@ -137,14 +137,19 @@ define(['controllers/controllers',
                     return
                 }
 
+                $scope.$broadcast('ct-spinner-show');
+
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 
                 TaskService.save($scope.task).then(function(results){
                     AssignmentService.updateTab();
                     $modalInstance.close(angular.extend(results,$scope.task));
+                    $scope.$broadcast('ct-spinner-hide');
+                    return
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
+                    $scope.$broadcast('ta-spinner-hide');
                     return $q.reject();
                 });
 

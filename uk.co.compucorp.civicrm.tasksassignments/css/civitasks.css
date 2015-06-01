@@ -11116,6 +11116,14 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   background-color: #db6c86;
   color: #fff;
 }
+/* line 47, ../sass/civihr/partials/_typography.scss */
+#civitasks a[disabled]:not(.btn), #cividocuments a[disabled]:not(.btn) {
+  color: #727e8a;
+}
+/* line 50, ../sass/civihr/partials/_typography.scss */
+#civitasks a[disabled]:not(.btn):hover, #cividocuments a[disabled]:not(.btn):hover {
+  cursor: default;
+}
 /* line 3, ../sass/civihr/partials/_global.scss */
 #civitasks .container, #cividocuments .container,
 #civitasks .container-fluid,
@@ -12516,6 +12524,26 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-left: 5px;
   padding-right: 5px;
 }
+/* line 36, ../sass/civitasks/partials/_forms.scss */
+#civitasks .ui-select-required, #cividocuments .ui-select-required {
+  display: table;
+  max-width: 100%;
+  position: relative;
+  width: 100%;
+}
+/* line 42, ../sass/civitasks/partials/_forms.scss */
+#civitasks .ui-select-required .ui-select-container, #cividocuments .ui-select-required .ui-select-container {
+  display: table-cell;
+}
+/* line 46, ../sass/civitasks/partials/_forms.scss */
+#civitasks .ui-select-required:after, #cividocuments .ui-select-required:after {
+  content: "*";
+  color: red;
+  display: table-cell;
+  padding-left: 3px;
+  position: absolute;
+  top: 0;
+}
 /* line 1, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task, #cividocuments .ct-list-task {
   list-style: none;
@@ -12785,7 +12813,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
-  background-color: white !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -12817,6 +12845,11 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   -webkit-animation: fadeIn 0.3s;
   -o-animation: fadeIn 0.3s;
   animation: fadeIn 0.3s;
+}
+
+/* line 35, ../sass/civitasks/partials/_spinner.scss */
+.ct-page-loading .ct-spinner-cover {
+  background-color: white !important;
 }
 /* line 3, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-documents .dropdown, #cividocuments .ct-table-documents .dropdown {
