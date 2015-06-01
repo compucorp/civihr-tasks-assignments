@@ -45,7 +45,8 @@
                             ng-click="filterParams.dateRange.from = filterParamsHolder.dateRange.from;
                                       filterParams.dateRange.until = filterParamsHolder.dateRange.until;
                                       filterParams.due = 'dateRange';
-                                      labelDateRange()">Show Date Range</button>
+                                      labelDateRange(filterParams.dateRange.from, filterParams.dateRange.until)">
+                        Show Date Range</button>
                 </div>
             </div>
         </div>

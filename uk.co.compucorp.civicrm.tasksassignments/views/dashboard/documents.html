@@ -21,7 +21,6 @@
                         <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
                         <div class="col-xs-12 col-sm-9 col-lg-7">
                             <input
-                            <input
                                     is-open="dpOpened.filterDates.from"
                                     datepicker-popup="dd/MM/yyyy"
                                     ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
@@ -47,7 +46,7 @@
                         <div class="col-xs-12 col-sm-9">
                             <ui-select
                                     multiple
-                                    ng-model="filterParams.documentStatusHolder">
+                                    ng-model="filterParamsHolder.documentStatus">
                                 <ui-select-match placeholder="Select status...">{{$item.value}}</ui-select-match>
                                 <ui-select-choices repeat="status.key as status in cache.documentStatus.arr">
                                     <div ng-bind-html="status.value | highlight: $select.search"></div>
@@ -60,7 +59,8 @@
                                       filterParams.dateRange.until = filterParamsHolder.dateRange.until;
                                       filterParams.documentStatus = filterParamsHolder.documentStatus;
                                       filterParams.due = 'dateRange';
-                                      labelDateRange()">Apply Filter</button>
+                                      labelDateRange(filterParams.dateRange.from, filterParams.dateRange.unti)">
+                        Apply Filter</button>
                 </div>
             </div>
         </div>

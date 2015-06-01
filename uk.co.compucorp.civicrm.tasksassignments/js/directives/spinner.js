@@ -38,7 +38,7 @@ define(['directives/directives'], function(directives){
                     cover.className = 'ct-spinner-cover';
 
                     spinner = document.createElement('div');
-                    spinner.className = 'ct-spinner ct-spinner-img'
+                    spinner.className = 'ct-spinner ct-spinner-img';
 
                     $rootScope.$on('$routeChangeStart', function() {
                         appendSpinner();
@@ -57,12 +57,22 @@ define(['directives/directives'], function(directives){
 
                 }
 
-                $scope.$on('ct-spinner-show',function(){
-                    appendSpinner();
+                $scope.$on('ct-spinner-show',function(e, param){
+
+                    if (!param || attrs.ctSpinnerId && attrs.ctSpinnerId == param) {
+                        appendSpinner();
+                        return
+                    }
+
                 });
 
-                $scope.$on('ct-spinner-hide',function(){
-                    removeSpinner();
+                $scope.$on('ct-spinner-hide',function(e, param){
+
+                    if (!param || attrs.ctSpinnerId && attrs.ctSpinnerId == param) {
+                        removeSpinner();
+                        return
+                    }
+
                 });
 
             }
