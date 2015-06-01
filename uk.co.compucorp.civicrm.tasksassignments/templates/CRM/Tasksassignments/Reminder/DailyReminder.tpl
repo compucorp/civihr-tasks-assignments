@@ -1,6 +1,6 @@
 <h1>Daily Task Reminder</h1>
 
-<div>You have {$reminder.todayMine|@count} task(s) and document(s) due today. You have {$reminder.overdue|@count} overdue task(s).</div>
+<div>You have {math equation="x + y" x=$reminder.todayMine|@count y=$reminder.today_keydates_count} task(s) and document(s) due today. You have {$reminder.overdue|@count} overdue task(s).</div>
 
 <div>
     
@@ -11,31 +11,31 @@
         {/foreach}
     {/if}
     
-    {if $reminder.todayMine}
-    <h2 class="today-mine">Today's Tasks and Documents ({$reminder.todayMine|@count})</h2>
-        {foreach from=$reminder.todayMine item=row}
+    {if $reminder.today_mine}
+    <h2 class="today-mine">Today's Tasks and Documents ({$reminder.today_mine|@count})</h2>
+        {foreach from=$reminder.today_mine item=row}
             {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
         {/foreach}
     {/if}
     
-    {if $reminder.todayOthers}
-    <h2 class="today-others">Today's Tasks for others ({$reminder.todayOthers|@count})</h2>
-        {foreach from=$reminder.todayOthers item=row}
+    {if $reminder.today_others}
+    <h2 class="today-others">Today's Tasks for others ({$reminder.today_others|@count})</h2>
+        {foreach from=$reminder.today_others item=row}
             {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
         {/foreach}
     {/if}
     
-    {if $reminder.comingUp}
-    <h2 class="coming-up">Coming up this week ({$reminder.comingUp|@count})</h2>
-        {foreach from=$reminder.comingUp item=row}
+    {if $reminder.coming_up}
+    <h2 class="coming-up">Coming up this week ({$reminder.coming_up|@count})</h2>
+        {foreach from=$reminder.coming_up item=row}
             {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
         {/foreach}
     {/if}
     
-    {if $reminder.upcomingKeyDates}
-    <h2 class="coming-up">Upcoming Key Dates ({$reminder.upcomingKeyDates|@count})</h2>
-        {foreach from=$reminder.upcomingKeyDates item=row}
-            {* TODO! *}
+    {if $reminder.upcoming_keydates}
+    <h2 class="coming-up">Upcoming Key Dates ({$reminder.upcoming_keydates|@count})</h2>
+        {foreach from=$reminder.upcoming_keydates item=row}
+            {include file='CRM/Tasksassignments/Reminder/DailyReminderKeyDate.tpl'}
         {/foreach}
     {/if}
     
