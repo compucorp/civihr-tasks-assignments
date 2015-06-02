@@ -188,6 +188,35 @@
 
                 return deferred.promise;
             },
+            sendReminder: function(documentId, notes){
+
+                if (!documentId || typeof +documentId !== 'number') {
+                    return null;
+                }
+
+                var deferred = $q.defer();
+
+                Document.save({
+                    action: 'sendreminder',
+                    json: {
+                        sequential: 1,
+                        debug: config.DEBUG,
+                        activity_id: documentId,
+                        notes: notes || ''
+                    }
+                }, null, function(data){
+
+                    if (UtilsService.errorHandler(data,'Unable to send a reminder',deferred)) {
+                        return
+                    }
+
+                    deferred.resolve(data);
+                },function(){
+                    deferred.reject('Unable to send a reminder');
+                });
+
+                return deferred.promise;
+            },
             delete: function(documentId) {
 
                 if (!documentId || typeof +documentId !== 'number') {

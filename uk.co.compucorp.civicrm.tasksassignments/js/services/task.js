@@ -208,7 +208,6 @@ define(['services/services',
                         notes: notes || ''
                     }
                 }, null, function(data){
-                    console.log(data);
 
                     if (UtilsService.errorHandler(data,'Unable to send a reminder',deferred)) {
                         return

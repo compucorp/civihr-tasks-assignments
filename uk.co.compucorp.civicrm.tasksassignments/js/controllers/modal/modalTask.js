@@ -107,13 +107,13 @@ define(['controllers/controllers',
                     copyCancel: 'No',
                     msg: 'Are you sure you want to cancel? Changes will be lost!'
                 }).then(function(confirm){
-                        if (!confirm) {
-                            return
-                        }
+                    if (!confirm) {
+                        return
+                    }
 
-                        $scope.$broadcast('ct-spinner-hide');
-                        $modalInstance.dismiss('cancel');
-                    });
+                    $scope.$broadcast('ct-spinner-hide');
+                    $modalInstance.dismiss('cancel');
+                });
 
             }
 

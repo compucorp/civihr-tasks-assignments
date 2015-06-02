@@ -155,10 +155,12 @@ define(['controllers/controllers',
                     resolve: {
                         data: function(){
                             return data;
+                        },
+                        type: function(){
+                            return 'task'
                         }
                     }
                 });
-
             };
 
             $rootScope.modalAssignment = function(data) {
@@ -188,14 +190,14 @@ define(['controllers/controllers',
                 $dialog.open({
                     msg: 'Are you sure you want to delete this task?'
                 }).then(function(confirm){
-                        if (!confirm) {
-                            return
-                        }
+                    if (!confirm) {
+                        return
+                    }
 
-                        TaskService.delete(task.id).then(function(results){
-                            $scope.taskList.splice($scope.taskList.indexOf(task),1);
-                        });
+                    TaskService.delete(task.id).then(function(results){
+                        $scope.taskList.splice($scope.taskList.indexOf(task),1);
                     });
+                });
 
             }
 

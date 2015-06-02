@@ -13,7 +13,7 @@ define(['services/services'], function (services) {
 
                 return $modal.open({
                     targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/modalDialog.html',
+                    templateUrl: config.path.TPL+'modal/dialog.html',
                     size: 'sm',
                     controller: 'ModalDialogCtrl',
                     resolve: {

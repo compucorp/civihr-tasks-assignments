@@ -5,9 +5,9 @@ define(['controllers/controllers',
         'services/assignment',
         'moment'], function(controllers, moment){
 
-    controllers.controller('DocumentListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
+    controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
         '$log', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
-        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, documentList, config, ContactService,
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, documentList, config, ContactService,
                  AssignmentService, DocumentService){
             $log.debug('Controller: DocumentListCtrl');
 
@@ -145,7 +145,24 @@ define(['controllers/controllers',
                 }, function(){
                     $log.info('Modal dismissed');
                 });
+            };
 
+            $rootScope.modalReminder = function(data) {
+                var data = data || {};
+
+                $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/reminder.html?v='+(new Date().getTime()),
+                    controller: 'ModalReminderCtrl',
+                    resolve: {
+                        data: function(){
+                            return data;
+                        },
+                        type: function(){
+                            return 'document'
+                        }
+                    }
+                });
             };
 
             $rootScope.modalAssignment = function(data) {
@@ -171,9 +188,19 @@ define(['controllers/controllers',
             };
 
             $scope.deleteDocument = function(document){
-                 DocumentService.delete(document.id).then(function(results){
-                     $scope.documentList.splice($scope.documentList.indexOf(document),1);
-                 });
+
+                $dialog.open({
+                    msg: 'Are you sure you want to delete this task?'
+                }).then(function(confirm){
+                    if (!confirm) {
+                        return
+                    }
+
+                    DocumentService.delete(document.id).then(function(results){
+                        $scope.documentList.splice($scope.documentList.indexOf(document),1);
+                    });
+                });
+
             }
 
             $scope.$on('crmFormSuccess',function(e, data){

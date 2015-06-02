@@ -118,17 +118,25 @@ define(['controllers/controllers',
             };
 
             $scope.confirm = function(){
-                console.log($scope.document);
-                console.log(angular.equals($scope.document,data));
+
+                if (angular.equals(data,$scope.task)) {
+                    $modalInstance.dismiss('cancel');
+                    return
+                }
+
+                $scope.$broadcast('ct-spinner-show');
 
                 $scope.document.activity_date_time = $scope.document.activity_date_time || new Date();
 
                 DocumentService.save($scope.document).then(function(results){
                     AssignmentService.updateTab();
                     $modalInstance.close(angular.extend(results,$scope.document));
+                    $scope.$broadcast('ta-spinner-hide');
+                    return
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
+                    $scope.$broadcast('ta-spinner-hide');
                     return $q.reject();
                 });
 
