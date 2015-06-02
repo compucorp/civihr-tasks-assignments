@@ -30,13 +30,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="{{prefix}}document-due" class="col-xs-4 col-sm-3 control-label form-control-static">Due:
+                    <label for="{{prefix}}document-due" class="col-xs-6 col-sm-5 control-label form-control-static">Due:
                         <a href="" class="text-normal"
                            ng-model="document.activity_date_time"
-                           is-open="dpOpened"
+                           is-open="dpOpened.due"
                            datepicker-popup
-                           ng-click="dpOpen($event);">{{(document.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                           ng-click="dpOpened.due = !dpOpened.due;">{{(document.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                     <input type="hidden" id="{{prefix}}document-due" ng-model="document.activity_date_time" name="documentDue">
+                    <label for="{{prefix}}document-exp" class="col-xs-6 col-sm-5 control-label form-control-static">Expires:
+                        <a href="" class="text-normal"
+                           ng-model="document.expire_date"
+                           is-open="dpOpened.exp"
+                           datepicker-popup
+                           ng-click="dpOpened.exp = !dpOpened.exp;">{{(document.expire_date | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                    <input type="hidden" id="{{prefix}}document-exp" ng-model="document.expire_date" name="documentExp">
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12" ng-show="!data.subject && !showFieldSubject">

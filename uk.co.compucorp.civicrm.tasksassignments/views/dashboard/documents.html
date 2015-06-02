@@ -182,7 +182,7 @@
                 </div>
             </div>
         </div>
-        <div class="{{prefix}}documents-container">
+        <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="documentList">
             <table class="table table-striped {{prefix}}table-documents">
                 <thead>
                     <tr>
@@ -237,8 +237,8 @@
     <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
     <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
     <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
-    <td ng-bind="document.activity_date_time | date: 'dd/MM/yyyy'"></td>
-    <td>-</td>
+    <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
+    <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
     <td>
         <div class="dropdown" dropdown>
             <a href class="dropdown-toggle"
@@ -248,7 +248,7 @@
                 'text-warning-light': (document.status_id == 1 || document.status_id == 2)
             }" dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
             <ul class="dropdown-menu">
-                <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(status.key)"></a></li>
+                <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
             </ul>
         </div>
     </td>

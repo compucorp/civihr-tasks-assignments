@@ -57,7 +57,7 @@
                     'is_current_revision': '1',
                     'is_deleted': '0',
                     'sequential': '1',
-                    'return': 'activity_date_time, activity_type_id, assignee_contact_id, details, id, source_contact_id, target_contact_id, subject, status_id'
+                    'return': 'activity_date_time, activity_type_id, assignee_contact_id, details, id, source_contact_id, target_contact_id, subject, status_id, expire_date'
                 },params);
 
                 Document.get({json: params}, function(data){

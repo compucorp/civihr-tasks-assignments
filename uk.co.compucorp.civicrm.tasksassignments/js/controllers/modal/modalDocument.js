@@ -88,12 +88,9 @@ define(['controllers/controllers',
                 });
             };
 
-            $scope.dpOpen = function($event){
-                $event.preventDefault();
-                $event.stopPropagation();
-
-                $scope.dpOpened = true;
-
+            $scope.dpOpened = {
+                due: false,
+                exp: false
             };
 
             $scope.cancel = function(){

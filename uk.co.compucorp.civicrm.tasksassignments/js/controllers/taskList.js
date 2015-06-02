@@ -109,6 +109,18 @@ define(['controllers/controllers',
                 dateRange: ''
             };
 
+            $scope.changeStatus = function(task, statusId){
+                $scope.$broadcast('ct-spinner-show','task'+task.id);
+
+                TaskService.save({
+                    id: task.id,
+                    status_id: statusId || '2'
+                }).then(function(results){
+                    task.status_id = results.status_id;
+                    $scope.$broadcast('ct-spinner-hide','task'+task.id);
+                })
+            }
+
             $scope.labelDateRange = function(from, until){
                 var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
                     filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';

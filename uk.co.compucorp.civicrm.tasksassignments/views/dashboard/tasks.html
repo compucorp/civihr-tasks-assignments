@@ -137,7 +137,9 @@
                 }"
                 ng-if="!task.resolved"
                 ng-include
-                src="'task.html'">
+                src="'task.html'"
+                ct-spinner
+                ct-spinner-id="task{{task.id}}">
             </li>
         </ul>
         <h4 class="header-bar header-bar-danger" ng-show="taskListFiltered.length">Resolved:</h4>
@@ -147,7 +149,8 @@
                 ng-class="'{{prefix}}task-resolved'"
                 ng-if="task.resolved"
                 ng-include
-                src="'task.html'">
+                src="'task.html'"
+                ct-spinner>
             </li>
         </ul>
     </div>
@@ -157,7 +160,7 @@
     <header class="row">
         <div class="col-xs-6">
             <input type="checkbox"
-                   ng-change="changeStatus(2)"
+                   ng-change="changeStatus(task, 2)"
                    ng-disabled="task.completed"
                    ng-model="task.completed"
                    class="{{prefix}}task-checkbox"

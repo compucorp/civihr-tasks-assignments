@@ -112,6 +112,23 @@ define(['controllers/controllers',
                 dateRange: ''
             };
 
+            $scope.changeStatus = function(document, statusId){
+
+                if (!statusId || typeof +statusId !== 'number') {
+                    return null;
+                }
+
+                $scope.$broadcast('ct-spinner-show','documentList');
+
+                DocumentService.save({
+                    id: document.id,
+                    status_id: statusId
+                }).then(function(results){
+                    document.status_id = results.status_id;
+                    $scope.$broadcast('ct-spinner-hide','documentList');
+                })
+            }
+
             $scope.labelDateRange = function(from, until){
                 var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
                     filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';
@@ -158,9 +175,7 @@ define(['controllers/controllers',
                         data: function(){
                             return data;
                         },
-                        type: function(){
-                            return 'document'
-                        }
+                        type: {}
                     }
                 });
             };
