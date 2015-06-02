@@ -487,6 +487,18 @@ function civicrm_api3_document_get($params) {
     if (empty($params['return']))
     {
         $params['return'] = _civicrm_api3_document_getfields();
+    } else {
+        if (!is_array($params['return'])) {
+            $params['return'] = explode(',', $params['return']);
+            $params['return'] = array_map('trim', $params['return']);
+        }
+        $activityCustomValues = array();
+        $customFields = _civicrm_api3_document_getcustomfieldsflipped();
+        foreach ($customFields as $key => $value) {
+            if (in_array($key, $params['return'])) {
+                $params['return'][] = $value;
+            }
+        }
     }
     
     $activityIds = array();
