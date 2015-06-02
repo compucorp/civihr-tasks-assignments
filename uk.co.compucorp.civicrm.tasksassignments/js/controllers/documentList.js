@@ -112,9 +112,9 @@ define(['controllers/controllers',
                 dateRange: ''
             };
 
-            $scope.labelDateRange = function(){
-                var filterDateTimeFrom = $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '',
-                    filterDateTimeUntil = $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
+            $scope.labelDateRange = function(from, until){
+                var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
+                    filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';
 
                 if (filterDateTimeUntil) {
                     filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;

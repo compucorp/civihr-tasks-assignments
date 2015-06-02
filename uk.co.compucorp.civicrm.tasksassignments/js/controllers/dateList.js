@@ -4,31 +4,27 @@ define(['controllers/controllers',
         'services/contact'], function(controllers, moment){
 
     controllers.controller('DateListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', 'contactList','KeyDateService',
-        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, contactList,KeyDateService){
+        '$log', '$timeout', 'contactList','KeyDateService',
+        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, $timeout, contactList,KeyDateService){
             $log.debug('Controller: DateListCtrl');
-
-            this.contactList = contactList;
 
             this.init = function(){
 
-                this.createDateList();
+                $scope.dateList = this.createDateList(contactList);
 
                 $rootScope.$broadcast('ct-spinner-hide');
 
-                this.backgroundLoading();
-            }
-
-            this.backgroundLoading = function(){
+                //Load year range in background
                 KeyDateService.get(moment().startOf('year'),moment().endOf('year')).then(function(contactList){
-                    this.contactList = contactList;
-                    this.createDateList();
+                    $scope.dateList = this.createDateList(contactList);
                     $scope.dataLoading = false;
                 }.bind(this));
             }
 
-            this.createDateList = function(){
-                var i = 0, contactList = this.contactList, len = contactList.length, date, dateObj = {}, dateList = [];
+
+            // Create date list from contact list
+            this.createDateList = function(contactList){
+                var i = 0, len = contactList.length, date, dateObj = {}, dateList = [];
                 for (; i < len; i++) {
                     dateObj[contactList[i].keydate] = dateObj[contactList[i].keydate] || [];
                     dateObj[contactList[i].keydate].push(contactList[i]);
@@ -41,11 +37,12 @@ define(['controllers/controllers',
                     });
                 }
 
-                $scope.dateList = dateList;
+                return dateList;
             };
 
             $scope.dataLoading = true;
             $scope.dateList = [];
+            $scope.dateListSelected = [];
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -57,19 +54,12 @@ define(['controllers/controllers',
 
             $scope.filterParams = {
                 dateRange: {
-                    from: null,
-                    until: null
+                    from: new Date().setHours(0, 0, 0, 0),
+                    until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
                 },
                 date: 'month',
                 dateType: []
             };
-
-            $scope.filterParamsHolder = {
-                dateRange: {
-                    from: new Date().setHours(0, 0, 0, 0),
-                    until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
-                }
-            }
 
             $scope.label = {
                 isoWeek: 'Week',
@@ -78,9 +68,9 @@ define(['controllers/controllers',
                 dateRange: ''
             };
 
-            $scope.labelDateRange = function(){
-                var filterDateTimeFrom = $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '',
-                    filterDateTimeUntil = $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
+            $scope.labelDateRange = function(from, until){
+                var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
+                    filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';
 
                 if (filterDateTimeUntil) {
                     filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
@@ -92,6 +82,15 @@ define(['controllers/controllers',
 
                 $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
             }
+
+            $scope.showDateRange = function(from, until){
+                $scope.$broadcast('ct-spinner-show','dateList');
+                KeyDateService.get(moment(from),moment(until)).then(function(contactList){
+                        $scope.dateListSelected = this.createDateList(contactList);
+                        $scope.filterParams.date = 'dateRange';
+                        $scope.$broadcast('ct-spinner-hide','dateList');
+                }.bind(this));
+            }.bind(this);
 
             this.init();
 
