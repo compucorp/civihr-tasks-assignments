@@ -113,6 +113,21 @@ function civicrm_api3_document_create($params) {
   $activityBAO = CRM_Tasksassignments_BAO_Document::create($params);
 
   if (isset($activityBAO->id)) {
+    
+    $activityCustomValues = array();
+    $customFields = _civicrm_api3_document_getcustomfieldsflipped();
+    foreach ($customFields as $key => $value) {
+        if (isset($params[$key])) {
+            $activityCustomValues[$value] = $params[$key];
+        }
+    }
+    if (!empty($activityCustomValues)) {
+        civicrm_api3('Activity', 'create', array_merge(
+            array('id' => $activityBAO->id),
+            $activityCustomValues
+        ));
+    }
+      
     if ($case_id && !$createRevision) {
       // If this is a brand new case activity we need to add this
       $caseActivityParams = array('activity_id' => $activityBAO->id, 'case_id' => $case_id);
@@ -469,11 +484,17 @@ function _civicrm_api3_document_getlist_output($result, $request) {
 
 function civicrm_api3_document_get($params) {
     
+    if (empty($params['return']))
+    {
+        $params['return'] = _civicrm_api3_document_getfields();
+    }
+    
     $activityIds = array();
     
     $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
     $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
     $caseId = isset($params['case_id']) ? $params['case_id'] : null;
+    $customFields = _civicrm_api3_document_getcustomfields();
     
     if ($assigneeContactId) {
         $result = civicrm_api3('ActivityContact', 'get', array(
@@ -538,6 +559,17 @@ function civicrm_api3_document_get($params) {
             if ($caseActivityResult->fetch())
             {
                 $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
+            }
+            foreach ($customFields as $customFieldKey => $customFieldData) {
+                if (isset($getResult['values'][$key][$customFieldKey])) {
+                    $customFieldValue = $getResult['values'][$key][$customFieldKey];
+                    if ($customFieldData['data_type'] == 'Date') {
+                        $processDate = CRM_Utils_date::processDate($getResult['values'][$key][$customFieldKey]);
+                        $customFieldValue = CRM_Utils_Date::customFormat($processDate, '%Y-%m-%d');
+                    }
+                    unset($getResult['values'][$key][$customFieldKey]);
+                    $getResult['values'][$key][$customFieldData['name']] = $customFieldValue;
+                }
             }
         }
         return $getResult;
@@ -618,6 +650,47 @@ function _civicrm_api3_document_gettypesbycomponent($component, $sequential = 1)
     }
     
     return null;
+}
+
+function _civicrm_api3_document_getfields() {
+    
+    $fields = civicrm_api3('Document', 'getfields');
+    return array_keys(array_merge($fields['values'], _civicrm_api3_document_getcustomfields()));
+}
+
+function _civicrm_api3_document_getcustomfields() {
+    
+    $result = array();
+    
+    $customGroup = civicrm_api3('CustomGroup', 'get', array(
+      'sequential' => 1,
+      'name' => "Activity_Custom_Fields",
+    ));
+    
+    if (empty($customGroup['id'])) {
+        return $result;
+    }
+    
+    $customFields = civicrm_api3('CustomField', 'get', array(
+      'sequential' => 1,
+      'custom_group_id' => $customGroup['id'],
+      'return' => array('id', 'name', 'data_type'),
+    ));
+    
+    foreach ($customFields['values'] as $customField) {
+        $result['custom_' . $customField['id']] = array(
+            'name' => strtolower($customField['name']),
+            'data_type' => $customField['data_type'],
+        );
+    }
+    
+    return $result;
+}
+
+function _civicrm_api3_document_getcustomfieldsflipped() {
+    
+    $customFields = _civicrm_api3_document_getcustomfields();
+    return array_flip(array_map(function($item) { return $item['name']; }, $customFields));
 }
 
 /*
