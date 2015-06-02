@@ -207,6 +207,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
         return TRUE;
     }
+    
+    public function upgrade_0008()
+    {
+        $this->executeCustomDataFile('xml/activity_custom_fields.xml');
+        
+        return TRUE;
+    }
   
     function _installTypes()
     {
