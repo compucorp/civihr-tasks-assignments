@@ -1,15 +1,16 @@
 define(['controllers/controllers',
         'services/contact',
+        'services/dialog',
         'services/task'], function(controllers){
 
     controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
-        '$modal', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, AssignmentService, TaskService, ContactService,
+        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
+        function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
                  data, config){
             $log.debug('Controller: ModalTaskCtrl');
 
             $scope.data = data;
-            $scope.task = {}
+            $scope.task = {};
 
             angular.copy(data,$scope.task);
 
@@ -73,7 +74,7 @@ define(['controllers/controllers',
                 AssignmentService.search(input, $scope.task.case_id).then(function(results){
                     $scope.assignments = results;
                 });
-            }
+            };
 
             $scope.refreshContacts = function(input){
                 if (!input) {
@@ -85,7 +86,7 @@ define(['controllers/controllers',
                 }).then(function(results){
                     $scope.contacts = results;
                 });
-            }
+            };
 
             $scope.dpOpen = function($event){
                 $event.preventDefault();
@@ -93,7 +94,7 @@ define(['controllers/controllers',
 
                 $scope.dpOpened = true;
 
-            }
+            };
 
             $scope.cancel = function(){
 
@@ -102,31 +103,17 @@ define(['controllers/controllers',
                     return
                 }
 
-                var modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/modalDialog.html',
-                    size: 'sm',
-                    controller: 'ModalDialogCtrl',
-                    resolve: {
-                        content: function(){
-                            return {
-                                copyCancel: 'No',
-                                title: 'Alert',
-                                msg: 'Are you sure you want to cancel? Changes will be lost!'
-                            };
+                $dialog.open({
+                    copyCancel: 'No',
+                    msg: 'Are you sure you want to cancel? Changes will be lost!'
+                }).then(function(confirm){
+                        if (!confirm) {
+                            return
                         }
-                    }
-                });
 
-                modalInstance.result.then(function(confirm){
-
-                    if (!confirm) {
-                         return
-                    }
-
-                    $scope.$broadcast('ct-spinner-hide');
-                    $modalInstance.dismiss('cancel');
-                });
+                        $scope.$broadcast('ct-spinner-hide');
+                        $modalInstance.dismiss('cancel');
+                    });
 
             }
 

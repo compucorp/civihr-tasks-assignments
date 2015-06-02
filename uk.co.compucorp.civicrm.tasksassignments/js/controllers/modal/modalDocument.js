@@ -1,14 +1,16 @@
 define(['controllers/controllers',
         'services/contact',
+        'services/dialog',
         'services/document'], function(controllers){
 
     controllers.controller('ModalDocumentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-        'AssignmentService', 'DocumentService', 'ContactService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, DocumentService, ContactService,
+        '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'data', 'config',
+        function($scope, $modalInstance, $rootScope, $q, $log, $filter, $dialog, AssignmentService, DocumentService, ContactService,
                  data, config){
             $log.debug('Controller: ModalDocumentCtrl');
 
-            $scope.document = {}
+            $scope.data = data;
+            $scope.document = {};
 
             angular.copy(data,$scope.document);
 
@@ -72,7 +74,7 @@ define(['controllers/controllers',
                 AssignmentService.search(input, $scope.document.case_id).then(function(results){
                     $scope.assignments = results;
                 });
-            }
+            };
 
             $scope.refreshContacts = function(input){
                 if (!input) {
@@ -84,7 +86,7 @@ define(['controllers/controllers',
                 }).then(function(results){
                     $scope.contacts = results;
                 });
-            }
+            };
 
             $scope.dpOpen = function($event){
                 $event.preventDefault();
@@ -92,11 +94,28 @@ define(['controllers/controllers',
 
                 $scope.dpOpened = true;
 
-            }
+            };
 
             $scope.cancel = function(){
-                $modalInstance.dismiss('cancel');
-            }
+
+                if ($scope.documentForm.$pristine) {
+                    $modalInstance.dismiss('cancel');
+                    return
+                }
+
+                $dialog.open({
+                    copyCancel: 'No',
+                    msg: 'Are you sure you want to cancel? Changes will be lost!'
+                }).then(function(confirm){
+                    if (!confirm) {
+                        return
+                    }
+
+                    $scope.$broadcast('ct-spinner-hide');
+                    $modalInstance.dismiss('cancel');
+                });
+
+            };
 
             $scope.confirm = function(){
                 console.log($scope.document);

@@ -1,12 +1,13 @@
 define(['controllers/controllers',
         'moment',
         'services/contact',
+        'services/dialog',
         'services/task',
         'services/assignment'], function(controllers, moment){
 
-    controllers.controller('TaskListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
+    controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
         '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
-        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, taskList, config, ContactService,
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, taskList, config, ContactService,
                  AssignmentService, TaskService){
             $log.debug('Controller: TaskListCtrl');
 
@@ -184,29 +185,18 @@ define(['controllers/controllers',
 
             $scope.deleteTask = function(task){
 
-                var modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/modalDialog.html',
-                    size: 'sm',
-                    controller: 'ModalDialogCtrl',
-                    resolve: {
-                        content: function(){
-                            return {
-                                msg: 'Are you sure you want to delete this task?'
-                            };
+                $dialog.open({
+                    msg: 'Are you sure you want to delete this task?'
+                }).then(function(confirm){
+                        if (!confirm) {
+                            return
                         }
-                    }
-                });
 
-                modalInstance.result.then(function(confirm){
-                    if (!confirm) {
-                        return
-                    }
-
-                    TaskService.delete(task.id).then(function(results){
-                        $scope.taskList.splice($scope.taskList.indexOf(task),1);
+                        TaskService.delete(task.id).then(function(results){
+                            $scope.taskList.splice($scope.taskList.indexOf(task),1);
+                        });
                     });
-                });
+
             }
 
             $scope.$on('crmFormSuccess',function(e, data){
