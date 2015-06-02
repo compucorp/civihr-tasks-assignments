@@ -97,9 +97,6 @@ class CRM_Tasksassignments_Reminder
         foreach ($recipients as $recipient)
         {
             $contactId = $emailToContactId[$recipient];
-            //echo 'sending to : ' . $recipient . "\n";
-            //$recipient = 'tristan992@gmail.com';
-
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
