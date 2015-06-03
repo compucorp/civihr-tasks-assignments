@@ -198,9 +198,12 @@ define(['controllers/controllers',
                 return
             }
 
-            console.log($scope.task);
-
             $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
+
+                if (!$scope.task.create) {
+                    return
+                }
+
                 if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {
                     $scope.task.activity_date_time = assignmentDueDate;
                 }
