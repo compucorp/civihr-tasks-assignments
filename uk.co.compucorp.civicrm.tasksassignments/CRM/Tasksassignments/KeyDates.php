@@ -8,6 +8,7 @@ class CRM_Tasksassignments_KeyDates
             'civicrm_hrjobcontract_details',
             'civicrm_contact',
             'civicrm_value_job_summary_10',
+            'civicrm_value_probation_12',
         ));
         $result = array();
         
@@ -184,6 +185,15 @@ class CRM_Tasksassignments_KeyDates
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE final_termination_date_57 IS NOT NULL
             " . self::_buildWhereDateRange('final_termination_date_57', $startDate, $endDate)
+              . self::_buildWhereContactId('entity_id', $contactId);
+        }
+        if ($tableExists['civicrm_value_probation_12'])
+        {
+            $queries[] = "
+                SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(probation_end_date) as keydate, 'probation_end_date' as type FROM civicrm_value_probation_12 vp
+                LEFT JOIN civicrm_contact c ON vp.entity_id = c.id
+                WHERE probation_end_date IS NOT NULL
+            " . self::_buildWhereDateRange('probation_end_date', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
         }
         
