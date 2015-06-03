@@ -27,6 +27,10 @@ define(['controllers/controllers',
 
             }
 
+            $scope.removeTask = function(index){
+                $scope.taskList.splice(index, 1);
+            };
+
             $scope.dpOpen = function($event, key){
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -191,16 +195,27 @@ define(['controllers/controllers',
             $scope.task.status_id = '1';
             $scope.task.activity_type_id = taskType ? taskType.key : null;
             $scope.task.assignee_contact_id = [];
-            $scope.task.target_contact_id = [$scope.$parent.assignment.contact_id];
             $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
 
             if ($scope.isDisabled) {
                 return
             }
 
-            console.log($scope.task);
+            $scope.$watch('$parent.assignment.contact_id',function(targetContactId){
+
+                if (!targetContactId) {
+                    return
+                }
+
+                $scope.task.target_contact_id = [targetContactId];
+            });
 
             $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
+
+                if (!$scope.task.create) {
+                    return
+                }
+
                 if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {
                     $scope.task.activity_date_time = assignmentDueDate;
                 }

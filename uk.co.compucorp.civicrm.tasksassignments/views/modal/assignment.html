@@ -86,10 +86,10 @@
                 </div>
                 <div class="row" ng-repeat="task in taskList" ng-controller="ModalAssignmentTaskCtrl">
                     <div class="col-xs-10">
-                        <div class="form-group" ng-class="{required: !isDisabled}">
+                        <div class="form-group" ng-class="{required: !isDisabled && task.create}">
                             <div class="checkbox col-xs-12 col-sm-4" ng-if="!task.isAdded">
                                 <label>
-                                    <input type="checkbox" ng-model="task.create" ng-disabled="isDisabled"> {{task.name}}
+                                    <input type="checkbox" ng-model="task.create" ng-change="!task.create && (task.assignee_contact_id = undefined) || (task.activity_date_time = undefined);" ng-disabled="isDisabled"> {{task.name}}
                                 </label>
                             </div>
                             <div class="col-xs-8 col-sm-4" ng-if="task.isAdded">
@@ -111,8 +111,8 @@
                                 <div class="input-group">
                                     <ui-select allow-clear
                                                ng-model="task.assignee_contact_id[0]"
-                                               ng-disabled="isDisabled"
-                                               ng-required="!isDisabled"
+                                               ng-disabled="isDisabled || !task.create"
+                                               ng-required="!isDisabled && task.create"
                                                on-select="cacheContact($item)">
                                         <ui-select-match
                                                 placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
@@ -125,7 +125,7 @@
                                     </ui-select>
                                     <span class="input-group-btn">
                                       <a ng-click="task.assignee_contact_id = ''"
-                                         ng-disabled="isDisabled"
+                                         ng-disabled="isDisabled || !task.create"
                                          class="btn btn-default">
                                           <span class="fa fa-remove"></span>
                                       </a>
@@ -135,16 +135,21 @@
                         </div>
                     </div>
                     <div class="col-xs-2">
-                        <div class="form-group">
-                            <label for="{{prefix}}assignment-task-due-{{$index}}" class="col-xs-12 control-label">
+                        <div class="input-group">
+                            <label for="{{prefix}}assignment-task-due-{{$index}}" class="control-label">
                                 <a href="" class="text-normal"
                                    ng-model="task.activity_date_time"
                                    is-open="dpOpened[$index]"
                                    datepicker-popup
                                    ng-change="setAssignmentDueDate(task.activity_date_time)"
-                                   ng-click="!isDisabled ? dpOpen($event, $index) : return;"
-                                   ng-disabled="isDisabled">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                                   ng-click="!isDisabled && task.create ? dpOpen($event, $index) : return;"
+                                   ng-disabled="isDisabled || !task.create">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                             <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.activity_date_time" name="assignmentDue">
+                            <span class="input-group-btn" ng-if="task.isAdded">
+                                <a class="btn btn-default btn-danger" ng-click="removeTask($index)">
+                                    <span class="fa fa-remove" aria-hidden="true"></span>
+                                </a>
+                            </span>
                         </div>
                     </div>
                 </div>
