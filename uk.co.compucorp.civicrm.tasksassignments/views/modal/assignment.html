@@ -135,8 +135,8 @@
                         </div>
                     </div>
                     <div class="col-xs-2">
-                        <div class="form-group">
-                            <label for="{{prefix}}assignment-task-due-{{$index}}" class="col-xs-12 control-label">
+                        <div class="input-group">
+                            <label for="{{prefix}}assignment-task-due-{{$index}}" class="control-label">
                                 <a href="" class="text-normal"
                                    ng-model="task.activity_date_time"
                                    is-open="dpOpened[$index]"
@@ -145,6 +145,11 @@
                                    ng-click="!isDisabled && task.create ? dpOpen($event, $index) : return;"
                                    ng-disabled="isDisabled || !task.create">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
                             <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.activity_date_time" name="assignmentDue">
+                            <span class="input-group-btn" ng-if="task.isAdded">
+                                <a class="btn btn-default btn-danger" ng-click="removeTask($index)">
+                                    <span class="fa fa-remove" aria-hidden="true"></span>
+                                </a>
+                            </span>
                         </div>
                     </div>
                 </div>
