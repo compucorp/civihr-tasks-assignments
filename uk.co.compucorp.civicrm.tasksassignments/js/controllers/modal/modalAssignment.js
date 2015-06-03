@@ -184,6 +184,8 @@ define(['controllers/controllers',
 
             var taskType = $scope.task.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: $scope.task.name }, true)[0] : '';
 
+
+
             $scope.isDisabled = !taskType && !$scope.task.isAdded;
             $scope.task.create = !$scope.isDisabled;
             $scope.task.status_id = '1';
@@ -195,6 +197,8 @@ define(['controllers/controllers',
             if ($scope.isDisabled) {
                 return
             }
+
+            console.log($scope.task);
 
             $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
                 if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {

@@ -12289,6 +12289,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   background-color: #586277;
   position: relative;
   z-index: 99;
+  overflow: hidden;
 }
 /* line 7, ../sass/civitasks/partials/_breadcrumb.scss */
 #civitasks .ct-top-bar .btn-group, #cividocuments .ct-top-bar .btn-group {

@@ -36,7 +36,9 @@
                     }"
                     ng-if="!task.resolved"
                     ng-include
-                    src="'task.html'">
+                    src="'task.html'"
+                    ct-spinner
+                    ct-spinner-id="task{{task.id}}">
                 </li>
             </ul>
             <h4 class="header-bar header-bar-danger">Resolved:</h4>
@@ -46,7 +48,8 @@
                     ng-class="'{{prefix}}task-resolved'"
                     ng-if="task.resolved"
                     ng-include
-                    src="'task.html'">
+                    src="'task.html'"
+                    ct-spinner>
                 </li>
             </ul>
         </div>
@@ -57,7 +60,7 @@
     <header class="row">
         <div class="col-xs-6">
             <input type="checkbox"
-                   ng-change="changeStatus(2)"
+                   ng-change="changeStatus(task, 2)"
                    ng-disabled="task.completed"
                    ng-model="task.completed"
                    class="{{prefix}}task-checkbox"
@@ -74,7 +77,7 @@
                         <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
                         <ul class="dropdown-menu pull-right">
                             <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>
-                            <li><a href ng-click="modalReminder(task)"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+                            <li><a href ng-click="modalReminder(task);"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
                             <li><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
                         </ul>
                     </div>
