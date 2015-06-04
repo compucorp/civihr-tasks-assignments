@@ -268,6 +268,7 @@ define(['controllers/controllers',
 
                     DocumentService.delete(document.id).then(function(results){
                         $scope.documentList.splice($scope.documentList.indexOf(document),1);
+                        $scope.checklist.selected.splice($scope.checklist.selected.indexOf(document),1);
                     });
                 });
 
