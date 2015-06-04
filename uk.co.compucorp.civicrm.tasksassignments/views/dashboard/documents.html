@@ -149,18 +149,10 @@
                                 <label class="col-xs-12 col-sm-2 control-label">Action:</label>
                                 <div class="col-xs-12 col-sm-10">
                                     <div class="input-group">
-                                        <ui-select
-                                                allow-clear
-                                                ng-model="action"
-                                                ng-disabled="true">
-                                            <ui-select-match
-                                                    placeholder="Select action">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices  repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
-                                                                refresh-delay="0">
-                                                <div ng-bind="contact.label"></div>
-                                                <small ng-bind="contact.description[0]"></small>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <select class="form-control" ng-model="action">
+                                            <option value="">SELECT ACTION</option>
+                                            <option value="delete">Delete</option>
+                                        </select>
                                         <span class="input-group-btn">
                                           <a ng-click="filterParams.contactId = ''" class="btn btn-default" disabled>
                                               <span class="fa fa-remove"></span>

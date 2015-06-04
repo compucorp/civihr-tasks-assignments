@@ -175,7 +175,9 @@ define(['controllers/controllers',
                         data: function(){
                             return data;
                         },
-                        type: {}
+                        type: function(){
+                            return 'document'
+                        }
                     }
                 });
             };

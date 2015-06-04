@@ -74,6 +74,7 @@ define(['controllers/controllers',
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
             $scope.taskList = taskList;
+            $scope.taskListLimit = 5;
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -229,6 +230,10 @@ define(['controllers/controllers',
                     }
                 }
             });
+
+            $scope.test = function(val) {
+                console.log(val);
+            }
 
             this.init();
 
