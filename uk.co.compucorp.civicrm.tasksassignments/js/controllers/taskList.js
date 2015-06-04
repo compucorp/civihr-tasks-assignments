@@ -74,6 +74,7 @@ define(['controllers/controllers',
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
             $scope.taskList = taskList;
+            $scope.taskListFiltered = [];
             $scope.taskListLimit = 5;
 
             $scope.dpOpened = {

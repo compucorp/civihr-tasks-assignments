@@ -114,11 +114,11 @@
                                                 <small ng-bind="contact.description[0]"></small>
                                             </ui-select-choices>
                                         </ui-select>
-                                <span class="input-group-btn">
-                                  <a ng-click="filterParams.contactId = ''" class="btn btn-default">
-                                      <span class="fa fa-remove"></span>
-                                  </a>
-                                </span>
+                                        <span class="input-group-btn">
+                                          <a ng-click="filterParams.contactId = ''" class="btn btn-default">
+                                              <span class="fa fa-remove"></span>
+                                          </a>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -154,8 +154,8 @@
                                             <option value="delete">Delete</option>
                                         </select>
                                         <span class="input-group-btn">
-                                          <a ng-click="filterParams.contactId = ''" class="btn btn-default" disabled>
-                                              <span class="fa fa-remove"></span>
+                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentList : checklist.selected))" class="btn btn-default">
+                                              Apply
                                           </a>
                                         </span>
                                     </div>
@@ -164,10 +164,10 @@
                         </div>
                         <div class="col-xs-5 col-xs-offset-1">
                             <label class="radio-inline">
-                                <input type="radio" name="actionApplyTo" disabled> All 36 Docs
+                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentList.length}} Docs
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="actionApplyTo" disabled> 3 Selected Docs Only
+                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected.length}} Selected Docs Only
                             </label>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
             <table class="table table-striped {{prefix}}table-documents">
                 <thead>
                     <tr>
-                        <th class="{{prefix}}col-select"><input type="checkbox" name="selectDocumentAll" disabled></th>
+                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll" ng-change="toggleAll();"></th>
                         <th>Type</th>
                         <th>Contact</th>
                         <th>Assignment</th>
@@ -225,7 +225,7 @@
 </div>
 
 <script type="text/ng-template" id="document.html">
-    <td class="{{prefix}}col-select"><input type="checkbox" name="selectDocument1" disabled></td>
+    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected" checklist-value="document"></td>
     <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
     <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
     <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
