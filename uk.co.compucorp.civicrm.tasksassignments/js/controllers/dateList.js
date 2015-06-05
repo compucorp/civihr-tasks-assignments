@@ -42,6 +42,7 @@ define(['controllers/controllers',
 
             $scope.dataLoading = true;
             $scope.dateList = [];
+            $scope.dateListLimit = 5;
             $scope.dateListSelected = [];
 
             $scope.dpOpened = {
@@ -85,6 +86,7 @@ define(['controllers/controllers',
 
             $scope.showDateRange = function(from, until){
                 $scope.$broadcast('ct-spinner-show','dateList');
+
                 KeyDateService.get(moment(from),moment(until)).then(function(contactList){
                         $scope.dateListSelected = this.createDateList(contactList);
                         $scope.filterParams.date = 'dateRange';

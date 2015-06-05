@@ -18,8 +18,10 @@ define(['controllers/controllers',
             $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
             $scope.contacts = $rootScope.cache.contact.arrSearch;
-            $scope.assignments = $rootScope.cache.assignment.arrSearch;
             $scope.showCId = !config.CONTACT_ID;
+            $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val){
+                return +val.extra.contact_id == +$scope.task.target_contact_id;
+            });
 
             $scope.cacheAssignment = function($item){
 
@@ -67,12 +69,17 @@ define(['controllers/controllers',
             };
 
             $scope.refreshAssignments = function(input){
+
                 if (!input) {
                     return
                 }
 
+                var targetContactId = $scope.task.target_contact_id;
+
                 AssignmentService.search(input, $scope.task.case_id).then(function(results){
-                    $scope.assignments = results;
+                    $scope.assignments = $filter('filter')(results, function(val){
+                        return +val.extra.contact_id == +targetContactId;
+                    });
                 });
             };
 

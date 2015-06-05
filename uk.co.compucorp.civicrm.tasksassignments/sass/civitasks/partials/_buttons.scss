@@ -9,3 +9,13 @@
     color: $brand-primary;
   }
 }
+
+.#{$prefix}btn-list-expand {
+  @include box-shadow($box-shadow-global);
+  background-color: $btn-default-bg;
+  border: 0 none;
+  color: $btn-default-color;
+  max-width: 119px;
+  margin: 28px auto 13px;
+  padding: 9px 12px;
+}

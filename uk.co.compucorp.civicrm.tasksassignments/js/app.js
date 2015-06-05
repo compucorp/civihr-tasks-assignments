@@ -1,5 +1,15 @@
-define(['moment', 'crmUi','angularBootstrapCalendar', 'angularSelect', 'textAngular', 'config', 'controllers/controllers', 'directives/directives',
-    'filters/filters', 'services/services'], function(moment){
+define([
+    'moment',
+    'crmUi',
+    'angularBootstrapCalendar',
+    'angularChecklistModel',
+    'angularSelect',
+    'textAngular',
+    'config',
+    'controllers/controllers',
+    'directives/directives',
+    'filters/filters',
+    'services/services'], function(moment){
 
     angular.module('civitasks.run',[
         'ngRoute',
@@ -10,6 +20,7 @@ define(['moment', 'crmUi','angularBootstrapCalendar', 'angularSelect', 'textAngu
         'mwl.calendar',
         'textAngular',
         'crmUi',
+        'checklist-model',
         'civitasks.config',
         'civitasks.controllers',
         'civitasks.directives',

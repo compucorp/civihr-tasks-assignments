@@ -81,17 +81,17 @@
                     </div>
                 </div>
             </div>
-            <ul class="{{prefix}}list-key-dates" ng-if="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
+            <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
                 <li
-                        ng-repeat="dateObj in dateList | filterBy.date:filterParams.date | filterBy.dateType:filterParams.dateType"
+                        ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterBy.date:filterParams.date | filterBy.dateType:filterParams.dateType) | limitTo: dateListLimit)"
                         ng-include
                         src="'key-date.html'"
                         class="panel panel-light panel-secondary">
                 </li>
             </ul>
-            <ul class="{{prefix}}list-key-dates" ng-if="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
+            <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
                 <li
-                        ng-repeat="dateObj in dateListSelected | filterBy.dateType:filterParams.dateType"
+                        ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterBy.dateType:filterParams.dateType) | limitTo: dateListLimit)"
                         ng-include
                         src="'key-date.html'"
                         class="panel panel-light panel-secondary">
@@ -99,6 +99,9 @@
             </ul>
         </div>
     </div>
+</div>
+<div class="row" ng-show="dateListUnlimited.length > dateListFiltered.length || dateListSelectedUnlimited.length > dateListSelectedFiltered.length">
+    <div class="col-xs-12 col-sm-4 col-md-2 col-sm-offset-4 col-md-offset-5"><a href class="btn {{prefix}}btn-list-expand btn-block" ng-click="dateListLimit = dateListLimit+5">Show more</a></div>
 </div>
 
 <script type="text/ng-template" id="key-date.html">

@@ -114,11 +114,11 @@
                                                 <small ng-bind="contact.description[0]"></small>
                                             </ui-select-choices>
                                         </ui-select>
-                                <span class="input-group-btn">
-                                  <a ng-click="filterParams.contactId = ''" class="btn btn-default">
-                                      <span class="fa fa-remove"></span>
-                                  </a>
-                                </span>
+                                        <span class="input-group-btn">
+                                          <a ng-click="filterParams.contactId = ''" class="btn btn-default">
+                                              <span class="fa fa-remove"></span>
+                                          </a>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -149,21 +149,13 @@
                                 <label class="col-xs-12 col-sm-2 control-label">Action:</label>
                                 <div class="col-xs-12 col-sm-10">
                                     <div class="input-group">
-                                        <ui-select
-                                                allow-clear
-                                                ng-model="action"
-                                                ng-disabled="true">
-                                            <ui-select-match
-                                                    placeholder="Select action">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices  repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
-                                                                refresh-delay="0">
-                                                <div ng-bind="contact.label"></div>
-                                                <small ng-bind="contact.description[0]"></small>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <select class="form-control" ng-model="action">
+                                            <option value="">SELECT ACTION</option>
+                                            <option value="delete">Delete</option>
+                                        </select>
                                         <span class="input-group-btn">
-                                          <a ng-click="filterParams.contactId = ''" class="btn btn-default" disabled>
-                                              <span class="fa fa-remove"></span>
+                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentList : checklist.selected))" class="btn btn-default">
+                                              Apply
                                           </a>
                                         </span>
                                     </div>
@@ -172,10 +164,10 @@
                         </div>
                         <div class="col-xs-5 col-xs-offset-1">
                             <label class="radio-inline">
-                                <input type="radio" name="actionApplyTo" disabled> All 36 Docs
+                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentList.length}} Docs
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="actionApplyTo" disabled> 3 Selected Docs Only
+                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected.length}} Selected Docs Only
                             </label>
                         </div>
                     </div>
@@ -186,7 +178,7 @@
             <table class="table table-striped {{prefix}}table-documents">
                 <thead>
                     <tr>
-                        <th class="{{prefix}}col-select"><input type="checkbox" name="selectDocumentAll" disabled></th>
+                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll" ng-change="toggleAll();"></th>
                         <th>Type</th>
                         <th>Contact</th>
                         <th>Assignment</th>
@@ -233,7 +225,7 @@
 </div>
 
 <script type="text/ng-template" id="document.html">
-    <td class="{{prefix}}col-select"><input type="checkbox" name="selectDocument1" disabled></td>
+    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected" checklist-value="document"></td>
     <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
     <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
     <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>

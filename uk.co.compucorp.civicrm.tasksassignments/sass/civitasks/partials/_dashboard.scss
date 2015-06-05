@@ -16,8 +16,6 @@
   }
 
   .#{$prefix}container-inner {
-    background-color: $brand-secondary;
-
     &:before,
     &:after {
       content: " ";
@@ -26,6 +24,12 @@
 
     &:after {
       clear: both;
+    }
+  }
+
+  .#{$prefix}sidebar-inner {
+    + .#{$prefix}content-wrapper {
+      background-color: $brand-secondary;
     }
   }
 

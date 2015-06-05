@@ -68,12 +68,15 @@
 
   .dropdown {
     float: right;
-    width: 10%;
-    display: inline-block;
+    width: 30px;
   }
 
   .#{$prefix}context-menu-toggle  {
     margin-right: -9px;
+  }
+
+  .#{$prefix}assignment-type, {
+    padding-right: 10px;
   }
 
   .#{$prefix}assignment-type,
@@ -90,13 +93,6 @@
     margin-right: 4px;
     float: left;
     margin-top: 2px;
-  }
-
-  .#{$prefix}task-contact-assignee {
-    padding-left: 10px;
-    word-break: break-word;
-    width: 90%;
-    display: inline-block;
   }
 
   .#{$prefix}task-contact-source {
