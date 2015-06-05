@@ -329,6 +329,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             ),
         );
 
+        $previousActivity = 'Open Case';
         foreach ($types as $type)
         {
             $activityTypes[] = array(
@@ -338,10 +339,11 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             $activitySets[0]['activityTypes'][] = array(
                 'name' => $type,
                 'status' => 'Scheduled',
-                //'reference_activity' => '',
-                //'reference_offset' => 1,
-                //'reference_select' => 'newest',
+                'reference_activity' => $previousActivity,
+                'reference_offset' => 1,
+                'reference_select' => 'newest',
             );
+            $previousActivity = $type;
         }
 
         $result = civicrm_api3('CaseType', 'create', array(
