@@ -72,8 +72,8 @@
                                 <label for="{{prefix}}assignment-task-list" class="col-xs-12 col-sm-4 control-label">Select a task list:</label>
                                 <div class="col-xs-12 col-sm-8">
                                     <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
-                                            ng-model="taskSet"
-                                            ng-options="taskSet.label for taskSet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
+                                            ng-model="activitySet"
+                                            ng-options="activitySet.label for activitySet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
                                             ng-disabled="!taskList.length"
                                             class="form-control">
                                     </select>
@@ -81,84 +81,165 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <h4>Tasks:</h4>
-                </div>
-                <div class="row" ng-repeat="task in taskList" ng-controller="ModalAssignmentTaskCtrl">
-                    <div class="col-xs-10">
-                        <div class="form-group" ng-class="{required: !isDisabled && task.create}">
-                            <div class="checkbox col-xs-12 col-sm-4" ng-if="!task.isAdded">
-                                <label>
-                                    <input type="checkbox" ng-model="task.create" ng-change="!task.create && (task.assignee_contact_id = undefined) || (task.activity_date_time = undefined);" ng-disabled="isDisabled"> {{task.name}}
-                                </label>
-                            </div>
-                            <div class="col-xs-8 col-sm-4" ng-if="task.isAdded">
-                                <div class="ui-select-required">
-                                    <ui-select
-                                            ng-model="task.activity_type_id"
-                                            ng-required="true">
-                                        <ui-select-match
-                                                placeholder="Select task type">{{$select.selected.value}}</ui-select-match>
-                                        <ui-select-choices
-                                                repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                                            <div ng-bind="type.value"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-                            <label class="col-xs-12 col-sm-2 control-label">Assigned to:</label>
-                            <div class="col-xs-6 col-sm-6">
-                                <div class="input-group">
-                                    <ui-select allow-clear
-                                               ng-model="task.assignee_contact_id[0]"
-                                               ng-disabled="isDisabled || !task.create"
-                                               ng-required="!isDisabled && task.create"
-                                               on-select="cacheContact($item)">
-                                        <ui-select-match
-                                                placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                                        <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                                            refresh="refreshContacts($select.search)"
-                                                            refresh-delay="0">
-                                            <div ng-bind="contact.label"></div>
-                                            <small ng-bind="contact.description[0]"></small>
-                                        </ui-select-choices>
-                                    </ui-select>
+                    <div ng-show="taskList.length">
+                        <hr>
+                        <h4>Tasks:</h4>
+                        <div class="row" ng-repeat="activity in taskList" ng-controller="ModalAssignmentActivityCtrl">
+                            <div class="col-xs-10">
+                                <div class="form-group" ng-class="{required: !isDisabled && activity.create}">
+                                    <div class="checkbox col-xs-12 col-sm-4" ng-if="!activity.isAdded">
+                                        <label>
+                                            <input type="checkbox" ng-model="activity.create" ng-change="!activity.create && (activity.assignee_contact_id = undefined) || (activity.activity_date_time = undefined);" ng-disabled="isDisabled"> {{activity.name}}
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-8 col-sm-4" ng-if="activity.isAdded">
+                                        <div class="ui-select-required">
+                                            <ui-select
+                                                    ng-model="activity.activity_type_id"
+                                                    ng-required="true">
+                                                <ui-select-match
+                                                        placeholder="Select task type">{{$select.selected.value}}</ui-select-match>
+                                                <ui-select-choices
+                                                        repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                                                    <div ng-bind="type.value"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <label class="col-xs-12 col-sm-2 control-label">Assigned to:</label>
+                                    <div class="col-xs-6 col-sm-6">
+                                        <div class="input-group">
+                                            <ui-select allow-clear
+                                                       ng-model="activity.assignee_contact_id[0]"
+                                                       ng-disabled="isDisabled || !activity.create"
+                                                       ng-required="!isDisabled && activity.create"
+                                                       on-select="cacheContact($item)">
+                                                <ui-select-match
+                                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                                                    refresh="refreshContacts($select.search)"
+                                                                    refresh-delay="0">
+                                                    <div ng-bind="contact.label"></div>
+                                                    <small ng-bind="contact.description[0]"></small>
+                                                </ui-select-choices>
+                                            </ui-select>
                                     <span class="input-group-btn">
-                                      <a ng-click="task.assignee_contact_id = ''"
-                                         ng-disabled="isDisabled || !task.create"
+                                      <a ng-click="activity.assignee_contact_id = ''"
+                                         ng-disabled="isDisabled || !activity.create"
                                          class="btn btn-default">
                                           <span class="fa fa-remove"></span>
                                       </a>
                                     </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-2">
-                        <div class="input-group">
-                            <label for="{{prefix}}assignment-task-due-{{$index}}" class="control-label">
-                                <a href="" class="text-normal"
-                                   ng-model="task.activity_date_time"
-                                   is-open="dpOpened[$index]"
-                                   datepicker-popup
-                                   ng-change="setAssignmentDueDate(task.activity_date_time)"
-                                   ng-click="!isDisabled && task.create ? dpOpen($event, $index) : return;"
-                                   ng-disabled="isDisabled || !task.create">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                            <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="task.activity_date_time" name="assignmentDue">
-                            <span class="input-group-btn" ng-if="task.isAdded">
-                                <a class="btn btn-default btn-danger" ng-click="removeTask($index)">
+                            <div class="col-xs-2">
+                                <div class="input-group">
+                                    <label for="{{prefix}}assignment-task-due-{{$index}}" class="control-label">
+                                        <a href="" class="text-normal"
+                                           ng-model="activity.activity_date_time"
+                                           is-open="dpOpened['task'+$index]"
+                                           datepicker-popup
+                                           ng-change="setAssignmentDueDate(activity.activity_date_time)"
+                                           ng-click="!isDisabled && activity.create ? dpOpen($event, 'task'+$index) : return;"
+                                           ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                                    <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue">
+                            <span class="input-group-btn" ng-if="activity.isAdded">
+                                <a class="btn btn-default btn-danger" ng-click="removeActivity(taskList, $index)">
                                     <span class="fa fa-remove" aria-hidden="true"></span>
                                 </a>
                             </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="taskList.length">
+                            <div class="col-xs-12">
+                                <a href class="btn btn-default btn-primary" ng-click="addActivity(taskList)">
+                                    <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a task
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="form-group" ng-show="taskList.length">
-                    <div class="col-xs-12">
-                        <a href class="btn btn-default btn-primary" ng-click="addTask()">
-                            <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a task
-                        </a>
+                    <div ng-show="documentList.length">
+                        <hr>
+                        <h4>Documents:</h4>
+                        <div class="row" ng-repeat="activity in documentList" ng-controller="ModalAssignmentActivityCtrl">
+                            <div class="col-xs-10">
+                                <div class="form-group" ng-class="{required: !isDisabled && activity.create}">
+                                    <div class="checkbox col-xs-12 col-sm-4" ng-if="!activity.isAdded">
+                                        <label>
+                                            <input type="checkbox" ng-model="activity.create" ng-change="!activity.create && (activity.assignee_contact_id = undefined) || (activity.activity_date_time = undefined);" ng-disabled="isDisabled"> {{activity.name}}
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-8 col-sm-4" ng-if="activity.isAdded">
+                                        <div class="ui-select-required">
+                                            <ui-select
+                                                    ng-model="activity.activity_type_id"
+                                                    ng-required="true">
+                                                <ui-select-match
+                                                        placeholder="Select document type">{{$select.selected.value}}</ui-select-match>
+                                                <ui-select-choices
+                                                        repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+                                                    <div ng-bind="type.value"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <label class="col-xs-12 col-sm-2 control-label">Assigned to:</label>
+                                    <div class="col-xs-6 col-sm-6">
+                                        <div class="input-group">
+                                            <ui-select allow-clear
+                                                       ng-model="activity.assignee_contact_id[0]"
+                                                       ng-disabled="isDisabled || !activity.create"
+                                                       ng-required="!isDisabled && activity.create"
+                                                       on-select="cacheContact($item)">
+                                                <ui-select-match
+                                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                                                    refresh="refreshContacts($select.search)"
+                                                                    refresh-delay="0">
+                                                    <div ng-bind="contact.label"></div>
+                                                    <small ng-bind="contact.description[0]"></small>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                    <span class="input-group-btn">
+                                      <a ng-click="activity.assignee_contact_id = ''"
+                                         ng-disabled="isDisabled || !activity.create"
+                                         class="btn btn-default">
+                                          <span class="fa fa-remove"></span>
+                                      </a>
+                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="input-group">
+                                    <label for="{{prefix}}assignment-doc-due-{{$index}}" class="control-label">
+                                        <a href="" class="text-normal"
+                                           ng-model="activity.activity_date_time"
+                                           is-open="dpOpened['doc'+$index]"
+                                           datepicker-popup
+                                           ng-change="setAssignmentDueDate(activity.activity_date_time)"
+                                           ng-click="!isDisabled && activity.create ? dpOpen($event, 'doc'+$index) : return;"
+                                           ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
+                                    <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-doc-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue">
+                            <span class="input-group-btn" ng-if="activity.isAdded">
+                                <a class="btn btn-default btn-danger" ng-click="removeActivity(documentList, $index)">
+                                    <span class="fa fa-remove" aria-hidden="true"></span>
+                                </a>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="documentList.length">
+                            <div class="col-xs-12">
+                                <a href class="btn btn-default btn-primary" ng-click="addActivity(documentList)">
+                                    <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a document
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
