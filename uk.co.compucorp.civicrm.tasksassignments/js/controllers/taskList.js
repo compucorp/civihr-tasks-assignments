@@ -217,7 +217,7 @@ define(['controllers/controllers',
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {
-                    var pattern = /case|activity/i;
+                    var pattern = /case|activity|assignment/i;
 
                     if (pattern.test(data.title) ||
                         data.crmMessages.length &&
