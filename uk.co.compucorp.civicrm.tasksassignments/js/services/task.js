@@ -24,6 +24,10 @@ define(['services/services',
                     return null;
                 }
 
+                if (!taskArr.length) {
+                    return taskArr;
+                }
+
                 var deferred = $q.defer();
 
                 Task.save({
@@ -167,6 +171,10 @@ define(['services/services',
 
                 if (!taskArr || !angular.isArray(taskArr)) {
                     return null;
+                }
+
+                if (!taskArr.length) {
+                    return taskArr;
                 }
 
                 var deferred = $q.defer();

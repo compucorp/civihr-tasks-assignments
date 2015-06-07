@@ -250,7 +250,7 @@ define(['controllers/controllers',
                     });
 
                 modalInstance.result.then(function(results){
-                    Array.prototype.push.apply($scope.documentList,results);
+                    Array.prototype.push.apply($scope.documentList,results.documentList);
                 }, function(){
                     $log.info('Modal dismissed');
                 });
