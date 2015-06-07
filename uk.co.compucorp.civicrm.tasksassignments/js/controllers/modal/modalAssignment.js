@@ -214,6 +214,11 @@ define(['controllers/controllers',
                         return $q.reject();
                     });
 
+                }, function (reason) {
+                    CRM.alert(reason, 'Error', 'error');
+                    $modalInstance.dismiss();
+                    $scope.$broadcast('ct-spinner-hide');
+                    return $q.reject();
                 });
 
             }

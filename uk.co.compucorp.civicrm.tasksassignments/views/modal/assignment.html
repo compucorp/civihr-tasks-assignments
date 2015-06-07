@@ -81,7 +81,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="taskList.length">
+                    <div ng-show="activitySet">
                         <hr>
                         <h4>Tasks:</h4>
                         <div class="row" ng-repeat="activity in taskList" ng-controller="ModalAssignmentActivityCtrl">
@@ -153,7 +153,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" ng-show="taskList.length">
+                        <div class="form-group">
                             <div class="col-xs-12">
                                 <a href class="btn btn-default btn-primary" ng-click="addActivity(taskList)">
                                     <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a task
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="documentList.length">
+                    <div ng-show="activitySet">
                         <hr>
                         <h4>Documents:</h4>
                         <div class="row" ng-repeat="activity in documentList" ng-controller="ModalAssignmentActivityCtrl">
@@ -233,7 +233,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" ng-show="documentList.length">
+                        <div class="form-group">
                             <div class="col-xs-12">
                                 <a href class="btn btn-default btn-primary" ng-click="addActivity(documentList)">
                                     <span class="fa fa-plus-circle" aria-hidden="true"></span> Add a document
