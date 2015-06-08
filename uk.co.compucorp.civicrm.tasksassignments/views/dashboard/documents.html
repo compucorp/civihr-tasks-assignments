@@ -154,7 +154,7 @@
                                             <option value="delete">Delete</option>
                                         </select>
                                         <span class="input-group-btn">
-                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentList : checklist.selected))" class="btn btn-default">
+                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentListOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
                                               Apply
                                           </a>
                                         </span>
@@ -167,7 +167,7 @@
                                 <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentListFiltered.length}} Docs
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected.length}} Selected Docs Only
+                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
                             </label>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
             <table class="table table-striped {{prefix}}table-documents">
                 <thead>
                     <tr>
-                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll" ng-change="toggleAll();"></th>
+                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
                         <th>Type</th>
                         <th>Contact</th>
                         <th>Assignment</th>
@@ -217,7 +217,7 @@
 </div>
 
 <script type="text/ng-template" id="document.html">
-    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected" checklist-value="document"></td>
+    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected[pagination.currentPage]" checklist-value="document"></td>
     <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
     <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
     <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>

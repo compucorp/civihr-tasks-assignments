@@ -87,8 +87,8 @@ define(['controllers/controllers',
             $scope.actionApplyTo = 'selected';
 
             $scope.checklist = {
-                selected: [],
-                isCheckedAll: false
+                selected: {},
+                isCheckedAll: {}
             };
 
             $scope.dpOpened = {
@@ -161,7 +161,8 @@ define(['controllers/controllers',
                                 for (; i < documentListLen; i++) {
                                     $scope.documentList.splice($scope.documentList.indexOf(documentList[i]),1);
                                 }
-                                $scope.checklist.selected = [];
+                                $scope.checklist.isCheckedAll = {};
+                                $scope.checklist.selected = {};
                                 $scope.$broadcast('ct-spinner-hide','documentList');
                             });
 
@@ -188,8 +189,8 @@ define(['controllers/controllers',
                 })
             };
 
-            $scope.toggleAll = function(){
-                $scope.checklist.isCheckedAll ? $scope.checklist.selected = angular.copy($scope.documentListPaginated) : $scope.checklist.selected = [];
+            $scope.toggleAll = function(page){
+                $scope.checklist.isCheckedAll[page] ? $scope.checklist.selected[page] = angular.copy($scope.documentListPaginated) : $scope.checklist.selected[page] = [];
             };
 
             $scope.labelDateRange = function(from, until){
