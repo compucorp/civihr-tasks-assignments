@@ -1,11 +1,24 @@
 define(['controllers/controllers',
         'services/contact',
+        'services/document',
+        'services/task',
         'services/assignment'], function(controllers){
     controllers.controller('ModalAssignmentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-         'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, ContactService,
-                 data, config){
+         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config',
+        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
+                 ContactService, data, config){
             $log.debug('Controller: ModalAssignmentCtrl');
+
+            var activityModel = {
+                    activity_type_id: null,
+                    assignee_contact_id: [],
+                    case_id: null,
+                    create: true,
+                    isAdded: false,
+                    name: null,
+                    source_contact_id: config.LOGGED_IN_CONTACT_ID,
+                    status_id: '1'
+                };
 
             $scope.assignment = {};
             $scope.assignment.status_id = '1';
@@ -16,19 +29,27 @@ define(['controllers/controllers',
             $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.dpOpened = {};
             $scope.showCId = !config.CONTACT_ID;
-            $scope.taskSet = {};
+            $scope.activitySet = {};
             $scope.taskList = [];
+            $scope.documentList = [];
 
-            $scope.addTask = function(){
+            $scope.addActivity = function(activityArr){
 
-                $scope.taskList.push({
-                    isAdded: true
-                });
+                if (!activityArr) {
+                    return
+                }
+
+                activityArr.push(angular.extend({},activityModel,{isAdded: true}));
 
             }
 
-            $scope.removeTask = function(index){
-                $scope.taskList.splice(index, 1);
+            $scope.removeActivity = function(activityArr, index){
+
+                if (!activityArr) {
+                    return
+                }
+
+                activityArr.splice(index, 1);
             };
 
             $scope.dpOpen = function($event, key){
@@ -75,13 +96,13 @@ define(['controllers/controllers',
                 var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
 
                 if (!assignmentType) {
-                    $scope.taskSet = {};
+                    $scope.activitySet = {};
                     $scope.assignment.subject = '';
 
                     return;
                 }
 
-                $scope.taskSet = assignmentType.definition.activitySets[0];
+                $scope.activitySet = assignmentType.definition.activitySets[0];
                 $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
             }
 
@@ -92,42 +113,65 @@ define(['controllers/controllers',
             $scope.confirm = function(){
                 $scope.$broadcast('ct-spinner-show');
 
-                var taskListAssignment = [], taskArr = [], cacheAssignmentObj = {}, i, len;
+                var documentListAssignment = [], taskListAssignment = [], taskArr = [], documentArr = [],
+                    cacheAssignmentObj = {}, i, len;
 
                 $scope.assignment.start_date = new Date();
 
                 AssignmentService.save($scope.assignment).then(function(resultAssignment) {
 
-                    angular.forEach($scope.taskList, function(task){
+                    angular.forEach($scope.taskList, function (task) {
                         if (task.create) {
                             task.case_id = resultAssignment.id;
                             this.push(task);
                         }
-                    },taskListAssignment);
+                    }, taskListAssignment);
 
-                    TaskService.saveMultiple(taskListAssignment).then(function(resultTask){
-                        i = 0, len = resultTask.length;
+                    angular.forEach($scope.documentList, function (document) {
+                        if (document.create) {
+                            document.case_id = resultAssignment.id;
+                            this.push(document);
+                        }
+                    }, documentListAssignment);
 
+                    $q.all({
+                        task: TaskService.saveMultiple(taskListAssignment),
+                        document: DocumentService.saveMultiple(documentListAssignment)
+                    }).then(function (results) {
+
+                        i = 0, len = results.task.length;
                         for (i; i < len; i++) {
-                            taskListAssignment[i].id = resultTask[i].id;
-                            taskArr.push(resultTask[i].id);
+                            taskListAssignment[i].id = results.task[i].id;
+                            taskArr.push(results.task[i].id);
+                        }
+
+                        i = 0, len = results.document.length;
+                        for (i; i < len; i++) {
+                            documentListAssignment[i].id = results.document[i].id;
+                            documentArr.push(results.document[i].id);
                         }
 
                         return $q.all({
                             assignedTasks: TaskService.assign(taskArr, resultAssignment.id),
+                            assignedDocuments: DocumentService.assign(documentArr, resultAssignment.id),
                             relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
                         });
 
-                    },function(reason){
+                    }, function (reason) {
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
                         $scope.$broadcast('ct-spinner-hide');
                         return $q.reject();
-                    }).then(function(results){
-                        i = 0, len = results.assignedTasks.length;
+                    }).then(function(results) {
 
+                        i = 0, len = results.assignedTasks.length;
                         for (i; i < len; i++) {
                             taskArr.push(results.assignedTasks[i].id)
+                        }
+
+                        i = 0, len = results.assignedDocuments.length;
+                        for (i; i < len; i++) {
+                            documentArr.push(results.assignedDocuments[i].id)
                         }
 
                         cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment),{
@@ -152,22 +196,25 @@ define(['controllers/controllers',
                             ],
                             is_deleted: '0',
                             end_date: '',
-                            activities: taskArr
+                            activities: taskArr.concat(documentArr)
                         });
 
                         AssignmentService.updateCache(cacheAssignmentObj);
                         AssignmentService.updateTab(1);
-                        $modalInstance.close(taskListAssignment);
+                        $modalInstance.close({
+                            documentList: documentListAssignment,
+                            taskList: taskListAssignment
+                        });
                         $scope.$broadcast('ct-spinner-hide');
                         return
-                    },function(reason){
+                    }, function (reason) {
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
                         $scope.$broadcast('ct-spinner-hide');
                         return $q.reject();
                     });
 
-                },function(reason){
+                }, function (reason) {
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
                     $scope.$broadcast('ct-spinner-hide');
@@ -176,26 +223,50 @@ define(['controllers/controllers',
 
             }
 
-            $scope.$watch('taskSet',function(taskSet){
-                angular.copy(taskSet.activityTypes, $scope.taskList);
+            $scope.$watch('activitySet',function(activitySet){
+
+                if (!activitySet.activityTypes) {
+                    return
+                }
+
+                var activity,
+                    activityTypes = activitySet.activityTypes,
+                    activityTypesLen = activityTypes.length,
+                    documentList = [],
+                    documentType,
+                    taskList = [],
+                    taskType,
+                    i = 0;
+
+                for (; i < activityTypesLen; i++) {
+                    activity = angular.copy(activityModel);
+                    activity.name = activityTypes[i].name;
+
+                    documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
+
+                    if (documentType) {
+                        activity.activity_type_id = documentType.key;
+                        documentList.push(activity);
+                        continue;
+                    }
+
+                    taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
+                    activity.activity_type_id = taskType ? taskType.key : null;
+                    taskList.push(activity);
+                }
+
+                angular.copy(taskList, $scope.taskList);
+                angular.copy(documentList, $scope.documentList);
             });
 
         }]);
 
-    controllers.controller('ModalAssignmentTaskCtrl',['$scope', '$log', '$filter', '$rootScope', 'config',
-        function($scope, $log, $filter, $rootScope, config){
+    controllers.controller('ModalAssignmentActivityCtrl',['$scope', '$log',
+        function($scope, $log){
             $log.debug('Controller: ModalAssignmentTaskCtrl');
 
-            var taskType = $scope.task.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: $scope.task.name }, true)[0] : '';
-
-
-
-            $scope.isDisabled = !taskType && !$scope.task.isAdded;
-            $scope.task.create = !$scope.isDisabled;
-            $scope.task.status_id = '1';
-            $scope.task.activity_type_id = taskType ? taskType.key : null;
-            $scope.task.assignee_contact_id = [];
-            $scope.task.source_contact_id = config.LOGGED_IN_CONTACT_ID;
+            $scope.isDisabled = !$scope.activity.activity_type_id && !$scope.activity.isAdded;
+            $scope.activity.create = !$scope.isDisabled;
 
             if ($scope.isDisabled) {
                 return
@@ -207,17 +278,17 @@ define(['controllers/controllers',
                     return
                 }
 
-                $scope.task.target_contact_id = [targetContactId];
+                $scope.activity.target_contact_id = [targetContactId];
             });
 
             $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
 
-                if (!$scope.task.create) {
+                if (!$scope.activity.create) {
                     return
                 }
 
-                if (!$scope.task.activity_date_time || $scope.task.activity_date_time > assignmentDueDate) {
-                    $scope.task.activity_date_time = assignmentDueDate;
+                if (!$scope.activity.activity_date_time || $scope.activity.activity_date_time > assignmentDueDate) {
+                    $scope.activity.activity_date_time = assignmentDueDate;
                 }
             });
 

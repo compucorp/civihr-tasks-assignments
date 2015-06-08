@@ -24,6 +24,10 @@
                     return null;
                 }
 
+                if (!documentArr.length) {
+                    return documentArr;
+                }
+
                 var deferred = $q.defer();
 
                 Document.save({
@@ -164,6 +168,10 @@
 
                 if (!documentArr || !angular.isArray(documentArr)) {
                     return null;
+                }
+
+                if (!documentArr.length) {
+                    return documentArr;
                 }
 
                 var deferred = $q.defer();

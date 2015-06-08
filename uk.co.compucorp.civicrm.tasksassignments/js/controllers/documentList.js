@@ -31,7 +31,7 @@ define(['controllers/controllers',
 
                 $rootScope.$broadcast('ct-spinner-hide');
                 console.log($rootScope.cache);
-            }
+            };
 
             this.assignmentIds = [];
             this.contactIds = [];
@@ -68,12 +68,21 @@ define(['controllers/controllers',
                     collectCId(document);
                     collectAId(document);
                 });
-            }
+            };
+
+            $scope.pagination = {
+                currentPage: 1,
+                itemsPerPage: 5,
+                maxSize: 5
+            };
 
             $scope.dueToday = 0;
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
             $scope.documentList = documentList;
+            $scope.documentListFiltered = [];
+            $scope.documentListOngoing = [];
+            $scope.documentListResolved = [];
             $scope.actionApplyTo = 'selected';
 
             $scope.checklist = {
@@ -83,7 +92,7 @@ define(['controllers/controllers',
 
             $scope.dpOpened = {
                 filterDates: {}
-            }
+            };
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
@@ -159,7 +168,7 @@ define(['controllers/controllers',
 
                         break;
                 }
-            }
+            };
 
             $scope.changeStatus = function(document, statusId){
 
@@ -176,11 +185,11 @@ define(['controllers/controllers',
                     document.status_id = results.status_id;
                     $scope.$broadcast('ct-spinner-hide','documentList');
                 })
-            }
+            };
 
             $scope.toggleAll = function(){
                 $scope.checklist.isCheckedAll ? $scope.checklist.selected = angular.copy($scope.documentList) : $scope.checklist.selected = [];
-            }
+            };
 
             $scope.labelDateRange = function(from, until){
                 var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
@@ -195,7 +204,7 @@ define(['controllers/controllers',
                 }
 
                 $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
-            }
+            };
 
             $rootScope.modalDocument = function(data) {
                     var data = data || {},
@@ -250,7 +259,7 @@ define(['controllers/controllers',
                     });
 
                 modalInstance.result.then(function(results){
-                    Array.prototype.push.apply($scope.documentList,results);
+                    Array.prototype.push.apply($scope.documentList,results.documentList);
                 }, function(){
                     $log.info('Modal dismissed');
                 });
@@ -272,11 +281,26 @@ define(['controllers/controllers',
                     });
                 });
 
-            }
+            };
+
+            /*
+            $scope.$watch('pagination.currentPage', function(currentPage) {
+                var start, end, itemsPerPage = $scope.pagination.itemsPerPage;
+
+                start = ((currentPage - 1) * itemsPerPage),
+                end = start + itemsPerPage;
+
+                $scope.documentListPaginated = $scope.documentListFiltered.slice(start, end);
+            });
+
+            $scope.$watchCollection('filterParams', function(filterParams){
+
+            });
+            */
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {
-                    var pattern = /case|activity/i;
+                    var pattern = /case|activity|assignment/i;
 
                     if (pattern.test(data.title) ||
                         data.crmMessages.length &&

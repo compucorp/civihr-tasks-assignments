@@ -25,13 +25,12 @@
                 </div>
             </div>
         </div>
-        <div ng-show="documentListFiltered.length">
+        <div ng-hide="!documentListOngoing.length">
             <h4 class="header-bar header-bar-primary">Ongoing:</h4>
             <div ct-spinner ct-spinner-id="documentList">
                 <table class="table table-striped {{prefix}}table-documents">
                     <thead>
                     <tr>
-                        <th class="{{prefix}}col-select"><input type="checkbox" name="selectDocumentAll" disabled></th>
                         <th>Type</th>
                         <th>Contact</th>
                         <th>Assignment</th>
@@ -42,7 +41,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="document in documentListFiltered = (documentList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time')"
+                    <tr ng-repeat="document in documentListOngoing = (documentListFiltered = (documentList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterBy.status:cache.documentStatusResolve:false)"
                         ng-controller="DocumentCtrl"
                         ng-include
                         src="'document.html'">
@@ -50,13 +49,36 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div ng-hide="!taskListResolved.length">
             <h4 class="header-bar header-bar-danger">Resolved:</h4>
+            <div ct-spinner ct-spinner-id="documentList">
+                <table class="table table-striped {{prefix}}table-documents">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Contact</th>
+                        <th>Assignment</th>
+                        <th>Due Date</th>
+                        <th>Expiry Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="document in taskListResolved = (documentListFiltered | filterBy.status:cache.documentStatusResolve:true)"
+                        ng-controller="DocumentCtrl"
+                        ng-include
+                        src="'document.html'">
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </form>
 </div>
 
 <script type="text/ng-template" id="document.html">
-    <td class="{{prefix}}col-select"><input type="checkbox" name="selectDocument1" disabled></td>
     <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
     <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
     <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>

@@ -76,6 +76,8 @@ define(['controllers/controllers',
             $scope.taskList = taskList;
             $scope.taskListFiltered = [];
             $scope.taskListLimit = 5;
+            $scope.taskListOngoing = [];
+            $scope.taskListResolved = [];
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -192,7 +194,7 @@ define(['controllers/controllers',
                     });
 
                 modalInstance.result.then(function(results){
-                    Array.prototype.push.apply($scope.taskList,results);
+                    Array.prototype.push.apply($scope.taskList,results.taskList);
                 }, function(){
                     $log.info('Modal dismissed');
                 });
@@ -213,11 +215,11 @@ define(['controllers/controllers',
                     });
                 });
 
-            }
+            };
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {
-                    var pattern = /case|activity/i;
+                    var pattern = /case|activity|assignment/i;
 
                     if (pattern.test(data.title) ||
                         data.crmMessages.length &&
@@ -231,10 +233,6 @@ define(['controllers/controllers',
                     }
                 }
             });
-
-            $scope.test = function(val) {
-                console.log(val);
-            }
 
             this.init();
 
