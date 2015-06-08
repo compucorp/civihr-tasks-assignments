@@ -6,9 +6,9 @@ define(['controllers/controllers',
         'moment'], function(controllers, moment){
 
     controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', '$q', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
-        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, documentList, config,
-                 ContactService, AssignmentService, DocumentService){
+        '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, documentList,
+                 config, ContactService, AssignmentService, DocumentService){
             $log.debug('Controller: DocumentListCtrl');
 
             this.init = function(){
@@ -191,6 +191,12 @@ define(['controllers/controllers',
 
             $scope.toggleAll = function(page){
                 $scope.checklist.isCheckedAll[page] ? $scope.checklist.selected[page] = angular.copy($scope.documentListPaginated) : $scope.checklist.selected[page] = [];
+            };
+
+            $scope.toggleIsCheckedAll = function() {
+                $timeout(function(){
+                    $scope.checklist.isCheckedAll[$scope.pagination.currentPage] = $scope.checklist.selected[$scope.pagination.currentPage].length == $scope.documentListPaginated.length;
+                });
             };
 
             $scope.labelDateRange = function(from, until){
