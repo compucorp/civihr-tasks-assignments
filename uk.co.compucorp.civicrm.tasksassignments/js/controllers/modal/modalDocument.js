@@ -1,15 +1,17 @@
 define(['controllers/controllers',
         'services/contact',
+        'services/file',
         'services/dialog',
         'services/document'], function(controllers){
 
     controllers.controller('ModalDocumentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-        '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'data', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, $dialog, AssignmentService, DocumentService, ContactService,
-                 data, config){
+        '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config',
+        function($scope, $modalInstance, $rootScope, $q, $log, $filter, $dialog, AssignmentService, DocumentService,
+                 ContactService, FileService, data, files, config){
             $log.debug('Controller: ModalDocumentCtrl');
 
             $scope.data = data;
+            $scope.files = files;
             $scope.document = {};
 
             angular.copy(data,$scope.document);
@@ -18,6 +20,7 @@ define(['controllers/controllers',
             $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
             $scope.contacts = $rootScope.cache.contact.arrSearch;
+            $scope.uploader = FileService.uploader('civicrm_activity');
             $scope.showCId = !config.CONTACT_ID;
             $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val){
                 return +val.extra.contact_id == +$scope.document.target_contact_id;
@@ -123,7 +126,9 @@ define(['controllers/controllers',
 
             $scope.confirm = function(){
 
-                if (angular.equals(data,$scope.task)) {
+                if (angular.equals(data,$scope.document) &&
+                    angular.equals(files,$scope.files) &&
+                    !$scope.uploader.queue.length) {
                     $modalInstance.dismiss('cancel');
                     return
                 }
@@ -132,11 +137,25 @@ define(['controllers/controllers',
 
                 $scope.document.activity_date_time = $scope.document.activity_date_time || new Date();
 
-                DocumentService.save($scope.document).then(function(results){
+                DocumentService.save($scope.document).then(function(resultDocument){
+
+                    if ($scope.uploader.queue.length) {
+                        FileService.upload($scope.uploader, resultDocument.id).then(function(resultFileUpload){
+                            AssignmentService.updateTab();
+                            $modalInstance.close(angular.extend(resultDocument,$scope.document));
+                            $scope.$broadcast('ta-spinner-hide');
+                        },function(reason){
+                            CRM.alert(reason, 'Error', 'error');
+                            $modalInstance.dismiss();
+                            $scope.$broadcast('ta-spinner-hide');
+                            return $q.reject();
+                        });
+                    }
+
                     AssignmentService.updateTab();
-                    $modalInstance.close(angular.extend(results,$scope.document));
+                    $modalInstance.close(angular.extend(resultDocument,$scope.document));
                     $scope.$broadcast('ta-spinner-hide');
-                    return
+
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();

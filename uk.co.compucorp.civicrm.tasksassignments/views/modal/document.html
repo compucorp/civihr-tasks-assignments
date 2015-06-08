@@ -137,6 +137,54 @@
                 </div>
                 <hr>
                 <div class="form-group">
+                    <label for="{{prefix}}document-files" class="col-xs-12 col-sm-2 control-label">File(s):</label>
+                    <div class="col-xs-12 col-sm-10">
+                        <input type="file"
+                               class="form-control-file"
+                               id="{{prefix}}document-files"
+                               multiple
+                               nv-file-select uploader="uploader" />
+                        <table class="table table-condensed" ng-show="uploader.queue.length || files.length">
+                            <colgroup>
+                                <col class="col-index">
+                                <col class="col-name">
+                                <col class="col-size" ng-show="uploader.isHTML5">
+                                <col class="col-action">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="file in files">
+                                <td><strong>{{$index+1}}</strong></td>
+                                <td><strong><a ng-href="{{file.url}}">{{file.name}}</a></strong></td>
+                                <td ng-show="uploader.isHTML5" nowrap><span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span></td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="fileMoveToTrash($index)">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td><strong>{{files.length + $index+1}}</strong></td>
+                                <td><strong>{{item.file.name}}</strong></td>
+                                <td ng-show="uploader.details.contract_file.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
                     <label for="{{prefix}}document-status" class="col-xs-12 col-sm-2 control-label">Status:</label>
                     <div class="col-xs-12 col-sm-5">
                         <select id="{{prefix}}document-status" class="form-control" name="documentStatus"

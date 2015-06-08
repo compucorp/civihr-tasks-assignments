@@ -2,13 +2,14 @@ define(['controllers/controllers',
         'moment',
         'services/contact',
         'services/document',
+        'services/file',
         'services/assignment',
         'moment'], function(controllers, moment){
 
     controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
+        '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService',
         function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, documentList,
-                 config, ContactService, AssignmentService, DocumentService){
+                 config, ContactService, AssignmentService, DocumentService, FileService){
             $log.debug('Controller: DocumentListCtrl');
 
             this.init = function(){
@@ -223,6 +224,14 @@ define(['controllers/controllers',
                         resolve: {
                             data: function(){
                                 return data;
+                            },
+                            files: function(){
+
+                                if (!data.id) {
+                                    return [];
+                                }
+
+                                return FileService.get(data.id,'civicrm_activity')
                             }
                         }
                     });

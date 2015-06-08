@@ -12,6 +12,7 @@ define([
     'services/services'], function(moment){
 
     angular.module('civitasks.run',[
+        'angularFileUpload',
         'ngRoute',
         'ngResource',
         'ngSanitize',
