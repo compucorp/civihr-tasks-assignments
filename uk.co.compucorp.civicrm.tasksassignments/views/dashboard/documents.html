@@ -164,7 +164,7 @@
                         </div>
                         <div class="col-xs-5 col-xs-offset-1">
                             <label class="radio-inline">
-                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentList.length}} Docs
+                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentListFiltered.length}} Docs
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected.length}} Selected Docs Only
@@ -189,7 +189,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="document in documentListFiltered = (documentListOngoing = (documentList | filterBy.status:cache.documentStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | filterBy.status:filterParams.documentStatus | orderBy: 'activity_date_time')"
+                 <tr ng-repeat="document in
+                 documentListPaginated = (documentListFiltered = (documentListOngoing = (documentList
+                    | filterBy.status:cache.documentStatusResolve:false)
+                        | filterBy.due:filterParams.due:filterParams.dateRange
+                        | filterBy.userRole:filterParams.userRole
+                        | filterBy.assignmentType:filterParams.assignmentType
+                        | filterBy.contactId:filterParams.contactId
+                        | filterBy.status:filterParams.documentStatus
+                        | orderBy: 'activity_date_time')
+                            | offset: (pagination.currentPage-1)*pagination.itemsPerPage
+                            | limitTo: pagination.itemsPerPage)"
                         ng-controller="DocumentCtrl"
                         ng-include
                         src="'document.html'">
@@ -197,13 +207,11 @@
                 </tbody>
             </table>
             <div class="clearfix"></div>
-            <!--
             <nav class="row" ng-show="(documentListFiltered.length > pagination.itemsPerPage)">
                 <div class="col-xs-12 text-center">
                     <pagination boundary-links="true" total-items="documentListFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
             </nav>
-            -->
         </div>
     </div>
 </div>

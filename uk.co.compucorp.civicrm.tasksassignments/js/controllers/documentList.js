@@ -72,7 +72,7 @@ define(['controllers/controllers',
 
             $scope.pagination = {
                 currentPage: 1,
-                itemsPerPage: 5,
+                itemsPerPage: 10,
                 maxSize: 5
             };
 
@@ -82,6 +82,7 @@ define(['controllers/controllers',
             $scope.documentList = documentList;
             $scope.documentListFiltered = [];
             $scope.documentListOngoing = [];
+            $scope.documentListPaginated = [];
             $scope.documentListResolved = [];
             $scope.actionApplyTo = 'selected';
 
@@ -188,7 +189,7 @@ define(['controllers/controllers',
             };
 
             $scope.toggleAll = function(){
-                $scope.checklist.isCheckedAll ? $scope.checklist.selected = angular.copy($scope.documentList) : $scope.checklist.selected = [];
+                $scope.checklist.isCheckedAll ? $scope.checklist.selected = angular.copy($scope.documentListPaginated) : $scope.checklist.selected = [];
             };
 
             $scope.labelDateRange = function(from, until){
@@ -282,21 +283,6 @@ define(['controllers/controllers',
                 });
 
             };
-
-            /*
-            $scope.$watch('pagination.currentPage', function(currentPage) {
-                var start, end, itemsPerPage = $scope.pagination.itemsPerPage;
-
-                start = ((currentPage - 1) * itemsPerPage),
-                end = start + itemsPerPage;
-
-                $scope.documentListPaginated = $scope.documentListFiltered.slice(start, end);
-            });
-
-            $scope.$watchCollection('filterParams', function(filterParams){
-
-            });
-            */
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {
