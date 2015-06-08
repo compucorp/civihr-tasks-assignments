@@ -5,7 +5,7 @@ class CRM_Tasksassignments_KeyDates
     public static function get($startDate = null, $endDate = null, $contactId = null)
     {
         $tableExists = self::_checkTableExists(array(
-            'civicrm_hrjobcontract_details',
+            'civicrm_value_jobcontract_dates_13',
             'civicrm_contact',
             'civicrm_value_job_summary_10',
             'civicrm_value_probation_12',
@@ -115,24 +115,18 @@ class CRM_Tasksassignments_KeyDates
     {
         $queries = array();
         
-        if ($tableExists['civicrm_hrjobcontract_details'])
+        if ($tableExists['civicrm_value_jobcontract_dates_13'])
         {
-            $queries[] = "
-                SELECT hrjc.contact_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(period_start_date) as keydate, 'period_start_date' as type FROM civicrm_hrjobcontract_details hrjc_d
-                LEFT JOIN civicrm_hrjobcontract_revision hrjc_r ON hrjc_d.jobcontract_revision_id = hrjc_r.details_revision_id
-                LEFT JOIN civicrm_hrjobcontract hrjc ON hrjc_r.jobcontract_id = hrjc.id
-                LEFT JOIN civicrm_contact c ON hrjc.contact_id = c.id
-                WHERE period_start_date IS NOT NULL
-            " . self::_buildWhereDateRange('period_start_date', $startDate, $endDate)
-              . self::_buildWhereContactId('contact_id', $contactId);
-            $queries[] = "
-                SELECT hrjc.contact_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(period_end_date) as keydate, 'period_end_date' as type FROM civicrm_hrjobcontract_details hrjc_d
-                LEFT JOIN civicrm_hrjobcontract_revision hrjc_r ON hrjc_d.jobcontract_revision_id = hrjc_r.details_revision_id
-                LEFT JOIN civicrm_hrjobcontract hrjc ON hrjc_r.jobcontract_id = hrjc.id
-                LEFT JOIN civicrm_contact c ON hrjc.contact_id = c.id
-                WHERE period_end_date IS NOT NULL
-            " . self::_buildWhereDateRange('period_end_date', $startDate, $endDate)
-              . self::_buildWhereContactId('contact_id', $contactId);
+            $queries[] = "SELECT jcd.entity_id AS contact_id, external_identifier AS contact_external_identifier, c.sort_name AS contact_name, DATE(contract_start_date) AS keydate, 'period_start_date' AS type FROM civicrm_value_jobcontract_dates_13 jcd 
+                LEFT JOIN civicrm_contact c ON jcd.entity_id = c.id 
+                WHERE contract_start_date IS NOT NULL 
+            " . self::_buildWhereDateRange('contract_start_date', $startDate, $endDate)
+              . self::_buildWhereContactId('entity_id', $contactId);
+            $queries[] = "SELECT jcd.entity_id AS contact_id, external_identifier AS contact_external_identifier, c.sort_name AS contact_name, DATE(contract_end_date) AS keydate, 'period_end_date' AS type FROM civicrm_value_jobcontract_dates_13 jcd 
+                LEFT JOIN civicrm_contact c ON jcd.entity_id = c.id 
+                WHERE contract_end_date IS NOT NULL 
+            " . self::_buildWhereDateRange('contract_end_date', $startDate, $endDate)
+              . self::_buildWhereContactId('entity_id', $contactId);
         }
         if ($tableExists['civicrm_contact'])
         {
