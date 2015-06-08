@@ -112,19 +112,6 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     }
     
     /*
-     * Install Documents Component
-     * Previously existed as a separate extension.
-     */
-    public function upgrade_0005() {
-        
-        CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_option_value` WHERE component_id = (SELECT id FROM `civicrm_component` WHERE name = 'CiviDocument')");
-        CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_component` WHERE name = 'CiviDocument'");
-        CRM_Core_DAO::executeQuery("INSERT INTO `civicrm_component` (`id`, `name`, `namespace`) VALUES (NULL, 'CiviDocument', 'CRM_CiviDocument')");
-        
-        return TRUE;
-    }
-    
-    /*
      * Install Documents statuses
      */
     public function upgrade_0006() {
