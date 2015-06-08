@@ -208,6 +208,17 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         
         return TRUE;
     }
+    
+    /*
+     * Enable CiviTask and CiviDocument components.
+     */
+    public function upgrade_0010()
+    {
+        CRM_Core_BAO_ConfigSetting::enableComponent('CiviTask');
+        CRM_Core_BAO_ConfigSetting::enableComponent('CiviDocument');
+        
+        return TRUE;
+    }
   
     function _installTypes()
     {
@@ -278,6 +289,15 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                         'option_group_id' => $optionGroupID,
                         'component_id' => $componentId,
                         'label' => $taskType,
+                        'name' => $taskType,
+                    ));
+                }
+                else
+                {
+                    $result = civicrm_api3('OptionValue', 'create', array(
+                        'sequential' => 1,
+                        'id' => $selectActivityTypeResult->id,
+                        'component_id' => $componentId,
                         'name' => $taskType,
                     ));
                 }
