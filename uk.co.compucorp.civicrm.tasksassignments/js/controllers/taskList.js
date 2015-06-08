@@ -215,7 +215,7 @@ define(['controllers/controllers',
                     });
                 });
 
-            }
+            };
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {
