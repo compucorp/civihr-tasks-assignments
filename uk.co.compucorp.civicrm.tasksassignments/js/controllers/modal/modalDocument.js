@@ -10,16 +10,18 @@ define(['controllers/controllers',
                  ContactService, FileService, data, files, config){
             $log.debug('Controller: ModalDocumentCtrl');
 
-            $scope.data = data;
-            $scope.files = files;
+            $scope.files = [];
             $scope.document = {};
 
             angular.copy(data,$scope.document);
+            angular.copy(files,$scope.files);
 
+            $scope.data = data;
             $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
             $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
             $scope.contacts = $rootScope.cache.contact.arrSearch;
+            $scope.filesTrash = [];
             $scope.uploader = FileService.uploader('civicrm_activity');
             $scope.showCId = !config.CONTACT_ID;
             $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val){
@@ -69,6 +71,11 @@ define(['controllers/controllers',
                 };
 
                 ContactService.updateCache(obj);
+            };
+
+            $scope.fileMoveToTrash = function(index) {
+                $scope.filesTrash.push($scope.files[index]);
+                $scope.files.splice(index, 1);
             };
 
             $scope.refreshAssignments = function(input){
@@ -133,36 +140,48 @@ define(['controllers/controllers',
                     return
                 }
 
+                var uploader = $scope.uploader,
+                    filesTrash = $scope.filesTrash,
+                    promiseFilesDelete = [],
+                    file, i, len;
+
                 $scope.$broadcast('ct-spinner-show');
 
                 $scope.document.activity_date_time = $scope.document.activity_date_time || new Date();
 
-                DocumentService.save($scope.document).then(function(resultDocument){
+                if (filesTrash.length) {
+                    i = 0, len = filesTrash.length;
+                    for (; i < len; i++) {
+                        file = filesTrash[i];
+                        promiseFilesDelete.push(FileService.delete(file.fileID, file.entityID, file.entityTable));
+                    }
+                }
 
-                    if ($scope.uploader.queue.length) {
-                        FileService.upload($scope.uploader, resultDocument.id).then(function(resultFileUpload){
-                            AssignmentService.updateTab();
-                            $modalInstance.close(angular.extend(resultDocument,$scope.document));
-                            $scope.$broadcast('ta-spinner-hide');
-                        },function(reason){
-                            CRM.alert(reason, 'Error', 'error');
-                            $modalInstance.dismiss();
-                            $scope.$broadcast('ta-spinner-hide');
-                            return $q.reject();
-                        });
+                $q.all({
+                    document: DocumentService.save($scope.document),
+                    files: !!promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
+                }).then(function(result){
+
+                    if (uploader.queue.length) {
+                        result.files = FileService.upload(uploader, result.document.id);
+                        return $q.all(result);
                     }
 
-                    AssignmentService.updateTab();
-                    $modalInstance.close(angular.extend(resultDocument,$scope.document));
-                    $scope.$broadcast('ta-spinner-hide');
+                    return result;
 
+                }).then(function(result){
+
+                    $scope.document.id = result.document.id;
+
+                    AssignmentService.updateTab();
+                    $modalInstance.close($scope.document);
+                    $scope.$broadcast('ta-spinner-hide');
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
                     $scope.$broadcast('ta-spinner-hide');
                     return $q.reject();
                 });
-
             }
 
         }]);

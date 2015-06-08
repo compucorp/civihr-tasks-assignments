@@ -6,7 +6,7 @@ define(['controllers/controllers',
             $log.debug('Controller: TaskCtrl');
 
             $scope.isCollapsed = true;
-            $scope.task.activity_date_time = moment($scope.task.activity_date_time).toDate();
+            $scope.task.activity_date_time = !!$scope.task.activity_date_time ? moment($scope.task.activity_date_time).toDate() : null;
 
             $scope.$watch('task.status_id',function(statusId){
                 var isResolved = $rootScope.cache.taskStatusResolve.indexOf(statusId) > -1;

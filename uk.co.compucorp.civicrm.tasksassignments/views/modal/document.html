@@ -144,7 +144,7 @@
                                id="{{prefix}}document-files"
                                multiple
                                nv-file-select uploader="uploader" />
-                        <table class="table table-condensed" ng-show="uploader.queue.length || files.length">
+                        <table class="table table-condensed {{prefix}}table-upload" ng-show="uploader.queue.length || files.length">
                             <colgroup>
                                 <col class="col-index">
                                 <col class="col-name">
@@ -172,7 +172,7 @@
                             <tr ng-repeat="item in uploader.queue">
                                 <td><strong>{{files.length + $index+1}}</strong></td>
                                 <td><strong>{{item.file.name}}</strong></td>
-                                <td ng-show="uploader.details.contract_file.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
                                 <td nowrap>
                                     <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
                                         <span class="glyphicon glyphicon-trash"></span> Remove

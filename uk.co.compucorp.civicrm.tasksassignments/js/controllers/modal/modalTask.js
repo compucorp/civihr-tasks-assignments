@@ -136,8 +136,11 @@ define(['controllers/controllers',
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 
                 TaskService.save($scope.task).then(function(results){
+
+                    $scope.task.id = results.id;
+
                     AssignmentService.updateTab();
-                    $modalInstance.close(angular.extend(results,$scope.task));
+                    $modalInstance.close($scope.task);
                     $scope.$broadcast('ct-spinner-hide');
                     return
                 },function(reason){

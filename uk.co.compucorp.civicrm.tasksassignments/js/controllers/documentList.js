@@ -185,6 +185,7 @@ define(['controllers/controllers',
                     id: document.id,
                     status_id: statusId
                 }).then(function(results){
+                    document.id = results.id;
                     document.status_id = results.status_id;
                     $scope.$broadcast('ct-spinner-hide','documentList');
                 })
@@ -217,7 +218,7 @@ define(['controllers/controllers',
 
             $rootScope.modalDocument = function(data) {
                     var data = data || {},
-                    modalInstance = $modal.open({
+                        modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
                         templateUrl: config.path.TPL+'modal/document.html?v='+(new Date().getTime()),
                         controller: 'ModalDocumentCtrl',
