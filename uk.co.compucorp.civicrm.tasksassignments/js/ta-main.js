@@ -51,6 +51,7 @@ reqTa([
     'filters/dateParse',
     'filters/dateType',
     'filters/due',
+    'filters/offset',
     'filters/userRole',
     'filters/status',
     'requireLib'

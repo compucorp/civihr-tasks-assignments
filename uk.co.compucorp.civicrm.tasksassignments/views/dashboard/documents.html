@@ -154,7 +154,7 @@
                                             <option value="delete">Delete</option>
                                         </select>
                                         <span class="input-group-btn">
-                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentList : checklist.selected))" class="btn btn-default">
+                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentListOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
                                               Apply
                                           </a>
                                         </span>
@@ -164,10 +164,10 @@
                         </div>
                         <div class="col-xs-5 col-xs-offset-1">
                             <label class="radio-inline">
-                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentList.length}} Docs
+                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentListFiltered.length}} Docs
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected.length}} Selected Docs Only
+                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
                             </label>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
             <table class="table table-striped {{prefix}}table-documents">
                 <thead>
                     <tr>
-                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll" ng-change="toggleAll();"></th>
+                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
                         <th>Type</th>
                         <th>Contact</th>
                         <th>Assignment</th>
@@ -189,7 +189,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="document in documentListFiltered = (documentListOngoing = (documentList | filterBy.status:cache.documentStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | filterBy.status:filterParams.documentStatus | orderBy: 'activity_date_time')"
+                 <tr ng-repeat="document in
+                 documentListPaginated = (documentListFiltered = (documentListOngoing = (documentList
+                    | filterBy.status:cache.documentStatusResolve:false)
+                        | filterBy.due:filterParams.due:filterParams.dateRange
+                        | filterBy.userRole:filterParams.userRole
+                        | filterBy.assignmentType:filterParams.assignmentType
+                        | filterBy.contactId:filterParams.contactId
+                        | filterBy.status:filterParams.documentStatus
+                        | orderBy: 'activity_date_time')
+                            | offset: (pagination.currentPage-1)*pagination.itemsPerPage
+                            | limitTo: pagination.itemsPerPage)"
                         ng-controller="DocumentCtrl"
                         ng-include
                         src="'document.html'">
@@ -197,19 +207,17 @@
                 </tbody>
             </table>
             <div class="clearfix"></div>
-            <!--
             <nav class="row" ng-show="(documentListFiltered.length > pagination.itemsPerPage)">
                 <div class="col-xs-12 text-center">
                     <pagination boundary-links="true" total-items="documentListFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
             </nav>
-            -->
         </div>
     </div>
 </div>
 
 <script type="text/ng-template" id="document.html">
-    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected" checklist-value="document"></td>
+    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected[pagination.currentPage]" checklist-value="document" ng-change="toggleIsCheckedAll()"></td>
     <td ng-bind="cache.documentType.obj[document.activity_type_id]"></td>
     <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a></td>
     <td ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>

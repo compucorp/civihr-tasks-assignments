@@ -6,9 +6,9 @@ define(['controllers/controllers',
         'moment'], function(controllers, moment){
 
     controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', '$q', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
-        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, documentList, config,
-                 ContactService, AssignmentService, DocumentService){
+        '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService',
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, documentList,
+                 config, ContactService, AssignmentService, DocumentService){
             $log.debug('Controller: DocumentListCtrl');
 
             this.init = function(){
@@ -72,7 +72,7 @@ define(['controllers/controllers',
 
             $scope.pagination = {
                 currentPage: 1,
-                itemsPerPage: 5,
+                itemsPerPage: 10,
                 maxSize: 5
             };
 
@@ -82,12 +82,13 @@ define(['controllers/controllers',
             $scope.documentList = documentList;
             $scope.documentListFiltered = [];
             $scope.documentListOngoing = [];
+            $scope.documentListPaginated = [];
             $scope.documentListResolved = [];
             $scope.actionApplyTo = 'selected';
 
             $scope.checklist = {
-                selected: [],
-                isCheckedAll: false
+                selected: {},
+                isCheckedAll: {}
             };
 
             $scope.dpOpened = {
@@ -160,7 +161,8 @@ define(['controllers/controllers',
                                 for (; i < documentListLen; i++) {
                                     $scope.documentList.splice($scope.documentList.indexOf(documentList[i]),1);
                                 }
-                                $scope.checklist.selected = [];
+                                $scope.checklist.isCheckedAll = {};
+                                $scope.checklist.selected = {};
                                 $scope.$broadcast('ct-spinner-hide','documentList');
                             });
 
@@ -187,8 +189,14 @@ define(['controllers/controllers',
                 })
             };
 
-            $scope.toggleAll = function(){
-                $scope.checklist.isCheckedAll ? $scope.checklist.selected = angular.copy($scope.documentList) : $scope.checklist.selected = [];
+            $scope.toggleAll = function(page){
+                $scope.checklist.isCheckedAll[page] ? $scope.checklist.selected[page] = angular.copy($scope.documentListPaginated) : $scope.checklist.selected[page] = [];
+            };
+
+            $scope.toggleIsCheckedAll = function() {
+                $timeout(function(){
+                    $scope.checklist.isCheckedAll[$scope.pagination.currentPage] = $scope.checklist.selected[$scope.pagination.currentPage].length == $scope.documentListPaginated.length;
+                });
             };
 
             $scope.labelDateRange = function(from, until){
@@ -282,21 +290,6 @@ define(['controllers/controllers',
                 });
 
             };
-
-            /*
-            $scope.$watch('pagination.currentPage', function(currentPage) {
-                var start, end, itemsPerPage = $scope.pagination.itemsPerPage;
-
-                start = ((currentPage - 1) * itemsPerPage),
-                end = start + itemsPerPage;
-
-                $scope.documentListPaginated = $scope.documentListFiltered.slice(start, end);
-            });
-
-            $scope.$watchCollection('filterParams', function(filterParams){
-
-            });
-            */
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {
