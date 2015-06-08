@@ -6,9 +6,9 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(documentList | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentList | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentList | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
                 </ul>
                 <hr>
                 <a href
@@ -79,10 +79,10 @@
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-gray active"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="'assignee_contact_id'">My Docs ({{(documentList | filterBy.userRole:'assignee_contact_id').length}})</button>
+                                        btn-radio="'assignee_contact_id'">My Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="'source_contact_id'">Delegated Docs ({{(documentList | filterBy.userRole:'source_contact_id').length}})</button>
+                                        btn-radio="'source_contact_id'">Delegated Docs ({{(documentListOngoing | filterBy.userRole:'source_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
                                         btn-radio="null">All</button>
@@ -189,7 +189,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="document in documentList | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | filterBy.status:filterParams.documentStatus | orderBy: 'activity_date_time'"
+                    <tr ng-repeat="document in documentListFiltered = (documentListOngoing = (documentList | filterBy.status:cache.documentStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | filterBy.status:filterParams.documentStatus | orderBy: 'activity_date_time')"
                         ng-controller="DocumentCtrl"
                         ng-include
                         src="'document.html'">
@@ -198,25 +198,9 @@
             </table>
             <div class="clearfix"></div>
             <!--
-            <nav class="row">
+            <nav class="row" ng-show="(documentListFiltered.length > pagination.itemsPerPage)">
                 <div class="col-xs-12 text-center">
-                    <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li>
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <pagination boundary-links="true" total-items="documentListFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
             </nav>
             -->

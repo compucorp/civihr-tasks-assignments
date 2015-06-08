@@ -76,6 +76,8 @@ define(['controllers/controllers',
             $scope.taskList = taskList;
             $scope.taskListFiltered = [];
             $scope.taskListLimit = 5;
+            $scope.taskListOngoing = [];
+            $scope.taskListResolved = [];
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -231,10 +233,6 @@ define(['controllers/controllers',
                     }
                 }
             });
-
-            $scope.test = function(val) {
-                console.log(val);
-            }
 
             this.init();
 

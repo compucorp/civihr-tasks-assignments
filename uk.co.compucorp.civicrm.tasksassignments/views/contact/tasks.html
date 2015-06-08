@@ -26,7 +26,7 @@
             </div>
         </div>
         <div ng-show="taskListFiltered.length">
-            <h4 class="header-bar header-bar-primary" ng-hide="!taskListOngoing.length">Ongoing:</h4>
+            <h4 class="header-bar header-bar-primary" ng-show="">Ongoing:</h4>
             <ul class="{{prefix}}list-task">
                 <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterBy.status:cache.taskStatusResolve:false)"
                     ng-controller="TaskCtrl"
@@ -40,7 +40,7 @@
                     ct-spinner-id="task{{task.id}}">
                 </li>
             </ul>
-            <h4 class="header-bar header-bar-danger" ng-hide="!taskListResolved.length">Resolved:</h4>
+            <h4 class="header-bar header-bar-danger" ng-show="taskListResolved.length">Resolved:</h4>
             <ul class="{{prefix}}list-task">
                 <li ng-repeat="task in taskListResolved = (taskListFiltered | filterBy.status:cache.taskStatusResolve:true)"
                     ng-controller="TaskCtrl"
