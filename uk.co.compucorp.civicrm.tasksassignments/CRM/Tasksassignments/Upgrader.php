@@ -103,11 +103,30 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     }
 
     /*
-     * Install Task Types and Case Types
+     * Install Task Types
      */
     public function upgrade_0004() {
 
-        $this->_installTypes();
+        $this->_installTypes('CiviTask', array(
+            'Joining' => array(
+                'Schedule joining date',
+                'Probation appraisal (start probation workflow)',
+                'Group Orientation to organization, values, policies',
+                'Enter employee data in CiviHR',
+                'Issue appointment letter',
+                'Fill Employee Details Form',
+                'Submission of ID/Residence proofs and photos',
+                'Program and work induction by program supervisor',
+            ),
+            'Exiting' => array(
+                'Schedule Exit Interview',
+                'Conduct Exit Interview',
+                'Get "No Dues" certification',
+                'Revoke Access to Database',
+                'Block work email ID',
+            ),
+        ));
+        
         return TRUE;
     }
     
@@ -219,33 +238,34 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         
         return TRUE;
     }
-  
-    function _installTypes()
+    
+    /*
+     * Install Document Types
+     */
+    public function upgrade_1011()
     {
-        $types = array(
+        $this->_installTypes('CiviDocument', array(
             'Joining' => array(
-                'Schedule joining date',
-                'Probation appraisal (start probation workflow)',
-                'Group Orientation to organization, values, policies',
-                'Enter employee data in CiviHR',
-                'Issue appointment letter',
-                'Fill Employee Details Form',
-                'Submission of ID/Residence proofs and photos',
-                'Program and work induction by program supervisor',
+                'Joining Document 1',
+                'Joining Document 2',
+                'Joining Document 3',
             ),
             'Exiting' => array(
-                'Schedule Exit Interview',
-                'Conduct Exit Interview',
-                'Get "No Dues" certification',
-                'Revoke Access to Database',
-                'Block work email ID',
+                'Exiting document 1',
+                'Exiting document 2',
+                'Exiting document 3',
             ),
-        );
-
+        ));
+        
+        return TRUE;
+    }
+  
+    function _installTypes($component, array $types)
+    {
         $componentId = null;
         $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
         $componentParams = array(
-            1 => array('CiviTask', 'String'),
+            1 => array($component, 'String'),
         );
         $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
         if ($componentResult->fetch())
@@ -255,7 +275,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
         if (!$componentId)
         {
-            throw new Exception('CiviTask Component not found.');
+            throw new Exception($component . ' Component not found.');
         }
 
         $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
@@ -272,13 +292,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         // Create the types:
 
         $selectActivityTypeQuery = 'SELECT id FROM civicrm_option_value WHERE option_group_id = %1 AND name = %2';
-        foreach ($types as $caseType => $taskTypes)
+        foreach ($types as $caseType => $types)
         {
-            foreach ($taskTypes as $taskType)
+            foreach ($types as $type)
             {
                 $selectActivityTypeParams = array(
                     1 => array($optionGroupID, 'Integer'),
-                    2 => array($taskType, 'String'),
+                    2 => array($type, 'String'),
                 );
 
                 $selectActivityTypeResult = CRM_Core_DAO::executeQuery($selectActivityTypeQuery, $selectActivityTypeParams);
@@ -288,8 +308,8 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                         'sequential' => 1,
                         'option_group_id' => $optionGroupID,
                         'component_id' => $componentId,
-                        'label' => $taskType,
-                        'name' => $taskType,
+                        'label' => $type,
+                        'name' => $type,
                     ));
                 }
                 else
@@ -298,12 +318,12 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                         'sequential' => 1,
                         'id' => $selectActivityTypeResult->id,
                         'component_id' => $componentId,
-                        'name' => $taskType,
+                        'name' => $type,
                     ));
                 }
             }
 
-            $this->_createCaseType($caseType, $taskTypes);
+            $this->_createCaseType($caseType, $types);
         }
     }
 
