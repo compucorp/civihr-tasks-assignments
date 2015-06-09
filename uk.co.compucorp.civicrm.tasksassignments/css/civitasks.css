@@ -11396,6 +11396,12 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match-item, #cividocuments .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
   margin-bottom: 2px;
 }
+/* line 129, ../sass/civihr/partials/_forms.scss */
+#civitasks .drop-zone, #cividocuments .drop-zone {
+  background-color: #e8eef0;
+  border: 1px solid #727e8a;
+  color: #525966;
+}
 /* line 1, ../sass/civihr/partials/_iframe.scss */
 #civitasks .ct-iframe, #cividocuments .ct-iframe {
   opacity: 0;

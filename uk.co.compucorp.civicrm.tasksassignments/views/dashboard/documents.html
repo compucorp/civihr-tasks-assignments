@@ -227,9 +227,9 @@
         <div class="dropdown" dropdown>
             <a href class="dropdown-toggle"
                ng-class="{
-                'text-danger-light': (document.status_id == 4),
+                'text-danger-light': (document.status_id == 4 || document.status_id == 1),
                 'text-success-light': (document.status_id == 3),
-                'text-warning-light': (document.status_id == 1 || document.status_id == 2)
+                'text-warning-light': (document.status_id == 2)
             }" dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
             <ul class="dropdown-menu">
                 <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
