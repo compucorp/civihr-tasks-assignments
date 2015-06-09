@@ -54,4 +54,10 @@
     <title>FileDelete</title>
     <!--<access_arguments>edit Documents</access_arguments>-->
   </item>
+  <item>
+    <path>civicrm/tasksassignments/file/zip</path>
+    <page_callback>CRM_Tasksassignments_Page_Files::fileZip</page_callback>
+    <title>FileZip</title>
+    <!--<access_arguments>edit Documents</access_arguments>-->
+  </item>
 </menu>

@@ -24,6 +24,23 @@ function civicrm_api3_task_create($params) {
       )
     );
   }
+  
+  /* This code prevents creating a copy of Activity each time we pass 'case_id'
+   * to 'create' method and when the Activity is already connected to the Case.
+   * The code is commented out due to front-end JavaScript solution to the issue.
+   * 
+  if (!empty($params['id']) && !empty($params['case_id'])) {
+    $activity = civicrm_api3('Task', 'get', array(
+      'sequential' => 1,
+      'id' => $params['id'],
+      'return' => 'case_id',
+    ));
+    $activityValues = CRM_Utils_Array::first($activity['values']);
+    if (!empty($activityValues['case_id']) && $activityValues['case_id'] == $params['case_id']) {
+        unset($params['case_id']);
+    }
+  }
+  */
 
   $errors = _civicrm_api3_task_check_params($params);
 

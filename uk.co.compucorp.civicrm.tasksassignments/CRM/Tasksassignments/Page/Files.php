@@ -158,6 +158,40 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     CRM_Utils_System::civiExit( );
   }
   
+  static function fileZip() {
+      $config = CRM_Core_Config::singleton();
+      $dest = $config->customFileUploadDir;
+      $params = $_GET;
+      $files = array();
+      $entityFiles = CRM_Core_BAO_File::getEntityFile( $params['entityTable'], $params['entityID'] );
+      
+      foreach ($entityFiles as $entityFile) {
+          if (!empty($entityFile['fullPath'])) {
+            $files[] = $entityFile['fullPath'];
+          }
+      }
+      
+      if (empty($files)) {
+          CRM_Utils_System::civiExit();
+      }
+      
+      $zipname = 'document_' . (int)$params['entityID'] . '_files.zip';
+      $zipfullpath = $dest . '/' . $zipname;
+      $zip = new ZipArchive();
+      $zip->open($zipfullpath, ZipArchive::CREATE);
+      foreach ($files as $file) {
+        $zip->addFile($file, substr($file, strrpos($file, '/') + 1));
+      }
+      $zip->close();
+    
+      header('Content-Type: application/zip');
+      header('Content-disposition: attachment; filename='.$zipname);
+      header('Content-Length: ' . filesize($zipfullpath));
+      readfile($zipfullpath);
+      
+      CRM_Utils_System::civiExit();
+  }
+  
   /**
    * @param $name
    *

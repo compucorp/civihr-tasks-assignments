@@ -24,6 +24,23 @@ function civicrm_api3_document_create($params) {
       )
     );
   }
+  
+  /* This code prevents creating a copy of Activity each time we pass 'case_id'
+   * to 'create' method and when the Activity is already connected to the Case.
+   * The code is commented out due to front-end JavaScript solution to the issue.
+   * 
+  if (!empty($params['id']) && !empty($params['case_id'])) {
+    $activity = civicrm_api3('Document', 'get', array(
+      'sequential' => 1,
+      'id' => $params['id'],
+      'return' => 'case_id',
+    ));
+    $activityValues = CRM_Utils_Array::first($activity['values']);
+    if (!empty($activityValues['case_id']) && $activityValues['case_id'] == $params['case_id']) {
+        unset($params['case_id']);
+    }
+  }
+  */
 
   $errors = _civicrm_api3_document_check_params($params);
 
@@ -562,6 +579,7 @@ function civicrm_api3_document_get($params) {
         ));
         
         $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
+        $fileCountQuery = 'SELECT COUNT(id) as file_count FROM civicrm_entity_file WHERE entity_table = "civicrm_activity" AND entity_id = %1';
         foreach ($getResult['values'] as $key => $value) {
             $caseActivityParams = array(
                 1 => array($value['id'], 'Integer'),
@@ -572,6 +590,14 @@ function civicrm_api3_document_get($params) {
             {
                 $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
             }
+            
+            $fileCountParams = array(
+                1 => array($value['id'], 'Integer'),
+            );
+            $fileCountResult = CRM_Core_DAO::executeQuery($fileCountQuery, $fileCountParams);
+            $fileCountResult->fetch();
+            $getResult['values'][$key]['file_count'] = (int)$fileCountResult->file_count;
+            
             foreach ($customFields as $customFieldKey => $customFieldData) {
                 if (isset($getResult['values'][$key][$customFieldKey])) {
                     $customFieldValue = $getResult['values'][$key][$customFieldKey];
