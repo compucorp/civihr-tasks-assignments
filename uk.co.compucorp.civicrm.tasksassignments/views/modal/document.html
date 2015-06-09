@@ -30,14 +30,16 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="{{prefix}}document-due" class="col-xs-6 col-sm-5 control-label form-control-static">Due:
+                    <label for="{{prefix}}document-due" class="col-xs-6 col-sm-5 control-label form-control-static">
+                        Due:<span class="text-required">*</span>&nbsp;
                         <a href="" class="text-normal"
                            ng-model="document.activity_date_time"
                            is-open="dpOpened.due"
                            datepicker-popup
                            ng-click="dpOpened.due = !dpOpened.due;">{{(document.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                    <input type="hidden" id="{{prefix}}document-due" ng-model="document.activity_date_time" name="documentDue">
-                    <label for="{{prefix}}document-exp" class="col-xs-6 col-sm-5 control-label form-control-static">Expires:
+                    <input type="hidden" id="{{prefix}}document-due" ng-model="document.activity_date_time" name="documentDue" ng-required="true">
+                    <label for="{{prefix}}document-exp" class="col-xs-6 col-sm-5 control-label form-control-static">
+                        Expires:&nbsp;
                         <a href="" class="text-normal"
                            ng-model="document.expire_date"
                            is-open="dpOpened.exp"
@@ -190,7 +192,6 @@
                         <select id="{{prefix}}document-status" class="form-control" name="documentStatus"
                                 ng-model="document.status_id"
                                 ng-options="key as value for (key, value) in cache.documentStatus.obj">
-                            <option value="">- select -</option>
                         </select>
                     </div>
                 </div>

@@ -20,6 +20,7 @@ define(['controllers/controllers',
             $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
             $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
+            $scope.document.status_id = $scope.document.status_id || '1';
             $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.filesTrash = [];
             $scope.uploader = FileService.uploader('civicrm_activity');

@@ -65,6 +65,10 @@ input[type="checkbox"],
   }
 }
 
+.text-required {
+  color:red;
+}
+
 .form-group.required {
   .control-label:after {
     content:"*";
