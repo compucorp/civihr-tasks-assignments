@@ -4,10 +4,10 @@ define(['controllers/controllers',
         'services/dialog',
         'services/document'], function(controllers){
 
-    controllers.controller('ModalDocumentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-        '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, $dialog, AssignmentService, DocumentService,
-                 ContactService, FileService, data, files, config){
+    controllers.controller('ModalDocumentCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log',
+        '$filter', '$modal', '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config',
+        function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService,
+                 DocumentService, ContactService, FileService, data, files, config){
             $log.debug('Controller: ModalDocumentCtrl');
 
             $scope.files = [];
@@ -166,7 +166,22 @@ define(['controllers/controllers',
                 }).then(function(result){
 
                     if (uploader.queue.length) {
-                        result.files = FileService.upload(uploader, result.document.id);
+                        var modalInstance  = $modal.open({
+                            targetDomEl: $rootElement.find('div').eq(0),
+                            templateUrl: config.path.TPL+'/modal/progress.html?v='+(new Date()).getTime(),
+                            size: 'sm',
+                            controller: 'ModalProgressCtrl',
+                            resolve: {
+                                uploader: function(){
+                                    return uploader;
+                                },
+                                entityId: function(){
+                                    return result.document.id;
+                                }
+                            }
+                        });
+
+                        result.files = modalInstance.result;
                         return $q.all(result);
                     }
 
@@ -175,6 +190,7 @@ define(['controllers/controllers',
                 }).then(function(result){
 
                     $scope.document.id = result.document.id;
+                    $scope.document.case_id = result.document.case_id;
                     $scope.document.file_count = $scope.files.length + uploader.queue.length;
 
                     AssignmentService.updateTab();
