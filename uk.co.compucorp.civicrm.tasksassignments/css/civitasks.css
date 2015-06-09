@@ -12884,4 +12884,22 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 /* line 16, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-upload, #cividocuments .ct-table-upload {
   margin-bottom: 0;
+  table-layout: fixed;
+}
+/* line 20, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-upload .col-index, #cividocuments .ct-table-upload .col-index {
+  width: 30px;
+}
+/* line 24, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-upload .col-size, #cividocuments .ct-table-upload .col-size {
+  width: 80px;
+}
+/* line 28, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-upload .col-action, #cividocuments .ct-table-upload .col-action {
+  width: 82px;
+}
+/* line 32, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-upload td, #cividocuments .ct-table-upload td {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

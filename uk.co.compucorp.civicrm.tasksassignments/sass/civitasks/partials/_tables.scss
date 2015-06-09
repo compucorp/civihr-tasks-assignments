@@ -15,4 +15,22 @@
 
 .#{$prefix}table-upload {
   margin-bottom: 0;
+  table-layout: fixed;
+
+  .col-index {
+    width: 30px;
+  }
+
+  .col-size {
+    width: 80px;
+  }
+
+  .col-action {
+    width: 82px;
+  }
+
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
