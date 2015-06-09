@@ -230,8 +230,7 @@ define(['controllers/controllers',
                         },
                         files: function(){
 
-                            //if (!data.id || !data.file_count) {
-                            if (!data.id) {
+                            if (!data.id || !+data.file_count) {
                                 return [];
                             }
 

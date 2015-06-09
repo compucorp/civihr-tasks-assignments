@@ -73,7 +73,7 @@ define(['services/services',
                     }
 
                     var uploaderSettings = {
-                        url: config.url.FILE + 'upload',
+                        url: config.url.FILE + '/upload',
                         formData: [
                             {
                                 entityTable: entityTable
