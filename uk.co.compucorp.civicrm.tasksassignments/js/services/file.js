@@ -5,7 +5,7 @@ define(['services/services',
         function ($resource, config, $q, UtilsService, FileUploader, $log) {
             $log.debug('Service: FileService');
 
-            var File = $resource(config.url.FILE+':action');
+            var File = $resource(config.url.FILE+'/:action');
                 FileUploader.prototype.queueDelete = [];
 
             return {

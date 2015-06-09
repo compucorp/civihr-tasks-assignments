@@ -20,6 +20,7 @@ define(['controllers/controllers',
             $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
             $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
+            $scope.document.status_id = $scope.document.status_id || '1';
             $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.filesTrash = [];
             $scope.uploader = FileService.uploader('civicrm_activity');
@@ -147,6 +148,8 @@ define(['controllers/controllers',
 
                 $scope.$broadcast('ct-spinner-show');
 
+                //temporary remove case_id
+                +$scope.document.case_id == +data.case_id && delete $scope.document.case_id;
                 $scope.document.activity_date_time = $scope.document.activity_date_time || new Date();
 
                 if (filesTrash.length) {
@@ -172,6 +175,7 @@ define(['controllers/controllers',
                 }).then(function(result){
 
                     $scope.document.id = result.document.id;
+                    $scope.document.id = result.document.file_count;
 
                     AssignmentService.updateTab();
                     $modalInstance.close($scope.document);

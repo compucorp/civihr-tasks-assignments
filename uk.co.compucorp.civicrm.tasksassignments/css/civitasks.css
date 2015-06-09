@@ -11337,12 +11337,16 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .form-horizontal .well .form-group + .form-group, #cividocuments .form-horizontal .well .form-group + .form-group {
   margin-top: 15px;
 }
-/* line 69, ../sass/civihr/partials/_forms.scss */
+/* line 68, ../sass/civihr/partials/_forms.scss */
+#civitasks .text-required, #cividocuments .text-required {
+  color: red;
+}
+/* line 73, ../sass/civihr/partials/_forms.scss */
 #civitasks .form-group.required .control-label:after, #cividocuments .form-group.required .control-label:after {
   content: "*";
   color: red;
 }
-/* line 75, ../sass/civihr/partials/_forms.scss */
+/* line 79, ../sass/civihr/partials/_forms.scss */
 #civitasks .control-label, #cividocuments .control-label,
 #civitasks .checkbox-inline,
 #cividocuments .checkbox-inline,
@@ -11357,18 +11361,18 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   font-weight: bold;
   font-size: 11px;
 }
-/* line 91, ../sass/civihr/partials/_forms.scss */
+/* line 95, ../sass/civihr/partials/_forms.scss */
 #civitasks .ta-editor.ta-html, #cividocuments .ta-editor.ta-html,
 #civitasks .ta-scroll-window.form-control,
 #cividocuments .ta-scroll-window.form-control {
   min-height: 120px;
   overflow: visible;
 }
-/* line 97, ../sass/civihr/partials/_forms.scss */
+/* line 101, ../sass/civihr/partials/_forms.scss */
 #civitasks .ta-scroll-window > .ta-bind, #cividocuments .ta-scroll-window > .ta-bind {
   min-height: 120px;
 }
-/* line 101, ../sass/civihr/partials/_forms.scss */
+/* line 105, ../sass/civihr/partials/_forms.scss */
 #civitasks .ta-toolbar, #cividocuments .ta-toolbar {
   background-color: #e8eef0;
   padding: 5px;
@@ -11376,19 +11380,19 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   border: 1px solid #727e8a;
   margin-bottom: -1px;
 }
-/* line 109, ../sass/civihr/partials/_forms.scss */
+/* line 113, ../sass/civihr/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap, #cividocuments .ui-select-multiple.ui-select-bootstrap {
   min-height: 31px;
 }
-/* line 112, ../sass/civihr/partials/_forms.scss */
+/* line 116, ../sass/civihr/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap input.ui-select-search, #cividocuments .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
   height: 1.9em;
 }
-/* line 116, ../sass/civihr/partials/_forms.scss */
+/* line 120, ../sass/civihr/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match .close, #cividocuments .ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
   line-height: 0.8;
 }
-/* line 120, ../sass/civihr/partials/_forms.scss */
+/* line 124, ../sass/civihr/partials/_forms.scss */
 #civitasks .ui-select-multiple.ui-select-bootstrap .ui-select-match-item, #cividocuments .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
   margin-bottom: 2px;
 }

@@ -54,13 +54,14 @@
                     </div>
                     <div class="col-xs-6 col-sm-4">
                         <div class="form-group">
-                            <label for="{{prefix}}assignment-due" class="col-xs-12 control-label">Due Date:
+                            <label for="{{prefix}}assignment-due" class="col-xs-12 control-label">
+                                Due Date:<span class="text-required">*</span>&nbsp;
                                 <a href class="text-normal"
                                    ng-model="assignment.dueDate"
                                    is-open="dpOpened.assignmentDue"
                                    datepicker-popup
                                    ng-click="dpOpen($event, 'assignmentDue');">{{(assignment.dueDate | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                            <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="assignmentDue">
+                            <input type="hidden" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="assignmentDue" ng-required="true">
                         </div>
                     </div>
                 </div>
@@ -143,8 +144,8 @@
                                            datepicker-popup
                                            ng-change="setAssignmentDueDate(activity.activity_date_time)"
                                            ng-click="!isDisabled && activity.create ? dpOpen($event, 'task'+$index) : return;"
-                                           ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                                    <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue">
+                                           ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a><span class="text-required" ng-hide="isDisabled || !activity.create">*</span></label>
+                                    <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue" ng-required="!isDisabled && activity.create">
                             <span class="input-group-btn" ng-if="activity.isAdded">
                                 <a class="btn btn-default btn-danger" ng-click="removeActivity(taskList, $index)">
                                     <span class="fa fa-remove" aria-hidden="true"></span>
@@ -223,8 +224,8 @@
                                            datepicker-popup
                                            ng-change="setAssignmentDueDate(activity.activity_date_time)"
                                            ng-click="!isDisabled && activity.create ? dpOpen($event, 'doc'+$index) : return;"
-                                           ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                                    <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-doc-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue">
+                                           ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a><span class="text-required" ng-hide="isDisabled || !activity.create">*</span></label>
+                                    <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-doc-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue" ng-required="!isDisabled && activity.create">
                             <span class="input-group-btn" ng-if="activity.isAdded">
                                 <a class="btn btn-default btn-danger" ng-click="removeActivity(documentList, $index)">
                                     <span class="fa fa-remove" aria-hidden="true"></span>

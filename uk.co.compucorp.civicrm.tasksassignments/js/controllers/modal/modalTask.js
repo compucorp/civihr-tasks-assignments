@@ -133,11 +133,14 @@ define(['controllers/controllers',
 
                 $scope.$broadcast('ct-spinner-show');
 
+                //temporary remove case_id
+                +$scope.task.case_id == +data.case_id && delete $scope.task.case_id;
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 
                 TaskService.save($scope.task).then(function(results){
 
                     $scope.task.id = results.id;
+                    $scope.task.case_id = results.case_id;
 
                     AssignmentService.updateTab();
                     $modalInstance.close($scope.task);
