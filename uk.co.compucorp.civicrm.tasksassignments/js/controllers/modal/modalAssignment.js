@@ -136,7 +136,8 @@ define(['controllers/controllers',
 
                     $q.all({
                         task: TaskService.saveMultiple(taskListAssignment),
-                        document: DocumentService.saveMultiple(documentListAssignment)
+                        document: DocumentService.saveMultiple(documentListAssignment),
+                        relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
                     }).then(function (results) {
 
                         i = 0, len = results.task.length;
@@ -149,29 +150,6 @@ define(['controllers/controllers',
                         for (i; i < len; i++) {
                             documentListAssignment[i].id = results.document[i].id;
                             documentArr.push(results.document[i].id);
-                        }
-
-                        return $q.all({
-                            assignedTasks: TaskService.assign(taskArr, resultAssignment.id),
-                            assignedDocuments: DocumentService.assign(documentArr, resultAssignment.id),
-                            relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
-                        });
-
-                    }, function (reason) {
-                        CRM.alert(reason, 'Error', 'error');
-                        $modalInstance.dismiss();
-                        $scope.$broadcast('ct-spinner-hide');
-                        return $q.reject();
-                    }).then(function(results) {
-
-                        i = 0, len = results.assignedTasks.length;
-                        for (i; i < len; i++) {
-                            taskArr.push(results.assignedTasks[i].id)
-                        }
-
-                        i = 0, len = results.assignedDocuments.length;
-                        for (i; i < len; i++) {
-                            documentArr.push(results.assignedDocuments[i].id)
                         }
 
                         cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment),{
@@ -207,6 +185,7 @@ define(['controllers/controllers',
                         });
                         $scope.$broadcast('ct-spinner-hide');
                         return
+
                     }, function (reason) {
                         CRM.alert(reason, 'Error', 'error');
                         $modalInstance.dismiss();
@@ -221,7 +200,7 @@ define(['controllers/controllers',
                     return $q.reject();
                 });
 
-            }
+            };
 
             $scope.$watch('activitySet',function(activitySet){
 
