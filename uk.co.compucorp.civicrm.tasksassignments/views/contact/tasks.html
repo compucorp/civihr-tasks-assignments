@@ -26,7 +26,7 @@
             </div>
         </div>
         <div ng-show="taskListFiltered.length">
-            <h4 class="header-bar header-bar-primary" ng-show="">Ongoing:</h4>
+            <h4 class="header-bar header-bar-primary" ng-show="taskListOngoing.length">Ongoing:</h4>
             <ul class="{{prefix}}list-task">
                 <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterBy.status:cache.taskStatusResolve:false)"
                     ng-controller="TaskCtrl"

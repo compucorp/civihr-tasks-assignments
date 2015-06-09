@@ -175,6 +175,7 @@ define(['controllers/controllers',
                 }).then(function(result){
 
                     $scope.document.id = result.document.id;
+                    $scope.document.id = result.document.file_count;
 
                     AssignmentService.updateTab();
                     $modalInstance.close($scope.document);

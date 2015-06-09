@@ -216,26 +216,29 @@ define(['controllers/controllers',
                 $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
             };
 
-            $rootScope.modalDocument = function(data) {
-                    var data = data || {},
-                        modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/document.html?v='+(new Date().getTime()),
-                        controller: 'ModalDocumentCtrl',
-                        resolve: {
-                            data: function(){
-                                return data;
-                            },
-                            files: function(){
+            $rootScope.modalDocument = function(data, e) {
+                e && e.preventDefault();
 
-                                if (!data.id) {
-                                    return [];
-                                }
+                var data = data || {},
+                    modalInstance = $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/document.html?v='+(new Date().getTime()),
+                    controller: 'ModalDocumentCtrl',
+                    resolve: {
+                        data: function(){
+                            return data;
+                        },
+                        files: function(){
 
-                                return FileService.get(data.id,'civicrm_activity')
+                            //if (!data.id || !data.file_count) {
+                            if (!data.id) {
+                                return [];
                             }
+
+                            return FileService.get(data.id,'civicrm_activity')
                         }
-                    });
+                    }
+                });
 
                 modalInstance.result.then(function(results){
                     angular.equals({}, data) ? $scope.documentList.push(results) : angular.extend(data,results);
