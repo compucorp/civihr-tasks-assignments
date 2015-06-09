@@ -147,6 +147,8 @@ define(['controllers/controllers',
 
                 $scope.$broadcast('ct-spinner-show');
 
+                //temporary remove case_id
+                +$scope.document.case_id == +data.case_id && delete $scope.document.case_id;
                 $scope.document.activity_date_time = $scope.document.activity_date_time || new Date();
 
                 if (filesTrash.length) {
