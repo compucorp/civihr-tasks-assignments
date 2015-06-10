@@ -125,3 +125,9 @@ input[type="checkbox"],
     margin-bottom: 2px;
   }
 }
+
+.drop-zone {
+  background-color: $gray-lighter;
+  border: 1px dashed $input-border;
+  color: $headings-color;
+}

@@ -6,8 +6,8 @@ define(['controllers/controllers',
         'services/assignment'], function(controllers, moment){
 
     controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
-        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, taskList, config, ContactService,
+        '$timeout', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $timeout, $log, taskList, config, ContactService,
                  AssignmentService, TaskService){
             $log.debug('Controller: TaskListCtrl');
 
@@ -78,6 +78,7 @@ define(['controllers/controllers',
             $scope.taskListLimit = 5;
             $scope.taskListOngoing = [];
             $scope.taskListResolved = [];
+            $scope.taskListResolvedLoaded = false;
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -85,12 +86,16 @@ define(['controllers/controllers',
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
-                filterDates: true
+                filterDates: true,
+                taskListResolved: true
             };
 
             $scope.filterParams = {
                 contactId: null,
-                userRole: null,
+                userRole: {
+                    field: null,
+                    isEqual: null
+                },
                 dateRange: {
                     from: null,
                     until: null
@@ -123,7 +128,7 @@ define(['controllers/controllers',
                     task.status_id = results.status_id;
                     $scope.$broadcast('ct-spinner-hide','task'+task.id);
                 })
-            }
+            };
 
             $scope.labelDateRange = function(from, until){
                 var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
@@ -138,7 +143,29 @@ define(['controllers/controllers',
                 }
 
                 $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
-            }
+            };
+
+            $scope.loadTasksResolved = function(){
+
+                if ($scope.taskListResolvedLoaded) {
+                    return;
+                }
+
+                //Remove resolved tasks from the task list
+                $scope.taskList = $scope.taskListOngoing;
+
+                TaskService.get({
+                    'target_contact_id': config.CONTACT_ID,
+                    'status_id': {
+                        'IN': config.status.resolve.TASK
+                    }
+                }).then(function(taskListResolved){
+                    $scope.taskList.push.apply($scope.taskList, taskListResolved);
+                    $timeout(function () {
+                        $scope.taskListResolvedLoaded = true;
+                    });
+                });
+            };
 
             $rootScope.modalTask = function(data) {
                 var data = data || {},

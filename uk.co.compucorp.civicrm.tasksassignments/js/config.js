@@ -18,6 +18,13 @@ define(function(){
             CIVI_DASHBOARD: CRM.url('civicrm/'),
             CONTACT: CRM.url('civicrm/contact/view'),
             FILE: CRM.url('civicrm/tasksassignments/file')
+        },
+        status: {
+            resolve: {
+                //TODO
+                DOCUMENT: ['3', '4'],
+                TASK: ['2', '3', '6', '8']
+            }
         }
     });
 

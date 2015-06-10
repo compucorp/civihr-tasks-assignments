@@ -85,6 +85,7 @@ define(['controllers/controllers',
             $scope.documentListOngoing = [];
             $scope.documentListPaginated = [];
             $scope.documentListResolved = [];
+            $scope.documentListResolvedLoaded = false;
             $scope.actionApplyTo = 'selected';
 
             $scope.checklist = {
@@ -98,13 +99,17 @@ define(['controllers/controllers',
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
-                filterDates: true
+                filterDates: true,
+                documentListResolved: true
             };
 
             $scope.filterParams = {
                 contactId: null,
                 documentStatus: [],
-                userRole: null,
+                userRole: {
+                    field: null,
+                    isEqual: null
+                },
                 dateRange: {
                     from: null,
                     until: null
@@ -214,6 +219,28 @@ define(['controllers/controllers',
                 }
 
                 $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
+            };
+
+            $scope.loadDocumentsResolved = function(){
+
+                if ($scope.documentListResolvedLoaded) {
+                    return;
+                }
+
+                //Remove resolved documents from the document list
+                $scope.documentList = $scope.documentListOngoing;
+
+                DocumentService.get({
+                    'target_contact_id': config.CONTACT_ID,
+                    'status_id': {
+                        'IN': config.status.resolve.DOCUMENT
+                    }
+                }).then(function(documentListResolved){
+                    $scope.documentList.push.apply($scope.documentList, documentListResolved);
+                    $timeout(function () {
+                        $scope.documentListResolvedLoaded = true;
+                    });
+                });
             };
 
             $rootScope.modalDocument = function(data, e) {

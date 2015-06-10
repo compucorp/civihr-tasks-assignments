@@ -3,7 +3,7 @@
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name || 'No target contact'"></h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" nv-file-drop uploader="uploader">
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-group">
@@ -141,11 +141,15 @@
                 <div class="form-group">
                     <label for="{{prefix}}document-files" class="col-xs-12 col-sm-2 control-label">File(s):</label>
                     <div class="col-xs-12 col-sm-10">
+                        <div class="well drop-zone">
+                            Drop document(s) here
+                        </div>
                         <input type="file"
-                               class="form-control-file"
+                               class="form-control-file pull-right"
                                id="{{prefix}}document-files"
                                multiple
                                nv-file-select uploader="uploader" />
+                        <p class="form-control-static">or select document(s) to upload</p>
                         <table class="table table-condensed {{prefix}}table-upload" ng-show="uploader.queue.length || files.length">
                             <colgroup>
                                 <col class="col-index">
@@ -157,6 +161,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
+                                <th>Size</th>
                                 <th></th>
                             </tr>
                             </thead>

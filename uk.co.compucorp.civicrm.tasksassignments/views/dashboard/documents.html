@@ -6,9 +6,9 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
                 </ul>
                 <hr>
                 <a href
@@ -59,7 +59,7 @@
                                       filterParams.dateRange.until = filterParamsHolder.dateRange.until;
                                       filterParams.documentStatus = filterParamsHolder.documentStatus;
                                       filterParams.due = 'dateRange';
-                                      labelDateRange(filterParams.dateRange.from, filterParams.dateRange.unti)">
+                                      labelDateRange(filterParams.dateRange.from, filterParams.dateRange.until)">
                         Apply Filter</button>
                 </div>
             </div>
@@ -79,13 +79,22 @@
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-gray active"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="'assignee_contact_id'">My Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id').length}})</button>
+                                        btn-radio="{
+                                            field: 'assignee_contact_id',
+                                            isEqual: true
+                                        }">My Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="'source_contact_id'">Delegated Docs ({{(documentListOngoing | filterBy.userRole:'source_contact_id').length}})</button>
+                                        btn-radio="{
+                                            field: 'assignee_contact_id',
+                                            isEqual: false
+                                        }">Delegated Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id':false).length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="null">All</button>
+                                        btn-radio="{
+                                            field: null,
+                                            isEqual: null
+                                        }">All</button>
                             </div>
                         </div>
                     </div>
@@ -193,7 +202,7 @@
                  documentListPaginated = (documentListFiltered = (documentListOngoing = (documentList
                     | filterBy.status:cache.documentStatusResolve:false)
                         | filterBy.due:filterParams.due:filterParams.dateRange
-                        | filterBy.userRole:filterParams.userRole
+                        | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual
                         | filterBy.assignmentType:filterParams.assignmentType
                         | filterBy.contactId:filterParams.contactId
                         | filterBy.status:filterParams.documentStatus
@@ -227,9 +236,9 @@
         <div class="dropdown" dropdown>
             <a href class="dropdown-toggle"
                ng-class="{
-                'text-danger-light': (document.status_id == 4),
+                'text-danger-light': (document.status_id == 4 || document.status_id == 1),
                 'text-success-light': (document.status_id == 3),
-                'text-warning-light': (document.status_id == 1 || document.status_id == 2)
+                'text-warning-light': (document.status_id == 2)
             }" dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
             <ul class="dropdown-menu">
                 <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>

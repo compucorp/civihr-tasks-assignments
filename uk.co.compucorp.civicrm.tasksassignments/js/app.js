@@ -72,8 +72,7 @@ define([
                     obj: {},
                     arr: []
                 },
-                //TODO
-                documentStatusResolve: ['3', '4'],
+                documentStatusResolve: config.status.resolve.DOCUMENT,
                 taskType: {
                     obj: {},
                     arr: []
@@ -82,8 +81,7 @@ define([
                     obj: {},
                     arr: []
                 },
-                //TODO
-                taskStatusResolve: ['2', '3', '6', '8']
+                taskStatusResolve: config.status.resolve.TASK
             };
 
             TaskService.getOptions().then(function(options){
@@ -131,11 +129,17 @@ define([
                                 $q.all([
                                     TaskService.get({
                                         'sequential': 0,
-                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID
+                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.TASK
+                                        }
                                     }),
                                     TaskService.get({
                                         'sequential': 0,
-                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID
+                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.TASK
+                                        }
                                     })
                                 ]).then(function(results){
                                     var taskId, taskList = [];
@@ -164,11 +168,17 @@ define([
                                 $q.all([
                                     DocumentService.get({
                                         'sequential': 0,
-                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID
+                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.DOCUMENT
+                                        }
                                     }),
                                     DocumentService.get({
                                         'sequential': 0,
-                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID
+                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.DOCUMENT
+                                        }
                                     })
                                 ]).then(function(results){
                                     var documentId, documentList = [];
@@ -230,7 +240,10 @@ define([
                         resolve: {
                             documentList: ['DocumentService',function(DocumentService){
                                 return DocumentService.get({
-                                    'target_contact_id': config.CONTACT_ID
+                                    'target_contact_id': config.CONTACT_ID,
+                                    'status_id': {
+                                        'NOT IN': config.status.resolve.DOCUMENT
+                                    }
                                 });
                             }]
                         }
@@ -257,7 +270,10 @@ define([
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({
-                                    'target_contact_id': config.CONTACT_ID
+                                    'target_contact_id': config.CONTACT_ID,
+                                    'status_id': {
+                                        'NOT IN': config.status.resolve.TASK
+                                    }
                                 });
                             }]
                         }

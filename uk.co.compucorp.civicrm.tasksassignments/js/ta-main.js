@@ -37,6 +37,7 @@ reqTa([
     'controllers/dashboard/topBar',
     'controllers/modal/modalDialog',
     'controllers/modal/modalDocument',
+    'controllers/modal/modalProgress',
     'controllers/modal/modalTask',
     'controllers/modal/modalReminder',
     'controllers/modal/modalAssignment',

@@ -50,29 +50,47 @@
                 </table>
             </div>
         </div>
-        <div ng-hide="!documentListResolved.length">
-            <h4 class="header-bar header-bar-danger">Resolved:</h4>
-            <div ct-spinner ct-spinner-id="documentList">
+        <h4 class="header-bar header-bar-danger">Resolved:
+            <a href class="pull-right" ng-click="loadDocumentsResolved(); isCollapsed.documentListResolved = !isCollapsed.documentListResolved">
+                <i ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.documentListResolved, 'fa-chevron-up': isCollapsed.documentListResolved }"></i>
+            </a>
+        </h4>
+        <div collapse="isCollapsed.documentListResolved">
+            <div class="well {{prefix}}spinner-container" ng-show="!documentListResolvedLoaded">
+                Loading resolved documents...
+                <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
+            </div>
+            <div class="alert alert-danger" ng-show="documentListResolvedLoaded && !documentListResolved.length">No results found.</div>
+            <div ct-spinner ct-spinner-id="documentList" ng-show="documentListResolved.length">
                 <table class="table table-striped {{prefix}}table-documents">
                     <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Contact</th>
-                        <th>Assignment</th>
-                        <th>Due Date</th>
-                        <th>Expiry Date</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
+                        <tr>
+                            <th>Type</th>
+                            <th>Contact</th>
+                            <th>Assignment</th>
+                            <th>Due Date</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="document in documentListResolved = (documentListFiltered | filterBy.status:cache.documentStatusResolve:true)"
-                        ng-controller="DocumentCtrl"
-                        ng-include
-                        src="'document.html'">
-                    </tr>
+                        <tr ng-repeat="document in documentListPaginated = (documentListResolved = (documentListFiltered
+                        | filterBy.status:cache.documentStatusResolve:true)
+                            | offset: (pagination.currentPage-1)*pagination.itemsPerPage
+                            | limitTo: pagination.itemsPerPage)"
+                            ng-controller="DocumentCtrl"
+                            ng-include
+                            src="'document.html'">
+                        </tr>
                     </tbody>
                 </table>
+                <div class="clearfix"></div>
+                <nav class="row" ng-show="(documentListResolved.length > pagination.itemsPerPage)">
+                    <div class="col-xs-12 text-center">
+                        <pagination boundary-links="true" total-items="documentListResolved.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                    </div>
+                </nav>
             </div>
         </div>
     </form>
@@ -88,9 +106,9 @@
         <div class="dropdown" dropdown>
             <a href class="dropdown-toggle"
                ng-class="{
-                'text-danger-light': (document.status_id == 4),
+                'text-danger-light': (document.status_id == 4 || document.status_id == 1),
                 'text-success-light': (document.status_id == 3),
-                'text-warning-light': (document.status_id == 1 || document.status_id == 2)
+                'text-warning-light': (document.status_id == 2)
             }" dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
             <ul class="dropdown-menu">
                 <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
