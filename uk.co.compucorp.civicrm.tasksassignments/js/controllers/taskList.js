@@ -92,7 +92,10 @@ define(['controllers/controllers',
 
             $scope.filterParams = {
                 contactId: null,
-                userRole: null,
+                userRole: {
+                    field: null,
+                    isEqual: null
+                },
                 dateRange: {
                     from: null,
                     until: null

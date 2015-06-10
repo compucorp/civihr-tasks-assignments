@@ -6,9 +6,9 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
                 </ul>
                 <hr>
                 <a href
@@ -65,13 +65,22 @@
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-gray active"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="'assignee_contact_id'">My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})</button>
+                                        btn-radio="{
+                                            field: 'assignee_contact_id',
+                                            isEqual: true
+                                        }">My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="'source_contact_id'">Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'source_contact_id').length}})</button>
+                                        btn-radio="{
+                                            field: 'assignee_contact_id',
+                                            isEqual: false
+                                        }">Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id':false).length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
-                                        btn-radio="null">All</button>
+                                        btn-radio="{
+                                            field: null,
+                                            isEqual: null
+                                        }">All</button>
                             </div>
                         </div>
                     </div>
@@ -129,7 +138,7 @@
             </div>
         </div>
         <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterBy.status:cache.taskStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
+            <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterBy.status:cache.taskStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
                 ng-controller="TaskCtrl"
                 ng-class="{
                     '{{prefix}}task-completed': task.completed,
@@ -141,19 +150,6 @@
                 ct-spinner-id="task{{task.id}}">
             </li>
         </ul>
-        <!--
-        <h4 class="header-bar header-bar-danger" ng-show="taskListFiltered.length">Resolved:</h4>
-        <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskListFiltered"
-                ng-controller="TaskCtrl"
-                ng-class="'{{prefix}}task-resolved'"
-                ng-if="task.resolved"
-                ng-include
-                src="'task.html'"
-                ct-spinner>
-            </li>
-        </ul>
-        -->
     </div>
 </div>
 <div class="row" ng-show="taskListUnlimited.length > taskListFiltered.length">
