@@ -179,6 +179,8 @@ define(['controllers/controllers',
 
                         AssignmentService.updateCache(cacheAssignmentObj);
                         AssignmentService.updateTab(1);
+                        //CRM.refreshParent('#civitasks');
+                        //CRM.refreshParent('#cividocuments');
                         $modalInstance.close({
                             documentList: documentListAssignment,
                             taskList: taskListAssignment
