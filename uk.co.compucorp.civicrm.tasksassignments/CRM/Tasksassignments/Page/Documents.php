@@ -28,6 +28,9 @@ class CRM_Tasksassignments_Page_Documents extends CRM_Core_Page {
                 return array(
                     'Tasksassignments' => array(
                         'extensionPath' => CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.tasksassignments'),
+                        'permissions' => array(
+                            'delete_tasks_and_documents' => CRM_Core_Permission::check('delete Tasks and Documents'),
+                        ),
                     ),
                     'adminId' => CRM_Core_Session::getLoggedInContactID(),
                     'contactId' => CRM_Utils_Request::retrieve('cid', 'Integer'),

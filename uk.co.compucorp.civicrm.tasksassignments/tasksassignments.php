@@ -166,3 +166,16 @@ function tasksassignments_civicrm_tabs(&$tabs) {
     );
 
 }
+
+/**
+ * Implementation of hook_civicrm_permission
+ *
+ * @param array $permissions
+ * @return void
+ */
+function tasksassignments_civicrm_permission(&$permissions) {
+  $prefix = ts('CiviTasksassignments') . ': ';
+  $permissions += array(
+    'delete Tasks and Documents' => $prefix . ts('delete Tasks and Documents'),
+  );
+}
