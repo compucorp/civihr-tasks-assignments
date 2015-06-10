@@ -11096,31 +11096,43 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   background-color: #42b0cb;
   color: #fff;
 }
-/* line 26, ../sass/civihr/partials/_typography.scss */
+/* line 25, ../sass/civihr/partials/_typography.scss */
+#civitasks .header-bar.header-bar-primary a, #cividocuments .header-bar.header-bar-primary a {
+  color: #fff;
+}
+/* line 30, ../sass/civihr/partials/_typography.scss */
 #civitasks .header-bar.header-bar-success, #cividocuments .header-bar.header-bar-success {
   background-color: #7dc4a7;
   color: #fff;
 }
-/* line 31, ../sass/civihr/partials/_typography.scss */
+/* line 35, ../sass/civihr/partials/_typography.scss */
 #civitasks .header-bar.header-bar-info, #cividocuments .header-bar.header-bar-info {
   background-color: #5bc0de;
   color: #fff;
 }
-/* line 36, ../sass/civihr/partials/_typography.scss */
+/* line 40, ../sass/civihr/partials/_typography.scss */
 #civitasks .header-bar.header-bar-warning, #cividocuments .header-bar.header-bar-warning {
   background-color: #db6c86;
   color: #fff;
 }
-/* line 41, ../sass/civihr/partials/_typography.scss */
+/* line 45, ../sass/civihr/partials/_typography.scss */
 #civitasks .header-bar.header-bar-danger, #cividocuments .header-bar.header-bar-danger {
   background-color: #db6c86;
   color: #fff;
 }
-/* line 47, ../sass/civihr/partials/_typography.scss */
+/* line 49, ../sass/civihr/partials/_typography.scss */
+#civitasks .header-bar.header-bar-danger a, #cividocuments .header-bar.header-bar-danger a {
+  color: #fff;
+}
+/* line 52, ../sass/civihr/partials/_typography.scss */
+#civitasks .header-bar.header-bar-danger a:hover, #cividocuments .header-bar.header-bar-danger a:hover, #civitasks .header-bar.header-bar-danger a:active, #cividocuments .header-bar.header-bar-danger a:active {
+  color: #e6e6e6;
+}
+/* line 60, ../sass/civihr/partials/_typography.scss */
 #civitasks a[disabled]:not(.btn), #cividocuments a[disabled]:not(.btn) {
   color: #727e8a;
 }
-/* line 50, ../sass/civihr/partials/_typography.scss */
+/* line 63, ../sass/civihr/partials/_typography.scss */
 #civitasks a[disabled]:not(.btn):hover, #cividocuments a[disabled]:not(.btn):hover {
   cursor: default;
 }
@@ -11399,7 +11411,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 /* line 129, ../sass/civihr/partials/_forms.scss */
 #civitasks .drop-zone, #cividocuments .drop-zone {
   background-color: #e8eef0;
-  border: 1px solid #727e8a;
+  border: 1px dashed #727e8a;
   color: #525966;
 }
 /* line 1, ../sass/civihr/partials/_iframe.scss */
@@ -12781,6 +12793,19 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks .ct-sidebar-main > li.active > a:hover, #cividocuments .ct-sidebar-main > li.active > a:hover {
   background-color: #d9e3e6;
 }
+/* line 3, ../sass/civitasks/partials/_page-contact.scss */
+#civitasks .ct-page-contact .ct-list-task > li:first-child, #cividocuments .ct-page-contact .ct-list-task > li:first-child {
+  margin-top: 0;
+}
+/* line 8, ../sass/civitasks/partials/_page-contact.scss */
+#civitasks .ct-page-contact .alert, #cividocuments .ct-page-contact .alert {
+  padding: 19px;
+  margin-bottom: 15px;
+}
+/* line 13, ../sass/civitasks/partials/_page-contact.scss */
+#civitasks .ct-page-contact .well, #cividocuments .ct-page-contact .well {
+  margin-bottom: 15px;
+}
 /* line 1, ../sass/civitasks/partials/_sidebar.scss */
 #civitasks .ct-sidebar, #cividocuments .ct-sidebar {
   float: left;
@@ -12827,6 +12852,11 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   min-height: 530px;
 }
 /* line 2, ../sass/civitasks/partials/_spinner.scss */
+.ct-spinner-container {
+  position: relative;
+}
+
+/* line 6, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner-cover {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -12843,14 +12873,14 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   animation: fadeIn 0.3s;
 }
 
-/* line 15, ../sass/civitasks/partials/_spinner.scss */
+/* line 19, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner-img {
   background-image: url("../img/loading-overlay.gif") !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
 }
 
-/* line 21, ../sass/civitasks/partials/_spinner.scss */
+/* line 25, ../sass/civitasks/partials/_spinner.scss */
 .ct-spinner {
   height: 32px;
   margin-left: -16px;
@@ -12865,7 +12895,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   animation: fadeIn 0.3s;
 }
 
-/* line 35, ../sass/civitasks/partials/_spinner.scss */
+/* line 39, ../sass/civitasks/partials/_spinner.scss */
 .ct-page-loading .ct-spinner-cover {
   background-color: white !important;
 }

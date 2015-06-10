@@ -128,6 +128,6 @@ input[type="checkbox"],
 
 .drop-zone {
   background-color: $gray-lighter;
-  border: 1px solid $input-border;
+  border: 1px dashed $input-border;
   color: $headings-color;
 }
