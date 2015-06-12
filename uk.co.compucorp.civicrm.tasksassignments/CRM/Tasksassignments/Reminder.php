@@ -100,7 +100,7 @@ class CRM_Tasksassignments_Reminder
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
-                'activityName' => implode(', ', $activityContact[3]['links']) . ' - ' . $typeResult['values'][$activityResult['activity_type_id']],
+                'activityName' => implode(', ', $activityContact[3]['links']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityTargets' => implode(', ', $activityContact[3]['links']),
                 'activityAssignee' => implode(', ', $activityContact[1]['links']),
@@ -200,6 +200,7 @@ class CRM_Tasksassignments_Reminder
         LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
         WHERE a.id IN (" . implode(',', $activityIds) . ")
         GROUP BY a.id";
+        
         $activityResult = CRM_Core_DAO::executeQuery($activityQuery);
         while ($activityResult->fetch())
         {

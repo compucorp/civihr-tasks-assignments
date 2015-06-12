@@ -1,371 +1,268 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
-        <!-- This is a simple example template that you can edit to create your own custom templates -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!-- Facebook sharing information tags -->
-        <meta property="og:title" content="*|MC:SUBJECT|*">
-        
-        <title>*|MC:SUBJECT|*</title>
-		
+        <title>CiviCRM Reminder3</title>
 	<style type="text/css">
-		#outlook a{
-			padding:0;
-		}
-		body{
-			width:100% !important;
-		}
-		body{
-			-webkit-text-size-adjust:none;
-		}
-		body{
-			margin:0;
-			padding:0;
-		}
-		img{
-			border:none;
-			font-size:14px;
-			font-weight:bold;
-			height:auto;
-			line-height:100%;
-			outline:none;
-			text-decoration:none;
-			text-transform:capitalize;
-		}
-		#backgroundTable{
-			height:100% !important;
-			margin:0;
-			padding:0;
-			width:100% !important;
-		}
-	/*
-	@tab Page
-	@section background color
-	@tip Set the background color for your email. You may want to choose one that matches your company's branding.
-	@theme page
-	*/
-		body,.backgroundTable{
-			/*@editable*/background-color:#FAFAFA;
-		}
-	/*
-	@tab Page
-	@section email border
-	@tip Set the border for your email.
-	*/
-		#templateContainer{
-			/*@editable*/border:1px solid #DDDDDD;
-		}
-	/*
-	@tab Page
-	@section heading 1
-	@tip Set the styling for all first-level headings in your emails. These should be the largest of your headings.
-	@theme heading1
-	*/
-		h1,.h1{
-			/*@editable*/color:#202020;
-			display:block;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:34px;
-			/*@editable*/font-weight:normal;
-			/*@editable*/line-height:100%;
-			margin-bottom:10px;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Page
-	@section heading 2
-	@tip Set the styling for all second-level headings in your emails.
-	@theme heading2
-	*/
-		h2,.h2{
-			/*@editable*/color:#202020;
-			display:block;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:30px;
-			/*@editable*/font-weight:normal;
-			/*@editable*/line-height:100%;
-			margin-bottom:10px;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Page
-	@section heading 3
-	@tip Set the styling for all third-level headings in your emails.
-	@theme heading3
-	*/
-		h3,.h3{
-			/*@editable*/color:#202020;
-			display:block;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:26px;
-			/*@editable*/font-weight:normal;
-			/*@editable*/line-height:100%;
-			margin-bottom:10px;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Page
-	@section heading 4
-	@tip Set the styling for all fourth-level headings in your emails. These should be the smallest of your headings.
-	@theme heading4
-	*/
-		h4,.h4{
-			/*@editable*/color:#202020;
-			display:block;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:22px;
-			/*@editable*/font-weight:normal;
-			/*@editable*/line-height:100%;
-			margin-bottom:10px;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Header
-	@section preheader style
-	@tip Set the background color for your email's preheader area.
-	@theme page
-	*/
-		#templatePreheader{
-			/*@editable*/background-color:#FAFAFA;
-		}
-	/*
-	@tab Header
-	@section preheader text
-	@tip Set the styling for your email's preheader text. Choose a size and color that is easy to read.
-	*/
-		.preheaderContent div{
-			/*@editable*/color:#505050;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:10px;
-			/*@editable*/line-height:100%;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Header
-	@section preheader link
-	@tip Set the styling for your email's preheader links. Choose a color that helps them stand out from your text.
-	*/
-		.preheaderContent div a:link,.preheaderContent div a:visited{
-			/*@editable*/color:#336699;
-			/*@editable*/font-weight:normal;
-			/*@editable*/text-decoration:underline;
-		}
-		.preheaderContent div img{
-			height:auto;
-			max-width:600px;
-		}
-	/*
-	@tab Header
-	@section header style
-	@tip Set the background color and border for your email's header area.
-	@theme header
-	*/
-		#templateHeader{
-			/*@editable*/background-color:#FFFFFF;
-			/*@editable*/border-bottom:0;
-		}
-	/*
-	@tab Header
-	@section header text
-	@tip Set the styling for your email's header text. Choose a size and color that is easy to read.
-	*/
-		.headerContent{
-			/*@editable*/color:#202020;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:34px;
-			/*@editable*/font-weight:bold;
-			/*@editable*/line-height:100%;
-			/*@editable*/padding:0;
-			/*@editable*/text-align:center;
-			/*@editable*/vertical-align:middle;
-		}
-	/*
-	@tab Header
-	@section header link
-	@tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
-	*/
-		.headerContent a:link,.headerContent a:visited{
-			/*@editable*/color:#336699;
-			/*@editable*/font-weight:normal;
-			/*@editable*/text-decoration:underline;
-		}
-		#headerImage{
-			height:auto;
-			max-width:600px !important;
-		}
-	/*
-	@tab Body
-	@section body style
-	@tip Set the background color for your email's body area.
-	*/
-		#templateContainer,.bodyContent{
-			/*@editable*/background-color:#FDFDFD;
-		}
-	/*
-	@tab Body
-	@section body text
-	@tip Set the styling for your email's main content text. Choose a size and color that is easy to read.
-	@theme main
-	*/
-		.bodyContent div{
-			/*@editable*/color:#505050;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:14px;
-			/*@editable*/line-height:150%;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Body
-	@section body link
-	@tip Set the styling for your email's main content links. Choose a color that helps them stand out from your text.
-	*/
-		.bodyContent div a:link,.bodyContent div a:visited{
-			/*@editable*/color:#42b0cb;
-			/*@editable*/font-weight:normal;
-			/*@editable*/text-decoration:underline;
-		}
-		.bodyContent img{
-			display:inline;
-			margin-bottom:10px;
-		}
-	/*
-	@tab Footer
-	@section footer style
-	@tip Set the background color and top border for your email's footer area.
-	@theme footer
-	*/
-		#templateFooter{
-			/*@editable*/background-color:#FDFDFD;
-			/*@editable*/border-top:0;
-		}
-	/*
-	@tab Footer
-	@section footer text
-	@tip Set the styling for your email's footer text. Choose a size and color that is easy to read.
-	@theme footer
-	*/
-		.footerContent div{
-			/*@editable*/color:#707070;
-			/*@editable*/font-family:Arial;
-			/*@editable*/font-size:12px;
-			/*@editable*/line-height:125%;
-			/*@editable*/text-align:left;
-		}
-	/*
-	@tab Footer
-	@section footer link
-	@tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
-	*/
-		.footerContent div a:link,.footerContent div a:visited{
-			/*@editable*/color:#336699;
-			/*@editable*/font-weight:normal;
-			/*@editable*/text-decoration:underline;
-		}
-		.footerContent img{
-			display:inline;
-		}
-	/*
-	@tab Footer
-	@section social bar style
-	@tip Set the background color and border for your email's footer social bar.
-	*/
-		#social{
-			/*@editable*/background-color:#FAFAFA;
-			/*@editable*/border:1px solid #F5F5F5;
-		}
-	/*
-	@tab Footer
-	@section social bar style
-	@tip Set the background color and border for your email's footer social bar.
-	*/
-		#social div{
-			/*@editable*/text-align:center;
-		}
-	/*
-	@tab Footer
-	@section utility bar style
-	@tip Set the background color and border for your email's footer utility bar.
-	*/
-		#utility{
-			/*@editable*/background-color:#FDFDFD;
-			/*@editable*/border-top:1px solid #F5F5F5;
-		}
-	/*
-	@tab Footer
-	@section utility bar style
-	@tip Set the background color and border for your email's footer utility bar.
-	*/
-		#utility div{
-			/*@editable*/text-align:center;
-		}
-		#monkeyRewards img{
-			max-width:160px;
-		}
-		a.mlink{
-			color:#42b0cb;
-		}
-		hr{
-			height:0px;
-			border:0px none;
-			border-bottom:1px solid;
-			border-color:#e0e0e0;
-			margin:16px 0 10px;
-		}
-		table.mtable, table.mtable > tr, table.mtable > tr > td {
-			margin: 0px;
-			padding: 0px;
-            border: 0;
-            vertical-align: top;
-		}
-		table.mtable>tr>td{
-			margin:0px;
-			padding:0px;
-		}
-		table.notes{
-			margin-top:8px;
-		}
-		table.mbutton{
-			border:1px solid #35a4bf;
-		}
-		table.mbutton tr td{
-			width:100%;
-			height:40px;
-			color:#ffffff;
-			display:block;
-			background-color:#42b0cb;
-		}
-		table.mbutton tr td a{
-			font-size:14px;
-			font-weight:bold;
-			font-family:Helvetica, Arial, sans-serif;
-			text-decoration:none;
-			line-height:40px;
-			width:100%;
-			display:inline-block;
-		}
-		table.mbutton tr td a span{
-			color:#ffffff;
-		}
-		td.mfooter{
-			font-size:13px;
-			color:#cdcdcd;
-			text-align:center;
-			line-height:17px;
-		}
-        
-        table.subtable {
-        	font-size: 12px;
-        }
-        
-        span.h4.dailyreminder {
-        	margin-top: 16px;
-            margin-bottom: 16px;
-        }
-</style></head>
+{literal}
+            #outlook a {ldelim}
+                    padding:0;
+            {rdelim}
+            body {ldelim}
+                    width:100% !important;
+            {rdelim}
+            body {ldelim}
+                    -webkit-text-size-adjust:none;
+            {rdelim}
+            body {ldelim}
+                    margin:0;
+                    padding:0;
+            {rdelim}
+            img {ldelim}
+                    border:none;
+                    font-size:14px;
+                    font-weight:bold;
+                    height:auto;
+                    line-height:100%;
+                    outline:none;
+                    text-decoration:none;
+                    text-transform:capitalize;
+            {rdelim}
+            #backgroundTable {ldelim}
+                    height:100% !important;
+                    margin:0;
+                    padding:0;
+                    width:100% !important;
+            {rdelim}
+
+            body,.backgroundTable {ldelim}
+                    /*@editable*/background-color:#FAFAFA;
+            {rdelim}
+
+            #templateContainer {ldelim}
+                    /*@editable*/border:1px solid #DDDDDD;
+            {rdelim}
+
+            h1,.h1 {ldelim}
+                    /*@editable*/color:#202020;
+                    display:block;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:34px;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/line-height:100%;
+                    margin-bottom:10px;
+                    /*@editable*/text-align:left;
+            {rdelim}
+
+            h2,.h2 {ldelim}
+                    /*@editable*/color:#202020;
+                    display:block;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:30px;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/line-height:100%;
+                    margin-bottom:10px;
+                    /*@editable*/text-align:left;
+            {rdelim}
+
+            h3,.h3 {ldelim}
+                    /*@editable*/color:#202020;
+                    display:block;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:26px;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/line-height:100%;
+                    margin-bottom:10px;
+                    /*@editable*/text-align:left;
+            {rdelim}
+
+            h4,.h4 {ldelim}
+                    /*@editable*/color:#202020;
+                    display:block;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:22px;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/line-height:100%;
+                    margin-bottom:10px;
+                    /*@editable*/text-align:left;
+            {rdelim}
+
+            #templatePreheader {ldelim}
+                    /*@editable*/background-color:#FAFAFA;
+            {rdelim}
+            .preheaderContent div {ldelim}
+                    /*@editable*/color:#505050;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:10px;
+                    /*@editable*/line-height:100%;
+                    /*@editable*/text-align:left;
+            {rdelim}
+            .preheaderContent div a:link,.preheaderContent div a:visited {ldelim}
+                    /*@editable*/color:#336699;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/text-decoration:underline;
+            {rdelim}
+            .preheaderContent div img {ldelim}
+                    height:auto;
+                    max-width:600px;
+            {rdelim}
+
+            #templateHeader {ldelim}
+                    /*@editable*/background-color:#FFFFFF;
+                    /*@editable*/border-bottom:0;
+            {rdelim}
+
+            .headerContent {ldelim}
+                    /*@editable*/color:#202020;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:34px;
+                    /*@editable*/font-weight:bold;
+                    /*@editable*/line-height:100%;
+                    /*@editable*/padding:0;
+                    /*@editable*/text-align:center;
+                    /*@editable*/vertical-align:middle;
+            {rdelim}
+
+            .headerContent a:link,.headerContent a:visited {ldelim}
+                    /*@editable*/color:#336699;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/text-decoration:underline;
+            {rdelim}
+            #headerImage {ldelim}
+                    height:auto;
+                    max-width:600px !important;
+            {rdelim}
+
+            #templateContainer,.bodyContent {ldelim}
+                    /*@editable*/background-color:#FDFDFD;
+            {rdelim}
+
+            .bodyContent div {ldelim}
+                    /*@editable*/color:#505050;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:14px;
+                    /*@editable*/line-height:150%;
+                    /*@editable*/text-align:left;
+            {rdelim}
+
+            .bodyContent div a:link,.bodyContent div a:visited {ldelim}
+                    /*@editable*/color:#42b0cb;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/text-decoration:underline;
+            {rdelim}
+            .bodyContent img {ldelim}
+                    display:inline;
+                    margin-bottom:10px;
+            {rdelim}
+
+            #templateFooter {ldelim}
+                    /*@editable*/background-color:#FDFDFD;
+                    /*@editable*/border-top:0;
+            {rdelim}
+
+            .footerContent div {ldelim}
+                    /*@editable*/color:#707070;
+                    /*@editable*/font-family:Arial;
+                    /*@editable*/font-size:12px;
+                    /*@editable*/line-height:125%;
+                    /*@editable*/text-align:left;
+            {rdelim}
+
+            .footerContent div a:link,.footerContent div a:visited {ldelim}
+                    /*@editable*/color:#336699;
+                    /*@editable*/font-weight:normal;
+                    /*@editable*/text-decoration:underline;
+            {rdelim}
+            .footerContent img {ldelim}
+                    display:inline;
+            {rdelim}
+
+            #social {ldelim}
+                    /*@editable*/background-color:#FAFAFA;
+                    /*@editable*/border:1px solid #F5F5F5;
+            {rdelim}
+
+            #social div {ldelim}
+                    /*@editable*/text-align:center;
+            {rdelim}
+
+            #utility {ldelim}
+                    /*@editable*/background-color:#FDFDFD;
+                    /*@editable*/border-top:1px solid #F5F5F5;
+            {rdelim}
+
+            #utility div {ldelim}
+                    /*@editable*/text-align:center;
+            {rdelim}
+            #monkeyRewards img {ldelim}
+                    max-width:160px;
+            {rdelim}
+            a.mlink {ldelim}
+                    color:#42b0cb;
+            {rdelim}
+            hr {ldelim}
+                    height:0px;
+                    border:0px none;
+                    border-bottom:1px solid;
+                    border-color:#e0e0e0;
+                    margin:16px 0 10px;
+            {rdelim}
+            table.mtable, table.mtable > tr, table.mtable > tr > td {ldelim}
+                margin: 0px;
+                padding: 0px;
+                border: 0;
+                vertical-align: top;
+            {rdelim}
+            table.mtable>tr>td {ldelim}
+                    margin:0px;
+                    padding:0px;
+            {rdelim}
+            table.notes {ldelim}
+                    margin-top:8px;
+            {rdelim}
+            table.mbutton {ldelim}
+                    border:1px solid #35a4bf;
+            {rdelim}
+            table.mbutton tr td {ldelim}
+                    width:100%;
+                    height:40px;
+                    color:#ffffff;
+                    display:block;
+                    background-color:#42b0cb;
+            {rdelim}
+            table.mbutton tr td a {ldelim}
+                    font-size:14px;
+                    font-weight:bold;
+                    font-family:Helvetica, Arial, sans-serif;
+                    text-decoration:none;
+                    line-height:40px;
+                    width:100%;
+                    display:inline-block;
+            {rdelim}
+            table.mbutton tr td a span {ldelim}
+                    color:#ffffff;
+            {rdelim}
+            td.mfooter {ldelim}
+                    font-size:13px;
+                    color:#cdcdcd;
+                    text-align:center;
+                    line-height:17px;
+            {rdelim}
+
+            table.subtable {ldelim}
+                    font-size: 12px;
+            {rdelim}
+
+            span.h4.dailyreminder {ldelim}
+                    margin-top: 16px;
+                margin-bottom: 16px;
+            {rdelim}
+{/literal}
+</style>
+    </head>
     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
     	<center>
-
-<!-- Daily Reminder -->
+            
         	<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
             	<tr>
                 	<td align="center" valign="top">
