@@ -3,6 +3,7 @@ define([
     'crmUi',
     'angularBootstrapCalendar',
     'angularChecklistModel',
+    'angularRouter',
     'angularSelect',
     'textAngular',
     'config',
@@ -17,6 +18,7 @@ define([
         'ngResource',
         'ngSanitize',
         'ui.bootstrap',
+        'ui.router',
         'ui.select',
         'mwl.calendar',
         'textAngular',
@@ -106,7 +108,7 @@ define([
                 })
             },$rootScope.cache.dateType.arr);
 
-            $rootScope.$on('$routeChangeSuccess', function() {
+            $rootScope.$on('$stateChangeSuccess', function() {
                 $rootElement.removeClass('ct-page-loading');
             });
 
@@ -114,12 +116,17 @@ define([
     ]);
 
     angular.module('civitasks.appDashboard',['civitasks.run'])
-        .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
-            function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
+        .config(['config', '$resourceProvider','$httpProvider', '$logProvider',
+            '$urlRouterProvider', '$stateProvider','calendarConfigProvider', 'uiSelectConfig',
+            function(config, $resourceProvider, $httpProvider, $logProvider,
+                     $urlRouterProvider, $stateProvider, calendarConfigProvider, uiSelectConfig){
                 $logProvider.debugEnabled(config.debug);
 
-                $routeProvider.
-                    when('/tasks', {
+                $urlRouterProvider.otherwise("/tasks");
+
+                $stateProvider.
+                    state('tasks', {
+                        url: '/tasks',
                         controller: 'TaskListCtrl',
                         templateUrl: config.path.TPL+'dashboard/tasks.html?v='+(new Date().getTime()),
                         resolve: {
@@ -158,7 +165,8 @@ define([
                             }]
                         }
                     }).
-                    when('/documents', {
+                    state('documents', {
+                        url: '/documents',
                         controller: 'DocumentListCtrl',
                         templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime()),
                         resolve: {
@@ -197,19 +205,104 @@ define([
                             }]
                         }
                     }).
-                    when('/assignments', {
+                    state('assignments', {
+                        url: '/assignments',
                         controller: 'ExternalPageCtrl',
                         templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
                     }).
-                    when('/calendar', {
+                    state('calendar', {
+                        url: '/calendar',
                         controller: 'CalendarCtrl',
-                        templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime())
+                        templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime()),
+                        resolve: {
+                            documentList: ['$q', 'DocumentService',function($q, DocumentService){
+                                var deferred = $q.defer();
+
+                                $q.all([
+                                    DocumentService.get({
+                                        'sequential': 0,
+                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.DOCUMENT
+                                        }
+                                    }),
+                                    DocumentService.get({
+                                        'sequential': 0,
+                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.DOCUMENT
+                                        }
+                                    })
+                                ]).then(function(results){
+                                    var documentId, documentList = [];
+
+                                    angular.extend(results[0],results[1]);
+
+                                    for (documentId in results[0]) {
+                                        documentList.push(results[0][documentId]);
+                                    }
+
+                                    deferred.resolve(documentList);
+
+                                });
+
+                                return deferred.promise;
+                            }],
+                            taskList: ['$q', 'TaskService',function($q, TaskService){
+                                var deferred = $q.defer();
+
+                                $q.all([
+                                    TaskService.get({
+                                        'sequential': 0,
+                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.TASK
+                                        }
+                                    }),
+                                    TaskService.get({
+                                        'sequential': 0,
+                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                        'status_id': {
+                                            'NOT IN': config.status.resolve.TASK
+                                        }
+                                    })
+                                ]).then(function(results){
+                                    var taskId, taskList = [];
+
+                                    angular.extend(results[0],results[1]);
+
+                                    for (taskId in results[0]) {
+                                        taskList.push(results[0][taskId]);
+                                    }
+
+                                    deferred.resolve(taskList);
+
+                                });
+
+                                return deferred.promise;
+                            }]
+                        }
                     }).
-                    when('/reports', {
+                    state('calendar.day', {
+                        views: {
+                            'documentList': {
+                                controller: 'DocumentListCtrl',
+                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v='+(new Date().getTime())
+                            },
+                            'taskList': {
+                                controller: 'TaskListCtrl',
+                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v='+(new Date().getTime())
+                            }
+
+                        }
+                    }).
+                    state('reports', {
+                        url: '/reports',
                         controller: 'ExternalPageCtrl',
                         templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
                     }).
-                    when('/key-dates', {
+                    state('keyDates', {
+                        url: '/key-dates',
                         controller: 'DateListCtrl',
                         templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
                         resolve: {
@@ -217,12 +310,15 @@ define([
                                 return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
                             }]
                         }
-                    }).
-                    otherwise({redirectTo:'/tasks'});
+                    });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 
                 $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+
+                calendarConfigProvider.setDateFormats({
+                    weekDay: 'ddd'
+                });
 
                 uiSelectConfig.theme = 'bootstrap';
             }

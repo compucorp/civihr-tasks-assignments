@@ -33,13 +33,59 @@
     }
   }
 
+  .panel {
+    margin-bottom: 15px;
+  }
+
+  .panel-filter {
+    margin-bottom: 0;
+  }
+
+}
+
+.#{$prefix}dashboard-tasks {
   .#{$prefix}list-task,
-  .#{$prefix}list-task + .header-bar,
+  .#{$prefix}list-task + .header-bar {
+    margin-left: 10px;
+  }
+}
+
+.#{$prefix}dashboard-key-dates {
   .#{$prefix}list-key-dates {
     margin-left: 10px;
   }
+}
 
-  .panel {
-    margin-bottom: 0;
+.#{$prefix}dashboard-calendar {
+  .header-bar {
+    .#{$prefix}cal-prev,
+    .#{$prefix}cal-next {
+      margin-top: -10px;
+      padding: 10px;
+    }
+
+    .#{$prefix}cal-prev {
+      float: left;
+      margin-left: -10px;
+    }
+
+    .#{$prefix}cal-next {
+      float: right;
+      margin-right: -10px;
+    }
   }
+
+  .header-bar-dark,
+  .header-bar-danger-light {
+    margin-bottom: 10px;
+  }
+
+  .btn-cal-view {
+    min-width: 70px;
+  }
+
+  .#{$prefix}list-task {
+    margin-bottom: 15px;
+  }
+
 }
