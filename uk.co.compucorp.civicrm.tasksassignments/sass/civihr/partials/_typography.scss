@@ -24,6 +24,11 @@ h1, h2, h3, h4, h5, h6 {
 
     a {
       color: #fff;
+
+      &:hover,
+      &:active {
+        color: darken(#fff, 10%);
+      }
     }
   }
 
@@ -54,6 +59,16 @@ h1, h2, h3, h4, h5, h6 {
         color: darken(#fff, 10%);
       }
     }
+  }
+
+  &.header-bar-danger-light {
+    background-color: #e6807f;
+    color: #fff;
+  }
+
+  &.header-bar-dark {
+    background-color: #5d6779;
+    color: #fff;
   }
 }
 

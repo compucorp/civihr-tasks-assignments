@@ -34,23 +34,23 @@ define(['directives/directives'], function(directives){
                     appendSpinner();
                 }
 
-                if (typeof attrs.ngView !== 'undefined') {
+                if (typeof attrs.ctSpinnerMainView !== 'undefined') {
                     cover.className = 'ct-spinner-cover';
 
                     spinner = document.createElement('div');
                     spinner.className = 'ct-spinner ct-spinner-img';
 
-                    $rootScope.$on('$routeChangeStart', function() {
+                    $rootScope.$on('$stateChangeStart', function() {
                         appendSpinner();
                         document.body.appendChild(spinner);
                     });
 
-                    $rootScope.$on('$routeChangeSuccess', function() {
+                    $rootScope.$on('$stateChangeSuccess', function() {
                         removeSpinner();
                         spinner.remove();
                     });
 
-                    $rootScope.$on('routeChangeError', function() {
+                    $rootScope.$on('$stateChangeError', function() {
                         removeSpinner();
                         spinner.remove();
                     });

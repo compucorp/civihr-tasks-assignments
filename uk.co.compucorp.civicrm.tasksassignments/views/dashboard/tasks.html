@@ -1,159 +1,161 @@
-<div class="{{prefix}}sidebar {{prefix}}sidebar-inner">
-    <div class="panel panel-light  panel-secondary">
-        <div class="panel-heading">
-            <h3 class="panel-title">View Tasks By:</h3>
-        </div>
-        <div class="panel-body">
-            <div class="{{prefix}}filter-date">
-                <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                </ul>
-                <hr>
-                <a href
-                   ng-click="isCollapsed.filterDates = !isCollapsed.filterDates"
-                   class="btn btn-block {{prefix}}select-dates"><em>OR</em> Select Dates <i
-                        class="fa"
-                        ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-left': isCollapsed.filterDates }"></i></a>
-                <div class="form-horizontal" collapse="isCollapsed.filterDates">
-                    <div class="form-group">
-                        <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
-                        <div class="col-xs-12 col-sm-9 col-lg-7">
-                            <input
-                                    is-open="dpOpened.filterDates.from"
-                                    datepicker-popup="dd/MM/yyyy"
-                                    ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
-                                    ng-model="filterParamsHolder.dateRange.from"
-                                    max-date="filterParamsHolder.dateRange.until"
-                                    id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+<div class="{{prefix}}dashboard-tasks">
+    <div class="{{prefix}}sidebar {{prefix}}sidebar-inner">
+        <div class="panel panel-light  panel-secondary">
+            <div class="panel-heading">
+                <h3 class="panel-title">View Tasks By:</h3>
+            </div>
+            <div class="panel-body">
+                <div class="{{prefix}}filter-date">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar"></i> <span class="badge badge-danger" ng-bind="(taskListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar"></i> <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    </ul>
+                    <hr>
+                    <a href
+                       ng-click="isCollapsed.filterDates = !isCollapsed.filterDates"
+                       class="btn btn-block {{prefix}}select-dates"><i
+                            class="fa"
+                            ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-left': isCollapsed.filterDates }"></i>
+                        <em>OR</em> Select Dates
+                    </a>
+                    <div class="form-horizontal" collapse="isCollapsed.filterDates">
+                        <div class="form-group">
+                            <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
+                            <div class="col-xs-12 col-sm-9 col-lg-7">
+                                <input
+                                        is-open="dpOpened.filterDates.from"
+                                        datepicker-popup="dd/MM/yyyy"
+                                        ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
+                                        ng-model="filterParamsHolder.dateRange.from"
+                                        max-date="filterParamsHolder.dateRange.until"
+                                        id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">Until</label>
-                        <div class="col-xs-12 col-sm-9  col-lg-7">
-                            <input
-                                    is-open="dpOpened.filterDates.until"
-                                    datepicker-popup="dd/MM/yyyy"
-                                    min-date="filterParamsHolder.dateRange.from"
-                                    ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
-                                    ng-model="filterParamsHolder.dateRange.until"
-                                    id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+                        <div class="form-group">
+                            <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">Until</label>
+                            <div class="col-xs-12 col-sm-9  col-lg-7">
+                                <input
+                                        is-open="dpOpened.filterDates.until"
+                                        datepicker-popup="dd/MM/yyyy"
+                                        min-date="filterParamsHolder.dateRange.from"
+                                        ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
+                                        ng-model="filterParamsHolder.dateRange.until"
+                                        id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+                            </div>
                         </div>
-                    </div>
-                    <button class="btn btn-default btn-primary btn-block"
-                            ng-click="filterParams.dateRange.from = filterParamsHolder.dateRange.from;
+                        <button class="btn btn-default btn-primary btn-block"
+                                ng-click="filterParams.dateRange.from = filterParamsHolder.dateRange.from;
                                       filterParams.dateRange.until = filterParamsHolder.dateRange.until;
                                       filterParams.due = 'dateRange';
                                       labelDateRange(filterParams.dateRange.from, filterParams.dateRange.until)">
-                        Show Date Range</button>
+                            Show Date Range</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="{{prefix}}content-wrapper">
-    <div class="{{prefix}}content">
-        <div class="panel panel-light panel-secondary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-3">
-                        <h3 class="panel-title">{{label[filterParams.due]}}</h3>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 text-center">
-                        <div class="{{prefix}}filter-user-role">
+    <div class="{{prefix}}content-wrapper">
+        <div class="{{prefix}}content">
+            <div class="panel panel-light panel-secondary panel-filter">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-3">
+                            <h3 class="panel-title">{{label[filterParams.due]}}</h3>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 text-center">
                             <div class="btn-group btn-group-sm">
                                 <button type="button" class="btn btn-gray active"
                                         ng-model="filterParams.userRole"
                                         btn-radio="{
-                                            field: 'assignee_contact_id',
-                                            isEqual: true
-                                        }">My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})</button>
+                                        field: 'assignee_contact_id',
+                                        isEqual: true
+                                    }">My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
                                         btn-radio="{
-                                            field: 'assignee_contact_id',
-                                            isEqual: false
-                                        }">Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id':false).length}})</button>
+                                        field: 'assignee_contact_id',
+                                        isEqual: false
+                                    }">Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id':false).length}})</button>
                                 <button type="button" class="btn btn-gray"
                                         ng-model="filterParams.userRole"
                                         btn-radio="{
-                                            field: null,
-                                            isEqual: null
-                                        }">All</button>
+                                        field: null,
+                                        isEqual: null
+                                    }">All</button>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-3 text-right">
+                            <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced" class="btn btn-collapse"><span
+                                    class="fa"
+                                    ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterAdvanced, 'fa-chevron-right': isCollapsed.filterAdvanced }"
+                                    aria-hidden="true"></span> Filter Tasks</a>
+                        </div>
                     </div>
-                    <div class="col-xs-12 col-sm-3 text-right">
-                        <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced" class="btn btn-collapse"><span
-                                class="fa"
-                                ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterAdvanced, 'fa-chevron-right': isCollapsed.filterAdvanced }"
-                                aria-hidden="true"></span> Filter Tasks</a>
-                    </div>
-                </div>
-                <div class="{{prefix}}filter-advanced" collapse="isCollapsed.filterAdvanced">
-                    <div class="row form-horizontal">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
-                                <div class="col-xs-12 col-sm-10">
-                                    <div class="input-group">
-                                        <ui-select
-                                                allow-clear
-                                                ng-model="filterParams.contactId">
-                                            <ui-select-match
-                                                    placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices  repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
-                                                                refresh-delay="0">
-                                                <div ng-bind="contact.label"></div>
-                                                <small ng-bind="contact.description[0]"></small>
-                                            </ui-select-choices>
-                                        </ui-select>
+                    <div class="{{prefix}}filter-advanced" collapse="isCollapsed.filterAdvanced">
+                        <div class="row form-horizontal">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
+                                    <div class="col-xs-12 col-sm-10">
+                                        <div class="input-group">
+                                            <ui-select
+                                                    allow-clear
+                                                    ng-model="filterParams.contactId">
+                                                <ui-select-match
+                                                        placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
+                                                <ui-select-choices  repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
+                                                                    refresh-delay="0">
+                                                    <div ng-bind="contact.label"></div>
+                                                    <small ng-bind="contact.description[0]"></small>
+                                                </ui-select-choices>
+                                            </ui-select>
                                 <span class="input-group-btn">
                                   <a ng-click="filterParams.contactId = ''" class="btn btn-default">
                                       <span class="fa fa-remove"></span>
                                   </a>
                                 </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-4 control-label">Assignmnet Type:</label>
-                                <div class="col-xs-12 col-sm-8">
-                                    <ui-select
-                                            multiple
-                                            ng-model="filterParams.assignmentType">
-                                        <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
-                                        <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
-                                            <div ng-bind-html="type.title | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="col-xs-12 col-sm-4 control-label">Assignmnet Type:</label>
+                                    <div class="col-xs-12 col-sm-8">
+                                        <ui-select
+                                                multiple
+                                                ng-model="filterParams.assignmentType">
+                                            <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                                                <div ng-bind-html="type.title | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterBy.status:cache.taskStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
-                ng-controller="TaskCtrl"
-                ng-class="{
+            <ul class="{{prefix}}list-task">
+                <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterBy.status:cache.taskStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
+                    ng-controller="TaskCtrl"
+                    ng-class="{
                     '{{prefix}}task-completed': task.completed,
                     '{{prefix}}task-due': task.due
                 }"
-                ng-include
-                src="'task.html'"
-                ct-spinner
-                ct-spinner-id="task{{task.id}}">
-            </li>
-        </ul>
+                    ng-include
+                    src="'task.html'"
+                    ct-spinner
+                    ct-spinner-id="task{{task.id}}">
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="row" ng-show="taskListUnlimited.length > taskListFiltered.length">
-    <div class="col-xs-12 col-sm-4 col-md-2 col-sm-offset-4 col-md-offset-5"><a href class="btn {{prefix}}btn-list-expand btn-block" ng-click="taskListLimit = taskListLimit+5">Show more</a></div>
+    <div class="row" ng-show="taskListUnlimited.length > taskListFiltered.length">
+        <div class="col-xs-12 col-sm-4 col-md-2 col-sm-offset-4 col-md-offset-5"><a href class="btn {{prefix}}btn-list-expand btn-block" ng-click="taskListLimit = taskListLimit+5">Show more</a></div>
+    </div>
 </div>
 
 <script type="text/ng-template" id="task.html">

@@ -14,10 +14,14 @@ define(['directives/directives'], function(directives){
                             'civicrm-menu',
                             'civicrm-footer',
                             'access'],
-                        i = 0, len = hideElements.length;
+                        i = 0, el2hide, len = hideElements.length;
 
                     for (i; i < len; i++) {
-                        document.getElementById(hideElements[i]).style.display = 'none';
+                        el2hide =  document.getElementById(hideElements[i]);
+                        if (!el2hide) {
+                            continue;
+                        }
+                        el2hide.style.display = 'none';
                     }
 
                     document.body.style.paddingTop = '10px';

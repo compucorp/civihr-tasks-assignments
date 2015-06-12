@@ -1,11 +1,12 @@
 define(['controllers/controllers',
         'moment',
         'services/task'], function(controllers, moment){
-    controllers.controller('CalendarCtrl',['$scope', '$log', '$rootScope', '$filter', '$timeout', 'TaskService',
-        function($scope, $log, $rootScope, $filter, $timeout, TaskService){
+    controllers.controller('CalendarCtrl',['$scope', '$log', '$rootScope', '$filter', '$timeout', '$state', '$stateParams',
+        function($scope, $log, $rootScope, $filter, $timeout, $state, $stateParams){
 
             $scope.calendarDay = new Date();
-            $scope.calendarView = 'month';
+            $scope.calendarTitle = '';
+            $scope.calendarView = $state.params.calendarView || 'month';
             $scope.events = [
                 {
                     title: 'My event title', // The title of the event
@@ -18,7 +19,9 @@ define(['controllers/controllers',
                 }
             ];
 
-            $rootScope.$broadcast('ct-spinner-hide');
-            console.log($rootScope.cache);
+            $scope.displayDayView = function(calendarDate) {
+                $scope.calendarDay = calendarDate;
+                $state.go('calendar.day');
+            };
         }]);
 });
