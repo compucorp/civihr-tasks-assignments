@@ -316,7 +316,11 @@ function _civicrm_api3_task_get_formatResult($params, $activities) {
  *
  */
 function civicrm_api3_task_delete($params) {
-
+  
+  if (!CRM_Core_Permission::check('delete Tasks and Documents')) {
+    throw new API_Exception('You don\'t have permissions to delete Tasks');
+  }
+  
   if (CRM_Activity_BAO_Activity::deleteActivity($params)) {
     return civicrm_api3_create_success(1, $params, 'activity', 'delete');
   }

@@ -1,45 +1,40 @@
-<h1>Daily Task Reminder</h1>
+{include file='CRM/Tasksassignments/Reminder/Header.tpl'}
+<span class="h4">Daily Task Reminder</span>
+You have {math equation="x + y" x=$reminder.todayMine|@count y=$reminder.today_keydates_count} task(s) and document(s) due today. You have {$reminder.overdue|@count} overdue task(s).
 
-<div>You have {math equation="x + y" x=$reminder.todayMine|@count y=$reminder.today_keydates_count} task(s) and document(s) due today. You have {$reminder.overdue|@count} overdue task(s).</div>
+{if $reminder.overdue}
+<span class="h4 dailyreminder overdue">Overdue Tasks ({$reminder.overdue|@count})</span>
+                                                                <hr/>
+    {foreach from=$reminder.overdue item=row}
+        {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
+    {/foreach}
+{/if}
 
-<div>
-    
-    {if $reminder.overdue}
-    <h2 class="overdue">Overdue Tasks ({$reminder.overdue|@count})</h2>
-        {foreach from=$reminder.overdue item=row}
-            {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
-        {/foreach}
-    {/if}
-    
-    {if $reminder.today_mine}
-    <h2 class="today-mine">Today's Tasks and Documents ({$reminder.today_mine|@count})</h2>
-        {foreach from=$reminder.today_mine item=row}
-            {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
-        {/foreach}
-    {/if}
-    
-    {if $reminder.today_others}
-    <h2 class="today-others">Today's Tasks for others ({$reminder.today_others|@count})</h2>
-        {foreach from=$reminder.today_others item=row}
-            {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
-        {/foreach}
-    {/if}
-    
-    {if $reminder.coming_up}
-    <h2 class="coming-up">Coming up this week ({$reminder.coming_up|@count})</h2>
-        {foreach from=$reminder.coming_up item=row}
-            {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
-        {/foreach}
-    {/if}
-    
-    {if $reminder.upcoming_keydates}
-    <h2 class="coming-up">Upcoming Key Dates ({$reminder.upcoming_keydates|@count})</h2>
-        {foreach from=$reminder.upcoming_keydates item=row}
-            {include file='CRM/Tasksassignments/Reminder/DailyReminderKeyDate.tpl'}
-        {/foreach}
-    {/if}
-    
-</div>
+{if $reminder.today_mine}
+<span class="h4 dailyreminder today-mine">Today's Tasks and Documents ({$reminder.today_mine|@count})</span>
+    {foreach from=$reminder.today_mine item=row}
+        {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
+    {/foreach}
+{/if}
 
-<a href="{$myTasksUrl}">See my tasks</a>
-<a href="{$myDocumentsUrl}">See my documents</a>
+{if $reminder.today_others}
+<span class="h4 dailyreminder today-others">Today's Tasks for others ({$reminder.today_others|@count})</span>
+    {foreach from=$reminder.today_others item=row}
+        {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
+    {/foreach}
+{/if}
+
+{if $reminder.coming_up}
+<span class="h4 dailyreminder coming-up">Coming up this week ({$reminder.coming_up|@count})</span>
+    {foreach from=$reminder.coming_up item=row}
+        {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
+    {/foreach}
+{/if}
+
+{if $reminder.upcoming_keydates}
+<span class="h4 dailyreminder upcoming-keydates">Upcoming Key Dates ({$reminder.upcoming_keydates|@count})</span>
+    {foreach from=$reminder.upcoming_keydates item=row}
+        {include file='CRM/Tasksassignments/Reminder/DailyReminderKeyDate.tpl'}
+    {/foreach}
+{/if}
+{include file='CRM/Tasksassignments/Reminder/Footer.tpl'}
