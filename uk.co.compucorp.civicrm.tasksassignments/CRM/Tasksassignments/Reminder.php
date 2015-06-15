@@ -105,7 +105,7 @@ class CRM_Tasksassignments_Reminder
                 'activityTargets' => implode(', ', $activityContact[3]['links']),
                 'activityAssignee' => implode(', ', $activityContact[1]['links']),
                 'activityStatus' => self::$_activityOptions['status'][$activityResult['status_id']],
-                'activityDue' => $activityResult['activity_date_time'],
+                'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
                 'activitySubject' => $activityResult['subject'],
                 'activityDetails' => $activityResult['details'],
                 'baseUrl' => CIVICRM_UF_BASEURL,
@@ -157,7 +157,6 @@ class CRM_Tasksassignments_Reminder
         while ($contactsResult->fetch())
         {
             $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids), $to);
-            
             $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
                 'reminder' => $reminderData,
                 'baseUrl' => CIVICRM_UF_BASEURL,
@@ -251,9 +250,10 @@ class CRM_Tasksassignments_Reminder
                     'statusId' => $activityResult->status_id,
                     'status' => self::$_activityOptions['status'][$activityResult->status_id],
                     'targets' => $activityContact[self::ACTIVITY_CONTACT_TARGET],
+                    'assignee' => $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE],
                     'caseId' => $activityResult->case_id,
                     'caseType' => $activityResult->case_type,
-                    'date' => $activityResult->activity_date,
+                    'date' => date("M d", strtotime($activityResult->activity_date)),
                 );
             }
         }
