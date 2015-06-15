@@ -2,25 +2,85 @@ define(['controllers/controllers',
         'moment',
         'services/task'], function(controllers, moment){
     controllers.controller('CalendarCtrl',['$scope', '$log', '$rootScope', '$filter', '$timeout', '$state', '$stateParams',
-        function($scope, $log, $rootScope, $filter, $timeout, $state, $stateParams){
+        'taskList', 'documentList',
+        function($scope, $log, $rootScope, $filter, $timeout, $state, $stateParams, taskList, documentList){
+
+            this.init = function(){
+                $scope.calTaskList = this.createCalTaskList(taskList);
+                $scope.calDocList = this.createCalDocList(documentList);
+            };
+
+            this.createCalDocList = function(documentList){
+                var cache = $rootScope.cache, documentDue, documentExp, calDocumentList = [];
+
+                angular.forEach(documentList, function(document){
+                    documentDue = moment(document.activity_date_time).toDate();
+
+                    this.push(
+                        {
+                            title: cache.documentType.obj[document.activity_type_id],
+                            type: 'document',
+                            startsAt: documentDue,
+                            endsAt: documentDue,
+                            editable: false,
+                            deletable: false,
+                            incrementsBadgeTotal: true
+                        }
+                    )
+
+                    if (!!document.expire_date) {
+                        documentExp = moment(document.expire_date).toDate();
+
+                        this.push(
+                            {
+                                title: cache.documentType.obj[document.activity_type_id],
+                                type: 'document',
+                                startsAt: documentExp,
+                                endsAt: documentExp,
+                                editable: false,
+                                deletable: false,
+                                incrementsBadgeTotal: true
+                            }
+                        )
+                    }
+
+                },calDocumentList);
+
+                return calDocumentList;
+            };
+
+            this.createCalTaskList = function(taskList){
+                var cache = $rootScope.cache, taskDue, calTaskList = [];
+
+                angular.forEach(taskList, function(task){
+                    taskDue = moment(task.activity_date_time).toDate();
+                    this.push(
+                        {
+                            title: cache.taskType.obj[task.activity_type_id],
+                            type: 'task',
+                            startsAt: taskDue,
+                            endsAt: taskDue,
+                            editable: false,
+                            deletable: false,
+                            incrementsBadgeTotal: true
+                        }
+                    )
+                },calTaskList);
+
+                return calTaskList;
+            };
 
             $scope.calendarDay = new Date();
             $scope.calendarTitle = '';
-            $scope.calendarView = $state.params.calendarView || 'month';
-            $scope.events = [
-                {
-                    title: 'My event title', // The title of the event
-                    type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
-                    startsAt: new Date(2013,5,1,1), // A javascript date object for when the event starts
-                    endsAt: new Date(2014,8,26,15), // A javascript date object for when the event ends
-                    editable: false, // If edit-event-html is set and this field is explicitly set to false then dont make it editable
-                    deletable: false, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
-                    incrementsBadgeTotal: true //If set to false then will not count towards the badge total amount on the month and year view
-                }
-            ];
+            $scope.calendarView = $stateParams.calendarView || 'month';
+            $scope.calTaskList = [];
+            $scope.calDocList = [];
+
+            this.init();
 
             $scope.displayDayView = function(calendarDate) {
-                $scope.calendarDay = calendarDate;
+                $scope.calendarDay = moment(calendarDate).toDate();
+                $scope.calendarView = 'day';
                 $state.go('calendar.day');
             };
         }]);
