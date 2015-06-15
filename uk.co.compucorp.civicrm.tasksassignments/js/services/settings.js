@@ -7,25 +7,31 @@ define(['services/services',
         return $resource(config.url.REST,{
             'action': 'get',
             'entity': 'TASettings',
-            'fields': {}
+            'json': {}
         });
 
     }]);
 
-    services.factory('SettingsService',['Settings', '$q', 'config', 'UtilsService', '$log',
-        function(Task, $q, config, UtilsService, $log){
+    services.factory('SettingsService',['Settings', '$q', 'config', 'UtilsService', '$log', 'settings',
+        function(Settings, $q, config, UtilsService, $log, settings){
         $log.debug('Service: SettingsService');
 
         return {
-            get: function(params){
+            get: function(fields){
                 var deferred = $q.defer();
 
-                params = params && typeof params === 'object' ? params : [];
+                fields = fields && typeof fields === 'object' ? fields : [];
 
-                Task.get({fields: params}, function(data){
+                Settings.get({
+                    json: {
+                        'sequential': '1',
+                        'debug': config.DEBUG,
+                        'fields': fields
+                    }
+                }, function(data){
                     deferred.resolve(data.values);
                 },function(){
-                    deferred.reject('Unable to fetch the settings');
+                    deferred.reject('Unable to fetch tasks list');
                 });
 
                 return deferred.promise;
@@ -36,23 +42,28 @@ define(['services/services',
                     return null;
                 }
 
-                var deferred = $q.defer(),
-                    params = angular.extend({
-                        sequential: 1,
-                        debug: config.DEBUG
-                    },fields),
-                    val;
+                var deferred = $q.defer();
 
-                Task.save({
-                    action: 'set',
-                    fields: params
+                Settings.save({
+                    'action': 'set',
+                    'json': {
+                        'sequential': 1,
+                        'debug': config.DEBUG,
+                        'fields': fields
+                    }
                 }, null, function(data){
 
                     if (UtilsService.errorHandler(data,'Unable to save',deferred)) {
                         return
                     }
 
-                    val = data.values;
+                    settings.tabEnabled = {
+                        documents: fields.documents_tab || settings.tabEnabled.documents_tab,
+                        keyDates: fields.keydates_tab || settings.tabEnabled.keydates_tab
+                    };
+
+                    settings.copy.button.assignmentAdd = fields.add_assignment_button_title;
+
                     deferred.resolve(data.values);
                 },function(){
                     deferred.reject('Unable to save');

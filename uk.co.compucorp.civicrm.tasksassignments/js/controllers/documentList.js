@@ -7,9 +7,9 @@ define(['controllers/controllers',
         'moment'], function(controllers, moment){
 
     controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService',
-        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, documentList,
-                 config, ContactService, AssignmentService, DocumentService, FileService){
+        '$log', '$q', '$timeout', '$state', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings',
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, $state, documentList,
+                 config, ContactService, AssignmentService, DocumentService, FileService, settings){
             $log.debug('Controller: DocumentListCtrl');
 
             this.init = function(){
