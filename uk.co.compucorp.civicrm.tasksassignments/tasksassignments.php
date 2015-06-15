@@ -157,13 +157,17 @@ function tasksassignments_civicrm_tabs(&$tabs) {
         'weight'    => 1
     );
 
-
-    $tabs[] = Array(
-        'id'        => 'cividocuments',
-        'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
-        'title'     => ts('Documents'),
-        'weight'    => 2
-    );
+    $documentsTab = civicrm_api3('TASettings', 'get', array(
+        'fields' => 'documents_tab',
+    ));
+    if ($documentsTab['values']['documents_tab']['value']) {
+        $tabs[] = Array(
+            'id'        => 'cividocuments',
+            'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
+            'title'     => ts('Documents'),
+            'weight'    => 2
+        );
+    }
 
 }
 
