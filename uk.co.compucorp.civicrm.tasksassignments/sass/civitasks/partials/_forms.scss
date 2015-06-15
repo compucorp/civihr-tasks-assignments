@@ -24,6 +24,10 @@
     };
   }
 
+  .form-horizontal .control-label {
+    text-align: right;
+  }
+
   [class^="col-"],
   [class*=" col-"] {
     padding: {
