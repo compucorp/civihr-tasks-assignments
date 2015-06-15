@@ -12608,57 +12608,61 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks #ct-dashboard .panel-filter, #cividocuments #ct-dashboard .panel-filter {
   margin-bottom: 0;
 }
-/* line 46, ../sass/civitasks/partials/_dashboard.scss */
+/* line 45, ../sass/civitasks/partials/_dashboard.scss */
+#civitasks #ct-dashboard .ct-dashboard-settings, #cividocuments #ct-dashboard .ct-dashboard-settings {
+  background-color: #fff;
+}
+/* line 50, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks .ct-list-task, #cividocuments #ct-dashboard .ct-dashboard-tasks .ct-list-task,
 #civitasks #ct-dashboard .ct-dashboard-tasks .ct-list-task + .header-bar,
 #cividocuments #ct-dashboard .ct-dashboard-tasks .ct-list-task + .header-bar {
   margin-left: 10px;
 }
-/* line 52, ../sass/civitasks/partials/_dashboard.scss */
+/* line 56, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks .ct-list-task > li:last-child, #cividocuments #ct-dashboard .ct-dashboard-tasks .ct-list-task > li:last-child {
   margin-bottom: 0;
 }
-/* line 59, ../sass/civitasks/partials/_dashboard.scss */
+/* line 63, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates {
   margin-left: 10px;
 }
-/* line 62, ../sass/civitasks/partials/_dashboard.scss */
+/* line 66, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li:last-child, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li:last-child {
   margin-bottom: 0;
 }
-/* line 70, ../sass/civitasks/partials/_dashboard.scss */
+/* line 74, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev,
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next,
 #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next {
   margin-top: -10px;
   padding: 10px;
 }
-/* line 76, ../sass/civitasks/partials/_dashboard.scss */
+/* line 80, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev {
   float: left;
   margin-left: -10px;
 }
-/* line 81, ../sass/civitasks/partials/_dashboard.scss */
+/* line 85, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next {
   float: right;
   margin-right: -10px;
 }
-/* line 87, ../sass/civitasks/partials/_dashboard.scss */
+/* line 91, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-documents-container, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-documents-container {
   -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 91, ../sass/civitasks/partials/_dashboard.scss */
+/* line 95, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar-dark, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar-dark,
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar-danger-light,
 #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar-danger-light {
   margin-bottom: 10px;
 }
-/* line 96, ../sass/civitasks/partials/_dashboard.scss */
+/* line 100, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .btn-cal-view, #cividocuments #ct-dashboard .ct-dashboard-calendar .btn-cal-view {
   min-width: 70px;
 }
-/* line 100, ../sass/civitasks/partials/_dashboard.scss */
+/* line 104, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-list-task, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-list-task {
   margin-bottom: 15px;
 }
@@ -12676,7 +12680,7 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-left: 7.5px;
   padding-right: 7.5px;
 }
-/* line 107, ../sass/civitasks/partials/_dashboard.scss */
+/* line 111, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-view-day .ct-datepicker table, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-view-day .ct-datepicker table {
   table-layout: fixed;
   max-width: 100%;
