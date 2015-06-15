@@ -1,27 +1,20 @@
-define(['controllers/controllers'], function(controllers){
-    controllers.controller('ExternalPageCtrl',['$scope', '$log', '$modal', '$rootElement', '$rootScope', 'config',
-        function($scope, $log, $modal, $rootElement, $rootScope, config){
+define(['controllers/controllers',
+        'services/contact'], function(controllers){
+    controllers.controller('ExternalPageCtrl',['$scope', '$log', '$modal', '$rootElement', '$rootScope', '$state',
+        'ContactService', 'config',
+        function($scope, $log, $modal, $rootElement, $rootScope, $state, ContactService, config){
             $log.debug('Controller: ExternalPageCtrl');
 
             $scope.assignmentsUrl = config.url.ASSIGNMENTS+'?reset=1';
             $scope.reportsUrl = config.url.CIVI_DASHBOARD+'?reset=1';
 
-            $rootScope.modalAssignment = function(data) {
-                var data = data || {};
+            ContactService.get({'IN': [config.LOGGED_IN_CONTACT_ID]}).then(function(data){
+                ContactService.updateCache(data);
+            });
 
-                    $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/assignment.html?v='+(new Date().getTime()),
-                        controller: 'ModalAssignmentCtrl',
-                        size: 'lg',
-                        resolve: {
-                            data: function(){
-                                return data;
-                            }
-                        }
-                    });
-
-            };
+            $scope.$on('assignmentFormSuccess',function(){
+                $state.go($state.current, {}, {reload: true});
+            });
 
             $scope.$on('iframe-ready',function(){
                 $rootScope.$broadcast('ct-spinner-hide');

@@ -167,67 +167,6 @@ define(['controllers/controllers',
                 });
             };
 
-            $rootScope.modalTask = function(data) {
-                var data = data || {},
-                    modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/task.html?v='+(new Date().getTime()),
-                    controller: 'ModalTaskCtrl',
-                    resolve: {
-                        data: function(){
-                            return data;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function(results){
-                    angular.equals({}, data) ? $scope.taskList.push(results) : angular.extend(data,results);
-                }, function(){
-                    $log.info('Modal dismissed');
-                });
-
-            };
-
-            $rootScope.modalReminder = function(data) {
-                var data = data || {};
-
-                $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/reminder.html?v='+(new Date().getTime()),
-                    controller: 'ModalReminderCtrl',
-                    resolve: {
-                        data: function(){
-                            return data;
-                        },
-                        type: function(){
-                            return 'task'
-                        }
-                    }
-                });
-            };
-
-            $rootScope.modalAssignment = function(data) {
-                var data = data || {},
-                    modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/assignment.html?v='+(new Date().getTime()),
-                        controller: 'ModalAssignmentCtrl',
-                        size: 'lg',
-                        resolve: {
-                            data: function(){
-                                return data;
-                            }
-                        }
-                    });
-
-                modalInstance.result.then(function(results){
-                    Array.prototype.push.apply($scope.taskList,results.taskList);
-                }, function(){
-                    $log.info('Modal dismissed');
-                });
-
-            };
-
             $scope.deleteTask = function(task){
 
                 $dialog.open({
@@ -243,6 +182,14 @@ define(['controllers/controllers',
                 });
 
             };
+
+            $scope.$on('assignmentFormSuccess',function(e, output){
+                Array.prototype.push.apply($scope.taskList, output.taskList);
+            });
+
+            $scope.$on('taskFormSuccess',function(e, output, input){
+                angular.equals({}, input) ? $scope.taskList.push(output) : angular.extend(input,output);
+            });
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {

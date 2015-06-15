@@ -1,7 +1,7 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" class="{$prefix}page-loading">
+<div id="{$module}" class="{$prefix}page-loading" ng-controller="MainCtrl">
     <div class="container-fluid">
         <div id="{$prefix}dashboard">
             <div class="{$prefix}top-bar" ng-controller="TopBarCtrl">

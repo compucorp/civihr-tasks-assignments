@@ -4,8 +4,6 @@ define(['controllers/controllers',
         function($scope, $rootScope, $location, $dialog, $log, $state, SettingsService, config, settings){
             $log.debug('Controller: SettingsCtrl');
 
-            this.confirmLeave = false;
-
             $scope.settings = angular.copy(settings);
             $scope.configureAddAssignmentBtn = !!$scope.settings.copy.button.assignmentAdd;
 
