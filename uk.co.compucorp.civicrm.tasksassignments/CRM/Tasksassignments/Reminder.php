@@ -100,12 +100,12 @@ class CRM_Tasksassignments_Reminder
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
-                'activityName' => implode(', ', $activityContact[3]['links']) . ' - ' . $typeResult['values'][$activityResult['activity_type_id']],
+                'activityName' => implode(', ', $activityContact[3]['links']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityTargets' => implode(', ', $activityContact[3]['links']),
                 'activityAssignee' => implode(', ', $activityContact[1]['links']),
                 'activityStatus' => self::$_activityOptions['status'][$activityResult['status_id']],
-                'activityDue' => $activityResult['activity_date_time'],
+                'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
                 'activitySubject' => $activityResult['subject'],
                 'activityDetails' => $activityResult['details'],
                 'baseUrl' => CIVICRM_UF_BASEURL,
@@ -157,7 +157,6 @@ class CRM_Tasksassignments_Reminder
         while ($contactsResult->fetch())
         {
             $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids), $to);
-            
             $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
                 'reminder' => $reminderData,
                 'baseUrl' => CIVICRM_UF_BASEURL,
@@ -200,6 +199,7 @@ class CRM_Tasksassignments_Reminder
         LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
         WHERE a.id IN (" . implode(',', $activityIds) . ")
         GROUP BY a.id";
+        
         $activityResult = CRM_Core_DAO::executeQuery($activityQuery);
         while ($activityResult->fetch())
         {
@@ -250,9 +250,10 @@ class CRM_Tasksassignments_Reminder
                     'statusId' => $activityResult->status_id,
                     'status' => self::$_activityOptions['status'][$activityResult->status_id],
                     'targets' => $activityContact[self::ACTIVITY_CONTACT_TARGET],
+                    'assignee' => $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE],
                     'caseId' => $activityResult->case_id,
                     'caseType' => $activityResult->case_type,
-                    'date' => $activityResult->activity_date,
+                    'date' => date("M d", strtotime($activityResult->activity_date)),
                 );
             }
         }

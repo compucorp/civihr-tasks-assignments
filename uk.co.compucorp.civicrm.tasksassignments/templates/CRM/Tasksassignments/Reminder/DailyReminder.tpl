@@ -20,7 +20,7 @@ You have {math equation="x + y" x=$reminder.todayMine|@count y=$reminder.today_k
 {if $reminder.today_others}
 <span class="h4 dailyreminder today-others">Today's Tasks for others ({$reminder.today_others|@count})</span>
     {foreach from=$reminder.today_others item=row}
-        {include file='CRM/Tasksassignments/Reminder/DailyReminderActivity.tpl'}
+        {include file='CRM/Tasksassignments/Reminder/DailyReminderActivityOthers.tpl'}
     {/foreach}
 {/if}
 
