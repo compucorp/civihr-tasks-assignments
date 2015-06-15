@@ -42,6 +42,10 @@
     margin-bottom: 0;
   }
 
+  .#{$prefix}dashboard-settings {
+    background-color: #fff;
+  }
+
   .#{$prefix}dashboard-tasks {
     .#{$prefix}list-task,
     .#{$prefix}list-task + .header-bar {
