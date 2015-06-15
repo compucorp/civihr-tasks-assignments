@@ -70,6 +70,8 @@
   }
 
   .#{$prefix}dashboard-calendar {
+    min-height: 675px;
+
     .header-bar {
       .#{$prefix}cal-prev,
       .#{$prefix}cal-next {
