@@ -585,14 +585,15 @@ function civicrm_api3_document_get($params) {
         $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
         $fileCountQuery = 'SELECT COUNT(id) as file_count FROM civicrm_entity_file WHERE entity_table = "civicrm_activity" AND entity_id = %1';
         foreach ($getResult['values'] as $key => $value) {
-            $caseActivityParams = array(
-                1 => array($value['id'], 'Integer'),
-            );
-            $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
-            $getResult['values'][$key]['case_id'] = null;
-            if ($caseActivityResult->fetch())
-            {
-                $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
+            if (CRM_Core_DAO::checkTableExists('civicrm_case_activity')) {
+                $caseActivityParams = array(
+                    1 => array($value['id'], 'Integer'),
+                );
+                $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
+                $getResult['values'][$key]['case_id'] = null;
+                if ($caseActivityResult->fetch()) {
+                    $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
+                }
             }
             
             $fileCountParams = array(
