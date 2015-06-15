@@ -148,7 +148,7 @@ function tasksassignments_civicrm_pageRun($page) {
  */
 
 function tasksassignments_civicrm_tabs(&$tabs) {
-    CRM_Tasksassignments_Page_Tasks::registerScripts();
+    CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
     
     $tabs[] = Array(
         'id'        => 'civitasks',
