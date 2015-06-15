@@ -43,6 +43,7 @@ reqTa([
     'controllers/modal/modalReminder',
     'controllers/modal/modalAssignment',
     'controllers/externalPage',
+    'controllers/settings',
     'directives/civiEvents',
     'directives/iframe',
     'directives/spinner',

@@ -310,6 +310,11 @@ define([
                                 return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
                             }]
                         }
+                    }).
+                    state('settings', {
+                        url: '/settings',
+                        controller: 'SettingsCtrl',
+                        templateUrl: config.path.TPL+'dashboard/settings.html?v='+(new Date().getTime())
                     });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
