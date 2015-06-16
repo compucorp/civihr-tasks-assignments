@@ -625,21 +625,16 @@ function civicrm_api3_document_getoptions($params) {
     
     if ($params['field'] == 'activity_type_id') {
         $result = array();
-        $options = civicrm_api3('Activity', 'getoptions', array(
-          'sequential' => 0,
-          'field' => "activity_type_id",
-        ));
         $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
-
         $types = _civicrm_api3_document_gettypesbycomponent('CiviDocument');
 
         foreach ($types['values'] as $type) {
             if (!$sequential) {
-                $result[$type['value']] = $options['values'][$type['value']];
+                $result[$type['value']] = $type['name'];
             } else {
                 $result[] = array(
                     'key' => $type['value'],
-                    'value' => $options['values'][$type['value']],
+                    'value' => $type['name'],
                 );
             }
         }
