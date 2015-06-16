@@ -30,7 +30,7 @@ define(['controllers/controllers',
                 }
 
                 $rootScope.$broadcast('ct-spinner-hide');
-                console.log($rootScope.cache);
+                $log.debug($rootScope.cache);
             }
 
             this.assignmentIds = [];

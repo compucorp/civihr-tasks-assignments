@@ -1,6 +1,5 @@
 define([
     'moment',
-    'crmUi',
     'angularBootstrapCalendar',
     'angularChecklistModel',
     'angularRouter',
@@ -23,7 +22,6 @@ define([
         'ui.select',
         'mwl.calendar',
         'textAngular',
-        'crmUi',
         'checklist-model',
         'civitasks.config',
         'civitasks.controllers',
@@ -131,7 +129,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'dashboard/tasks.html',
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();
@@ -171,7 +169,7 @@ define([
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'dashboard/documents.html',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
@@ -211,12 +209,12 @@ define([
                     state('assignments', {
                         url: '/assignments',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/assignments.html?v='+(new Date().getTime())
+                        templateUrl: config.path.TPL+'dashboard/assignments.html'
                     }).
                     state('calendar', {
                         url: '/calendar',
                         controller: 'CalendarCtrl',
-                        templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'dashboard/calendar.html',
                         resolve: {
                             documentList: ['$q', 'DocumentService','settings', function($q, DocumentService, settings){
                                 var deferred = $q.defer();
@@ -297,11 +295,11 @@ define([
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v='+(new Date().getTime())
+                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html'
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v='+(new Date().getTime())
+                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html'
                             }
 
                         }
@@ -319,12 +317,12 @@ define([
                     state('reports', {
                         url: '/reports',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/reports.html?v='+(new Date().getTime())
+                        templateUrl: config.path.TPL+'dashboard/reports.html'
                     }).
                     state('keyDates', {
                         url: '/key-dates',
                         controller: 'DateListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/key-dates.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'dashboard/key-dates.html',
                         resolve: {
                             contactList: ['KeyDateService',function(KeyDateService){
                                 return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
@@ -334,7 +332,7 @@ define([
                     state('settings', {
                         url: '/settings',
                         controller: 'SettingsCtrl',
-                        templateUrl: config.path.TPL+'dashboard/settings.html?v='+(new Date().getTime())
+                        templateUrl: config.path.TPL+'dashboard/settings.html'
                     });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
@@ -357,7 +355,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'contact/documents.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'contact/documents.html',
                         resolve: {
                             documentList: ['DocumentService',function(DocumentService){
                                 return DocumentService.get({
@@ -387,7 +385,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'contact/tasks.html',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({
