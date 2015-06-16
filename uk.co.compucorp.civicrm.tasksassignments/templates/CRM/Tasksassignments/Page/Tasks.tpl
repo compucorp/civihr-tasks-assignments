@@ -1,7 +1,7 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}">
+<div id="{$module}" ng-controller="MainCtrl">
     <div class="container" ng-view>
     </div>
 </div>

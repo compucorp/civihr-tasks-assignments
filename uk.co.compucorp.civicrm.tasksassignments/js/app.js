@@ -7,6 +7,7 @@ define([
     'angularSelect',
     'textAngular',
     'config',
+    'settings',
     'controllers/controllers',
     'directives/directives',
     'filters/filters',
@@ -28,10 +29,11 @@ define([
         'civitasks.controllers',
         'civitasks.directives',
         'civitasks.filters',
-        'civitasks.services'
-    ]).run(['config', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
+        'civitasks.services',
+        'civitasks.settings',
+    ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', '$log',
-        function(config, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
+        function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
                  KeyDateService, $log){
             $log.debug('civitasks.run');
 
@@ -39,6 +41,7 @@ define([
             $rootScope.prefix = config.CLASS_NAME_PREFIX;
             $rootScope.url = config.url;
             $rootScope.location = $location;
+            $rootScope.settings = settings;
             $rootScope.cache = {
                 contact: {
                     obj: {},
@@ -170,7 +173,7 @@ define([
                         controller: 'DocumentListCtrl',
                         templateUrl: config.path.TPL+'dashboard/documents.html?v='+(new Date().getTime()),
                         resolve: {
-                            documentList: ['$q', 'DocumentService',function($q, DocumentService){
+                            documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
 
                                 $q.all([
@@ -215,8 +218,12 @@ define([
                         controller: 'CalendarCtrl',
                         templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime()),
                         resolve: {
-                            documentList: ['$q', 'DocumentService',function($q, DocumentService){
+                            documentList: ['$q', 'DocumentService','settings', function($q, DocumentService, settings){
                                 var deferred = $q.defer();
+
+                                if (!+settings.tabEnabled.documents) {
+                                    deferred.resolve([]);
+                                }
 
                                 $q.all([
                                     DocumentService.get({

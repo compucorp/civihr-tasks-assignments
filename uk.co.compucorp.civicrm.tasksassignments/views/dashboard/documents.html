@@ -251,7 +251,7 @@
             <ul class="dropdown-menu pull-right">
                 <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
                 <li><a href ng-click="modalDocument(document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
-                <li><a href ng-click="modalReminder(document);"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+                <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
                 <li><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
             </ul>
         </div>

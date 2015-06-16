@@ -189,7 +189,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                   ),
                   'add_assignment_button_title' => array(
                       'label' => 'Configure \'Add Assignment\' button title',
-                      'value' => 'Add Assignment',
+                      'value' => '',
                   ),
                   'number_of_days' => array(
                       'label' => 'No of days prior to Key Date to create task',
@@ -217,7 +217,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     public function upgrade_0008()
     {
         $this->executeCustomDataFile('xml/activity_custom_fields.xml');
-        
+
         return TRUE;
     }
     

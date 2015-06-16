@@ -25,7 +25,7 @@ function civicrm_api3_t_a_settings_get($params) {
         $result[$field] = array(
             'name' => $item['name'],
             //'label' => $item['label'],
-            'value' => $item['value'],
+            'value' => $item['value'] != "null" ? $item['value'] : ""
         );
     }
     

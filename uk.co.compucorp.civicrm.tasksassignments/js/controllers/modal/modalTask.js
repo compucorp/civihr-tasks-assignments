@@ -149,7 +149,7 @@ define(['controllers/controllers',
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
-                    $scope.$broadcast('ta-spinner-hide');
+                    $scope.$broadcast('ct-spinner-hide');
                     return $q.reject();
                 });
 

@@ -4,9 +4,9 @@ define(['controllers/controllers',
         'services/task',
         'services/assignment'], function(controllers){
     controllers.controller('ModalAssignmentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config',
+         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
         function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
-                 ContactService, data, config){
+                 ContactService, data, config, settings){
             $log.debug('Controller: ModalAssignmentCtrl');
 
             var activityModel = {
@@ -237,6 +237,11 @@ define(['controllers/controllers',
                 }
 
                 angular.copy(taskList, $scope.taskList);
+
+                if (!+settings.tabEnabled.documents) {
+                    return
+                }
+
                 angular.copy(documentList, $scope.documentList);
             });
 

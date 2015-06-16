@@ -2,11 +2,16 @@ define(['controllers/controllers',
         'moment',
         'services/task'], function(controllers, moment){
     controllers.controller('CalendarCtrl',['$scope', '$log', '$rootScope', '$filter', '$timeout', '$state', '$stateParams',
-        'taskList', 'documentList',
-        function($scope, $log, $rootScope, $filter, $timeout, $state, $stateParams, taskList, documentList){
+        'taskList', 'documentList', 'settings',
+        function($scope, $log, $rootScope, $filter, $timeout, $state, $stateParams, taskList, documentList, settings){
 
             this.init = function(){
                 $scope.calTaskList = this.createCalTaskList(taskList);
+
+                if (!+settings.tabEnabled.documents) {
+                    return;
+                }
+
                 $scope.calDocList = this.createCalDocList(documentList);
             };
 
@@ -76,12 +81,56 @@ define(['controllers/controllers',
             $scope.calTaskList = [];
             $scope.calDocList = [];
 
-            this.init();
-
             $scope.displayDayView = function(calendarDate) {
                 $scope.calendarDay = moment(calendarDate).toDate();
                 $scope.calendarView = 'day';
                 $state.go('calendar.day');
             };
+
+            this.init();
+
+            function eventUpdateCb(output, input, calActvList, activityTypeObj) {
+                var actvDueOut = moment(output.activity_date_time).toDate(),
+                    actvTitleOut = activityTypeObj[output.activity_type_id],
+                    isNewActv = angular.equals({}, input),
+                    len = calActvList.length, i = 0;
+
+                if (!isNewActv) {
+                    var actvDueIn = moment(input.activity_date_time).toDate(),
+                        actvTitleIn = activityTypeObj[input.activity_type_id];
+
+                    for (; i < len; i++) {
+                        if (calActvList[i].title == actvTitleIn &&
+                            +calActvList[i].startsAt == +actvDueIn) {
+                            calActvList.splice(i,1);
+                            break;
+                        }
+                    }
+                }
+
+                calActvList.push({
+                    title: actvTitleOut,
+                    type: 'task',
+                    startsAt: actvDueOut,
+                    endsAt: actvDueOut,
+                    editable: false,
+                    deletable: false,
+                    incrementsBadgeTotal: true
+                });
+            }
+
+            $scope.$on('taskFormSuccess',function(e, output, input){
+                eventUpdateCb(output, input, $scope.calTaskList, $rootScope.cache.taskType.obj)
+            });
+
+            $scope.$on('documentFormSuccess',function(e, output, input){
+                eventUpdateCb(output, input, $scope.calDocList, $rootScope.cache.documentType.obj)
+            });
+
+
+             $scope.$on('assignmentFormSuccess',function(e, output){
+                //Array.prototype.push.apply($scope.taskList, output.taskList);
+             });
+
         }]);
 });

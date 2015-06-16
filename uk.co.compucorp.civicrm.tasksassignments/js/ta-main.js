@@ -32,6 +32,7 @@ reqTa([
     'controllers/dateList',
     'controllers/documentList',
     'controllers/document',
+    'controllers/main',
     'controllers/taskList',
     'controllers/task',
     'controllers/dashboard/navMain',

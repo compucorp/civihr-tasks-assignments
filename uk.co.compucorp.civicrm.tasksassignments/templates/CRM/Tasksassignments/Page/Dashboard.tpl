@@ -1,7 +1,7 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" class="{$prefix}page-loading">
+<div id="{$module}" class="{$prefix}page-loading" ng-controller="MainCtrl">
     <div class="container-fluid">
         <div id="{$prefix}dashboard">
             <div class="{$prefix}top-bar" ng-controller="TopBarCtrl">
@@ -15,11 +15,13 @@
                     <div class="col-xs-12 col-sm-4">
                         <div class="btn-group pull-right">
                             <a class="btn" ng-click="itemAdd.fn()">
-                                <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;{literal}{{itemAdd.label()}}{/literal}
+                                <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
+                                {literal}{{itemAdd.label()}}{/literal}
                             </a>
 
-                            <a class="btn" ng-click="modalAssignment()">
-                                <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Assignment
+                            <a class="btn" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
+                                <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
+                                {literal}{{settings.copy.button.assignmentAdd || 'Add Assignment'}}{/literal}
                             </a>
                         </div>
                     </div>
@@ -33,13 +35,13 @@
                             <span class="{$prefix}sidebar-main-title">Tasks</span>
                         </a>
                     </li>
-                    <li ng-class="{literal}{ active: isActive('documents')}{/literal}">
+                    <li ng-if="settings.tabEnabled.documents == '1'" ng-class="{literal}{ active: isActive('documents')}{/literal}">
                         <a href="#/documents">
                             <i class="fa fa-files-o"></i>
                             <span class="{$prefix}sidebar-main-title">Documents</span>
                         </a>
                     </li>
-                    <li ng-class="{literal}{ active: isActive('assignments')}{/literal}">
+                    <li ng-if="settings.extEnabled.assignments" ng-class="{literal}{ active: isActive('assignments')}{/literal}">
                         <a href="#/assignments">
                             <i class="fa fa-briefcase"></i>
                             <span class="{$prefix}sidebar-main-title">Assignments</span>
@@ -57,7 +59,7 @@
                             <span class="{$prefix}sidebar-main-title">Reports</span>
                         </a>
                     </li>
-                    <li ng-class="{literal}{ active: isActive('key-dates')}{/literal}">
+                    <li ng-if="settings.tabEnabled.keyDates == '1'" ng-class="{literal}{ active: isActive('key-dates')}{/literal}">
                         <a href="#/key-dates">
                             <i class="fa fa-birthday-cake"></i>
                             <span class="{$prefix}sidebar-main-title">Key Dates</span>

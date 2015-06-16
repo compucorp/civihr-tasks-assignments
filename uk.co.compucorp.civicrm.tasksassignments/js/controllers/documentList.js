@@ -7,9 +7,9 @@ define(['controllers/controllers',
         'moment'], function(controllers, moment){
 
     controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService',
-        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, documentList,
-                 config, ContactService, AssignmentService, DocumentService, FileService){
+        '$log', '$q', '$timeout', '$state', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings',
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $log, $q, $timeout, $state, documentList,
+                 config, ContactService, AssignmentService, DocumentService, FileService, settings){
             $log.debug('Controller: DocumentListCtrl');
 
             this.init = function(){
@@ -243,76 +243,6 @@ define(['controllers/controllers',
                 });
             };
 
-            $rootScope.modalDocument = function(data, e) {
-                e && e.preventDefault();
-
-                var data = data || {},
-                    modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/document.html?v='+(new Date().getTime()),
-                    controller: 'ModalDocumentCtrl',
-                    resolve: {
-                        data: function(){
-                            return data;
-                        },
-                        files: function(){
-
-                            if (!data.id || !+data.file_count) {
-                                return [];
-                            }
-
-                            return FileService.get(data.id,'civicrm_activity')
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function(results){
-                    angular.equals({}, data) ? $scope.documentList.push(results) : angular.extend(data,results);
-                }, function(){
-                    $log.info('Modal dismissed');
-                });
-            };
-
-            $rootScope.modalReminder = function(data) {
-                var data = data || {};
-
-                $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/reminder.html?v='+(new Date().getTime()),
-                    controller: 'ModalReminderCtrl',
-                    resolve: {
-                        data: function(){
-                            return data;
-                        },
-                        type: function(){
-                            return 'document'
-                        }
-                    }
-                });
-            };
-
-            $rootScope.modalAssignment = function(data) {
-                var data = data || {},
-                    modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/assignment.html?v='+(new Date().getTime()),
-                        controller: 'ModalAssignmentCtrl',
-                        size: 'lg',
-                        resolve: {
-                            data: function(){
-                                return data;
-                            }
-                        }
-                    });
-
-                modalInstance.result.then(function(results){
-                    Array.prototype.push.apply($scope.documentList,results.documentList);
-                }, function(){
-                    $log.info('Modal dismissed');
-                });
-
-            };
-
             $scope.deleteDocument = function(document){
 
                 $dialog.open({
@@ -329,6 +259,14 @@ define(['controllers/controllers',
                 });
 
             };
+
+            $scope.$on('assignmentFormSuccess',function(e, output){
+                Array.prototype.push.apply($scope.documentList, output.documentList);
+            });
+
+            $scope.$on('documentFormSuccess',function(e, output, input){
+                angular.equals({}, input) ? $scope.documentList.push(output) : angular.extend(input,output);
+            });
 
             $scope.$on('crmFormSuccess',function(e, data){
                 if (data.status == 'success')  {

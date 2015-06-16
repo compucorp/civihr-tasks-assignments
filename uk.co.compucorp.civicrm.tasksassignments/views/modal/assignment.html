@@ -162,7 +162,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="activitySet">
+                    <div ng-show="activitySet && +settings.tabEnabled.documents">
                         <hr>
                         <h4>Documents:</h4>
                         <div class="row" ng-repeat="activity in documentList" ng-controller="ModalAssignmentActivityCtrl">

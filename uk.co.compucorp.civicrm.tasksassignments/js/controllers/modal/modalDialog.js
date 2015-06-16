@@ -13,7 +13,8 @@ define(['controllers/controllers'], function(controllers){
             };
 
             $scope.cancel = function () {
-                $modalInstance.dismiss('Cancel');
+                $modalInstance.close(false);
             };
+
         }]);
 });
