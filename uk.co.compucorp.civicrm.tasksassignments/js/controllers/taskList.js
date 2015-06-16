@@ -6,9 +6,9 @@ define(['controllers/controllers',
         'services/assignment'], function(controllers, moment){
 
     controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$timeout', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
-        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $timeout, $log, taskList, config, ContactService,
-                 AssignmentService, TaskService){
+        '$timeout', '$state', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService',
+        function($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $timeout, $state, $log, taskList,
+                 config, ContactService, AssignmentService, TaskService){
             $log.debug('Controller: TaskListCtrl');
 
             this.init = function(){
@@ -181,6 +181,12 @@ define(['controllers/controllers',
                     });
                 });
 
+            };
+
+            $scope.viewInCalendar = function(view){
+                $state.go('calendar.'+view, {
+                    calendarView: view
+                });
             };
 
             $scope.$on('assignmentFormSuccess',function(e, output){

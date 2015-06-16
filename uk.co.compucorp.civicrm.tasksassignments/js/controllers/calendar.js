@@ -77,7 +77,7 @@ define(['controllers/controllers',
 
             $scope.calendarDay = new Date();
             $scope.calendarTitle = '';
-            $scope.calendarView = $stateParams.calendarView || 'month';
+            $scope.calendarView = $state.params.calendarView || 'month';
             $scope.calTaskList = [];
             $scope.calDocList = [];
 

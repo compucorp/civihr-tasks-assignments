@@ -12510,37 +12510,56 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 #civitasks span[data-cal-date]:hover, #cividocuments span[data-cal-date]:hover {
   opacity: 0.75;
 }
-/* line 40, ../sass/civitasks/partials/_calendar.scss */
+/* line 41, ../sass/civitasks/partials/_calendar.scss */
+#civitasks .cal-day-past .cal-list-events-num, #cividocuments .cal-day-past .cal-list-events-num {
+  color: #db6c86;
+}
+/* line 47, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-day-weekend span[data-cal-date], #cividocuments .cal-day-weekend span[data-cal-date] {
   color: #db6c86;
 }
-/* line 45, ../sass/civitasks/partials/_calendar.scss */
+/* line 52, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-day-outmonth, #cividocuments .cal-day-outmonth {
   background-color: #f5f7f8;
 }
-/* line 48, ../sass/civitasks/partials/_calendar.scss */
+/* line 55, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-day-outmonth span[data-cal-date], #cividocuments .cal-day-outmonth span[data-cal-date] {
   opacity: 1;
 }
-/* line 54, ../sass/civitasks/partials/_calendar.scss */
+/* line 60, ../sass/civitasks/partials/_calendar.scss */
+#civitasks .cal-week-box, #cividocuments .cal-week-box {
+  overflow: hidden;
+}
+/* line 63, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-week-box .cal-row-head, #cividocuments .cal-week-box .cal-row-head {
   border: 0 none;
 }
-/* line 58, ../sass/civitasks/partials/_calendar.scss */
+/* line 67, ../sass/civitasks/partials/_calendar.scss */
+#civitasks .cal-week-box .cal-col-fluid, #cividocuments .cal-week-box .cal-col-fluid {
+  border-left: 1px solid #e8eef0;
+  float: left;
+  min-height: 1px;
+  width: 14.285714285714285%;
+}
+/* line 73, ../sass/civitasks/partials/_calendar.scss */
+#civitasks .cal-week-box .cal-col-fluid .cal-row-fluid, #cividocuments .cal-week-box .cal-col-fluid .cal-row-fluid {
+  height: 40px;
+}
+/* line 76, ../sass/civitasks/partials/_calendar.scss */
+#civitasks .cal-week-box .cal-col-fluid .cal-row-fluid:nth-child(odd), #cividocuments .cal-week-box .cal-col-fluid .cal-row-fluid:nth-child(odd) {
+  background-color: #f4f7f8;
+}
+/* line 82, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-week-box [data-event-class], #cividocuments .cal-week-box [data-event-class] {
   margin: 0;
   line-height: 38px;
   height: 40px;
 }
-/* line 64, ../sass/civitasks/partials/_calendar.scss */
-#civitasks .cal-week-box .cal-row-fluid:nth-child(even), #cividocuments .cal-week-box .cal-row-fluid:nth-child(even) {
-  background-color: #f4f7f8;
-}
-/* line 70, ../sass/civitasks/partials/_calendar.scss */
+/* line 89, ../sass/civitasks/partials/_calendar.scss */
 #civitasks a.cal-event-week, #cividocuments a.cal-event-week {
   color: #727e8a;
 }
-/* line 74, ../sass/civitasks/partials/_calendar.scss */
+/* line 93, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-list-events-num, #cividocuments .cal-list-events-num {
   bottom: 0;
   list-style: none;
@@ -12548,24 +12567,28 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding: 10px;
   position: absolute;
 }
-/* line 81, ../sass/civitasks/partials/_calendar.scss */
+/* line 100, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .cal-list-events-num > li, #cividocuments .cal-list-events-num > li {
   margin-top: 10px;
 }
-/* line 86, ../sass/civitasks/partials/_calendar.scss */
+/* line 105, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .day-highlight, #cividocuments .day-highlight {
   background-color: transparent;
   border-left: 5px solid;
 }
-/* line 92, ../sass/civitasks/partials/_calendar.scss */
+/* line 111, ../sass/civitasks/partials/_calendar.scss */
+#civitasks .day-highlight.dh-event-overdue-true a.cal-event-week, #cividocuments .day-highlight.dh-event-overdue-true a.cal-event-week {
+  color: #db6c86;
+}
+/* line 115, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .day-highlight.dh-event-task, #cividocuments .day-highlight.dh-event-task {
   border-left-color: #5d6779;
 }
-/* line 96, ../sass/civitasks/partials/_calendar.scss */
+/* line 119, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .day-highlight.dh-event-document, #cividocuments .day-highlight.dh-event-document {
   border-left-color: #e6807f;
 }
-/* line 100, ../sass/civitasks/partials/_calendar.scss */
+/* line 123, ../sass/civitasks/partials/_calendar.scss */
 #civitasks .day-highlight:hover, #cividocuments .day-highlight:hover, #civitasks .day-highlight.dh-event-important, #cividocuments .day-highlight.dh-event-important, #civitasks .day-highlight.dh-event-important:hover, #cividocuments .day-highlight.dh-event-important:hover, #civitasks .day-highlight.dh-event-warning, #cividocuments .day-highlight.dh-event-warning, #civitasks .day-highlight.dh-event-warning:hover, #cividocuments .day-highlight.dh-event-warning:hover, #civitasks .day-highlight.dh-event-info, #cividocuments .day-highlight.dh-event-info, #civitasks .day-highlight.dh-event-info:hover, #cividocuments .day-highlight.dh-event-info:hover, #civitasks .day-highlight.dh-event-inverse, #cividocuments .day-highlight.dh-event-inverse, #civitasks .day-highlight.dh-event-inverse:hover, #cividocuments .day-highlight.dh-event-inverse:hover, #civitasks .day-highlight.dh-event-success, #cividocuments .day-highlight.dh-event-success, #civitasks .day-highlight.dh-event-success:hover, #cividocuments .day-highlight.dh-event-success:hover, #civitasks .day-highlight.dh-event-special, #cividocuments .day-highlight.dh-event-special, #civitasks .day-highlight.dh-event-special:hover, #cividocuments .day-highlight.dh-event-special:hover {
   background-color: transparent;
 }
@@ -13214,31 +13237,35 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   text-transform: capitalize;
 }
 /* line 7, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-documents .dropdown-toggle, #cividocuments .ct-table-documents .dropdown-toggle {
+  white-space: nowrap;
+}
+/* line 11, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-documents .ct-col-select, #cividocuments .ct-table-documents .ct-col-select {
   text-align: center;
 }
-/* line 11, ../sass/civitasks/partials/_tables.scss */
+/* line 15, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-documents input[type="checkbox"], #cividocuments .ct-table-documents input[type="checkbox"] {
   margin-left: 7px;
 }
-/* line 16, ../sass/civitasks/partials/_tables.scss */
+/* line 20, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-upload, #cividocuments .ct-table-upload {
   margin-bottom: 0;
   table-layout: fixed;
 }
-/* line 20, ../sass/civitasks/partials/_tables.scss */
+/* line 24, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-upload .col-index, #cividocuments .ct-table-upload .col-index {
   width: 30px;
 }
-/* line 24, ../sass/civitasks/partials/_tables.scss */
+/* line 28, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-upload .col-size, #cividocuments .ct-table-upload .col-size {
   width: 80px;
 }
-/* line 28, ../sass/civitasks/partials/_tables.scss */
+/* line 32, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-upload .col-action, #cividocuments .ct-table-upload .col-action {
   width: 82px;
 }
-/* line 32, ../sass/civitasks/partials/_tables.scss */
+/* line 36, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-upload td, #cividocuments .ct-table-upload td {
   overflow: hidden;
   text-overflow: ellipsis;

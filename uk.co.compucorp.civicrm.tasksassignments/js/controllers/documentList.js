@@ -260,6 +260,12 @@ define(['controllers/controllers',
 
             };
 
+            $scope.viewInCalendar = function(view){
+                $state.go('calendar.'+view, {
+                    calendarView: view
+                });
+            };
+
             $scope.$on('assignmentFormSuccess',function(e, output){
                 Array.prototype.push.apply($scope.documentList, output.documentList);
             });
