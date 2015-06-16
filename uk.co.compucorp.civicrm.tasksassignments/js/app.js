@@ -291,6 +291,9 @@ define([
                         }
                     }).
                     state('calendar.day', {
+                        params: {
+                            calendarView: 'day'
+                        },
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
@@ -301,6 +304,16 @@ define([
                                 templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v='+(new Date().getTime())
                             }
 
+                        }
+                    }).
+                    state('calendar.month', {
+                        params: {
+                            calendarView: 'month'
+                        }
+                    }).
+                    state('calendar.week', {
+                        params: {
+                            calendarView: 'day'
                         }
                     }).
                     state('reports', {
