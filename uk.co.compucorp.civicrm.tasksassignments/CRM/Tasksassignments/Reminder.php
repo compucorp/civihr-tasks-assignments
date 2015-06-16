@@ -122,6 +122,13 @@ class CRM_Tasksassignments_Reminder
     public static function sendDailyReminder()
     {
         self::_setActivityOptions();
+        $taSettings = civicrm_api3('TASettings', 'get');
+        $settings = $taSettings['values'];
+        $components = array("'CiviTask'");
+        if ($settings['documents_tab']['value'])
+        {
+            $components[] = "'CiviDocument'";
+        }
         
         $incompleteStatuses = array();
         $incompleteStatusesResult = civicrm_api3('Task', 'getstatuses', array(
@@ -144,10 +151,17 @@ class CRM_Tasksassignments_Reminder
             FROM `civicrm_activity` a
             LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
             LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id
-            WHERE activity_date_time <= %1
+            WHERE activity_date_time <='2015-07-07'
             AND a.status_id IN (" . implode(',', $incompleteStatuses) . ")
             AND ac.record_type_id IN (1,2)
             AND e.is_primary = 1
+            AND a.activity_type_id IN (
+                SELECT value FROM civicrm_option_value ov
+                LEFT JOIN civicrm_option_group og ON ov.option_group_id = og.id
+                LEFT JOIN civicrm_component co ON ov.component_id = co.id
+                WHERE og.name = 'activity_type'
+                AND co.name IN (" . implode(',', $components) . ")
+            )
             GROUP BY ac.contact_id";
         $contactsParams = array(
             1 => array($to, 'String'),
@@ -156,12 +170,13 @@ class CRM_Tasksassignments_Reminder
         $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery, $contactsParams);
         while ($contactsResult->fetch())
         {
-            $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids), $to);
+            $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids), $to, $settings);
             $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
                 'reminder' => $reminderData,
                 'baseUrl' => CIVICRM_UF_BASEURL,
                 'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactsResult->contact_id . '&selectedChild=civitasks',
                 'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactsResult->contact_id . '&selectedChild=cividocuments',
+                'settings' => $settings,
             ));
             self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
         }
@@ -169,7 +184,7 @@ class CRM_Tasksassignments_Reminder
         return true;
     }
     
-    private static function _getContactDailyReminderData($contactId, array $activityIds, $to = null)
+    private static function _getContactDailyReminderData($contactId, array $activityIds, $to, array $settings)
     {
         $reminderData = array(
             'overdue' => array(),
@@ -258,20 +273,23 @@ class CRM_Tasksassignments_Reminder
             }
         }
         
-        $today = date('Y-m-d');
         $todayKeydatesCount = 0;
-        $keyDates = CRM_Tasksassignments_KeyDates::get($today, $to, $contactId);
-        foreach ($keyDates as $keyDate)
+        if ($settings['keydates_tab']['value'])
         {
-            $reminderData['upcoming_keydates'][] = array_merge(
-                $keyDate,
-                array(
-                    'label' => $keyDateLabels[$keyDate['type']],
-                )
-            );
-            if ($keyDate['keydate'] == $today)
+            $today = date('Y-m-d');
+            $keyDates = CRM_Tasksassignments_KeyDates::get($today, $to, $contactId);
+            foreach ($keyDates as $keyDate)
             {
-                $todayKeydatesCount++;
+                $reminderData['upcoming_keydates'][] = array_merge(
+                    $keyDate,
+                    array(
+                        'label' => $keyDateLabels[$keyDate['type']],
+                    )
+                );
+                if ($keyDate['keydate'] == $today)
+                {
+                    $todayKeydatesCount++;
+                }
             }
         }
         $reminderData['today_keydates_count'] = $todayKeydatesCount;
