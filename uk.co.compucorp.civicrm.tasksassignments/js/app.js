@@ -218,8 +218,12 @@ define([
                         controller: 'CalendarCtrl',
                         templateUrl: config.path.TPL+'dashboard/calendar.html?v='+(new Date().getTime()),
                         resolve: {
-                            documentList: ['$q', 'DocumentService',function($q, DocumentService){
+                            documentList: ['$q', 'DocumentService','settings', function($q, DocumentService, settings){
                                 var deferred = $q.defer();
+
+                                if (!+settings.tabEnabled.documents) {
+                                    deferred.resolve([]);
+                                }
 
                                 $q.all([
                                     DocumentService.get({

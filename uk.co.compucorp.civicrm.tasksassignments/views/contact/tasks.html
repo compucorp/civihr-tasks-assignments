@@ -8,7 +8,9 @@
                             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
                         </button>
                         &nbsp;
-                        <button class="btn btn-default btn-primary" ng-click="modalAssignment()">
+                        <button class="btn btn-default btn-primary"
+                                ng-click="modalAssignment()"
+                                ng-if="settings.extEnabled.assignments">
                             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
                             {{settings.copy.button.assignmentAdd || 'Add Assignment'}}
                         </button>

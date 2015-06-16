@@ -19,7 +19,7 @@
                                 {literal}{{itemAdd.label()}}{/literal}
                             </a>
 
-                            <a class="btn" ng-click="modalAssignment()">
+                            <a class="btn" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
                                 <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
                                 {literal}{{settings.copy.button.assignmentAdd || 'Add Assignment'}}{/literal}
                             </a>
@@ -41,7 +41,7 @@
                             <span class="{$prefix}sidebar-main-title">Documents</span>
                         </a>
                     </li>
-                    <li ng-class="{literal}{ active: isActive('assignments')}{/literal}">
+                    <li ng-if="settings.extEnabled.assignments" ng-class="{literal}{ active: isActive('assignments')}{/literal}">
                         <a href="#/assignments">
                             <i class="fa fa-briefcase"></i>
                             <span class="{$prefix}sidebar-main-title">Assignments</span>

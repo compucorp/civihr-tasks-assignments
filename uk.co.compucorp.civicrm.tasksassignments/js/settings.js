@@ -3,10 +3,13 @@ define(function(){
 
     var values = angular.module('civitasks.settings',[]);
 
-    values.constant('settings',{
+    values.value('settings',{
         tabEnabled: {
-            'documents': CRM.Tasksassignments.settings.documents_tab,
-            'keyDates': CRM.Tasksassignments.settings.keydates_tab
+            documents: CRM.Tasksassignments.settings.documents_tab,
+            keyDates: CRM.Tasksassignments.settings.keydates_tab
+        },
+        extEnabled: {
+            assignments: CRM.Tasksassignments.case_extension
         },
         copy: {
             button: {
