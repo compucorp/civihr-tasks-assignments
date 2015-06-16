@@ -15,10 +15,6 @@ define(['controllers/controllers',
                     this.item = item.file.name;
                 };
 
-                uploader.onProgressAll = function(progress){
-                    console.log(progress);
-                };
-
             FileService.upload(uploader, entityId).then(function(results){
                 $timeout(function(){
                     $modalInstance.close(results);

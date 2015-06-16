@@ -176,8 +176,8 @@ define(['services/services',
 
             },
             updateCache: function(data){
-                console.log('updateCache');
-                console.log(data);
+                $log.debug('updateCache');
+                $log.debug(data);
 
                 var obj = $rootScope.cache.assignment.obj || {}, arr = [], arrSearch = [], assignment, assignmentId,
                     assignmentType;
