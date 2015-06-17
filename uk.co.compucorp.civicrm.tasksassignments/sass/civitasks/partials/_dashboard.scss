@@ -2,6 +2,7 @@
   margin-top: 25px;
 
   .#{$prefix}container-main {
+    position: relative;
     background-color: $sidebar-main-bg;
 
     &:before,
@@ -130,6 +131,12 @@
       }
     }
 
+  }
+
+  .#{$prefix}dashboard-assignments,
+  .#{$prefix}dashboard-reports {
+    background-color: #fff;
+    @include box-shadow($box-shadow-global);
   }
 
 }

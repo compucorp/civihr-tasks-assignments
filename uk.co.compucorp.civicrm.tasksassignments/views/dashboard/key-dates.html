@@ -102,11 +102,13 @@
             </ul>
         </div>
     </div>
-    <div class="clearfix">
-        <a href
-           class="btn clearfix {{prefix}}btn-list-expand btn-block"
-           ng-show="dateListUnlimited.length > dateListFiltered.length || dateListSelectedUnlimited.length > dateListSelectedFiltered.length"
-           ng-click="dateListLimit = dateListLimit+5">Show more</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <a href
+               class="btn clearfix {{prefix}}btn-list-expand btn-block"
+               ng-show="dateListUnlimited.length > dateListFiltered.length || dateListSelectedUnlimited.length > dateListSelectedFiltered.length"
+               ng-click="dateListLimit = dateListLimit+5">Show more</a>
+        </div>
     </div>
 </div>
 

@@ -174,7 +174,7 @@ define([
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html?v=3',
+                        templateUrl: config.path.TPL+'dashboard/documents.html?v=4',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
@@ -214,7 +214,7 @@ define([
                     state('assignments', {
                         url: '/assignments',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/assignments.html?v=31'
+                        templateUrl: config.path.TPL+'dashboard/assignments.html?v=4'
                     }).
                     state('calendar', {
                         abstract: true,
@@ -324,12 +324,12 @@ define([
                     state('reports', {
                         url: '/reports',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/reports.html?v=3'
+                        templateUrl: config.path.TPL+'dashboard/reports.html?v=4'
                     }).
                     state('keyDates', {
                         url: '/key-dates',
                         controller: 'DateListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/key-dates.html?v=3',
+                        templateUrl: config.path.TPL+'dashboard/key-dates.html?v=4',
                         resolve: {
                             contactList: ['KeyDateService',function(KeyDateService){
                                 return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
@@ -362,7 +362,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'contact/documents.html?v=3',
+                        templateUrl: config.path.TPL+'contact/documents.html?v=4',
                         resolve: {
                             documentList: ['DocumentService',function(DocumentService){
                                 return DocumentService.get({
@@ -392,7 +392,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v=3',
+                        templateUrl: config.path.TPL+'contact/tasks.html?v=4',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({

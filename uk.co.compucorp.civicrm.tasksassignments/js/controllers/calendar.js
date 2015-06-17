@@ -127,8 +127,6 @@ define(['controllers/controllers',
             $scope.$on('assignmentFormSuccess',function(e, output){
                 Array.prototype.push.apply($scope.calTaskList, this.createCalTaskList(output.taskList));
 
-                console.log($state);
-
                 if (!+settings.tabEnabled.documents) {
                     return;
                 }

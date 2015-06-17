@@ -153,12 +153,14 @@
             </ul>
         </div>
     </div>
-    <div class="clearfix">
-        <a
-            href
-            class="btn {{prefix}}btn-list-expand btn-block"
-            ng-show="taskListUnlimited.length > taskListFiltered.length"
-            ng-click="taskListLimit = taskListLimit+5">Show more</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <a
+                    href
+                    class="btn {{prefix}}btn-list-expand btn-block"
+                    ng-show="taskListUnlimited.length > taskListFiltered.length"
+                    ng-click="taskListLimit = taskListLimit+5">Show more</a>
+        </div>
     </div>
 </div>
 
