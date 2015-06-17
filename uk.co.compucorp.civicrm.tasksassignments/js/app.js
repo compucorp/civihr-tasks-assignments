@@ -126,7 +126,7 @@ define([
             '$urlRouterProvider', '$stateProvider','calendarConfigProvider', 'uiSelectConfig',
             function(config, $resourceProvider, $httpProvider, $logProvider,
                      $urlRouterProvider, $stateProvider, calendarConfigProvider, uiSelectConfig){
-                $logProvider.debugEnabled(config.debug);
+                $logProvider.debugEnabled(config.DEBUG);
 
                 $urlRouterProvider.otherwise("/tasks");
 
@@ -357,7 +357,7 @@ define([
     angular.module('civitasks.appDocuments',['civitasks.run'])
         .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
             function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
-                $logProvider.debugEnabled(config.debug);
+                $logProvider.debugEnabled(config.DEBUG);
 
                 $routeProvider.
                     when('/', {
@@ -387,7 +387,7 @@ define([
     angular.module('civitasks.appTasks',['civitasks.run'])
         .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
             function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
-                $logProvider.debugEnabled(config.debug);
+                $logProvider.debugEnabled(config.DEBUG);
 
                 $routeProvider.
                     when('/', {

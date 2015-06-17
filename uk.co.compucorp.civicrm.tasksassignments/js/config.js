@@ -4,7 +4,7 @@ define(function(){
     var constants = angular.module('civitasks.config',[]);
 
     constants.constant('config',{
-        DEBUG: +CRM.debug,
+        DEBUG: !!+CRM.debug,
         CLASS_NAME_PREFIX: 'ct-',
         CONTACT_ID: CRM.contactId ||null,
         LOGGED_IN_CONTACT_ID: CRM.adminId ||null,
