@@ -133,7 +133,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html',
+                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=1',
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();
@@ -173,7 +173,7 @@ define([
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html',
+                        templateUrl: config.path.TPL+'dashboard/documents.html?v=1',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
