@@ -12,6 +12,9 @@ define(function(){
             EXT: CRM.Tasksassignments.extensionPath,
             TPL: CRM.Tasksassignments.extensionPath + 'views/'
         },
+        permissions: {
+            allowDelete: CRM.Tasksassignments.permissions.delete_tasks_and_documents
+        },
         url: {
             REST: CRM.url('civicrm/ajax/rest'),
             ASSIGNMENTS: CRM.url('civicrm/case'),
