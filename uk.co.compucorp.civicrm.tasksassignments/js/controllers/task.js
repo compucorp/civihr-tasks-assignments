@@ -1,8 +1,8 @@
 define(['controllers/controllers',
         'moment',
         'services/task'], function(controllers, moment){
-    controllers.controller('TaskCtrl',['$scope', '$log', '$rootScope', '$filter', '$timeout', 'TaskService',
-        function($scope, $log, $rootScope, $filter, $timeout, TaskService){
+    controllers.controller('TaskCtrl',['$scope', '$log', '$rootScope',
+        function($scope, $log, $rootScope){
             $log.debug('Controller: TaskCtrl');
 
             $scope.isCollapsed = true;

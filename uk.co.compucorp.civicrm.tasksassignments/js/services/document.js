@@ -58,6 +58,9 @@
 
                 params = angular.extend({
                     'component': 'CiviDocument',
+                    'options': {
+                        'limit': 0
+                    },
                     'is_current_revision': '1',
                     'is_deleted': '0',
                     'sequential': '1',

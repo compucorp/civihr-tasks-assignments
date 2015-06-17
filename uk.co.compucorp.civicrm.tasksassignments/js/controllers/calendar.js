@@ -84,10 +84,7 @@ define(['controllers/controllers',
             $scope.displayDayView = function(calendarDate) {
                 $scope.calendarDay = moment(calendarDate).toDate();
                 $scope.calendarView = 'day';
-                $state.go('calendar.day');
             };
-
-            this.init();
 
             function eventUpdateCb(output, input, calActvList, activityTypeObj) {
                 var actvDueOut = moment(output.activity_date_time).toDate(),
@@ -127,10 +124,19 @@ define(['controllers/controllers',
                 eventUpdateCb(output, input, $scope.calDocList, $rootScope.cache.documentType.obj)
             });
 
+            $scope.$on('assignmentFormSuccess',function(e, output){
+                Array.prototype.push.apply($scope.calTaskList, this.createCalTaskList(output.taskList));
 
-             $scope.$on('assignmentFormSuccess',function(e, output){
-                //Array.prototype.push.apply($scope.taskList, output.taskList);
-             });
+                console.log($state);
+
+                if (!+settings.tabEnabled.documents) {
+                    return;
+                }
+
+                Array.prototype.push.apply($scope.calDocList, this.createCalDocList(output.documentList));
+            }.bind(this));
+
+            this.init();
 
         }]);
 });

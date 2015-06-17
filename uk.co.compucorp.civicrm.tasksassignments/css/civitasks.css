@@ -12764,7 +12764,12 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   top: 15px;
   font-size: 11px;
 }
-/* line 48, ../sass/civitasks/partials/_filters.scss */
+/* line 45, ../sass/civitasks/partials/_filters.scss */
+#civitasks .ct-filter-date .nav > li .fa:hover, #cividocuments .ct-filter-date .nav > li .fa:hover, #civitasks .ct-filter-date .nav > li .fa:focus, #cividocuments .ct-filter-date .nav > li .fa:focus {
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+}
+/* line 53, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates, #cividocuments .ct-filter-date .ct-select-dates {
   color: #525966;
   font-size: 11px;
@@ -12775,25 +12780,25 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   text-align: left;
   width: auto;
 }
-/* line 58, ../sass/civitasks/partials/_filters.scss */
+/* line 63, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates em, #cividocuments .ct-filter-date .ct-select-dates em {
   color: #586277;
 }
-/* line 62, ../sass/civitasks/partials/_filters.scss */
+/* line 67, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates .fa, #cividocuments .ct-filter-date .ct-select-dates .fa {
   float: right;
   line-height: 1.6;
 }
-/* line 67, ../sass/civitasks/partials/_filters.scss */
+/* line 72, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates:active, #cividocuments .ct-filter-date .ct-select-dates:active {
   -webkit-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
 }
-/* line 71, ../sass/civitasks/partials/_filters.scss */
+/* line 76, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date .ct-select-dates:hover, #cividocuments .ct-filter-date .ct-select-dates:hover {
   color: #30343c;
 }
-/* line 77, ../sass/civitasks/partials/_filters.scss */
+/* line 82, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-advanced, #cividocuments .ct-filter-advanced {
   max-width: 817px;
 }
@@ -12811,16 +12816,16 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-left: 5px;
   padding-right: 5px;
 }
-/* line 83, ../sass/civitasks/partials/_filters.scss */
+/* line 88, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-advanced .form-horizontal .control-label, #cividocuments .ct-filter-advanced .form-horizontal .control-label {
   text-align: right;
 }
-/* line 87, ../sass/civitasks/partials/_filters.scss */
+/* line 92, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-advanced .form-horizontal .form-group, #cividocuments .ct-filter-advanced .form-horizontal .form-group {
   margin-bottom: 0;
   margin-top: 20px;
 }
-/* line 94, ../sass/civitasks/partials/_filters.scss */
+/* line 99, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date-type, #cividocuments .ct-filter-date-type {
   margin-top: -6px;
   margin-bottom: -7px;
@@ -12841,11 +12846,11 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   padding-left: 5px;
   padding-right: 5px;
 }
-/* line 102, ../sass/civitasks/partials/_filters.scss */
+/* line 107, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date-type .form-horizontal .control-label, #cividocuments .ct-filter-date-type .form-horizontal .control-label {
   text-align: right;
 }
-/* line 106, ../sass/civitasks/partials/_filters.scss */
+/* line 111, ../sass/civitasks/partials/_filters.scss */
 #civitasks .ct-filter-date-type .form-horizontal .form-group, #cividocuments .ct-filter-date-type .form-horizontal .form-group {
   margin-bottom: 0;
 }

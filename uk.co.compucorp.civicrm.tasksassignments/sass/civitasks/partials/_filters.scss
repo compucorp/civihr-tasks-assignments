@@ -41,6 +41,11 @@
         right: 58px;
         top: 15px;
         font-size: 11px;
+
+        &:hover,
+        &:focus {
+          @include opacity(0.7);
+        }
       }
     }
   }

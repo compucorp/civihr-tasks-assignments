@@ -261,9 +261,7 @@ define(['controllers/controllers',
             };
 
             $scope.viewInCalendar = function(view){
-                $state.go('calendar.'+view, {
-                    calendarView: view
-                });
+                $state.go('calendar.mwl.'+view);
             };
 
             $scope.$on('assignmentFormSuccess',function(e, output){

@@ -58,6 +58,9 @@ define(['services/services',
 
                 Assignment.get({
                     'json': {
+                        'options': {
+                            'limit': 0
+                        },
                         'id': id,
                         'debug': config.DEBUG
                     }}, function(data){

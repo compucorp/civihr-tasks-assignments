@@ -30,9 +30,9 @@ define([
         'civitasks.services',
         'civitasks.settings',
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
-        'TaskService', 'AssignmentService', 'KeyDateService', '$log',
+        'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
-                 KeyDateService, $log){
+                 KeyDateService, ContactService, $log){
             $log.debug('civitasks.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -100,6 +100,10 @@ define([
                 angular.forEach(types, function(type) {
                     this.push(type);
                 }, $rootScope.cache.assignmentType.arr);
+            });
+
+            ContactService.get({'IN': [config.LOGGED_IN_CONTACT_ID]}).then(function(data){
+                ContactService.updateCache(data);
             });
 
             angular.forEach($rootScope.cache.dateType.obj, function(value, key){
@@ -212,7 +216,7 @@ define([
                         templateUrl: config.path.TPL+'dashboard/assignments.html'
                     }).
                     state('calendar', {
-                        url: '/calendar',
+                        abstract: true,
                         controller: 'CalendarCtrl',
                         templateUrl: config.path.TPL+'dashboard/calendar.html',
                         resolve: {
@@ -288,10 +292,8 @@ define([
                             }]
                         }
                     }).
-                    state('calendar.day', {
-                        params: {
-                            calendarView: 'day'
-                        },
+                    state('calendar.mwl', {
+                        url: '/calendar',
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
@@ -301,17 +303,21 @@ define([
                                 controller: 'TaskListCtrl',
                                 templateUrl: config.path.TPL+'dashboard/calendar.taskList.html'
                             }
-
                         }
                     }).
-                    state('calendar.month', {
+                    state('calendar.mwl.day', {
+                        params: {
+                            calendarView: 'day'
+                        }
+                    }).
+                    state('calendar.mwl.month', {
                         params: {
                             calendarView: 'month'
                         }
                     }).
-                    state('calendar.week', {
+                    state('calendar.mwl.week', {
                         params: {
-                            calendarView: 'day'
+                            calendarView: 'week'
                         }
                     }).
                     state('reports', {
