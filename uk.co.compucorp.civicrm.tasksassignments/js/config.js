@@ -17,7 +17,8 @@ define(function(){
             ASSIGNMENTS: CRM.url('civicrm/case'),
             CIVI_DASHBOARD: CRM.url('civicrm/'),
             CONTACT: CRM.url('civicrm/contact/view'),
-            FILE: CRM.url('civicrm/tasksassignments/file')
+            FILE: CRM.url('civicrm/tasksassignments/file'),
+            CSV_EXPORT: CRM.url('civicrm/tasksassignments')
         },
         status: {
             resolve: {

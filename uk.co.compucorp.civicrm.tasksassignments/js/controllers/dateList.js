@@ -4,8 +4,9 @@ define(['controllers/controllers',
         'services/contact'], function(controllers, moment){
 
     controllers.controller('DateListCtrl',['$scope', '$modal', '$rootElement', '$rootScope', '$route', '$filter',
-        '$log', '$timeout', 'contactList','KeyDateService',
-        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, $timeout, contactList,KeyDateService){
+        '$log', '$timeout', 'contactList','KeyDateService', 'config',
+        function($scope, $modal, $rootElement, $rootScope, $route, $filter, $log, $timeout, contactList, KeyDateService,
+                 config){
             $log.debug('Controller: DateListCtrl');
 
             this.init = function(){
@@ -67,6 +68,26 @@ define(['controllers/controllers',
                 month: 'Month',
                 year: 'Year',
                 dateRange: ''
+            };
+
+            $scope.csvExport = function(){
+                var startDate, endDate;
+
+                if ($scope.filterParams.date == 'dateRange') {
+
+                    startDate = $scope.filterParams.dateRange.from ?
+                        moment($scope.filterParams.dateRange.from).format('YYYY-MM-DD') :
+                        '';
+                    endDate = $scope.filterParams.dateRange.until ?
+                        moment($scope.filterParams.dateRange.until).format('YYYY-MM-DD') :
+                        '';
+
+                } else {
+                    startDate = moment().startOf($scope.filterParams.date).format('YYYY-MM-DD');
+                    endDate = moment().endOf($scope.filterParams.date).format('YYYY-MM-DD');
+                }
+
+                window.location.href = config.url.CSV_EXPORT+'/keydatescsv?start_date='+startDate+'&end_date='+endDate;
             };
 
             $scope.labelDateRange = function(from, until){
