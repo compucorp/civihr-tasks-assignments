@@ -29,7 +29,7 @@ function civicrm_api3_t_a_settings_get($params) {
         );
     }
     
-    return civicrm_api3_create_success($result, $params, 'tasettings', 'get');
+    return civicrm_api3_create_success($result, $params, 'TASettings', 'get');
 }
 
 function civicrm_api3_t_a_settings_set($params) {
