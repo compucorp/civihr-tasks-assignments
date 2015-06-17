@@ -16,17 +16,17 @@ define(['controllers/controllers',
             };
 
             this.createCalDocList = function(documentList){
-                var cache = $rootScope.cache, documentDue, documentExp, calDocumentList = [];
+                var cache = $rootScope.cache, calDocumentList = [];
 
                 angular.forEach(documentList, function(document){
-                    documentDue = moment(document.activity_date_time).toDate();
+                    document.activity_date_time = moment(document.activity_date_time).toDate();
 
                     this.push(
                         {
                             title: cache.documentType.obj[document.activity_type_id],
                             type: 'document',
-                            startsAt: documentDue,
-                            endsAt: documentDue,
+                            startsAt: document.activity_date_time,
+                            endsAt: document.activity_date_time,
                             editable: false,
                             deletable: false,
                             incrementsBadgeTotal: true
@@ -34,14 +34,14 @@ define(['controllers/controllers',
                     )
 
                     if (!!document.expire_date) {
-                        documentExp = moment(document.expire_date).toDate();
+                        document.expire_date = moment(document.expire_date).toDate();
 
                         this.push(
                             {
                                 title: cache.documentType.obj[document.activity_type_id],
                                 type: 'document',
-                                startsAt: documentExp,
-                                endsAt: documentExp,
+                                startsAt: document.expire_date,
+                                endsAt: document.expire_date,
                                 editable: false,
                                 deletable: false,
                                 incrementsBadgeTotal: true
@@ -55,16 +55,16 @@ define(['controllers/controllers',
             };
 
             this.createCalTaskList = function(taskList){
-                var cache = $rootScope.cache, taskDue, calTaskList = [];
+                var cache = $rootScope.cache, calTaskList = [];
 
                 angular.forEach(taskList, function(task){
-                    taskDue = moment(task.activity_date_time).toDate();
+                    task.activity_date_time = moment(task.activity_date_time).toDate();
                     this.push(
                         {
                             title: cache.taskType.obj[task.activity_type_id],
                             type: 'task',
-                            startsAt: taskDue,
-                            endsAt: taskDue,
+                            startsAt: task.activity_date_time,
+                            endsAt: task.activity_date_time,
                             editable: false,
                             deletable: false,
                             incrementsBadgeTotal: true

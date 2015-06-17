@@ -41,6 +41,7 @@ define(['filters/filters'], function(filters){
                     for (i; i < inputArrlen; i++) {
                         itemDateTime = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
                         itemDateExp = inputArr[i].expire_date ? new Date(inputArr[i].expire_date).setHours(0, 0, 0, 0) : false;
+
                         if ((itemDateTime >= filterDateTimeFrom && itemDateTime <= filterDateTimeUntil) ||
                             (itemDateExp && itemDateExp >= filterDateTimeFrom && itemDateExp <= filterDateTimeUntil)) {
                             filteredArr.push(inputArr[i]);
