@@ -14,7 +14,45 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             $this->{$methodName}();
           }
       }
+      
+    $this->setComponentStatuses(array(
+      'CiviTask' => true,
+      'CiviDocument' => true,
+    ));
     }
+    
+  /**
+   * Set components as enabled or disabled. Leave any other
+   * components unmodified.
+   *
+   * Note: This API has only been tested with CiviCRM 4.4.
+   *
+   * @param array $components keys are component names (e.g. "CiviMail"); values are booleans
+   */
+  public function setComponentStatuses($components) {
+    $getResult = civicrm_api3('setting', 'getsingle', array(
+      'domain_id' => CRM_Core_Config::domainID(),
+      'return' => array('enable_components'),
+    ));
+    if (!is_array($getResult['enable_components'])) {
+      throw new CRM_Core_Exception("Failed to determine component statuses");
+    }
+
+    // Merge $components with existing list
+    $enableComponents = $getResult['enable_components'];
+    foreach ($components as $component => $status) {
+      if ($status) {
+        $enableComponents = array_merge($enableComponents, array($component));
+      } else {
+        $enableComponents = array_diff($enableComponents, array($component));
+      }
+    }
+    civicrm_api3('setting', 'create', array(
+      'domain_id' => CRM_Core_Config::domainID(),
+      'enable_components' => $enableComponents,
+    ));
+    CRM_Core_Component::flushEnabledComponents();
+  }
 
     public function upgrade_0001() {
 
@@ -231,13 +269,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     /*
      * Enable CiviTask and CiviDocument components.
      */
-    public function upgrade_0010()
+    /*public function upgrade_0010()
     {
         CRM_Core_BAO_ConfigSetting::enableComponent('CiviTask');
         CRM_Core_BAO_ConfigSetting::enableComponent('CiviDocument');
         
         return TRUE;
-    }
+    }*/
     
     /*
      * Install Document Types
@@ -256,6 +294,32 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                 'Exiting document 3',
             ),
         ));
+        
+        return TRUE;
+    }
+    
+    /*
+     * Set up Daily Reminder job
+     */
+    public function upgrade_1012()
+    {
+        $dao = new CRM_Core_DAO_Job();
+        $dao->api_entity = 'task';
+        $dao->api_action = 'senddailyreminder';
+        $dao->find(TRUE);
+        if (!$dao->id)
+        {
+            $dao = new CRM_Core_DAO_Job();
+            $dao->domain_id = CRM_Core_Config::domainID();
+            $dao->run_frequency = 'Daily';
+            $dao->parameters = null;
+            $dao->name = 'Tasks and Assignments Daily Reminder';
+            $dao->description = 'Tasks and Assignments Daily Reminder';
+            $dao->api_entity = 'task';
+            $dao->api_action = 'senddailyreminder';
+            $dao->is_active = 0;
+            $dao->save();
+        }
         
         return TRUE;
     }
