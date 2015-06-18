@@ -11,7 +11,7 @@ define(['controllers/controllers',
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/document.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'modal/document.html?v=1',
                         controller: 'ModalDocumentCtrl',
                         resolve: {
                             data: function(){
@@ -39,7 +39,7 @@ define(['controllers/controllers',
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/task.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'modal/task.html?v=1',
                         controller: 'ModalTaskCtrl',
                         resolve: {
                             data: function(){
@@ -56,11 +56,24 @@ define(['controllers/controllers',
 
             };
 
+            $rootScope.modalTaskMigrate = function() {
+                $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/taskMigrate.html?v='+(new Date().getTime()),
+                    controller: 'ModalTaskMigrateCtrl'
+                }).result.then(function(results){
+                    $scope.$broadcast('taskMigrateFormSuccess', results);
+                }, function(){
+                    $log.info('Modal dismissed');
+                });
+
+            };
+
             $rootScope.modalAssignment = function(data) {
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/assignment.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL+'modal/assignment.html?v=1',
                         controller: 'ModalAssignmentCtrl',
                         size: 'lg',
                         resolve: {
@@ -87,7 +100,7 @@ define(['controllers/controllers',
 
                 $modal.open({
                     targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/reminder.html?v='+(new Date().getTime()),
+                    templateUrl: config.path.TPL+'modal/reminder.html?v=1',
                     controller: 'ModalReminderCtrl',
                     resolve: {
                         data: function(){

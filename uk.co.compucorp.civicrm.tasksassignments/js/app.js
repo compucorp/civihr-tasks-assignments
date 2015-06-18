@@ -214,7 +214,7 @@ define([
                     state('assignments', {
                         url: '/assignments',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/assignments.html?v=4'
+                        templateUrl: config.path.TPL+'dashboard/assignments.html?v=5'
                     }).
                     state('calendar', {
                         abstract: true,
@@ -339,7 +339,7 @@ define([
                     state('settings', {
                         url: '/settings',
                         controller: 'SettingsCtrl',
-                        templateUrl: config.path.TPL+'dashboard/settings.html?v=3'
+                        templateUrl: config.path.TPL+'dashboard/settings.html?v=4'
                     });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;

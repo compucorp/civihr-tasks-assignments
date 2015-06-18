@@ -13369,3 +13369,21 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* line 42, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-task-migrate, #cividocuments .ct-table-task-migrate {
+  table-layout: fixed;
+}
+/* line 45, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-task-migrate .ct-col-select, #cividocuments .ct-table-task-migrate .ct-col-select,
+#civitasks .ct-table-task-migrate .ct-col-task-status,
+#cividocuments .ct-table-task-migrate .ct-col-task-status {
+  text-align: center;
+}
+/* line 50, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-task-migrate .ct-col-select, #cividocuments .ct-table-task-migrate .ct-col-select {
+  width: 30px;
+}
+/* line 54, ../sass/civitasks/partials/_tables.scss */
+#civitasks .ct-table-task-migrate .ct-col-task-status, #cividocuments .ct-table-task-migrate .ct-col-task-status {
+  width: 20%;
+}
