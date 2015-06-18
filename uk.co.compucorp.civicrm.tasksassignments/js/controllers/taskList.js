@@ -152,7 +152,7 @@ define(['controllers/controllers',
                 }
 
                 //Remove resolved tasks from the task list
-                $scope.taskList = $scope.taskListOngoing;
+                $filter('filterBy.status')($scope.taskList, $rootScope.cache.taskStatusResolve, false);
 
                 TaskService.get({
                     'target_contact_id': config.CONTACT_ID,
@@ -160,10 +160,8 @@ define(['controllers/controllers',
                         'IN': config.status.resolve.TASK
                     }
                 }).then(function(taskListResolved){
-                    $scope.taskList.push.apply($scope.taskList, taskListResolved);
-                    $timeout(function () {
-                        $scope.taskListResolvedLoaded = true;
-                    });
+                    Array.prototype.push.apply($scope.taskList, taskListResolved);
+                    $scope.taskListResolvedLoaded = true;
                 });
             };
 

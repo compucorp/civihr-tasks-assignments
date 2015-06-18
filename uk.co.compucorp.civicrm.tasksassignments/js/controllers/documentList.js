@@ -228,7 +228,7 @@ define(['controllers/controllers',
                 }
 
                 //Remove resolved documents from the document list
-                $scope.documentList = $scope.documentListOngoing;
+                $scope.documentList = $filter('filterBy.status')($scope.documentList, $rootScope.cache.documentStatusResolve, false);
 
                 DocumentService.get({
                     'target_contact_id': config.CONTACT_ID,
@@ -236,10 +236,8 @@ define(['controllers/controllers',
                         'IN': config.status.resolve.DOCUMENT
                     }
                 }).then(function(documentListResolved){
-                    $scope.documentList.push.apply($scope.documentList, documentListResolved);
-                    $timeout(function () {
-                        $scope.documentListResolvedLoaded = true;
-                    });
+                    Array.prototype.push.apply($scope.documentList, documentListResolved);
+                    $scope.documentListResolvedLoaded = true;
                 });
             };
 
@@ -254,7 +252,10 @@ define(['controllers/controllers',
 
                     DocumentService.delete(document.id).then(function(results){
                         $scope.documentList.splice($scope.documentList.indexOf(document),1);
-                        $scope.checklist.selected.splice($scope.checklist.selected.indexOf(document),1);
+
+                        angular.forEach($scope.checklist.selected, function(page){
+                            page.splice(page.indexOf(document),1);
+                        });
                     });
                 });
 
