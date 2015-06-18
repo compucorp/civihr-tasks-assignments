@@ -323,6 +323,46 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         
         return TRUE;
     }
+    
+    /*
+     * Add Settings page to Tasks and Assignments top menu
+     */
+    public function upgrade_1013()
+    {
+        $taNavigation = new CRM_Core_DAO_Navigation();
+        $taNavigation->name = 'tasksassignments';
+        $taNavigation->find(true);
+        if ($taNavigation->id)
+        {
+            $taNavigation->url = '';
+            $taNavigation->save();
+            
+            $submenu = array(
+                array(
+                    'label' => ts('Dashboard'),
+                    'name' => 'ta_dashboard',
+                    'url' => 'civicrm/tasksassignments/dashboard#/tasks',
+                ),
+                array(
+                    'label' => ts('Settings'),
+                    'name' => 'ta_settings',
+                    'url' => 'civicrm/tasksassignments/settings',
+                )
+            );
+            
+            foreach ($submenu as $key => $item)
+            {
+                $item['parent_id'] = $taNavigation->id;
+                $item['weight'] = $key;
+                $item['is_active'] = 1;
+                CRM_Core_BAO_Navigation::add($item);
+            }
+            
+            CRM_Core_BAO_Navigation::resetNavigation();
+        }
+        
+        return TRUE;
+    }
   
     function _installTypes($component, array $types)
     {
