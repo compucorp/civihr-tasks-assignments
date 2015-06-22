@@ -35,6 +35,7 @@
         'controllers/modal/modalDocument',
         'controllers/modal/modalProgress',
         'controllers/modal/modalTask',
+        'controllers/modal/modalTaskMigrate',
         'controllers/modal/modalReminder',
         'controllers/modal/modalAssignment',
         'controllers/externalPage',
