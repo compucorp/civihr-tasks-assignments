@@ -1,4 +1,5 @@
 @mixin global {
+  min-height: 184px;
 
   &.#{$prefix}page-loading {
     background-color: #fff;

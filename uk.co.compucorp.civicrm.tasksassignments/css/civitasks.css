@@ -67,6 +67,7 @@
    * @link https://github.com/mattlewis92/angular-bootstrap-calendar
    * @license MIT
    */
+  min-height: 184px;
 }
 /* line 7, ../sass/civihr/modules/_unset.scss */
 #civitasks html, #cividocuments html,
@@ -12429,22 +12430,22 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
     border-bottom: 1px solid #e1e1e1;
   }
 }
-/* line 18, ../sass/civitasks/partials/_global.scss */
+/* line 19, ../sass/civitasks/partials/_global.scss */
 .page-civicrm-tasksassignments-dashboard #branding {
   display: none;
 }
-/* line 22, ../sass/civitasks/partials/_global.scss */
+/* line 23, ../sass/civitasks/partials/_global.scss */
 .page-civicrm-tasksassignments-dashboard #page {
   padding: 0;
   margin: 0;
 }
-/* line 3, ../sass/civitasks/partials/_global.scss */
+/* line 4, ../sass/civitasks/partials/_global.scss */
 #civitasks.ct-page-loading, .ct-page-loading#cividocuments {
   background-color: #fff;
   z-index: 0;
   min-height: 640px;
 }
-/* line 8, ../sass/civitasks/partials/_global.scss */
+/* line 9, ../sass/civitasks/partials/_global.scss */
 #civitasks.ct-page-loading .container, .ct-page-loading#cividocuments .container,
 #civitasks.ct-page-loading .container-fluid,
 .ct-page-loading#cividocuments .container-fluid {

@@ -1,8 +1,8 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" ng-controller="MainCtrl">
-    <div class="container" ng-view>
+<div id="{$module}" ng-controller="MainCtrl" ct-spinner ct-spinner-show>
+    <div class="container fade-in" ng-view>
     </div>
 </div>
 {literal}
@@ -13,11 +13,21 @@
             'details': 'appContact'
         });
 */
-        document.dispatchEvent(new CustomEvent('taInit', {
-            'detail': {
-                'app': 'appTasks',
-                'module': 'civitasks'
-            }
-        }));
+
+        (function(){
+            function taInit(){
+                document.dispatchEvent(new CustomEvent('taInit', {
+                    'detail': {
+                        'app': 'appTasks',
+                        'module': 'civitasks'
+                    }
+                }));
+            };
+            taInit();
+
+            document.addEventListener('taReady', function(){
+                taInit();
+            });
+        })();
     </script>
 {/literal}
