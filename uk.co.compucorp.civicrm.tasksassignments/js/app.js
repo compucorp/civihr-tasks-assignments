@@ -134,7 +134,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=3',
+                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=4',
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();
@@ -387,7 +387,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v=4',
+                        templateUrl: config.path.TPL+'contact/tasks.html?v=5',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({

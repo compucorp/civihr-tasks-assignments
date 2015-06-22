@@ -198,7 +198,7 @@
     </header>
     <div class="row">
         <div class="col-xs-12">
-            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> <span ng-if="!!task.subject">Subject: {{task.subject}}</span></p>
+            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> <span ng-if="!!task.subject">Subject: {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}</span></p>
         </div>
     </div>
     <div class="row">
