@@ -11669,16 +11669,38 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   position: relative;
   top: 1px;
 }
-/* line 26, ../sass/civihr/partials/_tables.scss */
-#civitasks .table > thead > tr > th, #cividocuments .table > thead > tr > th {
+/* line 20, ../sass/civihr/partials/_tables.scss */
+#civitasks .table > tbody > tr > td.checkbox, #cividocuments .table > tbody > tr > td.checkbox,
+#civitasks .table > tfoot > tr > td.checkbox,
+#cividocuments .table > tfoot > tr > td.checkbox {
+  padding: 11px 8px 10px;
+  text-align: left;
+}
+/* line 31, ../sass/civihr/partials/_tables.scss */
+#civitasks .table > thead > tr > th, #cividocuments .table > thead > tr > th,
+#civitasks .table > thead > tr > th.checkbox,
+#cividocuments .table > thead > tr > th.checkbox {
   border: 0 none;
   color: #525966;
   font-size: 11px;
   font-weight: bold;
   padding-bottom: 12px;
   padding-top: 10px;
+  text-align: left;
 }
-/* line 37, ../sass/civihr/partials/_tables.scss */
+/* line 43, ../sass/civihr/partials/_tables.scss */
+#civitasks .table > thead > tr > th label, #cividocuments .table > thead > tr > th label, #civitasks .table > thead > tr > th .checkbox-label, #cividocuments .table > thead > tr > th .checkbox-label,
+#civitasks .table > thead > tr > th .radio-label,
+#cividocuments .table > thead > tr > th .radio-label,
+#civitasks .table > thead > tr > th.checkbox label,
+#cividocuments .table > thead > tr > th.checkbox label,
+#civitasks .table > thead > tr > th.checkbox .checkbox-label,
+#cividocuments .table > thead > tr > th.checkbox .checkbox-label,
+#civitasks .table > thead > tr > th.checkbox .radio-label,
+#cividocuments .table > thead > tr > th.checkbox .radio-label {
+  font-weight: bold;
+}
+/* line 48, ../sass/civihr/partials/_tables.scss */
 #civitasks .table > thead > tr > td, #cividocuments .table > thead > tr > td {
   border-top: 0 none;
 }

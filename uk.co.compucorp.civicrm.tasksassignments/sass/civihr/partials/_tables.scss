@@ -16,6 +16,11 @@
           position: relative;
           top: 1px;
         }
+
+        &.checkbox {
+          padding: $table-cell-padding;
+          text-align: left;
+        }
       }
 
     }
@@ -23,15 +28,21 @@
 
   > thead {
     > tr {
-      > th {
+      > th,
+      > th.checkbox {
         border: 0 none;
         color: $headings-color;
         font-size: $font-size-h3;
-        font-weight: bold;
+        font-weight: $headings-font-weight;
         padding: {
           bottom: 12px;
           top: 10px;
         };
+        text-align: left;
+
+        label {
+          font-weight: $headings-font-weight;
+        }
       }
 
       > td {

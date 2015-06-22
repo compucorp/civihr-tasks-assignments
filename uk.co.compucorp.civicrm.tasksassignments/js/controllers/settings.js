@@ -1,7 +1,9 @@
 define(['controllers/controllers',
         'services/settings'], function(controllers){
-    controllers.controller('SettingsCtrl',['$scope', '$rootScope', '$location', '$dialog', '$log', '$state', 'SettingsService', 'config', 'settings',
-        function($scope, $rootScope, $location, $dialog, $log, $state, SettingsService, config, settings){
+    controllers.controller('SettingsCtrl',['$scope', '$rootScope', '$location', '$dialog', '$log', '$state',
+        'SettingsService', 'config', 'settings',
+        function($scope, $rootScope, $location, $dialog, $log, $state, SettingsService, config,
+                 settings){
             $log.debug('Controller: SettingsCtrl');
 
             $scope.settings = angular.copy(settings);

@@ -11,7 +11,7 @@
                     <ui-select
                             allow-clear
                             ng-model="migrate.from"
-                            on-select="cacheContact($item); getTasks($item.id);"
+                            on-select="cacheContact($item); getActivities($item.id);"
                             ng-required="true">
                         <ui-select-match
                                 placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
@@ -23,7 +23,7 @@
                         </ui-select-choices>
                     </ui-select>
                     <span class="input-group-btn">
-                        <a ng-click="migrate.from = ''; migrate.taskList = [];" class="btn btn-default">
+                        <a ng-click="migrate.from = ''; migrate.activityList = [];" class="btn btn-default">
                             <span class="fa fa-remove"></span>
                         </a>
                     </span>
@@ -61,20 +61,22 @@
                 <table class="table table-striped {{prefix}}table-task-migrate">
                     <thead>
                         <tr>
-                            <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll" ng-change="toggleAll();"></th>
-                            <th>Select All</th>
+                            <th class="{{prefix}}col-task-type checkbox">
+                                <label><input type="checkbox" name="toggleAll" ng-model="migrate.isCheckedAll" ng-change="toggleAll();"> Select All</label>
+                            </th>
                             <th class="{{prefix}}col-task-status">Ongoing</th>
                             <th class="{{prefix}}col-task-status">Completed</th>
                             <th class="{{prefix}}col-task-status">Cancelled</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="task in migrate.taskList">
-                            <td class="{{prefix}}col-select"><input type="checkbox"></td>
-                            <td>{{cache.taskType.obj[task.activity_type_id]}}</td>
-                            <td class="{{prefix}}col-task-status"><input type="checkbox" disabled></td>
-                            <td class="{{prefix}}col-task-status"><input type="checkbox" disabled></td>
-                            <td class="{{prefix}}col-task-status"><input type="checkbox" disabled></td>
+                        <tr ng-repeat="activity in migrate.activityList" ng-controller="ActivityMigrateCtrl">
+                            <td class="{{prefix}}col-task-type checkbox">
+                                <label><input checklist-model="migrate.activityListSelected" checklist-value="activity" ng-change="toggleIsCheckedAll();" type="checkbox">{{activityType[activity.activity_type_id]}}</label>
+                            </td>
+                            <td class="{{prefix}}col-task-status"><input ng-model="activity.ongoing" type="checkbox" disabled></td>
+                            <td class="{{prefix}}col-task-status"><input ng-model="activity.completed" type="checkbox" disabled></td>
+                            <td class="{{prefix}}col-task-status"><input ng-model="activity.cancelled" type="checkbox" disabled></td>
                         </tr>
                     </tbody>
                 </table>
