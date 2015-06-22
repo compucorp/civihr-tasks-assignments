@@ -36,7 +36,9 @@ define(['services/services',
         return $resource(config.url.REST,{
             'action': 'get',
             'entity': 'CaseType',
-            'json': {}
+            'json': {
+                'is_active': 1
+            }
         });
 
     }]);
