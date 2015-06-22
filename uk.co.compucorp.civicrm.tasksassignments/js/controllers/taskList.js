@@ -198,7 +198,7 @@ define(['controllers/controllers',
                     var pattern = /case|activity|assignment/i;
 
                     if (pattern.test(data.title) ||
-                        data.crmMessages.length &&
+                        (data.crmMessages && data.crmMessages.length) &&
                         (pattern.test(data.crmMessages[0].title) ||
                         pattern.test(data.crmMessages[0].text))) {
                         $rootScope.cache.assignment = {
