@@ -62,6 +62,7 @@ class CRM_Tasksassignments_Reminder
             }
             
             $links = array();
+            $names = array();
             $emails = array();
             
             $contactResult = civicrm_api3('Contact', 'get', array(
@@ -77,8 +78,9 @@ class CRM_Tasksassignments_Reminder
             
             foreach ($contactResult['values'] as $contactKey => $contactValue)
             {
-                $url = '/civicrm/contact/view?reset=1&cid=' . $contactKey;
-                $links[] = '<a href="' . $url . '">' . $contactValue['sort_name'] . '</a>';
+                $url = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactKey;
+                $links[] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contactValue['sort_name'] . '</a>';
+                $names[] = $contactValue['sort_name'];
             }
             
             foreach ($emailResult['values'] as $contactValue)
@@ -88,6 +90,7 @@ class CRM_Tasksassignments_Reminder
             }
             
             $activityContact[$key]['links'] = $links;
+            $activityContact[$key]['names'] = $names;
             $activityContact[$key]['emails'] = $emails;
         }
         
@@ -100,7 +103,7 @@ class CRM_Tasksassignments_Reminder
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
-                'activityName' => implode(', ', $activityContact[3]['links']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']],
+                'activityName' => implode(', ', $activityContact[3]['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityTargets' => implode(', ', $activityContact[3]['links']),
                 'activityAssignee' => implode(', ', $activityContact[1]['links']),
@@ -229,8 +232,8 @@ class CRM_Tasksassignments_Reminder
             {
                 list($type, $cId, $cSortName) = explode(':', $value);
                 
-                $contactUrl = '/civicrm/contact/view?reset=1&cid=' . $cId;
-                $activityContact[$type][$cId] = '<a href="' . $contactUrl . '">' . $cSortName . '</a>';
+                $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $cId;
+                $activityContact[$type][$cId] = '<a href="' . $contactUrl . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $cSortName . '</a>';
             }
             
             $reminderKeys = array();
