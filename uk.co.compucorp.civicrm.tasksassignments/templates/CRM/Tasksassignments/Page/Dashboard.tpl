@@ -65,12 +65,6 @@
                             <span class="{$prefix}sidebar-main-title">Key Dates</span>
                         </a>
                     </li>
-                    <li ng-class="{literal}{ active: isActive('settings')}{/literal}">
-                        <a href="#/settings">
-                            <i class="fa fa-cogs"></i>
-                            <span class="{$prefix}sidebar-main-title">Settings</span>
-                        </a>
-                    </li>
                 </ul>
                 <div class="{$prefix}content-wrapper">
                     <div class="{$prefix}content">

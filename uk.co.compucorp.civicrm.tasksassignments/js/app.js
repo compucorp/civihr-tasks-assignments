@@ -335,11 +335,6 @@ define([
                                 return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
                             }]
                         }
-                    }).
-                    state('settings', {
-                        url: '/settings',
-                        controller: 'SettingsCtrl',
-                        templateUrl: config.path.TPL+'dashboard/settings.html?v=4'
                     });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
@@ -405,6 +400,31 @@ define([
                         }
                     }
                 ).otherwise({redirectTo:'/'});
+
+                $resourceProvider.defaults.stripTrailingSlashes = false;
+
+                $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+
+                uiSelectConfig.theme = 'bootstrap';
+            }
+        ]);
+
+    angular.module('civitasks.appSettings',['civitasks.run'])
+        .config(['config','$stateProvider','$urlRouterProvider', '$resourceProvider', '$urlRouterProvider',
+            '$httpProvider','uiSelectConfig','$logProvider',
+            function(config, $stateProvider, $urlRouterProvider, $resourceProvider, $urlRouterProvider, $httpProvider,
+                     uiSelectConfig, $logProvider){
+                $logProvider.debugEnabled(config.DEBUG);
+
+                $urlRouterProvider.otherwise("/");
+
+                $stateProvider.
+                    state('settings', {
+                        url: '/',
+                        controller: 'SettingsCtrl',
+                        templateUrl: config.path.TPL+'settings.html?v=5'
+                    }
+                );
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 

@@ -1,8 +1,8 @@
 define(['controllers/controllers',
         'services/file'], function(controllers){
     controllers.controller('MainCtrl',['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService',
-        'Task', 'config', 'settings',
-        function($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, Task, config, settings){
+         'config',
+        function($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config){
             $log.debug('Controller: MainCtrl');
 
             $rootScope.modalDocument = function(data, e) {
@@ -50,38 +50,6 @@ define(['controllers/controllers',
 
                 modalInstance.result.then(function(results){
                     $scope.$broadcast('taskFormSuccess', results, data);
-                }, function(){
-                    $log.info('Modal dismissed');
-                });
-
-            };
-
-            $rootScope.modalTaskMigrate = function() {
-                $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/taskMigrate.html?v='+(new Date().getTime()),
-                    controller: 'ModalTaskMigrateCtrl',
-                    resolve: {
-                        activityType: function(){
-                            var deferred = $q.defer();
-
-                            Task.get({
-                                'entity': 'Activity',
-                                'action': 'getoptions',
-                                'json': {
-                                    'field': 'activity_type_id'
-                                }
-                            },function(data){
-                                deferred.resolve(data.values || []);
-                            },function(){
-                                deferred.reject('Unable to get activity types');
-                            });
-
-                            return deferred.promise;
-                        }
-                    }
-                }).result.then(function(results){
-                    $scope.$broadcast('taskMigrateFormSuccess', results);
                 }, function(){
                     $log.info('Modal dismissed');
                 });

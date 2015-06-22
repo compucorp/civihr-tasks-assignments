@@ -133,7 +133,9 @@ function tasksassignments_civicrm_entityTypes(&$entityTypes) {
  */
 function tasksassignments_civicrm_pageRun($page) {
 
-    if ($page instanceof CRM_Contact_Page_View_Summary || $page instanceof CRM_Tasksassignments_Page_Dashboard) {
+    if ($page instanceof CRM_Contact_Page_View_Summary ||
+        $page instanceof CRM_Tasksassignments_Page_Dashboard ||
+        $page instanceof CRM_Tasksassignments_Page_Settings) {
 
         CRM_Core_Resources::singleton()
             ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/ta-main.js' : 'dist/ta-main.js',1010);
