@@ -62,7 +62,7 @@
   </item>
   <item>
     <path>civicrm/tasksassignments/settings</path>
-    <page_callback>CRM_Tasksassignments_Page_TASettings</page_callback>
+    <page_callback>CRM_Tasksassignments_Page_Settings</page_callback>
     <title>Settings</title>
   </item>
 </menu>
