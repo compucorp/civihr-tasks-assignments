@@ -7,21 +7,20 @@
 </div>
 {literal}
     <script type="text/javascript">
-        /*
-        var evt = document.createEvent("CustomEvent");
-         document.dispatchEvent(new CustomEvent('taInit')) || evt.initCustomEvent('taInit', false, false, {
-            'details': 'appContact'
-        });
-*/
-
         (function(){
             function taInit(){
-                document.dispatchEvent(new CustomEvent('taInit', {
-                    'detail': {
-                        'app': 'appTasks',
-                        'module': 'civitasks'
-                    }
-                }));
+                var detail = {
+                    'app': 'appTasks',
+                    'module': 'civitasks'
+                };
+
+                document.dispatchEvent(typeof window.CustomEvent == "function" ? new CustomEvent('taInit', {
+                    'detail': detail
+                }) : (function(){
+                    var e = document.createEvent('CustomEvent');
+                    e.initCustomEvent('taInit', true, true, detail);
+                    return e;
+                })());
             };
             taInit();
 
