@@ -46,6 +46,11 @@ function tasksassignments_civicrm_uninstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function tasksassignments_civicrm_enable() {
+  
+  $sql = "UPDATE civicrm_navigation SET is_active=1 WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
+  CRM_Core_DAO::executeQuery($sql);
+  CRM_Core_BAO_Navigation::resetNavigation();
+  
   _tasksassignments_civix_civicrm_enable();
 }
 
@@ -55,6 +60,11 @@ function tasksassignments_civicrm_enable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
  */
 function tasksassignments_civicrm_disable() {
+  
+  $sql = "UPDATE civicrm_navigation SET is_active=0 WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
+  CRM_Core_DAO::executeQuery($sql);
+  CRM_Core_BAO_Navigation::resetNavigation();
+  
   _tasksassignments_civix_civicrm_disable();
 }
 

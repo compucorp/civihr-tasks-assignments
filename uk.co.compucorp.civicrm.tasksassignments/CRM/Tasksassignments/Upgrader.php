@@ -363,9 +363,65 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         
         return TRUE;
     }
+    
+    /*
+     * Add Settings page to Administer top menu
+     */
+    public function upgrade_1014()
+    {
+        // Add Tasks and Assignments to the Administer menu
+        $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+        if ($administerNavId)
+        {
+            CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments_administer' and parent_id = %1",
+                array(
+                    1 => array($administerNavId, 'Integer'),
+                )
+            );
+
+            $taAdminNavigation = new CRM_Core_DAO_Navigation();
+            $params = array (
+                'domain_id'  => CRM_Core_Config::domainID(),
+                'label'      => ts('Tasks and Assignments'),
+                'name'       => 'tasksassignments_administer',
+                'url'        => null,
+                'parent_id'  => $administerNavId,
+                'separator'  => 1,
+                'is_active'  => 1
+            );
+            $taAdminNavigation->copyValues($params);
+            $taAdminNavigation->save();
+
+            $taSettings = new CRM_Core_DAO_Navigation();
+            $taSettings->name = 'ta_settings';
+            $taSettings->find(true);
+            if ($taSettings->id)
+            {
+                $taSettings->parent_id = $taAdminNavigation->id;
+                $taSettings->save();
+            }
+
+            CRM_Core_BAO_Navigation::resetNavigation();
+        }
+        
+        return TRUE;
+    }
+    
+    public function uninstall()
+    {
+        CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
+        CRM_Core_BAO_Navigation::resetNavigation();
+        
+        return TRUE;
+    }
   
     function _installTypes($component, array $types)
     {
+        $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+        if ($administerNavId)
+        {
+            
+        }
         $componentId = null;
         $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
         $componentParams = array(
