@@ -172,6 +172,7 @@ define(['controllers/controllers',
                                 $scope.checklist.isCheckedAll = {};
                                 $scope.checklist.selected = {};
                                 $scope.$broadcast('ct-spinner-hide','documentList');
+                                AssignmentService.updateTab();
                             });
 
                         });
@@ -196,6 +197,7 @@ define(['controllers/controllers',
                     document.status_id = results.status_id;
                     $rootScope.$broadcast('documentFormSuccess', results, document);
                     $scope.$broadcast('ct-spinner-hide','documentList');
+                    AssignmentService.updateTab();
                 })
             };
 
@@ -261,6 +263,7 @@ define(['controllers/controllers',
                         });
 
                         $rootScope.$broadcast('documentDelete', document.id);
+                        AssignmentService.updateTab();
                     });
                 });
 
