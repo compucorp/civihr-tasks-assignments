@@ -39,7 +39,7 @@ define(['controllers/controllers',
                     return
                 }
 
-                activityArr.push(angular.extend({},activityModel,{isAdded: true}));
+                activityArr.push(angular.extend(angular.copy(activityModel),{isAdded: true}));
 
             }
 
