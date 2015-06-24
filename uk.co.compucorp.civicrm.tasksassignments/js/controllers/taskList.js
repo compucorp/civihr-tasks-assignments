@@ -126,6 +126,7 @@ define(['controllers/controllers',
                     status_id: statusId || '2'
                 }).then(function(results){
                     task.status_id = results.status_id;
+                    $rootScope.$broadcast('taskFormSuccess', results, task);
                     $scope.$broadcast('ct-spinner-hide','task'+task.id);
                 })
             };
@@ -176,6 +177,8 @@ define(['controllers/controllers',
 
                     TaskService.delete(task.id).then(function(results){
                         $scope.taskList.splice($scope.taskList.indexOf(task),1);
+
+                        $rootScope.$broadcast('taskDelete', task.id);
                     });
                 });
 
