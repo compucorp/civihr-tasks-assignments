@@ -44,9 +44,9 @@ define(['services/services',
     }]);
 
     services.factory('AssignmentService',['Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType', '$q', 'config', 'UtilsService',
-        '$filter', '$location', '$route', '$rootScope', '$log',
-        function(Relationship, Assignment, AssignmentSearch, AssignmentType, $q, config, UtilsService, $filter, $location, $route,
-                 $rootScope, $log){
+        '$filter', '$location', '$state', '$rootScope', '$log', '$timeout',
+        function(Relationship, Assignment, AssignmentSearch, AssignmentType, $q, config, UtilsService, $filter, $location, $state,
+                 $rootScope, $log, $timeout){
         $log.debug('Service: AssignmentService');
 
         return {
@@ -163,8 +163,6 @@ define(['services/services',
                 }).$promise;
             },
             updateTab: function(count) {
-
-
                 if (document.getElementsByClassName('CRM_Case_Form_Search').length) {
                     CRM.refreshParent('.CRM_Case_Form_Search');
                     return;
@@ -176,9 +174,8 @@ define(['services/services',
                 }
 
                 if ($location.path() == '/assignments') {
-                    $route.reload();
+                    $state.reload(true);
                 }
-
             },
             updateCache: function(data){
                 $log.debug('updateCache');

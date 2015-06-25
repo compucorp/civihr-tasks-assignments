@@ -9,28 +9,32 @@ define(['controllers/controllers',
             $scope.settings = angular.copy(settings);
             $scope.configureAddAssignmentBtn = !!$scope.settings.copy.button.assignmentAdd;
 
+            var promiseActivityTypes = (function(){
+                var deferred = $q.defer();
+
+                Task.get({
+                    'entity': 'Activity',
+                    'action': 'getoptions',
+                    'json': {
+                        'field': 'activity_type_id'
+                    }
+                },function(data){
+                    deferred.resolve(data.values || []);
+                },function(){
+                    deferred.reject('Unable to get activity types');
+                });
+
+                return deferred.promise;
+            })();
+
             $scope.modalTaskMigrate = function() {
                 $modal.open({
                     targetDomEl: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL+'modal/taskMigrate.html?v='+(new Date().getTime()),
                     controller: 'ModalTaskMigrateCtrl',
                     resolve: {
-                        activityType: function(){
-                            var deferred = $q.defer();
-
-                            Task.get({
-                                'entity': 'Activity',
-                                'action': 'getoptions',
-                                'json': {
-                                    'field': 'activity_type_id'
-                                }
-                            },function(data){
-                                deferred.resolve(data.values || []);
-                            },function(){
-                                deferred.reject('Unable to get activity types');
-                            });
-
-                            return deferred.promise;
+                        activityType: function() {
+                            return promiseActivityTypes;
                         }
                     }
                 }).result.then(function(results){

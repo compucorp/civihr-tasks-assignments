@@ -6,6 +6,7 @@ define(['directives/directives'], function(directives){
             link: function ($scope, el, attrs) {
                 var cover = document.createElement('div'),
                     positionSet = false,
+                    coverSet = false,
                     spinner;
 
                 cover.className = 'ct-spinner-cover ct-spinner-img';
@@ -20,11 +21,15 @@ define(['directives/directives'], function(directives){
                         el.css('position','relative');
                         positionSet = true;
                     }
+
                     el.append(cover);
+                    coverSet = true;
                 }
 
                 function removeSpinner(){
-                    cover.remove();
+                    coverSet && cover.parentNode.removeChild(cover);
+                    coverSet = false;
+
                     if (positionSet) {
                         el.css('position','');
                     }
@@ -47,12 +52,12 @@ define(['directives/directives'], function(directives){
 
                     $rootScope.$on('$stateChangeSuccess', function() {
                         removeSpinner();
-                        spinner.remove();
+                        spinner.parentNode.removeChild(spinner);
                     });
 
                     $rootScope.$on('$stateChangeError', function() {
                         removeSpinner();
-                        spinner.remove();
+                        spinner.parentNode.removeChild(spinner);
                     });
 
                 }

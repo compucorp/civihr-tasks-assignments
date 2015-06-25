@@ -165,11 +165,14 @@ define(['controllers/controllers',
                             $q.all(documentListPromise).then(function(results){
                                 i = 0;
                                 for (; i < documentListLen; i++) {
+                                    $rootScope.$broadcast('documentDelete', documentList[i].id);
                                     $scope.documentList.splice($scope.documentList.indexOf(documentList[i]),1);
+
                                 }
                                 $scope.checklist.isCheckedAll = {};
                                 $scope.checklist.selected = {};
                                 $scope.$broadcast('ct-spinner-hide','documentList');
+                                AssignmentService.updateTab();
                             });
 
                         });
@@ -192,7 +195,9 @@ define(['controllers/controllers',
                 }).then(function(results){
                     document.id = results.id;
                     document.status_id = results.status_id;
+                    $rootScope.$broadcast('documentFormSuccess', results, document);
                     $scope.$broadcast('ct-spinner-hide','documentList');
+                    AssignmentService.updateTab();
                 })
             };
 
@@ -256,6 +261,9 @@ define(['controllers/controllers',
                         angular.forEach($scope.checklist.selected, function(page){
                             page.splice(page.indexOf(document),1);
                         });
+
+                        $rootScope.$broadcast('documentDelete', document.id);
+                        AssignmentService.updateTab();
                     });
                 });
 

@@ -14,13 +14,22 @@
 </div>
 {literal}
     <script type="text/javascript">
-        document.addEventListener('taReady', function(){
-            document.dispatchEvent(new CustomEvent('taInit', {
-                'detail': {
-                    'app': 'appSettings',
-                    'module': 'civitasks'
-                }
-            }));
-        });
+        (function(){
+
+            var detail = {
+                'app': 'appSettings',
+                'module': 'civitasks'
+            };
+
+            document.addEventListener('taReady', function(){
+                document.dispatchEvent(typeof window.CustomEvent == "function" ? new CustomEvent('taInit', {
+                    'detail': detail
+                }) : (function(){
+                    var e = document.createEvent('CustomEvent');
+                    e.initCustomEvent('taInit', true, true, detail);
+                    return e;
+                })());
+            });
+        })();
     </script>
 {/literal}

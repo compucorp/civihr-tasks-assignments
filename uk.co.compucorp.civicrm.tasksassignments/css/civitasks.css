@@ -11715,6 +11715,13 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* line 2, ../sass/civihr/modules/_ie.scss */
+  #civitasks h1, #cividocuments h1, #civitasks h2, #cividocuments h2, #civitasks h3, #cividocuments h3, #civitasks h4, #cividocuments h4, #civitasks h5, #cividocuments h5, #civitasks h6, #cividocuments h6 {
+    background-color: transparent;
+    padding: 0;
+  }
+}
 /* line 7, ../sass/civitasks/modules/_bootstrap-calendar.scss */
 #civitasks [class*="cal-cell"], #cividocuments [class*="cal-cell"] {
   float: left;
@@ -13409,4 +13416,14 @@ a.list-group-item.active > #civitasks .badge, a.list-group-item.active > #civido
 /* line 54, ../sass/civitasks/partials/_tables.scss */
 #civitasks .ct-table-task-migrate .ct-col-task-status, #cividocuments .ct-table-task-migrate .ct-col-task-status {
   width: 20%;
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* line 2, ../sass/civitasks/modules/_ie.scss */
+  #civitasks .ct-sidebar-main, #cividocuments .ct-sidebar-main {
+    margin-left: 0;
+  }
+  /* line 8, ../sass/civitasks/modules/_ie.scss */
+  #civitasks .ct-list-key-dates .panel > .list-group, #cividocuments .ct-list-key-dates .panel > .list-group {
+    margin: 0;
+  }
 }
