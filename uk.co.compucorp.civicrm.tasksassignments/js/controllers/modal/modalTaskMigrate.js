@@ -42,7 +42,7 @@ define(['controllers/controllers',
                     }
                 },function(data){
 
-                    if (data.values.length) {
+                    if (data.values && data.values.length) {
                         angular.forEach(data.values,function(val){
                             this.push(val.activity_id);
                         },activityIdArr);
@@ -64,7 +64,7 @@ define(['controllers/controllers',
                             }
                         }, function(data){
 
-                            if (data.values.length) {
+                            if (data.values && data.values.length) {
 
                                 $scope.migrate.activityList = $filter('orderBy')(data.values,['-activity_date_time','activity_type_id']);
                             }
@@ -72,6 +72,8 @@ define(['controllers/controllers',
                             $scope.$broadcast('ct-spinner-hide');
                         });
 
+                    } else {
+                        $scope.$broadcast('ct-spinner-hide');
                     }
                 });
             };
