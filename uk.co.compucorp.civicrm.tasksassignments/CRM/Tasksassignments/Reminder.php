@@ -112,8 +112,8 @@ class CRM_Tasksassignments_Reminder
                 'activitySubject' => $activityResult['subject'],
                 'activityDetails' => $activityResult['details'],
                 'baseUrl' => CIVICRM_UF_BASEURL,
-                'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId . '&selectedChild=civitasks',
-                'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId . '&selectedChild=cividocuments',
+                'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
+                'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
             ));
             
             self::_send($contactId, $recipient, 'Task Reminder', $templateBodyHTML);
@@ -177,8 +177,8 @@ class CRM_Tasksassignments_Reminder
             $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
                 'reminder' => $reminderData,
                 'baseUrl' => CIVICRM_UF_BASEURL,
-                'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactsResult->contact_id . '&selectedChild=civitasks',
-                'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactsResult->contact_id . '&selectedChild=cividocuments',
+                'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
+                'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
                 'settings' => $settings,
             ));
             self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
