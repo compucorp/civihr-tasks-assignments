@@ -4,6 +4,7 @@
         <h4 class="modal-title" ng-bind="cache.contact.obj[assignment.contact_id].sort_name || 'No target contact'"></h4>
     </div>
     <div class="modal-body">
+        <alert type="{{alert.type}}" close="alert.show = false;" ng-show="alert.show">{{alert.msg}}</alert>
         <div class="row">
             <div class="col-xs-12">
                 <div class="row">

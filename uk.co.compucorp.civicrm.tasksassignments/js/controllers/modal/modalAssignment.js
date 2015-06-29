@@ -20,6 +20,12 @@ define(['controllers/controllers',
                     status_id: '1'
                 };
 
+            $scope.alert = {
+                show: false,
+                msg: '',
+                type: 'danger'
+            };
+
             $scope.assignment = {};
             $scope.assignment.status_id = '1';
             $scope.assignment.contact_id = config.CONTACT_ID;
@@ -41,7 +47,7 @@ define(['controllers/controllers',
 
                 activityArr.push(angular.extend(angular.copy(activityModel),{isAdded: true}));
 
-            }
+            };
 
             $scope.removeActivity = function(activityArr, index){
 
@@ -111,17 +117,15 @@ define(['controllers/controllers',
             }
 
             $scope.confirm = function(){
-                $scope.$broadcast('ct-spinner-show');
 
-                //console.log(($filter('filter')($scope.taskList, { create: true }))).length;
-                //console.log(($filter('filter')($scope.documentList, { create: true })).length);
-                //
-                //return;
-                 //
-                 //if (!$filter('filter')($scope.taskList, { create: true }).length ||
-                 //    !$filter('filter')($scope.documentList, { create: true }).length) {
-                 //    alert('ok');
-                 //};
+                 if (!($filter('filter')($scope.taskList, { create: true })).length &&
+                     !($filter('filter')($scope.documentList, { create: true })).length) {
+                     $scope.alert.msg = 'Please add at least one task.';
+                     $scope.alert.show = true;
+                     return
+                 };
+
+                $scope.$broadcast('ct-spinner-show');
 
                 var documentListAssignment = [], taskListAssignment = [], taskArr = [], documentArr = [],
                     cacheAssignmentObj = {}, i, len;
