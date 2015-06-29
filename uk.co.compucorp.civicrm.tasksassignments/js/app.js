@@ -31,8 +31,8 @@ define([
         'civitasks.settings'
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', '$log',
-        function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
-                 KeyDateService, ContactService, $log){
+        function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,
+                 AssignmentService, KeyDateService, ContactService, $log){
             $log.debug('civitasks.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -352,7 +352,7 @@ define([
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=4'
+                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=5'
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
@@ -441,7 +441,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v=5',
+                        templateUrl: config.path.TPL+'contact/tasks.html?v=6',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({

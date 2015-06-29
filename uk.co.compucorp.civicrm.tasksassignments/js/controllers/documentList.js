@@ -24,7 +24,7 @@ define(['controllers/controllers',
                     });
                 }
 
-                if (assignmentIds && assignmentIds.length) {
+                if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
                     AssignmentService.get({'IN': assignmentIds}).then(function(data){
                         AssignmentService.updateCache(data);
                     });

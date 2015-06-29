@@ -15,7 +15,7 @@
                             {{settings.copy.button.assignmentAdd || 'Add Assignment'}}
                         </button>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <div class="col-xs-12 col-sm-6 col-lg-4" ng-if="settings.extEnabled.assignments">
                         <ui-select
                                 multiple
                                 ng-model="filterParams.assignmentType">

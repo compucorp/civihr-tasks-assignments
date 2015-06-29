@@ -208,7 +208,7 @@
                              ng-model="document.details"></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="settings.extEnabled.assignments">
                     <div class="col-xs-12 col-sm-6" ng-show="!data.case_id && !showFieldAssignment">
                             <span class="form-control-static">
                                 <a href class="btn" ng-click="showFieldAssignment = true">Add to assignment</a>

@@ -11,7 +11,7 @@ define(['controllers/controllers',
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/document.html?v=1',
+                        templateUrl: config.path.TPL+'modal/document.html?v=2',
                         controller: 'ModalDocumentCtrl',
                         resolve: {
                             data: function(){
@@ -39,7 +39,7 @@ define(['controllers/controllers',
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/task.html?v=2',
+                        templateUrl: config.path.TPL+'modal/task.html?v=3',
                         controller: 'ModalTaskCtrl',
                         resolve: {
                             data: function(){
