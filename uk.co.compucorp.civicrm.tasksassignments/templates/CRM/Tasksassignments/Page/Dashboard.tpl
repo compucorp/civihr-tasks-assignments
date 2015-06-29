@@ -59,16 +59,10 @@
                             <span class="{$prefix}sidebar-main-title">Reports</span>
                         </a>
                     </li>
-                    <li ng-if="settings.tabEnabled.keyDates == '1'" ng-class="{literal}{ active: isActive('key-dates')}{/literal}">
+                    <li ng-if="settings.tabEnabled.keyDates == '1'" ng-class="{literal}{ active: isActive('keyDates')}{/literal}">
                         <a href="#/key-dates">
                             <i class="fa fa-birthday-cake"></i>
                             <span class="{$prefix}sidebar-main-title">Key Dates</span>
-                        </a>
-                    </li>
-                    <li ng-class="{literal}{ active: isActive('settings')}{/literal}">
-                        <a href="#/settings">
-                            <i class="fa fa-cogs"></i>
-                            <span class="{$prefix}sidebar-main-title">Settings</span>
                         </a>
                     </li>
                 </ul>
@@ -87,13 +81,22 @@
 </div>
 {literal}
     <script type="text/javascript">
-        document.addEventListener('taReady', function(){
-            document.dispatchEvent(new CustomEvent('taInit', {
-                'detail': {
-                    'app': 'appDashboard',
-                    'module': 'civitasks'
-                }
-            }));
-        });
+        (function(){
+
+            var detail = {
+                'app': 'appDashboard',
+                'module': 'civitasks'
+            };
+
+            document.addEventListener('taReady', function(){
+                document.dispatchEvent(typeof window.CustomEvent == "function" ? new CustomEvent('taInit', {
+                    'detail': detail
+                }) : (function(){
+                    var e = document.createEvent('CustomEvent');
+                    e.initCustomEvent('taInit', true, true, detail);
+                    return e;
+                })());
+            });
+        })();
     </script>
 {/literal}

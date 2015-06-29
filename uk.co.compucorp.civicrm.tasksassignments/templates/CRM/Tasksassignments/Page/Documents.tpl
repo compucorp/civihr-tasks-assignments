@@ -1,23 +1,32 @@
 {assign var="module" value="cividocuments" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" ng-controller="MainCtrl">
-    <div class="container" ng-view>
+<div id="{$module}" ng-controller="MainCtrl" ct-spinner ct-spinner-show>
+    <div class="container fade-in" ng-view>
     </div>
 </div>
 {literal}
     <script type="text/javascript">
-        /*
-         var evt = document.createEvent("CustomEvent");
-         document.dispatchEvent(new CustomEvent('taInit')) || evt.initCustomEvent('taInit', false, false, {
-         'details': 'appContact'
-         });
-         */
-        document.dispatchEvent(new CustomEvent('taInit', {
-            'detail': {
-                'app': 'appDocuments',
-                'module': 'cividocuments'
-            }
-        }));
+        (function(){
+            function taInit(){
+                var detail = {
+                    'app': 'appDocuments',
+                    'module': 'cividocuments'
+                };
+
+                document.dispatchEvent(typeof window.CustomEvent == "function" ? new CustomEvent('taInit', {
+                    'detail': detail
+                }) : (function(){
+                    var e = document.createEvent('CustomEvent');
+                    e.initCustomEvent('taInit', true, true, detail);
+                    return e;
+                })());
+            };
+            taInit();
+
+            document.addEventListener('taReady', function(){
+                taInit();
+            });
+        })();
     </script>
 {/literal}

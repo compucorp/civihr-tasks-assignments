@@ -160,7 +160,7 @@
                                     <div class="input-group">
                                         <select class="form-control" ng-model="action">
                                             <option value="">SELECT ACTION</option>
-                                            <option value="delete">Delete</option>
+                                            <option value="delete" ng-disabled="!permissions.allowDelete">Delete</option>
                                         </select>
                                         <span class="input-group-btn">
                                           <a ng-click="apply(action, (actionApplyTo == 'all' ? documentListOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
@@ -252,7 +252,7 @@
                 <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
                 <li><a href ng-click="modalDocument(document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
                 <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
-                <li><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
+                <li ng-if="permissions.allowDelete"><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
             </ul>
         </div>
     </td>

@@ -14,6 +14,11 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task
         $hook = empty($params['id']) ? 'create' : 'edit';
         CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
         
+        if (empty($params['status_id']) && $hook === 'create')
+        {
+            $params['status_id'] = 1;
+        }
+        
         $instance = parent::create($params);
         CRM_Tasksassignments_Reminder::sendReminder((int)$instance->id);
         

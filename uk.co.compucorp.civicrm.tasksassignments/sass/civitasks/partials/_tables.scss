@@ -38,3 +38,20 @@
     text-overflow: ellipsis;
   }
 }
+
+.#{$prefix}table-task-migrate {
+  table-layout: fixed;
+
+  .#{$prefix}col-select,
+  .#{$prefix}col-task-status {
+    text-align: center;
+  }
+
+  .#{$prefix}col-select {
+    width: 30px;
+  }
+
+  .#{$prefix}col-task-status {
+    width: 20%;
+  }
+}

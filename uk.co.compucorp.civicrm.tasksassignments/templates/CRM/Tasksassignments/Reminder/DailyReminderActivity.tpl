@@ -1,20 +1,20 @@
-<table class="mtable" width="100%">
-        <tr>
-        <td width="80%" align="left">
-            <a href="{$row.activityUrl}">{$row.type}</a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="status-{$row.status}">{$row.status}</span>
+<table class="mtable" width="100%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+    <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+        <td width="80%" align="left" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+            <a href="{$row.activityUrl}" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">{$row.type}</a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="status-{$row.status}">{$row.status}</span>
         </td>
-        <td align="right">
+        <td align="right" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                 {$row.date}
         </td>
     </tr>
-    <tr>
-        <td align="left">
-            <table class="mtable subtable" width="100%">
-                    <tr>
-                    <td width="50%" align="left">
+    <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+        <td align="left" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+            <table class="mtable subtable" width="100%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;font-size: 12px;">
+                <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+                    <td width="50%" align="left" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                             Contact: {', '|implode:$row.targets}
                     </td>
-                    <td align="left" valign="top">
+                    <td align="left" valign="top" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
 {if $row.caseType}
                             Assignment Type: {$row.caseType}
 {/if}
@@ -23,9 +23,9 @@
                 </tr>
             </table>
         </td>
-        <td>
+        <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                 &nbsp;
         </td>
     </tr>
 </table>
-<hr/>
+<hr style="height:0px;border:0px none;border-bottom:1px solid;border-color:#e0e0e0;margin:16px 0 10px;"/>

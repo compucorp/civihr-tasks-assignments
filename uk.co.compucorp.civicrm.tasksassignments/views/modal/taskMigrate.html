@@ -1,0 +1,94 @@
+<form novalidate name="taskMigrateForm" class="form-horizontal form-task" role="form" ng-submit="confirm()" ct-spinner>
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Migrate Tasks</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group required">
+            <label class="col-xs-12 col-sm-2 control-label">From:</label>
+            <div class="col-xs-12 col-sm-8">
+                <div class="input-group">
+                    <ui-select
+                            allow-clear
+                            ng-model="migrate.from"
+                            on-select="cacheContact($item); getActivities($item.id);"
+                            ng-required="true">
+                        <ui-select-match
+                                placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                        <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                            refresh="refreshContacts($select.search)"
+                                            refresh-delay="0">
+                            <div ng-bind="contact.label"></div>
+                            <small ng-bind="contact.description[0]"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <a ng-click="migrate.from = ''; migrate.activityList = [];" class="btn btn-default">
+                            <span class="fa fa-remove"></span>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group required">
+            <label class="col-xs-12 col-sm-2 control-label">To:</label>
+            <div class="col-xs-12 col-sm-8">
+                <div class="input-group">
+                    <ui-select
+                            allow-clear
+                            ng-model="migrate.to"
+                            on-select="cacheContact($item)"
+                            ng-required="true">
+                        <ui-select-match
+                                placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
+                        <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                            refresh="refreshContacts($select.search)"
+                                            refresh-delay="0">
+                            <div ng-bind="contact.label"></div>
+                            <small ng-bind="contact.description[0]"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                        <a ng-click="migrate.to = ''" class="btn btn-default">
+                            <span class="fa fa-remove"></span>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-striped {{prefix}}table-task-migrate">
+                    <thead>
+                        <tr>
+                            <th class="{{prefix}}col-task-type checkbox">
+                                <label><input type="checkbox" name="toggleAll" ng-model="migrate.isCheckedAll" ng-change="toggleAll();"> Select All</label>
+                            </th>
+                            <th class="{{prefix}}col-task-status">Ongoing</th>
+                            <th class="{{prefix}}col-task-status">Completed</th>
+                            <th class="{{prefix}}col-task-status">Cancelled</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="activity in migrate.activityList" ng-controller="ActivityMigrateCtrl">
+                            <td class="{{prefix}}col-task-type checkbox">
+                                <label><input checklist-model="migrate.activityListSelected" checklist-value="activity" ng-change="toggleIsCheckedAll();" type="checkbox">{{activityType[activity.activity_type_id]}}</label>
+                            </td>
+                            <td class="{{prefix}}col-task-status"><input ng-model="activity.ongoing" type="checkbox" disabled></td>
+                            <td class="{{prefix}}col-task-status"><input ng-model="activity.completed" type="checkbox" disabled></td>
+                            <td class="{{prefix}}col-task-status"><input ng-model="activity.cancelled" type="checkbox" disabled></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">
+            <span class="fa fa-remove" aria-hidden="true"></span> Cancel
+        </button>
+        <button type="submit" class="btn btn-default btn-primary" ng-disabled="!taskMigrateForm.$valid">
+            <span class="fa fa-check" aria-hidden="true"></span> Migrate Tasks
+        </button>
+    </div>
+</form>

@@ -28,7 +28,7 @@ define([
         'civitasks.directives',
         'civitasks.filters',
         'civitasks.services',
-        'civitasks.settings',
+        'civitasks.settings'
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService, AssignmentService,
@@ -36,6 +36,7 @@ define([
             $log.debug('civitasks.run');
 
             $rootScope.pathTpl = config.path.TPL;
+            $rootScope.permissions = config.permissions;
             $rootScope.prefix = config.CLASS_NAME_PREFIX;
             $rootScope.url = config.url;
             $rootScope.location = $location;
@@ -125,7 +126,7 @@ define([
             '$urlRouterProvider', '$stateProvider','calendarConfigProvider', 'uiSelectConfig',
             function(config, $resourceProvider, $httpProvider, $logProvider,
                      $urlRouterProvider, $stateProvider, calendarConfigProvider, uiSelectConfig){
-                $logProvider.debugEnabled(config.debug);
+                $logProvider.debugEnabled(config.DEBUG);
 
                 $urlRouterProvider.otherwise("/tasks");
 
@@ -133,7 +134,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html',
+                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=4',
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();
@@ -173,7 +174,7 @@ define([
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html',
+                        templateUrl: config.path.TPL+'dashboard/documents.html?v=4',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
@@ -213,12 +214,12 @@ define([
                     state('assignments', {
                         url: '/assignments',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/assignments.html'
+                        templateUrl: config.path.TPL+'dashboard/assignments.html?v=5'
                     }).
                     state('calendar', {
                         abstract: true,
                         controller: 'CalendarCtrl',
-                        templateUrl: config.path.TPL+'dashboard/calendar.html',
+                        templateUrl: config.path.TPL+'dashboard/calendar.html?v=3',
                         resolve: {
                             documentList: ['$q', 'DocumentService','settings', function($q, DocumentService, settings){
                                 var deferred = $q.defer();
@@ -297,11 +298,11 @@ define([
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html'
+                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=4'
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html'
+                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=3'
                             }
                         }
                     }).
@@ -323,22 +324,17 @@ define([
                     state('reports', {
                         url: '/reports',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/reports.html'
+                        templateUrl: config.path.TPL+'dashboard/reports.html?v=4'
                     }).
                     state('keyDates', {
                         url: '/key-dates',
                         controller: 'DateListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/key-dates.html',
+                        templateUrl: config.path.TPL+'dashboard/key-dates.html?v=4',
                         resolve: {
                             contactList: ['KeyDateService',function(KeyDateService){
                                 return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
                             }]
                         }
-                    }).
-                    state('settings', {
-                        url: '/settings',
-                        controller: 'SettingsCtrl',
-                        templateUrl: config.path.TPL+'dashboard/settings.html'
                     });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
@@ -356,12 +352,12 @@ define([
     angular.module('civitasks.appDocuments',['civitasks.run'])
         .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
             function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
-                $logProvider.debugEnabled(config.debug);
+                $logProvider.debugEnabled(config.DEBUG);
 
                 $routeProvider.
                     when('/', {
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'contact/documents.html',
+                        templateUrl: config.path.TPL+'contact/documents.html?v=4',
                         resolve: {
                             documentList: ['DocumentService',function(DocumentService){
                                 return DocumentService.get({
@@ -386,12 +382,12 @@ define([
     angular.module('civitasks.appTasks',['civitasks.run'])
         .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
             function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
-                $logProvider.debugEnabled(config.debug);
+                $logProvider.debugEnabled(config.DEBUG);
 
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html',
+                        templateUrl: config.path.TPL+'contact/tasks.html?v=5',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({
@@ -404,6 +400,31 @@ define([
                         }
                     }
                 ).otherwise({redirectTo:'/'});
+
+                $resourceProvider.defaults.stripTrailingSlashes = false;
+
+                $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+
+                uiSelectConfig.theme = 'bootstrap';
+            }
+        ]);
+
+    angular.module('civitasks.appSettings',['civitasks.run'])
+        .config(['config','$stateProvider','$urlRouterProvider', '$resourceProvider', '$urlRouterProvider',
+            '$httpProvider','uiSelectConfig','$logProvider',
+            function(config, $stateProvider, $urlRouterProvider, $resourceProvider, $urlRouterProvider, $httpProvider,
+                     uiSelectConfig, $logProvider){
+                $logProvider.debugEnabled(config.DEBUG);
+
+                $urlRouterProvider.otherwise("/");
+
+                $stateProvider.
+                    state('settings', {
+                        url: '/',
+                        controller: 'SettingsCtrl',
+                        templateUrl: config.path.TPL+'settings.html?v=5'
+                    }
+                );
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 

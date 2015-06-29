@@ -1,8 +1,8 @@
 ##{$prefix}dashboard {
-  overflow: hidden;
   margin-top: 25px;
 
   .#{$prefix}container-main {
+    position: relative;
     background-color: $sidebar-main-bg;
 
     &:before,
@@ -42,9 +42,6 @@
     margin-bottom: 0;
   }
 
-  .#{$prefix}dashboard-settings {
-    background-color: #fff;
-  }
 
   .#{$prefix}dashboard-tasks {
     .#{$prefix}list-task,
@@ -60,8 +57,23 @@
   }
 
   .#{$prefix}dashboard-key-dates {
+    .ct-sidebar-inner + .ct-content-wrapper > .ct-content {
+      min-height: 515px;
+    }
+
+    .#{$prefix}csv-export {
+      font-size: 11px;
+      margin-left: 30px;
+      position: relative;
+      top: 1px;
+    }
+
     .#{$prefix}list-key-dates {
       margin-left: 10px;
+
+      > li {
+        margin-bottom: 0px;
+      }
 
       > li:last-child {
         margin-bottom: 0;
@@ -116,6 +128,12 @@
       }
     }
 
+  }
+
+  .#{$prefix}dashboard-assignments,
+  .#{$prefix}dashboard-reports {
+    background-color: #fff;
+    @include box-shadow($box-shadow-global);
   }
 
 }

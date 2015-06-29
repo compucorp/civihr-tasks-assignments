@@ -26,7 +26,11 @@
 }
 
 .#{$prefix}sidebar-main {
-  background-color: $sidebar-main-bg;
+  height: 100%;
+  overflow: hidden;
+  padding-right: 15px;
+  position: absolute;
+  width: $sidebar-width+15px;
 
   + .#{$prefix}content-wrapper {
     > .#{$prefix}content {

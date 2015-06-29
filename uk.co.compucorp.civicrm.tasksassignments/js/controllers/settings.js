@@ -1,11 +1,49 @@
 define(['controllers/controllers',
         'services/settings'], function(controllers){
-    controllers.controller('SettingsCtrl',['$scope', '$rootScope', '$location', '$dialog', '$log', '$state', 'SettingsService', 'config', 'settings',
-        function($scope, $rootScope, $location, $dialog, $log, $state, SettingsService, config, settings){
+    controllers.controller('SettingsCtrl',['$scope', '$rootScope', '$rootElement', '$location', '$dialog', '$q',
+        '$log', '$state', '$modal', 'SettingsService', 'Task', 'config', 'settings',
+        function($scope, $rootScope, $rootElement, $location, $dialog, $q, $log, $state, $modal, SettingsService,
+                 Task, config, settings){
             $log.debug('Controller: SettingsCtrl');
 
             $scope.settings = angular.copy(settings);
             $scope.configureAddAssignmentBtn = !!$scope.settings.copy.button.assignmentAdd;
+
+            var promiseActivityTypes = (function(){
+                var deferred = $q.defer();
+
+                Task.get({
+                    'entity': 'Activity',
+                    'action': 'getoptions',
+                    'json': {
+                        'field': 'activity_type_id'
+                    }
+                },function(data){
+                    deferred.resolve(data.values || []);
+                },function(){
+                    deferred.reject('Unable to get activity types');
+                });
+
+                return deferred.promise;
+            })();
+
+            $scope.modalTaskMigrate = function() {
+                $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL+'modal/taskMigrate.html?v='+(new Date().getTime()),
+                    controller: 'ModalTaskMigrateCtrl',
+                    resolve: {
+                        activityType: function() {
+                            return promiseActivityTypes;
+                        }
+                    }
+                }).result.then(function(results){
+                        $scope.$broadcast('taskMigrateFormSuccess', results);
+                    }, function(){
+                        $log.info('Modal dismissed');
+                    });
+
+            };
 
             $scope.confirm = function(){
                 $scope.$broadcast('ct-spinner-show');

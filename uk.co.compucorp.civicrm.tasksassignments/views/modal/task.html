@@ -52,7 +52,7 @@
                     <div class="col-xs-12" ng-show="showFieldSubject">
                         <div class="input-group">
                             <input id="{{prefix}}task-subject" class="form-control" name="taskSubject"
-                                   ng-model="task.subject" placeholder="Subject">
+                                   ng-model="task.subject" placeholder="Subject" maxlength="255">
                             <span class="input-group-btn">
                                 <a href class="btn" ng-click="showFieldSubject = false; task.subject = data.subject;">Cancel</a>
                             </span>

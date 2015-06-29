@@ -20,7 +20,7 @@ class CRM_Tasksassignments_Page_Tasksassignments extends CRM_Core_Page {
       return;
     }
     $loaded = TRUE;
-    
+
     CRM_Core_Resources::singleton()
       ->addSettingsFactory(function () {
       global $user;

@@ -155,7 +155,7 @@ define(['moment'],function(moment){
                 var dayCounter = startOfWeek.clone();
                 var days = [];
                 var cols = [];
-                var rowsMax = 0;
+                var rowsMax = 10;
                 var today = moment().startOf('day');
 
                 while (days.length < 7) {

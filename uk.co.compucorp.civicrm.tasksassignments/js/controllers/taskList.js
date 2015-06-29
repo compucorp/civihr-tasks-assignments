@@ -126,7 +126,9 @@ define(['controllers/controllers',
                     status_id: statusId || '2'
                 }).then(function(results){
                     task.status_id = results.status_id;
+                    $rootScope.$broadcast('taskFormSuccess', results, task);
                     $scope.$broadcast('ct-spinner-hide','task'+task.id);
+                    AssignmentService.updateTab();
                 })
             };
 
@@ -152,7 +154,7 @@ define(['controllers/controllers',
                 }
 
                 //Remove resolved tasks from the task list
-                $scope.taskList = $scope.taskListOngoing;
+                $filter('filterBy.status')($scope.taskList, $rootScope.cache.taskStatusResolve, false);
 
                 TaskService.get({
                     'target_contact_id': config.CONTACT_ID,
@@ -160,10 +162,8 @@ define(['controllers/controllers',
                         'IN': config.status.resolve.TASK
                     }
                 }).then(function(taskListResolved){
-                    $scope.taskList.push.apply($scope.taskList, taskListResolved);
-                    $timeout(function () {
-                        $scope.taskListResolvedLoaded = true;
-                    });
+                    Array.prototype.push.apply($scope.taskList, taskListResolved);
+                    $scope.taskListResolvedLoaded = true;
                 });
             };
 
@@ -178,6 +178,9 @@ define(['controllers/controllers',
 
                     TaskService.delete(task.id).then(function(results){
                         $scope.taskList.splice($scope.taskList.indexOf(task),1);
+
+                        $rootScope.$broadcast('taskDelete', task.id);
+                        AssignmentService.updateTab();
                     });
                 });
 
@@ -200,7 +203,7 @@ define(['controllers/controllers',
                     var pattern = /case|activity|assignment/i;
 
                     if (pattern.test(data.title) ||
-                        data.crmMessages.length &&
+                        (data.crmMessages && data.crmMessages.length) &&
                         (pattern.test(data.crmMessages[0].title) ||
                         pattern.test(data.crmMessages[0].text))) {
                         $rootScope.cache.assignment = {

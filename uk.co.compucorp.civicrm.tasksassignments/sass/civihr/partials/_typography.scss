@@ -79,3 +79,8 @@ a[disabled]:not(.btn) {
     cursor: default;
   }
 }
+
+a:active,
+a:focus {
+  outline: 0;
+}

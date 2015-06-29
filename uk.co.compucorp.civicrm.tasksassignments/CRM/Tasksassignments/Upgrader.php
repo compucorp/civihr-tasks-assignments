@@ -14,7 +14,45 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             $this->{$methodName}();
           }
       }
+      
+    $this->setComponentStatuses(array(
+      'CiviTask' => true,
+      'CiviDocument' => true,
+    ));
     }
+    
+  /**
+   * Set components as enabled or disabled. Leave any other
+   * components unmodified.
+   *
+   * Note: This API has only been tested with CiviCRM 4.4.
+   *
+   * @param array $components keys are component names (e.g. "CiviMail"); values are booleans
+   */
+  public function setComponentStatuses($components) {
+    $getResult = civicrm_api3('setting', 'getsingle', array(
+      'domain_id' => CRM_Core_Config::domainID(),
+      'return' => array('enable_components'),
+    ));
+    if (!is_array($getResult['enable_components'])) {
+      throw new CRM_Core_Exception("Failed to determine component statuses");
+    }
+
+    // Merge $components with existing list
+    $enableComponents = $getResult['enable_components'];
+    foreach ($components as $component => $status) {
+      if ($status) {
+        $enableComponents = array_merge($enableComponents, array($component));
+      } else {
+        $enableComponents = array_diff($enableComponents, array($component));
+      }
+    }
+    civicrm_api3('setting', 'create', array(
+      'domain_id' => CRM_Core_Config::domainID(),
+      'enable_components' => $enableComponents,
+    ));
+    CRM_Core_Component::flushEnabledComponents();
+  }
 
     public function upgrade_0001() {
 
@@ -231,13 +269,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     /*
      * Enable CiviTask and CiviDocument components.
      */
-    public function upgrade_0010()
+    /*public function upgrade_0010()
     {
         CRM_Core_BAO_ConfigSetting::enableComponent('CiviTask');
         CRM_Core_BAO_ConfigSetting::enableComponent('CiviDocument');
         
         return TRUE;
-    }
+    }*/
     
     /*
      * Install Document Types
@@ -259,9 +297,131 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         
         return TRUE;
     }
+    
+    /*
+     * Set up Daily Reminder job
+     */
+    public function upgrade_1012()
+    {
+        $dao = new CRM_Core_DAO_Job();
+        $dao->api_entity = 'task';
+        $dao->api_action = 'senddailyreminder';
+        $dao->find(TRUE);
+        if (!$dao->id)
+        {
+            $dao = new CRM_Core_DAO_Job();
+            $dao->domain_id = CRM_Core_Config::domainID();
+            $dao->run_frequency = 'Daily';
+            $dao->parameters = null;
+            $dao->name = 'Tasks and Assignments Daily Reminder';
+            $dao->description = 'Tasks and Assignments Daily Reminder';
+            $dao->api_entity = 'task';
+            $dao->api_action = 'senddailyreminder';
+            $dao->is_active = 0;
+            $dao->save();
+        }
+        
+        return TRUE;
+    }
+    
+    /*
+     * Add Settings page to Tasks and Assignments top menu
+     */
+    public function upgrade_1013()
+    {
+        $taNavigation = new CRM_Core_DAO_Navigation();
+        $taNavigation->name = 'tasksassignments';
+        $taNavigation->find(true);
+        if ($taNavigation->id)
+        {
+            $taNavigation->url = '';
+            $taNavigation->save();
+            
+            $submenu = array(
+                array(
+                    'label' => ts('Dashboard'),
+                    'name' => 'ta_dashboard',
+                    'url' => 'civicrm/tasksassignments/dashboard#/tasks',
+                ),
+                array(
+                    'label' => ts('Settings'),
+                    'name' => 'ta_settings',
+                    'url' => 'civicrm/tasksassignments/settings',
+                )
+            );
+            
+            foreach ($submenu as $key => $item)
+            {
+                $item['parent_id'] = $taNavigation->id;
+                $item['weight'] = $key;
+                $item['is_active'] = 1;
+                CRM_Core_BAO_Navigation::add($item);
+            }
+            
+            CRM_Core_BAO_Navigation::resetNavigation();
+        }
+        
+        return TRUE;
+    }
+    
+    /*
+     * Add Settings page to Administer top menu
+     */
+    public function upgrade_1014()
+    {
+        // Add Tasks and Assignments to the Administer menu
+        $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+        if ($administerNavId)
+        {
+            CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments_administer' and parent_id = %1",
+                array(
+                    1 => array($administerNavId, 'Integer'),
+                )
+            );
+
+            $taAdminNavigation = new CRM_Core_DAO_Navigation();
+            $params = array (
+                'domain_id'  => CRM_Core_Config::domainID(),
+                'label'      => ts('Tasks and Assignments'),
+                'name'       => 'tasksassignments_administer',
+                'url'        => null,
+                'parent_id'  => $administerNavId,
+                'separator'  => 1,
+                'is_active'  => 1
+            );
+            $taAdminNavigation->copyValues($params);
+            $taAdminNavigation->save();
+
+            $taSettings = new CRM_Core_DAO_Navigation();
+            $taSettings->name = 'ta_settings';
+            $taSettings->find(true);
+            if ($taSettings->id)
+            {
+                $taSettings->parent_id = $taAdminNavigation->id;
+                $taSettings->save();
+            }
+
+            CRM_Core_BAO_Navigation::resetNavigation();
+        }
+        
+        return TRUE;
+    }
+    
+    public function uninstall()
+    {
+        CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
+        CRM_Core_BAO_Navigation::resetNavigation();
+        
+        return TRUE;
+    }
   
     function _installTypes($component, array $types)
     {
+        $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+        if ($administerNavId)
+        {
+            
+        }
         $componentId = null;
         $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
         $componentParams = array(

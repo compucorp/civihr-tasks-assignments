@@ -40,6 +40,7 @@ reqTa([
     'controllers/modal/modalDocument',
     'controllers/modal/modalProgress',
     'controllers/modal/modalTask',
+    'controllers/modal/modalTaskMigrate',
     'controllers/modal/modalReminder',
     'controllers/modal/modalAssignment',
     'controllers/externalPage',
@@ -66,5 +67,9 @@ reqTa([
             ['civitasks.'+ e.detail.app]);
     });
 
-    document.dispatchEvent(new CustomEvent('taReady'));
+    document.dispatchEvent(typeof window.CustomEvent == "function" ? new CustomEvent('taReady') : (function(){
+        var e = document.createEvent('Event');
+        e.initEvent('taReady', true, true);
+        return e;
+    })());
 })

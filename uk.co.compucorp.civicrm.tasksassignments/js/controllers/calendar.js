@@ -6,73 +6,57 @@ define(['controllers/controllers',
         function($scope, $log, $rootScope, $filter, $timeout, $state, $stateParams, taskList, documentList, settings){
 
             this.init = function(){
-                $scope.calTaskList = this.createCalTaskList(taskList);
+                $scope.calTaskList = this.createCalEventList('task', taskList, $rootScope.cache.taskType.obj);
 
                 if (!+settings.tabEnabled.documents) {
                     return;
                 }
 
-                $scope.calDocList = this.createCalDocList(documentList);
+                $scope.calDocList = this.createCalEventList('document', documentList, $rootScope.cache.documentType.obj);
             };
 
-            this.createCalDocList = function(documentList){
-                var cache = $rootScope.cache, documentDue, documentExp, calDocumentList = [];
+            this.createCalEventList = function(type, actvList, actvTypeObj) {
+                var calActvList = [];
 
-                angular.forEach(documentList, function(document){
-                    documentDue = moment(document.activity_date_time).toDate();
+                angular.forEach(actvList, function(actv){
+                    actv.activity_date_time = moment(actv.activity_date_time).toDate();
 
                     this.push(
                         {
-                            title: cache.documentType.obj[document.activity_type_id],
-                            type: 'document',
-                            startsAt: documentDue,
-                            endsAt: documentDue,
+                            id: actv.id,
+                            title: actvTypeObj[actv.activity_type_id],
+                            type: type,
+                            startsAt: actv.activity_date_time,
+                            endsAt: actv.activity_date_time,
                             editable: false,
                             deletable: false,
                             incrementsBadgeTotal: true
                         }
                     )
 
-                    if (!!document.expire_date) {
-                        documentExp = moment(document.expire_date).toDate();
+                    if (!!actv.expire_date) {
+                        actv.expire_date = moment(actv.expire_date).toDate();
 
-                        this.push(
-                            {
-                                title: cache.documentType.obj[document.activity_type_id],
-                                type: 'document',
-                                startsAt: documentExp,
-                                endsAt: documentExp,
-                                editable: false,
-                                deletable: false,
-                                incrementsBadgeTotal: true
-                            }
-                        )
+                        if (+actv.expire_date != +actv.activity_date_time) {
+                            this.push(
+                                {
+                                    id: actv.id,
+                                    title: actvTypeObj[actv.activity_type_id],
+                                    type: type,
+                                    startsAt: actv.expire_date,
+                                    endsAt: actv.expire_date,
+                                    editable: false,
+                                    deletable: false,
+                                    incrementsBadgeTotal: true
+                                }
+                            );
+                        }
                     }
 
-                },calDocumentList);
+                },calActvList);
 
-                return calDocumentList;
-            };
+                return calActvList;
 
-            this.createCalTaskList = function(taskList){
-                var cache = $rootScope.cache, taskDue, calTaskList = [];
-
-                angular.forEach(taskList, function(task){
-                    taskDue = moment(task.activity_date_time).toDate();
-                    this.push(
-                        {
-                            title: cache.taskType.obj[task.activity_type_id],
-                            type: 'task',
-                            startsAt: taskDue,
-                            endsAt: taskDue,
-                            editable: false,
-                            deletable: false,
-                            incrementsBadgeTotal: true
-                        }
-                    )
-                },calTaskList);
-
-                return calTaskList;
             };
 
             $scope.calendarDay = new Date();
@@ -86,54 +70,90 @@ define(['controllers/controllers',
                 $scope.calendarView = 'day';
             };
 
-            function eventUpdateCb(output, input, calActvList, activityTypeObj) {
-                var actvDueOut = moment(output.activity_date_time).toDate(),
-                    actvTitleOut = activityTypeObj[output.activity_type_id],
-                    isNewActv = angular.equals({}, input),
+            function eventUpdateCb(output, input, calActvList, activityTypeObj, type) {
+                var actvOutDue,
+                    actvOutTitle,
+                    actvOutId = output.id,
+                    actvOutExpDate,
+                    actvInId = input.id,
                     len = calActvList.length, i = 0;
 
-                if (!isNewActv) {
-                    var actvDueIn = moment(input.activity_date_time).toDate(),
-                        actvTitleIn = activityTypeObj[input.activity_type_id];
-
+                if (actvInId) {
                     for (; i < len; i++) {
-                        if (calActvList[i].title == actvTitleIn &&
-                            +calActvList[i].startsAt == +actvDueIn) {
+                        if (+calActvList[i].id == +actvInId) {
                             calActvList.splice(i,1);
-                            break;
+                            i--;
+                            len--;
                         }
                     }
                 }
 
-                calActvList.push({
-                    title: actvTitleOut,
-                    type: 'task',
-                    startsAt: actvDueOut,
-                    endsAt: actvDueOut,
-                    editable: false,
-                    deletable: false,
-                    incrementsBadgeTotal: true
-                });
-            }
+                if (actvOutId) {
+                    actvOutDue = moment(output.activity_date_time).toDate();
+                    actvOutTitle = activityTypeObj[output.activity_type_id];
+
+                    calActvList.push({
+                        id: actvOutId,
+                        title: actvOutTitle,
+                        type: type,
+                        startsAt: actvOutDue,
+                        endsAt: actvOutDue,
+                        editable: false,
+                        deletable: false,
+                        incrementsBadgeTotal: true
+                    });
+
+                    if (!!output.expire_date) {
+                        actvOutExpDate = moment(output.expire_date).toDate();
+
+                        if (+actvOutExpDate != +actvOutDue) {
+                            calActvList.push({
+                                id: actvOutId,
+                                title: actvOutTitle,
+                                type: type,
+                                startsAt: actvOutExpDate,
+                                endsAt: actvOutExpDate,
+                                editable: false,
+                                deletable: false,
+                                incrementsBadgeTotal: true
+                            });
+                        }
+                    }
+                }
+            };
+
+            $scope.$on('taskDelete',function(e, taskId){
+                eventUpdateCb({}, { id: taskId }, $scope.calTaskList);
+            });
 
             $scope.$on('taskFormSuccess',function(e, output, input){
-                eventUpdateCb(output, input, $scope.calTaskList, $rootScope.cache.taskType.obj)
+                var isResolved = $rootScope.cache.taskStatusResolve.indexOf(output.status_id) > -1;
+                eventUpdateCb(!isResolved ? output : {}, input, $scope.calTaskList, $rootScope.cache.taskType.obj, 'task')
+            });
+
+            $scope.$on('documentDelete',function(e, documentId){
+                eventUpdateCb({}, { id: documentId }, $scope.calDocList);
             });
 
             $scope.$on('documentFormSuccess',function(e, output, input){
-                eventUpdateCb(output, input, $scope.calDocList, $rootScope.cache.documentType.obj)
+                var isResolved = $rootScope.cache.documentStatusResolve.indexOf(output.status_id) > -1;
+                eventUpdateCb(!isResolved ? output : {}, input, $scope.calDocList, $rootScope.cache.documentType.obj, 'document');
             });
 
             $scope.$on('assignmentFormSuccess',function(e, output){
-                Array.prototype.push.apply($scope.calTaskList, this.createCalTaskList(output.taskList));
-
-                console.log($state);
+                Array.prototype.push.apply(
+                    $scope.calTaskList,
+                    this.createCalEventList('task', output.taskList, $rootScope.cache.taskType.obj)
+                );
 
                 if (!+settings.tabEnabled.documents) {
                     return;
                 }
 
-                Array.prototype.push.apply($scope.calDocList, this.createCalDocList(output.documentList));
+                Array.prototype.push.apply(
+                    $scope.calDocList,
+                    this.createCalEventList('document', output.documentList, $rootScope.cache.documentType.obj)
+                );
             }.bind(this));
 
             this.init();

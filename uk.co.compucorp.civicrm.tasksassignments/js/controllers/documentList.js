@@ -165,11 +165,14 @@ define(['controllers/controllers',
                             $q.all(documentListPromise).then(function(results){
                                 i = 0;
                                 for (; i < documentListLen; i++) {
+                                    $rootScope.$broadcast('documentDelete', documentList[i].id);
                                     $scope.documentList.splice($scope.documentList.indexOf(documentList[i]),1);
+
                                 }
                                 $scope.checklist.isCheckedAll = {};
                                 $scope.checklist.selected = {};
                                 $scope.$broadcast('ct-spinner-hide','documentList');
+                                AssignmentService.updateTab();
                             });
 
                         });
@@ -192,7 +195,9 @@ define(['controllers/controllers',
                 }).then(function(results){
                     document.id = results.id;
                     document.status_id = results.status_id;
+                    $rootScope.$broadcast('documentFormSuccess', results, document);
                     $scope.$broadcast('ct-spinner-hide','documentList');
+                    AssignmentService.updateTab();
                 })
             };
 
@@ -228,7 +233,7 @@ define(['controllers/controllers',
                 }
 
                 //Remove resolved documents from the document list
-                $scope.documentList = $scope.documentListOngoing;
+                $scope.documentList = $filter('filterBy.status')($scope.documentList, $rootScope.cache.documentStatusResolve, false);
 
                 DocumentService.get({
                     'target_contact_id': config.CONTACT_ID,
@@ -236,10 +241,8 @@ define(['controllers/controllers',
                         'IN': config.status.resolve.DOCUMENT
                     }
                 }).then(function(documentListResolved){
-                    $scope.documentList.push.apply($scope.documentList, documentListResolved);
-                    $timeout(function () {
-                        $scope.documentListResolvedLoaded = true;
-                    });
+                    Array.prototype.push.apply($scope.documentList, documentListResolved);
+                    $scope.documentListResolvedLoaded = true;
                 });
             };
 
@@ -254,7 +257,13 @@ define(['controllers/controllers',
 
                     DocumentService.delete(document.id).then(function(results){
                         $scope.documentList.splice($scope.documentList.indexOf(document),1);
-                        $scope.checklist.selected.splice($scope.checklist.selected.indexOf(document),1);
+
+                        angular.forEach($scope.checklist.selected, function(page){
+                            page.splice(page.indexOf(document),1);
+                        });
+
+                        $rootScope.$broadcast('documentDelete', document.id);
+                        AssignmentService.updateTab();
                     });
                 });
 
@@ -277,7 +286,7 @@ define(['controllers/controllers',
                     var pattern = /case|activity|assignment/i;
 
                     if (pattern.test(data.title) ||
-                        data.crmMessages.length &&
+                        (data.crmMessages && data.crmMessages.length) &&
                         (pattern.test(data.crmMessages[0].title) ||
                         pattern.test(data.crmMessages[0].text))) {
                         $rootScope.cache.assignment = {
