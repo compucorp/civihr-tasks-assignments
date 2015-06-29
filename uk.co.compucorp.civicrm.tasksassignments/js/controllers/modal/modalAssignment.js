@@ -113,6 +113,16 @@ define(['controllers/controllers',
             $scope.confirm = function(){
                 $scope.$broadcast('ct-spinner-show');
 
+                //console.log(($filter('filter')($scope.taskList, { create: true }))).length;
+                //console.log(($filter('filter')($scope.documentList, { create: true })).length);
+                //
+                //return;
+                 //
+                 //if (!$filter('filter')($scope.taskList, { create: true }).length ||
+                 //    !$filter('filter')($scope.documentList, { create: true }).length) {
+                 //    alert('ok');
+                 //};
+
                 var documentListAssignment = [], taskListAssignment = [], taskArr = [], documentArr = [],
                     cacheAssignmentObj = {}, i, len;
 

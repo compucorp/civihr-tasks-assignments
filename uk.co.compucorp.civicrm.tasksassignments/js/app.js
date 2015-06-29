@@ -134,7 +134,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=4',
+                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=5',
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();
@@ -171,10 +171,37 @@ define([
                             }]
                         }
                     }).
+                    state('tasks.my', {
+                        url: '/my',
+                        params: {
+                            userRole: {
+                                field: 'assignee_contact_id',
+                                isEqual: true
+                            }
+                        }
+                    }).
+                    state('tasks.delegated', {
+                        url: '/delegated',
+                        params: {
+                            userRole: {
+                                field: 'assignee_contact_id',
+                                isEqual: false
+                            }
+                        }
+                    }).
+                    state('tasks.all', {
+                        url: '/all',
+                        params: {
+                            userRole: {
+                                field: null,
+                                isEqual: null
+                            }
+                        }
+                    }).
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html?v=4',
+                        templateUrl: config.path.TPL+'dashboard/documents.html?v=5',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
@@ -209,6 +236,33 @@ define([
 
                                 return deferred.promise;
                             }]
+                        }
+                    }).
+                    state('documents.my', {
+                        url: '/my',
+                        params: {
+                            userRole: {
+                                field: 'assignee_contact_id',
+                                isEqual: true
+                            }
+                        }
+                    }).
+                    state('documents.delegated', {
+                        url: '/delegated',
+                        params: {
+                            userRole: {
+                                field: 'assignee_contact_id',
+                                isEqual: false
+                            }
+                        }
+                    }).
+                    state('documents.all', {
+                        url: '/all',
+                        params: {
+                            userRole: {
+                                field: null,
+                                isEqual: null
+                            }
                         }
                     }).
                     state('assignments', {

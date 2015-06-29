@@ -92,7 +92,7 @@ define(['controllers/controllers',
 
             $scope.filterParams = {
                 contactId: null,
-                userRole: {
+                userRole: $state.params.userRole || {
                     field: null,
                     isEqual: null
                 },

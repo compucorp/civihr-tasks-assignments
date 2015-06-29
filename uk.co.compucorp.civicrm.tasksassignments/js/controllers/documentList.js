@@ -106,7 +106,7 @@ define(['controllers/controllers',
             $scope.filterParams = {
                 contactId: null,
                 documentStatus: [],
-                userRole: {
+                userRole: $state.params.userRole || {
                     field: null,
                     isEqual: null
                 },
