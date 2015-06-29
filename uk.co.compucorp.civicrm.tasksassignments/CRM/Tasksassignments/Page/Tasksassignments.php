@@ -4,6 +4,12 @@ require_once 'CRM/Core/Page.php';
 
 class CRM_Tasksassignments_Page_Tasksassignments extends CRM_Core_Page {
   function run() {
+    if (!CRM_Core_Permission::check('access Tasks and Assignments')) {
+        CRM_Core_Session::setStatus('Permission denied.', 'Tasks and Assignments', 'error');
+        CRM_Utils_System::redirect('/civicrm');
+        return FALSE;
+    }
+      
     parent::run();
   }
 
