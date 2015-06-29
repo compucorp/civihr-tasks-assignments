@@ -153,6 +153,8 @@ define(['controllers/controllers',
                     return;
                 }
 
+                var ctrl = this;
+
                 //Remove resolved tasks from the task list
                 $filter('filterBy.status')($scope.taskList, $rootScope.cache.taskStatusResolve, false);
 
@@ -162,10 +164,28 @@ define(['controllers/controllers',
                         'IN': config.status.resolve.TASK
                     }
                 }).then(function(taskListResolved){
+                    var contactIds = ctrl.contactIds,
+                        assignmentIds = ctrl.assignmentIds;
+
+                    ctrl.collectId(taskListResolved);
+
+                    if (contactIds && contactIds.length) {
+                        ContactService.get({'IN': contactIds}).then(function(data){
+                            ContactService.updateCache(data);
+                        });
+                    }
+
+                    if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+                        AssignmentService.get({'IN': assignmentIds}).then(function(data){
+                            AssignmentService.updateCache(data);
+                        });
+                    }
+
                     Array.prototype.push.apply($scope.taskList, taskListResolved);
+
                     $scope.taskListResolvedLoaded = true;
                 });
-            };
+            }.bind(this);
 
             $scope.deleteTask = function(task){
 
