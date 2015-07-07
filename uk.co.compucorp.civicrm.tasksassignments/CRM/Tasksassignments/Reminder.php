@@ -388,7 +388,7 @@ class CRM_Tasksassignments_Reminder
         $mailParams = array(
           'groupName' => 'Scheduled Reminder Sender',
           //'from' => $from, // TODO
-          'toName' => $contact['display_name'],
+          'toName' => !empty($contact['display_name']) ? $contact['display_name'] : $email,
           'toEmail' => $email,
           'subject' => $messageSubject,
         );

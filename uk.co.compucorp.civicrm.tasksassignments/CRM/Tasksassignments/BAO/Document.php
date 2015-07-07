@@ -8,7 +8,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
      * @param array $params key-value pairs
      * @return CRM_Tasksassignments_DAO_Document|NULL
      */
-    public static function create($params)
+    public static function create(&$params)
     {
         $entityName = 'Document';
         $hook = empty($params['id']) ? 'create' : 'edit';
