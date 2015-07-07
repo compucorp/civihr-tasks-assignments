@@ -555,6 +555,10 @@ function civicrm_api3_document_get($params) {
         }
     }
     
+    if (($assigneeContactId || $sourceContactId) && empty($activityIds)) {
+        return civicrm_api3_create_success(array(), $params, 'document', 'getbycomponent');
+    }
+    
     if ($caseId) {
         $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
         $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
