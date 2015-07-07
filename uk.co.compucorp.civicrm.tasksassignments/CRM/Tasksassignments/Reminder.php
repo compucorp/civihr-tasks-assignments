@@ -315,6 +315,13 @@ class CRM_Tasksassignments_Reminder
         $result     = false;
         $hookTokens = array();
         
+        $domainValues = array();
+        $domainValues['name'] = CRM_Utils_Token::getDomainTokenReplacement('name', $domain);
+        
+        $domainValue = CRM_Core_BAO_Domain::getNameAndEmail();
+        $domainValues['email'] = $domainValue[1];
+        $receiptFrom = '"' . $domainValues['name'] . '" <' . $domainValues['email'] . '>';
+        
         $body_text = CRM_Utils_String::htmlToText($body_html);
         
         $params = array(array('contact_id', '=', $contactId, 0, 0));
@@ -387,7 +394,7 @@ class CRM_Tasksassignments_Reminder
         // set up the parameters for CRM_Utils_Mail::send
         $mailParams = array(
           'groupName' => 'Scheduled Reminder Sender',
-          //'from' => $from, // TODO
+          'from' => $receiptFrom,
           'toName' => !empty($contact['display_name']) ? $contact['display_name'] : $email,
           'toEmail' => $email,
           'subject' => $messageSubject,
