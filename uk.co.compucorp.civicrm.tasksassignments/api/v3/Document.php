@@ -608,17 +608,24 @@ function civicrm_api3_document_get($params) {
             $getResult['values'][$key]['file_count'] = (int)$fileCountResult->file_count;
             
             foreach ($customFields as $customFieldKey => $customFieldData) {
-                if (isset($getResult['values'][$key][$customFieldKey])) {
-                    $customFieldValue = $getResult['values'][$key][$customFieldKey];
-                    if ($customFieldData['data_type'] == 'Date') {
-                        $processDate = CRM_Utils_date::processDate($getResult['values'][$key][$customFieldKey]);
-                        $customFieldValue = CRM_Utils_Date::customFormat($processDate, '%Y-%m-%d');
-                    }
-                    unset($getResult['values'][$key][$customFieldKey]);
-                    $getResult['values'][$key][$customFieldData['name']] = $customFieldValue;
+                $customColumnResult = CRM_Core_DAO::executeQuery(
+                    "SELECT {$customFieldData['name']} FROM {$customFieldData['table']} WHERE entity_id = %1",
+                    array(
+                        1 => array($getResult['values'][$key]['id'], 'Integer'),
+                    )
+                );
+                if (!$customColumnResult->fetch()) {
+                    continue;
                 }
+                $customFieldValue = $customColumnResult->$customFieldData['name'];
+                if ($customFieldData['data_type'] == 'Date') {
+                    $processDate = CRM_Utils_Date::processDate($customColumnResult->$customFieldData['name']);
+                    $customFieldValue = CRM_Utils_Date::customFormat($processDate, '%Y-%m-%d');
+                }
+                $getResult['values'][$key][$customFieldData['name']] = $customFieldValue;
             }
         }
+        
         return $getResult;
     }
     
@@ -722,6 +729,7 @@ function _civicrm_api3_document_getcustomfields() {
     foreach ($customFields['values'] as $customField) {
         $result['custom_' . $customField['id']] = array(
             'name' => strtolower($customField['name']),
+            'table' => $customGroup['values'][0]['table_name'],
             'data_type' => $customField['data_type'],
         );
     }
