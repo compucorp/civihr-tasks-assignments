@@ -3,9 +3,13 @@
 require_once 'CRM/Core/Page.php';
 
 class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
-  public static function fileList() {
+  public static function fileList($postParams = null) {
     $config = CRM_Core_Config::singleton();
-    $postParams = $_GET;
+    $return = true;
+    if (empty($postParams)) {
+        $postParams = $_GET;
+        $return = false;
+    }
     $result = array();
     $fileID = CRM_Core_BAO_File::getEntityFile( $postParams['entityTable'], $postParams['entityID'] );
     
@@ -51,6 +55,9 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
       }
     }
     
+    if ($return) {
+        return $result;
+    }
     echo html_entity_decode(stripcslashes(json_encode(array('values' => $result))));
     CRM_Utils_System::civiExit( );
   }
@@ -96,8 +103,12 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     CRM_Utils_System::civiExit( );
   }
 
-  public static function fileDelete() {
-    $postParams = $_GET;
+  public static function fileDelete($postParams = null) {
+    $return = true;
+    if (empty($postParams)) {
+        $postParams = $_GET;
+        $return = false;
+    }
     $fileId = $postParams['fileID'];
     $result = 0;
     
@@ -109,6 +120,9 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         $result = 1;
     }
 
+    if ($return) {
+        return $result;
+    }
     echo html_entity_decode(stripcslashes(json_encode(array('values' => array(array('result' => $result))), true)));
     CRM_Utils_System::civiExit( );
   }

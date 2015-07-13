@@ -100,23 +100,24 @@ class CRM_Tasksassignments_Reminder
         foreach ($recipients as $recipient)
         {
             $contactId = $emailToContactId[$recipient];
+            $activityName = implode(', ', $activityContact[3]['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
-                'activityName' => implode(', ', $activityContact[3]['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']],
+                'activityName' => $activityName,
                 'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityTargets' => implode(', ', $activityContact[3]['links']),
                 'activityAssignee' => implode(', ', $activityContact[1]['links']),
                 'activityStatus' => self::$_activityOptions['status'][$activityResult['status_id']],
                 'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
-                'activitySubject' => $activityResult['subject'],
-                'activityDetails' => $activityResult['details'],
+                'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
+                'activityDetails' => isset($activityResult['details']) ? $activityResult['details'] : '',
                 'baseUrl' => CIVICRM_UF_BASEURL,
                 'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
                 'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
             ));
             
-            self::_send($contactId, $recipient, 'Task Reminder', $templateBodyHTML);
+            self::_send($contactId, $recipient, $activityName, $templateBodyHTML);
         }
 
         return true;
@@ -314,6 +315,13 @@ class CRM_Tasksassignments_Reminder
         $result     = false;
         $hookTokens = array();
         
+        $domainValues = array();
+        $domainValues['name'] = CRM_Utils_Token::getDomainTokenReplacement('name', $domain);
+        
+        $domainValue = CRM_Core_BAO_Domain::getNameAndEmail();
+        $domainValues['email'] = $domainValue[1];
+        $receiptFrom = '"' . $domainValues['name'] . '" <' . $domainValues['email'] . '>';
+        
         $body_text = CRM_Utils_String::htmlToText($body_html);
         
         $params = array(array('contact_id', '=', $contactId, 0, 0));
@@ -386,8 +394,8 @@ class CRM_Tasksassignments_Reminder
         // set up the parameters for CRM_Utils_Mail::send
         $mailParams = array(
           'groupName' => 'Scheduled Reminder Sender',
-          //'from' => $from, // TODO
-          'toName' => $contact['display_name'],
+          'from' => $receiptFrom,
+          'toName' => !empty($contact['display_name']) ? $contact['display_name'] : $email,
           'toEmail' => $email,
           'subject' => $messageSubject,
         );

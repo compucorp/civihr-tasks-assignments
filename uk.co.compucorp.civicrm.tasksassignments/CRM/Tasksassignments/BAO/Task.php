@@ -8,7 +8,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task
      * @param array $params key-value pairs
      * @return CRM_Tasksassignments_DAO_Task|NULL
      */
-    public static function create($params)
+    public static function create(&$params)
     {
         $entityName = 'Task';
         $hook = empty($params['id']) ? 'create' : 'edit';
