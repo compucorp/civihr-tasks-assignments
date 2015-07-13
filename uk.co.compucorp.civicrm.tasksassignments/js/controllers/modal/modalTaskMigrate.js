@@ -5,33 +5,47 @@ define(['controllers/controllers',
 
     controllers.controller('ModalTaskMigrateCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q',
         '$log', '$filter', '$modal', '$dialog', '$timeout', 'AssignmentService', 'TaskService', 'Task', 'activityType',
-        'ContactService', 'UtilsService', 'config',
+        'ContactService', 'UtilsService', 'settings',
         function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout,
-                 AssignmentService, TaskService, Task, activityType, ContactService, UtilsService, config){
+                 AssignmentService, TaskService, Task, activityType, ContactService, UtilsService, settings){
             $log.debug('Controller: ModalTaskMigrateCtrl');
 
             $scope.migrate = {};
+            $scope.migrate.dataLoaded = false;
             $scope.migrate.from = '';
             $scope.migrate.to = '';
-            $scope.migrate.activityList = [];
-            $scope.migrate.activityListSelected = [];
-            $scope.migrate.isCheckedAll = false;
+
+            $scope.migrate.task = {
+                list: [],
+                statusList: [],
+                statusListSelected: []
+            };
+
+            $scope.migrate.document = {
+                list: [],
+                statusList: [],
+                statusListSelected: []
+            };
 
             $scope.contacts = $rootScope.cache.contact.arrSearch;
-            $scope.activityType = activityType;
 
             $scope.getActivities = function(contactId){
                 $scope.$broadcast('ct-spinner-show');
 
                 contactId = contactId || $scope.migrate.from;
-                $scope.migrate.activityList = [];
+
+                $scope.migrate.task.statusList = [];
+                $scope.migrate.task.statusListSelected = [];
+                $scope.migrate.document.statusList = [];
+                $scope.migrate.document.statusListSelected = [];
+                $scope.migrate.dataLoaded = false;
 
                 var activityIdArr = [];
 
                 Task.get({
                     'entity': 'ActivityContact',
                     'json': {
-                        component: '',
+                        'component': '',
                         'sequential': '1',
                         'return': 'activity_id',
                         'contact_id': contactId,
@@ -60,19 +74,48 @@ define(['controllers/controllers',
                                 'is_current_revision': '1',
                                 'is_deleted': '0',
                                 'sequential': '1',
-                                'return': 'activity_date_time, activity_type_id, assignee_contact_id, id, status_id'
+                                'return': 'assignee_contact_id, activity_type_id, assignee_contact_id, id, status_id'
                             }
                         }, function(data){
+                            var documentTypeObj = $rootScope.cache.documentType.obj,
+                                statusResolve = {
+                                    task: $rootScope.cache.taskStatusResolve,
+                                    document: $rootScope.cache.documentStatusResolve
+                                };
 
                             if (data.values && data.values.length) {
 
-                                $scope.migrate.activityList = $filter('orderBy')(data.values,['-activity_date_time','activity_type_id']);
+                                data.values = $filter('orderBy')(data.values, '-status_id');
+
+                                function createStatusList(type, activity){
+                                    var migrateTypeObj = $scope.migrate[type]
+
+                                    migrateTypeObj.list.push(activity);
+
+                                    if (!(migrateTypeObj.statusList.indexOf(activity.status_id) > -1)) {
+
+                                        if (!(statusResolve[type].indexOf(activity.status_id) > -1)) {
+                                            migrateTypeObj.statusList.unshift(activity.status_id);
+                                            migrateTypeObj.statusListSelected.push(activity.status_id);
+                                        } else {
+                                            migrateTypeObj.statusList.push(activity.status_id);
+                                        }
+                                    }
+                                }
+
+                                angular.forEach(data.values, function(activity){
+                                    !documentTypeObj[activity.activity_type_id] ?
+                                        createStatusList('task', activity) :
+                                        createStatusList('document', activity);
+                                });
                             }
 
+                            $scope.migrate.dataLoaded = true;
                             $scope.$broadcast('ct-spinner-hide');
                         });
 
                     } else {
+                        $scope.migrate.dataLoaded = true;
                         $scope.$broadcast('ct-spinner-hide');
                     }
                 });
@@ -126,15 +169,30 @@ define(['controllers/controllers',
 
             $scope.confirm = function(){
 
-                if (!$scope.migrate.activityListSelected.length) {
+                if (!$scope.migrate.task.statusListSelected &&
+                    !$scope.migrate.document.statusListSelected) {
                     return
                 }
 
-                var promiseActivity = [], promisePrev, i = 0;
+                var activityListSelected = [], promiseActivity = [], promisePrev, i = 0;
+
+                angular.forEach($scope.migrate.task.list, function(task){
+                    if ($scope.migrate.task.statusListSelected.indexOf(task.status_id) > -1) {
+                        this.push(task);
+                    }
+                }, activityListSelected);
+
+                if (!!+settings.tabEnabled.documents) {
+                    angular.forEach($scope.migrate.document.list, function(document){
+                        if ($scope.migrate.document.statusListSelected.indexOf(document.status_id) > -1) {
+                            this.push(document);
+                        }
+                    }, activityListSelected);
+                }
 
                 $scope.$broadcast('ct-spinner-show');
 
-                angular.forEach($scope.migrate.activityListSelected, function(activity){
+                angular.forEach(activityListSelected, function(activity){
                     activity.assignee_contact_id[0] = $scope.migrate.to;
 
                     this.push(function(){
@@ -171,12 +229,12 @@ define(['controllers/controllers',
 
                 $q.all(promiseActivity).then(function(results){
                     if (results.length) {
-                        CRM.alert(results.length + ' task(s) re-assigned from: '+
+                        CRM.alert(results.length + ' item(s) re-assigned from: '+
                             $rootScope.cache.contact.obj[$scope.migrate.from].sort_name + ' to: '+
                             $rootScope.cache.contact.obj[$scope.migrate.to].sort_name,
                             'Migrate Tasks','success');
                     } else {
-                        CRM.alert('0 tasks re-assigned.',
+                        CRM.alert('0 items re-assigned.',
                             'Migrate Tasks','warning');
                     }
 
@@ -192,31 +250,6 @@ define(['controllers/controllers',
 
             };
 
-            $scope.toggleAll = function(){
-                $scope.migrate.isCheckedAll ? $scope.migrate.activityListSelected = angular.copy($scope.migrate.activityList) : $scope.migrate.activityListSelected = [];
-            };
-
-            $scope.toggleIsCheckedAll = function() {
-                $timeout(function(){
-                    $scope.migrate.isCheckedAll = $scope.migrate.activityListSelected.length == $scope.migrate.activityList.length;
-                });
-            };
-
         }]);
 
-    controllers.controller('ActivityMigrateCtrl',['$scope', '$log', '$rootScope', 'config',
-        function($scope, $log, $rootScope, config){
-            $log.debug('Controller: ActivityMigrateCtrl');
-
-            var statusId = $scope.activity.status_id,
-                isDocument = !!$rootScope.cache.documentType.obj[$scope.activity.activity_type_id],
-                statusIdResolvedArr = !isDocument ? config.status.resolve.TASK : config.status.resolve.DOCUMENT;
-
-            $scope.activity.cancelled = !isDocument ? statusId == 3 : false;
-            $scope.activity.completed = !isDocument ? statusId == 2 : statusId == 3 || statusId == 4;
-            $scope.activity.ongoing = statusIdResolvedArr.indexOf(statusId) == -1;
-
-            $scope.activity.ongoing && $scope.$parent.migrate.activityListSelected.push($scope.activity);
-
-        }]);
 });

@@ -8,6 +8,12 @@
   }
 }
 
+.form-task-migrate {
+  label {
+    text-transform: capitalize;
+  }
+}
+
 .#{$prefix}form-action {
   margin-top: -12px;
   margin-bottom: -12px;
