@@ -1,5 +1,5 @@
 {include file='CRM/Tasksassignments/Reminder/Header.tpl'}
-<span class="h4" style="color:#202020;display:block;font-family:Arial;font-size:22px;font-weight:normal;line-height:100%;margin-bottom:10px;text-align:left;"><a class="mlink" style="color:#42b0cb;font-weight:normal;text-decoration:underline;" href="{$activityUrl}">{$activityName}</a></span>
+<span class="h4" style="color:#202020;display:block;font-family:Arial;font-size:22px;font-weight:normal;line-height:100%;margin-bottom:10px;text-align:left;">{if $isReminder}Reminder: {/if}<a class="mlink" style="color:#42b0cb;font-weight:normal;text-decoration:underline;" href="{$activityUrl}">{$activityName}</a></span>
 {if $notes}
 <table class="mtable notes" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;margin-top:8px;" width="100%">
     <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">

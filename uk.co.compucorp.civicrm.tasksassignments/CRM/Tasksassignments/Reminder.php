@@ -24,7 +24,7 @@ class CRM_Tasksassignments_Reminder
         }
     }
     
-    public static function sendReminder($activityId, $notes = null)
+    public static function sendReminder($activityId, $notes = null, $isReminder = false)
     {
         self::_setActivityOptions();
         
@@ -102,6 +102,7 @@ class CRM_Tasksassignments_Reminder
             $contactId = $emailToContactId[$recipient];
             $activityName = implode(', ', $activityContact[3]['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
+                'isReminder' => $isReminder,
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
                 'activityName' => $activityName,

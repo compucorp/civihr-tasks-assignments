@@ -752,7 +752,7 @@ function civicrm_api3_document_sendreminder($params) {
         throw new API_Exception(ts("Please specify 'activity_id' value."));
     }
     
-    $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '');
+    $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '', true);
     return civicrm_api3_create_success($result, $params, 'document', 'reminder');
 }
 
