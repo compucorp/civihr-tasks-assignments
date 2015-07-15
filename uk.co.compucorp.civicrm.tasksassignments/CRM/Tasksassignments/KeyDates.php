@@ -2,6 +2,35 @@
 
 class CRM_Tasksassignments_KeyDates
 {
+    public static function getContactIds($startDate = null, $endDate = null)
+    {
+        $tableExists = self::_checkTableExists(array(
+            'civicrm_value_jobcontract_dates_13',
+            'civicrm_contact',
+            'civicrm_value_job_summary_10',
+            'civicrm_value_probation_12',
+        ));
+        $result = array();
+        
+        if (!$startDate)
+        {
+            $startDate = date('Y-m-d');
+        }
+        if (!$endDate)
+        {
+            $endDate = date('Y') . '-12-31';
+        }
+        
+        $query = self::_buildQuery($tableExists, $startDate, $endDate);
+        $keyDates = CRM_Core_DAO::executeQuery($query);
+        while ($keyDates->fetch())
+        {
+            $result[] = $keyDates->contact_id;
+        }
+        
+        return $result;
+    }
+    
     public static function get($startDate = null, $endDate = null, $contactId = null)
     {
         $tableExists = self::_checkTableExists(array(

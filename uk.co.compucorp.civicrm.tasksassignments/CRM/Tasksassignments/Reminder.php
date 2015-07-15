@@ -151,22 +151,52 @@ class CRM_Tasksassignments_Reminder
         
         $to = $sunday->format('Y-m-d');
         
-        $contactsQuery = "SELECT GROUP_CONCAT(a.id) AS activity_ids, ac.contact_id, e.email
+        $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
+        
+        $contactsQuery = "SELECT activity_ids, contact_id, email
+            FROM (
+            SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
             FROM `civicrm_activity` a
             LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
             LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id
-            WHERE activity_date_time <='2015-07-07'
-            AND a.status_id IN (" . implode(',', $incompleteStatuses) . ")
-            AND ac.record_type_id IN (1,2)
-            AND e.is_primary = 1
-            AND a.activity_type_id IN (
-                SELECT value FROM civicrm_option_value ov
-                LEFT JOIN civicrm_option_group og ON ov.option_group_id = og.id
-                LEFT JOIN civicrm_component co ON ov.component_id = co.id
-                WHERE og.name = 'activity_type'
-                AND co.name IN (" . implode(',', $components) . ")
+            WHERE (
+            activity_date_time <= %1
+            AND a.status_id
+            IN (" . implode(',', $incompleteStatuses) . ")
+            AND ac.record_type_id
+            IN ( 1, 2 )
+            AND e.is_primary =1
+            AND a.activity_type_id
+            IN (
+            SELECT value
+            FROM civicrm_option_value ov
+            LEFT JOIN civicrm_option_group og ON ov.option_group_id = og.id
+            LEFT JOIN civicrm_component co ON ov.component_id = co.id
+            WHERE og.name = 'activity_type'
+            AND co.name
+            IN (
+            " . implode(',', $components) . "
             )
-            GROUP BY ac.contact_id";
+            )
+            )
+            GROUP BY e.contact_id
+            ";
+        if (!empty($keyDatesContacts))
+        {
+            $contactsQuery .= "UNION
+            SELECT NULL AS activity_ids, e.contact_id, e.email
+            FROM `civicrm_email` e
+            WHERE (
+            e.contact_id
+            IN (" . implode(',', $keyDatesContacts) . ")
+            )
+            GROUP BY e.contact_id
+            ";
+        }
+        $contactsQuery .= ") AS reminder
+            GROUP BY reminder.contact_id
+            ";
+        
         $contactsParams = array(
             1 => array($to, 'String'),
         );
@@ -174,7 +204,7 @@ class CRM_Tasksassignments_Reminder
         $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery, $contactsParams);
         while ($contactsResult->fetch())
         {
-            $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, explode(',', $contactsResult->activity_ids), $to, $settings);
+            $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : array(), $to, $settings);
             $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
                 'reminder' => $reminderData,
                 'baseUrl' => CIVICRM_UF_BASEURL,
@@ -206,74 +236,77 @@ class CRM_Tasksassignments_Reminder
         );
         $now = date('Y-m-d');
         
-        $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date,
-        GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.sort_name SEPARATOR  '|') AS activity_contact,
-        ca.case_id,
-        case_type.title AS case_type
-        FROM `civicrm_activity` a
-        LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
-        LEFT JOIN civicrm_case_activity ca ON ca.activity_id = a.id
-        LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
-        LEFT JOIN civicrm_case tcase ON tcase.id = ca.case_id
-        LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
-        WHERE a.id IN (" . implode(',', $activityIds) . ")
-        GROUP BY a.id";
-        
-        $activityResult = CRM_Core_DAO::executeQuery($activityQuery);
-        while ($activityResult->fetch())
+        if (!empty($activityIds))
         {
-            $activityContact = array(
-                self::ACTIVITY_CONTACT_ASSIGNEE => array(),
-                self::ACTIVITY_CONTACT_CREATOR => array(),
-                self::ACTIVITY_CONTACT_TARGET => array(),
-            );
-            
-            $activityContactRow = explode('|', $activityResult->activity_contact);
-            foreach ($activityContactRow as $value)
+            $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date,
+            GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.sort_name SEPARATOR  '|') AS activity_contact,
+            ca.case_id,
+            case_type.title AS case_type
+            FROM `civicrm_activity` a
+            LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
+            LEFT JOIN civicrm_case_activity ca ON ca.activity_id = a.id
+            LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
+            LEFT JOIN civicrm_case tcase ON tcase.id = ca.case_id
+            LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
+            WHERE a.id IN (" . implode(',', $activityIds) . ")
+            GROUP BY a.id";
+
+            $activityResult = CRM_Core_DAO::executeQuery($activityQuery);
+            while ($activityResult->fetch())
             {
-                list($type, $cId, $cSortName) = explode(':', $value);
-                
-                $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $cId;
-                $activityContact[$type][$cId] = '<a href="' . $contactUrl . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $cSortName . '</a>';
-            }
-            
-            $reminderKeys = array();
-            if (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE]))
-            {
-                if ($activityResult->activity_date < $now)
-                {
-                    $reminderKeys[] = 'overdue';
-                }
-                elseif ($activityResult->activity_date > $now)
-                {
-                    $reminderKeys[] = 'coming_up';
-                }
-                else
-                {
-                    $reminderKeys[] = 'today_mine';
-                }
-            }
-            if (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_CREATOR]) && $activityResult->activity_date === $now)
-            {
-                $reminderKeys[] = 'today_others';
-            }
-            
-            // Fill the $reminderData array:
-            foreach ($reminderKeys as $reminderKey)
-            {
-                $reminderData[$reminderKey][] = array(
-                    'id' => $activityResult->id,
-                    'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=&context=activity&searchContext=activity',
-                    'typeId' => $activityResult->activity_type_id,
-                    'type' => self::$_activityOptions['type'][$activityResult->activity_type_id],
-                    'statusId' => $activityResult->status_id,
-                    'status' => self::$_activityOptions['status'][$activityResult->status_id],
-                    'targets' => $activityContact[self::ACTIVITY_CONTACT_TARGET],
-                    'assignee' => $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE],
-                    'caseId' => $activityResult->case_id,
-                    'caseType' => $activityResult->case_type,
-                    'date' => date("M d", strtotime($activityResult->activity_date)),
+                $activityContact = array(
+                    self::ACTIVITY_CONTACT_ASSIGNEE => array(),
+                    self::ACTIVITY_CONTACT_CREATOR => array(),
+                    self::ACTIVITY_CONTACT_TARGET => array(),
                 );
+
+                $activityContactRow = explode('|', $activityResult->activity_contact);
+                foreach ($activityContactRow as $value)
+                {
+                    list($type, $cId, $cSortName) = explode(':', $value);
+
+                    $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $cId;
+                    $activityContact[$type][$cId] = '<a href="' . $contactUrl . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $cSortName . '</a>';
+                }
+
+                $reminderKeys = array();
+                if (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE]))
+                {
+                    if ($activityResult->activity_date < $now)
+                    {
+                        $reminderKeys[] = 'overdue';
+                    }
+                    elseif ($activityResult->activity_date > $now)
+                    {
+                        $reminderKeys[] = 'coming_up';
+                    }
+                    else
+                    {
+                        $reminderKeys[] = 'today_mine';
+                    }
+                }
+                if (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_CREATOR]) && $activityResult->activity_date === $now)
+                {
+                    $reminderKeys[] = 'today_others';
+                }
+
+                // Fill the $reminderData array:
+                foreach ($reminderKeys as $reminderKey)
+                {
+                    $reminderData[$reminderKey][] = array(
+                        'id' => $activityResult->id,
+                        'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=&context=activity&searchContext=activity',
+                        'typeId' => $activityResult->activity_type_id,
+                        'type' => self::$_activityOptions['type'][$activityResult->activity_type_id],
+                        'statusId' => $activityResult->status_id,
+                        'status' => self::$_activityOptions['status'][$activityResult->status_id],
+                        'targets' => $activityContact[self::ACTIVITY_CONTACT_TARGET],
+                        'assignee' => $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE],
+                        'caseId' => $activityResult->case_id,
+                        'caseType' => $activityResult->case_type,
+                        'date' => date("M d", strtotime($activityResult->activity_date)),
+                    );
+                }
             }
         }
         
