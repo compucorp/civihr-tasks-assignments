@@ -66,7 +66,7 @@ class CRM_Tasksassignments_Reminder
             $emails = array();
             
             $contactResult = civicrm_api3('Contact', 'get', array(
-              'return' => 'sort_name',
+              'return' => 'display_name',
               'id' => array('IN' => $value['ids']),
             ));
             
@@ -79,8 +79,8 @@ class CRM_Tasksassignments_Reminder
             foreach ($contactResult['values'] as $contactKey => $contactValue)
             {
                 $url = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactKey;
-                $links[] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contactValue['sort_name'] . '</a>';
-                $names[] = $contactValue['sort_name'];
+                $links[] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contactValue['display_name'] . '</a>';
+                $names[] = $contactValue['display_name'];
             }
             
             foreach ($emailResult['values'] as $contactValue)
@@ -239,7 +239,7 @@ class CRM_Tasksassignments_Reminder
         if (!empty($activityIds))
         {
             $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date,
-            GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.sort_name SEPARATOR  '|') AS activity_contact,
+            GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.display_name SEPARATOR  '|') AS activity_contact,
             ca.case_id,
             case_type.title AS case_type
             FROM `civicrm_activity` a
