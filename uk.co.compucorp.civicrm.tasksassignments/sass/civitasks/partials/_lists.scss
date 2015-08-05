@@ -13,10 +13,10 @@
       top: 10px;
     };
     padding: {
-      bottom: 2px;
+      bottom: 7px;
       left: 35px;
       right: 20px;
-      top: 17px;
+      top: 12px;
     };
 
     &.#{$prefix}task-due {
@@ -38,12 +38,12 @@
     color: $text-color;
     font-size: $font-size-base;
     font-weight: normal;
-    margin-bottom: 3px;
+    margin-bottom: 8px;
     margin-left: -20px;
     text-transform: none;
 
     .fa {
-      font-size: 11px;
+      font-size: 10px;
       margin-right: 9px;
       top: 0;
 
@@ -59,10 +59,9 @@
   }
 
   header {
-    font-size: 11px;
+    font-size: 16px;
     font-weight: bold;
     margin-bottom: 4px;
-    text-transform: uppercase;
   }
 
   time {
@@ -79,7 +78,7 @@
   }
 
   .#{$prefix}assignment-type, {
-    padding-right: 20px;
+    padding-left: 105px;
   }
 
   .#{$prefix}assignment-type,
@@ -95,36 +94,58 @@
     margin-left: -20px;
     margin-right: 4px;
     float: left;
-    margin-top: 2px;
+    margin-top: 6px;
+  }
+
+  .#{$prefix}task-contact-assignee,
+  .#{$prefix}task-contact-target {
+    padding-left: 5px;
   }
 
   .#{$prefix}task-contact-source {
-    font-size: 11px;
+    margin-bottom: 0;
   }
 
   .#{$prefix}task-details {
-    background-color: #f0f1f4;
-    border: 1px solid #f0f1f4;
-    padding: 4px 8px 0;
-    margin-bottom: 14px;
-    font-size: 12px;
-
-    > * {
-      margin-bottom: 6px;
+    p {
+      margin-bottom: 16px;
     }
+  }
+
+  .#{$prefix}task-more {
+    background-color: #f4f7f8;
+    border: 1px solid #eef2f3;
+    padding: 9px 8px;
+    margin-bottom: 12px;
+    line-height: 23px;
   }
 
   .#{$prefix}task-subject {
     font-size: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 
     time {
       margin-right: 12px;
+      margin-left: 7px;
     }
   }
 
   + .header-bar {
     margin-top: 15px;
+  }
+
+  &.#{$prefix}list-task-small {
+    header {
+      font-size: 13px;
+    }
+
+    .#{$prefix}task-checkbox {
+      margin-top: 3px;
+    }
+
+    .#{$prefix}assignment-type {
+      padding-left: 85px;
+    }
   }
 
 }
@@ -144,14 +165,14 @@
 
   strong {
     color: #5b6779;
-    font-size: 11px;
     padding-right: 5px;
-    text-transform: uppercase;
   }
 
   time {
-    font-size: 11px;
+    display: block;
+    font-size: 16px;
     font-weight: bold;
+    padding: 3px 0 2px;
 
     span {
       color: $text-color;
@@ -177,10 +198,10 @@
       .list-group-item {
         border-width: 0;
         margin: 0;
-        padding: 0 15px 13px;
+        padding: 0 15px 11px;
 
         &:first-child {
-          padding-top: 13px;
+          padding-top: 11px;
         }
       }
     }
