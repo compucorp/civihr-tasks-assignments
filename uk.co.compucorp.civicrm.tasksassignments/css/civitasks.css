@@ -11536,6 +11536,23 @@ fieldset[disabled]
   position: relative;
   top: -1px;
 }
+/* line 56, ../sass/civihr/partials/_buttons.scss */
+#civitasks .ct-context-menu-toggle, #cividocuments .ct-context-menu-toggle {
+  color: #586277;
+  padding: 0px 10px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+}
+/* line 63, ../sass/civihr/partials/_buttons.scss */
+#civitasks .ct-context-menu-toggle:hover, #cividocuments .ct-context-menu-toggle:hover {
+  color: #42b0cb;
+}
+/* line 69, ../sass/civihr/partials/_buttons.scss */
+#civitasks .btn-group.open .ct-context-menu-toggle.dropdown-toggle, #cividocuments .btn-group.open .ct-context-menu-toggle.dropdown-toggle {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
 /* line 1, ../sass/civihr/partials/_datepicker.scss */
 #civitasks .dropdown-menu[datepicker-popup-wrap], #cividocuments .dropdown-menu[datepicker-popup-wrap] {
   padding: 10px;
@@ -11810,7 +11827,7 @@ fieldset[disabled]
 }
 /* line 22, ../sass/civihr/partials/_modals.scss */
 #civitasks .modal-title, #cividocuments .modal-title {
-  font-size: 13px;
+  font-size: 18px;
 }
 /* line 29, ../sass/civihr/partials/_modals.scss */
 #civitasks .modal-content .form-horizontal .row, #cividocuments .modal-content .form-horizontal .row,
@@ -12739,18 +12756,6 @@ fieldset[disabled]
   box-shadow: none;
 }
 /* line 1, ../sass/civitasks/partials/_buttons.scss */
-#civitasks .ct-context-menu-toggle, #cividocuments .ct-context-menu-toggle {
-  color: #586277;
-  padding: 0px 10px;
-  text-align: center;
-  display: inline-block;
-  font-size: 14px;
-}
-/* line 8, ../sass/civitasks/partials/_buttons.scss */
-#civitasks .ct-context-menu-toggle:hover, #cividocuments .ct-context-menu-toggle:hover {
-  color: #42b0cb;
-}
-/* line 13, ../sass/civitasks/partials/_buttons.scss */
 #civitasks .ct-btn-list-expand, #cividocuments .ct-btn-list-expand {
   -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
