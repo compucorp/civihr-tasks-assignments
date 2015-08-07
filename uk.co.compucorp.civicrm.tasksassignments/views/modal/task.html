@@ -165,7 +165,7 @@
                                         ng-model="task.case_id"
                                         on-select="cacheAssignment($item);">
                                     <ui-select-match
-                                            placeholder="Enter search term...">{{$select.selected.label}}</ui-select-match>
+                                            placeholder="Enter target's name...">{{$select.selected.label}}</ui-select-match>
                                     <ui-select-choices  repeat="assignment.id as assignment in assignments"
                                                         refresh="refreshAssignments($select.search)"
                                                         refresh-delay="0">
