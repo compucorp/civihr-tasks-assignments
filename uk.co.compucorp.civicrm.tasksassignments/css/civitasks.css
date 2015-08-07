@@ -67,6 +67,11 @@
    * @link https://github.com/mattlewis92/angular-bootstrap-calendar
    * @license MIT
    */
+  /*!
+  angular-xeditable - 0.1.9
+  Edit-in-place for angular.js
+  Build date: 2015-03-26
+  */
   min-height: 184px;
 }
 /* line 7, ../sass/civihr/modules/_unset.scss */
@@ -12710,6 +12715,90 @@ fieldset[disabled]
   #cividocuments .cal-year-box [class*="span"]:nth-child(2) {
     border-bottom: 1px solid #e1e1e1;
   }
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-wrap, #cividocuments .editable-wrap {
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-wrap .editable-controls, #cividocuments .editable-wrap .editable-controls, #civitasks .editable-wrap .editable-error, #cividocuments .editable-wrap .editable-error {
+  margin-bottom: 0;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-wrap .editable-controls > input, #cividocuments .editable-wrap .editable-controls > input, #civitasks .editable-wrap .editable-controls > select, #cividocuments .editable-wrap .editable-controls > select, #civitasks .editable-wrap .editable-controls > textarea, #cividocuments .editable-wrap .editable-controls > textarea {
+  margin-bottom: 0;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-wrap .editable-input, #cividocuments .editable-wrap .editable-input {
+  display: inline-block;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-buttons, #cividocuments .editable-buttons {
+  display: inline-block;
+  vertical-align: top;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-buttons button, #cividocuments .editable-buttons button {
+  margin-left: 5px;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-input.editable-has-buttons, #cividocuments .editable-input.editable-has-buttons {
+  width: auto;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-bstime .editable-input input[type=text], #cividocuments .editable-bstime .editable-input input[type=text] {
+  width: 46px;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-bstime .well-small, #cividocuments .editable-bstime .well-small {
+  margin-bottom: 0;
+  padding: 10px;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-range output, #cividocuments .editable-range output {
+  display: inline-block;
+  min-width: 30px;
+  vertical-align: top;
+  text-align: center;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-color input[type=color], #cividocuments .editable-color input[type=color] {
+  width: 50px;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-checkbox label span, #cividocuments .editable-checkbox label span, #civitasks .editable-checkbox .checkbox-label span, #cividocuments .editable-checkbox .checkbox-label span,
+#civitasks .editable-checkbox .radio-label span,
+#cividocuments .editable-checkbox .radio-label span, #civitasks .editable-checklist label span, #cividocuments .editable-checklist label span, #civitasks .editable-checklist .checkbox-label span, #cividocuments .editable-checklist .checkbox-label span,
+#civitasks .editable-checklist .radio-label span,
+#cividocuments .editable-checklist .radio-label span, #civitasks .editable-radiolist label span, #cividocuments .editable-radiolist label span, #civitasks .editable-radiolist .checkbox-label span, #cividocuments .editable-radiolist .checkbox-label span,
+#civitasks .editable-radiolist .radio-label span,
+#cividocuments .editable-radiolist .radio-label span {
+  margin-left: 7px;
+  margin-right: 10px;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-hide, #cividocuments .editable-hide {
+  display: none !important;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-click, #cividocuments .editable-click, #civitasks a.editable-click, #cividocuments a.editable-click {
+  text-decoration: none;
+  color: #428bca;
+  border-bottom: dashed 1px #428bca;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-click:hover, #cividocuments .editable-click:hover, #civitasks a.editable-click:hover, #cividocuments a.editable-click:hover {
+  text-decoration: none;
+  color: #2a6496;
+  border-bottom-color: #2a6496;
+}
+/* line 7, ../sass/civitasks/modules/_xeditable.scss */
+#civitasks .editable-empty, #cividocuments .editable-empty, #civitasks .editable-empty:hover, #cividocuments .editable-empty:hover, #civitasks .editable-empty:focus, #cividocuments .editable-empty:focus, #civitasks a.editable-empty, #cividocuments a.editable-empty, #civitasks a.editable-empty:hover, #cividocuments a.editable-empty:hover, #civitasks a.editable-empty:focus, #cividocuments a.editable-empty:focus {
+  font-style: italic;
+  color: #D14;
+  text-decoration: none;
 }
 /* line 19, ../sass/civitasks/partials/_global.scss */
 .page-civicrm-tasksassignments-dashboard #branding {

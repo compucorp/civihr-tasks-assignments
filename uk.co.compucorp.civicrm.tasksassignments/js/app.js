@@ -4,6 +4,7 @@ define([
     'angularChecklistModel',
     'angularRouter',
     'angularSelect',
+    'angularXeditable',
     'textAngular',
     'config',
     'settings',
@@ -28,11 +29,12 @@ define([
         'civitasks.directives',
         'civitasks.filters',
         'civitasks.services',
-        'civitasks.settings'
+        'civitasks.settings',
+        'xeditable',
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
-        'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', '$log',
+        'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,
-                 AssignmentService, KeyDateService, ContactService, $log){
+                 AssignmentService, KeyDateService, ContactService, editableOptions, $log){
             $log.debug('civitasks.run');
 
             $rootScope.pathTpl = config.path.TPL;
@@ -118,6 +120,8 @@ define([
                 $rootElement.removeClass('ct-page-loading');
             });
 
+            editableOptions.theme = 'bs3';
+
         }
     ]);
 
@@ -134,7 +138,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=3',
+                        templateUrl: config.path.TPL+'dashboard/tasks.html?v='+(new Date().getTime()),
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();

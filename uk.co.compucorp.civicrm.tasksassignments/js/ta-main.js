@@ -7,6 +7,7 @@ var module, reqTa = require.config({
         angularBootstrapCalendar: 'vendor/angular/angular-bootstrap-calendar-tpls-custom',
         angularChecklistModel: 'vendor/angular/checklist-model',
         angularRouter: 'vendor/angular/angular-ui-router',
+        angularXeditable: 'vendor/angular/xeditable',
         moment: 'vendor/moment.min',
         requireLib: CRM.vars.reqAngular.requireLib,
         textAngular: 'vendor/angular/textAngular.min',

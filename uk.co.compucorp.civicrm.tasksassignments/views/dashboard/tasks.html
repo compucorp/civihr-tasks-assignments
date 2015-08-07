@@ -196,7 +196,7 @@
     </header>
     <div class="row">
         <div class="col-xs-7">
-            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> <span ng-if="!!task.subject">Subject: {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}</span></p>
+            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> <span ng-if="!!task.subject">Subject: <span editable-text="task.subject">{{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}</span></span></p>
         </div>
         <div class="col-xs-5">
             <span class="{{prefix}}assignment-type" ng-bind="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title"></span>
