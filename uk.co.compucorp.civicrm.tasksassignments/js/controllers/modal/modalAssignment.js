@@ -1,8 +1,9 @@
 define(['controllers/controllers',
+        'moment',
         'services/contact',
         'services/document',
         'services/task',
-        'services/assignment'], function(controllers){
+        'services/assignment'], function(controllers, moment){
     controllers.controller('ModalAssignmentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
          'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
         function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
@@ -17,7 +18,9 @@ define(['controllers/controllers',
                     isAdded: false,
                     name: null,
                     source_contact_id: config.LOGGED_IN_CONTACT_ID,
-                    status_id: '1'
+                    status_id: '1',
+                    offset: 0,
+                    offset_reverse: 0
                 };
 
             $scope.alert = {
@@ -227,6 +230,7 @@ define(['controllers/controllers',
                 var activity,
                     activityTypes = activitySet.activityTypes,
                     activityTypesLen = activityTypes.length,
+                    activityLastOffset = $filter('orderBy')(activityTypes, 'reference_offset')[activityTypesLen-1].reference_offset,
                     documentList = [],
                     documentType,
                     taskList = [],
@@ -236,6 +240,8 @@ define(['controllers/controllers',
                 for (; i < activityTypesLen; i++) {
                     activity = angular.copy(activityModel);
                     activity.name = activityTypes[i].name;
+                    activity.offset = activityTypes[i].reference_offset;
+                    activity.offset_reverse = activityTypes[i].reference_offset-activityLastOffset;
 
                     documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
 
@@ -261,9 +267,11 @@ define(['controllers/controllers',
 
         }]);
 
-    controllers.controller('ModalAssignmentActivityCtrl',['$scope', '$log',
-        function($scope, $log){
+    controllers.controller('ModalAssignmentActivityCtrl',['$scope', '$timeout', '$log',
+        function($scope, $timeout, $log){
             $log.debug('Controller: ModalAssignmentTaskCtrl');
+
+            var assignmentDueDate = $scope.$parent.assignment.dueDate;
 
             $scope.isDisabled = !$scope.activity.activity_type_id && !$scope.activity.isAdded;
             $scope.activity.create = !$scope.isDisabled;
@@ -271,6 +279,12 @@ define(['controllers/controllers',
             if ($scope.isDisabled) {
                 return
             }
+
+            $timeout(function(){
+                $scope.activity.activity_date_time = !assignmentDueDate ?
+                    moment().add($scope.activity.offset,'days').toDate() :
+                    moment(assignmentDueDate).add($scope.activity.offset_reverse,'days').toDate();
+            },0);
 
             $scope.$watch('$parent.assignment.contact_id',function(targetContactId){
 
