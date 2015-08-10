@@ -4,7 +4,7 @@
 <table class="mtable notes" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;margin-top:8px;" width="100%">
     <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
         <td width="15%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">Notes:</td>
-        <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">{$notes|strip_tags}</td>
+        <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">{$notes}</td>
     </tr>
 </table>
 {/if}

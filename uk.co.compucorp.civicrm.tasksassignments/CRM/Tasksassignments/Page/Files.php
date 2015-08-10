@@ -166,11 +166,11 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
           }
         }
       }
-      civicrm_api3('Document', 'create', array(
+      /*civicrm_api3('Document', 'create', array(
           'sequential' => 1,
           'id' => $postParams['entityID'],
           'status_id' => 2,
-      ));
+      ));*/
     }
 
     echo html_entity_decode(stripcslashes(json_encode(array('values' => array(array('result' => $result))), true)));
