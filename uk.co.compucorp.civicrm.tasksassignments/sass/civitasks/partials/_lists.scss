@@ -68,13 +68,14 @@
     color: $brand-success;
   }
 
-  .dropdown {
-    float: right;
-    width: 30px;
+  .ui-select-container {
+    display: inline-block;
   }
 
   .#{$prefix}context-menu-toggle  {
     margin-right: -9px;
+    float: right;
+    width: 30px;
   }
 
   .#{$prefix}assignment-type, {

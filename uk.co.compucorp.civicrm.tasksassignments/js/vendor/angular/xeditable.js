@@ -621,7 +621,7 @@ angular.module('xeditable').factory('editableController',
     // copy MUST be used for `checklist`
     self.setLocalValue = function() {
       self.scope.$data = self.useCopy ? 
-        angular.copy(valueGetter($scope.$parent)) : 
+        angular.copy(valueGetter($scope.$parent)) :
         valueGetter($scope.$parent);
     };
 
@@ -800,7 +800,7 @@ angular.module('xeditable').factory('editableController',
     */
     self.handleEmpty = function() {
       var val = valueGetter($scope.$parent);
-      var isEmpty = val === null || val === undefined || val === "" || (angular.isArray(val) && val.length === 0); 
+      var isEmpty = val === null || val === undefined || val === "" || (angular.isArray(val) && val.length === 0);
       $element.toggleClass('editable-empty', isEmpty);
     };
 
@@ -843,6 +843,7 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
       require: [overwrites.directiveName, '?^form'],
       controller: editableController,
       link: function(scope, elem, attrs, ctrl) {
+
         // editable controller
         var eCtrl = ctrl[0];
 

@@ -5,6 +5,7 @@ define([
     'angularRouter',
     'angularSelect',
     'angularXeditable',
+    'civiEditable',
     'textAngular',
     'config',
     'settings',

@@ -70,6 +70,7 @@ define(['controllers/controllers',
                 });
             }
 
+            $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.dueToday = 0;
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
@@ -130,6 +131,18 @@ define(['controllers/controllers',
                     $scope.$broadcast('ct-spinner-hide','task'+task.id);
                     AssignmentService.updateTab();
                 })
+            };
+
+            $scope.refreshContacts = function(input){
+                if (!input) {
+                    return
+                }
+
+                ContactService.search(input, {
+                    contact_type: 'Individual'
+                }).then(function(results){
+                    $scope.contacts = results;
+                });
             };
 
             $scope.labelDateRange = function(from, until){

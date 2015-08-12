@@ -8,6 +8,7 @@ var module, reqTa = require.config({
         angularChecklistModel: 'vendor/angular/checklist-model',
         angularRouter: 'vendor/angular/angular-ui-router',
         angularXeditable: 'vendor/angular/xeditable',
+        civiEditable: 'vendor/angular/civi-editable',
         moment: 'vendor/moment.min',
         requireLib: CRM.vars.reqAngular.requireLib,
         textAngular: 'vendor/angular/textAngular.min',
@@ -15,6 +16,9 @@ var module, reqTa = require.config({
         textAngularSanitize: 'vendor/angular/textAngular-sanitize.min'
     },
     shim: {
+        civiEditable: {
+            deps: ['angularXeditable','angularSelect']
+        },
         textAngular: {
             deps: ['textAngularRangy','textAngularSanitize']
         }

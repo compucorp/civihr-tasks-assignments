@@ -39,7 +39,7 @@ define(['controllers/controllers',
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/task.html?v=3',
+                        templateUrl: config.path.TPL+'modal/task.html?v=5',
                         controller: 'ModalTaskCtrl',
                         resolve: {
                             data: function(){
