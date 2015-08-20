@@ -352,11 +352,11 @@ define([
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=5'
+                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=6'
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=3'
+                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=4'
                             }
                         }
                     }).
