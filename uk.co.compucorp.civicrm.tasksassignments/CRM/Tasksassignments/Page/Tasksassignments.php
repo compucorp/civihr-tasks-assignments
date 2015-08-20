@@ -34,7 +34,7 @@ class CRM_Tasksassignments_Page_Tasksassignments extends CRM_Core_Page {
       return array(
         'Tasksassignments' => array(
             'extensionPath' => CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.tasksassignments'),
-            'case_extension' => !empty($extensions['org.civicrm.hrcase']),
+            'case_extension' => !empty(CRM_Core_Component::get('CiviCase')),
             'settings' => $settings,
             'permissions' => array(
                 'delete_tasks_and_documents' => CRM_Core_Permission::check('delete Tasks and Documents'),

@@ -47,7 +47,7 @@
 {if $activityDetails}
     <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
         <td width="15%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">Details:</td>
-        <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">{$activityDetails|strip_tags}</td>
+        <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">{$activityDetails}</td>
     </tr>
 {/if}
 </table>
