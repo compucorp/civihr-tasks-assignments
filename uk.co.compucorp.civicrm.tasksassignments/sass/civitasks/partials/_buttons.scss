@@ -1,15 +1,3 @@
-.#{$prefix}context-menu-toggle {
-  color: $gray;
-  padding: 0px 10px;
-  text-align: center;
-  display: inline-block;
-  font-size: 14px;
-
-  &:hover {
-    color: $brand-primary;
-  }
-}
-
 .#{$prefix}btn-list-expand {
   @include box-shadow($box-shadow-global);
   background-color: $btn-default-bg;

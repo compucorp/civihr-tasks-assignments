@@ -168,7 +168,7 @@ define(['controllers/controllers',
                     if (uploader.queue.length) {
                         var modalInstance  = $modal.open({
                             targetDomEl: $rootElement.find('div').eq(0),
-                            templateUrl: config.path.TPL+'/modal/progress.html?v='+(new Date()).getTime(),
+                            templateUrl: config.path.TPL+'/modal/progress.html?v=1',
                             size: 'sm',
                             controller: 'ModalProgressCtrl',
                             resolve: {
