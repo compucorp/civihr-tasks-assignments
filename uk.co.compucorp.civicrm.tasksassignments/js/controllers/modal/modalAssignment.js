@@ -19,8 +19,7 @@ define(['controllers/controllers',
                     name: null,
                     source_contact_id: config.LOGGED_IN_CONTACT_ID,
                     status_id: '1',
-                    offset: 0,
-                    offset_reverse: 0
+                    offset: 0
                 };
 
             $scope.alert = {
@@ -94,12 +93,6 @@ define(['controllers/controllers',
                 ContactService.updateCache(obj);
             };
 
-            $scope.setAssignmentDueDate = function(taskDueDate){
-                if (!$scope.assignment.dueDate || $scope.assignment.dueDate < taskDueDate) {
-                    $scope.assignment.dueDate = taskDueDate;
-                }
-            }
-
             $scope.setData = function() {
 
                 var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
@@ -113,6 +106,7 @@ define(['controllers/controllers',
 
                 $scope.activitySet = assignmentType.definition.activitySets[0];
                 $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
+                $scope.assignment.dueDate = $scope.assignment.dueDate || new Date().setHours(0, 0, 0, 0);
             }
 
             $scope.cancel = function(){
@@ -230,7 +224,6 @@ define(['controllers/controllers',
                 var activity,
                     activityTypes = activitySet.activityTypes,
                     activityTypesLen = activityTypes.length,
-                    activityLastOffset = $filter('orderBy')(activityTypes, 'reference_offset')[activityTypesLen-1].reference_offset,
                     documentList = [],
                     documentType,
                     taskList = [],
@@ -241,7 +234,6 @@ define(['controllers/controllers',
                     activity = angular.copy(activityModel);
                     activity.name = activityTypes[i].name;
                     activity.offset = activityTypes[i].reference_offset;
-                    activity.offset_reverse = activityTypes[i].reference_offset-activityLastOffset;
 
                     documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
 
@@ -271,8 +263,6 @@ define(['controllers/controllers',
         function($scope, $timeout, $log){
             $log.debug('Controller: ModalAssignmentTaskCtrl');
 
-            var assignmentDueDate = $scope.$parent.assignment.dueDate;
-
             $scope.isDisabled = !$scope.activity.activity_type_id && !$scope.activity.isAdded;
             $scope.activity.create = !$scope.isDisabled;
 
@@ -280,11 +270,9 @@ define(['controllers/controllers',
                 return
             }
 
-            $timeout(function(){
-                $scope.activity.activity_date_time = !assignmentDueDate ?
-                    moment().add($scope.activity.offset,'days').toDate() :
-                    moment(assignmentDueDate).add($scope.activity.offset_reverse,'days').toDate();
-            },0);
+            $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
+                $scope.activity.activity_date_time = !!assignmentDueDate ?  moment(assignmentDueDate).add($scope.activity.offset,'days').toDate() : null;
+            });
 
             $scope.$watch('$parent.assignment.contact_id',function(targetContactId){
 
@@ -293,17 +281,6 @@ define(['controllers/controllers',
                 }
 
                 $scope.activity.target_contact_id = [targetContactId];
-            });
-
-            $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
-
-                if (!$scope.activity.create) {
-                    return
-                }
-
-                if (!$scope.activity.activity_date_time || $scope.activity.activity_date_time > assignmentDueDate) {
-                    $scope.activity.activity_date_time = assignmentDueDate;
-                }
             });
 
         }]);

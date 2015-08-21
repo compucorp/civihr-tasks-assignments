@@ -123,9 +123,9 @@ define([
 
     angular.module('civitasks.appDashboard',['civitasks.run'])
         .config(['config', '$resourceProvider','$httpProvider', '$logProvider',
-            '$urlRouterProvider', '$stateProvider','calendarConfigProvider', 'uiSelectConfig',
+            '$urlRouterProvider', '$stateProvider','calendarConfigProvider', 'datepickerConfig', 'uiSelectConfig',
             function(config, $resourceProvider, $httpProvider, $logProvider,
-                     $urlRouterProvider, $stateProvider, calendarConfigProvider, uiSelectConfig){
+                     $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig, uiSelectConfig){
                 $logProvider.debugEnabled(config.DEBUG);
 
                 $urlRouterProvider.otherwise("/tasks");
@@ -134,7 +134,7 @@ define([
                     state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=5',
+                        templateUrl: config.path.TPL+'dashboard/tasks.html?v=3',
                         resolve: {
                             taskList: ['$q', 'TaskService',function($q, TaskService){
                                 var deferred = $q.defer();
@@ -201,7 +201,7 @@ define([
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html?v=5',
+                        templateUrl: config.path.TPL+'dashboard/documents.html?v=6',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
@@ -352,11 +352,11 @@ define([
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=5'
+                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=6'
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=3'
+                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=4'
                             }
                         }
                     }).
@@ -399,13 +399,17 @@ define([
                     weekDay: 'ddd'
                 });
 
+                datepickerConfig.showWeeks = false;
+
                 uiSelectConfig.theme = 'bootstrap';
             }
         ]);
 
     angular.module('civitasks.appDocuments',['civitasks.run'])
-        .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
-            function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
+        .config(['config','$routeProvider','$resourceProvider','$httpProvider','datepickerConfig','uiSelectConfig',
+            '$logProvider',
+            function(config, $routeProvider, $resourceProvider, $httpProvider, datepickerConfig, uiSelectConfig,
+                     $logProvider){
                 $logProvider.debugEnabled(config.DEBUG);
 
                 $routeProvider.
@@ -429,19 +433,23 @@ define([
 
                 $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
+                datepickerConfig.showWeeks = false;
+
                 uiSelectConfig.theme = 'bootstrap';
             }
         ]);
 
     angular.module('civitasks.appTasks',['civitasks.run'])
-        .config(['config','$routeProvider','$resourceProvider','$httpProvider','uiSelectConfig','$logProvider',
-            function(config, $routeProvider, $resourceProvider, $httpProvider, uiSelectConfig, $logProvider){
+        .config(['config','$routeProvider','$resourceProvider','$httpProvider','datepickerConfig','uiSelectConfig',
+            '$logProvider',
+            function(config, $routeProvider, $resourceProvider, $httpProvider, datepickerConfig, uiSelectConfig,
+                     $logProvider){
                 $logProvider.debugEnabled(config.DEBUG);
 
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v=6',
+                        templateUrl: config.path.TPL+'contact/tasks.html?v=123',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({
@@ -459,15 +467,17 @@ define([
 
                 $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 
+                datepickerConfig.showWeeks = false;
+
                 uiSelectConfig.theme = 'bootstrap';
             }
         ]);
 
     angular.module('civitasks.appSettings',['civitasks.run'])
         .config(['config','$stateProvider','$urlRouterProvider', '$resourceProvider', '$urlRouterProvider',
-            '$httpProvider','uiSelectConfig','$logProvider',
+            '$httpProvider','datepickerConfig', 'uiSelectConfig','$logProvider',
             function(config, $stateProvider, $urlRouterProvider, $resourceProvider, $urlRouterProvider, $httpProvider,
-                     uiSelectConfig, $logProvider){
+                datepickerConfig, uiSelectConfig, $logProvider){
                 $logProvider.debugEnabled(config.DEBUG);
 
                 $urlRouterProvider.otherwise("/");
@@ -483,6 +493,8 @@ define([
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 
                 $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+
+                datepickerConfig.showWeeks = false;
 
                 uiSelectConfig.theme = 'bootstrap';
             }

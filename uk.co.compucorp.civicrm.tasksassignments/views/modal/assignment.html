@@ -143,7 +143,6 @@
                                            ng-model="activity.activity_date_time"
                                            is-open="dpOpened['task'+$index]"
                                            datepicker-popup
-                                           ng-change="setAssignmentDueDate(activity.activity_date_time)"
                                            ng-click="!isDisabled && activity.create ? dpOpen($event, 'task'+$index) : return;"
                                            ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a><span class="text-required" ng-hide="isDisabled || !activity.create">*</span></label>
                                     <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-task-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue" ng-required="!isDisabled && activity.create">
@@ -223,7 +222,6 @@
                                            ng-model="activity.activity_date_time"
                                            is-open="dpOpened['doc'+$index]"
                                            datepicker-popup
-                                           ng-change="setAssignmentDueDate(activity.activity_date_time)"
                                            ng-click="!isDisabled && activity.create ? dpOpen($event, 'doc'+$index) : return;"
                                            ng-disabled="isDisabled || !activity.create">{{(activity.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a><span class="text-required" ng-hide="isDisabled || !activity.create">*</span></label>
                                     <input type="hidden" ng-disabled="isDisabled" id="{{prefix}}assignment-doc-due-{{$index}}" ng-model="activity.activity_date_time" name="assignmentDue" ng-required="!isDisabled && activity.create">
