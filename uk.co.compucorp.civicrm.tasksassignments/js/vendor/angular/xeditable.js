@@ -431,6 +431,7 @@ angular.module('xeditable').factory('editableController',
 
     //init
     self.init = function(single) {
+
       self.single = single;
 
       self.name = $attrs.eName || $attrs[self.directiveName];
@@ -534,7 +535,8 @@ angular.module('xeditable').factory('editableController',
     };
 
     self.render = function() {
-      var theme = self.theme;
+        
+        var theme = self.theme;
 
       //build input
       self.inputEl = angular.element(self.inputTpl);
@@ -620,13 +622,14 @@ angular.module('xeditable').factory('editableController',
     // copy MUST NOT be used for `select-multiple` with objects as items
     // copy MUST be used for `checklist`
     self.setLocalValue = function() {
-      self.scope.$data = self.useCopy ? 
+      self.scope.$data = self.useCopy ?
         angular.copy(valueGetter($scope.$parent)) :
         valueGetter($scope.$parent);
     };
 
     //show
     self.show = function() {
+        
       // set value of scope.$data
       self.setLocalValue();
 
@@ -790,7 +793,6 @@ angular.module('xeditable').factory('editableController',
     self.save = function() {
       valueGetter.assign($scope.$parent,
           self.useCopy ? angular.copy(self.scope.$data) : self.scope.$data);
-
       // no need to call handleEmpty here as we are watching change of model value
       // self.handleEmpty();
     };
@@ -1092,6 +1094,7 @@ angular.module('xeditable').factory('editableFormController',
       //clear errors
       this.$setError(null, '');
 
+
       //children show
       angular.forEach(this.$editables, function(editable) {
         pc.when(editable.show());
@@ -1113,7 +1116,8 @@ angular.module('xeditable').factory('editableFormController',
         if(editableUtils.indexOf(shown, this) === -1) {
           shown.push(this);
         }
-      }), 0);      
+      }), 0);
+
     },
 
     /**
@@ -1306,7 +1310,6 @@ angular.module('xeditable').factory('editableFormController',
        * @memberOf editable-form
        */
       $waiting: false,
-      $data: {},
       _clicked: false,
       _blur: null
     }, base);

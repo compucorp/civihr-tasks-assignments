@@ -13379,8 +13379,9 @@ fieldset[disabled]
   right: 0;
   position: absolute;
   bottom: -24px;
+  z-index: 999;
 }
-/* line 108, ../sass/civitasks/partials/_forms.scss */
+/* line 109, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-wrap .editable-buttons .btn, #cividocuments .editable-wrap .editable-buttons .btn {
   background-color: #f4f7f8;
   border-color: #727e8a;
@@ -13390,30 +13391,30 @@ fieldset[disabled]
   padding: 4px 6px;
   height: 25px;
 }
-/* line 117, ../sass/civitasks/partials/_forms.scss */
+/* line 118, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-wrap .editable-buttons .btn:active, #cividocuments .editable-wrap .editable-buttons .btn:active, #civitasks .editable-wrap .editable-buttons .btn:focus, #cividocuments .editable-wrap .editable-buttons .btn:focus {
   background-color: #f4f7f8;
   outline: none;
 }
-/* line 124, ../sass/civitasks/partials/_forms.scss */
+/* line 125, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-wrap .editable-buttons .glyphicon-ok, #cividocuments .editable-wrap .editable-buttons .glyphicon-ok {
   color: #42b0cb;
 }
-/* line 128, ../sass/civitasks/partials/_forms.scss */
+/* line 129, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-wrap .editable-buttons .glyphicon-remove, #cividocuments .editable-wrap .editable-buttons .glyphicon-remove {
   color: #db6c86;
 }
-/* line 133, ../sass/civitasks/partials/_forms.scss */
+/* line 134, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-wrap .form-control:focus, #cividocuments .editable-wrap .form-control:focus {
   -webkit-box-shadow: none;
   box-shadow: none;
   border-color: #727e8a;
 }
-/* line 139, ../sass/civitasks/partials/_forms.scss */
+/* line 140, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-click, #cividocuments .editable-click {
   color: inherit;
 }
-/* line 142, ../sass/civitasks/partials/_forms.scss */
+/* line 143, ../sass/civitasks/partials/_forms.scss */
 #civitasks .editable-click:hover, #cividocuments .editable-click:hover {
   color: inherit;
 }
