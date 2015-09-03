@@ -9,6 +9,8 @@
         'angularBootstrapCalendar': 'vendor/angular/angular-bootstrap-calendar-tpls-custom',
         'angularChecklistModel': 'vendor/angular/checklist-model',
         'angularRouter': 'vendor/angular/angular-ui-router',
+        'angularXeditable': 'vendor/angular/xeditable',
+        'angularXeditableCivi': 'vendor/angular/xeditable-civi',
         'moment': 'vendor/moment.min',
         'requireLib': 'empty:',
         'textAngular': 'vendor/angular/textAngular.min',
@@ -16,6 +18,9 @@
         'textAngularSanitize': 'vendor/angular/textAngular-sanitize.min'
     },
     shim: {
+        angularXeditableCivi: {
+            deps: ['angularXeditable','angularSelect','textAngular']
+        },
         textAngular: {
             deps: ['textAngularRangy','textAngularSanitize']
         }
