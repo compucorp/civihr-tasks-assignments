@@ -997,6 +997,7 @@ uis.directive('uiSelectMatch', ['uiSelectConfig', function(uiSelectConfig) {
       return theme + (multi ? '/match-multiple.tpl.html' : '/match.tpl.html');
     },
     link: function(scope, element, attrs, $select) {
+
       $select.lockChoiceExpression = attrs.uiLockChoice;
       attrs.$observe('placeholder', function(placeholder) {
         $select.placeholder = placeholder !== undefined ? placeholder : uiSelectConfig.placeholder;
