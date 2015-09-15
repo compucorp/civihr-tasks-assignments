@@ -7,7 +7,7 @@ class CRM_Tasksassignments_KeyDates
         $tableExists = self::_checkTableExists(array(
             'civicrm_value_jobcontract_dates_13',
             'civicrm_contact',
-            'civicrm_value_job_summary_10',
+            'civicrm_value_jobcontract_summary_10',
             'civicrm_value_probation_12',
         ));
         $result = array();
@@ -36,7 +36,7 @@ class CRM_Tasksassignments_KeyDates
         $tableExists = self::_checkTableExists(array(
             'civicrm_value_jobcontract_dates_13',
             'civicrm_contact',
-            'civicrm_value_job_summary_10',
+            'civicrm_value_jobcontract_summary_10',
             'civicrm_value_probation_12',
         ));
         $result = array();
@@ -195,16 +195,16 @@ class CRM_Tasksassignments_KeyDates
             
             $queries[] = $query;
         }
-        if ($tableExists['civicrm_value_job_summary_10'])
+        if ($tableExists['civicrm_value_jobcontract_summary_10'])
         {
             $queries[] = "
-                SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(initial_join_date_56) as keydate, 'initial_join_date' as type FROM civicrm_value_job_summary_10 vjs
+                SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(initial_join_date_56) as keydate, 'initial_join_date' as type FROM civicrm_value_jobcontract_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE initial_join_date_56 IS NOT NULL
             " . self::_buildWhereDateRange('initial_join_date_56', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
             $queries[] = "
-                SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(final_termination_date_57) as keydate, 'final_termination_date' as type FROM civicrm_value_job_summary_10 vjs
+                SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(final_termination_date_57) as keydate, 'final_termination_date' as type FROM civicrm_value_jobcontract_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE final_termination_date_57 IS NOT NULL
             " . self::_buildWhereDateRange('final_termination_date_57', $startDate, $endDate)
