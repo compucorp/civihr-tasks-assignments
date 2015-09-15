@@ -70,6 +70,8 @@ define(['controllers/controllers',
                 });
             }
 
+            $scope.assignments = [];
+            $scope.contacts = [];
             $scope.dueToday = 0;
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
@@ -118,6 +120,51 @@ define(['controllers/controllers',
                 dateRange: ''
             };
 
+            $scope.cacheAssignment = function($item){
+
+                if ($rootScope.cache.assignment.obj[$item.id]) {
+                    return
+                }
+
+                var obj = {};
+
+                obj[$item.id] = {
+                    case_type_id: $filter('filter')($rootScope.cache.assignmentType.arr, { title: $item.extra.case_type })[0].id,
+                    client_id: {
+                        '1': $item.extra.contact_id
+                    },
+                    contact_id: {
+                        '1': $item.extra.contact_id
+                    },
+                    contacts: [
+                        {
+                            sort_name: $item.extra.sort_name,
+                            contact_id: $item.extra.contact_id
+                        }
+                    ],
+                    end_date: $item.extra.end_date,
+                    id: $item.id,
+                    is_deleted: $item.label_class == 'strikethrough' ? '1' : '0',
+                    start_date: $item.extra.start_date,
+                    subject: $item.extra.case_subject
+                };
+
+                AssignmentService.updateCache(obj);
+            };
+
+            $scope.cacheContact = function($item){
+                var obj = {};
+
+                obj[$item.id] = {
+                    contact_id: $item.id,
+                    contact_type: $item.icon_class,
+                    sort_name: $item.label,
+                    email: $item.description.length ? $item.description[0] : ''
+                };
+
+                ContactService.updateCache(obj);
+            };
+
             $scope.changeStatus = function(task, statusId){
                 $scope.$broadcast('ct-spinner-show','task'+task.id);
 
@@ -125,11 +172,59 @@ define(['controllers/controllers',
                     id: task.id,
                     status_id: statusId || '2'
                 }).then(function(results){
-                    task.status_id = results.status_id;
                     $rootScope.$broadcast('taskFormSuccess', results, task);
                     $scope.$broadcast('ct-spinner-hide','task'+task.id);
                     AssignmentService.updateTab();
                 })
+            };
+
+            $scope.updateTask = function(task, updateObj) {
+
+                var updatePromise = TaskService.save(angular.extend({
+                    id: task.id
+                },updateObj));
+
+                updatePromise.then(null,function(reason){
+                    CRM.alert(reason, 'Error', 'error');
+                });
+
+                return updatePromise;
+            };
+
+            $scope.updateAssignments = function(assignments, targetContactId){
+                $scope.assignments = $filter('filter')(assignments, function(val){
+                    return +val.extra.contact_id == +targetContactId;
+                });
+            };
+
+            $scope.updateContacts = function(contacts){
+                $scope.contacts = contacts;
+            };
+
+            $scope.refreshContacts = function(input){
+
+                if (!input) {
+                    return
+                }
+
+                ContactService.search(input, {
+                    contact_type: 'Individual'
+                }).then(function(results){
+                    $scope.contacts = results;
+                });
+            };
+
+            $scope.refreshAssignments = function(input, targetContactId, caseId){
+
+                if (!input || !targetContactId || !caseId) {
+                    return
+                }
+
+                AssignmentService.search(input, caseId).then(function(results){
+                    $scope.assignments = $filter('filter')(results, function(val){
+                        return +val.extra.contact_id == +targetContactId;
+                    });
+                });
             };
 
             $scope.labelDateRange = function(from, until){
