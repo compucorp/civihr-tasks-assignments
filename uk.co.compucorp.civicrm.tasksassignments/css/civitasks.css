@@ -1651,7 +1651,7 @@
 }
 /* line 47, ../../../../../../../../../../../../../var/lib/gems/2.1.0/gems/bootstrap-sass-3.3.5.1/assets/stylesheets/bootstrap/_type.scss */
 #civitasks h1, #cividocuments h1, #civitasks .h1, #cividocuments .h1 {
-  font-size: 13px;
+  font-size: 24px;
 }
 /* line 48, ../../../../../../../../../../../../../var/lib/gems/2.1.0/gems/bootstrap-sass-3.3.5.1/assets/stylesheets/bootstrap/_type.scss */
 #civitasks h2, #cividocuments h2, #civitasks .h2, #cividocuments .h2 {
@@ -3443,7 +3443,7 @@
 }
 /* line 140, ../../../../../../../../../../../../../var/lib/gems/2.1.0/gems/bootstrap-sass-3.3.5.1/assets/stylesheets/bootstrap/_forms.scss */
 #civitasks .form-control[disabled], #cividocuments .form-control[disabled], #civitasks .form-control[readonly], #cividocuments .form-control[readonly], fieldset[disabled] #civitasks .form-control, fieldset[disabled] #cividocuments .form-control {
-  background-color: #e8eef0;
+  background-color: #f4f7f8;
   opacity: 1;
 }
 /* line 147, ../../../../../../../../../../../../../var/lib/gems/2.1.0/gems/bootstrap-sass-3.3.5.1/assets/stylesheets/bootstrap/_forms.scss */
@@ -10913,7 +10913,7 @@ fieldset[disabled]
 }
 /* line 105, ../sass/civihr/modules/_select.scss */
 #civitasks .input-group > .ui-select-bootstrap > input.ui-select-search.form-control, #cividocuments .input-group > .ui-select-bootstrap > input.ui-select-search.form-control {
-  border-radius: 4px;
+  border-radius: 0;
   /* FIXME hardcoded value :-/ */
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -11494,27 +11494,31 @@ fieldset[disabled]
   text-transform: uppercase;
 }
 /* line 5, ../sass/civihr/partials/_buttons.scss */
+#civitasks .btn-link, #cividocuments .btn-link {
+  font-weight: bold;
+}
+/* line 9, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-gray, #cividocuments .btn-gray {
   color: #767e8f;
   background-color: #fff;
   border-color: #767e8f;
 }
-/* line 10, ../sass/civihr/partials/_buttons.scss */
+/* line 14, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-gray:hover, #cividocuments .btn-gray:hover, #civitasks .btn-gray:focus, #cividocuments .btn-gray:focus, #civitasks .btn-gray.btn-focus, #cividocuments .btn-gray.btn-focus {
   color: #535966;
   border-color: #535966;
 }
-/* line 17, ../sass/civihr/partials/_buttons.scss */
+/* line 21, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-gray.active, #cividocuments .btn-gray.active {
   background-color: #767e8f;
   color: #fff;
 }
-/* line 21, ../sass/civihr/partials/_buttons.scss */
+/* line 25, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-gray.active:hover, #cividocuments .btn-gray.active:hover, #civitasks .btn-gray.active:focus, #cividocuments .btn-gray.active:focus, #civitasks .btn-gray.active.btn-focus, #cividocuments .btn-gray.active.btn-focus {
   background-color: #5e6574;
   color: #fff;
 }
-/* line 30, ../sass/civihr/partials/_buttons.scss */
+/* line 34, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-collapse, #cividocuments .btn-collapse {
   background: none;
   border: 0 none;
@@ -11525,23 +11529,23 @@ fieldset[disabled]
   text-transform: none;
   vertical-align: baseline;
 }
-/* line 40, ../sass/civihr/partials/_buttons.scss */
+/* line 44, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-collapse:hover, #cividocuments .btn-collapse:hover {
   color: #373e4b;
 }
-/* line 44, ../sass/civihr/partials/_buttons.scss */
+/* line 48, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-collapse:active, #cividocuments .btn-collapse:active {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-/* line 48, ../sass/civihr/partials/_buttons.scss */
+/* line 52, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-collapse .fa, #cividocuments .btn-collapse .fa {
   margin-right: 3px;
   font-size: 9px;
   position: relative;
   top: -1px;
 }
-/* line 56, ../sass/civihr/partials/_buttons.scss */
+/* line 60, ../sass/civihr/partials/_buttons.scss */
 #civitasks .ct-context-menu-toggle, #cividocuments .ct-context-menu-toggle {
   color: #586277;
   padding: 0px 10px;
@@ -11549,11 +11553,11 @@ fieldset[disabled]
   display: inline-block;
   font-size: 14px;
 }
-/* line 63, ../sass/civihr/partials/_buttons.scss */
+/* line 67, ../sass/civihr/partials/_buttons.scss */
 #civitasks .ct-context-menu-toggle:hover, #cividocuments .ct-context-menu-toggle:hover {
   color: #42b0cb;
 }
-/* line 69, ../sass/civihr/partials/_buttons.scss */
+/* line 73, ../sass/civihr/partials/_buttons.scss */
 #civitasks .btn-group.open .ct-context-menu-toggle.dropdown-toggle, #cividocuments .btn-group.open .ct-context-menu-toggle.dropdown-toggle {
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -11780,6 +11784,19 @@ fieldset[disabled]
 #cividocuments .ui-select-match-text {
   font-weight: normal;
   text-transform: none;
+}
+/* line 119, ../sass/civihr/partials/_forms.scss */
+#civitasks .ui-select-match-text, #cividocuments .ui-select-match-text {
+  color: #586277;
+}
+/* line 123, ../sass/civihr/partials/_forms.scss */
+#civitasks .ui-select-toggle[disabled], #cividocuments .ui-select-toggle[disabled] {
+  background-color: #f4f7f8;
+  opacity: 1;
+}
+/* line 127, ../sass/civihr/partials/_forms.scss */
+#civitasks .ui-select-toggle[disabled]:hover, #cividocuments .ui-select-toggle[disabled]:hover, #civitasks .ui-select-toggle[disabled]:focus, #cividocuments .ui-select-toggle[disabled]:focus, #civitasks .ui-select-toggle[disabled]:active, #cividocuments .ui-select-toggle[disabled]:active {
+  background-color: #f4f7f8;
 }
 /* line 1, ../sass/civihr/partials/_iframe.scss */
 #civitasks .ct-iframe, #cividocuments .ct-iframe {
