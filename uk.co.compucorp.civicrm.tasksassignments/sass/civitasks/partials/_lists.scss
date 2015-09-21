@@ -59,7 +59,7 @@
 
   header {
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
 
     .editable-ui-select {
       margin-bottom: -3px;
@@ -141,7 +141,6 @@
   }
 
   .#{$prefix}task-subject {
-    font-size: 12px;
     margin-bottom: 14px;
 
     time {
@@ -152,10 +151,10 @@
     .editable-text,
     .editable-bsdate {
       margin: {
-        bottom: -5px;
+        bottom: -6px;
         top: -3px;
       };
-      top: -1px;
+      top: -2px;
     }
 
     .editable-small {
@@ -207,7 +206,7 @@
   time {
     display: block;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     padding: 3px 0 2px;
 
     span {
