@@ -5,7 +5,20 @@ angular.module('xeditable-civi').config(['$provide', function($provide){
 
             var dirObj = $delegate(overwrites);
             dirObj.compile = function(tEl){
+                var ngHrefAttr = tEl[0].attributes.getNamedItem('ng-href'), linkEl;
+
                 tEl.append('<i class="fa fa-pencil" />');
+
+                if (ngHrefAttr) {
+                    linkEl = angular.element('<a />');
+                    linkEl.text('Follow link');
+                    linkEl.attr(ngHrefAttr.nodeName, ngHrefAttr.value);
+                    linkEl.attr('ng-click', '$event.stopPropagation();');
+                    linkEl.addClass('editable-link');
+                    tEl.append(linkEl);
+                    tEl.addClass('editable-with-link');
+                }
+
                 return {
                     post: dirObj.link
                 }
@@ -18,7 +31,7 @@ angular.module('xeditable-civi').config(['$provide', function($provide){
 
 angular.module('xeditable').directive('editableUiSelect', [
     'editableDirectiveFactory','$timeout',
-    function(editableDirectiveFactory, $timeout) {
+    function(editableDirectiveFactory) {
         var linkOrg, dir;
 
         function rename(tag, el) {

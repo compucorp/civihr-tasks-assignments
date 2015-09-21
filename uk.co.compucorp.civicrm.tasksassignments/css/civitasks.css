@@ -13847,6 +13847,36 @@ fieldset[disabled]
   position: relative;
 }
 /* line 7, ../sass/civitasks/partials/_editable.scss */
+#civitasks .editable.editable-with-link, #cividocuments .editable.editable-with-link {
+  -webkit-transition: color ease-in-out 0.25s;
+  -o-transition: color ease-in-out 0.25s;
+  transition: color ease-in-out 0.25s;
+  color: #42b0cb;
+}
+/* line 11, ../sass/civitasks/partials/_editable.scss */
+#civitasks .editable.editable-with-link .editable-link, #cividocuments .editable.editable-with-link .editable-link {
+  -webkit-transition: all ease-in-out 0.15s;
+  -o-transition: all ease-in-out 0.15s;
+  transition: all ease-in-out 0.15s;
+  background-color: #fff;
+  border: 1px solid #727e8a;
+  color: #586277;
+  font-weight: normal;
+  height: 100%;
+  display: block;
+  right: 19px;
+  font-size: 11px;
+  position: absolute;
+  z-index: 999;
+  opacity: 0;
+  padding: 6px 9px;
+  bottom: 0;
+}
+/* line 27, ../sass/civitasks/partials/_editable.scss */
+#civitasks .editable.editable-with-link .editable-link:hover, #cividocuments .editable.editable-with-link .editable-link:hover {
+  text-decoration: underline;
+}
+/* line 33, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable .fa-pencil, #cividocuments .editable .fa-pencil {
   -webkit-transition: opacity ease-in-out 0.15s;
   -o-transition: opacity ease-in-out 0.15s;
@@ -13862,40 +13892,45 @@ fieldset[disabled]
   border-left: 1px solid #727e8a;
   opacity: 0;
 }
-/* line 21, ../sass/civitasks/partials/_editable.scss */
+/* line 47, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable:hover, #cividocuments .editable:hover {
   background-color: #fff;
   border-color: #727e8a;
 }
-/* line 24, ../sass/civitasks/partials/_editable.scss */
-#civitasks .editable:hover .fa-pencil, #cividocuments .editable:hover .fa-pencil {
+/* line 51, ../sass/civitasks/partials/_editable.scss */
+#civitasks .editable:hover .fa-pencil, #cividocuments .editable:hover .fa-pencil, #civitasks .editable:hover.editable-with-link .editable-link, #cividocuments .editable:hover.editable-with-link .editable-link {
   opacity: 1;
 }
-/* line 31, ../sass/civitasks/partials/_editable.scss */
+/* line 56, ../sass/civitasks/partials/_editable.scss */
+#civitasks .editable:hover.editable-with-link .editable-link, #cividocuments .editable:hover.editable-with-link .editable-link {
+  bottom: -27px;
+  height: auto;
+}
+/* line 64, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-empty, #cividocuments .editable-empty {
   width: 100px;
 }
-/* line 34, ../sass/civitasks/partials/_editable.scss */
+/* line 67, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-empty:before, #cividocuments .editable-empty:before {
   content: "\f";
   line-height: inherit;
 }
-/* line 41, ../sass/civitasks/partials/_editable.scss */
+/* line 74, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-bsdate input[type="text"], #cividocuments .editable-bsdate input[type="text"] {
   max-width: 80px;
 }
-/* line 46, ../sass/civitasks/partials/_editable.scss */
+/* line 79, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap, #cividocuments .editable-wrap {
   position: relative;
 }
-/* line 49, ../sass/civitasks/partials/_editable.scss */
+/* line 82, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap .editable-buttons, #cividocuments .editable-wrap .editable-buttons {
   right: 0;
   position: absolute;
   bottom: -24px;
   z-index: 999;
 }
-/* line 55, ../sass/civitasks/partials/_editable.scss */
+/* line 88, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap .editable-buttons .btn, #cividocuments .editable-wrap .editable-buttons .btn {
   background-color: #f4f7f8;
   border-color: #727e8a;
@@ -13905,58 +13940,58 @@ fieldset[disabled]
   padding: 4px 6px;
   height: 25px;
 }
-/* line 64, ../sass/civitasks/partials/_editable.scss */
+/* line 97, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap .editable-buttons .btn:active, #cividocuments .editable-wrap .editable-buttons .btn:active, #civitasks .editable-wrap .editable-buttons .btn:focus, #cividocuments .editable-wrap .editable-buttons .btn:focus {
   background-color: #f4f7f8;
   outline: none;
 }
-/* line 71, ../sass/civitasks/partials/_editable.scss */
+/* line 104, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap .editable-buttons .glyphicon-ok, #cividocuments .editable-wrap .editable-buttons .glyphicon-ok {
   color: #42b0cb;
 }
-/* line 75, ../sass/civitasks/partials/_editable.scss */
+/* line 108, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap .editable-buttons .glyphicon-remove, #cividocuments .editable-wrap .editable-buttons .glyphicon-remove {
   color: #db6c86;
 }
-/* line 80, ../sass/civitasks/partials/_editable.scss */
+/* line 113, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap.editable-ta, #cividocuments .editable-wrap.editable-ta {
   display: block;
   white-space: normal;
 }
-/* line 84, ../sass/civitasks/partials/_editable.scss */
+/* line 117, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap.editable-ta .editable-input, #cividocuments .editable-wrap.editable-ta .editable-input {
   display: block;
 }
-/* line 90, ../sass/civitasks/partials/_editable.scss */
+/* line 123, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-wrap .form-control:focus, #cividocuments .editable-wrap .form-control:focus {
   -webkit-box-shadow: none;
   box-shadow: none;
   border-color: #727e8a;
 }
-/* line 97, ../sass/civitasks/partials/_editable.scss */
+/* line 130, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-small + .editable-wrap input, #cividocuments .editable-small + .editable-wrap input,
 #civitasks .editable-small + .editable-wrap select,
 #cividocuments .editable-small + .editable-wrap select {
   height: 25px;
   padding: 3px;
 }
-/* line 103, ../sass/civitasks/partials/_editable.scss */
+/* line 136, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-small + .editable-wrap .input-group-btn .btn, #cividocuments .editable-small + .editable-wrap .input-group-btn .btn {
   font-size: 12px;
   height: 25px;
   padding: 3px;
   width: 25px;
 }
-/* line 111, ../sass/civitasks/partials/_editable.scss */
+/* line 144, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-click, #cividocuments .editable-click {
   color: inherit;
   display: inline-block;
 }
-/* line 115, ../sass/civitasks/partials/_editable.scss */
+/* line 148, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-click:hover, #cividocuments .editable-click:hover {
   color: inherit;
 }
-/* line 120, ../sass/civitasks/partials/_editable.scss */
+/* line 153, ../sass/civitasks/partials/_editable.scss */
 #civitasks .editable-error, #cividocuments .editable-error {
   display: none;
 }

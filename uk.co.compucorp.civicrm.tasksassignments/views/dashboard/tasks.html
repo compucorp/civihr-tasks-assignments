@@ -180,10 +180,10 @@
                    class="{{prefix}}task-checkbox"
                    name="task">
             <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>:
-            <!--<a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}" class="{{prefix}}task-contact-target" ng-bind="cache.contact.obj[task.target_contact_id[0]].sort_name"></a>-->
             <span
                     editable-ui-select="task.target_contact_id[0]"
                     e-required="true"
+                    ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
                     onbeforesave="updateTask(task, { target_contact_id: [select.$data] });"
                     onshow="updateContacts(cache.contact.arrSearch);"
                     on-select="cacheContact($item);">
@@ -207,10 +207,10 @@
                     <li ng-if="permissions.allowDelete"><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
                 </ul>
             </div>
-            <!-- Assigned to: <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}" class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a> -->
             Assigned to: <span
                     editable-ui-select="task.assignee_contact_id[0]"
                     e-required="true"
+                    ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                     onshow="updateContacts(cache.contact.arrSearch);"
                     onbeforesave="updateTask(task, { assignee_contact_id: [select.$data] });"
                     on-select="cacheContact($item);">
