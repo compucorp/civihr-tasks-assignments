@@ -1,74 +1,72 @@
 <div class="{{prefix}}page-contact" ct-civi-events>
-    <form name="formTasks">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-lg-8">
-                        <button class="btn btn-default btn-primary" ng-click="modalTask()">
-                            <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
-                        </button>
-                        &nbsp;
-                        <button class="btn btn-default btn-primary"
-                                ng-click="modalAssignment()"
-                                ng-if="settings.extEnabled.assignments">
-                            <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
-                            {{settings.copy.button.assignmentAdd || 'Add Assignment'}}
-                        </button>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-lg-4" ng-if="settings.extEnabled.assignments">
-                        <ui-select
-                                multiple
-                                ng-model="filterParams.assignmentType">
-                            <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
-                            <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
-                                <div ng-bind-html="type.title | highlight: $select.search"></div>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-lg-8">
+                    <button class="btn btn-default btn-primary" ng-click="modalTask()">
+                        <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-default btn-primary"
+                            ng-click="modalAssignment()"
+                            ng-if="settings.extEnabled.assignments">
+                        <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
+                        {{settings.copy.button.assignmentAdd || 'Add Assignment'}}
+                    </button>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4" ng-if="settings.extEnabled.assignments">
+                    <ui-select
+                            multiple
+                            ng-model="filterParams.assignmentType">
+                        <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                        <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                            <div ng-bind-html="type.title | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
             </div>
         </div>
-        <h4 class="header-bar header-bar-primary" ng-show="taskListOngoing.length">Ongoing:</h4>
+    </div>
+    <h4 class="header-bar header-bar-primary" ng-show="taskListOngoing.length">Ongoing:</h4>
+    <ul class="{{prefix}}list-task">
+        <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterBy.status:cache.taskStatusResolve:false)"
+            ng-controller="TaskCtrl"
+            ng-class="{
+                '{{prefix}}task-completed': task.completed,
+                '{{prefix}}task-due': task.due
+            }"
+            ng-include
+            src="'task.html'"
+            ct-spinner
+            ct-spinner-id="task{{task.id}}">
+        </li>
+    </ul>
+    <h4 class="header-bar header-bar-danger">Resolved:
+        <a href class="pull-right" ng-click="loadTasksResolved(); isCollapsed.taskListResolved = !isCollapsed.taskListResolved">
+            <i ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.taskListResolved, 'fa-chevron-up': isCollapsed.taskListResolved }"></i>
+        </a>
+    </h4>
+    <div collapse="isCollapsed.taskListResolved">
+        <div class="well {{prefix}}spinner-container" ng-show="!taskListResolvedLoaded">
+            Loading resolved tasks...
+            <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
+        </div>
+        <div class="alert alert-danger" ng-show="taskListResolvedLoaded && !taskListResolved.length">No results found.</div>
         <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterBy.status:cache.taskStatusResolve:false)"
+            <li ng-repeat="task in taskListResolved = (taskListFiltered | filterBy.status:cache.taskStatusResolve:true)"
                 ng-controller="TaskCtrl"
-                ng-class="{
-                    '{{prefix}}task-completed': task.completed,
-                    '{{prefix}}task-due': task.due
-                }"
+                ng-class="'{{prefix}}task-resolved'"
                 ng-include
                 src="'task.html'"
-                ct-spinner
-                ct-spinner-id="task{{task.id}}">
+                ct-spinner>
             </li>
         </ul>
-        <h4 class="header-bar header-bar-danger">Resolved:
-            <a href class="pull-right" ng-click="loadTasksResolved(); isCollapsed.taskListResolved = !isCollapsed.taskListResolved">
-                <i ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.taskListResolved, 'fa-chevron-up': isCollapsed.taskListResolved }"></i>
-            </a>
-        </h4>
-        <div collapse="isCollapsed.taskListResolved">
-            <div class="well {{prefix}}spinner-container" ng-show="!taskListResolvedLoaded">
-                Loading resolved tasks...
-                <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
-            </div>
-            <div class="alert alert-danger" ng-show="taskListResolvedLoaded && !taskListResolved.length">No results found.</div>
-            <ul class="{{prefix}}list-task">
-                <li ng-repeat="task in taskListResolved = (taskListFiltered | filterBy.status:cache.taskStatusResolve:true)"
-                    ng-controller="TaskCtrl"
-                    ng-class="'{{prefix}}task-resolved'"
-                    ng-include
-                    src="'task.html'"
-                    ct-spinner>
-                </li>
-            </ul>
-        </div>
-    </form>
+    </div>
 </div>
 
 <script type="text/ng-template" id="task.html">
     <header class="row">
-        <div class="col-xs-7">
+        <div class="col-xs-6">
             <input type="checkbox"
                    ng-change="changeStatus(task, 2)"
                    ng-disabled="task.completed"
@@ -77,7 +75,7 @@
                    name="task">
             <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
         </div>
-        <div class="col-xs-5">
+        <div class="col-xs-6">
             <div class="dropdown" dropdown>
                 <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
                 <ul class="dropdown-menu pull-right">
@@ -86,15 +84,51 @@
                     <li ng-if="permissions.allowDelete"><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
                 </ul>
             </div>
-            Assigned to: <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}" class="{{prefix}}task-contact-assignee" ng-bind="cache.contact.obj[task.assignee_contact_id[0]].sort_name"></a>
+            Assigned to: <span
+                editable-ui-select="task.assignee_contact_id[0]"
+                e-required="true"
+                ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
+                onshow="updateContacts(cache.contact.arrSearch);"
+                onbeforesave="updateTask(task, { assignee_contact_id: [select.$data] });"
+                on-select="cacheContact($item);">
+                <editable-ui-select-match
+                        placeholder="Start typing a name or email...">{{$select.selected.label}}</editable-ui-select-match>
+                <editable-ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                                             refresh="refreshContacts($select.search)"
+                                             refresh-delay="0">
+                    <div ng-bind="contact.label"></div>
+                    <small ng-bind="contact.description[0]"></small>
+                </editable-ui-select-choices>
+                {{cache.contact.obj[task.assignee_contact_id[0]].sort_name}}
+            </span>
         </div>
     </header>
     <div class="row">
-        <div class="col-xs-7">
-            <p class="{{prefix}}task-subject">Due: <time ng-bind="task.activity_date_time | date: 'MMM d'"></time> <span ng-if="!!task.subject">Subject: {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}</span></p>
+        <div class="col-xs-6">
+            <p class="{{prefix}}task-subject">Due: <time editable-bsdate="task.activity_date_time"
+                                                         onbeforesave="updateTask(task, { activity_date_time: $data });"
+                                                         class="editable-small"
+                                                         e-ng-click="dpOpen($event)"
+                                                         e-is-open="picker.opened"
+                                                         e-datepicker-popup>{{task.activity_date_time | date: 'MMM d'}}</time><!--<time ng-bind="task.activity_date_time | date: 'MMM d'"></time>--> <span ng-if="!!task.subject">Subject: </span><span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">{{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}</span></p>
         </div>
-        <div class="col-xs-5">
-            <span class="{{prefix}}assignment-type" ng-bind="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title"></span>
+        <div class="col-xs-6">
+            <span class="{{prefix}}assignment-type">
+                <span
+                        editable-ui-select="task.case_id"
+                        onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"
+                        onbeforesave="updateTask(task, { case_id: select.$data });"
+                        on-select="cacheAssignment($item);">
+                    <editable-ui-select-match
+                            placeholder="Enter search term...">{{$select.selected.label}}</editable-ui-select-match>
+                    <editable-ui-select-choices  repeat="assignment.id as assignment in assignments | filter: $select.search"
+                                                 refresh="refreshAssignments($select.search, task.target_contact_id[0], task.case_id)"
+                                                 refresh-delay="0">
+                        <div ng-bind="assignment.label"></div>
+                    </editable-ui-select-choices>
+                    {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
+                </span>
+            </span>
         </div>
     </div>
     <div class="row">
@@ -102,11 +136,12 @@
             <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
                     class="fa"
                     ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
-                    aria-hidden="true"></span> Show more</a>
+                    aria-hidden="true"></span> Show More</a>
             <article class="row" collapse="isCollapsed">
                 <div class="col-xs-12">
                     <div class="{{prefix}}task-more">
-                        <div class="{{prefix}}task-details" ta-bind ng-if="!!task.details" ng-model="task.details"></div>
+                        <div editable-ta="task.details"
+                             onbeforesave="updateTask(task, { details: ta.$data });"><div ta-bind ng-model="task.details"></div></div>
                         <p class="{{prefix}}task-contact-source">Created by:&nbsp; <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}"><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span></a></p>
                     </div>
                 </div>

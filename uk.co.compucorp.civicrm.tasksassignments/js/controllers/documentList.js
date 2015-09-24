@@ -86,7 +86,12 @@ define(['controllers/controllers',
             $scope.documentListPaginated = [];
             $scope.documentListResolved = [];
             $scope.documentListResolvedLoaded = false;
-            $scope.actionApplyTo = 'selected';
+            $scope.action = {
+                selected: null,
+                applyTo: 'selected'
+            };
+            $scope.actionList = [{type:'delete',label:'Delete'}];
+
 
             $scope.checklist = {
                 selected: {},

@@ -161,12 +161,17 @@
                                 <label class="col-xs-12 col-sm-2 control-label">Action:</label>
                                 <div class="col-xs-12 col-sm-10">
                                     <div class="input-group">
-                                        <select class="form-control" ng-model="action">
-                                            <option value="">Select action</option>
-                                            <option value="delete" ng-disabled="!permissions.allowDelete">Delete</option>
-                                        </select>
+                                        <ui-select
+                                                ng-model="action.selected">
+                                            <ui-select-match
+                                                    placeholder="Select action">{{$select.selected.label}}</ui-select-match>
+                                            <ui-select-choices
+                                                    repeat="actionObj.type as actionObj in actionList">
+                                                <div ng-bind="actionObj.label"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
                                         <span class="input-group-btn">
-                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentListOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
+                                          <a ng-click="apply(action.selected, (action.applyTo == 'all' ? documentListOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
                                               Apply
                                           </a>
                                         </span>
@@ -176,10 +181,10 @@
                         </div>
                         <div class="col-xs-5 col-xs-offset-1">
                             <label class="radio-inline">
-                                <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentListFiltered.length}} Docs
+                                <input type="radio" ng-model="action.applyTo" value="all"> All {{documentListFiltered.length}} Docs
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
+                                <input type="radio" ng-model="action.applyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
                             </label>
                         </div>
                     </div>

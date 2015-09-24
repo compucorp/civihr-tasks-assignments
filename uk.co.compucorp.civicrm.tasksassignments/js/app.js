@@ -207,7 +207,7 @@ define([
                     state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html?v=6',
+                        templateUrl: config.path.TPL+'dashboard/documents.html?v=8',
                         resolve: {
                             documentList: ['$q', 'DocumentService', function($q, DocumentService){
                                 var deferred = $q.defer();
@@ -362,7 +362,7 @@ define([
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=4'
+                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=5'
                             }
                         }
                     }).
@@ -455,7 +455,7 @@ define([
                 $routeProvider.
                     when('/', {
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v=123',
+                        templateUrl: config.path.TPL+'contact/tasks.html?v=222',
                         resolve: {
                             taskList: ['TaskService',function(TaskService){
                                 return TaskService.get({
