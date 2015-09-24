@@ -117,6 +117,13 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
   _tasksassignments_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
+function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions)
+{
+  if ($entity == 'document' || $entity == 'task' || $entity == 'assignment') {
+    $params['check_permissions'] = false;
+  }
+}
+
 /**
  * Implementation of hook_civicrm_entityTypes
  */
