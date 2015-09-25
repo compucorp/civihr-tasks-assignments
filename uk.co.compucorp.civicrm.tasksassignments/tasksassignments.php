@@ -119,6 +119,8 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
 
 function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions)
 {
+    $permissions['contact']['get'] = array();
+    $permissions['contact']['getquick'] = array();
   if ($entity == 'document' || $entity == 'task' || $entity == 'assignment') {
     $params['check_permissions'] = false;
   }
