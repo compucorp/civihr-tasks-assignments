@@ -663,3 +663,55 @@ function civicrm_api3_task_senddailyreminder($params) {
     CRM_Tasksassignments_Reminder::sendDailyReminder();
     return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
 }
+
+function civicrm_api3_task_getcontactlist($params) {
+  $options = array();
+  $sortName = isset($params['sort_name']) ? $params['sort_name'] : '';
+  $params = array(
+    "contact_is_deleted" => 0,
+    "sort_name" => $sortName,
+    "options" => array(
+        "limit" => 0,
+        "offset" => 0,
+        "sort" => "sort_name",
+    ),
+    "sequential" => 1,
+    "return" => array("email", "sort_name", "contact_type"),
+    "check_permissions" => false,
+    "version" => 3,
+  );
+  
+  _civicrm_api3_task_get_supportanomalies($params, $options);
+  $contacts = _civicrm_api3_get_using_query_object('contact', $params, $options);
+  return civicrm_api3_create_success($contacts, $params, 'contact');
+}
+
+function _civicrm_api3_task_get_supportanomalies(&$params, &$options) {
+  if (isset($params['showAll'])) {
+    if (strtolower($params['showAll']) == "active") {
+      $params['contact_is_deleted'] = 0;
+    }
+    if (strtolower($params['showAll']) == "trash") {
+      $params['contact_is_deleted'] = 1;
+    }
+    if (strtolower($params['showAll']) == "all" && isset($params['contact_is_deleted'])) {
+      unset($params['contact_is_deleted']);
+    }
+  }
+  // support for group filters
+  if (array_key_exists('filter_group_id', $params)) {
+    $params['filter.group_id'] = $params['filter_group_id'];
+    unset($params['filter_group_id']);
+  }
+  // filter.group_id works both for 1,2,3 and array (1,2,3)
+  if (array_key_exists('filter.group_id', $params)) {
+    if (is_array($params['filter.group_id'])) {
+      $groups = $params['filter.group_id'];
+    }
+    else $groups = explode(',', $params['filter.group_id']);
+    unset($params['filter.group_id']);
+    $groups = array_flip($groups);
+    $groups[key($groups)] = 1;
+    $options['input_params']['group'] = $groups;
+  }
+}
