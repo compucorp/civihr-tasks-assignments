@@ -686,6 +686,11 @@ function civicrm_api3_task_getcontactlist($params) {
   return civicrm_api3_create_success($contacts, $params, 'contact');
 }
 
+function civicrm_api3_task_getcontact($params) {
+    $params['check_permissions'] = false;
+    return civicrm_api3('Contact', 'get', $params);
+}
+
 function _civicrm_api3_task_get_supportanomalies(&$params, &$options) {
   if (isset($params['showAll'])) {
     if (strtolower($params['showAll']) == "active") {
