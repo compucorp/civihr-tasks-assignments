@@ -1,9 +1,7 @@
 define(function(){
-    'use strict'
+    'use strict';
 
-    var values = angular.module('civitasks.settings',[]);
-
-    values.value('settings',{
+    angular.module('civitasks.settings',[]).value('settings',{
         tabEnabled: {
             documents: CRM.Tasksassignments.settings.documents_tab,
             keyDates: CRM.Tasksassignments.settings.keydates_tab
@@ -17,6 +15,4 @@ define(function(){
             }
         }
     });
-
-    return values;
 });

@@ -1,9 +1,7 @@
 define(function(){
-    'use strict'
+    'use strict';
 
-    var constants = angular.module('civitasks.config',[]);
-
-    constants.constant('config',{
+    angular.module('civitasks.config',[]).constant('config', {
         DEBUG: !!+CRM.debug,
         CLASS_NAME_PREFIX: 'ct-',
         CONTACT_ID: CRM.contactId ||null,
@@ -31,6 +29,4 @@ define(function(){
             }
         }
     });
-
-    return constants;
 });
