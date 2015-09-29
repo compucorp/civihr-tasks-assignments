@@ -67,7 +67,7 @@
                             <div class="btn-group btn-group-sm">
                                 <a
                                    ui-sref="tasks.my"
-                                   class="btn btn-gray active"
+                                   class="btn btn-gray active panel-filter__filter"
                                    ng-model="filterParams.userRole"
                                    btn-radio="{
                                     field: 'assignee_contact_id',
@@ -75,7 +75,7 @@
                                 }">My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})</a>
                                 <a
                                    ui-sref="tasks.delegated"
-                                   class="btn btn-gray"
+                                   class="btn btn-gray panel-filter__filter"
                                    ng-model="filterParams.userRole"
                                    btn-radio="{
                                     field: 'assignee_contact_id',
@@ -83,7 +83,7 @@
                                 }">Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id':false).length}})</a>
                                 <a
                                    ui-sref="tasks.all"
-                                   class="btn btn-gray"
+                                   class="btn btn-gray panel-filter__filter"
                                    ng-model="filterParams.userRole"
                                    btn-radio="{
                                     field: null,

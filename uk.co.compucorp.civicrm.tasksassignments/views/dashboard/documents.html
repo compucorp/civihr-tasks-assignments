@@ -79,21 +79,21 @@
                     <div class="col-xs-12 col-sm-6 text-center">
                         <div class="btn-group btn-group-sm">
                             <a ui-sref="documents.my"
-                               class="btn btn-gray active"
+                               class="btn btn-gray active panel-filter__filter"
                                ng-model="filterParams.userRole"
                                btn-radio="{
                                    field: 'assignee_contact_id',
                                    isEqual: true
                                }">My Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id').length}})</a>
                             <a ui-sref="documents.delegated"
-                               class="btn btn-gray"
+                               class="btn btn-gray panel-filter__filter"
                                ng-model="filterParams.userRole"
                                btn-radio="{
                                    field: 'assignee_contact_id',
                                    isEqual: false
                                }">Delegated Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id':false).length}})</a>
                             <a ui-sref="documents.all"
-                               class="btn btn-gray"
+                               class="btn btn-gray panel-filter__filter"
                                ng-model="filterParams.userRole"
                                btn-radio="{
                                    field: null,
