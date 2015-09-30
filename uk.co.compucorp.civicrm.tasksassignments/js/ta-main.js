@@ -1,4 +1,4 @@
-var module, reqTa = require.config({
+require.config({
     context: 'tasksassignments',
     baseUrl: CRM.Tasksassignments.extensionPath+'js',
     urlArgs: "bust=" + (new Date()).getTime(),
@@ -10,7 +10,6 @@ var module, reqTa = require.config({
         angularXeditable: 'vendor/angular/xeditable',
         angularXeditableCivi: 'vendor/angular/xeditable-civi',
         moment: 'vendor/moment.min',
-        requireLib: CRM.vars.reqAngular.requireLib,
         textAngular: 'vendor/angular/textAngular.min',
         textAngularRangy: 'vendor/angular/textAngular-rangy.min',
         textAngularSanitize: 'vendor/angular/textAngular-sanitize.min'
@@ -28,6 +27,4 @@ var module, reqTa = require.config({
             noGlobal: true
         }
     }
-});
-
-reqTa(['app', 'requireLib']);
+})(['app']);
