@@ -1,0 +1,27 @@
+{
+  "name": "civihr-taskassignments",
+  "version": "1.0.0",
+  "description": "CiviHR \"Tasks and Assignments\" extension",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/compucorp/civihr-tasks-assignments.git"
+  },
+  "keywords": [
+    "civihr",
+    "tasks",
+    "assignments"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/compucorp/civihr-tasks-assignments/issues"
+  },
+  "homepage": "https://github.com/compucorp/civihr-tasks-assignments#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}

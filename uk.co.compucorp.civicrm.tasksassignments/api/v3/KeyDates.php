@@ -7,5 +7,5 @@ function civicrm_api3_key_dates_get($params) {
     
     $result = CRM_Tasksassignments_KeyDates::get($startDate, $endDate);
     
-    return civicrm_api3_create_success($result, $params, 'keydates', 'get');
+    return civicrm_api3_create_success($result, $params, 'KeyDates', 'get');
 }
