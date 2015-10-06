@@ -5,7 +5,7 @@ define(['controllers/controllers',
         'services/task',
         'services/assignment'], function(controllers, moment){
     controllers.controller('ModalAssignmentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
+          'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
         function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
                  ContactService, data, config, settings){
             $log.debug('Controller: ModalAssignmentCtrl');
@@ -33,6 +33,7 @@ define(['controllers/controllers',
             $scope.assignment.contact_id = config.CONTACT_ID;
             $scope.assignment.client_id = $scope.assignment.contact_id;
             $scope.assignment.subject = '';
+            $scope.assignment.dueDate = null;
 
             $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.dpOpened = {};
@@ -78,7 +79,7 @@ define(['controllers/controllers',
                 }).then(function(results){
                     $scope.contacts = results;
                 });
-            }
+            };
 
             $scope.cacheContact = function($item){
                 var obj = {};
@@ -106,12 +107,13 @@ define(['controllers/controllers',
 
                 $scope.activitySet = assignmentType.definition.activitySets[0];
                 $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
-                $scope.assignment.dueDate = $scope.assignment.dueDate || new Date().setHours(0, 0, 0, 0);
-            }
+
+                $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
+            };
 
             $scope.cancel = function(){
                 $modalInstance.dismiss('cancel');
-            }
+            };
 
             $scope.confirm = function(){
 
@@ -259,8 +261,8 @@ define(['controllers/controllers',
 
         }]);
 
-    controllers.controller('ModalAssignmentActivityCtrl',['$scope', '$timeout', '$log',
-        function($scope, $timeout, $log){
+    controllers.controller('ModalAssignmentActivityCtrl',['$scope', '$log',
+        function($scope, $log){
             $log.debug('Controller: ModalAssignmentTaskCtrl');
 
             $scope.isDisabled = !$scope.activity.activity_type_id && !$scope.activity.isAdded;
