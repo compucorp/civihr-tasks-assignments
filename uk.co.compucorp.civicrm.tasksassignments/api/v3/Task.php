@@ -667,6 +667,9 @@ function civicrm_api3_task_senddailyreminder($params) {
 function civicrm_api3_task_getcontactlist($params) {
   $options = array();
   $sortName = isset($params['sort_name']) ? $params['sort_name'] : '';
+  $relationshipName = isset($params['relationship_name']) ? $params['relationship_name'] : null;
+  $relatedContactId = isset($params['related_contact_id']) ? $params['related_contact_id'] : null;
+  $includeRelatedContact = isset($params['include_related_contact']) ? $params['include_related_contact'] : false;
   $params = array(
     "contact_is_deleted" => 0,
     "sort_name" => $sortName,
@@ -680,6 +683,33 @@ function civicrm_api3_task_getcontactlist($params) {
     "check_permissions" => false,
     "version" => 3,
   );
+  
+  if ($relationshipName && $relatedContactId) {
+    $relationshipTypeResult = civicrm_api3('RelationshipType', 'get', array(
+      'sequential' => 1,
+      'name_a_b' => $relationshipName,
+    ));
+    $relationshipType = CRM_Utils_Array::first($relationshipTypeResult['values']);
+    if ($relationshipType['id']) {
+      $relationshipResult = civicrm_api3('Relationship', 'get', array(
+        'sequential' => 1,
+        'relationship_type_id' => (int)$relationshipType['id'],
+        'contact_id_b' => $relatedContactId,
+        'return' => "contact_id_a",
+      ));
+      $relationshipContactIds = array();
+      foreach ($relationshipResult['values'] as $relationship) {
+        $relationshipContactIds[] = (int)$relationship['contact_id_a'];
+      }
+      if ($includeRelatedContact) {
+        $relationshipContactIds[] = $relatedContactId;
+      }
+      if (empty($relationshipContactIds)) {
+        return civicrm_api3_create_success(array(), $params, 'contact');
+      }
+      $params['id'] = array('IN' => $relationshipContactIds);
+    }
+  }
   
   _civicrm_api3_task_get_supportanomalies($params, $options);
   $contacts = _civicrm_api3_get_using_query_object('contact', $params, $options);
