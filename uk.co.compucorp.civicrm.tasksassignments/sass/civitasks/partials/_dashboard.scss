@@ -38,6 +38,10 @@
     margin-bottom: 15px;
   }
 
+  .panel-filter {
+    margin-bottom: 0;
+  }
+
   .#{$prefix}dashboard-tasks {
     .#{$prefix}list-task,
     .#{$prefix}list-task + .header-bar {
