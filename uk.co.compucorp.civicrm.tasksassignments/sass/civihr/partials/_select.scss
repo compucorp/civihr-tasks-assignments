@@ -11,6 +11,19 @@
     font-weight: normal;
   }
 
+  + .input-group-btn {
+    .btn {
+      margin-left: -1px;
+      @include border-left-radius(0);
+    }
+  }
+
+  .ui-select-match {
+    .btn:first-child {
+      @include border-radius($border-radius-base);
+    }
+  }
+
   .ui-select-toggle {
     padding-right: 30px;
   }
