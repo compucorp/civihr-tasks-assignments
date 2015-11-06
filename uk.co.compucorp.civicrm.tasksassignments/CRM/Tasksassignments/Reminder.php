@@ -318,16 +318,17 @@ class CRM_Tasksassignments_Reminder
             $keyDates = CRM_Tasksassignments_KeyDates::get($today, $to, $contactId);
             foreach ($keyDates as $keyDate)
             {
+                if ($keyDate['keydate'] == $today)
+                {
+                    $todayKeydatesCount++;
+                }
+                $keyDate['keydate'] = date("M d", strtotime($keyDate['keydate']));
                 $reminderData['upcoming_keydates'][] = array_merge(
                     $keyDate,
                     array(
                         'label' => $keyDateLabels[$keyDate['type']],
                     )
                 );
-                if ($keyDate['keydate'] == $today)
-                {
-                    $todayKeydatesCount++;
-                }
             }
         }
         $reminderData['today_keydates_count'] = $todayKeydatesCount;
