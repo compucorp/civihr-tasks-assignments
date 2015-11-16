@@ -286,15 +286,15 @@
                     Subject:
                 </span>
                 <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })"
-                      class="editable-small">
-                    {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
+                      class="editable-small"
+                      e-placeholder="Subject...">
+                    {{ (task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '') }}
                 </span>
             </p>
         </div>
         <div class="col-xs-6">
             Assigned to:
-            <span
-                    editable-ui-select="task.assignee_contact_id[0]"
+            <span   editable-ui-select="task.assignee_contact_id[0]"
                     e-required="true"
                     ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                     onshow="updateContacts(cache.contact.arrSearch);"
