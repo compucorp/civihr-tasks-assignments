@@ -11,6 +11,7 @@ define([
     'controllers/dateList',
     'controllers/documentList',
     'controllers/document',
+    'controllers/assignments',
     'controllers/main',
     'controllers/taskList',
     'controllers/task',

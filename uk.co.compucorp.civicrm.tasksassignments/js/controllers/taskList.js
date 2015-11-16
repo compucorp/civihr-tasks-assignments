@@ -30,8 +30,8 @@ define(['controllers/controllers',
                 }
 
                 $rootScope.$broadcast('ct-spinner-hide');
-                $log.debug($rootScope.cache);
-            }
+                $log.info($rootScope.cache);
+            };
 
             this.assignmentIds = [];
             this.contactIds = [];
@@ -68,7 +68,7 @@ define(['controllers/controllers',
                     collectCId(task);
                     collectAId(task);
                 });
-            }
+            };
 
             $scope.assignments = [];
             $scope.contacts = [];
@@ -84,7 +84,7 @@ define(['controllers/controllers',
 
             $scope.dpOpened = {
                 filterDates: {}
-            }
+            };
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
@@ -111,7 +111,7 @@ define(['controllers/controllers',
                     from: new Date().setHours(0, 0, 0, 0),
                     until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
                 }
-            }
+            };
 
             $scope.label = {
                 overdue: 'Overdue',
