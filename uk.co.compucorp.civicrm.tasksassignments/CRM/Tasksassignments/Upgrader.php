@@ -21,6 +21,21 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     ));
     }
     
+  public function enable() {
+    $this->setComponentStatuses(array(
+      'CiviTask' => true,
+      'CiviDocument' => true,
+    ));
+    return TRUE;
+  }
+  
+  public function disable() {
+    $this->setComponentStatuses(array(
+      'CiviTask' => false,
+      'CiviDocument' => false,
+    ));
+  }
+    
   /**
    * Set components as enabled or disabled. Leave any other
    * components unmodified.
