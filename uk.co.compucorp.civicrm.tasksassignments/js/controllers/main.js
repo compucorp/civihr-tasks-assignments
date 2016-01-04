@@ -1,99 +1,99 @@
 define(['controllers/controllers',
-        'services/file'], function(controllers){
-    controllers.controller('MainCtrl',['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService',
-         'config',
-        function($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config){
+    'services/file'], function (controllers) {
+    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService',
+        'config',
+        function ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config) {
             $log.debug('Controller: MainCtrl');
 
-            $rootScope.modalDocument = function(data, e) {
+            $rootScope.modalDocument = function (data, e) {
                 e && e.preventDefault();
 
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/document.html?v=3',
+                        templateUrl: config.path.TPL + 'modal/document.html?v=3',
                         controller: 'ModalDocumentCtrl',
                         resolve: {
-                            data: function(){
+                            data: function () {
                                 return data;
                             },
-                            files: function(){
+                            files: function () {
 
                                 if (!data.id || !+data.file_count) {
                                     return [];
                                 }
 
-                                return FileService.get(data.id,'civicrm_activity')
+                                return FileService.get(data.id, 'civicrm_activity')
                             }
                         }
                     });
 
-                modalInstance.result.then(function(results){
+                modalInstance.result.then(function (results) {
                     $scope.$broadcast('documentFormSuccess', results, data);
-                }, function(){
+                }, function () {
                     $log.info('Modal dismissed');
                 });
             };
 
-            $rootScope.modalTask = function(data) {
+            $rootScope.modalTask = function (data) {
                 var data = data || {},
                     modalInstance = $modal.open({
                         targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/task.html?v=5',
+                        templateUrl: config.path.TPL + 'modal/task.html?v=5',
                         controller: 'ModalTaskCtrl',
                         resolve: {
-                            data: function(){
+                            data: function () {
                                 return data;
                             }
                         }
                     });
 
-                modalInstance.result.then(function(results){
+                modalInstance.result.then(function (results) {
                     $scope.$broadcast('taskFormSuccess', results, data);
-                }, function(){
+                }, function () {
                     $log.info('Modal dismissed');
                 });
 
             };
 
-            $rootScope.modalAssignment = function(data) {
-                var data = data || {},
-                    modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL+'modal/assignment.html?v=3',
-                        controller: 'ModalAssignmentCtrl',
-                        size: 'lg',
-                        resolve: {
-                            data: function(){
-                                return data;
-                            }
+            $rootScope.modalAssignment = function (data) {
+                data = data || {};
+
+                var modalInstance = $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
+                    controller: 'ModalAssignmentCtrl',
+                    size: 'lg',
+                    resolve: {
+                        data: function () {
+                            return data;
                         }
-                    });
+                    }
+                });
 
-                modalInstance.result.then(function(results){
+                modalInstance.result.then(function (results) {
                     $scope.$broadcast('assignmentFormSuccess', results, data);
-                }, function(){
+                }, function () {
                     $log.info('Modal dismissed');
                 });
 
             };
 
-            $rootScope.modalReminder = function(data, type) {
+            $rootScope.modalReminder = function (data, type) {
 
-                if (!data || typeof data !== 'object' ||
-                    !type || typeof type !== 'string') {
+                if (!data || typeof data !== 'object' || !type || typeof type !== 'string') {
                     return null;
                 }
 
                 $modal.open({
                     targetDomEl: $rootElement.find('div').eq(0),
-                    templateUrl: config.path.TPL+'modal/reminder.html?v=1',
+                    templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
                     controller: 'ModalReminderCtrl',
                     resolve: {
-                        data: function(){
+                        data: function () {
                             return data;
                         },
-                        type: function(){
+                        type: function () {
                             return type
                         }
                     }
