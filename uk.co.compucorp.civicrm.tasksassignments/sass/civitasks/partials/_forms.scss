@@ -8,6 +8,58 @@
   }
 }
 
+.form-assignment{
+  h2 {
+    font-size: 16px;
+    line-height: 32px;
+    margin: 0;
+  }
+
+  hr {
+    margin: 0 -15px 10px -15px;
+  }
+
+  .row{
+    margin-bottom: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  /* Bootstrap override */
+  .input-group-addon{
+    background: transparent;
+    border: none;
+
+    a{
+      color: #333333;
+    }
+  }
+
+  .separately{
+    margin-bottom: 20px;
+  }
+
+  .no-wrap{
+    white-space: nowrap;
+  }
+
+  .civihr-table {
+    margin-top: 10px;
+    border: 1px solid #e8eef0;
+    background-color: #FDFEFE;
+
+    &.civihr-table--striped{
+      tbody, tfoot {
+        tr:nth-child(odd) {
+          background-color: #F4F7F8;
+        }
+      }
+    }
+  }
+}
+
 .form-task-migrate {
   label {
     text-transform: capitalize;
@@ -27,7 +79,8 @@
       bottom: 0;
       left: -5px;
       right: -5px;
-    };
+    }
+  ;
   }
 
   .form-horizontal .control-label {
