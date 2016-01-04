@@ -33,11 +33,11 @@
 
   .form-horizontal {
     .row,
-    .form-group{
+    .form-group {
       margin: {
         left: -$modal-inner-padding;
         right: -$modal-inner-padding;
-      };
+      }
     }
 
     .modal-body {
@@ -51,6 +51,15 @@
       left: $modal-inner-padding;
       right: $modal-inner-padding;
     }
+  }
+}
+
+.modal-inverted{
+  .modal-header, .modal-footer{
+    background-color: $brand-secondary;
+  }
+  .modal-body{
+    background: none;
   }
 }
 
