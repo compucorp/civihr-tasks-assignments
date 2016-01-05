@@ -1,9 +1,11 @@
-define(['controllers/controllers',
+define([
+    'controllers/controllers',
     'moment',
     'services/contact',
     'services/document',
     'services/task',
-    'services/assignment'], function (controllers, moment) {
+    'services/assignment'
+], function (controllers, moment) {
     controllers.controller('ModalAssignmentCtrl', ['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
         function ($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
@@ -214,6 +216,14 @@ define(['controllers/controllers',
 
             };
 
+            $scope.setAssignee = function setAssignee(list) {
+                angular.forEach(list, function (item) {
+                    if (item.create && item.assignee_contact_id.length === 0) {
+                        item.assignee_contact_id.push(config.LOGGED_IN_CONTACT_ID);
+                    }
+                });
+            };
+
             $scope.$watch('activitySet', function (activitySet) {
 
                 if (!activitySet.activityTypes) {
@@ -256,7 +266,8 @@ define(['controllers/controllers',
                 angular.copy(documentList, $scope.documentList);
             });
 
-        }]);
+        }
+    ]);
 
     controllers.controller('ModalAssignmentActivityCtrl', ['$scope', '$log',
         function ($scope, $log) {
@@ -282,5 +293,6 @@ define(['controllers/controllers',
                 $scope.activity.target_contact_id = [targetContactId];
             });
 
-        }]);
+        }
+    ]);
 });
