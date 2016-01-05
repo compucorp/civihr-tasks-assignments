@@ -8,7 +8,7 @@
   }
 }
 
-.form-assignment{
+.form-assignment {
   h2 {
     font-size: 16px;
     line-height: 32px;
@@ -19,44 +19,48 @@
     margin: 0 -15px 10px -15px;
   }
 
-  .row{
+  .row {
     margin-bottom: 10px;
   }
 
-  .form-group {
-    margin-bottom: 10px;
+  //TODO Move it to org.civicrm.bootstrapcivicrm
+  .modal-table {
+    margin-top: 10px;
+    border: 1px solid $table-border-color;
+    background-color: $table-striped-bg;
+
+    &.table-striped {
+      > tbody, tfoot {
+        > tr:nth-child(odd) {
+          background-color: $table-bg-accent;
+        }
+      }
+    }
+
+    th{
+      > .btn{
+        margin-top: -6px;
+        margin-bottom: -6px;
+      }
+    }
   }
 
   /* Bootstrap override */
-  .input-group-addon{
+  .input-group-addon {
     background: transparent;
     border: none;
 
-    a{
+    a {
       color: #333333;
     }
   }
 
-  .separately{
+  .separately {
     margin-bottom: 20px;
   }
 
-  .no-wrap{
+  .no-wrap {
     white-space: nowrap;
-  }
-
-  .civihr-table {
-    margin-top: 10px;
-    border: 1px solid #e8eef0;
-    background-color: #FDFEFE;
-
-    &.civihr-table--striped{
-      tbody, tfoot {
-        tr:nth-child(odd) {
-          background-color: #F4F7F8;
-        }
-      }
-    }
   }
 }
 
@@ -80,7 +84,6 @@
       left: -5px;
       right: -5px;
     }
-  ;
   }
 
   .form-horizontal .control-label {
