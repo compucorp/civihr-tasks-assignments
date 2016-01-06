@@ -54,11 +54,13 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
   public function buildQuickForm() {
     parent::buildQuickForm();
     
-    $componentSelectElement = $this->getElement('component_id');
     $newOptions = array();
-    $options = $componentSelectElement->_options;
-    foreach ($options as $value) {
-      $newOptions[$value['attr']['value']] = $value['text'];
+    if ($this->elementExists('component_id')) {
+        $componentSelectElement = $this->getElement('component_id');
+        $options = $componentSelectElement->_options;
+        foreach ($options as $value) {
+          $newOptions[$value['attr']['value']] = $value['text'];
+        }
     }
     
     $civiTaskId = CRM_Core_Component::getComponentID('CiviTask');
