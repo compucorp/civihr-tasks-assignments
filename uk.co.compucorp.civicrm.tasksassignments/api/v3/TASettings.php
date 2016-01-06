@@ -36,6 +36,14 @@ function civicrm_api3_t_a_settings_get($params) {
 function civicrm_api3_t_a_settings_set($params) {
     
     foreach ((array)$params['fields'] as $key => $value) {
+        if($key === 'is_task_dashboard_default') {
+            if($value == '1') {
+                CRM_Tasksassignments_DashboardSwitcher::switchToTasksAndAssignments();
+            } else {
+                CRM_Tasksassignments_DashboardSwitcher::switchToDefault();
+            }
+        }
+
         $setting = civicrm_api3('OptionValue', 'get', array(
             'option_group_id' => 'ta_settings',
             'name' => $key,
