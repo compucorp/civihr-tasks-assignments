@@ -50,7 +50,8 @@ define(['controllers/controllers',
                 SettingsService.set({
                     documents_tab: $scope.settings.tabEnabled.documents,
                     keydates_tab: $scope.settings.tabEnabled.keyDates,
-                    add_assignment_button_title: $scope.settings.copy.button.assignmentAdd
+                    add_assignment_button_title: $scope.settings.copy.button.assignmentAdd,
+                    is_task_dashboard_default: $scope.settings.isTaskDashboardDefault
                 }).then(function(results){
                     $scope.$broadcast('ct-spinner-hide');
                     $scope.settingsForm.$pristine = true;

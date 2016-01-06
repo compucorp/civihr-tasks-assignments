@@ -421,6 +421,26 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         
         return TRUE;
     }
+
+  public function upgrade_1015()
+  {
+    $setting = civicrm_api3('OptionValue', 'get', array(
+      'option_group_id' => 'ta_settings',
+      'name' => 'is_task_dashboard_default'
+    ));
+
+    if (empty($setting['id'])) {
+      $opValueParams = array(
+        'option_group_id' => 'ta_settings',
+        'name' => 'is_task_dashboard_default',
+        'label' => 'Is task dashboard the default page',
+        'value' => '1'
+      );
+      civicrm_api3('OptionValue', 'create', $opValueParams);
+    }
+
+    return TRUE;
+  }
     
     public function uninstall()
     {

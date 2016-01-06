@@ -8,6 +8,7 @@ function civicrm_api3_t_a_settings_get($params) {
         'add_assignment_button_title',
         'number_of_days',
         'auto_tasks_assigned_to',
+        'is_task_dashboard_default'
     );
     
     if (!empty($params['fields'])) {
