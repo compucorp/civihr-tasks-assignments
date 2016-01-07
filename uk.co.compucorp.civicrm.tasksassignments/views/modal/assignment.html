@@ -10,10 +10,10 @@
         <alert type="{{alert.type}}" close="alert.show = false;" ng-show="alert.show">{{alert.msg}}</alert>
         <section class="container">
             <div class="col-xs-12">
-                <div class="row separately" ng-if="showCId">
-                    <h2 class="col-xs-12 col-sm-2">Contact:</h2>
+                <div class="row separately">
+                    <h2 class="col-xs-12 col-sm-2 control-label">Contact:</h2>
 
-                    <div class="col-xs-12 col-sm-6">
+                    <div ng-if="showCId" class="col-xs-12 col-sm-6">
                         <ui-select allow-clear
                                    ng-model="assignment.contact_id"
                                    ng-change="assignment.client_id=assignment.contact_id"
@@ -29,6 +29,9 @@
                                 <small ng-bind="contact.description[0]"></small>
                             </ui-select-choices>
                         </ui-select>
+                    </div>
+                    <div ng-if="!showCId" class="col-xs-12 col-sm-6 display-only header">
+                        <span ng-bind="cache.contact.obj[assignment.contact_id].sort_name || 'No target contact'"></span>
                     </div>
                 </div>
 

@@ -13388,44 +13388,53 @@ fieldset[disabled]
   margin-bottom: 10px;
 }
 /* line 27, ../sass/civitasks/partials/_forms.scss */
+#civitasks .form-assignment .display-only.header, #cividocuments .form-assignment .display-only.header {
+  margin-top: 7px;
+  height: 32px;
+}
+/* line 31, ../sass/civitasks/partials/_forms.scss */
+#civitasks .form-assignment .display-only.header > span, #cividocuments .form-assignment .display-only.header > span {
+  line-height: 34px;
+}
+/* line 38, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .modal-table, #cividocuments .form-assignment .modal-table {
   margin-top: 10px;
   border: 1px solid #e8eef0;
   background-color: #fdfefe;
 }
-/* line 34, ../sass/civitasks/partials/_forms.scss */
+/* line 45, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #cividocuments .form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #civitasks .form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd), #cividocuments .form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd) {
   background-color: #fafbfb;
 }
-/* line 42, ../sass/civitasks/partials/_forms.scss */
+/* line 52, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .modal-table th > .btn, #cividocuments .form-assignment .modal-table th > .btn {
   margin-top: -6px;
   margin-bottom: -6px;
 }
-/* line 50, ../sass/civitasks/partials/_forms.scss */
+/* line 60, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .input-group-addon, #cividocuments .form-assignment .input-group-addon {
   background: transparent;
   border: none;
 }
-/* line 54, ../sass/civitasks/partials/_forms.scss */
+/* line 64, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .input-group-addon a, #cividocuments .form-assignment .input-group-addon a {
   color: #333333;
 }
-/* line 59, ../sass/civitasks/partials/_forms.scss */
+/* line 69, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .separately, #cividocuments .form-assignment .separately {
   margin-bottom: 20px;
 }
-/* line 63, ../sass/civitasks/partials/_forms.scss */
+/* line 73, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-assignment .no-wrap, #cividocuments .form-assignment .no-wrap {
   white-space: nowrap;
 }
-/* line 69, ../sass/civitasks/partials/_forms.scss */
+/* line 79, ../sass/civitasks/partials/_forms.scss */
 #civitasks .form-task-migrate label, #cividocuments .form-task-migrate label, #civitasks .form-task-migrate .checkbox-label, #cividocuments .form-task-migrate .checkbox-label,
 #civitasks .form-task-migrate .radio-label,
 #cividocuments .form-task-migrate .radio-label {
   text-transform: capitalize;
 }
-/* line 74, ../sass/civitasks/partials/_forms.scss */
+/* line 84, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action, #cividocuments .ct-form-action {
   margin-top: -12px;
   margin-bottom: -12px;
@@ -13433,7 +13442,7 @@ fieldset[disabled]
   width: 100%;
   float: left;
 }
-/* line 81, ../sass/civitasks/partials/_forms.scss */
+/* line 91, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action .row, #cividocuments .ct-form-action .row,
 #civitasks .ct-form-action .form-horizontal .form-group,
 #cividocuments .ct-form-action .form-horizontal .form-group {
@@ -13441,29 +13450,29 @@ fieldset[disabled]
   margin-left: -5px;
   margin-right: -5px;
 }
-/* line 90, ../sass/civitasks/partials/_forms.scss */
+/* line 100, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action .form-horizontal .control-label, #cividocuments .ct-form-action .form-horizontal .control-label {
   text-align: right;
 }
-/* line 94, ../sass/civitasks/partials/_forms.scss */
+/* line 104, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ct-form-action [class^="col-"], #cividocuments .ct-form-action [class^="col-"],
 #civitasks .ct-form-action [class*=" col-"],
 #cividocuments .ct-form-action [class*=" col-"] {
   padding-left: 5px;
   padding-right: 5px;
 }
-/* line 103, ../sass/civitasks/partials/_forms.scss */
+/* line 113, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ui-select-required, #cividocuments .ui-select-required {
   display: table;
   max-width: 100%;
   position: relative;
   width: 100%;
 }
-/* line 109, ../sass/civitasks/partials/_forms.scss */
+/* line 119, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ui-select-required .ui-select-container, #cividocuments .ui-select-required .ui-select-container {
   display: table-cell;
 }
-/* line 113, ../sass/civitasks/partials/_forms.scss */
+/* line 123, ../sass/civitasks/partials/_forms.scss */
 #civitasks .ui-select-required:after, #cividocuments .ui-select-required:after {
   content: "*";
   color: red;

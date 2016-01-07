@@ -23,6 +23,17 @@
     margin-bottom: 10px;
   }
 
+  .display-only{
+    &.header{
+      margin-top: 7px;
+      height: 32px;
+
+      > span{
+        line-height: 34px;
+      }
+    }
+  }
+
   //TODO Move it to org.civicrm.bootstrapcivicrm
   .modal-table {
     margin-top: 10px;
