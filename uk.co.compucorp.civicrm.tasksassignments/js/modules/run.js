@@ -64,8 +64,6 @@ define([
                         period_start_date: 'Contract Start Date',
                         period_end_date: 'Contract End Date',
                         birth_date: 'Birthday',
-                        initial_join_date: 'Initial Join Date',
-                        final_termination_date: 'Final Termination Date',
                         probation_end_date: 'Probation End Date'
                     },
                     arr: []
