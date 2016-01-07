@@ -3,7 +3,8 @@
       ct-spinner>
     <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span
-                class="sr-only">Close</span></button>
+                class="sr-only">Close</span>
+        </button>
         <h4 class="modal-title">Create New Assignment</h4>
     </div>
     <div class="modal-body">
@@ -49,8 +50,9 @@
                     </div>
 
 
-                    <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">Key
-                        Date:</label>
+                    <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
+                        Key Date:
+                    </label>
 
                     <div class="col-xs-12 col-sm-3">
                         <div class="input-group">
@@ -102,15 +104,15 @@
                                 <th class="title-column">Task Title</th>
                                 <th class="assignee-column">
                                     Assigned To
-                                        <span class="pull-right btn" ng-click="setAssignee(taskList)">
-                                            <i class="fa fa-files-o"></i>
-                                        </span>
+                                    <span class="pull-right btn" ng-click="setAssignee(taskList)">
+                                        <i class="fa fa-files-o"></i>
+                                    </span>
                                 </th>
                                 <th class="date-column">
                                     Due Date
-                                        <span class="pull-right btn">
-                                            <i class="fa fa-files-o"></i>
-                                        </span>
+                                    <span class="pull-right btn">
+                                        <i class="fa fa-files-o"></i>
+                                    </span>
                                 </th>
                             </tr>
                             </thead>
@@ -130,9 +132,8 @@
 
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
-                                        <ui-select
-                                                ng-model="activity.activity_type_id"
-                                                ng-required="true">
+                                        <ui-select ng-model="activity.activity_type_id"
+                                                   ng-required="true">
                                             <ui-select-match
                                                     placeholder="Select task type">{{$select.selected.value}}
                                             </ui-select-match>
@@ -150,8 +151,7 @@
                                                ng-disabled="isDisabled || !activity.create"
                                                ng-required="!isDisabled && activity.create"
                                                on-select="cacheContact($item)">
-                                        <ui-select-match
-                                                placeholder="Start typing a name or email...">
+                                        <ui-select-match placeholder="Start typing a name or email...">
                                             {{$select.selected.label}}
                                         </ui-select-match>
                                         <ui-select-choices
@@ -250,8 +250,8 @@
                                         <ui-select
                                                 ng-model="activity.activity_type_id"
                                                 ng-required="true">
-                                            <ui-select-match
-                                                    placeholder="Select document type">{{$select.selected.value}}
+                                            <ui-select-match placeholder="Select document type">
+                                                {{$select.selected.value}}
                                             </ui-select-match>
                                             <ui-select-choices
                                                     repeat="type.key as type in cache.documentType.arr | filter: $select.search">
@@ -267,8 +267,7 @@
                                                ng-disabled="isDisabled || !activity.create"
                                                ng-required="!isDisabled && activity.create"
                                                on-select="cacheContact($item)">
-                                        <ui-select-match
-                                                placeholder="Start typing a name or email...">
+                                        <ui-select-match placeholder="Start typing a name or email...">
                                             {{$select.selected.label}}
                                         </ui-select-match>
                                         <ui-select-choices
@@ -301,12 +300,10 @@
                                             </a>
                                         </span>
                                         <span class="input-group-btn" ng-if="activity.isAdded">
-                                            <a class="btn btn-default btn-danger"
-                                               ng-click="removeActivity(documentList, $index)">
+                                            <a class="btn btn-default btn-danger" ng-click="removeActivity(documentList, $index)">
                                                 <span class="fa fa-remove" aria-hidden="true"></span>
                                             </a>
                                         </span>
-
                                     </div>
                                 </td>
                             </tr>
