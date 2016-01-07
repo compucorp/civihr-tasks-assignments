@@ -23,12 +23,12 @@
     margin-bottom: 10px;
   }
 
-  .display-only{
-    &.header{
+  .display-only {
+    &.header {
       margin-top: 7px;
       height: 32px;
 
-      > span{
+      > span {
         line-height: 34px;
       }
     }
@@ -41,6 +41,29 @@
     background-color: $table-striped-bg;
 
     &.table-striped {
+      > thead {
+        > tr {
+          > th {
+            &.action-column {
+              width: 5%;
+            }
+
+            &.title-column {
+              width: 45%;
+            }
+
+            &.assignee-column {
+              width: 25%;
+            }
+            
+            &.date-column {
+              width: 25%;
+              min-width: 150px;
+            }
+          }
+        }
+      }
+
       > tbody, tfoot {
         > tr:nth-child(odd) {
           background-color: $table-bg-accent;
@@ -48,8 +71,8 @@
       }
     }
 
-    th{
-      > .btn{
+    th {
+      > .btn {
         margin-top: -6px;
         margin-bottom: -6px;
       }

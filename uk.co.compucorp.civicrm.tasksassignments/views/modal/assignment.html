@@ -98,15 +98,15 @@
                         <table class="table modal-table table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 5%;"></th>
-                                <th style="width: 45%;">Task Title</th>
-                                <th style="width: 25%;">
+                                <th class="action-column"></th>
+                                <th class="title-column">Task Title</th>
+                                <th class="assignee-column">
                                     Assigned To
                                         <span class="pull-right btn" ng-click="setAssignee(taskList)">
                                             <i class="fa fa-files-o"></i>
                                         </span>
                                 </th>
-                                <th style="width: 25%; min-width: 150px;">
+                                <th class="date-column">
                                     Due Date
                                         <span class="pull-right btn">
                                             <i class="fa fa-files-o"></i>
@@ -215,15 +215,15 @@
                         <table class="table modal-table table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 5%;"></th>
-                                <th style="width: 45%;">Document Title</th>
-                                <th style="width: 25%;">
+                                <th class="action-column"></th>
+                                <th class="title-column">Document Title</th>
+                                <th class="assignee-column">
                                     Assigned To
                                     <span class="pull-right btn" ng-click="setAssignee(documentList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
-                                <th style="width: 25%; min-width: 150px;">
+                                <th class="date-column">
                                     Due Date
                                     <span class="pull-right btn" ng-click="setDocumentsDate()">
                                         <i class="fa fa-files-o"></i>
