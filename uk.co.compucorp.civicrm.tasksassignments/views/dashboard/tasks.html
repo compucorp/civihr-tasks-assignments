@@ -207,24 +207,7 @@
                    class="{{prefix}}task-checkbox"
                    name="task"
             />
-            <!--<span editable-ui-select="task.case_id"-->
-            <!--onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"-->
-            <!--onbeforesave="updateTask(task, { case_id: select.$data });"-->
-            <!--on-select="cacheAssignment($item);">-->
-
-            <!--<editable-ui-select-match placeholder="Enter search term...">-->
-            <!--{{$select.selected.label}}-->
-            <!--</editable-ui-select-match>-->
-            <!--<editable-ui-select-choices-->
-            <!--repeat="assignment.id as assignment in assignments | filter: $select.search"-->
-            <!--refresh="refreshAssignments($select.search, task.target_contact_id[0], task.case_id)"-->
-            <!--refresh-delay="0">-->
-            <!--<div ng-bind="assignment.label"></div>-->
-            <!--</editable-ui-select-choices>-->
-            <!--{{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}-->
-            <!--</span>-->
-            <!-- FIXME: Find style that achieve following:-->
-            <p style="margin: 4px 0">
+            <p class="task-title">
                 {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}:
                 <a href class="{{prefix}}task-title" ng-click="modalTask(task);"
                    ng-bind="cache.taskType.obj[task.activity_type_id]"></a>

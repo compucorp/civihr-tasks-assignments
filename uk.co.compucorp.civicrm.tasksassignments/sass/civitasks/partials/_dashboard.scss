@@ -49,6 +49,13 @@
     }
 
     .#{$prefix}list-task {
+      > li {
+        header {
+          .task-title {
+            margin: 4px 0;
+          }
+        }
+      }
       > li:last-child {
         margin-bottom: 0;
       }
