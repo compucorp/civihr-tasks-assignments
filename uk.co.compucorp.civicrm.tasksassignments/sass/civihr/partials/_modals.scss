@@ -2,7 +2,7 @@
   border-bottom: 0 none;
 
   .close {
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 
@@ -11,6 +11,7 @@
 }
 
 .modal-progress {
+
   .modal-body {
     overflow: hidden;
     padding-top: 25px;
@@ -32,6 +33,7 @@
 .modal-content {
 
   .form-horizontal {
+
     .row,
     .form-group {
       margin: {
@@ -54,16 +56,20 @@
   }
 }
 
-.modal-inverted{
-  .modal-header, .modal-footer{
+.modal-inverted {
+
+  .modal-header,
+  .modal-footer {
     background-color: $brand-secondary;
   }
-  .modal-body{
+
+  .modal-body {
     background: none;
   }
 }
 
 @media (min-width: $screen-sm-min) {
+
   .modal-dialog {
     margin: 60px auto;
   }
