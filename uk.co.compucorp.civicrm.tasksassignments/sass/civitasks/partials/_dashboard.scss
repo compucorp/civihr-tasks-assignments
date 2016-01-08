@@ -17,6 +17,7 @@
   }
 
   .#{$prefix}container-inner {
+
     &:before,
     &:after {
       content: " ";
@@ -29,6 +30,7 @@
   }
 
   .#{$prefix}sidebar-inner {
+
     + .#{$prefix}content-wrapper {
       background-color: $brand-secondary;
     }
@@ -43,12 +45,14 @@
   }
 
   .#{$prefix}dashboard-tasks {
+
     .#{$prefix}list-task,
     .#{$prefix}list-task + .header-bar {
       margin-left: 10px;
     }
 
     .#{$prefix}list-task {
+
       > li:last-child {
         margin-bottom: 0;
       }
@@ -56,6 +60,7 @@
   }
 
   .#{$prefix}dashboard-key-dates {
+
     .ct-sidebar-inner + .ct-content-wrapper > .ct-content {
       min-height: 515px;
     }
@@ -84,6 +89,7 @@
     min-height: 675px;
 
     .header-bar {
+
       .#{$prefix}cal-prev,
       .#{$prefix}cal-next {
         margin-top: -10px;
@@ -126,7 +132,6 @@
         max-width: 100%;
       }
     }
-
   }
 
   .#{$prefix}dashboard-assignments,
@@ -134,5 +139,4 @@
     background-color: #fff;
     @include box-shadow($box-shadow-global);
   }
-
 }
