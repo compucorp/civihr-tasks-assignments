@@ -52,6 +52,15 @@
     }
 
     .#{$prefix}list-task {
+      > li {
+
+        header {
+
+          .task-title {
+            margin: 4px 0;
+          }
+        }
+      }
 
       > li:last-child {
         margin-bottom: 0;
@@ -89,7 +98,6 @@
     min-height: 675px;
 
     .header-bar {
-
       .#{$prefix}cal-prev,
       .#{$prefix}cal-next {
         margin-top: -10px;
@@ -132,6 +140,7 @@
         max-width: 100%;
       }
     }
+
   }
 
   .#{$prefix}dashboard-assignments,
@@ -139,4 +148,5 @@
     background-color: #fff;
     @include box-shadow($box-shadow-global);
   }
+
 }

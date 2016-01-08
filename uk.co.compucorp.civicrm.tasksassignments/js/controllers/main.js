@@ -1,32 +1,33 @@
-define(['controllers/controllers',
-    'services/file'], function (controllers) {
-    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService',
-        'config',
+define([
+    'controllers/controllers',
+    'services/file'
+], function (controllers) {
+    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService', 'config',
         function ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config) {
             $log.debug('Controller: MainCtrl');
 
             $rootScope.modalDocument = function (data, e) {
                 e && e.preventDefault();
 
-                var data = data || {},
-                    modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL + 'modal/document.html?v=3',
-                        controller: 'ModalDocumentCtrl',
-                        resolve: {
-                            data: function () {
-                                return data;
-                            },
-                            files: function () {
+                data = data || {};
+                var modalInstance = $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL + 'modal/document.html?v=3',
+                    controller: 'ModalDocumentCtrl',
+                    resolve: {
+                        data: function () {
+                            return data;
+                        },
+                        files: function () {
 
-                                if (!data.id || !+data.file_count) {
-                                    return [];
-                                }
-
-                                return FileService.get(data.id, 'civicrm_activity')
+                            if (!data.id || !+data.file_count) {
+                                return [];
                             }
+
+                            return FileService.get(data.id, 'civicrm_activity')
                         }
-                    });
+                    }
+                });
 
                 modalInstance.result.then(function (results) {
                     $scope.$broadcast('documentFormSuccess', results, data);
@@ -36,29 +37,27 @@ define(['controllers/controllers',
             };
 
             $rootScope.modalTask = function (data) {
-                var data = data || {},
-                    modalInstance = $modal.open({
-                        targetDomEl: $rootElement.find('div').eq(0),
-                        templateUrl: config.path.TPL + 'modal/task.html?v=5',
-                        controller: 'ModalTaskCtrl',
-                        resolve: {
-                            data: function () {
-                                return data;
-                            }
+                data = data || {};
+                var modalInstance = $modal.open({
+                    targetDomEl: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL + 'modal/task.html?v=5',
+                    controller: 'ModalTaskCtrl',
+                    resolve: {
+                        data: function () {
+                            return data;
                         }
-                    });
+                    }
+                });
 
                 modalInstance.result.then(function (results) {
                     $scope.$broadcast('taskFormSuccess', results, data);
                 }, function () {
                     $log.info('Modal dismissed');
                 });
-
             };
 
             $rootScope.modalAssignment = function (data) {
                 data = data || {};
-
                 var modalInstance = $modal.open({
                     targetDomEl: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
@@ -76,7 +75,6 @@ define(['controllers/controllers',
                 }, function () {
                     $log.info('Modal dismissed');
                 });
-
             };
 
             $rootScope.modalReminder = function (data, type) {
@@ -99,6 +97,6 @@ define(['controllers/controllers',
                     }
                 });
             };
-
-        }]);
+        }
+    ]);
 });

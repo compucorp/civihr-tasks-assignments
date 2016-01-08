@@ -112,7 +112,7 @@ define([
                     key: key,
                     value: value
                 })
-            },$rootScope.cache.dateType.arr);
+            }, $rootScope.cache.dateType.arr);
 
             $rootScope.$on('$stateChangeSuccess', function() {
                 $rootElement.removeClass('ct-page-loading');

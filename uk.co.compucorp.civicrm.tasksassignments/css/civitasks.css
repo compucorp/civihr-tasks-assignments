@@ -13121,70 +13121,74 @@ fieldset[disabled]
 #cividocuments #ct-dashboard .ct-dashboard-tasks .ct-list-task + .header-bar {
   margin-left: 10px;
 }
-/* line 56, ../sass/civitasks/partials/_dashboard.scss */
+/* line 59, ../sass/civitasks/partials/_dashboard.scss */
+#civitasks #ct-dashboard .ct-dashboard-tasks .ct-list-task > li header .task-title, #cividocuments #ct-dashboard .ct-dashboard-tasks .ct-list-task > li header .task-title {
+  margin: 4px 0;
+}
+/* line 65, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks .ct-list-task > li:last-child, #cividocuments #ct-dashboard .ct-dashboard-tasks .ct-list-task > li:last-child {
   margin-bottom: 0;
 }
-/* line 64, ../sass/civitasks/partials/_dashboard.scss */
+/* line 73, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-sidebar-inner + .ct-content-wrapper > .ct-content, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-sidebar-inner + .ct-content-wrapper > .ct-content {
   min-height: 515px;
 }
-/* line 68, ../sass/civitasks/partials/_dashboard.scss */
+/* line 77, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-csv-export, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-csv-export {
   font-size: 11px;
   margin-left: 30px;
   position: relative;
   top: 1px;
 }
-/* line 75, ../sass/civitasks/partials/_dashboard.scss */
+/* line 84, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates {
   margin-left: 10px;
 }
-/* line 78, ../sass/civitasks/partials/_dashboard.scss */
+/* line 87, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li {
   margin-bottom: 0px;
 }
-/* line 82, ../sass/civitasks/partials/_dashboard.scss */
+/* line 91, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li:last-child, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li:last-child {
   margin-bottom: 0;
 }
-/* line 88, ../sass/civitasks/partials/_dashboard.scss */
+/* line 97, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar, #cividocuments #ct-dashboard .ct-dashboard-calendar {
   min-height: 675px;
 }
-/* line 93, ../sass/civitasks/partials/_dashboard.scss */
+/* line 101, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev,
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next,
 #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next {
   margin-top: -10px;
   padding: 10px;
 }
-/* line 99, ../sass/civitasks/partials/_dashboard.scss */
+/* line 107, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev {
   float: left;
   margin-left: -10px;
 }
-/* line 104, ../sass/civitasks/partials/_dashboard.scss */
+/* line 112, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next {
   float: right;
   margin-right: -10px;
 }
-/* line 110, ../sass/civitasks/partials/_dashboard.scss */
+/* line 118, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-documents-container, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-documents-container {
   -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 114, ../sass/civitasks/partials/_dashboard.scss */
+/* line 122, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar-dark, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar-dark,
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar-danger-light,
 #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar-danger-light {
   margin-bottom: 10px;
 }
-/* line 119, ../sass/civitasks/partials/_dashboard.scss */
+/* line 127, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .btn-cal-view, #cividocuments #ct-dashboard .ct-dashboard-calendar .btn-cal-view {
   min-width: 70px;
 }
-/* line 123, ../sass/civitasks/partials/_dashboard.scss */
+/* line 131, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-list-task, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-list-task {
   margin-bottom: 15px;
 }
@@ -13202,12 +13206,12 @@ fieldset[disabled]
   padding-left: 7.5px;
   padding-right: 7.5px;
 }
-/* line 130, ../sass/civitasks/partials/_dashboard.scss */
+/* line 138, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-view-day .ct-datepicker table, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-view-day .ct-datepicker table {
   table-layout: fixed;
   max-width: 100%;
 }
-/* line 137, ../sass/civitasks/partials/_dashboard.scss */
+/* line 146, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-assignments, #cividocuments #ct-dashboard .ct-dashboard-assignments,
 #civitasks #ct-dashboard .ct-dashboard-reports,
 #cividocuments #ct-dashboard .ct-dashboard-reports {
@@ -13656,9 +13660,8 @@ fieldset[disabled]
 /* line 147, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-subject time, #cividocuments .ct-list-task .ct-task-subject time {
   margin-right: 12px;
-  margin-left: 7px;
 }
-/* line 152, ../sass/civitasks/partials/_lists.scss */
+/* line 151, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-subject .editable-text, #cividocuments .ct-list-task .ct-task-subject .editable-text,
 #civitasks .ct-list-task .ct-task-subject .editable-bsdate,
 #cividocuments .ct-list-task .ct-task-subject .editable-bsdate {
@@ -13666,85 +13669,85 @@ fieldset[disabled]
   margin-top: -3px;
   top: -2px;
 }
-/* line 161, ../sass/civitasks/partials/_lists.scss */
+/* line 160, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task .ct-task-subject .editable-small, #cividocuments .ct-list-task .ct-task-subject .editable-small {
   margin-bottom: -4px;
   margin-top: -4px;
 }
-/* line 169, ../sass/civitasks/partials/_lists.scss */
+/* line 168, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task + .header-bar, #cividocuments .ct-list-task + .header-bar {
   margin-top: 15px;
 }
-/* line 174, ../sass/civitasks/partials/_lists.scss */
+/* line 173, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task.ct-list-task-small header, #cividocuments .ct-list-task.ct-list-task-small header {
   font-size: 13px;
 }
-/* line 178, ../sass/civitasks/partials/_lists.scss */
+/* line 177, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task.ct-list-task-small .ct-task-checkbox, #cividocuments .ct-list-task.ct-list-task-small .ct-task-checkbox {
   margin-top: 3px;
 }
-/* line 182, ../sass/civitasks/partials/_lists.scss */
+/* line 181, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-task.ct-list-task-small .ct-assignment-type, #cividocuments .ct-list-task.ct-list-task-small .ct-assignment-type {
   padding-left: 85px;
 }
-/* line 189, ../sass/civitasks/partials/_lists.scss */
+/* line 188, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates, #cividocuments .ct-list-key-dates {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-/* line 194, ../sass/civitasks/partials/_lists.scss */
+/* line 193, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates a, #cividocuments .ct-list-key-dates a {
   color: #727e8a;
 }
-/* line 197, ../sass/civitasks/partials/_lists.scss */
+/* line 196, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates a:hover, #cividocuments .ct-list-key-dates a:hover {
   color: #4f5860;
 }
-/* line 202, ../sass/civitasks/partials/_lists.scss */
+/* line 201, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates strong, #cividocuments .ct-list-key-dates strong {
   color: #5b6779;
   padding-right: 5px;
 }
-/* line 207, ../sass/civitasks/partials/_lists.scss */
+/* line 206, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates time, #cividocuments .ct-list-key-dates time {
   display: block;
   font-size: 16px;
   font-weight: 600;
   padding: 3px 0 2px;
 }
-/* line 213, ../sass/civitasks/partials/_lists.scss */
+/* line 212, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates time span, #cividocuments .ct-list-key-dates time span {
   color: #727e8a;
 }
-/* line 218, ../sass/civitasks/partials/_lists.scss */
+/* line 217, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates > li, #cividocuments .ct-list-key-dates > li {
   margin-top: 10px;
 }
-/* line 222, ../sass/civitasks/partials/_lists.scss */
+/* line 221, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .period_start_date, #cividocuments .ct-list-key-dates .period_start_date {
   color: #eca67f;
 }
-/* line 226, ../sass/civitasks/partials/_lists.scss */
+/* line 225, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .period_end_date, #cividocuments .ct-list-key-dates .period_end_date {
   color: #c096aa;
 }
-/* line 230, ../sass/civitasks/partials/_lists.scss */
+/* line 229, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel, #cividocuments .ct-list-key-dates .panel {
   -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 234, ../sass/civitasks/partials/_lists.scss */
+/* line 233, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel > .list-group .list-group-item, #cividocuments .ct-list-key-dates .panel > .list-group .list-group-item {
   border-width: 0;
   margin: 0;
   padding: 0 15px 11px;
 }
-/* line 239, ../sass/civitasks/partials/_lists.scss */
+/* line 238, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel > .list-group .list-group-item:first-child, #cividocuments .ct-list-key-dates .panel > .list-group .list-group-item:first-child {
   padding-top: 11px;
 }
-/* line 246, ../sass/civitasks/partials/_lists.scss */
+/* line 245, ../sass/civitasks/partials/_lists.scss */
 #civitasks .ct-list-key-dates .panel-heading, #cividocuments .ct-list-key-dates .panel-heading {
   padding: 11px 15px 12px;
 }
