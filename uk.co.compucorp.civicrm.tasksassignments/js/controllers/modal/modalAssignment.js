@@ -50,7 +50,7 @@ define([
                     return
                 }
 
-                activityArr.push(angular.extend(angular.copy(activityModel), {isAdded: true}));
+                activityArr.push(angular.extend(angular.copy(activityModel), { isAdded: true }));
             };
 
             $scope.removeActivity = function (activityArr, index) {
@@ -117,7 +117,7 @@ define([
 
             $scope.confirm = function () {
 
-                if (!($filter('filter')($scope.taskList, {create: true})).length && !($filter('filter')($scope.documentList, {create: true})).length) {
+                if (!($filter('filter')($scope.taskList, { create: true })).length && !($filter('filter')($scope.documentList, { create: true })).length) {
 
                     $scope.alert.msg = 'Please add at least one task.';
                     $scope.alert.show = true;
@@ -217,7 +217,7 @@ define([
             };
 
             $scope.setAssignee = function setAssignee(list) {
-                angular.forEach(list, function (item) {
+                list.forEach(function (item) {
                     if (item.create && item.assignee_contact_id.length === 0) {
                         item.assignee_contact_id.push(config.LOGGED_IN_CONTACT_ID);
                     }
@@ -244,7 +244,7 @@ define([
                     activity.name = activityTypes[i].name;
                     activity.offset = activityTypes[i].reference_offset;
 
-                    documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, {value: activity.name}, true)[0] : '';
+                    documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
 
                     if (documentType) {
                         activity.activity_type_id = documentType.key;
@@ -252,7 +252,7 @@ define([
                         continue;
                     }
 
-                    taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, {value: activity.name}, true)[0] : '';
+                    taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
                     activity.activity_type_id = taskType ? taskType.key : null;
                     taskList.push(activity);
                 }
