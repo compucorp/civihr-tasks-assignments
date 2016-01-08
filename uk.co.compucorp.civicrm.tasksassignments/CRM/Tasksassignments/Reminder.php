@@ -127,8 +127,8 @@ class CRM_Tasksassignments_Reminder
                 'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
                 'activityDetails' => isset($activityResult['details']) ? $activityResult['details'] : '',
                 'baseUrl' => CIVICRM_UF_BASEURL,
-                'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
-                'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
+                'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-tasks',
+                'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-documents',
             ));
             
             self::_send($contactId, $recipient, $activityName, $templateBodyHTML);
