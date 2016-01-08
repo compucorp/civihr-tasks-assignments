@@ -1,26 +1,28 @@
-define(['controllers/controllers',
-        'moment',
-        'services/contact',
-        'services/document',
-        'services/task',
-        'services/assignment'], function(controllers, moment){
-    controllers.controller('ModalAssignmentCtrl',['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-          'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
-        function($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
-                 ContactService, data, config, settings){
+define([
+    'controllers/controllers',
+    'moment',
+    'services/contact',
+    'services/document',
+    'services/task',
+    'services/assignment'
+], function (controllers, moment) {
+    controllers.controller('ModalAssignmentCtrl', ['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
+        'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
+        function ($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
+                  ContactService, data, config, settings) {
             $log.debug('Controller: ModalAssignmentCtrl');
 
             var activityModel = {
-                    activity_type_id: null,
-                    assignee_contact_id: [],
-                    case_id: null,
-                    create: true,
-                    isAdded: false,
-                    name: null,
-                    source_contact_id: config.LOGGED_IN_CONTACT_ID,
-                    status_id: '1',
-                    offset: 0
-                };
+                activity_type_id: null,
+                assignee_contact_id: [],
+                case_id: null,
+                create: true,
+                isAdded: false,
+                name: null,
+                source_contact_id: config.LOGGED_IN_CONTACT_ID,
+                status_id: '1',
+                offset: 0
+            };
 
             $scope.alert = {
                 show: false,
@@ -42,17 +44,16 @@ define(['controllers/controllers',
             $scope.taskList = [];
             $scope.documentList = [];
 
-            $scope.addActivity = function(activityArr){
+            $scope.addActivity = function (activityArr) {
 
                 if (!activityArr) {
                     return
                 }
 
-                activityArr.push(angular.extend(angular.copy(activityModel),{isAdded: true}));
-
+                activityArr.push(angular.extend(angular.copy(activityModel), { isAdded: true }));
             };
 
-            $scope.removeActivity = function(activityArr, index){
+            $scope.removeActivity = function (activityArr, index) {
 
                 if (!activityArr) {
                     return
@@ -61,27 +62,26 @@ define(['controllers/controllers',
                 activityArr.splice(index, 1);
             };
 
-            $scope.dpOpen = function($event, key){
+            $scope.dpOpen = function ($event, key) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
                 $scope.dpOpened[key] = true;
+            };
 
-            }
-
-            $scope.refreshContacts = function(input){
+            $scope.refreshContacts = function (input) {
                 if (!input) {
                     return
                 }
 
                 ContactService.search(input, {
                     contact_type: 'Individual'
-                }).then(function(results){
+                }).then(function (results) {
                     $scope.contacts = results;
                 });
             };
 
-            $scope.cacheContact = function($item){
+            $scope.cacheContact = function ($item) {
                 var obj = {};
 
                 obj[$item.id] = {
@@ -94,7 +94,7 @@ define(['controllers/controllers',
                 ContactService.updateCache(obj);
             };
 
-            $scope.setData = function() {
+            $scope.setData = function () {
 
                 var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
 
@@ -111,18 +111,18 @@ define(['controllers/controllers',
                 $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
             };
 
-            $scope.cancel = function(){
+            $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
             };
 
-            $scope.confirm = function(){
+            $scope.confirm = function () {
 
-                 if (!($filter('filter')($scope.taskList, { create: true })).length &&
-                     !($filter('filter')($scope.documentList, { create: true })).length) {
-                     $scope.alert.msg = 'Please add at least one task.';
-                     $scope.alert.show = true;
-                     return
-                 };
+                if (!($filter('filter')($scope.taskList, { create: true })).length && !($filter('filter')($scope.documentList, { create: true })).length) {
+
+                    $scope.alert.msg = 'Please add at least one task.';
+                    $scope.alert.show = true;
+                    return;
+                }
 
                 $scope.$broadcast('ct-spinner-show');
 
@@ -131,7 +131,7 @@ define(['controllers/controllers',
 
                 $scope.assignment.start_date = new Date();
 
-                AssignmentService.save($scope.assignment).then(function(resultAssignment) {
+                AssignmentService.save($scope.assignment).then(function (resultAssignment) {
 
                     angular.forEach($scope.taskList, function (task) {
                         if (task.create) {
@@ -165,7 +165,7 @@ define(['controllers/controllers',
                             documentArr.push(results.document[i].id);
                         }
 
-                        cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment),{
+                        cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment), {
                             id: resultAssignment.id,
                             client_id: {
                                 '1': $scope.assignment.client_id
@@ -199,7 +199,6 @@ define(['controllers/controllers',
                             taskList: taskListAssignment
                         });
                         $scope.$broadcast('ct-spinner-hide');
-                        return
 
                     }, function (reason) {
                         CRM.alert(reason, 'Error', 'error');
@@ -217,7 +216,15 @@ define(['controllers/controllers',
 
             };
 
-            $scope.$watch('activitySet',function(activitySet){
+            $scope.setAssignee = function setAssignee(list) {
+                list.forEach(function (item) {
+                    if (item.create && item.assignee_contact_id.length === 0) {
+                        item.assignee_contact_id.push(config.LOGGED_IN_CONTACT_ID);
+                    }
+                });
+            };
+
+            $scope.$watch('activitySet', function (activitySet) {
 
                 if (!activitySet.activityTypes) {
                     return
@@ -259,10 +266,11 @@ define(['controllers/controllers',
                 angular.copy(documentList, $scope.documentList);
             });
 
-        }]);
+        }
+    ]);
 
-    controllers.controller('ModalAssignmentActivityCtrl',['$scope', '$log',
-        function($scope, $log){
+    controllers.controller('ModalAssignmentActivityCtrl', ['$scope', '$log',
+        function ($scope, $log) {
             $log.debug('Controller: ModalAssignmentTaskCtrl');
 
             $scope.isDisabled = !$scope.activity.activity_type_id && !$scope.activity.isAdded;
@@ -272,11 +280,11 @@ define(['controllers/controllers',
                 return
             }
 
-            $scope.$watch('$parent.assignment.dueDate',function(assignmentDueDate){
-                $scope.activity.activity_date_time = !!assignmentDueDate ?  moment(assignmentDueDate).add($scope.activity.offset,'days').toDate() : null;
+            $scope.$watch('$parent.assignment.dueDate', function (assignmentDueDate) {
+                $scope.activity.activity_date_time = !!assignmentDueDate ? moment(assignmentDueDate).add($scope.activity.offset, 'days').toDate() : null;
             });
 
-            $scope.$watch('$parent.assignment.contact_id',function(targetContactId){
+            $scope.$watch('$parent.assignment.contact_id', function (targetContactId) {
 
                 if (!targetContactId) {
                     return
@@ -285,5 +293,6 @@ define(['controllers/controllers',
                 $scope.activity.target_contact_id = [targetContactId];
             });
 
-        }]);
+        }
+    ]);
 });

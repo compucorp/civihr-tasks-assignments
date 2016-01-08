@@ -30,6 +30,7 @@ define([
         'civitasks.settings',
         'xeditable',
         'xeditable-civi',
+        'angular-date'
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,
