@@ -1,12 +1,13 @@
 <form novalidate name="assignmentForm" class="form-assignment form-horizontal modal-inverted" role="form"
-      ng-submit="confirm()"
-      ct-spinner>
+      ng-submit="confirm()" ct-spinner>
     <div class="modal-header">
-        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span
-                class="sr-only">Close</span>
+        <button type="button" class="close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
         </button>
         <h4 class="modal-title">Create New Assignment</h4>
     </div>
+
     <div class="modal-body">
         <alert type="{{alert.type}}" close="alert.show = false;" ng-show="alert.show">{{alert.msg}}</alert>
         <section class="container">
@@ -48,7 +49,6 @@
                             <option value="">- select -</option>
                         </select>
                     </div>
-
 
                     <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
                         Key Date:
@@ -132,10 +132,9 @@
 
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
-                                        <ui-select ng-model="activity.activity_type_id"
-                                                   ng-required="true">
-                                            <ui-select-match
-                                                    placeholder="Select task type">{{$select.selected.value}}
+                                        <ui-select ng-model="activity.activity_type_id" ng-required="true">
+                                            <ui-select-match placeholder="Select task type">
+                                                {{$select.selected.value}}
                                             </ui-select-match>
                                             <ui-select-choices
                                                     repeat="type.key as type in cache.taskType.arr | filter: $select.search">
@@ -247,9 +246,7 @@
 
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
-                                        <ui-select
-                                                ng-model="activity.activity_type_id"
-                                                ng-required="true">
+                                        <ui-select ng-model="activity.activity_type_id" ng-required="true">
                                             <ui-select-match placeholder="Select document type">
                                                 {{$select.selected.value}}
                                             </ui-select-match>
@@ -300,7 +297,8 @@
                                             </a>
                                         </span>
                                         <span class="input-group-btn" ng-if="activity.isAdded">
-                                            <a class="btn btn-default btn-danger" ng-click="removeActivity(documentList, $index)">
+                                            <a class="btn btn-default btn-danger"
+                                               ng-click="removeActivity(documentList, $index)">
                                                 <span class="fa fa-remove" aria-hidden="true"></span>
                                             </a>
                                         </span>
