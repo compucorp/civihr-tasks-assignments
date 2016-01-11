@@ -1,4 +1,7 @@
 /* Schema */
+$dashboard-sidebar-width: 225px;
+$dashboard-sidebar-color: $brand-secondary;
+
 ##{$prefix}dashboard {
   .#{$prefix}dashboard-tasks--full-height-columns {
     position: relative;
@@ -7,15 +10,15 @@
       position: absolute;
       float: left;
       overflow: hidden;
-      background-color: $brand-secondary;
-      width: 225px;
+      background-color: $dashboard-sidebar-color;
+      width: $dashboard-sidebar-width;
       height: 100%;
       box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
     }
 
     > main {
       display: block;
-      margin-left: 225px;
+      margin-left: $dashboard-sidebar-width;
     }
 
     > footer {
