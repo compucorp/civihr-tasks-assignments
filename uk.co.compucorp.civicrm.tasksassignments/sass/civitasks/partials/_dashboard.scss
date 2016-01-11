@@ -3,6 +3,7 @@ $dashboard-sidebar-width: 225px;
 $dashboard-sidebar-color: $brand-secondary;
 
 ##{$prefix}dashboard {
+
   .#{$prefix}dashboard-tasks--full-height-columns {
     position: relative;
 
@@ -55,10 +56,6 @@ $dashboard-sidebar-color: $brand-secondary;
     position: relative;
     background-color: $sidebar-main-bg;
 
-    .full-height {
-      height: 100%;
-    }
-
     &:before,
     &:after {
       content: " ";
@@ -92,19 +89,6 @@ $dashboard-sidebar-color: $brand-secondary;
   }
 
   .#{$prefix}dashboard-tasks {
-
-    .shadow {
-      box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
-    }
-
-    .ct-dashboard-content-wrapper {
-      overflow: hidden;
-
-      .clearfix {
-        display: block;
-        height: 1px;
-      }
-    }
 
     .#{$prefix}list-task,
     .#{$prefix}list-task + .header-bar {
