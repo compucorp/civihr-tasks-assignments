@@ -441,6 +441,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
     return TRUE;
   }
+
+  public function upgrade_1016()
+  {
+    CRM_Tasksassignments_DashboardSwitcher::switchToTasksAndAssignments();
+
+    return true;
+  }
     
     public function uninstall()
     {
