@@ -31,27 +31,6 @@ $dashboard-sidebar-color: $brand-secondary;
 ##{$prefix}dashboard {
   margin-top: 25px;
 
-  /* Custom Styles */
-  .#{$prefix}dashboard-tasks--full-height-columns {
-
-    > main {
-
-      > .#{$prefix}content-wrapper {
-
-        > .#{$prefix}content {
-
-          .panel-heading {
-            box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
-          }
-        }
-      }
-
-      .ct-list-task {
-        margin-left: 15px;
-      }
-    }
-  }
-
   .#{$prefix}container-main {
     position: relative;
     background-color: $sidebar-main-bg;
@@ -108,6 +87,44 @@ $dashboard-sidebar-color: $brand-secondary;
 
       > li:last-child {
         margin-bottom: 0;
+      }
+    }
+  }
+
+  .#{$prefix}dashboard-tasks--full-height-columns {
+
+    > main {
+
+      > .#{$prefix}content-wrapper {
+
+        > .#{$prefix}content {
+
+          .panel-heading {
+            box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
+          }
+
+          .#{$prefix}list-task {
+
+            > li {
+
+              header {
+
+                .task-title {
+                  margin: 4px 0;
+                }
+              }
+            }
+
+            > li:last-child {
+              margin-bottom: 0;
+            }
+          }
+
+        }
+      }
+
+      .ct-list-task {
+        margin-left: 10px;
       }
     }
   }
