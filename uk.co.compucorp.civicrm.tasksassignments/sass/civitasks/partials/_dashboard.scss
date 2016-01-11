@@ -104,6 +104,7 @@ $dashboard-sidebar-color: $brand-secondary;
           }
 
           .#{$prefix}list-task {
+            margin-left: 10px;
 
             > li {
 
@@ -121,10 +122,6 @@ $dashboard-sidebar-color: $brand-secondary;
           }
 
         }
-      }
-
-      .ct-list-task {
-        margin-left: 10px;
       }
     }
   }
