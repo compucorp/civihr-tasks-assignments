@@ -1,9 +1,60 @@
+/* Schema */
+##{$prefix}dashboard {
+  .#{$prefix}dashboard-tasks--full-height-columns {
+    position: relative;
+
+    > aside {
+      position: absolute;
+      float: left;
+      overflow: hidden;
+      background-color: $brand-secondary;
+      width: 225px;
+      height: 100%;
+      box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    > main {
+      display: block;
+      margin-left: 225px;
+    }
+
+    > footer {
+      clear: both;
+    }
+  }
+}
+
 ##{$prefix}dashboard {
   margin-top: 25px;
+
+  /* Custom Styles */
+  .#{$prefix}dashboard-tasks--full-height-columns {
+
+    > main {
+
+      > .#{$prefix}content-wrapper {
+
+        > .#{$prefix}content {
+
+          .panel-heading {
+            box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+
+      .ct-list-task {
+        margin-left: 15px;
+      }
+    }
+  }
 
   .#{$prefix}container-main {
     position: relative;
     background-color: $sidebar-main-bg;
+
+    .full-height {
+      height: 100%;
+    }
 
     &:before,
     &:after {
@@ -29,13 +80,6 @@
     }
   }
 
-  .#{$prefix}sidebar-inner {
-
-    + .#{$prefix}content-wrapper {
-      background-color: $brand-secondary;
-    }
-  }
-
   .panel {
     margin-bottom: 15px;
   }
@@ -45,6 +89,19 @@
   }
 
   .#{$prefix}dashboard-tasks {
+
+    .shadow {
+      box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .ct-dashboard-content-wrapper {
+      overflow: hidden;
+
+      .clearfix {
+        display: block;
+        height: 1px;
+      }
+    }
 
     .#{$prefix}list-task,
     .#{$prefix}list-task + .header-bar {
