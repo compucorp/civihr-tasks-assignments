@@ -65,4 +65,14 @@
     <page_callback>CRM_Tasksassignments_Page_Settings</page_callback>
     <title>Settings</title>
   </item>
+  <item>
+    <path>civicrm/tasksassignments/my-tasks</path>
+    <page_callback>CRM_Tasksassignments_Page_MyTasks</page_callback>
+    <title>MyTasks</title>
+  </item>
+  <item>
+    <path>civicrm/tasksassignments/my-documents</path>
+    <page_callback>CRM_Tasksassignments_Page_MyDocuments</page_callback>
+    <title>MyDocuments</title>
+  </item>
 </menu>
