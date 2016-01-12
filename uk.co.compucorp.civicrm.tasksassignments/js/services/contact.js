@@ -23,7 +23,7 @@ define(['services/services',
                 Contact.get({
                     'json': {
                         'id': id,
-                        'return': 'sort_name, id, contact_id, contact_type, email',
+                        'return': 'display_name, sort_name, id, contact_id, contact_type, email',
                         'debug': config.DEBUG
                 }}, function(data){
 
