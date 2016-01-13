@@ -349,7 +349,7 @@ class CRM_Tasksassignments_Reminder
         $todayKeydatesCount = 0;
         if ($settings['keydates_tab']['value'])
         {
-            $keyDates = CRM_Tasksassignments_KeyDates::get($now, $to, $contactId);
+            $keyDates = CRM_Tasksassignments_KeyDates::get($now, $to);
             foreach ($keyDates as $keyDate)
             {
                 $reminderData['upcoming_keydates'][] = array_merge(
