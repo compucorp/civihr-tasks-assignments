@@ -1,189 +1,177 @@
 <form novalidate name="taskForm" class="form-horizontal form-task" role="form" ng-submit="confirm()" ct-spinner>
     <div class="modal-header">
-        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" ng-bind="cache.contact.obj[task.target_contact_id[0]].sort_name || 'No target contact'"></h4>
+        <div class="row">
+            <div class="col-xs-11">
+                <ui-select
+                        allow-clear
+                        ng-model="task.target_contact_id[0]"
+                        on-select="cacheContact($item)"
+                        ng-required="true">
+                    <ui-select-match
+                            placeholder="Select Target Contact">{{$select.selected.label}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search"
+                                       refresh="refreshContacts($select.search)"
+                                       refresh-delay="0">
+                        <div ng-bind="contact.label"></div>
+                        <small ng-bind="contact.description[0]"></small>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-xs-1">
+                <button type="button" class="close" ng-click="cancel()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="modal-body">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="form-group">
-                    <div ng-show="data.activity_type_id">
-                        <label class="col-xs-12 col-sm-2 control-label">Task:</label>
-                        <div class="col-xs-8 col-sm-6">
-                            <p class="form-control-static" ng-bind="cache.taskType.obj[data.activity_type_id]"></p>
-                        </div>
-                    </div>
-                    <div class="col-xs-8 col-sm-8" ng-show="!data.activity_type_id">
-                        <div class="ui-select-required">
-                            <ui-select
-                                    ng-model="task.activity_type_id"
-                                    ng-required="true">
-                                <ui-select-match
-                                        placeholder="Select task type">{{$select.selected.value}}</ui-select-match>
-                                <ui-select-choices
-                                        repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                                    <div ng-bind="type.value"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-                    </div>
-                    <label for="{{prefix}}task-due" class="col-xs-4 col-sm-4 control-label">
-                        Due:<span class="text-required">*</span>&nbsp;
-                        <a href="" class="text-normal"
-                           ng-model="task.activity_date_time"
-                           is-open="dpOpened"
-                           datepicker-popup
-                           ng-click="dpOpen($event);">{{(task.activity_date_time | date: 'MMM d, yyyy' )|| 'Set Date'}}</a></label>
-                    <input type="hidden" id="{{prefix}}task-due" ng-model="task.activity_date_time" name="taskDue" ng-required="true">
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12" ng-show="!data.subject && !showFieldSubject">
-                        <span class="form-control-static"><a href class="btn btn-indent" ng-click="showFieldSubject = true;">Add Subject</a></span>
-                    </div>
-                    <div ng-show="data.subject && !showFieldSubject">
-                        <label for="{{prefix}}task-subject" class="col-xs-12 col-sm-2 control-label">Subject:</label>
-                        <div class="col-xs-10">
-                            <span class="form-control-static">
-                                {{task.subject}} <a href class="btn" ng-click="showFieldSubject = true;">Edit</a>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-xs-12" ng-show="showFieldSubject">
-                        <div class="input-group">
-                            <input id="{{prefix}}task-subject" class="form-control" name="taskSubject"
-                                   ng-model="task.subject" placeholder="Subject" maxlength="255">
-                            <span class="input-group-btn">
-                                <a href class="btn" ng-click="showFieldSubject = false; task.subject = data.subject;">Cancel</a>
-                            </span>
-                        </div>
+        <div class="container">
+            <!-- Task Type & Date -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-6" ng-show="data.activity_type_id">
+                    <label class="col-xs-12 col-sm-2 control-label">Task:</label>
+
+                    <div class="col-xs-8 col-sm-6">
+                        <p class="form-control-static" ng-bind="cache.taskType.obj[data.activity_type_id]"></p>
                     </div>
                 </div>
-                <div class="form-group required">
-                    <label class="col-xs-12 col-sm-2 control-label">Assignee:</label>
-                    <div class="col-xs-12 col-sm-7">
-                        <span class="form-control-static" ng-show="data.assignee_contact_id[0] && !showFieldAssignee">
-                            {{cache.contact.obj[task.assignee_contact_id[0]].sort_name}} <a href class="btn" ng-click="showFieldAssignee = true;">Edit</a>
-                        </span>
-                        <div class="input-group" ng-show="showFieldAssignee || !data.assignee_contact_id[0]">
-                            <ui-select
-                                    ng-required="true"
-                                    allow-clear
-                                    ng-model="task.assignee_contact_id[0]"
-                                    on-select="cacheContact($item)">
-                                <ui-select-match
-                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                                    refresh="refreshContacts($select.search)"
-                                                    refresh-delay="0">
-                                    <div ng-bind="contact.label"></div>
-                                    <small ng-bind="contact.description[0]"></small>
-                                </ui-select-choices>
-                            </ui-select>
-                            <span class="input-group-btn">
-                              <a ng-click="task.assignee_contact_id = ''" class="btn btn-default">
-                                  <span class="fa fa-remove"></span>
-                              </a>
-                            </span>
-                            <span class="input-group-btn" ng-show="data.assignee_contact_id[0]">
-                              <a ng-click="showFieldAssignee = false; task.assignee_contact_id[0] = data.assignee_contact_id[0]" class="btn">
-                                  Cancel
-                              </a>
-                            </span>
-                        </div>
+                <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
+                    <div class="ui-select-required">
+                        <ui-select
+                                ng-model="task.activity_type_id"
+                                ng-required="true">
+                            <ui-select-match
+                                    placeholder="Select Task Type">{{$select.selected.value}}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                                <div ng-bind="type.value"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
                 </div>
-                <div class="form-group required" ng-if="showCId">
-                    <label class="col-xs-12 col-sm-2 control-label">Target:</label>
-                    <div class="col-xs-12 col-sm-7">
-                        <span class="form-control-static" ng-show="data.target_contact_id[0] && !showFieldTarget">
-                            {{cache.contact.obj[task.target_contact_id[0]].sort_name}} <a href class="btn" ng-click="showFieldTarget = true;">Edit</a>
-                        </span>
-                        <div class="input-group" ng-show="showFieldTarget || !data.target_contact_id[0]">
-                            <ui-select
-                                    allow-clear
-                                    ng-model="task.target_contact_id[0]"
-                                    on-select="cacheContact($item)"
-                                    ng-required="true">
-                                <ui-select-match
-                                        placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                                <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                                    refresh="refreshContacts($select.search)"
-                                                    refresh-delay="0">
-                                    <div ng-bind="contact.label"></div>
-                                    <small ng-bind="contact.description[0]"></small>
-                                </ui-select-choices>
-                            </ui-select>
-                            <span class="input-group-btn">
-                              <a ng-click="task.target_contact_id = ''" class="btn btn-default">
-                                  <span class="fa fa-remove"></span>
-                              </a>
-                            </span>
-                            <span class="input-group-btn" ng-show="data.target_contact_id[0]">
-                              <a ng-click="showFieldTarget = false; task.target_contact_id[0] = data.target_contact_id[0]" class="btn">
-                                  Cancel
-                              </a>
-                            </span>
-                        </div>
-                    </div>
+                <label class="control-label no-gutter col-sm-2" for="{{prefix}}task-due">
+                    Due Date:
+                </label>
+
+                <div class="input-group col-sm-4">
+                    <input type="text" ng-model="task.activity_date_time"
+                           class="form-control"
+                           id="{{prefix}}task-due"
+                           custom-date-input
+                           placeholder="dd/mm/yyyy"
+                           name="assignmentDue" ng-required="true"
+                    />
+                <span class="input-group-addon">
+                    <a href class="text-normal calendar-popup-link"
+                       ng-model="task.activity_date_time"
+                       is-open="dpOpened"
+                       datepicker-popup
+                       ng-click="dpOpen($event);">
+                        <i class="fa fa-calendar"></i>
+                    </a>
+                </span>
                 </div>
-                <hr>
-                <div class="form-group">
-                    <label for="{{prefix}}task-status" class="col-xs-12 col-sm-2 control-label">Status:</label>
-                    <div class="col-xs-12 col-sm-5">
-                        <select id="{{prefix}}task-status" class="form-control" name="taskStatus"
-                                ng-model="task.status_id"
-                                ng-options="key as value for (key, value) in cache.taskStatus.obj">
-                            <option value="">- select -</option>
-                        </select>
-                    </div>
+            </div>
+            <!-- Subject -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-6" ng-show="!showFieldSubject">
+                    <span class="form-control-static">
+                        <a href class="btn btn-indent" ng-click="showFieldSubject = true;">
+                            Add Subject
+                        </a>
+                    </span>
                 </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-2 control-label">Details:</label>
-                    <div class="col-xs-12 col-sm-10">
-                        <div text-angular
-                                ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
-                                ng-model="task.details"></div>
-                    </div>
+                <div class="col-xs-12 col-sm-6" ng-show="showFieldSubject">
+                    <input id="{{prefix}}task-subject"
+                           class="form-control" name="taskSubject"
+                           ng-model="task.subject" placeholder="Subject"
+                           maxlength="255"/>
                 </div>
-                <div class="form-group" ng-if="settings.extEnabled.assignments">
-                    <div class="col-xs-12 col-sm-6" ng-show="!data.case_id && !showFieldAssignment">
-                            <span class="form-control-static">
-                                <a href class="btn" ng-click="showFieldAssignment = true">Add to assignment</a>
-                            </span>
-                    </div>
-                    <div ng-show="data.case_id || showFieldAssignment">
-                        <label class="col-xs-12 col-sm-2 control-label">Assignment:</label>
-                        <div class="col-xs-12 col-sm-8" >
-                            <span class="form-control-static" ng-show="data.case_id && !showFieldAssignment">
-                                {{cache.assignment.obj[task.case_id].contacts[0].sort_name + ' - ' + cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
-                                <a href class="btn" ng-click="showFieldAssignment = true">Edit {{showAssignment}}</a>
-                            </span>
-                            <div class="input-group" ng-show="showFieldAssignment">
-                                <ui-select
-                                        allow-clear
-                                        ng-model="task.case_id"
-                                        on-select="cacheAssignment($item);">
-                                    <ui-select-match
-                                            placeholder="Enter target's name...">{{$select.selected.label}}</ui-select-match>
-                                    <ui-select-choices  repeat="assignment.id as assignment in assignments"
-                                                        refresh="refreshAssignments($select.search)"
-                                                        refresh-delay="0">
-                                        <div ng-class="assignment.label_class" ng-bind="assignment.label"></div>
-                                    </ui-select-choices>
-                                </ui-select>
-                                <span class="input-group-btn">
-                                  <a ng-click="task.case_id = ''" class="btn btn-default">
-                                      <span class="fa fa-remove"></span>
-                                  </a>
-                                </span>
-                                <span class="input-group-btn">
-                                  <a ng-click="showFieldAssignment = false; task.case_id = data.case_id" class="btn">
-                                      Cancel
-                                  </a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <!-- Details -->
+            <div class="row">
+                <label class="col-xs-12 control-label">Details</label>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div text-angular
+                         ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
+                         ng-model="task.details"></div>
+                </div>
+            </div>
+            <!-- Assignee -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-5" ng-show="!showFieldAssignee">
+                    <span class="form-control-static">
+                        <a href class="btn btn-indent" ng-click="showFieldAssignee = true;">
+                            Add Assignee
+                        </a>
+                    </span>
+                </div>
+                <div class="col-xs-12 col-sm-6 input-group" ng-show="showFieldAssignee">
+                    <ui-select
+                            ng-required="true"
+                            allow-clear
+                            ng-model="task.assignee_contact_id[0]"
+                            on-select="cacheContact($item)">
+                        <ui-select-match
+                                placeholder="Assignee">{{$select.selected.label}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search"
+                                           refresh="refreshContacts($select.search)"
+                                           refresh-delay="0">
+                            <div ng-bind="contact.label"></div>
+                            <small ng-bind="contact.description[0]"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <!-- Status & Assignment-->
+            <div class="row">
+                <!-- Status -->
+                <div class="col-xs-12 col-sm-5" ng-show="!showFieldStatus">
+                    <span class="form-control-static">
+                        <a href class="btn btn-indent" ng-click="showFieldStatus = true;">
+                            Set Status
+                        </a>
+                    </span>
+                </div>
+                <div class="col-xs-12 col-sm-5">
+                    <ui-select  ng-show="showFieldStatus" allow-clear
+                               ng-model="task.status_id">
+                        <ui-select-match
+                                placeholder="Status">{{ $select.selected.value }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="status.key as status in cache.taskStatus.arr" refresh-delay="0">
+                            <div ng-bind="status.value"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <!-- Assignment -->
+                <div class="col-xs-12 col-sm-7" ng-show="!showFieldAssignment">
+                    <span class="form-control-static">
+                        <a href class="btn btn-indent" ng-click="showFieldAssignment = true;">
+                            Add to assignment
+                        </a>
+                    </span>
+                </div>
+                <div class="col-xs-12 col-sm-7" ng-show="data.case_id || showFieldAssignment">
+                    <ui-select
+                            allow-clear
+                            ng-model="task.case_id"
+                            on-select="cacheAssignment($item);">
+                        <ui-select-match
+                                placeholder="Assignment">{{$select.selected.label}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="assignment.id as assignment in assignments"
+                                           refresh="refreshAssignments($select.search)"
+                                           refresh-delay="0">
+                            <div ng-class="assignment.label_class" ng-bind="assignment.label"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
             </div>
         </div>
