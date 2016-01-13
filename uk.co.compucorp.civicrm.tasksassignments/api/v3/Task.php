@@ -322,6 +322,7 @@ function civicrm_api3_task_delete($params) {
   }
   
   if (CRM_Activity_BAO_Activity::deleteActivity($params)) {
+    CRM_Tasksassignments_Reminder::sendReminder($params['id']);
     return civicrm_api3_create_success(1, $params, 'activity', 'delete');
   }
   else {
