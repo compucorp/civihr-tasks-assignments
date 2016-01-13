@@ -122,7 +122,7 @@ define(['controllers/controllers',
                     $modalInstance.dismiss('cancel');
                 });
 
-            }
+            };
 
             $scope.confirm = function(){
 
@@ -153,7 +153,6 @@ define(['controllers/controllers',
                     return $q.reject();
                 });
 
-            }
-
+            };
         }]);
 });
