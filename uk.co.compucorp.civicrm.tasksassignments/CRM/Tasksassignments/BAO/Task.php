@@ -18,9 +18,28 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task
         {
             $params['status_id'] = 1;
         }
-        
+
+        $currentInstance = new static();
+        $currentInstance->get('id', $params['id']);
+
+        $activityContactResult = civicrm_api3('ActivityContact', 'get', array(
+          'sequential' => 1,
+          'activity_id' => $params['id'],
+        ));
+
+        $previousAssigneeId = null;
+
+        foreach($activityContactResult['values'] as $value)
+        {
+            if($value['record_type_id'] == 1) // 1 is assignee
+            {
+                $previousAssigneeId = $value['contact_id'];
+                break;
+            }
+        }
+
         $instance = parent::create($params);
-        CRM_Tasksassignments_Reminder::sendReminder((int)$instance->id);
+        CRM_Tasksassignments_Reminder::sendReminder((int)$instance->id, null, false, $previousAssigneeId);
         
         CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
         
