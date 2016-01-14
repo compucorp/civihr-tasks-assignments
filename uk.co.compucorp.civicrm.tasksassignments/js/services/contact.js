@@ -53,7 +53,7 @@ define(['services/services',
                         input: input,
                         params: params,
                         debug: config.DEBUG
-                }}, function(data){
+                    }}, function(data){
 
                     if (UtilsService.errorHandler(data,'Unable to fetch contact list',deferred)) {
                         return
@@ -79,7 +79,7 @@ define(['services/services',
 
                     arrSearch.push({
                         description: contact.email ? [contact.email] : [],
-                        label: contact.sort_name,
+                        label: contact.display_name,
                         icon_class: contact.contact_type,
                         id: contact.contact_id
                     });
