@@ -92,7 +92,12 @@ form {
     .modal-body {
 
       .ui-select-bootstrap > .ui-select-choices{
+        min-width: 100%;
         width: auto;
+      }
+
+      .dropdown-menu{
+        left: auto;
       }
 
       .ui-select-match-text > span {
