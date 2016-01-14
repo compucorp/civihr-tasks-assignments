@@ -39,31 +39,32 @@ define(['services/services',
 
                     return deferred.promise;
                 },
-                search: function (input, params) {
+                search: function (input, custom_params) {
 
                     if (params && typeof params !== 'object') {
                         return null
                     }
 
-                    var deferred = $q.defer(),
-                        params = params || {};
+                    var deferred = $q.defer();
+
+                    var params = {};
+
+                    angular.extend(params, custom_params);
+
+                    params.display_name = input;
+                    params.return = 'display_name, contact_id, contact_type, email';
 
                     Contact.get({
                         action: 'get',
-                        json: {
-                            "contact_type": "Individual",
-                            display_name: input,
-                            params: params,
-                            debug: config.DEBUG,
-                            return: 'display_name, contact_id, contact_type, email'
-                        }
+                        json: params
                     }, function (data) {
                         if (UtilsService.errorHandler(data, 'Unable to fetch contact list', deferred)) {
                             return
                         }
 
                         var contacts = [];
-                        for(var i in data.values){
+                        
+                        for (var i in data.values) {
                             contacts.push({
                                 label: data.values[i].display_name,
                                 description: [data.values[i].email],
@@ -71,7 +72,7 @@ define(['services/services',
                                 icon_class: data.values[i].contact_type
                             });
                         }
-                        console.log(contacts);
+
                         deferred.resolve(contacts);
 
                     }, function () {
