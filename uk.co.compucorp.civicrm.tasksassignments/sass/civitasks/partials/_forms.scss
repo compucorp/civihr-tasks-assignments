@@ -44,6 +44,47 @@ form {
         margin-left: -15px;
         margin-right: -15px;
       }
+
+      /* using this override until we have a separate directive for that */
+      .ui-select-container{
+
+        * {
+          border: none !important;
+          box-shadow: none !important;
+        }
+
+        .ui-select-choices {
+          border: 1px solid #333333 !important;
+        }
+
+        .ui-select-toggle{
+          border-bottom: 1px solid #E8EEF0 !important;
+          padding: 0;
+
+          .caret:before {
+            position: relative;
+            top: -10px;
+            left: -10px;
+
+            content: "\f002";
+            opacity: .3;
+
+            font-family: FontAwesome;
+            font-weight: 200;
+            font-size: 16px;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translate(0, 0);
+          }
+
+          .ui-select-placeholder,
+          .ui-select-match-text {
+            color: #41afcb !important;
+            font-size: 20px !important;
+          }
+        }
+      }
     }
 
     .modal-body {
