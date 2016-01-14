@@ -1,164 +1,267 @@
-.form-task {
+form {
 
-  h3 {
-    margin-top: 0;
+  .no-gutter [class*='col-'] {
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  .btn-indent {
-    margin-left: -13px;
-  }
-}
+  &.form-horizontal {
+    /* Bootstrap override */
+    .input-group-addon {
+      background: transparent;
+      border: none;
 
-.form-assignment {
-
-  h2 {
-    font-size: 16px;
-    line-height: 32px;
-    margin: 0;
-  }
-
-  hr {
-    margin: 0 -15px 10px;
-  }
-
-  .row {
-    margin-bottom: 10px;
-  }
-
-  .display-only {
-
-    &.header {
-      margin-top: 7px;
-      height: 32px;
-
-      > span {
-        line-height: 34px;
+      a {
+        color: #333333;
       }
     }
   }
 
-  //TODO Move it to org.civicrm.bootstrapcivicrm
-  .modal-table {
-    margin-top: 10px;
-    border: 1px solid $table-border-color;
-    background-color: $table-striped-bg;
+  &.form-task {
 
-    &.table-striped {
+    .form-control-static{
+      a:link{
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: underline;
+        text-transform: capitalize;
+      }
+    }
 
-      > thead {
+    .row{
+      margin-bottom: 10px;
+    }
 
-        > tr {
+    .modal-header {
+      padding: 10px 15px 0;
 
-          > th {
+      .close {
+        float: none;
+        opacity: .7;
+        margin-top: 7px;
+        margin-left: -3px;
+      }
 
-            &.action-column {
-              width: 5%;
+      > *[class^='col-'] {
+        margin-left: -15px;
+        margin-right: -15px;
+      }
+
+      /* using this override until we have a separate directive for that */
+      .ui-select-container{
+
+        * {
+          border: none !important;
+          box-shadow: none !important;
+        }
+
+        .ui-select-choices {
+          border: 1px solid #333333 !important;
+        }
+
+        .ui-select-toggle{
+          border-bottom: 1px solid #E8EEF0 !important;
+          padding: 0;
+
+          .caret:before {
+            position: relative;
+            top: -10px;
+            left: -10px;
+
+            // Magnifying Glass
+            content: "\f002";
+            opacity: .3;
+
+            font-family: FontAwesome;
+            font-weight: 200;
+            font-size: 16px;
+            font-style: normal;
+
+            transform: translate(0, 0);
+          }
+
+          .ui-select-placeholder,
+          .ui-select-match-text {
+            color: #41afcb !important;
+            font-size: 20px !important;
+          }
+        }
+      }
+    }
+
+    .modal-body {
+
+      .ui-select-bootstrap > .ui-select-choices{
+        min-width: 100%;
+        width: auto;
+      }
+
+      .dropdown-menu{
+        left: auto;
+      }
+
+      .ui-select-match-text > span {
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: absolute;
+      }
+
+      .container {
+        padding: 0 15px;
+      }
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .btn-indent {
+      margin-left: -13px;
+    }
+  }
+
+  &.form-assignment {
+
+    h2 {
+      font-size: 16px;
+      line-height: 32px;
+      margin: 0;
+    }
+
+    hr {
+      margin: 0 -15px 10px;
+    }
+
+    .row {
+      margin-bottom: 10px;
+    }
+
+    .display-only {
+
+      &.header {
+        margin-top: 7px;
+        height: 32px;
+
+        > span {
+          line-height: 34px;
+        }
+      }
+    }
+
+    //TODO Move it to org.civicrm.bootstrapcivicrm
+    .modal-table {
+      margin-top: 10px;
+      border: 1px solid $table-border-color;
+      background-color: $table-striped-bg;
+
+      &.table-striped {
+
+        > thead {
+
+          > tr {
+
+            > th {
+
+              &.action-column {
+                width: 5%;
+              }
+
+              &.title-column {
+                width: 45%;
+              }
+
+              &.assignee-column {
+                width: 25%;
+              }
+
+              &.date-column {
+                width: 25%;
+                min-width: 150px;
+              }
             }
+          }
+        }
 
-            &.title-column {
-              width: 45%;
-            }
+        > tbody, tfoot {
 
-            &.assignee-column {
-              width: 25%;
-            }
-
-            &.date-column {
-              width: 25%;
-              min-width: 150px;
-            }
+          > tr:nth-child(odd) {
+            background-color: $table-bg-accent;
           }
         }
       }
 
-      > tbody, tfoot {
+      th {
 
-        > tr:nth-child(odd) {
-          background-color: $table-bg-accent;
+        > .btn {
+          margin-top: -6px;
+          margin-bottom: -6px;
         }
       }
     }
 
-    th {
+    .separately {
+      margin-bottom: 20px;
+    }
 
-      > .btn {
-        margin-top: -6px;
-        margin-bottom: -6px;
+    .no-wrap {
+      white-space: nowrap;
+    }
+  }
+
+  &.form-task-migrate {
+
+    label {
+      text-transform: capitalize;
+    }
+  }
+
+  &.#{$prefix}form-action {
+    margin-top: -12px;
+    margin-bottom: -12px;
+    max-width: 817px;
+    width: 100%;
+    float: left;
+
+    .row,
+    .form-horizontal .form-group {
+      margin: {
+        bottom: 0;
+        left: -5px;
+        right: -5px;
+      }
+    }
+
+    .form-horizontal .control-label {
+      text-align: right;
+    }
+
+    [class^="col-"],
+    [class*=" col-"] {
+      padding: {
+        left: 5px;
+        right: 5px;
       }
     }
   }
 
-  /* Bootstrap override */
-  .input-group-addon {
-    background: transparent;
-    border: none;
+  .ui-select-required {
+    display: table;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
 
-    a {
-      color: #333333;
+    .ui-select-container {
+      display: table-cell;
     }
-  }
 
-  .separately {
-    margin-bottom: 20px;
-  }
-
-  .no-wrap {
-    white-space: nowrap;
-  }
-}
-
-.form-task-migrate {
-
-  label {
-    text-transform: capitalize;
-  }
-}
-
-.#{$prefix}form-action {
-  margin-top: -12px;
-  margin-bottom: -12px;
-  max-width: 817px;
-  width: 100%;
-  float: left;
-
-  .row,
-  .form-horizontal .form-group {
-    margin: {
-      bottom: 0;
-      left: -5px;
-      right: -5px;
+    &:after {
+      content: "*";
+      color: red;
+      display: table-cell;
+      padding-left: 3px;
+      position: absolute;
+      top: 0;
     }
-  }
-
-  .form-horizontal .control-label {
-    text-align: right;
-  }
-
-  [class^="col-"],
-  [class*=" col-"] {
-    padding: {
-      left: 5px;
-      right: 5px;
-    }
-  }
-}
-
-.ui-select-required {
-  display: table;
-  max-width: 100%;
-  position: relative;
-  width: 100%;
-
-  .ui-select-container {
-    display: table-cell;
-  }
-
-  &:after {
-    content: "*";
-    color: red;
-    display: table-cell;
-    padding-left: 3px;
-    position: absolute;
-    top: 0;
   }
 }

@@ -51,6 +51,11 @@ define([
 
                 modalInstance.result.then(function (results) {
                     $scope.$broadcast('taskFormSuccess', results, data);
+
+                    if (results.open) {
+                        $rootScope.modalTask(data);
+                    }
+
                 }, function () {
                     $log.info('Modal dismissed');
                 });
