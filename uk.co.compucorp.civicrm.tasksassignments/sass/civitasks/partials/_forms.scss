@@ -27,15 +27,17 @@ form {
         text-transform: capitalize;
       }
     }
+
     .row{
       margin-bottom: 10px;
     }
 
     .modal-header {
-      height: 64px;
+      padding: 10px 15px 0;
 
       .close {
         float: none;
+        opacity: .7;
         margin-top: 7px;
         margin-left: -3px;
       }
@@ -88,6 +90,17 @@ form {
     }
 
     .modal-body {
+
+      .ui-select-bootstrap > .ui-select-choices{
+        width: auto;
+      }
+
+      .ui-select-match-text > span {
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: absolute;
+      }
 
       .container {
         padding: 0 15px;

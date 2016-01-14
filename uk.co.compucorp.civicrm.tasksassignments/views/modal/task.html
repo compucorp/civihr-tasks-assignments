@@ -37,19 +37,17 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
-                    <div class="ui-select-required">
-                        <ui-select
-                                ng-model="task.activity_type_id"
-                                ng-required="true">
-                            <ui-select-match
-                                    placeholder="Select Task Type">{{$select.selected.value}}
-                            </ui-select-match>
-                            <ui-select-choices
-                                    repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                                <div ng-bind="type.value"></div>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
+                    <ui-select
+                            ng-model="task.activity_type_id"
+                            ng-required="true">
+                        <ui-select-match placeholder="Select Task Type">
+                            {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                            <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <label class="control-label no-gutter col-sm-2" for="{{prefix}}task-due">
                     Due Date:
