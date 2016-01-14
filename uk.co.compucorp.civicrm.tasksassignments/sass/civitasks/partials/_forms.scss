@@ -1,6 +1,6 @@
 form {
 
-  .no-gutter [class*='col-'] {
+  .no-gutter[class*='col-'] {
     padding-left: 0;
     padding-right: 0;
   }
@@ -17,10 +17,11 @@ form {
     }
   }
 
-  &.form-task {
+  &.form-task,
+  &.form-document {
 
-    .form-control-static{
-      a:link{
+    .form-control-static {
+      a:link {
         font-size: 12px;
         font-weight: 600;
         text-decoration: underline;
@@ -28,8 +29,12 @@ form {
       }
     }
 
-    .row{
+    .row {
       margin-bottom: 10px;
+
+      &.double-spacing {
+        margin-bottom: 20px;
+      }
     }
 
     .modal-header {
@@ -48,7 +53,7 @@ form {
       }
 
       /* using this override until we have a separate directive for that */
-      .ui-select-container{
+      .ui-select-container {
 
         * {
           border: none !important;
@@ -59,7 +64,7 @@ form {
           border: 1px solid #333333 !important;
         }
 
-        .ui-select-toggle{
+        .ui-select-toggle {
           border-bottom: 1px solid #E8EEF0 !important;
           padding: 0;
 
@@ -91,13 +96,51 @@ form {
 
     .modal-body {
 
-      .ui-select-bootstrap > .ui-select-choices{
+      .input-group[class^="col-"] {
+        float: left;
+      }
+
+      .ui-select-bootstrap > .ui-select-choices {
         min-width: 100%;
         width: auto;
       }
 
-      .dropdown-menu{
+      .dropdown-menu {
         left: auto;
+      }
+
+      table {
+        padding-left: 15px;
+        padding-right: 15px;
+        background: transparent;
+        * {
+          border: none;
+        }
+
+        .btn-danger {
+          background: transparent;
+          color: #f08290;
+        }
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .drop-zone {
+        background: transparent;
+        text-align: center;
+        padding: 25px;
+        cursor: pointer;
+
+        > .fa {
+          font-size: 25px;
+          margin-bottom: 15px;
+        }
+
+        > strong {
+          font-weight: 600;
+        }
       }
 
       .ui-select-match-text > span {

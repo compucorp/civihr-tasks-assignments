@@ -37,8 +37,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
-                    <ui-select
-                            ng-model="task.activity_type_id"
+                    <ui-select ng-model="task.activity_type_id"
                             ng-required="true">
                         <ui-select-match placeholder="Select Task Type">
                             {{$select.selected.value}}

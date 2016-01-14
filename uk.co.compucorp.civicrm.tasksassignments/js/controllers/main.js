@@ -31,6 +31,11 @@ define([
 
                 modalInstance.result.then(function (results) {
                     $scope.$broadcast('documentFormSuccess', results, data);
+
+                    if (results.open) {
+                        $rootScope.modalDocument(data);
+                    }
+
                 }, function () {
                     $log.info('Modal dismissed');
                 });
