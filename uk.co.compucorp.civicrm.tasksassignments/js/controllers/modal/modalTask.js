@@ -4,9 +4,9 @@ define(['controllers/controllers',
         'services/task'], function(controllers){
 
     controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
-        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', '$timeout',
+        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
         function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
-                 data, config, $timeout){
+                 data, config){
             $log.debug('Controller: ModalTaskCtrl');
 
             $scope.data = data;
