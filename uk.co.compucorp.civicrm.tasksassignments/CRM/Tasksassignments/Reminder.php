@@ -37,7 +37,7 @@ class CRM_Tasksassignments_Reminder
         }
     }
     
-    public static function sendReminder($activityId, $notes = null, $isReminder = false)
+    public static function sendReminder($activityId, $notes = null, $isReminder = false, $previousAssigneeId = null)
     {
         self::_setActivityOptions();
         
@@ -65,6 +65,11 @@ class CRM_Tasksassignments_Reminder
         foreach ($activityContactResult['values'] as $value)
         {
             $activityContact[$value['record_type_id']]['ids'][] = $value['contact_id'];
+        }
+
+        if($previousAssigneeId !== null)
+        {
+            $activityContact[1]['ids'][] = $previousAssigneeId;
         }
         
         foreach ($activityContact as $key => $value)
@@ -349,7 +354,7 @@ class CRM_Tasksassignments_Reminder
         $todayKeydatesCount = 0;
         if ($settings['keydates_tab']['value'])
         {
-            $keyDates = CRM_Tasksassignments_KeyDates::get($now, $to, $contactId);
+            $keyDates = CRM_Tasksassignments_KeyDates::get($now, $to);
             foreach ($keyDates as $keyDate)
             {
                 $reminderData['upcoming_keydates'][] = array_merge(
