@@ -2,8 +2,8 @@ define([
     'controllers/controllers',
     'services/file'
 ], function (controllers) {
-    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService', 'config',
-        function ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config) {
+    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService', 'config', '$timeout',
+        function ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config, $timeout) {
             $log.debug('Controller: MainCtrl');
 
             $rootScope.modalDocument = function (data, e) {
@@ -51,6 +51,13 @@ define([
 
                 modalInstance.result.then(function (results) {
                     $scope.$broadcast('taskFormSuccess', results, data);
+                    $log.info('Modal saved');
+
+                    if (results.open) {
+                        $log.info('New Modal', data);
+                        $rootScope.modalTask(data);
+                    }
+
                 }, function () {
                     $log.info('Modal dismissed');
                 });

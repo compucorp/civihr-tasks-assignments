@@ -4,20 +4,20 @@ define(['controllers/controllers',
         'services/task'], function(controllers){
 
     controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
-        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
+        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', '$timeout',
         function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
-                 data, config){
+                 data, config, $timeout){
             $log.debug('Controller: ModalTaskCtrl');
 
             $scope.data = data;
             $scope.task = {};
 
-            angular.copy(data,$scope.task);
+            angular.copy(data, $scope.task);
 
             $scope.task.assignee_contact_id = $scope.task.assignee_contact_id || [];
             $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
-            $scope.contacts = $rootScope.cache.contact.arrSearch;
+            $scope.contacts = [];
             $scope.showCId = !config.CONTACT_ID;
             $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val){
                 return +val.extra.contact_id == +$scope.task.target_contact_id;
@@ -143,9 +143,16 @@ define(['controllers/controllers',
                     $scope.task.case_id = results.case_id;
 
                     AssignmentService.updateTab();
+
+                    if($scope.openNew){
+                        $scope.task.open = true;
+                        $scope.openNew = false;
+                    }
+
                     $modalInstance.close($scope.task);
                     $scope.$broadcast('ct-spinner-hide');
-                    return
+
+                    return;
                 },function(reason){
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();

@@ -174,13 +174,13 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="cancel()">
-            <span class="fa fa-remove" aria-hidden="true"></span> Cancel
+            Cancel
         </button>
-        <button type="submit" class="btn btn-default" ng-disabled="!taskForm.$valid">
-            <span class="fa fa-check" aria-hidden="true"></span> Save And New
+        <button type="submit" ng-click="openNew = true;" class="btn btn-default" ng-disabled="!taskForm.$valid">
+            Save And New
         </button>
         <button type="submit" class="btn btn-default btn-primary" ng-disabled="!taskForm.$valid">
-            <span class="fa fa-check" aria-hidden="true"></span> Save
+            Save
         </button>
     </div>
 </form>
