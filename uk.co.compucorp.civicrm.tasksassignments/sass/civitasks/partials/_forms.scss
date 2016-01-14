@@ -66,13 +66,15 @@ form {
             top: -10px;
             left: -10px;
 
+            // Magnifying Glass
             content: "\f002";
             opacity: .3;
 
             font-family: FontAwesome;
             font-weight: 200;
             font-size: 16px;
-            
+            font-style: normal;
+
             transform: translate(0, 0);
           }
 
