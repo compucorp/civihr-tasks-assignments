@@ -3,9 +3,9 @@
         <div class="row">
             <div class="col-xs-11">
                 <ui-select allow-clear
-                        ng-model="task.target_contact_id[0]"
-                        on-select="cacheContact($item)"
-                        ng-required="true">
+                           ng-model="task.target_contact_id[0]"
+                           on-select="cacheContact($item)"
+                           ng-required="true">
                     <ui-select-match placeholder="Select Target Contact">
                         {{$select.selected.label}}
                     </ui-select-match>
@@ -43,8 +43,7 @@
                         <ui-select-match placeholder="Select Task Type">
                             {{$select.selected.value}}
                         </ui-select-match>
-                        <ui-select-choices
-                                repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                        <ui-select-choices repeat="type.key as type in cache.taskType.arr | filter: $select.search">
                             <div ng-bind="type.value"></div>
                         </ui-select-choices>
                     </ui-select>
@@ -85,7 +84,8 @@
                     <input id="{{prefix}}task-subject"
                            class="form-control" name="taskSubject"
                            ng-model="task.subject" placeholder="Subject"
-                           maxlength="255"/>
+                           maxlength="255"
+                    />
                 </div>
             </div>
             <!-- Details -->
@@ -96,7 +96,8 @@
                 <div class="col-xs-12">
                     <div text-angular
                          ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
-                         ng-model="task.details"></div>
+                         ng-model="task.details">
+                    </div>
                 </div>
             </div>
             <!-- Assignee -->
@@ -109,13 +110,12 @@
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-6 input-group" ng-show="showFieldAssignee">
-                    <ui-select
-                            ng-required="true"
-                            allow-clear
-                            ng-model="task.assignee_contact_id[0]"
-                            on-select="cacheContact($item)">
-                        <ui-select-match
-                                placeholder="Assignee">{{$select.selected.label}}
+                    <ui-select ng-required="true"
+                               allow-clear
+                               ng-model="task.assignee_contact_id[0]"
+                               on-select="cacheContact($item)">
+                        <ui-select-match placeholder="Assignee">
+                            {{$select.selected.label}}
                         </ui-select-match>
                         <ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search"
                                            refresh="refreshContacts($select.search)"
@@ -137,10 +137,10 @@
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-5">
-                    <ui-select  ng-show="showFieldStatus" allow-clear
+                    <ui-select ng-show="showFieldStatus" allow-clear
                                ng-model="task.status_id">
-                        <ui-select-match
-                                placeholder="Status">{{ $select.selected.value }}
+                        <ui-select-match placeholder="Status">
+                            {{ $select.selected.value }}
                         </ui-select-match>
                         <ui-select-choices repeat="status.key as status in cache.taskStatus.arr" refresh-delay="0">
                             <div ng-bind="status.value"></div>
@@ -156,12 +156,11 @@
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-7" ng-show="data.case_id || showFieldAssignment">
-                    <ui-select
-                            allow-clear
-                            ng-model="task.case_id"
-                            on-select="cacheAssignment($item);">
-                        <ui-select-match
-                                placeholder="Assignment">{{$select.selected.label}}
+                    <ui-select allow-clear
+                               ng-model="task.case_id"
+                               on-select="cacheAssignment($item);">
+                        <ui-select-match placeholder="Assignment">
+                            {{$select.selected.label}}
                         </ui-select-match>
                         <ui-select-choices repeat="assignment.id as assignment in assignments"
                                            refresh="refreshAssignments($select.search)"
@@ -176,6 +175,9 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <span class="fa fa-remove" aria-hidden="true"></span> Cancel
+        </button>
+        <button type="submit" class="btn btn-default" ng-disabled="!taskForm.$valid">
+            <span class="fa fa-check" aria-hidden="true"></span> Save And New
         </button>
         <button type="submit" class="btn btn-default btn-primary" ng-disabled="!taskForm.$valid">
             <span class="fa fa-check" aria-hidden="true"></span> Save
