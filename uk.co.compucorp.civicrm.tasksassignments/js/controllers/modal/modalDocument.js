@@ -214,7 +214,6 @@ define(['controllers/controllers',
             $scope.dropzoneClick = function () {
                 $timeout(function () {
                     document.getElementById($rootScope.prefix + 'document-files').click();
-                    console.log('click');
                 });
             };
         }]);
