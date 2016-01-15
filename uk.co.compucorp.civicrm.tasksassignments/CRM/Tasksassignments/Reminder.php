@@ -37,7 +37,7 @@ class CRM_Tasksassignments_Reminder
         }
     }
     
-    public static function sendReminder($activityId, $notes = null, $isReminder = false, $previousAssigneeId = null)
+    public static function sendReminder($activityId, $notes = null, $isReminder = false, $previousAssigneeId = null, $isDelete = false)
     {
         self::_setActivityOptions();
         
@@ -121,6 +121,7 @@ class CRM_Tasksassignments_Reminder
             $activityName = implode(', ', $activityContact[3]['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'isReminder' => $isReminder,
+                'isDelete' => $isDelete,
                 'notes' => $notes,
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
                 'activityName' => $activityName,
@@ -136,7 +137,12 @@ class CRM_Tasksassignments_Reminder
                 'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-documents',
             ));
             
-            self::_send($contactId, $recipient, $activityName, $templateBodyHTML);
+            if($isDelete){
+                $subject = "Your Task ({$activityName}) is deleted";
+            }else{
+                $subject = $activityName;
+            }
+            self::_send($contactId, $recipient, $subject, $templateBodyHTML);
         }
 
         return true;
