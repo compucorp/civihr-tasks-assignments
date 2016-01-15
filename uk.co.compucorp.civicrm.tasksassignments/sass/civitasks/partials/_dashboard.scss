@@ -109,6 +109,10 @@
 
                 .task-title {
                   margin: 4px 0;
+
+                  > .#{$prefix}task-title {
+                    color: #707C88;
+                  }
                 }
               }
             }
