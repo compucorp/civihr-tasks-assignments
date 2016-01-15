@@ -13085,9 +13085,9 @@ fieldset[disabled]
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > aside, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > aside {
   position: absolute;
   float: left;
-  overflow: hidden;
   background-color: #f4f7f8;
   width: 225px;
+  min-height: 500px;
   height: 100%;
   box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
 }
@@ -13166,78 +13166,82 @@ fieldset[disabled]
   color: #707C88;
 }
 /* line 121, ../sass/civitasks/partials/_dashboard.scss */
+#civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .editable-click, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .editable-click {
+  height: 28px;
+}
+/* line 125, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source {
   font-size: 12px;
   color: #999999;
 }
-/* line 125, ../sass/civitasks/partials/_dashboard.scss */
+/* line 129, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source > a:link, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source > a:link {
   color: initial;
 }
-/* line 132, ../sass/civitasks/partials/_dashboard.scss */
+/* line 136, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li:last-child, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li:last-child {
   margin-bottom: 0;
 }
-/* line 144, ../sass/civitasks/partials/_dashboard.scss */
+/* line 148, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-sidebar-inner + .ct-content-wrapper > .ct-content, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-sidebar-inner + .ct-content-wrapper > .ct-content {
   min-height: 515px;
 }
-/* line 148, ../sass/civitasks/partials/_dashboard.scss */
+/* line 152, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-csv-export, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-csv-export {
   font-size: 11px;
   margin-left: 30px;
   position: relative;
   top: 1px;
 }
-/* line 155, ../sass/civitasks/partials/_dashboard.scss */
+/* line 159, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates {
   margin-left: 10px;
 }
-/* line 158, ../sass/civitasks/partials/_dashboard.scss */
+/* line 162, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li {
   margin-bottom: 0px;
 }
-/* line 162, ../sass/civitasks/partials/_dashboard.scss */
+/* line 166, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li:last-child, #cividocuments #ct-dashboard .ct-dashboard-key-dates .ct-list-key-dates > li:last-child {
   margin-bottom: 0;
 }
-/* line 168, ../sass/civitasks/partials/_dashboard.scss */
+/* line 172, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar, #cividocuments #ct-dashboard .ct-dashboard-calendar {
   min-height: 675px;
 }
-/* line 172, ../sass/civitasks/partials/_dashboard.scss */
+/* line 176, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev,
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next,
 #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next {
   margin-top: -10px;
   padding: 10px;
 }
-/* line 178, ../sass/civitasks/partials/_dashboard.scss */
+/* line 182, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-prev {
   float: left;
   margin-left: -10px;
 }
-/* line 183, ../sass/civitasks/partials/_dashboard.scss */
+/* line 187, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar .ct-cal-next {
   float: right;
   margin-right: -10px;
 }
-/* line 189, ../sass/civitasks/partials/_dashboard.scss */
+/* line 193, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-documents-container, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-documents-container {
   -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 193, ../sass/civitasks/partials/_dashboard.scss */
+/* line 197, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar-dark, #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar-dark,
 #civitasks #ct-dashboard .ct-dashboard-calendar .header-bar-danger-light,
 #cividocuments #ct-dashboard .ct-dashboard-calendar .header-bar-danger-light {
   margin-bottom: 10px;
 }
-/* line 198, ../sass/civitasks/partials/_dashboard.scss */
+/* line 202, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .btn-cal-view, #cividocuments #ct-dashboard .ct-dashboard-calendar .btn-cal-view {
   min-width: 70px;
 }
-/* line 202, ../sass/civitasks/partials/_dashboard.scss */
+/* line 206, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-list-task, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-list-task {
   margin-bottom: 15px;
 }
@@ -13255,12 +13259,12 @@ fieldset[disabled]
   padding-left: 7.5px;
   padding-right: 7.5px;
 }
-/* line 209, ../sass/civitasks/partials/_dashboard.scss */
+/* line 213, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-calendar .ct-view-day .ct-datepicker table, #cividocuments #ct-dashboard .ct-dashboard-calendar .ct-view-day .ct-datepicker table {
   table-layout: fixed;
   max-width: 100%;
 }
-/* line 217, ../sass/civitasks/partials/_dashboard.scss */
+/* line 221, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-assignments, #cividocuments #ct-dashboard .ct-dashboard-assignments,
 #civitasks #ct-dashboard .ct-dashboard-reports,
 #cividocuments #ct-dashboard .ct-dashboard-reports {

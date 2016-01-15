@@ -316,7 +316,6 @@
             <div class="{{prefix}}task-more">
                 <div editable-ta="task.details" onbeforesave="updateTask(task, { details: ta.$data });">
                     <div ta-bind ng-model="task.details">
-                        {{ task | json }}
                     </div>
                 </div>
             </div>
