@@ -110,8 +110,8 @@
                 .task-title {
                   margin: 4px 0;
 
-                  > .#{$prefix}task-title {
-                    color: #707C88;
+                  > .task-title {
+                    color: $secondary-colour;
                   }
                 }
               }
@@ -124,7 +124,7 @@
 
                 .#{$prefix}task-contact-source {
                   font-size: 12px;
-                  color: #999999;
+                  color: $secondary-colour;
 
                   > a:link {
                     color: initial;

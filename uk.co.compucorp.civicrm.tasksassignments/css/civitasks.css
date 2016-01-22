@@ -13162,7 +13162,7 @@ fieldset[disabled]
   margin: 4px 0;
 }
 /* line 113, ../sass/civitasks/partials/_dashboard.scss */
-#civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li header .task-title > .ct-task-title, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li header .task-title > .ct-task-title {
+#civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li header .task-title > .task-title, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li header .task-title > .task-title {
   color: #707C88;
 }
 /* line 121, ../sass/civitasks/partials/_dashboard.scss */
@@ -13172,7 +13172,7 @@ fieldset[disabled]
 /* line 125, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source {
   font-size: 12px;
-  color: #999999;
+  color: #707C88;
 }
 /* line 129, ../sass/civitasks/partials/_dashboard.scss */
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source > a:link, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > main > .ct-content-wrapper > .ct-content .ct-list-task > li article .ct-task-contact-source > a:link {
