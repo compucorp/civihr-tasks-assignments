@@ -211,7 +211,7 @@
 
             <p class="task-title">
                 <span ng-show="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title">{{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}:</span>
-                <a href class="{{prefix}}task-title" ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
+                <a href class="task-title" ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
             </p>
         </div>
         <div class="col-xs-6">
@@ -315,22 +315,24 @@
         <div class="col-xs-12">
             <div class="{{prefix}}task-more">
                 <div editable-ta="task.details" onbeforesave="updateTask(task, { details: ta.$data });">
-                    <div ta-bind ng-model="task.details"></div>
+                    <div ta-bind ng-model="task.details">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xs-4">
+        <div class="col-xs-8">
             <p class="{{prefix}}task-contact-source">
                 Created by:&nbsp;
                 <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}">
                     <span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span>
                 </a>
-
+                &nbsp;-&nbsp;
+                <span class="{{prefix}}task-status" ng-bind="cache.taskStatus.obj[task.status_id]"></span>
             </p>
         </div>
-        <div class="col-xs-8">
-            <span ng-bind="cache.taskStatus.obj[task.status_id]"></span>
+        <div class="col-xs-4">
+
         </div>
     </article>
 </script>

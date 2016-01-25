@@ -7,9 +7,9 @@
     > aside {
       position: absolute;
       float: left;
-      overflow: hidden;
       background-color: $dashboard-sidebar-color;
       width: $dashboard-sidebar-width;
+      min-height: 500px;
       height: 100%;
       box-shadow: 1px 4px 15px 0 rgba(0, 0, 0, 0.1);
     }
@@ -109,6 +109,26 @@
 
                 .task-title {
                   margin: 4px 0;
+
+                  > .task-title {
+                    color: $secondary-colour;
+                  }
+                }
+              }
+
+              article {
+
+                .editable-click{
+                  height: 28px;
+                }
+
+                .#{$prefix}task-contact-source {
+                  font-size: 12px;
+                  color: $secondary-colour;
+
+                  > a:link {
+                    color: initial;
+                  }
                 }
               }
             }

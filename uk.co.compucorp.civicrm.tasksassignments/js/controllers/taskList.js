@@ -117,7 +117,7 @@ define(['controllers/controllers',
                 overdue: 'Overdue',
                 dueToday: 'Due Today',
                 dueThisWeek: 'Due This Week',
-                dateRange: ''
+                dateRange: 'Due Tasks'
             };
 
             $scope.cacheAssignment = function($item){
@@ -225,21 +225,6 @@ define(['controllers/controllers',
                         return +val.extra.contact_id == +targetContactId;
                     });
                 });
-            };
-
-            $scope.labelDateRange = function(from, until){
-                var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
-                    filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';
-
-                if (filterDateTimeUntil) {
-                    filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
-                }
-
-                if (filterDateTimeFrom) {
-                    filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
-                }
-
-                $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
             };
 
             $scope.loadTasksResolved = function(){
