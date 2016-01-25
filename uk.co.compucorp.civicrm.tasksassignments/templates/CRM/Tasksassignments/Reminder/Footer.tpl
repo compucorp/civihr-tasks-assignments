@@ -1,4 +1,5 @@
-                                                                <br/>                                                                
+                                                            {if $isDelete === false}
+                                                                <br/>
                                                                 <table class="mtable" width="100%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                                                                     <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                                                                         <td width="50%" align="left" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
@@ -21,6 +22,7 @@
                                                                         </td>
                                                                     </tr>
                                                                 </table>
+                                                            {/if}
                                                                 <table class="mtable" width="100%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                                                                     <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
                                                                         <td class="mfooter" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;font-size:13px;color:#cdcdcd;text-align:center;line-height:17px;">

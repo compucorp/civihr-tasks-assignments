@@ -13,6 +13,7 @@ define(function(){
             button: {
                 assignmentAdd: CRM.Tasksassignments.settings.add_assignment_button_title
             }
-        }
+        },
+        isTaskDashboardDefault: CRM.Tasksassignments.settings.is_task_dashboard_default
     });
 });

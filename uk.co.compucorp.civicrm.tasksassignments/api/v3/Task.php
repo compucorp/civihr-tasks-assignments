@@ -321,6 +321,7 @@ function civicrm_api3_task_delete($params) {
     throw new API_Exception('You don\'t have permissions to delete Tasks');
   }
   
+  CRM_Tasksassignments_Reminder::sendReminder($params['id'], null, false, null, true);
   if (CRM_Activity_BAO_Activity::deleteActivity($params)) {
     return civicrm_api3_create_success(1, $params, 'activity', 'delete');
   }
