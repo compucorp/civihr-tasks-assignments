@@ -30,8 +30,8 @@ define(['controllers/controllers',
                 }
 
                 $rootScope.$broadcast('ct-spinner-hide');
-                $log.debug($rootScope.cache);
-            }
+                $log.info($rootScope.cache);
+            };
 
             this.assignmentIds = [];
             this.contactIds = [];
@@ -68,7 +68,7 @@ define(['controllers/controllers',
                     collectCId(task);
                     collectAId(task);
                 });
-            }
+            };
 
             $scope.assignments = [];
             $scope.contacts = [];
@@ -84,7 +84,7 @@ define(['controllers/controllers',
 
             $scope.dpOpened = {
                 filterDates: {}
-            }
+            };
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
@@ -111,13 +111,13 @@ define(['controllers/controllers',
                     from: new Date().setHours(0, 0, 0, 0),
                     until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
                 }
-            }
+            };
 
             $scope.label = {
                 overdue: 'Overdue',
                 dueToday: 'Due Today',
                 dueThisWeek: 'Due This Week',
-                dateRange: ''
+                dateRange: 'Due Tasks'
             };
 
             $scope.cacheAssignment = function($item){
@@ -225,21 +225,6 @@ define(['controllers/controllers',
                         return +val.extra.contact_id == +targetContactId;
                     });
                 });
-            };
-
-            $scope.labelDateRange = function(from, until){
-                var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '',
-                    filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';
-
-                if (filterDateTimeUntil) {
-                    filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
-                }
-
-                if (filterDateTimeFrom) {
-                    filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
-                }
-
-                $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
             };
 
             $scope.loadTasksResolved = function(){

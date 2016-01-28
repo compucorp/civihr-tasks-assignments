@@ -30,6 +30,7 @@ define([
         'civitasks.settings',
         'xeditable',
         'xeditable-civi',
+        'angular-date'
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,
@@ -63,8 +64,6 @@ define([
                         period_start_date: 'Contract Start Date',
                         period_end_date: 'Contract End Date',
                         birth_date: 'Birthday',
-                        initial_join_date: 'Initial Join Date',
-                        final_termination_date: 'Final Termination Date',
                         probation_end_date: 'Probation End Date'
                     },
                     arr: []
@@ -113,7 +112,7 @@ define([
                     key: key,
                     value: value
                 })
-            },$rootScope.cache.dateType.arr);
+            }, $rootScope.cache.dateType.arr);
 
             $rootScope.$on('$stateChangeSuccess', function() {
                 $rootElement.removeClass('ct-page-loading');

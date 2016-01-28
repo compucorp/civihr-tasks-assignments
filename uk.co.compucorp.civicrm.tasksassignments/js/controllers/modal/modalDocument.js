@@ -1,35 +1,35 @@
 define(['controllers/controllers',
-        'services/contact',
-        'services/file',
-        'services/dialog',
-        'services/document'], function(controllers){
+    'services/contact',
+    'services/file',
+    'services/dialog',
+    'services/document'], function (controllers) {
 
-    controllers.controller('ModalDocumentCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log',
-        '$filter', '$modal', '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config',
-        function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService,
-                 DocumentService, ContactService, FileService, data, files, config){
+    controllers.controller('ModalDocumentCtrl', ['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log',
+        '$filter', '$modal', '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', '$timeout',
+        function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService,
+                  DocumentService, ContactService, FileService, data, files, config, $timeout) {
             $log.debug('Controller: ModalDocumentCtrl');
 
             $scope.files = [];
             $scope.document = {};
 
-            angular.copy(data,$scope.document);
-            angular.copy(files,$scope.files);
+            angular.copy(data, $scope.document);
+            angular.copy(files, $scope.files);
 
             $scope.data = data;
             $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
             $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
             $scope.document.status_id = $scope.document.status_id || '1';
-            $scope.contacts = $rootScope.cache.contact.arrSearch;
+            $scope.contacts = [];
             $scope.filesTrash = [];
             $scope.uploader = FileService.uploader('civicrm_activity');
             $scope.showCId = !config.CONTACT_ID;
-            $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val){
+            $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
                 return +val.extra.contact_id == +$scope.document.target_contact_id;
             });
 
-            $scope.cacheAssignment = function($item){
+            $scope.cacheAssignment = function ($item) {
 
                 if ($rootScope.cache.assignment.obj[$item.id]) {
                     return
@@ -61,7 +61,7 @@ define(['controllers/controllers',
                 AssignmentService.updateCache(obj);
             };
 
-            $scope.cacheContact = function($item){
+            $scope.cacheContact = function ($item) {
                 var obj = {};
 
                 obj[$item.id] = {
@@ -74,12 +74,12 @@ define(['controllers/controllers',
                 ContactService.updateCache(obj);
             };
 
-            $scope.fileMoveToTrash = function(index) {
+            $scope.fileMoveToTrash = function (index) {
                 $scope.filesTrash.push($scope.files[index]);
                 $scope.files.splice(index, 1);
             };
 
-            $scope.refreshAssignments = function(input){
+            $scope.refreshAssignments = function (input) {
 
                 if (!input) {
                     return
@@ -87,21 +87,21 @@ define(['controllers/controllers',
 
                 var targetContactId = $scope.document.target_contact_id;
 
-                AssignmentService.search(input, $scope.document.case_id).then(function(results){
-                    $scope.assignments = $filter('filter')(results, function(val){
+                AssignmentService.search(input, $scope.document.case_id).then(function (results) {
+                    $scope.assignments = $filter('filter')(results, function (val) {
                         return +val.extra.contact_id == +targetContactId;
                     });
                 });
             };
 
-            $scope.refreshContacts = function(input){
+            $scope.refreshContacts = function (input) {
                 if (!input) {
                     return
                 }
 
                 ContactService.search(input, {
                     contact_type: 'Individual'
-                }).then(function(results){
+                }).then(function (results) {
                     $scope.contacts = results;
                 });
             };
@@ -111,7 +111,7 @@ define(['controllers/controllers',
                 exp: false
             };
 
-            $scope.cancel = function(){
+            $scope.cancel = function () {
 
                 if ($scope.documentForm.$pristine) {
                     $modalInstance.dismiss('cancel');
@@ -121,7 +121,7 @@ define(['controllers/controllers',
                 $dialog.open({
                     copyCancel: 'No',
                     msg: 'Are you sure you want to cancel? Changes will be lost!'
-                }).then(function(confirm){
+                }).then(function (confirm) {
                     if (!confirm) {
                         return
                     }
@@ -132,11 +132,10 @@ define(['controllers/controllers',
 
             };
 
-            $scope.confirm = function(){
+            $scope.confirm = function () {
 
-                if (angular.equals(data,$scope.document) &&
-                    angular.equals(files,$scope.files) &&
-                    !$scope.uploader.queue.length) {
+                if (angular.equals(data, $scope.document) &&
+                    angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
                     $modalInstance.dismiss('cancel');
                     return
                 }
@@ -163,19 +162,19 @@ define(['controllers/controllers',
                 $q.all({
                     document: DocumentService.save($scope.document),
                     files: !!promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
-                }).then(function(result){
+                }).then(function (result) {
 
                     if (uploader.queue.length) {
-                        var modalInstance  = $modal.open({
+                        var modalInstance = $modal.open({
                             targetDomEl: $rootElement.find('div').eq(0),
-                            templateUrl: config.path.TPL+'/modal/progress.html?v=1',
+                            templateUrl: config.path.TPL + '/modal/progress.html?v=1',
                             size: 'sm',
                             controller: 'ModalProgressCtrl',
                             resolve: {
-                                uploader: function(){
+                                uploader: function () {
                                     return uploader;
                                 },
-                                entityId: function(){
+                                entityId: function () {
                                     return result.document.id;
                                 }
                             }
@@ -187,22 +186,35 @@ define(['controllers/controllers',
 
                     return result;
 
-                }).then(function(result){
+                }).then(function (result) {
 
                     $scope.document.id = result.document.id;
                     $scope.document.case_id = result.document.case_id;
                     $scope.document.file_count = $scope.files.length + uploader.queue.length;
 
+                    $scope.document.open = $scope.openNew;
+
                     AssignmentService.updateTab();
                     $modalInstance.close($scope.document);
                     $scope.$broadcast('ta-spinner-hide');
-                },function(reason){
+                }, function (reason) {
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
                     $scope.$broadcast('ta-spinner-hide');
                     return $q.reject();
                 });
-            }
+            };
 
+            $scope.dpOpen = function ($event, name) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.dpOpened[name] = true;
+            };
+
+            $scope.dropzoneClick = function () {
+                $timeout(function () {
+                    document.getElementById($rootScope.prefix + 'document-files').click();
+                });
+            };
         }]);
 });

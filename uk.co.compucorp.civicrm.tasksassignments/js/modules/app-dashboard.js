@@ -44,7 +44,6 @@ define(['modules/run', 'moment'], function (_, moment) {
                                     }
 
                                     deferred.resolve(taskList);
-
                                 });
 
                                 return deferred.promise;
@@ -147,7 +146,7 @@ define(['modules/run', 'moment'], function (_, moment) {
                     }).
                     state('assignments', {
                         url: '/assignments',
-                        controller: 'ExternalPageCtrl',
+                        controller: 'AssignmentsCtrl',
                         templateUrl: config.path.TPL+'dashboard/assignments.html?v=5'
                     }).
                     state('calendar', {

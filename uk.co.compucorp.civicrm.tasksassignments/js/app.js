@@ -11,6 +11,7 @@ define([
     'controllers/dateList',
     'controllers/documentList',
     'controllers/document',
+    'controllers/assignments',
     'controllers/main',
     'controllers/taskList',
     'controllers/task',
@@ -43,7 +44,7 @@ define([
     'services/services',
 ], function(){
     'use strict';
-
+    
     document.addEventListener('taInit', function(e){
         angular.bootstrap(document.getElementById(e.detail.module), ['civitasks.'+ e.detail.app]);
     });
