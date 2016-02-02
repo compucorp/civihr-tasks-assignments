@@ -157,7 +157,7 @@ function tasksassignments_civicrm_pageRun($page) {
         $page instanceof CRM_Tasksassignments_Page_Settings) {
 
         CRM_Core_Resources::singleton()
-            ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/src/tasks-assignments.js' : 'dist/tasks-assignments.min.js',1010);
+            ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/src/tasks-assignments.js' : 'js/dist/tasks-assignments.min.js',1010);
         CRM_Core_Resources::singleton()
             ->addStyleFile('uk.co.compucorp.civicrm.tasksassignments', 'css/civitasks.css');
 
