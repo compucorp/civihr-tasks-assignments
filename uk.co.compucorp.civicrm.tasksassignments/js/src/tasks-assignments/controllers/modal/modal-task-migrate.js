@@ -80,6 +80,23 @@ define([
                                 'return': 'assignee_contact_id, activity_type_id, assignee_contact_id, id, status_id'
                             }
                         }, function(data){
+
+                            function createStatusList(type, activity){
+                                var migrateTypeObj = $scope.migrate[type]
+
+                                migrateTypeObj.list.push(activity);
+
+                                if (!(migrateTypeObj.statusList.indexOf(activity.status_id) > -1)) {
+
+                                    if (!(statusResolve[type].indexOf(activity.status_id) > -1)) {
+                                        migrateTypeObj.statusList.unshift(activity.status_id);
+                                        migrateTypeObj.statusListSelected.push(activity.status_id);
+                                    } else {
+                                        migrateTypeObj.statusList.push(activity.status_id);
+                                    }
+                                }
+                            }
+
                             var documentTypeObj = $rootScope.cache.documentType.obj,
                                 statusResolve = {
                                     task: $rootScope.cache.taskStatusResolve,
@@ -89,22 +106,6 @@ define([
                             if (data.values && data.values.length) {
 
                                 data.values = $filter('orderBy')(data.values, '-status_id');
-
-                                function createStatusList(type, activity){
-                                    var migrateTypeObj = $scope.migrate[type]
-
-                                    migrateTypeObj.list.push(activity);
-
-                                    if (!(migrateTypeObj.statusList.indexOf(activity.status_id) > -1)) {
-
-                                        if (!(statusResolve[type].indexOf(activity.status_id) > -1)) {
-                                            migrateTypeObj.statusList.unshift(activity.status_id);
-                                            migrateTypeObj.statusListSelected.push(activity.status_id);
-                                        } else {
-                                            migrateTypeObj.statusList.push(activity.status_id);
-                                        }
-                                    }
-                                }
 
                                 angular.forEach(data.values, function(activity){
                                     !documentTypeObj[activity.activity_type_id] ?
