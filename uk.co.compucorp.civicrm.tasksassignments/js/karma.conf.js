@@ -18,7 +18,7 @@ module.exports = function (config) {
             'js/Common.js',
             'js/crm.ajax.js',
 
-            //
+            // Global variables that needs to be accessible in the test environment
             extPath + 'js/test/global-variables.js',
 
             // manual loading of requirejs as to avoid interference with the global dependencies above
