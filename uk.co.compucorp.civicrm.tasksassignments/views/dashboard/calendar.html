@@ -1,1 +1,76 @@
-<div class="{{prefix}}dashboard-calendar">    <div class="panel panel-secondary">        <div class="panel-heading">            <div class="row">                <div class="col-xs-12 col-sm-3">                    <h3 class="panel-title">View:</h3>                </div>                <div class="col-xs-12 col-sm-6 text-center">                    <div class="btn-group btn-group-sm">                        <a class="btn btn-gray btn-cal-view"                                ui-sref="calendar.mwl.day"                                ng-model="calendarView"                                btn-radio="'day'">Day</a>                        <a class="btn btn-gray btn-cal-view"                                ui-sref="calendar.mwl.week"                                ng-model="calendarView"                                btn-radio="'week'">Week</a>                        <a class="btn btn-gray btn-cal-view"                                ui-sref="calendar.mwl.month"                                ng-model="calendarView"                                btn-radio="'month'">Month</a>                    </div>                </div>            </div>        </div>    </div>    <h4 class="header-bar header-bar-primary text-center">        <a href           class="{{prefix}}cal-prev"           mwl-date-modifier           date="calendarDay"           decrement="calendarView">            <i class="fa fa-chevron-left"></i>        </a>        {{calendarTitle}}        <a href class="{{prefix}}cal-next"           mwl-date-modifier           date="calendarDay"           increment="calendarView">            <i class="fa fa-chevron-right"></i>        </a>    </h4>    <div ng-show="calendarView == 'day'" class="{{prefix}}view-day">        <div class="row">            <div class="col-xs-12 col-sm-4">                <div class="{{prefix}}datepicker">                    <datepicker ng-model="calendarDay" min-date="minDate" show-weeks="true"></datepicker>                </div>            </div>            <div class="col-sm-8" >                <div ui-view="taskList">                </div>                <div ui-view="documentList" ng-if="settings.tabEnabled.documents">                </div>            </div>        </div>    </div>    <div ng-show="calendarView != 'day'">        <mwl-calendar                view="calendarView"                current-day="calendarDay"                events="calTaskList"                documents="calDocList"                view-title="calendarTitle"                on-event-click="displayDayView(calendarEvent.startsAt)"                edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"                delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"                on-edit-event-click="eventEdited(calendarEvent)"                on-delete-event-click="eventDeleted(calendarEvent)"                on-drill-down-click="displayDayView(calendarDate)"                auto-open="true">        </mwl-calendar>    </div></div>
+<div class="{{prefix}}dashboard-calendar">
+    <div class="panel panel-secondary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <h3 class="panel-title">View:</h3>
+                </div>
+                <div class="col-xs-12 col-sm-6 text-center">
+                    <div class="btn-group btn-group-sm">
+                        <a class="btn btn-gray btn-cal-view"
+                                ui-sref="calendar.mwl.day"
+                                ng-model="calendarView"
+                                btn-radio="'day'">Day</a>
+                        <a class="btn btn-gray btn-cal-view"
+                                ui-sref="calendar.mwl.week"
+                                ng-model="calendarView"
+                                btn-radio="'week'">Week</a>
+                        <a class="btn btn-gray btn-cal-view"
+                                ui-sref="calendar.mwl.month"
+                                ng-model="calendarView"
+                                btn-radio="'month'">Month</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="header-bar header-bar-primary text-center">
+        <a href
+           class="{{prefix}}cal-prev"
+           mwl-date-modifier
+           date="calendarDay"
+           decrement="calendarView">
+            <i class="fa fa-chevron-left"></i>
+        </a>
+        {{calendarTitle}}
+        <a href class="{{prefix}}cal-next"
+           mwl-date-modifier
+           date="calendarDay"
+           increment="calendarView">
+            <i class="fa fa-chevron-right"></i>
+        </a>
+    </h4>
+    <div ng-show="calendarView == 'day'" class="{{prefix}}view-day">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="{{prefix}}datepicker">
+                    <datepicker ng-model="calendarDay" min-date="minDate" show-weeks="true"></datepicker>
+                </div>
+            </div>
+            <div class="col-sm-8" >
+                <div ui-view="taskList">
+
+                </div>
+                <div ui-view="documentList" ng-if="settings.tabEnabled.documents">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="calendarView != 'day'">
+        <mwl-calendar
+                view="calendarView"
+                current-day="calendarDay"
+                events="calTaskList"
+                documents="calDocList"
+                view-title="calendarTitle"
+                on-event-click="displayDayView(calendarEvent.startsAt)"
+                edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+                delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+                on-edit-event-click="eventEdited(calendarEvent)"
+                on-delete-event-click="eventDeleted(calendarEvent)"
+                on-drill-down-click="displayDayView(calendarDate)"
+                auto-open="true">
+        </mwl-calendar>
+    </div>
+</div>
