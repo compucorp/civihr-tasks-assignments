@@ -1,8 +1,7 @@
 var TEST_REGEXP = /(spec|test)\.js$/i;
 var allTestFiles = [];
-var extPath = '/base/tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments';
-var mocksPath = extPath + '/js/test/mocks';
-var srcPath = extPath + '/js/src/tasks-assignments';
+var mocksPath = CRM.Tasksassignments.extensionPath + '/js/test/mocks';
+var srcPath = CRM.Tasksassignments.extensionPath + '/js/src/tasks-assignments';
 
 Object.keys(window.__karma__.files).forEach(function(file) {
     if (TEST_REGEXP.test(file)) {
