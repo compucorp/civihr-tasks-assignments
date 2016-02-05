@@ -3,8 +3,8 @@ define([
 ], function (filters) {
     'use strict';
 
-    filters.filter('filterBy.userRole',['$filter', 'config', '$log', function($filter, config, $log){
-        $log.debug('Filter: filterBy.userRole');
+    filters.filter('filterByUserRole',['$filter', 'config', '$log', function($filter, config, $log){
+        $log.debug('Filter: filterByUserRole');
 
         return function(inputArr, contactTypeField, equal) {
             var filteredArr = [],

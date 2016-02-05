@@ -49,8 +49,8 @@
         </thead>
         <tbody>
         <tr ng-repeat="document in documentListPaginated = (documentListOngoing = (documentList
-                    | filterBy.status:cache.documentStatusResolve:false
-                    | filterBy.due:'dateRange':{ from: calendarDay, until: calendarDay }
+                    | filterByStatus:cache.documentStatusResolve:false
+                    | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
                     | orderBy: 'activity_date_time')
                         | offset: (pagination.currentPage-1)*pagination.itemsPerPage
                         | limitTo: pagination.itemsPerPage)"

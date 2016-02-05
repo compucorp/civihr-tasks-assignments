@@ -239,7 +239,7 @@ define([
                 var ctrl = this;
 
                 //Remove resolved tasks from the task list
-                $filter('filterBy.status')($scope.taskList, $rootScope.cache.taskStatusResolve, false);
+                $filter('filterByStatus')($scope.taskList, $rootScope.cache.taskStatusResolve, false);
 
                 TaskService.get({
                     'target_contact_id': config.CONTACT_ID,

@@ -3,8 +3,8 @@ define([
 ], function (filters) {
     'use strict';
 
-    filters.filter('filterBy.due',['$filter', '$log', function($filter, $log){
-        $log.debug('Filter: filterBy.due');
+    filters.filter('filterByDue',['$filter', '$log', function($filter, $log){
+        $log.debug('Filter: filterByDue');
 
         return function(inputArr, type, dateRange) {
 

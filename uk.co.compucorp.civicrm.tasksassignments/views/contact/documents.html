@@ -65,10 +65,10 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="document in documentListOngoing = (documentListFiltered = (documentList
-                    | filterBy.status:filterParams.documentStatus
-                    | filterBy.assignmentType:filterParams.assignmentType
+                    | filterByStatus:filterParams.documentStatus
+                    | filterByAssignmentType:filterParams.assignmentType
                     | orderBy: 'activity_date_time')
-                        | filterBy.status:cache.documentStatusResolve:false)"
+                        | filterByStatus:cache.documentStatusResolve:false)"
                         ng-controller="DocumentCtrl"
                         ng-include
                         src="'document.html'">
@@ -103,7 +103,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="document in documentListPaginated = (documentListResolved = (documentListFiltered
-                        | filterBy.status:cache.documentStatusResolve:true)
+                        | filterByStatus:cache.documentStatusResolve:true)
                             | offset: (pagination.currentPage-1)*pagination.itemsPerPage
                             | limitTo: pagination.itemsPerPage)"
                             ng-controller="DocumentCtrl"
