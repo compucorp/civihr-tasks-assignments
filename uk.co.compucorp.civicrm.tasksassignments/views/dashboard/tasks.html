@@ -11,21 +11,21 @@
                             <a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>
                                 {{label.overdue}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i>
-                                <span class="badge badge-danger" ng-bind="(taskListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
+                                <span class="badge badge-danger" ng-bind="(taskListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>
                                 {{label.dueToday}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i>
-                                <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
+                                <span class="badge badge-primary" ng-bind="(taskListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href ng-model="filterParams.due" btn-radio="'dueThisWeek'" uncheckable>
                                 {{label.dueThisWeek}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i>
-                                <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
+                                <span class="badge badge-primary" ng-bind="(taskListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
                             </a>
                         </li>
                     </ul>
@@ -93,7 +93,7 @@
                                             field: 'assignee_contact_id',
                                             isEqual: true
                                         }">
-                                        My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})
+                                        My Tasks ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByUserRole:'assignee_contact_id').length}})
                                     </a>
                                     <a ui-sref="tasks.delegated"
                                         class="btn btn-gray panel-filter__filter"
@@ -102,7 +102,7 @@
                                             field: 'assignee_contact_id',
                                             isEqual: false
                                         }">
-                                        Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id':false).length}})
+                                        Delegated Tasks ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByUserRole:'assignee_contact_id':false).length}})
                                     </a>
                                     <a ui-sref="tasks.all"
                                         class="btn btn-gray panel-filter__filter"
@@ -172,7 +172,7 @@
                     </div>
                 </div>
                 <ul class="{{prefix}}list-task">
-                    <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterBy.status:cache.taskStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
+                    <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterByStatus:cache.taskStatusResolve:false) | filterByDue:filterParams.due:filterParams.dateRange | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterByAssignmentType:filterParams.assignmentType | filterByContactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
                         ng-controller="TaskCtrl"
                         ng-class="{
                             '{{prefix}}task-completed': task.completed,

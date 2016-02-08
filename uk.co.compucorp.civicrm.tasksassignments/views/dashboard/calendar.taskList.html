@@ -1,8 +1,8 @@
 <h4 class="header-bar header-bar-dark">Tasks:</h4>
 <ul class="{{prefix}}list-task {{prefix}}list-task-small">
     <li ng-repeat="task in taskListOngoing = (taskList
-                        | filterBy.status:cache.taskStatusResolve:false
-                        | filterBy.due:'dateRange':{ from: calendarDay, until: calendarDay }
+                        | filterByStatus:cache.taskStatusResolve:false
+                        | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
                         | orderBy: 'activity_date_time')"
         ng-controller="TaskCtrl"
         ng-class="{

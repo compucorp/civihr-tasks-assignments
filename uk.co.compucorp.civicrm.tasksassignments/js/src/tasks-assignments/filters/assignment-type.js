@@ -3,8 +3,8 @@ define([
 ], function (filters) {
     'use strict';
 
-    filters.filter('filterBy.assignmentType',['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
-        $log.debug('Filter: filterBy.assignmentType');
+    filters.filter('filterByAssignmentType',['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
+        $log.debug('Filter: filterByAssignmentType');
 
         return function(inputArr, assignmentTypeArr) {
             var assignment,

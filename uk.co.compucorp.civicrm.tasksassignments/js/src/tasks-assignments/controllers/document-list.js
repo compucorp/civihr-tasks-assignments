@@ -242,7 +242,7 @@ define([
                 var ctrl = this;
 
                 //Remove resolved documents from the document list
-                $scope.documentList = $filter('filterBy.status')($scope.documentList, $rootScope.cache.documentStatusResolve, false);
+                $scope.documentList = $filter('filterByStatus')($scope.documentList, $rootScope.cache.documentStatusResolve, false);
 
                 DocumentService.get({
                     'target_contact_id': config.CONTACT_ID,

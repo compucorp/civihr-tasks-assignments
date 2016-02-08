@@ -3,8 +3,8 @@ define([
 ], function (filters) {
     'use strict';
 
-    filters.filter('filterBy.status',['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
-        $log.debug('Filter: filterBy.status');
+    filters.filter('filterByStatus',['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
+        $log.debug('Filter: filterByStatus');
 
         return function(inputArr, statusArr, equal) {
             var filteredArr = [],

@@ -3,8 +3,8 @@ define([
 ], function (filters) {
     'use strict';
 
-    filters.filter('filterBy.contactId',['$filter', 'config', '$log', function ($filter, config, $log) {
-        $log.debug('Filter: filterBy.contactId');
+    filters.filter('filterByContactId',['$filter', 'config', '$log', function ($filter, config, $log) {
+        $log.debug('Filter: filterByContactId');
 
         return function(inputArr, contactId) {
             var filteredArr = [],
