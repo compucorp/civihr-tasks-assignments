@@ -1,0 +1,40 @@
+.#{$prefix}table-documents {
+
+  .dropdown {
+    text-transform: capitalize;
+  }
+
+  .dropdown-toggle {
+    white-space: nowrap;
+  }
+
+  .#{$prefix}col-select {
+    text-align: center;
+  }
+
+  input[type="checkbox"] {
+    margin-left: 7px;
+  }
+}
+
+.#{$prefix}table-upload {
+  margin-bottom: 0;
+  table-layout: fixed;
+
+  .col-index {
+    width: 30px;
+  }
+
+  .col-size {
+    width: 8022px;
+  }
+
+  .col-action {
+    width: 82px;
+  }
+
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

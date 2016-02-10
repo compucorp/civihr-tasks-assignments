@@ -6,9 +6,9 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
                 </ul>
                 <hr>
                 <a href
@@ -84,14 +84,14 @@
                                btn-radio="{
                                    field: 'assignee_contact_id',
                                    isEqual: true
-                               }">My Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id').length}})</a>
+                               }">My Docs ({{(documentListOngoing | filterByUserRole:'assignee_contact_id').length}})</a>
                             <a ui-sref="documents.delegated"
                                class="btn btn-gray panel-filter__filter"
                                ng-model="filterParams.userRole"
                                btn-radio="{
                                    field: 'assignee_contact_id',
                                    isEqual: false
-                               }">Delegated Docs ({{(documentListOngoing | filterBy.userRole:'assignee_contact_id':false).length}})</a>
+                               }">Delegated Docs ({{(documentListOngoing | filterByUserRole:'assignee_contact_id':false).length}})</a>
                             <a ui-sref="documents.all"
                                class="btn btn-gray panel-filter__filter"
                                ng-model="filterParams.userRole"
@@ -208,12 +208,12 @@
                 <tbody>
                  <tr ng-repeat="document in
                  documentListPaginated = (documentListFiltered = (documentListOngoing = (documentList
-                    | filterBy.status:cache.documentStatusResolve:false)
-                        | filterBy.due:filterParams.due:filterParams.dateRange
-                        | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual
-                        | filterBy.assignmentType:filterParams.assignmentType
-                        | filterBy.contactId:filterParams.contactId
-                        | filterBy.status:filterParams.documentStatus
+                    | filterByStatus:cache.documentStatusResolve:false)
+                        | filterByDue:filterParams.due:filterParams.dateRange
+                        | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual
+                        | filterByAssignmentType:filterParams.assignmentType
+                        | filterByContactId:filterParams.contactId
+                        | filterByStatus:filterParams.documentStatus
                         | orderBy: 'activity_date_time')
                             | offset: (pagination.currentPage-1)*pagination.itemsPerPage
                             | limitTo: pagination.itemsPerPage)"

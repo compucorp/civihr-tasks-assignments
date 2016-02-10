@@ -29,7 +29,7 @@
     </div>
     <h4 class="header-bar header-bar-primary" ng-show="taskListOngoing.length">Ongoing:</h4>
     <ul class="{{prefix}}list-task">
-        <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterBy.assignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterBy.status:cache.taskStatusResolve:false)"
+        <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterByAssignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterByStatus:cache.taskStatusResolve:false)"
             ng-controller="TaskCtrl"
             ng-class="{
                 '{{prefix}}task-completed': task.completed,
@@ -53,7 +53,7 @@
         </div>
         <div class="alert alert-danger" ng-show="taskListResolvedLoaded && !taskListResolved.length">No results found.</div>
         <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskListResolved = (taskListFiltered | filterBy.status:cache.taskStatusResolve:true)"
+            <li ng-repeat="task in taskListResolved = (taskListFiltered | filterByStatus:cache.taskStatusResolve:true)"
                 ng-controller="TaskCtrl"
                 ng-class="'{{prefix}}task-resolved'"
                 ng-include
