@@ -1,25 +1,32 @@
 define([
+    'common/angular',
     'common/moment',
+    'common/services/angular-date/date-format',
     'tasks-assignments/modules/run'
-], function (moment) {
+], function (angular, moment) {
     'use strict';
 
-    angular.module('civitasks.appDashboard',['civitasks.run'])
-        .config(['config', '$resourceProvider','$httpProvider', '$logProvider',
-            '$urlRouterProvider', '$stateProvider','calendarConfigProvider', 'datepickerConfig', 'uiSelectConfig',
-            function(config, $resourceProvider, $httpProvider, $logProvider,
-                     $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig, uiSelectConfig){
+    angular.module('civitasks.appDashboard', ['civitasks.run'])
+        .config(['config', '$resourceProvider', '$httpProvider', '$logProvider',
+            '$urlRouterProvider', '$stateProvider', 'calendarConfigProvider', 'datepickerConfig', 'uiSelectConfig',
+            function (config, $resourceProvider, $httpProvider, $logProvider,
+                      $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig, uiSelectConfig) {
                 $logProvider.debugEnabled(config.DEBUG);
 
                 $urlRouterProvider.otherwise("/tasks");
 
-                $stateProvider.
-                    state('tasks', {
+                $stateProvider
+                    .resolveForAll({
+                        format: ['DateFormat', function (DateFormat) {
+                            return DateFormat.getDateFormat();
+                        }]
+                    })
+                    .state('tasks', {
                         url: '/tasks',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/tasks.html?v='+(new Date().getTime()),
+                        templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
                         resolve: {
-                            taskList: ['$q', 'TaskService',function($q, TaskService){
+                            taskList: ['$q', 'TaskService', function ($q, TaskService) {
                                 var deferred = $q.defer();
 
                                 $q.all([
@@ -37,10 +44,10 @@ define([
                                             'NOT IN': config.status.resolve.TASK
                                         }
                                     })
-                                ]).then(function(results){
+                                ]).then(function (results) {
                                     var taskId, taskList = [];
 
-                                    angular.extend(results[0],results[1]);
+                                    angular.extend(results[0], results[1]);
 
                                     for (taskId in results[0]) {
                                         taskList.push(results[0][taskId]);
@@ -52,8 +59,8 @@ define([
                                 return deferred.promise;
                             }]
                         }
-                    }).
-                    state('tasks.my', {
+                    })
+                    .state('tasks.my', {
                         url: '/my',
                         params: {
                             userRole: {
@@ -61,8 +68,8 @@ define([
                                 isEqual: true
                             }
                         }
-                    }).
-                    state('tasks.delegated', {
+                    })
+                    .state('tasks.delegated', {
                         url: '/delegated',
                         params: {
                             userRole: {
@@ -70,8 +77,8 @@ define([
                                 isEqual: false
                             }
                         }
-                    }).
-                    state('tasks.all', {
+                    })
+                    .state('tasks.all', {
                         url: '/all',
                         params: {
                             userRole: {
@@ -79,13 +86,13 @@ define([
                                 isEqual: null
                             }
                         }
-                    }).
-                    state('documents', {
+                    })
+                    .state('documents', {
                         url: '/documents',
                         controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/documents.html?v=8',
+                        templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
                         resolve: {
-                            documentList: ['$q', 'DocumentService', function($q, DocumentService){
+                            documentList: ['$q', 'DocumentService', function ($q, DocumentService) {
                                 var deferred = $q.defer();
 
                                 $q.all([
@@ -103,10 +110,10 @@ define([
                                             'NOT IN': config.status.resolve.DOCUMENT
                                         }
                                     })
-                                ]).then(function(results){
+                                ]).then(function (results) {
                                     var documentId, documentList = [];
 
-                                    angular.extend(results[0],results[1]);
+                                    angular.extend(results[0], results[1]);
 
                                     for (documentId in results[0]) {
                                         documentList.push(results[0][documentId]);
@@ -119,8 +126,8 @@ define([
                                 return deferred.promise;
                             }]
                         }
-                    }).
-                    state('documents.my', {
+                    })
+                    .state('documents.my', {
                         url: '/my',
                         params: {
                             userRole: {
@@ -128,8 +135,8 @@ define([
                                 isEqual: true
                             }
                         }
-                    }).
-                    state('documents.delegated', {
+                    })
+                    .state('documents.delegated', {
                         url: '/delegated',
                         params: {
                             userRole: {
@@ -137,8 +144,8 @@ define([
                                 isEqual: false
                             }
                         }
-                    }).
-                    state('documents.all', {
+                    })
+                    .state('documents.all', {
                         url: '/all',
                         params: {
                             userRole: {
@@ -146,18 +153,18 @@ define([
                                 isEqual: null
                             }
                         }
-                    }).
-                    state('assignments', {
+                    })
+                    .state('assignments', {
                         url: '/assignments',
                         controller: 'AssignmentsCtrl',
-                        templateUrl: config.path.TPL+'dashboard/assignments.html?v=5'
-                    }).
-                    state('calendar', {
+                        templateUrl: config.path.TPL + 'dashboard/assignments.html?v=5'
+                    })
+                    .state('calendar', {
                         abstract: true,
                         controller: 'CalendarCtrl',
-                        templateUrl: config.path.TPL+'dashboard/calendar.html?v=3',
+                        templateUrl: config.path.TPL + 'dashboard/calendar.html?v=3',
                         resolve: {
-                            documentList: ['$q', 'DocumentService','settings', function($q, DocumentService, settings){
+                            documentList: ['$q', 'DocumentService', 'settings', function ($q, DocumentService, settings) {
                                 var deferred = $q.defer();
 
                                 if (!+settings.tabEnabled.documents) {
@@ -179,10 +186,10 @@ define([
                                             'NOT IN': config.status.resolve.DOCUMENT
                                         }
                                     })
-                                ]).then(function(results){
+                                ]).then(function (results) {
                                     var documentId, documentList = [];
 
-                                    angular.extend(results[0],results[1]);
+                                    angular.extend(results[0], results[1]);
 
                                     for (documentId in results[0]) {
                                         documentList.push(results[0][documentId]);
@@ -194,7 +201,7 @@ define([
 
                                 return deferred.promise;
                             }],
-                            taskList: ['$q', 'TaskService',function($q, TaskService){
+                            taskList: ['$q', 'TaskService', function ($q, TaskService) {
                                 var deferred = $q.defer();
 
                                 $q.all([
@@ -212,10 +219,10 @@ define([
                                             'NOT IN': config.status.resolve.TASK
                                         }
                                     })
-                                ]).then(function(results){
+                                ]).then(function (results) {
                                     var taskId, taskList = [];
 
-                                    angular.extend(results[0],results[1]);
+                                    angular.extend(results[0], results[1]);
 
                                     for (taskId in results[0]) {
                                         taskList.push(results[0][taskId]);
@@ -228,47 +235,47 @@ define([
                                 return deferred.promise;
                             }]
                         }
-                    }).
-                    state('calendar.mwl', {
+                    })
+                    .state('calendar.mwl', {
                         url: '/calendar',
                         views: {
                             'documentList': {
                                 controller: 'DocumentListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.documentList.html?v=6'
+                                templateUrl: config.path.TPL + 'dashboard/calendar.documentList.html?v=6'
                             },
                             'taskList': {
                                 controller: 'TaskListCtrl',
-                                templateUrl: config.path.TPL+'dashboard/calendar.taskList.html?v=5'
+                                templateUrl: config.path.TPL + 'dashboard/calendar.taskList.html?v=5'
                             }
                         }
-                    }).
-                    state('calendar.mwl.day', {
+                    })
+                    .state('calendar.mwl.day', {
                         params: {
                             calendarView: 'day'
                         }
-                    }).
-                    state('calendar.mwl.month', {
+                    })
+                    .state('calendar.mwl.month', {
                         params: {
                             calendarView: 'month'
                         }
-                    }).
-                    state('calendar.mwl.week', {
+                    })
+                    .state('calendar.mwl.week', {
                         params: {
                             calendarView: 'week'
                         }
-                    }).
-                    state('reports', {
+                    })
+                    .state('reports', {
                         url: '/reports',
                         controller: 'ExternalPageCtrl',
-                        templateUrl: config.path.TPL+'dashboard/reports.html?v=4'
-                    }).
-                    state('keyDates', {
+                        templateUrl: config.path.TPL + 'dashboard/reports.html?v=4'
+                    })
+                    .state('keyDates', {
                         url: '/key-dates',
                         controller: 'DateListCtrl',
-                        templateUrl: config.path.TPL+'dashboard/key-dates.html?v=4',
+                        templateUrl: config.path.TPL + 'dashboard/key-dates.html?v=4',
                         resolve: {
-                            contactList: ['KeyDateService',function(KeyDateService){
-                                return KeyDateService.get(moment().startOf('month'),moment().endOf('month'));
+                            contactList: ['KeyDateService', function (KeyDateService) {
+                                return KeyDateService.get(moment().startOf('month'), moment().endOf('month'));
                             }]
                         }
                     });

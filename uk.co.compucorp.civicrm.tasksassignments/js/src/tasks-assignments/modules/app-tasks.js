@@ -4,18 +4,21 @@ define([
     'use strict';
 
     angular.module('civitasks.appTasks', ['civitasks.run'])
-        .config(['config','$routeProvider','$resourceProvider','$httpProvider','datepickerConfig','uiSelectConfig',
+        .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider', 'datepickerConfig', 'uiSelectConfig',
             '$logProvider',
-            function(config, $routeProvider, $resourceProvider, $httpProvider, datepickerConfig, uiSelectConfig,
-                     $logProvider){
+            function (config, $urlRouterProvider, $stateProvider, $resourceProvider, $httpProvider, datepickerConfig, uiSelectConfig,
+                      $logProvider) {
                 $logProvider.debugEnabled(config.DEBUG);
 
-                $routeProvider.
-                    when('/', {
+                $urlRouterProvider.otherwise('/');
+
+                $stateProvider
+                    .state('main', {
+                        url: '/',
                         controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL+'contact/tasks.html?v=222',
+                        templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
                         resolve: {
-                            taskList: ['TaskService',function(TaskService){
+                            taskList: ['TaskService', function (TaskService) {
                                 return TaskService.get({
                                     'target_contact_id': config.CONTACT_ID,
                                     'status_id': {
@@ -24,8 +27,7 @@ define([
                                 });
                             }]
                         }
-                    }
-                ).otherwise({redirectTo:'/'});
+                    });
 
                 $resourceProvider.defaults.stripTrailingSlashes = false;
 

@@ -55,8 +55,8 @@
                     <input type="text" ng-model="task.activity_date_time"
                            class="form-control"
                            id="{{prefix}}task-due"
-                           custom-date-input
-                           placeholder="dd/mm/yyyy"
+                           date-input
+                           placeholder="{{ format }}"
                            name="assignmentDue" ng-required="true"
                     />
                 <span class="input-group-addon">
