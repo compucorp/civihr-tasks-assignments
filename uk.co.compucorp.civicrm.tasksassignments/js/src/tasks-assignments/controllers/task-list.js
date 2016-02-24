@@ -9,9 +9,9 @@ define([
     'use strict';
 
     controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
-        '$timeout', '$state', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService', 'settings',
+        '$timeout', '$state', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService', 'settings', 'HR_settings',
         function ($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $timeout, $state, $log, taskList,
-                 config, ContactService, AssignmentService, TaskService, settings) {
+                 config, ContactService, AssignmentService, TaskService, settings, HR_settings) {
             $log.debug('Controller: TaskListCtrl');
 
             this.init = function(){
@@ -73,6 +73,7 @@ define([
                 });
             };
 
+            $scope.format = HR_settings.DATE_FORMAT;
             $scope.assignments = [];
             $scope.contacts = [];
             $scope.dueToday = 0;

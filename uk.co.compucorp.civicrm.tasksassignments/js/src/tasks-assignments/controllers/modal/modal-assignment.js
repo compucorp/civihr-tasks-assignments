@@ -9,9 +9,9 @@ define([
     'use strict';
 
     controllers.controller('ModalAssignmentCtrl', ['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
-        'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings',
+        'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings', 'HR_settings',
         function ($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
-                  ContactService, data, config, settings) {
+                  ContactService, data, config, settings, HR_settings) {
             $log.debug('Controller: ModalAssignmentCtrl');
 
             var activityModel = {
@@ -25,6 +25,8 @@ define([
                 status_id: '1',
                 offset: 0
             };
+
+            $scope.format = HR_settings.DATE_FORMAT.toLowerCase();
 
             $scope.alert = {
                 show: false,

@@ -9,16 +9,22 @@ define([
     'tasks-assignments/vendor/text-angular',
     'tasks-assignments/modules/config',
     'tasks-assignments/modules/settings',
+    // TODO use only one router
+    'common/modules/routers/compu-ng-route',
+    'common/modules/routers/compu-ui-router',
+
+    'common/filters/angular-date/format-date',
+    'common/directives/angular-date/date-input'
 ], function (angular) {
     'use strict';
 
     angular.module('civitasks.run', [
         'angularFileUpload',
-        'ngRoute',
+        'compuNgRoute',
         'ngResource',
         'ngSanitize',
         'ui.bootstrap',
-        'ui.router',
+        'compu.ui.router',
         'ui.select',
         'mwl.calendar',
         'textAngular',
@@ -31,7 +37,7 @@ define([
         'civitasks.settings',
         'xeditable',
         'xeditable-civi',
-        'angular-date'
+        'common.angularDate'
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,

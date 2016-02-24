@@ -58,8 +58,8 @@
                         <div class="input-group">
                             <input type="text" id="{{prefix}}assignment-due" ng-model="assignment.dueDate"
                                    class="form-control"
-                                   custom-date-input
-                                   placeholder="dd/mm/yyyy"
+                                   date-input
+                                   placeholder="{{ format }}"
                                    name="assignmentDue" ng-required="true"/>
                             <span class="input-group-addon">
                                 <a href class="text-normal calendar-popup-link"
@@ -168,9 +168,9 @@
                                         <input type="text" id="{{prefix}}assignment-task-due-{{$index}}"
                                                ng-model="activity.activity_date_time"
                                                class="form-control"
-                                               custom-date-input
+                                               date-input
                                                ng-disabled="isDisabled"
-                                               placeholder="dd/mm/yyyy"
+                                               placeholder="{{ format }}"
                                                name="assignmentDue" ng-required="true"/>
                                         <span class="input-group-addon">
                                             <a href class="text-normal calendar-popup-link"
@@ -282,9 +282,9 @@
                                         <input type="text" id="{{prefix}}assignment-doc-due-{{$index}}"
                                                ng-model="activity.activity_date_time"
                                                class="form-control"
-                                               custom-date-input
+                                               date-input
                                                ng-disabled="isDisabled"
-                                               placeholder="dd/mm/yyyy"
+                                               placeholder="{{ format }}"
                                                name="assignmentDue" ng-required="true"/>
                                         <span class="input-group-addon">
                                             <a href class="text-normal calendar-popup-link"
