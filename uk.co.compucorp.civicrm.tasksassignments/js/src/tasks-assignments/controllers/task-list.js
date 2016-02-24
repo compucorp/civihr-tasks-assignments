@@ -8,9 +8,9 @@ define([
 ], function (moment, controllers){
     'use strict';
 
-    controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$route', '$filter',
+    controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$filter',
         '$timeout', '$state', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService', 'settings', 'HR_settings',
-        function ($scope, $modal, $dialog, $rootElement, $rootScope, $route, $filter, $timeout, $state, $log, taskList,
+        function ($scope, $modal, $dialog, $rootElement, $rootScope, $filter, $timeout, $state, $log, taskList,
                  config, ContactService, AssignmentService, TaskService, settings, HR_settings) {
             $log.debug('Controller: TaskListCtrl');
 
@@ -314,7 +314,8 @@ define([
                             obj: {},
                             arr: []
                         };
-                        $route.reload();
+
+                        $state.go($state.current, {}, {reload: true});
                     }
                 }
             });

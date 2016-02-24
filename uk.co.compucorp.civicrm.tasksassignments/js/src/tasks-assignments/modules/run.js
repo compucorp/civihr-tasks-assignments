@@ -10,7 +10,6 @@ define([
     'tasks-assignments/modules/config',
     'tasks-assignments/modules/settings',
     // TODO use only one router
-    'common/modules/routers/compu-ng-route',
     'common/modules/routers/compu-ui-router',
 
     'common/filters/angular-date/format-date',
@@ -20,7 +19,6 @@ define([
 
     angular.module('civitasks.run', [
         'angularFileUpload',
-        'compuNgRoute',
         'ngResource',
         'ngSanitize',
         'ui.bootstrap',
