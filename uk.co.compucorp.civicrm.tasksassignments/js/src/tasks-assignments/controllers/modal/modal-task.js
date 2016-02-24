@@ -7,11 +7,12 @@ define([
     'use strict';
 
     controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
-        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config',
+        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', 'HR_settings',
         function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
-                 data, config) {
+                 data, config, HR_settings) {
             $log.debug('Controller: ModalTaskCtrl');
 
+            $scope.format = HR_settings.DATE_FORMAT.toLowerCase();
             $scope.data = data;
             $scope.task = {};
 
