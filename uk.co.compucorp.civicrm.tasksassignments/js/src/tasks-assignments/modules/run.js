@@ -9,9 +9,7 @@ define([
     'tasks-assignments/vendor/text-angular',
     'tasks-assignments/modules/config',
     'tasks-assignments/modules/settings',
-    // TODO use only one router
     'common/modules/routers/compu-ui-router',
-
     'common/filters/angular-date/format-date',
     'common/directives/angular-date/date-input'
 ], function (angular) {
