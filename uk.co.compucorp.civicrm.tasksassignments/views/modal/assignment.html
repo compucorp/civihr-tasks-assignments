@@ -41,13 +41,17 @@
                     <label class="col-xs-12 col-sm-2 control-label">Assignment Type:</label>
 
                     <div class="col-xs-12 col-sm-6">
-                        <select id="{{prefix}}assignment-type" class="form-control" name="assignmentType"
-                                ng-change="setData()"
-                                ng-model="assignment.case_type_id"
-                                ng-required="true"
-                                ng-options="key as value.title for (key, value) in cache.assignmentType.obj">
-                            <option value="">- select -</option>
-                        </select>
+                        <ui-select ng-model="assignment.case_type_id"
+                                   ng-change="setData()"
+                                   ng-required="true"
+                                   search-enabled="false">
+                            <ui-select-match placeholder="- select -">
+                                {{$select.selected.title}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="value.id as value in cache.assignmentType.arr">
+                                <div ng-bind="value.title"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
 
                     <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
@@ -77,17 +81,23 @@
                 <hr ng-show="assignment.case_type_id"/>
 
                 <div ng-show="assignment.case_type_id" class="row">
-                    <label for="{{prefix}}assignment-task-list" class="col-xs-12 col-sm-2 control-label">
+                    <label class="col-xs-12 col-sm-2 control-label">
                         Select Task List:
                     </label>
 
                     <div class="col-xs-12 col-sm-6">
-                        <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
-                                ng-model="activitySet"
-                                ng-options="activitySet.label for activitySet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
-                                ng-disabled="!taskList.length"
-                                class="form-control">
-                        </select>
+                        <ui-select ng-model="activitySet"
+                                   ng-disabled="!taskList.length"
+                                   ng-required="true"
+                                   search-enabled="false">
+                            <ui-select-match placeholder="- select -">
+                                {{$select.selected.label}}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    repeat="value.id as value in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets">
+                                <div ng-bind="value.label"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
                 </div>
 
@@ -104,7 +114,8 @@
                                 <th class="title-column">Task Title</th>
                                 <th class="assignee-column">
                                     Assigned To
-                                    <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyAssignee(taskList)">
+                                    <span class="pull-right btn" title="{{copyMessage}}"
+                                          ng-click="copyAssignee(taskList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
@@ -218,13 +229,15 @@
                                 <th class="title-column">Document Title</th>
                                 <th class="assignee-column">
                                     Assigned To
-                                    <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyAssignee(documentList)">
+                                    <span class="pull-right btn" title="{{copyMessage}}"
+                                          ng-click="copyAssignee(documentList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
                                 <th class="date-column">
                                     Due Date
-                                    <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyDate(documentList)">
+                                    <span class="pull-right btn" title="{{copyMessage}}"
+                                          ng-click="copyDate(documentList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
