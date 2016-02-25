@@ -220,10 +220,22 @@ define([
 
             };
 
-            $scope.setAssignee = function setAssignee(list) {
+            $scope.copyAssignee = function copyAssignee(list) {
+                var firstRowId = list[0].assignee_contact_id[0];
+
                 list.forEach(function (item) {
-                    if (item.create && item.assignee_contact_id.length === 0) {
-                        item.assignee_contact_id.push(config.LOGGED_IN_CONTACT_ID);
+                    if (item.create) {
+                        item.assignee_contact_id = [firstRowId];
+                    }
+                });
+            };
+
+            $scope.copyDate = function copyDate(list) {
+                var firstRowDate = list[0].activity_date_time;
+
+                list.forEach(function (item) {
+                    if (item.create) {
+                        item.activity_date_time = firstRowDate;
                     }
                 });
             };
