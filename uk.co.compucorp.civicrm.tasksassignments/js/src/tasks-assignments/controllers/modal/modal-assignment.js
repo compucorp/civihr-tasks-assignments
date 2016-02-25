@@ -27,6 +27,7 @@ define([
             };
 
             $scope.format = HR_settings.DATE_FORMAT.toLowerCase();
+            $scope.copyMessage = 'Click here to copy the value in row one to all rows.';
 
             $scope.alert = {
                 show: false,
