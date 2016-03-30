@@ -1,11 +1,12 @@
 define([
+    'common/angular',
     'common/moment',
     'tasks-assignments/controllers/controllers',
     'tasks-assignments/services/contact',
     'tasks-assignments/services/document',
     'tasks-assignments/services/task',
     'tasks-assignments/services/assignment'
-], function (moment, controllers) {
+], function (angular, moment, controllers) {
     'use strict';
 
     controllers.controller('ModalAssignmentCtrl', ['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',

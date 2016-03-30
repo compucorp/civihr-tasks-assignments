@@ -143,7 +143,7 @@
 
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
-                                        <ui-select ng-model="activity.activity_type_id" ng-required="true">
+                                        <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create">
                                             <ui-select-match placeholder="Select task type">
                                                 {{$select.selected.value}}
                                             </ui-select-match>
@@ -182,7 +182,7 @@
                                                date-input
                                                ng-disabled="isDisabled"
                                                placeholder="{{ format }}"
-                                               name="assignmentDue" ng-required="true"/>
+                                               name="assignmentDue" ng-required="!isDisabled && activity.create"/>
                                         <span class="input-group-addon">
                                             <a href class="text-normal calendar-popup-link"
                                                ng-model="activity.activity_date_time"
