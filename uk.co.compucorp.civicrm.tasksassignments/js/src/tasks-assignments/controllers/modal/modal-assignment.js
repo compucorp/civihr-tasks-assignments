@@ -223,7 +223,7 @@ define([
             };
 
             $scope.copyAssignee = function copyAssignee(list) {
-                var firstRowId = list[0].assignee_contact_id[0];
+                var firstRowId = $scope.taskList[0].assignee_contact_id[0];
 
                 list.forEach(function (item) {
                     if (item.create) {
