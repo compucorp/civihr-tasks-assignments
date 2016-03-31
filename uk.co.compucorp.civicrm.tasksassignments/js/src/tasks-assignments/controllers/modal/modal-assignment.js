@@ -223,11 +223,11 @@ define([
             };
 
             /**
-             * Copy assignee from the first row of tasks list to the rest of list's records.
+             * Copy assignee from the first row of list to the rest of records.
              * @param {Array} list
              */
             $scope.copyAssignee = function copyAssignee(list) {
-                var firstRowId = $scope.taskList[0].assignee_contact_id[0];
+                var firstRowId = list[0].assignee_contact_id[0];
 
                 list.forEach(function (item) {
                     if (item.create) {
