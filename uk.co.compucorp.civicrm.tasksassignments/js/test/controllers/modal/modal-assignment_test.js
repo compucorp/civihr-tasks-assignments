@@ -63,7 +63,7 @@ define([
         });
 
         describe('copyDate()', function () {
-            var list, activityDate = [2];
+            var list, activityDate = '2015-05-05';
 
             beforeEach(function () {
                 list = scope.taskList;
