@@ -222,6 +222,10 @@ define([
 
             };
 
+            /**
+             * Copy assignee from the first row of tasks list to the rest of list's records.
+             * @param {Array} list
+             */
             $scope.copyAssignee = function copyAssignee(list) {
                 var firstRowId = $scope.taskList[0].assignee_contact_id[0];
 
@@ -232,6 +236,10 @@ define([
                 });
             };
 
+            /**
+             * Copy date from the first row of the list to the rest of records.
+             * @param {Array} list
+             */
             $scope.copyDate = function copyDate(list) {
                 var firstRowDate = list[0].activity_date_time;
 
