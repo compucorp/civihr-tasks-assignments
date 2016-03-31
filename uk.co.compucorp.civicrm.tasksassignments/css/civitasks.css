@@ -6390,7 +6390,7 @@ fieldset[disabled]
 }
 @media (min-width: 992px) {
   #civitasks .modal-lg, #cividocuments .modal-lg {
-    width: 900px;
+    width: 800px;
   }
 }
 #civitasks .tooltip, #cividocuments .tooltip {
@@ -11080,14 +11080,19 @@ fieldset[disabled]
   padding-left: 0;
   padding-right: 0;
 }
-#civitasks form.form-horizontal, #cividocuments form.form-horizontal {
+#civitasks form.form-horizontal .input-group.date-input-group, #cividocuments form.form-horizontal .input-group.date-input-group {
+  text-align: right;
   /* Bootstrap override */
 }
-#civitasks form.form-horizontal .input-group-addon, #cividocuments form.form-horizontal .input-group-addon {
+#civitasks form.form-horizontal .input-group.date-input-group input, #cividocuments form.form-horizontal .input-group.date-input-group input {
+  width: 105px;
+}
+#civitasks form.form-horizontal .input-group.date-input-group .input-group-addon, #cividocuments form.form-horizontal .input-group.date-input-group .input-group-addon {
   background: transparent;
   border: none;
+  width: 0;
 }
-#civitasks form.form-horizontal .input-group-addon a, #cividocuments form.form-horizontal .input-group-addon a {
+#civitasks form.form-horizontal .input-group.date-input-group .input-group-addon a, #cividocuments form.form-horizontal .input-group.date-input-group .input-group-addon a {
   color: #333333;
 }
 #civitasks form.form-task .form-control-static a:link, #cividocuments form.form-task .form-control-static a:link, #civitasks form.form-document .form-control-static a:link, #cividocuments form.form-document .form-control-static a:link {
@@ -11230,10 +11235,10 @@ fieldset[disabled]
   width: 45%;
 }
 #civitasks form.form-assignment .modal-table.table-striped > thead > tr > th.assignee-column, #cividocuments form.form-assignment .modal-table.table-striped > thead > tr > th.assignee-column {
-  width: 25%;
+  width: 30%;
 }
 #civitasks form.form-assignment .modal-table.table-striped > thead > tr > th.date-column, #cividocuments form.form-assignment .modal-table.table-striped > thead > tr > th.date-column {
-  width: 25%;
+  width: 20%;
   min-width: 150px;
 }
 #civitasks form.form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #cividocuments form.form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #civitasks form.form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd), #cividocuments form.form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd) {
