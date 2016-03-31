@@ -1,11 +1,12 @@
 define([
+    'common/angular',
     'common/moment',
     'tasks-assignments/controllers/controllers',
     'tasks-assignments/services/contact',
     'tasks-assignments/services/document',
     'tasks-assignments/services/task',
     'tasks-assignments/services/assignment'
-], function (moment, controllers) {
+], function (angular, moment, controllers) {
     'use strict';
 
     controllers.controller('ModalAssignmentCtrl', ['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
@@ -27,6 +28,7 @@ define([
             };
 
             $scope.format = HR_settings.DATE_FORMAT.toLowerCase();
+            $scope.copyMessage = 'Click here to copy the value in row one to all rows.';
 
             $scope.alert = {
                 show: false,
@@ -220,10 +222,30 @@ define([
 
             };
 
-            $scope.setAssignee = function setAssignee(list) {
+            /**
+             * Copy assignee from the first row of list to the rest of records.
+             * @param {Array} list
+             */
+            $scope.copyAssignee = function copyAssignee(list) {
+                var firstRowId = list[0].assignee_contact_id[0];
+
                 list.forEach(function (item) {
-                    if (item.create && item.assignee_contact_id.length === 0) {
-                        item.assignee_contact_id.push(config.LOGGED_IN_CONTACT_ID);
+                    if (item.create) {
+                        item.assignee_contact_id = [firstRowId];
+                    }
+                });
+            };
+
+            /**
+             * Copy date from the first row of the list to the rest of records.
+             * @param {Array} list
+             */
+            $scope.copyDate = function copyDate(list) {
+                var firstRowDate = list[0].activity_date_time;
+
+                list.forEach(function (item) {
+                    if (item.create) {
+                        item.activity_date_time = firstRowDate;
                     }
                 });
             };

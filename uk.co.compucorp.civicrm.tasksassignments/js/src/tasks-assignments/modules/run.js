@@ -19,7 +19,6 @@ define([
         'angularFileUpload',
         'ngResource',
         'ngSanitize',
-        'ui.bootstrap',
         'compu.ui.router',
         'ui.select',
         'mwl.calendar',
