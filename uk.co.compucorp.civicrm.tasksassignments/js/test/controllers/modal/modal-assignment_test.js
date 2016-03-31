@@ -41,43 +41,41 @@ define([
                 settings: {},
                 HR_settings: HR_settings
             });
+
+            angular.extend(scope, Mock);
         }));
 
-        it('Controller should be defined', function () {
-            expect(ctrl).toBeDefined()
-        });
+        describe('copyAssignee()', function () {
+            var list, assigneeId = [2];
 
-        describe('Bulk Assign', function(){
-            beforeEach(function(){
-                angular.extend(scope, Mock);
-            });
-
-            it('Test copyAssignee method', function(){
-                var list = scope.taskList;
-
-                list[0].assignee_contact_id = [2];
-
-                expect(list[1].assignee_contact_id).toEqual([]);
-                expect(list[2].assignee_contact_id).toEqual([]);
+            beforeEach(function () {
+                list = scope.taskList;
+                list[0].assignee_contact_id = assigneeId;
 
                 scope.copyAssignee(list);
-
-                expect(list[1].assignee_contact_id).toEqual([2]);
-                expect(list[2].assignee_contact_id).toEqual([2]);
             });
 
-            it('Test copyDate method', function(){
-                var list = scope.taskList;
+            it("assigns the assignee's id of the first item to the whole list", function () {
+                list.forEach(function (item) {
+                    expect(item.assignee_contact_id).toEqual(assigneeId);
+                });
+            });
+        });
 
-                list[0].activity_date_time = '2015-05-05';
+        describe('copyDate()', function () {
+            var list, activityDate = [2];
 
-                expect(list[1].activity_date_time).toEqual('');
-                expect(list[2].activity_date_time).toEqual('');
+            beforeEach(function () {
+                list = scope.taskList;
+                list[0].activity_date_time = activityDate;
 
                 scope.copyDate(list);
+            });
 
-                expect(list[1].activity_date_time).toEqual('2015-05-05');
-                expect(list[2].activity_date_time).toEqual('2015-05-05');
+            it("assigns the date of the first item to the whole list", function () {
+                list.forEach(function (item) {
+                    expect(item.activity_date_time).toEqual(activityDate);
+                });
             });
         });
 
