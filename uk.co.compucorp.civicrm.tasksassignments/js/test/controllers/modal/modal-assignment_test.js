@@ -83,22 +83,3 @@ define([
 
     });
 });
-
-
-/*
-
- , $q, $log, $filter, AssignmentService, TaskService, DocumentService, ContactService, HR_settings
-
- $rootScope: $rootScope,
- $q: $q,
- $log: $log,
- $filter: $filter,
- AssignmentService: AssignmentService,
- TaskService: TaskService,
- DocumentService: DocumentService,
- ContactService: ContactService,
- data: {},
- config: {},
- settings: {},
- HR_settings: HR_settings
- */
