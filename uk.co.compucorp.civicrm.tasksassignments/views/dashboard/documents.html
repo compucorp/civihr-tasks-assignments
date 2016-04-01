@@ -49,8 +49,8 @@
                             <ui-select
                                     multiple
                                     ng-model="filterParamsHolder.documentStatus">
-                                <ui-select-match placeholder="Select status...">{{$item.value}}</ui-select-match>
-                                <ui-select-choices repeat="status.key as status in cache.documentStatus.arr">
+                                <ui-select-match class="ui-select-match" placeholder="Select status...">{{$item.value}}</ui-select-match>
+                                <ui-select-choices class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr">
                                     <div ng-bind-html="status.value | highlight: $select.search"></div>
                                 </ui-select-choices>
                             </ui-select>
@@ -118,9 +118,9 @@
                                         <ui-select
                                                 allow-clear
                                                 ng-model="filterParams.contactId">
-                                            <ui-select-match
+                                            <ui-select-match class="ui-select-match"
                                                     placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices  repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
+                                            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
                                                                 refresh-delay="0">
                                                 <div ng-bind="contact.label"></div>
                                                 <small ng-bind="contact.description[0]"></small>
@@ -142,8 +142,8 @@
                                     <ui-select
                                             multiple
                                             ng-model="filterParams.assignmentType">
-                                        <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
-                                        <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                                        <ui-select-match class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                                        <ui-select-choices class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                                             <div ng-bind-html="type.title | highlight: $select.search"></div>
                                         </ui-select-choices>
                                     </ui-select>
@@ -163,9 +163,9 @@
                                     <div class="input-group">
                                         <ui-select
                                                 ng-model="action.selected">
-                                            <ui-select-match
+                                            <ui-select-match class="ui-select-match"
                                                     placeholder="Select action">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices
+                                            <ui-select-choices class="ui-select-choices"
                                                     repeat="actionObj.type as actionObj in actionList">
                                                 <div ng-bind="actionObj.label"></div>
                                             </ui-select-choices>

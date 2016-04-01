@@ -7,10 +7,11 @@
                         ng-model="document.target_contact_id[0]"
                         on-select="cacheContact($item)"
                         ng-required="true">
-                    <ui-select-match placeholder="Start typing a name or email...">
+                    <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                         {{$select.selected.label}}
                     </ui-select-match>
-                    <ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search"
+                    <ui-select-choices class="ui-select-choices"
+                                        repeat="contact.id as contact in contacts | filter: $select.search"
                                        refresh="refreshContacts($select.search)"
                                        refresh-delay="0">
                         <div ng-bind="contact.label"></div>
@@ -34,9 +35,11 @@
                     <ui-select ng-model="document.activity_type_id"
                                ng-required="true">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Select document type">{{$select.selected.value}}
                         </ui-select-match>
                         <ui-select-choices
+                                class="ui-select-choices"
                                 repeat="type.key as type in cache.documentType.arr | filter: $select.search">
                             <div ng-bind="type.value"></div>
                         </ui-select-choices>
@@ -159,9 +162,11 @@
                             ng-model="document.assignee_contact_id[0]"
                             on-select="cacheContact($item)">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Start typing a name or email...">{{$select.selected.label}}
                         </ui-select-match>
                         <ui-select-choices
+                                class="ui-select-choices"
                                 repeat="contact.id as contact in contacts | filter: $select.search"
                                 refresh="refreshContacts($select.search)"
                                 refresh-delay="0">
@@ -183,9 +188,11 @@
                             ng-model="document.case_id"
                             on-select="cacheAssignment($item);">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Enter search term...">{{$select.selected.label}}
                         </ui-select-match>
-                        <ui-select-choices repeat="assignment.id as assignment in assignments"
+                        <ui-select-choices class="ui-select-choices"
+                                           repeat="assignment.id as assignment in assignments"
                                            refresh="refreshAssignments($select.search)"
                                            refresh-delay="0">
                             <div ng-class="assignment.label_class" ng-bind="assignment.label"></div>
@@ -210,10 +217,10 @@
                     <ui-select ng-required="true"
                                allow-clear
                                ng-model="document.status_id">
-                        <ui-select-match placeholder="Set Status">
+                        <ui-select-match class="ui-select-match" placeholder="Set Status">
                             {{$select.selected.value}}
                         </ui-select-match>
-                        <ui-select-choices repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
+                        <ui-select-choices class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
                             <div ng-bind="status.value"></div>
                         </ui-select-choices>
                     </ui-select>
