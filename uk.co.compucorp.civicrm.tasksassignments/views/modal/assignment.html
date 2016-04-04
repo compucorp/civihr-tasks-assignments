@@ -13,9 +13,9 @@
         <section class="container">
             <div class="col-xs-12">
                 <div class="row separately">
-                    <h2 class="col-xs-12 col-sm-2 control-label">Contact:</h2>
+                    <h2 class="col-xs-12 col-sm-3 control-label">Contact:</h2>
 
-                    <div ng-if="showCId" class="col-xs-12 col-sm-6">
+                    <div ng-if="showCId" class="col-xs-12 col-sm-5">
                         <ui-select allow-clear
                                    ng-model="assignment.contact_id"
                                    ng-change="assignment.client_id=assignment.contact_id"
@@ -32,22 +32,26 @@
                             </ui-select-choices>
                         </ui-select>
                     </div>
-                    <div ng-if="!showCId" class="col-xs-12 col-sm-6 display-only header">
+                    <div ng-if="!showCId" class="col-xs-12 col-sm-5 display-only header">
                         <span ng-bind="cache.contact.obj[assignment.contact_id].sort_name || 'No target contact'"></span>
                     </div>
                 </div>
 
                 <div class="row required">
-                    <label class="col-xs-12 col-sm-2 control-label">Assignment Type:</label>
+                    <label class="col-xs-12 col-sm-3 control-label">Assignment Type:</label>
 
-                    <div class="col-xs-12 col-sm-6">
-                        <select id="{{prefix}}assignment-type" class="form-control" name="assignmentType"
-                                ng-change="setData()"
-                                ng-model="assignment.case_type_id"
-                                ng-required="true"
-                                ng-options="key as value.title for (key, value) in cache.assignmentType.obj">
-                            <option value="">- select -</option>
-                        </select>
+                    <div class="col-xs-12 col-sm-5">
+                        <ui-select ng-model="assignment.case_type_id"
+                                   ng-change="setData()"
+                                   ng-required="true"
+                                   search-enabled="false">
+                            <ui-select-match placeholder="- select -">
+                                {{$select.selected.title}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="value.id as value in cache.assignmentType.arr">
+                                <div ng-bind="value.title"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
 
                     <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
@@ -55,11 +59,11 @@
                     </label>
 
                     <div class="col-xs-12 col-sm-3">
-                        <div class="input-group">
+                        <div class="input-group date-input-group">
                             <input type="text" id="{{prefix}}assignment-due" ng-model="assignment.dueDate"
                                    class="form-control"
-                                   custom-date-input
-                                   placeholder="dd/mm/yyyy"
+                                   date-input
+                                   placeholder="{{ format }}"
                                    name="assignmentDue" ng-required="true"/>
                             <span class="input-group-addon">
                                 <a href class="text-normal calendar-popup-link"
@@ -77,17 +81,23 @@
                 <hr ng-show="assignment.case_type_id"/>
 
                 <div ng-show="assignment.case_type_id" class="row">
-                    <label for="{{prefix}}assignment-task-list" class="col-xs-12 col-sm-2 control-label">
+                    <label class="col-xs-12 col-sm-3 control-label">
                         Select Task List:
                     </label>
 
-                    <div class="col-xs-12 col-sm-6">
-                        <select id="{{prefix}}assignment-task-list" name="assignmentTaskList"
-                                ng-model="activitySet"
-                                ng-options="activitySet.label for activitySet in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets"
-                                ng-disabled="!taskList.length"
-                                class="form-control">
-                        </select>
+                    <div class="col-xs-12 col-sm-5">
+                        <ui-select ng-model="activitySet"
+                                   ng-disabled="!taskList.length"
+                                   ng-required="true"
+                                   search-enabled="false">
+                            <ui-select-match placeholder="- select -">
+                                {{$select.selected.label}}
+                            </ui-select-match>
+                            <ui-select-choices
+                                    repeat="value.id as value in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets">
+                                <div ng-bind="value.label"></div>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
                 </div>
 
@@ -104,13 +114,14 @@
                                 <th class="title-column">Task Title</th>
                                 <th class="assignee-column">
                                     Assigned To
-                                    <span class="pull-right btn" ng-click="setAssignee(taskList)">
+                                    <span class="pull-right btn" title="{{copyMessage}}"
+                                          ng-click="copyAssignee(taskList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
                                 <th class="date-column">
                                     Due Date
-                                    <span class="pull-right btn">
+                                    <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyDate(taskList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
@@ -132,7 +143,7 @@
 
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
-                                        <ui-select ng-model="activity.activity_type_id" ng-required="true">
+                                        <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create">
                                             <ui-select-match placeholder="Select task type">
                                                 {{$select.selected.value}}
                                             </ui-select-match>
@@ -164,14 +175,14 @@
                                 </td>
 
                                 <td>
-                                    <div class="input-group">
+                                    <div class="input-group date-input-group">
                                         <input type="text" id="{{prefix}}assignment-task-due-{{$index}}"
                                                ng-model="activity.activity_date_time"
                                                class="form-control"
-                                               custom-date-input
+                                               date-input
                                                ng-disabled="isDisabled"
-                                               placeholder="dd/mm/yyyy"
-                                               name="assignmentDue" ng-required="true"/>
+                                               placeholder="{{ format }}"
+                                               name="assignmentDue" ng-required="!isDisabled && activity.create"/>
                                         <span class="input-group-addon">
                                             <a href class="text-normal calendar-popup-link"
                                                ng-model="activity.activity_date_time"
@@ -213,18 +224,20 @@
 
                         <table class="table modal-table table-striped">
                             <thead>
-                            <tr>
+                            <tr ng-hide="!documentList.length">
                                 <th class="action-column"></th>
                                 <th class="title-column">Document Title</th>
                                 <th class="assignee-column">
                                     Assigned To
-                                    <span class="pull-right btn" ng-click="setAssignee(documentList)">
+                                    <span class="pull-right btn" title="{{copyMessage}}"
+                                          ng-click="copyAssignee(documentList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
                                 <th class="date-column">
                                     Due Date
-                                    <span class="pull-right btn" ng-click="setDocumentsDate()">
+                                    <span class="pull-right btn" title="{{copyMessage}}"
+                                          ng-click="copyDate(documentList)">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
@@ -278,13 +291,13 @@
                                 </td>
 
                                 <td>
-                                    <div class="input-group">
+                                    <div class="input-group date-input-group">
                                         <input type="text" id="{{prefix}}assignment-doc-due-{{$index}}"
                                                ng-model="activity.activity_date_time"
                                                class="form-control"
-                                               custom-date-input
+                                               date-input
                                                ng-disabled="isDisabled"
-                                               placeholder="dd/mm/yyyy"
+                                               placeholder="{{ format }}"
                                                name="assignmentDue" ng-required="true"/>
                                         <span class="input-group-addon">
                                             <a href class="text-normal calendar-popup-link"

@@ -1,0 +1,320 @@
+form {
+
+  .no-gutter[class*='col-'] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &.form-horizontal {
+
+    .input-group.date-input-group {
+      text-align: right;
+
+      input{
+        width: 105px;
+      }
+
+      /* Bootstrap override */
+      .input-group-addon {
+        background: transparent;
+        border: none;
+        width: 0;
+
+        a {
+          color: #333333;
+        }
+      }
+    }
+  }
+
+  &.form-task,
+  &.form-document {
+
+    .form-control-static {
+      a:link {
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: underline;
+        text-transform: capitalize;
+      }
+    }
+
+    .row {
+      margin-bottom: 10px;
+
+      &.double-spacing {
+        margin-bottom: 20px;
+      }
+    }
+
+    .modal-header {
+      padding: 10px 15px 0;
+
+      .close {
+        float: none;
+        opacity: .7;
+        margin-top: 7px;
+        margin-left: -3px;
+      }
+
+      > *[class^='col-'] {
+        margin-left: -15px;
+        margin-right: -15px;
+      }
+
+      /* using this override until we have a separate directive for that */
+      .ui-select-container {
+
+        * {
+          border: none !important;
+          box-shadow: none !important;
+        }
+
+        .ui-select-choices {
+          border: 1px solid #333333 !important;
+        }
+
+        .ui-select-toggle {
+          border-bottom: 1px solid #E8EEF0 !important;
+          padding: 0;
+
+          .caret:before {
+            position: relative;
+            top: -10px;
+            left: -10px;
+
+            // Magnifying Glass
+            content: "\f002";
+            opacity: .3;
+
+            font-family: FontAwesome;
+            font-weight: 200;
+            font-size: 16px;
+            font-style: normal;
+
+            transform: translate(0, 0);
+          }
+
+          .ui-select-placeholder,
+          .ui-select-match-text {
+            color: #41afcb !important;
+            font-size: 20px !important;
+          }
+        }
+      }
+    }
+
+    .modal-body {
+
+      .input-group[class^="col-"] {
+        float: left;
+      }
+
+      .ui-select-bootstrap > .ui-select-choices {
+        min-width: 100%;
+        width: auto;
+      }
+
+      .dropdown-menu {
+        left: auto;
+      }
+
+      table {
+        padding-left: 15px;
+        padding-right: 15px;
+        background: transparent;
+        * {
+          border: none;
+        }
+
+        .btn-danger {
+          background: transparent;
+          color: #f08290;
+        }
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .drop-zone {
+        background: transparent;
+        text-align: center;
+        padding: 25px;
+        cursor: pointer;
+
+        > .fa {
+          font-size: 25px;
+          margin-bottom: 15px;
+        }
+
+        > strong {
+          font-weight: 600;
+        }
+      }
+
+      .ui-select-match-text > span {
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: absolute;
+      }
+
+      .container {
+        padding: 0 15px;
+      }
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .btn-indent {
+      margin-left: -13px;
+    }
+  }
+
+  &.form-assignment {
+
+    h2 {
+      font-size: 16px;
+      line-height: 32px;
+      margin: 0;
+    }
+
+    hr {
+      margin: 0 -15px 10px;
+    }
+
+    .row {
+      margin-bottom: 10px;
+    }
+
+    .display-only {
+
+      &.header {
+        margin-top: 7px;
+        height: 32px;
+
+        > span {
+          line-height: 34px;
+        }
+      }
+    }
+
+    //TODO Move it to org.civicrm.bootstrapcivicrm
+    .modal-table {
+      margin-top: 10px;
+      border: 1px solid $table-border-color;
+      background-color: $table-striped-bg;
+
+      &.table-striped {
+
+        > thead {
+
+          > tr {
+
+            > th {
+
+              &.action-column {
+                width: 5%;
+              }
+
+              &.title-column {
+                width: 45%;
+              }
+
+              &.assignee-column {
+                width: 30%;
+              }
+
+              &.date-column {
+                width: 20%;
+                min-width: 150px;
+              }
+            }
+          }
+        }
+
+        > tbody, tfoot {
+
+          > tr:nth-child(odd) {
+            background-color: $table-bg-accent;
+          }
+        }
+      }
+
+      th {
+
+        > .btn {
+          margin-top: -6px;
+          margin-bottom: -6px;
+        }
+      }
+    }
+
+    .separately {
+      margin-bottom: 20px;
+    }
+
+    .no-wrap {
+      white-space: nowrap;
+    }
+  }
+
+  &.form-task-migrate {
+
+    label {
+      text-transform: capitalize;
+    }
+  }
+
+  &.#{$prefix}form-action {
+    margin-top: -12px;
+    margin-bottom: -12px;
+    max-width: 817px;
+    width: 100%;
+    float: left;
+
+    .row,
+    .form-horizontal .form-group {
+      margin: {
+        bottom: 0;
+        left: -5px;
+        right: -5px;
+      }
+    }
+
+    .form-horizontal .control-label {
+      text-align: right;
+    }
+
+    [class^="col-"],
+    [class*=" col-"] {
+      padding: {
+        left: 5px;
+        right: 5px;
+      }
+    }
+  }
+
+  .ui-select-required {
+    display: table;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+
+    .ui-select-container {
+      display: table-cell;
+    }
+
+    &:after {
+      content: "*";
+      color: red;
+      display: table-cell;
+      padding-left: 3px;
+      position: absolute;
+      top: 0;
+    }
+  }
+}

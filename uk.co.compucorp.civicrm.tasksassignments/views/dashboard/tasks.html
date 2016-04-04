@@ -11,41 +11,48 @@
                             <a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>
                                 {{label.overdue}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i>
-                                <span class="badge badge-danger" ng-bind="(taskListOngoing | filterBy.due:'overdue' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
+                                <span class="badge badge-danger"
+                                      ng-bind="(taskListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>
                                 {{label.dueToday}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i>
-                                <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueToday' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
+                                <span class="badge badge-primary"
+                                      ng-bind="(taskListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href ng-model="filterParams.due" btn-radio="'dueThisWeek'" uncheckable>
                                 {{label.dueThisWeek}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i>
-                                <span class="badge badge-primary" ng-bind="(taskListOngoing | filterBy.due:'dueThisWeek' | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
+                                <span class="badge badge-primary"
+                                      ng-bind="(taskListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
                             </a>
                         </li>
                     </ul>
                     <hr>
-                    <a href ng-click="isCollapsed.filterDates = !isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
-                        <i class="fa" ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-right': isCollapsed.filterDates }"></i>
+                    <a href ng-click="isCollapsed.filterDates = !isCollapsed.filterDates"
+                       class="btn btn-block {{prefix}}select-dates">
+                        <i class="fa"
+                           ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-right': isCollapsed.filterDates }"></i>
                         <em>OR</em> Select Dates
                     </a>
 
                     <div class="form-horizontal" collapse="isCollapsed.filterDates">
                         <div class="form-group">
-                            <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
+                            <label for="{{prefix}}filter-date-from"
+                                   class="col-xs-12 col-sm-3 control-label">From</label>
 
                             <div class="col-xs-12 col-sm-9 col-lg-7">
                                 <input is-open="dpOpened.filterDates.from"
-                                    datepicker-popup="dd/MM/yyyy"
-                                    ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
-                                    ng-model="filterParamsHolder.dateRange.from"
-                                    max-date="filterParamsHolder.dateRange.until"
-                                    id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+                                       datepicker-popup
+                                       date-input
+                                       ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
+                                       ng-model="filterParamsHolder.dateRange.from"
+                                       max-date="filterParamsHolder.dateRange.until"
+                                       id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
                             </div>
                         </div>
                         <div class="form-group">
@@ -55,12 +62,13 @@
 
                             <div class="col-xs-12 col-sm-9  col-lg-7">
                                 <input is-open="dpOpened.filterDates.until"
-                                    datepicker-popup="dd/MM/yyyy"
-                                    min-date="filterParamsHolder.dateRange.from"
-                                    ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
-                                    ng-model="filterParamsHolder.dateRange.until"
-                                    id="{{prefix}}filter-date-until" class="form-control"
-                                    name="filterDateUntil">
+                                       datepicker-popup
+                                       date-input
+                                       min-date="filterParamsHolder.dateRange.from"
+                                       ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
+                                       ng-model="filterParamsHolder.dateRange.until"
+                                       id="{{prefix}}filter-date-until" class="form-control"
+                                       name="filterDateUntil">
                             </div>
                         </div>
                         <button class="btn btn-default btn-primary btn-block"
@@ -87,27 +95,27 @@
                             <div class="col-xs-12 col-sm-6 text-center">
                                 <div class="btn-group btn-group-sm">
                                     <a ui-sref="tasks.my"
-                                        class="btn btn-gray active panel-filter__filter"
-                                        ng-model="filterParams.userRole"
-                                        btn-radio="{
+                                       class="btn btn-gray active panel-filter__filter"
+                                       ng-model="filterParams.userRole"
+                                       btn-radio="{
                                             field: 'assignee_contact_id',
                                             isEqual: true
                                         }">
-                                        My Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id').length}})
+                                        My Tasks ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByUserRole:'assignee_contact_id').length}})
                                     </a>
                                     <a ui-sref="tasks.delegated"
-                                        class="btn btn-gray panel-filter__filter"
-                                        ng-model="filterParams.userRole"
-                                        btn-radio="{
+                                       class="btn btn-gray panel-filter__filter"
+                                       ng-model="filterParams.userRole"
+                                       btn-radio="{
                                             field: 'assignee_contact_id',
                                             isEqual: false
                                         }">
-                                        Delegated Tasks ({{(taskListOngoing | filterBy.status:cache.taskStatusResolve:false | filterBy.userRole:'assignee_contact_id':false).length}})
+                                        Delegated Tasks ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByUserRole:'assignee_contact_id':false).length}})
                                     </a>
                                     <a ui-sref="tasks.all"
-                                        class="btn btn-gray panel-filter__filter"
-                                        ng-model="filterParams.userRole"
-                                        btn-radio="{
+                                       class="btn btn-gray panel-filter__filter"
+                                       ng-model="filterParams.userRole"
+                                       btn-radio="{
                                             field: null,
                                             isEqual: null
                                         }">All
@@ -115,10 +123,11 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-3 text-right">
-                                <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced" class="btn btn-collapse">
+                                <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced"
+                                   class="btn btn-collapse">
                                     <span class="fa"
-                                        ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterAdvanced, 'fa-chevron-right': isCollapsed.filterAdvanced }"
-                                        aria-hidden="true">
+                                          ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterAdvanced, 'fa-chevron-right': isCollapsed.filterAdvanced }"
+                                          aria-hidden="true">
                                     </span>
                                     Filter Tasks
                                 </a>
@@ -172,7 +181,7 @@
                     </div>
                 </div>
                 <ul class="{{prefix}}list-task">
-                    <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterBy.status:cache.taskStatusResolve:false) | filterBy.due:filterParams.due:filterParams.dateRange | filterBy.userRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterBy.assignmentType:filterParams.assignmentType | filterBy.contactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
+                    <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterByStatus:cache.taskStatusResolve:false) | filterByDue:filterParams.due:filterParams.dateRange | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterByAssignmentType:filterParams.assignmentType | filterByContactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
                         ng-controller="TaskCtrl"
                         ng-class="{
                             '{{prefix}}task-completed': task.completed,
@@ -211,7 +220,8 @@
 
             <p class="task-title">
                 <span ng-show="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title">{{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}:</span>
-                <a href class="task-title" ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
+                <a href class="task-title" ng-click="modalTask(task);"
+                   ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
             </p>
         </div>
         <div class="col-xs-6">
@@ -303,7 +313,8 @@
     <div class="row">
         <div class="col-xs-12">
             <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse">
-                <span class="fa" ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
+                <span class="fa"
+                      ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
                       aria-hidden="true">
                 </span>
                 Show More
