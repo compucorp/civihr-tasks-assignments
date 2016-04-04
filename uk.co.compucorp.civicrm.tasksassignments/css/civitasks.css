@@ -11746,6 +11746,7 @@ fieldset[disabled]
 }
 #civitasks .editable:hover .fa-pencil, #cividocuments .editable:hover .fa-pencil, #civitasks .editable:hover.editable-with-link .editable-link, #cividocuments .editable:hover.editable-with-link .editable-link {
   opacity: 1;
+  z-index: 1000;
 }
 #civitasks .editable:hover.editable-with-link .editable-link, #cividocuments .editable:hover.editable-with-link .editable-link {
   bottom: -27px;
