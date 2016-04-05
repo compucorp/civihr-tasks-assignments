@@ -28,7 +28,7 @@ form {
   }
 
   &.form-task,
-  &.form-document {
+  &.form-document { 
 
     .form-control-static {
       a:link {
@@ -37,6 +37,10 @@ form {
         text-decoration: underline;
         text-transform: capitalize;
       }
+    }
+
+    .form-group-static {
+      margin-bottom: 0; 
     }
 
     .row {

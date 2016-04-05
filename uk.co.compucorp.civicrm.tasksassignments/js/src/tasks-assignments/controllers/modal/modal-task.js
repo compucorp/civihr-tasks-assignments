@@ -21,11 +21,9 @@ define([
             $scope.task.assignee_contact_id = $scope.task.assignee_contact_id || [];
             $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
-            $scope.contacts = [];
             $scope.showCId = !config.CONTACT_ID;
-            $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val){
-                return +val.extra.contact_id == +$scope.task.target_contact_id;
-            });
+            $scope.assignments = initialAssignments()
+            $scope.contacts = initialContacts();
 
             $scope.cacheAssignment = function($item){
 
@@ -165,5 +163,36 @@ define([
                 });
 
             };
+
+            /**
+             * The initial assignments that needs to be immediately available
+             * in the lookup directive
+             *
+             * @return {Array}
+             */
+            function initialAssignments() {
+                var cachedAssignments = $rootScope.cache.assignment.arrSearch;
+
+                return cachedAssignments.filter(function (assignment) {
+                    return +assignment.extra.contact_id === +$scope.task.target_contact_id;
+                });
+            }
+
+            /**
+             * The initial contacts that needs to be immediately available
+             * in the lookup directive
+             *
+             * If the modal is for a branch new task, then the contacts list is empty
+             *
+             * @return {Array}
+             */
+            function initialContacts() {
+                var cachedContacts = $rootScope.cache.contact.arrSearch;
+
+                return !$scope.task.id ? [] : cachedContacts.filter(function (contact) {
+                    return (+$scope.task.assignee_contact_id[0] === +contact.id) ||
+                           (+$scope.task.target_contact_id[0] === +contact.id);
+                });
+            }
         }]);
 });
