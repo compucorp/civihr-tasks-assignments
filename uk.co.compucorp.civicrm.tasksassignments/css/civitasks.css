@@ -11101,6 +11101,9 @@ fieldset[disabled]
   text-decoration: underline;
   text-transform: capitalize;
 }
+#civitasks form.form-task .form-group-static, #cividocuments form.form-task .form-group-static, #civitasks form.form-document .form-group-static, #cividocuments form.form-document .form-group-static {
+  margin-bottom: 0;
+}
 #civitasks form.form-task .row, #cividocuments form.form-task .row, #civitasks form.form-document .row, #cividocuments form.form-document .row {
   margin-bottom: 10px;
 }

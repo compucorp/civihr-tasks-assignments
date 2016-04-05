@@ -32,10 +32,11 @@
             <!-- Task Type & Date -->
             <div class="row">
                 <div class="col-xs-12 col-sm-6" ng-show="data.activity_type_id">
-                    <label class="col-xs-12 col-sm-2 control-label">Task:</label>
-
-                    <div class="col-xs-8 col-sm-6">
-                        <p class="form-control-static" ng-bind="cache.taskType.obj[data.activity_type_id]"></p>
+                    <div class="form-group form-group-static">
+                        <label class="col-xs-12 col-sm-3 control-label">Task:</label>
+                        <div class="col-xs-8 col-sm-9">
+                            <p class="form-control-static" ng-bind="cache.taskType.obj[data.activity_type_id]"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
@@ -74,14 +75,14 @@
             </div>
             <!-- Subject -->
             <div class="row">
-                <div class="col-xs-12 col-sm-6" ng-show="!showFieldSubject">
+                <div class="col-xs-12 col-sm-6" ng-show="!task.subject && !showFieldSubject">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showFieldSubject = true;">
                             Add Subject
                         </a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-6" ng-show="showFieldSubject">
+                <div class="col-xs-12 col-sm-6" ng-show="task.subject || showFieldSubject">
                     <input id="{{prefix}}task-subject"
                            class="form-control" name="taskSubject"
                            ng-model="task.subject" placeholder="Subject"
@@ -103,14 +104,14 @@
             </div>
             <!-- Assignee -->
             <div class="row">
-                <div class="col-xs-12 col-sm-5" ng-show="!showFieldAssignee">
+                <div class="col-xs-12 col-sm-5" ng-show="!task.assignee_contact_id[0] && !showFieldAssignee">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showFieldAssignee = true;">
                             Add Assignee
                         </a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-6 input-group" ng-show="showFieldAssignee">
+                <div class="col-xs-12 col-sm-6 input-group" ng-show="task.assignee_contact_id[0] || showFieldAssignee">
                     <ui-select ng-required="true"
                                allow-clear
                                ng-model="task.assignee_contact_id[0]"
@@ -132,16 +133,15 @@
             <!-- Status & Assignment-->
             <div class="row">
                 <!-- Status -->
-                <div class="col-xs-12 col-sm-5" ng-show="!showFieldStatus">
+                <div class="col-xs-12 col-sm-5" ng-show="!task.status_id && !showFieldStatus">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showFieldStatus = true;">
                             Set Status
                         </a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-5">
-                    <ui-select ng-show="showFieldStatus" allow-clear
-                               ng-model="task.status_id">
+                <div class="col-xs-12 col-sm-5" ng-show="task.status_id || showFieldStatus">
+                    <ui-select allow-clear ng-model="task.status_id">
                         <ui-select-match class="ui-select-match" placeholder="Status">
                             {{ $select.selected.value }}
                         </ui-select-match>
@@ -151,14 +151,14 @@
                     </ui-select>
                 </div>
                 <!-- Assignment -->
-                <div class="col-xs-12 col-sm-7" ng-show="!showFieldAssignment">
+                <div class="col-xs-12 col-sm-7" ng-show="!task.case_id && !showFieldAssignment">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showFieldAssignment = true;">
                             Add to assignment
                         </a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-7" ng-show="data.case_id || showFieldAssignment">
+                <div class="col-xs-12 col-sm-7" ng-show="task.case_id || showFieldAssignment">
                     <ui-select allow-clear
                                ng-model="task.case_id"
                                on-select="cacheAssignment($item);">
