@@ -10,6 +10,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
   public static function create(&$params) {
     $entityName = 'Task';
     $hook = empty($params['id']) ? 'create' : 'edit';
+
     CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
 
     if (empty($params['status_id']) && $hook === 'create') {
@@ -19,19 +20,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     $currentInstance = new static();
     $currentInstance->get('id', $params['id']);
 
-    $activityContactResult = civicrm_api3('ActivityContact', 'get', array(
-      'sequential' => 1,
-      'activity_id' => $params['id'],
-    ));
-
-    $previousAssigneeId = NULL;
-
-    foreach ($activityContactResult['values'] as $value) {
-      if ($value['record_type_id'] == 1) { // 1 is assignee
-        $previousAssigneeId = $value['contact_id'];
-        break;
-      }
-    }
+    $previousAssigneeId = self::getPreviousAssigneeId($params['id']);
 
     $instance = parent::create($params);
     CRM_Tasksassignments_Reminder::sendReminder((int) $instance->id, NULL, FALSE, $previousAssigneeId);
@@ -39,5 +28,33 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
 
     return $instance;
+  }
+
+  /**
+   * Gets the first previous assignee (if she exists) of the task with the given id
+   *
+   * @param {int} $taskId
+   * @return {int/null}
+   */
+  private static function getPreviousAssigneeId($taskId) {
+    $id = null;
+
+    if (!$taskId) {
+      return $id;
+    }
+
+    $activityContactResult = civicrm_api3('ActivityContact', 'get', array(
+      'sequential' => 1,
+      'activity_id' => $taskId,
+    ));
+
+    foreach ($activityContactResult['values'] as $value) {
+      if ($value['record_type_id'] == 1) { // 1 is assignee
+        $id = $value['contact_id'];
+        break;
+      }
+    }
+
+    return $id;
   }
 }
