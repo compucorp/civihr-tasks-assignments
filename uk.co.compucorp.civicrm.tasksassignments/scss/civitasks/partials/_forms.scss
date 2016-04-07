@@ -5,6 +5,19 @@ form {
     padding-right: 0;
   }
 
+  /* Bootstrap override */
+  .input-group-addon {
+    background: transparent;
+    border: none;
+    width: 0;
+    padding-right: 0;
+    padding-left: 6px;
+
+    a {
+      color: #333333;
+    }
+  }
+
   &.form-horizontal {
 
     .input-group.date-input-group {
@@ -12,17 +25,6 @@ form {
 
       input{
         width: 105px;
-      }
-
-      /* Bootstrap override */
-      .input-group-addon {
-        background: transparent;
-        border: none;
-        width: 0;
-
-        a {
-          color: #333333;
-        }
       }
     }
   }

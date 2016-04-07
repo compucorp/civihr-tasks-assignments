@@ -6377,7 +6377,7 @@ fieldset[disabled]
 }
 @media (min-width: 768px) {
   #civitasks .modal-dialog, #cividocuments .modal-dialog {
-    width: 600px;
+    width: 500px;
     margin: 30px auto;
   }
   #civitasks .modal-content, #cividocuments .modal-content {
@@ -11076,24 +11076,28 @@ fieldset[disabled]
 #civitasks .ct-filter-date-type .form-horizontal .form-group, #cividocuments .ct-filter-date-type .form-horizontal .form-group {
   margin-bottom: 0;
 }
+#civitasks form, #cividocuments form {
+  /* Bootstrap override */
+}
 #civitasks form .no-gutter[class*='col-'], #cividocuments form .no-gutter[class*='col-'] {
   padding-left: 0;
   padding-right: 0;
 }
-#civitasks form.form-horizontal .input-group.date-input-group, #cividocuments form.form-horizontal .input-group.date-input-group {
-  text-align: right;
-  /* Bootstrap override */
-}
-#civitasks form.form-horizontal .input-group.date-input-group input, #cividocuments form.form-horizontal .input-group.date-input-group input {
-  width: 105px;
-}
-#civitasks form.form-horizontal .input-group.date-input-group .input-group-addon, #cividocuments form.form-horizontal .input-group.date-input-group .input-group-addon {
+#civitasks form .input-group-addon, #cividocuments form .input-group-addon {
   background: transparent;
   border: none;
   width: 0;
+  padding-right: 0;
+  padding-left: 6px;
 }
-#civitasks form.form-horizontal .input-group.date-input-group .input-group-addon a, #cividocuments form.form-horizontal .input-group.date-input-group .input-group-addon a {
+#civitasks form .input-group-addon a, #cividocuments form .input-group-addon a {
   color: #333333;
+}
+#civitasks form.form-horizontal .input-group.date-input-group, #cividocuments form.form-horizontal .input-group.date-input-group {
+  text-align: right;
+}
+#civitasks form.form-horizontal .input-group.date-input-group input, #cividocuments form.form-horizontal .input-group.date-input-group input {
+  width: 105px;
 }
 #civitasks form.form-task .form-control-static a:link, #cividocuments form.form-task .form-control-static a:link, #civitasks form.form-document .form-control-static a:link, #cividocuments form.form-document .form-control-static a:link {
   font-size: 12px;
