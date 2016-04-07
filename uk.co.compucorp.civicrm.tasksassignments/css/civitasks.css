@@ -11772,7 +11772,7 @@ fieldset[disabled]
   right: 0;
   position: absolute;
   bottom: -24px;
-  z-index: 999;
+  z-index: 1100;
 }
 #civitasks .editable-wrap .editable-buttons .btn, #cividocuments .editable-wrap .editable-buttons .btn {
   background-color: #f4f7f8;
