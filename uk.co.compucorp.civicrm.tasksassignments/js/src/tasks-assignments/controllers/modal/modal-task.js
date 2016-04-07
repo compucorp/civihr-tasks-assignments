@@ -1,9 +1,11 @@
 define([
+    'common/angular',
+    'common/moment',
     'tasks-assignments/controllers/controllers',
     'tasks-assignments/services/contact',
     'tasks-assignments/services/dialog',
     'tasks-assignments/services/task'
-], function (controllers) {
+], function (angular, moment, controllers) {
     'use strict';
 
     controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
@@ -18,6 +20,7 @@ define([
 
             angular.copy(data, $scope.task);
 
+            $scope.task.activity_date_time = $scope.task.activity_date_time || moment().toDate();
             $scope.task.assignee_contact_id = $scope.task.assignee_contact_id || [];
             $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
