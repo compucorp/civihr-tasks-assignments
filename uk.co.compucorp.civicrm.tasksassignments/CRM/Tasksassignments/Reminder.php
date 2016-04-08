@@ -36,19 +36,75 @@ class CRM_Tasksassignments_Reminder
             self::$_relatedExtensions['appraisals'] = true;
         }
     }
-    
+
+    /**
+     * Gets the contacts starting with the given ids
+     *
+     * It also chains a call to the 'Email' api and puts the value in
+     * the 'email' property
+     *
+     * @param {Array} $contactIds
+     * @return {Array}
+     */
+    private static function _getContactsWithEmail($contactIds) {
+        $contacts = civicrm_api3('Contact', 'get', array(
+            'return' => 'display_name',
+            'id' => array('IN' => $contactIds),
+            'api.Email.getsingle' => array(
+                'contact_id' => "\$value.contact_id",
+                'is_primary' => true,
+                'return' => array('contact_id', 'email')
+            )
+        ))['values'];
+
+        foreach ($contacts as $id => $contact) {
+            $contacts[$id]['email'] = $contact['api.Email.getsingle']['email'];
+            unset($contacts[$id]['api.Email.getsingle']);
+        }
+
+        return $contacts;
+    }
+
+    /**
+     * Returns the links (in <a> tags), names and email of the contacts with given ids
+     * It also populates an array that maps emails to contact ids
+     *
+     * @param {Array} $contactIds
+     * @param {Array} $emailToContactId (by reference) Mapping between emails and contact ids
+     * @return {Array}
+     */
+    private static function _getActivityContactsDetails($contactIds, &$emailToContactId) {
+        $details = array('links' => array(), 'names' => array(), 'emails' => array());
+        $contacts = self::_getContactsWithEmail($contactIds);
+
+        foreach ($contacts as $id => $contact) {
+            $url = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $id;
+            $details['links'][] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contact['display_name'] . '</a>';
+            $details['names'][] = $contact['display_name'];
+
+            if ($contact['email']) {
+                $details['emails'][] = $contact['email'];
+                $emailToContactId[$contact['email']] = $id;
+            }
+        }
+
+        return $details;
+    }
+
+
     public static function sendReminder($activityId, $notes = null, $isReminder = false, $previousAssigneeId = null, $isDelete = false)
     {
         self::_setActivityOptions();
-        
-        $activityContact = array(
-            1 => array(), // assignees
-            2 => array(), // source
-            3 => array(), // targets
-        );
-        
+
+        $contactTypeToLabel = array(1 => 'assignees', 2 => 'source', 3 => 'targets');
+        $activityContacts = array();
+
+        foreach ($contactTypeToLabel as $type) {
+            $activityContacts[$type] = array();
+        }
+
         $emailToContactId = array();
-        
+
         $activityResult = civicrm_api3('Activity', 'get', array(
           'sequential' => 1,
           'activity_id' => $activityId,
@@ -56,69 +112,44 @@ class CRM_Tasksassignments_Reminder
           'is_deleted' => 0,
         ));
         $activityResult = CRM_Utils_Array::first($activityResult['values']);
-        
+
         $activityContactResult = civicrm_api3('ActivityContact', 'get', array(
           'sequential' => 1,
           'activity_id' => $activityId,
         ));
-        
+
         foreach ($activityContactResult['values'] as $value)
         {
-            $activityContact[$value['record_type_id']]['ids'][] = $value['contact_id'];
+            $type = $contactTypeToLabel[$value['record_type_id']];
+            $activityContacts[$type]['ids'][] = $value['contact_id'];
         }
 
         if($previousAssigneeId !== null)
         {
-            $activityContact[1]['ids'][] = $previousAssigneeId;
+            $activityContacts['assignees']['ids'][] = $previousAssigneeId;
         }
-        
-        foreach ($activityContact as $key => $value)
+
+        foreach ($activityContacts as $type => $contacts)
         {
             if (empty($value))
             {
                 continue;
             }
-            
-            $links = array();
-            $names = array();
-            $emails = array();
-            
-            $contactResult = civicrm_api3('Contact', 'get', array(
-              'return' => 'display_name',
-              'id' => array('IN' => $value['ids']),
-            ));
-            
-            $emailResult = civicrm_api3('Email', 'get', array(
-              'return' => 'contact_id,email',
-              'contact_id' => array('IN' => $value['ids']),
-              'is_primary' => 1,
-            ));
-            
-            foreach ($contactResult['values'] as $contactKey => $contactValue)
-            {
-                $url = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactKey;
-                $links[] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contactValue['display_name'] . '</a>';
-                $names[] = $contactValue['display_name'];
-            }
-            
-            foreach ($emailResult['values'] as $contactValue)
-            {
-                $emails[] = $contactValue['email'];
-                $emailToContactId[$contactValue['email']] = $contactValue['contact_id'];
-            }
-            
-            $activityContact[$key]['links'] = $links;
-            $activityContact[$key]['names'] = $names;
-            $activityContact[$key]['emails'] = $emails;
+
+            $details = self::_getActivityContactsDetails($contacts['ids'], $emailToContactId);
+
+            $activityContacts[$type]['links'] = $details['links'];
+            $activityContacts[$type]['names'] = $details['names'];
+            $activityContacts[$type]['emails'] = $details['emails'];
         }
-        
+
         $template = &CRM_Core_Smarty::singleton();
-        
-        $recipients = array_unique(array_merge($activityContact[1]['emails'], $activityContact[2]['emails']));
+
+        $recipients = array_unique(array_merge($activityContacts['assignees']['emails'], $activityContacts['source']['emails']));
         foreach ($recipients as $recipient)
         {
             $contactId = $emailToContactId[$recipient];
-            $activityName = implode(', ', $activityContact[3]['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
+            $activityName = implode(', ', $activityContacts['targets']['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
                 'isReminder' => $isReminder,
                 'isDelete' => $isDelete,
@@ -126,8 +157,8 @@ class CRM_Tasksassignments_Reminder
                 'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
                 'activityName' => $activityName,
                 'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
-                'activityTargets' => implode(', ', $activityContact[3]['links']),
-                'activityAssignee' => implode(', ', $activityContact[1]['links']),
+                'activityTargets' => implode(', ', $activityContacts['targets']['links']),
+                'activityAssignee' => implode(', ', $activityContacts['assignees']['links']),
                 'activityStatus' => self::$_activityOptions['status'][$activityResult['status_id']],
                 'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
                 'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
