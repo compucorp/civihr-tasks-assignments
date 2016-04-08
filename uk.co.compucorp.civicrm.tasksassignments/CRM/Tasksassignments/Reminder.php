@@ -43,8 +43,8 @@ class CRM_Tasksassignments_Reminder
      * It also chains a call to the 'Email' api and puts the value in
      * the 'email' property
      *
-     * @param {Array} $contactIds
-     * @return {Array}
+     * @param array $contactIds
+     * @return array
      */
     private static function _getContactsWithEmail($contactIds) {
         $contacts = civicrm_api3('Contact', 'get', array(
@@ -69,9 +69,9 @@ class CRM_Tasksassignments_Reminder
      * Returns the links (in <a> tags), names and email of the contacts with given ids
      * It also populates an array that maps emails to contact ids
      *
-     * @param {Array} $contactIds
-     * @param {Array} $emailToContactId (by reference) Mapping between emails and contact ids
-     * @return {Array}
+     * @param array $contactIds
+     * @param array $emailToContactId (by reference) Mapping between emails and contact ids
+     * @return array
      */
     private static function _getActivityContactsDetails($contactIds, &$emailToContactId) {
         $details = array('ids' => array(), 'links' => array(), 'names' => array(), 'emails' => array());
@@ -97,9 +97,9 @@ class CRM_Tasksassignments_Reminder
      * Extracts the previous assignee from the list of the activity assignees
      * Once the assignee has been found, it is removed from the original list
      *
-     * @param {Array} $assignees
-     * @param {id} $previousAssigneeId
-     * @return {Array} consists of id, link, email and name of the previous assignee
+     * @param array $assignees
+     * @param int $previousAssigneeId
+     * @return array consists of id, link, email and name of the previous assignee
      */
     private static function _extractPreviousAssignee(&$assignees, $previousAssigneeId) {
         $index = null;
@@ -134,9 +134,9 @@ class CRM_Tasksassignments_Reminder
      * Gets the full list of the recipients of the reminder email
      * Makes sure there are no duplicates or no empty emails in the list
      *
-     * @param {Array} $activityContacts
-     * @param {Array} $previousAssignee
-     * @return {Array}
+     * @param array $activityContacts
+     * @param array $previousAssignee
+     * @return array
      */
     private static function _reminderRecipients($activityContacts, $previousAssignee) {
         return array_filter(array_unique(array_merge(
