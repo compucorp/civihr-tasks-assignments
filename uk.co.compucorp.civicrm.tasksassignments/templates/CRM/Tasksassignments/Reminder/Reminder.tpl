@@ -18,8 +18,20 @@
 {/if}
 {if $activityAssignee}
     <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
-        <td width="15%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">Assignee:</td>
+        <td width="15%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+            {if $previousAssignee}
+                New Assignee:
+            {else}
+                Assignee:
+            {/if}
+        </td>
         <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">{$activityAssignee}</td>
+    </tr>
+{/if}
+{if $previousAssignee}
+    <tr style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
+        <td width="25%" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">Original Assignee:</td>
+        <td style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">{$previousAssignee}</td>
     </tr>
 {/if}
 {if $activityType}
