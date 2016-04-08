@@ -1,12 +1,10 @@
 define([
     'common/angular',
+    'common/modules/xeditable-civi',
     'tasks-assignments/vendor/angular-bootstrap-calendar',
     'tasks-assignments/vendor/angular-checklist-model',
     'tasks-assignments/vendor/angular-router',
     'tasks-assignments/vendor/angular-select',
-    'tasks-assignments/vendor/angular-xeditable',
-    'tasks-assignments/vendor/angular-xeditable-civi',
-    'tasks-assignments/vendor/text-angular',
     'tasks-assignments/modules/config',
     'tasks-assignments/modules/settings',
     'common/modules/routers/compu-ui-router',
