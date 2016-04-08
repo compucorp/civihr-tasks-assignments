@@ -7,7 +7,7 @@ define([
     'use strict';
 
     describe('ModalTaskCtrl', function () {
-        var ctrl, modalInstance, scope, AssignmentService, TaskService, DocumentService, ContactService, HR_settings;
+        var ctrl, modalInstance, scope, HR_settings;
 
         beforeEach(module('civitasks.appDashboard'));
         beforeEach(inject(function ($controller, $rootScope) {
@@ -21,10 +21,6 @@ define([
 
             scope = $rootScope.$new();
 
-            AssignmentService = {};
-            TaskService = {};
-            DocumentService = {};
-            ContactService = {};
             HR_settings = {
                 DATE_FORMAT: 'DD/MM/YYYY'
             };
@@ -43,7 +39,7 @@ define([
                 expect(scope.task.activity_date_time).toBeDefined();
             });
 
-            it('default date should be set to today', function(){
+            it('default date should be set to today', function () {
                 expect(moment(scope.task.activity_date_time).isSame(moment(), 'day')).toBe(true);
             })
         });

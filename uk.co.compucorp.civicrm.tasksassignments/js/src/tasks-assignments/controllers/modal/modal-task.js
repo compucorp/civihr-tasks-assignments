@@ -8,10 +8,10 @@ define([
 ], function (angular, moment, controllers) {
     'use strict';
 
-    controllers.controller('ModalTaskCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
+    controllers.controller('ModalTaskCtrl', ['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
         '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', 'HR_settings',
         function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
-                 data, config, HR_settings) {
+                  data, config, HR_settings) {
             $log.debug('Controller: ModalTaskCtrl');
 
             $scope.format = HR_settings.DATE_FORMAT.toLowerCase();
@@ -25,10 +25,11 @@ define([
             $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
             $scope.showCId = !config.CONTACT_ID;
-            $scope.assignments = initialAssignments()
+
+            $scope.assignments = initialAssignments();
             $scope.contacts = initialContacts();
 
-            $scope.cacheAssignment = function($item){
+            $scope.cacheAssignment = function ($item) {
 
                 if ($rootScope.cache.assignment.obj[$item.id]) {
                     return
@@ -60,7 +61,7 @@ define([
                 AssignmentService.updateCache(obj);
             };
 
-            $scope.cacheContact = function($item){
+            $scope.cacheContact = function ($item) {
                 var obj = {};
 
                 obj[$item.id] = {
@@ -74,7 +75,7 @@ define([
                 ContactService.updateCache(obj);
             };
 
-            $scope.refreshAssignments = function(input){
+            $scope.refreshAssignments = function (input) {
 
                 if (!input) {
                     return
@@ -82,26 +83,26 @@ define([
 
                 var targetContactId = $scope.task.target_contact_id;
 
-                AssignmentService.search(input, $scope.task.case_id).then(function(results){
-                    $scope.assignments = $filter('filter')(results, function(val){
+                AssignmentService.search(input, $scope.task.case_id).then(function (results) {
+                    $scope.assignments = $filter('filter')(results, function (val) {
                         return +val.extra.contact_id == +targetContactId;
                     });
                 });
             };
 
-            $scope.refreshContacts = function(input){
+            $scope.refreshContacts = function (input) {
                 if (!input) {
                     return
                 }
 
                 ContactService.search(input, {
                     contact_type: 'Individual'
-                }).then(function(results){
+                }).then(function (results) {
                     $scope.contacts = results;
                 });
             };
 
-            $scope.dpOpen = function($event){
+            $scope.dpOpen = function ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
 
@@ -109,7 +110,7 @@ define([
 
             };
 
-            $scope.cancel = function(){
+            $scope.cancel = function () {
 
                 if ($scope.taskForm.$pristine) {
                     $modalInstance.dismiss('cancel');
@@ -119,7 +120,7 @@ define([
                 $dialog.open({
                     copyCancel: 'No',
                     msg: 'Are you sure you want to cancel? Changes will be lost!'
-                }).then(function(confirm){
+                }).then(function (confirm) {
                     if (!confirm) {
                         return
                     }
@@ -130,9 +131,9 @@ define([
 
             };
 
-            $scope.confirm = function(){
+            $scope.confirm = function () {
 
-                if (angular.equals(data,$scope.task)) {
+                if (angular.equals(data, $scope.task)) {
                     $modalInstance.dismiss('cancel');
                     return
                 }
@@ -143,14 +144,14 @@ define([
                 +$scope.task.case_id == +data.case_id && delete $scope.task.case_id;
                 $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
 
-                TaskService.save($scope.task).then(function(results){
+                TaskService.save($scope.task).then(function (results) {
 
                     $scope.task.id = results.id;
                     $scope.task.case_id = results.case_id;
 
                     AssignmentService.updateTab();
 
-                    if($scope.openNew){
+                    if ($scope.openNew) {
                         $scope.task.open = true;
                         $scope.openNew = false;
                     }
@@ -159,7 +160,7 @@ define([
                     $scope.$broadcast('ct-spinner-hide');
 
                     return;
-                },function(reason){
+                }, function (reason) {
                     CRM.alert(reason, 'Error', 'error');
                     $modalInstance.dismiss();
                     $scope.$broadcast('ct-spinner-hide');
@@ -195,7 +196,7 @@ define([
 
                 return !$scope.task.id ? [] : cachedContacts.filter(function (contact) {
                     return (+$scope.task.assignee_contact_id[0] === +contact.id) ||
-                           (+$scope.task.target_contact_id[0] === +contact.id);
+                        (+$scope.task.target_contact_id[0] === +contact.id);
                 });
             }
         }]);
