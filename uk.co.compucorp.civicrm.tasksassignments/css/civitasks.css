@@ -11077,11 +11077,15 @@ fieldset[disabled]
   margin-bottom: 0;
 }
 #civitasks form, #cividocuments form {
+  /* helper classes */
   /* Bootstrap override */
 }
 #civitasks form .no-gutter[class*='col-'], #cividocuments form .no-gutter[class*='col-'] {
   padding-left: 0;
   padding-right: 0;
+}
+#civitasks form .no-wrap, #cividocuments form .no-wrap {
+  white-space: nowrap;
 }
 #civitasks form .input-group-addon, #cividocuments form .input-group-addon {
   background: transparent;
@@ -11257,9 +11261,6 @@ fieldset[disabled]
 }
 #civitasks form.form-assignment .separately, #cividocuments form.form-assignment .separately {
   margin-bottom: 20px;
-}
-#civitasks form.form-assignment .no-wrap, #cividocuments form.form-assignment .no-wrap {
-  white-space: nowrap;
 }
 #civitasks form.form-task-migrate label, #cividocuments form.form-task-migrate label, #civitasks form.form-task-migrate .checkbox-label, #cividocuments form.form-task-migrate .checkbox-label,
 #civitasks form.form-task-migrate .radio-label,

@@ -1,8 +1,13 @@
 form {
 
+  /* helper classes */
   .no-gutter[class*='col-'] {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  .no-wrap {
+    white-space: nowrap;
   }
 
   /* Bootstrap override */
@@ -261,10 +266,6 @@ form {
 
     .separately {
       margin-bottom: 20px;
-    }
-
-    .no-wrap {
-      white-space: nowrap;
     }
   }
 
