@@ -195,7 +195,14 @@
                                            repeat="assignment.id as assignment in assignments"
                                            refresh="refreshAssignments($select.search)"
                                            refresh-delay="0">
-                            <div ng-class="assignment.label_class" ng-bind="assignment.label"></div>
+                            <div>
+                                <div ng-class="assignment.label_class">{{assignment.label}}</div>
+                                <small>
+                                    #{{assignment.id}}: {{assignment.extra.case_status}} (opened: {{assignment.extra.start_date | date:'MMM d, yyyy'}})
+                                    <br>
+                                    {{assignment.extra.case_subject}}
+                                </small>
+                            </div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
