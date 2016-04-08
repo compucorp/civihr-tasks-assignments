@@ -74,21 +74,76 @@ class CRM_Tasksassignments_Reminder
      * @return {Array}
      */
     private static function _getActivityContactsDetails($contactIds, &$emailToContactId) {
-        $details = array('links' => array(), 'names' => array(), 'emails' => array());
+        $details = array('ids' => array(), 'links' => array(), 'names' => array(), 'emails' => array());
         $contacts = self::_getContactsWithEmail($contactIds);
 
         foreach ($contacts as $id => $contact) {
             $url = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $id;
+
+            $details['ids'][] = $id;
             $details['links'][] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contact['display_name'] . '</a>';
             $details['names'][] = $contact['display_name'];
+            $details['emails'][] = $contact['email'];
 
             if ($contact['email']) {
-                $details['emails'][] = $contact['email'];
                 $emailToContactId[$contact['email']] = $id;
             }
         }
 
         return $details;
+    }
+
+    /**
+     * Extracts the previous assignee from the list of the activity assignees
+     * Once the assignee has been found, it is removed from the original list
+     *
+     * @param {Array} $assignees
+     * @param {id} $previousAssigneeId
+     * @return {Array} consists of id, link, email and name of the previous assignee
+     */
+    private static function _extractPreviousAssignee(&$assignees, $previousAssigneeId) {
+        $index = null;
+
+        foreach ($assignees['ids'] as $i => $assigneeId) {
+            if ($assigneeId == $previousAssigneeId) {
+                $index = $i;
+                break;
+            }
+        }
+
+        if ($index === null) {
+            return null;
+        }
+
+        $previousAssignee = array(
+            'id' => $previousAssigneeId,
+            'email' => $assignees['emails'][$index],
+            'link' => $assignees['links'][$index],
+            'name' => $assignees['names'][$index],
+        );
+
+        unset($assignees['ids'][$index]);
+        unset($assignees['links'][$index]);
+        unset($assignees['names'][$index]);
+        unset($assignees['emails'][$index]);
+
+        return $previousAssignee;
+    }
+
+    /**
+     * Gets the full list of the recipients of the reminder email
+     * Makes sure there are no duplicates or no empty emails in the list
+     *
+     * @param {Array} $activityContacts
+     * @param {Array} $previousAssignee
+     * @return {Array}
+     */
+    private static function _reminderRecipients($activityContacts, $previousAssignee) {
+        return array_filter(array_unique(array_merge(
+            $activityContacts['assignees']['emails'],
+            $activityContacts['source']['emails'],
+            [$previousAssignee['email']]
+        )));
     }
 
 
@@ -98,12 +153,12 @@ class CRM_Tasksassignments_Reminder
 
         $contactTypeToLabel = array(1 => 'assignees', 2 => 'source', 3 => 'targets');
         $activityContacts = array();
+        $emailToContactId = array();
+        $previousAssignee = null;
 
         foreach ($contactTypeToLabel as $type) {
             $activityContacts[$type] = array();
         }
-
-        $emailToContactId = array();
 
         $activityResult = civicrm_api3('Activity', 'get', array(
           'sequential' => 1,
@@ -124,7 +179,7 @@ class CRM_Tasksassignments_Reminder
             $activityContacts[$type]['ids'][] = $value['contact_id'];
         }
 
-        if($previousAssigneeId !== null)
+        if ($previousAssigneeId !== null)
         {
             $activityContacts['assignees']['ids'][] = $previousAssigneeId;
         }
@@ -138,14 +193,19 @@ class CRM_Tasksassignments_Reminder
 
             $details = self::_getActivityContactsDetails($contacts['ids'], $emailToContactId);
 
+            $activityContacts[$type]['ids'] = $details['ids'];
             $activityContacts[$type]['links'] = $details['links'];
             $activityContacts[$type]['names'] = $details['names'];
             $activityContacts[$type]['emails'] = $details['emails'];
         }
 
-        $template = &CRM_Core_Smarty::singleton();
+        if ($previousAssigneeId !== null) {
+            $previousAssignee = self::_extractPreviousAssignee($activityContacts['assignees'], $previousAssigneeId);
+        }
 
-        $recipients = array_unique(array_merge($activityContacts['assignees']['emails'], $activityContacts['source']['emails']));
+        $template = &CRM_Core_Smarty::singleton();
+        $recipients = self::_reminderRecipients($activityContacts, $previousAssignee);
+
         foreach ($recipients as $recipient)
         {
             $contactId = $emailToContactId[$recipient];
@@ -159,6 +219,7 @@ class CRM_Tasksassignments_Reminder
                 'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
                 'activityTargets' => implode(', ', $activityContacts['targets']['links']),
                 'activityAssignee' => implode(', ', $activityContacts['assignees']['links']),
+                'previousAssignee' => $previousAssignee ? $previousAssignee['link'] : null,
                 'activityStatus' => self::$_activityOptions['status'][$activityResult['status_id']],
                 'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
                 'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
