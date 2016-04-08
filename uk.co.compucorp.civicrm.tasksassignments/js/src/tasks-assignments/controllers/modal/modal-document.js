@@ -1,10 +1,12 @@
 define([
+    'common/angular',
+    'common/moment',
     'tasks-assignments/controllers/controllers',
     'tasks-assignments/services/contact',
     'tasks-assignments/services/file',
     'tasks-assignments/services/dialog',
     'tasks-assignments/services/document'
-], function (controllers) {
+], function (angular, moment, controllers) {
     'use strict';
 
     controllers.controller('ModalDocumentCtrl', ['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log',
@@ -141,23 +143,24 @@ define([
                 if (angular.equals(data, $scope.document) &&
                     angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
                     $modalInstance.dismiss('cancel');
-                    return
+                    return;
                 }
 
                 var uploader = $scope.uploader,
                     filesTrash = $scope.filesTrash,
                     promiseFilesDelete = [],
-                    file, i, len;
+                    file;
 
                 $scope.$broadcast('ct-spinner-show');
 
                 //temporary remove case_id
                 +$scope.document.case_id == +data.case_id && delete $scope.document.case_id;
-                $scope.document.activity_date_time = $scope.document.activity_date_time || new Date();
+
+                $scope.document.activity_date_time = $scope.parseDate($scope.document.activity_date_time) || new Date();
+                $scope.document.expire_date = $scope.parseDate($scope.document.expire_date);
 
                 if (filesTrash.length) {
-                    i = 0, len = filesTrash.length;
-                    for (; i < len; i++) {
+                    for (var i = 0; i < filesTrash.length; i++) {
                         file = filesTrash[i];
                         promiseFilesDelete.push(FileService.delete(file.fileID, file.entityID, file.entityTable));
                     }
@@ -207,6 +210,27 @@ define([
                     $scope.$broadcast('ta-spinner-hide');
                     return $q.reject();
                 });
+            };
+
+            /**
+             * Parse dates so they can be correctly read by server.
+             *
+             * @param {string|Date} date
+             * @returns {string|null}
+             */
+            $scope.parseDate = function (date) {
+
+                if (date instanceof Date) {
+                    date = date.getTime();
+                }
+
+                var formatted = moment(date, [
+                    'DD/MM/YYYY',
+                    'x',
+                    'YYYY-MM-DD'
+                ]);
+
+                return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
             };
 
             $scope.dpOpen = function ($event, name) {

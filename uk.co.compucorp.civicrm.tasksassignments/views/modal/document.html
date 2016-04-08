@@ -55,7 +55,7 @@
                     <input type="text" ng-model="document.activity_date_time"
                            class="form-control"
                            id="{{prefix}}document-due"
-                           custom-date-input
+                           date-input
                            placeholder="dd/mm/yyyy"
                            name="documentDue" ng-required="true"
                     />
@@ -70,16 +70,17 @@
                     </span>
                 </div>
                 <!-- Expires -->
-                <label for="{{prefix}}document-exp"
-                       class="col-xs-12 col-sm-2 control-label no-gutter">Expiry Date:</label>
+                <label for="{{prefix}}document-exp" class="col-xs-12 col-sm-2 control-label no-gutter">
+                    <span class="pull-right">Expiry Date:</span>
+                </label>
 
                 <div class="col-xs-12 col-sm-4 input-group">
                     <input type="text" ng-model="document.expire_date"
                            class="form-control"
                            id="{{prefix}}document-exp"
-                           custom-date-input
+                           date-input
                            placeholder="dd/mm/yyyy"
-                           name="documentExpireDate" ng-required="true"
+                           name="documentExpireDate"
                     />
                     <span class="input-group-addon">
                         <a href class="text-normal calendar-popup-link"
@@ -106,46 +107,43 @@
                            multiple
                            nv-file-select uploader="uploader"/>
                 </div>
-
-                <table class="table table-condensed {{prefix}}table-upload col-xs-12"
-                       ng-show="uploader.queue.length || files.length">
-                    <colgroup>
-                        <col class="col-name">
-                        <col class="col-size" ng-show="uploader.isHTML5">
-                        <col class="col-action">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="file in files">
-                        <td><a ng-href="{{file.url}}">{{file.name}}</a></td>
-                        <td ng-show="uploader.isHTML5" nowrap>
-                            <span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span>
-                        </td>
-                        <td nowrap>
-                            <button type="button" class="btn btn-danger btn-xs"
-                                    ng-click="fileMoveToTrash($index)">
-                                <span class="glyphicon glyphicon-trash"></span> Remove
-                            </button>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="item in uploader.queue">
-                        <td>{{item.file.name}}</td>
-                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB
-                        </td>
-                        <td nowrap>
-                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                                <span class="glyphicon glyphicon-trash"></span> Remove
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-condensed {{prefix}}table-upload"
+                           ng-show="uploader.queue.length || files.length">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th ng-show="uploader.isHTML5">Size</th>
+                            <th class="pull-right"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="file in files">
+                            <td><a ng-href="{{file.url}}">{{file.name}}</a></td>
+                            <td ng-show="uploader.isHTML5" nowrap>
+                                <span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span>
+                            </td>
+                            <td class="text-right" nowrap>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                        ng-click="fileMoveToTrash($index)">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td>{{item.file.name}}</td>
+                            <td ng-show="uploader.isHTML5" nowrap>
+                                <span>{{ item.file.size/1024/1024|number:2 }} MB</span>
+                            </td>
+                            <td class="text-right" nowrap>
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- Assignee & Assignment -->
             <div class="row">
@@ -221,8 +219,7 @@
                 </label>
 
                 <div class="col-xs-12 col-sm-6" ng-show="showStatusField">
-                    <ui-select ng-required="true"
-                               allow-clear
+                    <ui-select allow-clear
                                ng-model="document.status_id">
                         <ui-select-match class="ui-select-match" placeholder="Set Status">
                             {{$select.selected.value}}
