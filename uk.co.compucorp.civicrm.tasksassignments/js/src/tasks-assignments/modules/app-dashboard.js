@@ -156,7 +156,7 @@ define([
                     })
                     .state('assignments', {
                         url: '/assignments',
-                        controller: 'AssignmentsCtrl',
+                        controller: 'ExternalPageCtrl',
                         templateUrl: config.path.TPL + 'dashboard/assignments.html?v=5'
                     })
                     .state('calendar', {
