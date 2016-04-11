@@ -11084,9 +11084,6 @@ fieldset[disabled]
   padding-left: 0;
   padding-right: 0;
 }
-#civitasks form .no-wrap, #cividocuments form .no-wrap {
-  white-space: nowrap;
-}
 #civitasks form .input-group-addon, #cividocuments form .input-group-addon {
   background: transparent;
   border: none;

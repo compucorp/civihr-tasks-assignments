@@ -10,9 +10,9 @@ define([
     'use strict';
 
     controllers.controller('ModalDocumentCtrl', ['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log',
-        '$filter', '$modal', '$dialog', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', '$timeout',
-        function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService,
-                  DocumentService, ContactService, FileService, data, files, config, $timeout) {
+        '$filter', '$modal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
+        function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout, AssignmentService,
+                  DocumentService, ContactService, FileService, data, files, config, HR_settings) {
             $log.debug('Controller: ModalDocumentCtrl');
 
             $scope.files = [];
@@ -224,8 +224,13 @@ define([
                     date = date.getTime();
                 }
 
+                /**
+                 * Apart from date format fetched from CiviCRM settings we want to parse:
+                 *  - timestamps (Date object is used by some 3rd party directives)
+                 *  - date format we get from server
+                 */
                 var formatted = moment(date, [
-                    'DD/MM/YYYY',
+                    HR_settings.DATE_FORMAT.toUpperCase(),
                     'x',
                     'YYYY-MM-DD'
                 ]);
