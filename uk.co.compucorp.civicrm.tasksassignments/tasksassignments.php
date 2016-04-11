@@ -46,11 +46,10 @@ function tasksassignments_civicrm_uninstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function tasksassignments_civicrm_enable() {
-  
-  $sql = "UPDATE civicrm_navigation SET is_active=1 WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
-  CRM_Core_DAO::executeQuery($sql);
+  _toggleMenuItems();
+  if (_isCaseEnabled()) { _toggleCaseMenuItems(false); }
+
   CRM_Core_BAO_Navigation::resetNavigation();
-  
   _tasksassignments_civix_civicrm_enable();
 }
 
@@ -60,11 +59,10 @@ function tasksassignments_civicrm_enable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
  */
 function tasksassignments_civicrm_disable() {
-  
-  $sql = "UPDATE civicrm_navigation SET is_active=0 WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
-  CRM_Core_DAO::executeQuery($sql);
+  _toggleMenuItems(false);
+  if (_isCaseEnabled()) { _toggleCaseMenuItems(true); }
+
   CRM_Core_BAO_Navigation::resetNavigation();
-  
   _tasksassignments_civix_civicrm_disable();
 }
 
@@ -204,4 +202,39 @@ function tasksassignments_civicrm_permission(&$permissions) {
     'delete Tasks and Documents' => $prefix . ts('delete Tasks and Documents'),
     'access Tasks and Assignments' => $prefix . ts('access Tasks and Assignments'),
   );
+}
+
+/**
+ * Checks if the Case extension is enabled
+ *
+ * @return {boolean}
+ */
+function _isCaseEnabled() {
+  return CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'org.civicrm.hrcase', 'is_active', 'full_name');
+}
+
+/**
+ * Sets the is_state flag of its own menu items
+ *
+ * @param boolean $activate
+ * @return void
+ */
+function _toggleMenuItems($activate = true) {
+  $is_active = $activate ? 1 : 0;
+  $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
+
+  CRM_Core_DAO::executeQuery($sql);
+}
+
+/**
+ * Sets the is_state flag of the Case extension menu items
+ *
+ * @param boolean $activate
+ * @return void
+ */
+function _toggleCaseMenuItems($activate = true) {
+  $is_active = $activate ? 1 : 0;
+  $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name = 'Cases' AND parent_id IS NULL";
+
+  CRM_Core_DAO::executeQuery($sql);
 }
