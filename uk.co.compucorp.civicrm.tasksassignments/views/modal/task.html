@@ -40,15 +40,16 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
-                    <ui-select ng-model="task.activity_type_id"
-                            ng-required="true">
-                        <ui-select-match class="ui-select-match" placeholder="Select Task Type">
-                            {{$select.selected.value}}
-                        </ui-select-match>
-                        <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                            <div ng-bind="type.value"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <div class="crm_custom-select crm_custom-select--full">
+                        <select
+                            ng-required
+                            class="form-control"
+                            ng-model="task.activity_type_id"
+                            ng-options="type.key as type.value for type in cache.taskType.arr">
+                            <option value="">Select Task Type</option>
+                        </select>
+                        <span class="crm_custom-select__arrow"></span>
+                    </div>
                 </div>
                 <label class="control-label no-gutter col-sm-2" for="{{prefix}}task-due">
                     <span class="pull-right">Due Date:</span>
@@ -141,14 +142,16 @@
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-5" ng-show="task.status_id || showFieldStatus">
-                    <ui-select allow-clear ng-model="task.status_id">
-                        <ui-select-match class="ui-select-match" placeholder="Status">
-                            {{ $select.selected.value }}
-                        </ui-select-match>
-                        <ui-select-choices class="ui-select-choices" repeat="status.key as status in cache.taskStatus.arr" refresh-delay="0">
-                            <div ng-bind="status.value"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <div class="crm_custom-select crm_custom-select--full">
+                        <select
+                            ng-required
+                            class="form-control"
+                            ng-model="task.status_id"
+                            ng-options="status.key as status.value for status in cache.taskStatus.arr">
+                            <option value="">Status</option>
+                        </select>
+                        <span class="crm_custom-select__arrow"></span>
+                    </div>
                 </div>
                 <!-- Assignment -->
                 <div class="col-xs-12 col-sm-7" ng-show="!task.case_id && !showFieldAssignment">
