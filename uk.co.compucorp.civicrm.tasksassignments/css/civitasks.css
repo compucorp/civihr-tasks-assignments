@@ -10082,6 +10082,75 @@ fieldset[disabled]
 #civitasks .editable-error, #cividocuments .editable-error {
   display: none;
 }
+#civitasks .crm_custom-select, #cividocuments .crm_custom-select {
+  background: #ffffff;
+  display: inline-block;
+  position: relative;
+}
+#civitasks .crm_custom-select > select, #cividocuments .crm_custom-select > select {
+  background: transparent;
+  padding-right: 44px;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
+}
+#civitasks .crm_custom-select > select::-ms-expand, #cividocuments .crm_custom-select > select::-ms-expand {
+  display: none;
+}
+#civitasks .crm_custom-select > select:disabled + .crm_custom-select__arrow, #cividocuments .crm_custom-select > select:disabled + .crm_custom-select__arrow {
+  z-index: 2;
+}
+#civitasks .crm_custom-select > select:focus + .crm_custom-select__arrow, #cividocuments .crm_custom-select > select:focus + .crm_custom-select__arrow {
+  border-color: #66afe9;
+}
+.ie9 #civitasks .crm_custom-select > select, .ie9 #cividocuments .crm_custom-select > select {
+  padding-right: 10px;
+}
+.ie9 #civitasks .crm_custom-select .crm_custom-select__arrow, .ie9 #cividocuments .crm_custom-select .crm_custom-select__arrow {
+  display: none;
+}
+#civitasks .crm_custom-select--full, #cividocuments .crm_custom-select--full {
+  display: block;
+  width: auto;
+}
+#civitasks .crm_custom-select--transparent, #cividocuments .crm_custom-select--transparent {
+  background: transparent;
+}
+#civitasks .crm_custom-select--transparent option, #cividocuments .crm_custom-select--transparent option {
+  background: #ffffff;
+}
+#civitasks .crm_custom-select__arrow, #cividocuments .crm_custom-select__arrow {
+  border-left: 1px solid #727e8a;
+  bottom: 0;
+  display: inline-block;
+  line-height: 31px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 32px;
+  z-index: 1;
+}
+#civitasks .crm_custom-select__arrow:before, #cividocuments .crm_custom-select__arrow:before {
+  content: '\f0d7';
+  color: #727e8a;
+  font-family: "FontAwesome";
+  font-style: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+#civitasks .has-error .crm_custom-select__arrow, #cividocuments .has-error .crm_custom-select__arrow {
+  border-color: #f08290 !important;
+}
+#civitasks .has-feedback > .crm_custom-select > select, #cividocuments .has-feedback > .crm_custom-select > select {
+  padding-right: 54px;
+}
+#civitasks .has-feedback > .crm_custom-select + .form-control-feedback, #cividocuments .has-feedback > .crm_custom-select + .form-control-feedback {
+  right: 27px !important;
+}
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   #civitasks .ct-sidebar-main, #cividocuments .ct-sidebar-main {
     margin-left: 0;

@@ -32,18 +32,16 @@
             <!-- Document Type -->
             <div class="row">
                 <div class="col-xs-12">
-                    <ui-select ng-model="document.activity_type_id"
-                               ng-required="true">
-                        <ui-select-match
-                                class="ui-select-match"
-                                placeholder="Select document type">{{$select.selected.value}}
-                        </ui-select-match>
-                        <ui-select-choices
-                                class="ui-select-choices"
-                                repeat="type.key as type in cache.documentType.arr | filter: $select.search">
-                            <div ng-bind="type.value"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <div class="crm_custom-select crm_custom-select--full">
+                        <select
+                            ng-required
+                            class="form-control"
+                            ng-model="document.activity_type_id"
+                            ng-options="type.key as type.value for type in cache.documentType.arr">
+                            <option value="">Select document type</option>
+                        </select>
+                        <span class="crm_custom-select__arrow"></span>
+                    </div>
                 </div>
             </div>
             <!-- Dates -->
@@ -219,15 +217,16 @@
                 </label>
 
                 <div class="col-xs-12 col-sm-6" ng-show="showStatusField">
-                    <ui-select allow-clear
-                               ng-model="document.status_id">
-                        <ui-select-match class="ui-select-match" placeholder="Set Status">
-                            {{$select.selected.value}}
-                        </ui-select-match>
-                        <ui-select-choices class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
-                            <div ng-bind="status.value"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <div class="crm_custom-select crm_custom-select--full">
+                        <select
+                            ng-required
+                            class="form-control"
+                            ng-model="document.status_id"
+                            ng-options="status.key as status.value for status in cache.documentStatus.arr">
+                            <option value="">Set Status</option>
+                        </select>
+                        <span class="crm_custom-select__arrow"></span>
+                    </div>
                 </div>
                 <label class="col-xs-12 control-label">Details</label>
                 <div class="col-xs-12">
