@@ -26,13 +26,16 @@ define([
             $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
             $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
             $scope.document.status_id = $scope.document.status_id || '1';
-            $scope.contacts = [];
             $scope.filesTrash = [];
             $scope.uploader = FileService.uploader('civicrm_activity');
             $scope.showCId = !config.CONTACT_ID;
             $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
                 return +val.extra.contact_id == +$scope.document.target_contact_id;
             });
+            $scope.contacts = {
+                target: initialContacts('target'),
+                assignee: initialContacts('assignee')
+            };
 
             $scope.cacheAssignment = function ($item) {
 
@@ -100,7 +103,7 @@ define([
                 });
             };
 
-            $scope.refreshContacts = function (input) {
+            $scope.refreshContacts = function (input, type) {
                 if (!input) {
                     return
                 }
@@ -108,7 +111,7 @@ define([
                 ContactService.search(input, {
                     contact_type: 'Individual'
                 }).then(function (results) {
-                    $scope.contacts = results;
+                    $scope.contacts[type] = results;
                 });
             };
 
@@ -249,5 +252,24 @@ define([
                     document.getElementById($rootScope.prefix + 'document-files').click();
                 });
             };
+
+            /**
+             * The initial contacts that needs to be immediately available
+             * in the lookup directive for the given type
+             *
+             * If the modal is for a brand new document, then the contacts list is empty
+             *
+             * @param {string} type - Either 'assignee' or 'target'
+             * @return {Array}
+             */
+            function initialContacts(type) {
+                var cachedContacts = $rootScope.cache.contact.arrSearch;
+
+                return !$scope.document.id ? [] : cachedContacts.filter(function (contact) {
+                    var currContactId = $scope.document[type + '_contact_id'][0];
+
+                    return +currContactId === +contact.id;
+                });
+            }
         }]);
 });

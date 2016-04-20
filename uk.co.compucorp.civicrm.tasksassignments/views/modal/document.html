@@ -11,8 +11,8 @@
                         {{$select.selected.label}}
                     </ui-select-match>
                     <ui-select-choices class="ui-select-choices"
-                                        repeat="contact.id as contact in contacts | filter: $select.search"
-                                       refresh="refreshContacts($select.search)"
+                                        repeat="contact.id as contact in contacts.target | filter: $select.search"
+                                       refresh="refreshContacts($select.search, 'target')"
                                        refresh-delay="0">
                         <div ng-bind="contact.label"></div>
                         <small ng-bind="contact.description[0]"></small>
@@ -146,12 +146,12 @@
             <!-- Assignee & Assignment -->
             <div class="row">
                 <!-- Assignee -->
-                <div class="col-xs-12 col-sm-6" ng-show="!showAssigneeField">
+                <div class="col-xs-12 col-sm-6" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showAssigneeField = true;">Add Assignee</a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-6" ng-show="showAssigneeField">
+                <div class="col-xs-12 col-sm-6" ng-show="document.assignee_contact_id[0] || showAssigneeField">
                     <ui-select
                             ng-required="true"
                             allow-clear
@@ -163,8 +163,8 @@
                         </ui-select-match>
                         <ui-select-choices
                                 class="ui-select-choices"
-                                repeat="contact.id as contact in contacts | filter: $select.search"
-                                refresh="refreshContacts($select.search)"
+                                repeat="contact.id as contact in contacts.assignee | filter: $select.search"
+                                refresh="refreshContacts($select.search, 'assignee')"
                                 refresh-delay="0">
                             <div ng-bind="contact.label"></div>
                             <small ng-bind="contact.description[0]"></small>
@@ -210,13 +210,13 @@
                 </div>
             </div>
             <div class="row" ng-show="expanded">
-                <label class="col-xs-12 col-sm-6" ng-show="!showStatusField">
+                <label class="col-xs-12 col-sm-6" ng-show="!document.id && !showStatusField">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showStatusField = true;">Set Status</a>
                     </span>
                 </label>
 
-                <div class="col-xs-12 col-sm-6" ng-show="showStatusField">
+                <div class="col-xs-12 col-sm-6" ng-show="document.status_id || showStatusField">
                     <div class="crm_custom-select crm_custom-select--full">
                         <select
                             ng-required
