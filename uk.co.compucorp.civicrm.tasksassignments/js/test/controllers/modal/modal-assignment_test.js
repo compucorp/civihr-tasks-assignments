@@ -45,6 +45,14 @@ define([
             angular.extend(scope, Mock);
         }));
 
+        describe('Lookup contacts lists', function () {
+            it('has the lists empty', function () {
+                expect(scope.contacts.target).toEqual([]);
+                expect(scope.contacts.document_assignee).toEqual([]);
+                expect(scope.contacts.task_assignee).toEqual([]);
+            });
+        });
+
         describe('copyAssignee()', function () {
             var list, assigneeId = [2];
 
