@@ -43,12 +43,16 @@ define([
             $scope.assignment.subject = '';
             $scope.assignment.dueDate = null;
 
-            $scope.contacts = $rootScope.cache.contact.arrSearch;
             $scope.dpOpened = {};
             $scope.showCId = !config.CONTACT_ID;
             $scope.activitySet = {};
             $scope.taskList = [];
             $scope.documentList = [];
+            $scope.contacts = {
+                target: [],
+                document_assignee: [],
+                task_assignee: []
+            }
 
             $scope.addActivity = function (activityArr) {
 
@@ -75,7 +79,7 @@ define([
                 $scope.dpOpened[key] = true;
             };
 
-            $scope.refreshContacts = function (input) {
+            $scope.refreshContacts = function (input, type) {
                 if (!input) {
                     return
                 }
@@ -83,7 +87,7 @@ define([
                 ContactService.search(input, {
                     contact_type: 'Individual'
                 }).then(function (results) {
-                    $scope.contacts = results;
+                    $scope.contacts[type] = results;
                 });
             };
 

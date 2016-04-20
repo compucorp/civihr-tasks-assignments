@@ -27,7 +27,10 @@ define([
             $scope.showCId = !config.CONTACT_ID;
 
             $scope.assignments = initialAssignments();
-            $scope.contacts = initialContacts();
+            $scope.contacts = {
+                target: initialContacts('target'),
+                assignee: initialContacts('assignee')
+            };
 
             $scope.cacheAssignment = function ($item) {
 
@@ -90,7 +93,7 @@ define([
                 });
             };
 
-            $scope.refreshContacts = function (input) {
+            $scope.refreshContacts = function (input, type) {
                 if (!input) {
                     return
                 }
@@ -98,7 +101,7 @@ define([
                 ContactService.search(input, {
                     contact_type: 'Individual'
                 }).then(function (results) {
-                    $scope.contacts = results;
+                    $scope.contacts[type] = results;
                 });
             };
 
@@ -185,18 +188,20 @@ define([
 
             /**
              * The initial contacts that needs to be immediately available
-             * in the lookup directive
+             * in the lookup directive for the given type
              *
              * If the modal is for a branch new task, then the contacts list is empty
              *
+             * @param {string} type - Either 'assignee' or 'target'
              * @return {Array}
              */
-            function initialContacts() {
+            function initialContacts(type) {
                 var cachedContacts = $rootScope.cache.contact.arrSearch;
 
                 return !$scope.task.id ? [] : cachedContacts.filter(function (contact) {
-                    return (+$scope.task.assignee_contact_id[0] === +contact.id) ||
-                        (+$scope.task.target_contact_id[0] === +contact.id);
+                    var currContactId = $scope.task[type + '_contact_id'][0];
+
+                    return +currContactId === +contact.id;
                 });
             }
         }]);
