@@ -11,8 +11,8 @@
                     </ui-select-match>
                     <ui-select-choices
                                        class="ui-select-choices"
-                                       repeat="contact.id as contact in contacts | filter: $select.search"
-                                       refresh="refreshContacts($select.search)"
+                                       repeat="contact.id as contact in contacts.target | filter: $select.search"
+                                       refresh="refreshContacts($select.search, 'target')"
                                        refresh-delay="0">
                         <div ng-bind="contact.label"></div>
                         <small ng-bind="contact.description[0]"></small>
@@ -122,8 +122,8 @@
                         </ui-select-match>
                         <ui-select-choices
                                            class="ui-select-choices"
-                                           repeat="contact.id as contact in contacts | filter: $select.search"
-                                           refresh="refreshContacts($select.search)"
+                                           repeat="contact.id as contact in contacts.assignee | filter: $select.search"
+                                           refresh="refreshContacts($select.search, 'assignee')"
                                            refresh-delay="0">
                             <div ng-bind="contact.label"></div>
                             <small ng-bind="contact.description[0]"></small>
