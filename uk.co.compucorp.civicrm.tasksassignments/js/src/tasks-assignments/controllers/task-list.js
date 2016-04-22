@@ -156,18 +156,37 @@ define([
                 AssignmentService.updateCache(obj);
             };
 
-            $scope.cacheContact = function($item){
+            /**
+             * Updates the permanent contact cache held in $rootScope, with the contact
+             * with the given id
+             *
+             * The full data of the contact is found in the temporary contact
+             * cache held in $scope.contacts
+             *
+             * @param {int} contactId
+             * @return {boolean}
+             */
+            $scope.cacheContact = function(contactId){
                 var obj = {};
+                var contact = $scope.contacts.filter(function (contact) {
+                    return contact.id === contactId;
+                })[0];
 
-                obj[$item.id] = {
-                    contact_id: $item.id,
-                    contact_type: $item.icon_class,
-                    sort_name: $item.label,
-                    display_name: $item.label,
-                    email: $item.description.length ? $item.description[0] : ''
+                if (!contact) {
+                    return;
+                }
+
+                obj[contact.id] = {
+                    contact_id: contact.id,
+                    contact_type: contact.icon_class,
+                    sort_name: contact.label,
+                    display_name: contact.label,
+                    email: contact.description.length ? contact.description[0] : ''
                 };
 
                 ContactService.updateCache(obj);
+
+                return true;
             };
 
             $scope.changeStatus = function(task, statusId){
