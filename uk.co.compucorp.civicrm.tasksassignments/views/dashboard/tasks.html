@@ -252,9 +252,8 @@
             <span editable-ui-select="task.target_contact_id[0]"
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
-                  onbeforesave="updateTask(task, { target_contact_id: [select.$data] });"
-                  onshow="updateContacts(cache.contact.arrSearch);"
-                  on-select="cacheContact($item);">
+                  onbeforesave="cacheContact(select.$data) && updateTask(task, { target_contact_id: [select.$data] })"
+                  onshow="updateContacts(cache.contact.arrSearch);">
                 <editable-ui-select-match placeholder="Start typing a name or email...">
                     {{$select.selected.label}}
                 </editable-ui-select-match>
@@ -295,8 +294,7 @@
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                   onshow="updateContacts(cache.contact.arrSearch);"
-                  onbeforesave="updateTask(task, { assignee_contact_id: [select.$data] });"
-                  on-select="cacheContact($item);">
+                  onbeforesave="cacheContact(select.$data) && updateTask(task, { assignee_contact_id: [select.$data] });">
                 <editable-ui-select-match placeholder="Start typing a name or email...">
                     {{$select.selected.label}}
                 </editable-ui-select-match>
