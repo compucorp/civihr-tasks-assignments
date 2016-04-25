@@ -8,7 +8,7 @@ define([
 ], function (moment, controllers) {
     'use strict';
 
-    controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
+    controllers.controller('DocumentListCtrl',['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
         '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings',
         function ($scope, $modal, $dialog, $rootElement, $rootScope, $state, $filter, $log, $q, $timeout, documentList,
                  config, ContactService, AssignmentService, DocumentService, FileService, settings) {

@@ -6,7 +6,7 @@ define([
 ], function (moment, controllers) {
     'use strict';
 
-    controllers.controller('DateListCtrl', ['$scope', '$modal', '$rootElement', '$rootScope', '$filter',
+    controllers.controller('DateListCtrl', ['$scope', '$uibModal', '$rootElement', '$rootScope', '$filter',
         '$log', '$timeout', 'contactList', 'KeyDateService', 'config',
         function ($scope, $modal, $rootElement, $rootScope, $filter, $log, $timeout, contactList, KeyDateService,
                   config) {

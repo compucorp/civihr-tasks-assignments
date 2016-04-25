@@ -9,8 +9,8 @@ define([
 ], function (angular, moment, controllers) {
     'use strict';
 
-    controllers.controller('ModalDocumentCtrl', ['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log',
-        '$filter', '$modal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
+    controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log',
+        '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
         function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout, AssignmentService,
                   DocumentService, ContactService, FileService, data, files, config, HR_settings) {
             $log.debug('Controller: ModalDocumentCtrl');
@@ -176,7 +176,7 @@ define([
 
                     if (uploader.queue.length) {
                         var modalInstance = $modal.open({
-                            targetDomEl: $rootElement.find('div').eq(0),
+                            appendTo: $rootElement.find('div').eq(0),
                             templateUrl: config.path.TPL + '/modal/progress.html?v=1',
                             size: 'sm',
                             controller: 'ModalProgressCtrl',

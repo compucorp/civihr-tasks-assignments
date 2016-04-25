@@ -3,7 +3,7 @@ define([
 ], function (services) {
     'use strict';
 
-    services.factory('$dialog', ['$modal', 'config', '$rootElement', '$log',
+    services.factory('$dialog', ['$uibModal', 'config', '$rootElement', '$log',
         function ($modal, config, $rootElement, $log) {
             $log.debug('Service: $dialog');
 
@@ -15,7 +15,7 @@ define([
                 }
 
                 return $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
+                    appendTo: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL+'modal/dialog.html',
                     size: 'sm',
                     controller: 'ModalDialogCtrl',

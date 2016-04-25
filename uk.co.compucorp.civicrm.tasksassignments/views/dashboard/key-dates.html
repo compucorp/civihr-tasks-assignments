@@ -19,13 +19,13 @@
                             ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-right': isCollapsed.filterDates }"></i>
                         <em>OR</em> Select Dates
                     </a>
-                    <div class="form-horizontal" collapse="isCollapsed.filterDates">
+                    <div class="form-horizontal" uib-collapse="isCollapsed.filterDates">
                         <div class="form-group">
                             <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
                             <div class="col-xs-12 col-sm-9 col-lg-7">
                                 <input
                                         is-open="dpOpened.filterDates.from"
-                                        datepicker-popup="dd/MM/yyyy"
+                                        uib-datepicker-popup="dd/MM/yyyy"
                                         ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
                                         ng-model="filterParams.dateRange.from"
                                         max-date="filterParams.dateRange.until"
@@ -37,7 +37,7 @@
                             <div class="col-xs-12 col-sm-9  col-lg-7">
                                 <input
                                         is-open="dpOpened.filterDates.until"
-                                        datepicker-popup="dd/MM/yyyy"
+                                        uib-datepicker-popup="dd/MM/yyyy"
                                         min-date="filterParams.dateRange.from"
                                         ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
                                         ng-model="filterParams.dateRange.until"

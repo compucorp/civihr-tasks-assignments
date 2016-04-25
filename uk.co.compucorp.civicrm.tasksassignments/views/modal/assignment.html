@@ -71,7 +71,7 @@
                                 <a href class="text-normal calendar-popup-link"
                                    ng-model="assignment.dueDate"
                                    is-open="dpOpened.assignmentDue"
-                                   datepicker-popup
+                                   uib-datepicker-popup
                                    ng-click="dpOpen($event, 'assignmentDue');">
                                     <i class="fa fa-calendar"></i>
                                 </a>
@@ -192,7 +192,7 @@
                                             <a href class="text-normal calendar-popup-link"
                                                ng-model="activity.activity_date_time"
                                                is-open="dpOpened['task'+$index]"
-                                               datepicker-popup
+                                               uib-datepicker-popup
                                                ng-click="!isDisabled && activity.create ? dpOpen($event, 'task'+$index) : return;"
                                                ng-disabled="isDisabled || !activity.create">
                                                 <i class="fa fa-calendar"></i>
@@ -310,7 +310,7 @@
                                             <a href class="text-normal calendar-popup-link"
                                                ng-model="activity.activity_date_time"
                                                is-open="dpOpened['doc'+$index]"
-                                               datepicker-popup
+                                               uib-datepicker-popup
                                                ng-click="!isDisabled && activity.create ? dpOpen($event, 'doc'+$index) : return;"
                                                ng-disabled="isDisabled || !activity.create">
                                                 <i class="fa fa-calendar"></i>

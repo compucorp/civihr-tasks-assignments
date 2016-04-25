@@ -8,8 +8,8 @@ define([
 ], function (angular, moment, controllers) {
     'use strict';
 
-    controllers.controller('ModalTaskCtrl', ['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
-        '$modal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', 'HR_settings',
+    controllers.controller('ModalTaskCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
+        '$uibModal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', 'HR_settings',
         function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
                   data, config, HR_settings) {
             $log.debug('Controller: ModalTaskCtrl');

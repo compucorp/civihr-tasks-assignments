@@ -8,7 +8,7 @@ define([
 ], function (moment, controllers){
     'use strict';
 
-    controllers.controller('TaskListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$filter',
+    controllers.controller('TaskListCtrl',['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$filter',
         '$timeout', '$state', '$log', 'taskList', 'config', 'ContactService', 'AssignmentService', 'TaskService', 'settings', 'HR_settings',
         function ($scope, $modal, $dialog, $rootElement, $rootScope, $filter, $timeout, $state, $log, taskList,
                  config, ContactService, AssignmentService, TaskService, settings, HR_settings) {

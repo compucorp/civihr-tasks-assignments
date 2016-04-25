@@ -4,7 +4,7 @@ define([
     'use strict';
 
     angular.module('civitasks.appTasks', ['civitasks.run'])
-        .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider', 'datepickerConfig', 'uiSelectConfig',
+        .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider', 'uibDatepickerConfig', 'uiSelectConfig',
             '$logProvider',
             function (config, $urlRouterProvider, $stateProvider, $resourceProvider, $httpProvider, datepickerConfig, uiSelectConfig,
                       $logProvider) {
