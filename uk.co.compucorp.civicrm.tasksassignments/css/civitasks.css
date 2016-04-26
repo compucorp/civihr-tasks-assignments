@@ -7829,7 +7829,7 @@ fieldset[disabled]
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-#civitasks .dropdown-menu[datepicker-popup-wrap], #cividocuments .dropdown-menu[datepicker-popup-wrap] {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu, #cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu {
   padding: 10px;
 }
 #civitasks .ct-datepicker, #cividocuments .ct-datepicker {
@@ -7837,18 +7837,18 @@ fieldset[disabled]
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
 #civitasks .ct-datepicker table:focus, #cividocuments .ct-datepicker table:focus,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table:focus,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table:focus {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table:focus,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table:focus {
   outline: 0 none;
 }
 #civitasks .ct-datepicker table tbody, #cividocuments .ct-datepicker table tbody,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table tbody,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table tbody {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody {
   background-color: #f4f7f8;
 }
 #civitasks .ct-datepicker table tbody .btn, #cividocuments .ct-datepicker table tbody .btn,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table tbody .btn,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table tbody .btn {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn {
   background-color: #f4f7f8;
   border-radius: 20px;
   padding: 7px;
@@ -7856,52 +7856,52 @@ fieldset[disabled]
   width: auto !important;
 }
 #civitasks .ct-datepicker table tbody .btn:active, #cividocuments .ct-datepicker table tbody .btn:active,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table tbody .btn:active,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table tbody .btn:active {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:active,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:active {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 #civitasks .ct-datepicker table tbody .btn:focus, #cividocuments .ct-datepicker table tbody .btn:focus,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table tbody .btn:focus,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table tbody .btn:focus {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:focus,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:focus {
   outline: 0 none;
   background-color: #e8eef0;
 }
 #civitasks .ct-datepicker table tbody .btn.active, #cividocuments .ct-datepicker table tbody .btn.active,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table tbody .btn.active,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table tbody .btn.active {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active {
   -webkit-box-shadow: none;
   box-shadow: none;
   background-color: #41afcb;
 }
 #civitasks .ct-datepicker table tbody .btn.active span, #cividocuments .ct-datepicker table tbody .btn.active span,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table tbody .btn.active span,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table tbody .btn.active span {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active span,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active span {
   color: #fff;
 }
 #civitasks .ct-datepicker table td, #cividocuments .ct-datepicker table td, #civitasks .ct-datepicker table th, #cividocuments .ct-datepicker table th,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table td,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table td,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table th,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table th {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table td,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table td,
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table th,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table th {
   padding: 7px;
 }
 #civitasks .ct-datepicker table thead small, #cividocuments .ct-datepicker table thead small,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table thead small,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table thead small {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table thead small,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table thead small {
   color: #525966;
   font-size: 11px;
 }
 #civitasks .ct-datepicker table .btn, #cividocuments .ct-datepicker table .btn,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table .btn,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table .btn {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table .btn,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table .btn {
   border-width: 0;
   font-size: 12px;
   font-weight: normal;
 }
 #civitasks .ct-datepicker table > thead > tr > th, #cividocuments .ct-datepicker table > thead > tr > th,
-#civitasks .dropdown-menu[datepicker-popup-wrap] table > thead > tr > th,
-#cividocuments .dropdown-menu[datepicker-popup-wrap] table > thead > tr > th {
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table > thead > tr > th,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table > thead > tr > th {
   vertical-align: middle;
 }
 #civitasks .dropdown-menu, #cividocuments .dropdown-menu {
@@ -8900,6 +8900,164 @@ fieldset[disabled]
   font-style: italic;
   color: #D14;
   text-decoration: none;
+}
+#civitasks .ng-animate.item:not(.left):not(.right), #cividocuments .ng-animate.item:not(.left):not(.right) {
+  -webkit-transition: 0s ease-in-out left;
+  transition: 0s ease-in-out left;
+}
+#civitasks .uib-datepicker .uib-title, #cividocuments .uib-datepicker .uib-title {
+  width: 100%;
+}
+#civitasks .uib-day button, #cividocuments .uib-day button,
+#civitasks .uib-month button,
+#cividocuments .uib-month button,
+#civitasks .uib-year button,
+#cividocuments .uib-year button {
+  min-width: 100%;
+}
+#civitasks .uib-left, #cividocuments .uib-left,
+#civitasks .uib-right,
+#cividocuments .uib-right {
+  width: 100%;
+}
+#civitasks .uib-position-measure, #cividocuments .uib-position-measure {
+  display: block !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+}
+#civitasks .uib-position-scrollbar-measure, #cividocuments .uib-position-scrollbar-measure {
+  position: absolute !important;
+  top: -9999px !important;
+  width: 50px !important;
+  height: 50px !important;
+  overflow: scroll !important;
+}
+#civitasks .uib-position-body-scrollbar-measure, #cividocuments .uib-position-body-scrollbar-measure {
+  overflow: scroll !important;
+}
+#civitasks .uib-datepicker-popup.dropdown-menu, #cividocuments .uib-datepicker-popup.dropdown-menu {
+  display: block;
+  float: none;
+  margin: 0;
+}
+#civitasks .uib-button-bar, #cividocuments .uib-button-bar {
+  padding: 10px 9px 2px;
+}
+#civitasks [uib-tooltip-popup].tooltip.top-left > .tooltip-arrow, #cividocuments [uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,
+#civitasks [uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,
+#cividocuments [uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,
+#civitasks [uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,
+#cividocuments [uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,
+#civitasks [uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,
+#cividocuments [uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,
+#civitasks [uib-popover-popup].popover.top-left > .arrow,
+#cividocuments [uib-popover-popup].popover.top-left > .arrow,
+#civitasks [uib-popover-popup].popover.top-right > .arrow,
+#cividocuments [uib-popover-popup].popover.top-right > .arrow,
+#civitasks [uib-popover-popup].popover.bottom-left > .arrow,
+#cividocuments [uib-popover-popup].popover.bottom-left > .arrow,
+#civitasks [uib-popover-popup].popover.bottom-right > .arrow,
+#cividocuments [uib-popover-popup].popover.bottom-right > .arrow,
+#civitasks [uib-popover-popup].popover.left-top > .arrow,
+#cividocuments [uib-popover-popup].popover.left-top > .arrow,
+#civitasks [uib-popover-popup].popover.left-bottom > .arrow,
+#cividocuments [uib-popover-popup].popover.left-bottom > .arrow,
+#civitasks [uib-popover-popup].popover.right-top > .arrow,
+#cividocuments [uib-popover-popup].popover.right-top > .arrow,
+#civitasks [uib-popover-popup].popover.right-bottom > .arrow,
+#cividocuments [uib-popover-popup].popover.right-bottom > .arrow,
+#civitasks [uib-popover-html-popup].popover.top-left > .arrow,
+#cividocuments [uib-popover-html-popup].popover.top-left > .arrow,
+#civitasks [uib-popover-html-popup].popover.top-right > .arrow,
+#cividocuments [uib-popover-html-popup].popover.top-right > .arrow,
+#civitasks [uib-popover-html-popup].popover.bottom-left > .arrow,
+#cividocuments [uib-popover-html-popup].popover.bottom-left > .arrow,
+#civitasks [uib-popover-html-popup].popover.bottom-right > .arrow,
+#cividocuments [uib-popover-html-popup].popover.bottom-right > .arrow,
+#civitasks [uib-popover-html-popup].popover.left-top > .arrow,
+#cividocuments [uib-popover-html-popup].popover.left-top > .arrow,
+#civitasks [uib-popover-html-popup].popover.left-bottom > .arrow,
+#cividocuments [uib-popover-html-popup].popover.left-bottom > .arrow,
+#civitasks [uib-popover-html-popup].popover.right-top > .arrow,
+#cividocuments [uib-popover-html-popup].popover.right-top > .arrow,
+#civitasks [uib-popover-html-popup].popover.right-bottom > .arrow,
+#cividocuments [uib-popover-html-popup].popover.right-bottom > .arrow,
+#civitasks [uib-popover-template-popup].popover.top-left > .arrow,
+#cividocuments [uib-popover-template-popup].popover.top-left > .arrow,
+#civitasks [uib-popover-template-popup].popover.top-right > .arrow,
+#cividocuments [uib-popover-template-popup].popover.top-right > .arrow,
+#civitasks [uib-popover-template-popup].popover.bottom-left > .arrow,
+#cividocuments [uib-popover-template-popup].popover.bottom-left > .arrow,
+#civitasks [uib-popover-template-popup].popover.bottom-right > .arrow,
+#cividocuments [uib-popover-template-popup].popover.bottom-right > .arrow,
+#civitasks [uib-popover-template-popup].popover.left-top > .arrow,
+#cividocuments [uib-popover-template-popup].popover.left-top > .arrow,
+#civitasks [uib-popover-template-popup].popover.left-bottom > .arrow,
+#cividocuments [uib-popover-template-popup].popover.left-bottom > .arrow,
+#civitasks [uib-popover-template-popup].popover.right-top > .arrow,
+#cividocuments [uib-popover-template-popup].popover.right-top > .arrow,
+#civitasks [uib-popover-template-popup].popover.right-bottom > .arrow,
+#cividocuments [uib-popover-template-popup].popover.right-bottom > .arrow {
+  top: auto;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  margin: 0;
+}
+#civitasks [uib-popover-popup].popover, #cividocuments [uib-popover-popup].popover,
+#civitasks [uib-popover-html-popup].popover,
+#cividocuments [uib-popover-html-popup].popover,
+#civitasks [uib-popover-template-popup].popover,
+#cividocuments [uib-popover-template-popup].popover {
+  display: block !important;
+}
+#civitasks .uib-time input, #cividocuments .uib-time input {
+  width: 50px;
+}
+#civitasks [uib-typeahead-popup].dropdown-menu, #cividocuments [uib-typeahead-popup].dropdown-menu {
+  display: block;
 }
 .page-civicrm-tasksassignments-dashboard #branding {
   display: none;
