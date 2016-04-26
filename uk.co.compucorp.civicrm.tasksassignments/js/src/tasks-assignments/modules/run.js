@@ -16,6 +16,7 @@ define([
     angular.module('civitasks.run', [
         'angularFileUpload',
         'ngResource',
+        'ngAnimate',
         'ngSanitize',
         'compu.ui.router',
         'ui.select',
