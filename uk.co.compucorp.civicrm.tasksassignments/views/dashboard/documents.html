@@ -6,9 +6,9 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                    <li role="presentation"><a href ng-model="filterParams.due"  uib-btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
                 </ul>
                 <hr>
                 <a href
@@ -81,21 +81,21 @@
                             <a ui-sref="documents.my"
                                class="btn btn-gray active panel-filter__filter"
                                ng-model="filterParams.userRole"
-                               btn-radio="{
+                               uib-btn-radio="{
                                    field: 'assignee_contact_id',
                                    isEqual: true
                                }">My Docs ({{(documentListOngoing | filterByUserRole:'assignee_contact_id').length}})</a>
                             <a ui-sref="documents.delegated"
                                class="btn btn-gray panel-filter__filter"
                                ng-model="filterParams.userRole"
-                               btn-radio="{
+                               uib-btn-radio="{
                                    field: 'assignee_contact_id',
                                    isEqual: false
                                }">Delegated Docs ({{(documentListOngoing | filterByUserRole:'assignee_contact_id':false).length}})</a>
                             <a ui-sref="documents.all"
                                class="btn btn-gray panel-filter__filter"
                                ng-model="filterParams.userRole"
-                               btn-radio="{
+                               uib-btn-radio="{
                                    field: null,
                                    isEqual: null
                                }">All</a>

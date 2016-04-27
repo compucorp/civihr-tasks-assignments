@@ -7,9 +7,9 @@
             <div class="panel-body">
                 <div class="{{prefix}}filter-date">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'isoWeek'">{{label.isoWeek}} <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'isoWeek').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date" btn-radio="'month'">{{label.month}} <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'month').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date"  btn-radio="'year'">{{label.year}} <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterBy.date:'year').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'isoWeek'">{{label.isoWeek}} <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'isoWeek').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'month'">{{label.month}} <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'month').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date"  uib-btn-radio="'year'">{{label.year}} <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterBy.date:'year').length"></span></a></li>
                     </ul>
                     <hr>
                     <a href

@@ -8,7 +8,7 @@
                 <div class="{{prefix}}filter-date">
                     <ul class="nav nav-pills nav-stacked">
                         <li role="presentation">
-                            <a href ng-model="filterParams.due" btn-radio="'overdue'" uncheckable>
+                            <a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>
                                 {{label.overdue}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i>
                                 <span class="badge badge-danger"
@@ -16,7 +16,7 @@
                             </a>
                         </li>
                         <li role="presentation">
-                            <a href ng-model="filterParams.due" btn-radio="'dueToday'" uncheckable>
+                            <a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>
                                 {{label.dueToday}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i>
                                 <span class="badge badge-primary"
@@ -24,7 +24,7 @@
                             </a>
                         </li>
                         <li role="presentation">
-                            <a href ng-model="filterParams.due" btn-radio="'dueThisWeek'" uncheckable>
+                            <a href ng-model="filterParams.due" uib-btn-radio="'dueThisWeek'" uncheckable>
                                 {{label.dueThisWeek}}
                                 <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i>
                                 <span class="badge badge-primary"
@@ -97,7 +97,7 @@
                                     <a ui-sref="tasks.my"
                                        class="btn btn-gray active panel-filter__filter"
                                        ng-model="filterParams.userRole"
-                                       btn-radio="{
+                                       uib-btn-radio="{
                                             field: 'assignee_contact_id',
                                             isEqual: true
                                         }">
@@ -106,7 +106,7 @@
                                     <a ui-sref="tasks.delegated"
                                        class="btn btn-gray panel-filter__filter"
                                        ng-model="filterParams.userRole"
-                                       btn-radio="{
+                                       uib-btn-radio="{
                                             field: 'assignee_contact_id',
                                             isEqual: false
                                         }">
@@ -115,7 +115,7 @@
                                     <a ui-sref="tasks.all"
                                        class="btn btn-gray panel-filter__filter"
                                        ng-model="filterParams.userRole"
-                                       btn-radio="{
+                                       uib-btn-radio="{
                                             field: null,
                                             isEqual: null
                                         }">All
