@@ -7899,6 +7899,11 @@ fieldset[disabled]
   font-size: 12px;
   font-weight: normal;
 }
+#civitasks .ct-datepicker table .text-muted, #cividocuments .ct-datepicker table .text-muted,
+#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table .text-muted,
+#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table .text-muted {
+  color: #CCCCCC;
+}
 #civitasks .ct-datepicker table > thead > tr > th, #cividocuments .ct-datepicker table > thead > tr > th,
 #civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table > thead > tr > th,
 #cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table > thead > tr > th {
