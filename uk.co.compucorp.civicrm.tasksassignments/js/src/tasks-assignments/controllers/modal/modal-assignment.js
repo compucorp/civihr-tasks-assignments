@@ -48,11 +48,14 @@ define([
             $scope.activitySet = {};
             $scope.taskList = [];
             $scope.documentList = [];
+
+            // The contacts collections used by the lookup directives
+            // divided by type
             $scope.contacts = {
                 target: [],
-                document_assignee: [],
-                task_assignee: []
-            }
+                document: [],
+                task: []
+            };
 
             $scope.addActivity = function (activityArr) {
 
@@ -79,15 +82,33 @@ define([
                 $scope.dpOpened[key] = true;
             };
 
-            $scope.refreshContacts = function (input, type) {
+            /**
+             * Fetches and stores a list of contacts based on the given
+             * query string
+             *
+             * @param {string} input
+             *   The search query the user typed
+             * @param {string} type
+             *   The type of contacts collection that the contacts will be stored
+             *   into (target, task, or document)
+             * @param {int} index
+             *   When fetching contacts for either the task or documents collection
+             *   the list will be stored as a sub-collection (at the given index)
+             *   so that each task or document has a separate contacts list
+             */
+            $scope.refreshContacts = function (input, type, index) {
                 if (!input) {
-                    return
+                    return;
                 }
 
                 ContactService.search(input, {
                     contact_type: 'Individual'
                 }).then(function (results) {
-                    $scope.contacts[type] = results;
+                    if (type === 'target') {
+                        $scope.contacts[type] = results;
+                    } else {
+                        $scope.contacts[type][index] = results;
+                    }
                 });
             };
 
@@ -229,14 +250,16 @@ define([
 
             /**
              * Copy assignee from the first row of list to the rest of records.
+             * It also copies to the other items the contacts collection of the first one
+             *
              * @param {Array} list
+             * @param {string} type (document, task)
              */
-            $scope.copyAssignee = function copyAssignee(list) {
-                var firstRowId = list[0].assignee_contact_id[0];
-
-                list.forEach(function (item) {
+            $scope.copyAssignee = function copyAssignee(list, type) {
+                list.forEach(function (item, index) {
                     if (item.create) {
-                        item.assignee_contact_id = [firstRowId];
+                        $scope.contacts[type][index] = $scope.contacts[type][0].slice();
+                        item.assignee_contact_id = [list[0].assignee_contact_id[0]];
                     }
                 });
             };
