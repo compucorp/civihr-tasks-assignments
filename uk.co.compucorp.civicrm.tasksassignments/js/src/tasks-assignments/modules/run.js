@@ -1,6 +1,5 @@
 define([
     'common/angular',
-    'tasks-assignments/decorators/hide-follow-link',
     'common/ui-select',
     'common/modules/xeditable-civi',
     'tasks-assignments/vendor/angular-bootstrap-calendar',
@@ -11,7 +10,7 @@ define([
     'common/modules/routers/compu-ui-router',
     'common/filters/angular-date/format-date',
     'common/directives/angular-date/date-input'
-], function (angular, hideFollowLinkDecorator) {
+], function (angular) {
     'use strict';
 
     angular.module('civitasks.run', [
@@ -32,15 +31,7 @@ define([
         'xeditable',
         'xeditable-civi',
         'common.angularDate'
-    ])
-
-    /**
-     * Hide the "Follow link" button in the "editable-ui" directives
-     */
-    .config(['$provide', function ($provide) {
-      $provide.decorator('editableDirectiveFactory', hideFollowLinkDecorator);
-    }])
-    .run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
+    ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,
                  AssignmentService, KeyDateService, ContactService, editableOptions, $log){
