@@ -48,9 +48,9 @@
                             <div class="col-xs-12 col-sm-9 col-lg-7">
                                 <input is-open="dpOpened.filterDates.from"
                                        uib-datepicker-popup
+                                       datepicker-options="datepickerOptions.from"
                                        ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
                                        ng-model="filterParamsHolder.dateRange.from"
-                                       max-date="filterParamsHolder.dateRange.until"
                                        id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                             <div class="col-xs-12 col-sm-9  col-lg-7">
                                 <input is-open="dpOpened.filterDates.until"
                                        uib-datepicker-popup
-                                       min-date="filterParamsHolder.dateRange.from"
+                                       datepicker-options="datepickerOptions.until"
                                        ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
                                        ng-model="filterParamsHolder.dateRange.until"
                                        id="{{prefix}}filter-date-until" class="form-control"

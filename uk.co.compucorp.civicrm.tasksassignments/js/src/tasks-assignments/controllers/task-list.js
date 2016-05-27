@@ -32,6 +32,8 @@ define([
                     });
                 }
 
+                watchDateFilters();
+
                 $rootScope.$broadcast('ct-spinner-hide');
                 $log.info($rootScope.cache);
             };
@@ -112,9 +114,14 @@ define([
 
             $scope.filterParamsHolder = {
                 dateRange: {
-                    from: new Date().setHours(0, 0, 0, 0),
-                    until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
+                    from: moment().startOf('day').toDate(),
+                    until: moment().add(1, 'month').startOf('day').toDate()
                 }
+            };
+
+            $scope.datepickerOptions = {
+                from: { maxDate: $scope.filterParamsHolder.dateRange.until },
+                until: { minDate: $scope.filterParamsHolder.dateRange.from }
             };
 
             $scope.label = {
@@ -342,5 +349,19 @@ define([
 
             this.init();
 
+            /**
+             * Whenever the date filters will change, their corrispondent
+             * datepickers will have the minDate or maxDate setting updated
+             * accordingly
+             */
+            function watchDateFilters() {
+              $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
+                $scope.datepickerOptions.until.minDate = newValue;
+              });
+
+              $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
+                $scope.datepickerOptions.from.maxDate = newValue;
+              });
+            }
         }]);
 });
