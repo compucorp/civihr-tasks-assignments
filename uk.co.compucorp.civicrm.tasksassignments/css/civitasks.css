@@ -7959,7 +7959,7 @@ fieldset[disabled]
 #civitasks .form-horizontal .has-feedback select + .form-control-feedback, #cividocuments .form-horizontal .has-feedback select + .form-control-feedback {
   right: 28px;
 }
-#civitasks .form-horizontal .has-feedback [datepicker-popup] + .form-control-feedback, #cividocuments .form-horizontal .has-feedback [datepicker-popup] + .form-control-feedback {
+#civitasks .form-horizontal .has-feedback [uib-datepicker-popup] + .form-control-feedback, #cividocuments .form-horizontal .has-feedback [uib-datepicker-popup] + .form-control-feedback {
   right: 41px;
 }
 #civitasks .form-horizontal .has-feedback .form-inline, #cividocuments .form-horizontal .has-feedback .form-inline {
