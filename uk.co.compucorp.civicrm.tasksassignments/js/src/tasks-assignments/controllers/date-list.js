@@ -13,7 +13,6 @@ define([
             $log.debug('Controller: DateListCtrl');
 
             this.init = function () {
-
                 $scope.dateList = this.createDateList(contactList);
 
                 $rootScope.$broadcast('ct-spinner-hide');
@@ -23,6 +22,8 @@ define([
                     $scope.dateList = this.createDateList(contactList);
                     $scope.dataLoading = false;
                 }.bind(this));
+
+                watchDateFilters();
             };
             
             // Create date list from contact list
@@ -58,11 +59,16 @@ define([
 
             $scope.filterParams = {
                 dateRange: {
-                    from: new Date().setHours(0, 0, 0, 0),
-                    until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
+                    from: moment().startOf('day').toDate(),
+                    until: moment().add(1, 'month').startOf('day').toDate()
                 },
                 date: 'month',
                 dateType: []
+            };
+
+            $scope.datepickerOptions = {
+                from: { maxDate: $scope.filterParams.dateRange.until },
+                until: { minDate: $scope.filterParams.dateRange.from }
             };
 
             $scope.label = {
@@ -119,5 +125,19 @@ define([
 
             this.init();
 
+            /**
+             * Whenever the date filters will change, their corrispondent
+             * datepickers will have the minDate or maxDate setting updated
+             * accordingly
+             */
+            function watchDateFilters() {
+              $scope.$watch('filterParams.dateRange.from', function (newValue) {
+                $scope.datepickerOptions.until.minDate = newValue;
+              });
+
+              $scope.$watch('filterParams.dateRange.until', function (newValue) {
+                $scope.datepickerOptions.from.maxDate = newValue;
+              });
+            }
         }]);
 });
