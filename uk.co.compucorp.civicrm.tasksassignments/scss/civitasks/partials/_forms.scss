@@ -1,8 +1,22 @@
 form {
 
+  /* helper classes */
   .no-gutter[class*='col-'] {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  /* Bootstrap override */
+  .input-group-addon {
+    background: transparent;
+    border: none;
+    width: 0;
+    padding-right: 0;
+    padding-left: 6px;
+
+    a {
+      color: #333333;
+    }
   }
 
   &.form-horizontal {
@@ -13,22 +27,11 @@ form {
       input{
         width: 105px;
       }
-
-      /* Bootstrap override */
-      .input-group-addon {
-        background: transparent;
-        border: none;
-        width: 0;
-
-        a {
-          color: #333333;
-        }
-      }
     }
   }
 
   &.form-task,
-  &.form-document {
+  &.form-document { 
 
     .form-control-static {
       a:link {
@@ -37,6 +40,10 @@ form {
         text-decoration: underline;
         text-transform: capitalize;
       }
+    }
+
+    .form-group-static {
+      margin-bottom: 0; 
     }
 
     .row {
@@ -255,10 +262,6 @@ form {
 
     .separately {
       margin-bottom: 20px;
-    }
-
-    .no-wrap {
-      white-space: nowrap;
     }
   }
 

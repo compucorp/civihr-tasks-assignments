@@ -142,10 +142,11 @@
                                         <div class="col-xs-12 col-sm-10">
                                             <div class="input-group">
                                                 <ui-select allow-clear ng-model="filterParams.contactId">
-                                                    <ui-select-match placeholder="Search / Filter">
+                                                    <ui-select-match class="ui-select-match" placeholder="Search / Filter">
                                                         {{$select.selected.label}}
                                                     </ui-select-match>
                                                     <ui-select-choices
+                                                            class="ui-select-choices"
                                                             repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
                                                             refresh-delay="0">
                                                         <div ng-bind="contact.label"></div>
@@ -163,13 +164,13 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label class="col-xs-12 col-sm-4 control-label">Assignmnet Type:</label>
+                                        <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
 
                                         <div class="col-xs-12 col-sm-8">
                                             <ui-select multiple ng-model="filterParams.assignmentType">
-                                                <ui-select-match placeholder="Select assignment...">{{$item.title}}
+                                                <ui-select-match class="ui-select-match" placeholder="Select assignment...">{{$item.title}}
                                                 </ui-select-match>
-                                                <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                                                <ui-select-choices class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                                                     <div ng-bind-html="type.title | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>
@@ -251,9 +252,8 @@
             <span editable-ui-select="task.target_contact_id[0]"
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
-                  onbeforesave="updateTask(task, { target_contact_id: [select.$data] });"
-                  onshow="updateContacts(cache.contact.arrSearch);"
-                  on-select="cacheContact($item);">
+                  onbeforesave="cacheContact(select.$data) && updateTask(task, { target_contact_id: [select.$data] })"
+                  onshow="updateContacts(cache.contact.arrSearch);">
                 <editable-ui-select-match placeholder="Start typing a name or email...">
                     {{$select.selected.label}}
                 </editable-ui-select-match>
@@ -294,8 +294,7 @@
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                   onshow="updateContacts(cache.contact.arrSearch);"
-                  onbeforesave="updateTask(task, { assignee_contact_id: [select.$data] });"
-                  on-select="cacheContact($item);">
+                  onbeforesave="cacheContact(select.$data) && updateTask(task, { assignee_contact_id: [select.$data] });">
                 <editable-ui-select-match placeholder="Start typing a name or email...">
                     {{$select.selected.label}}
                 </editable-ui-select-match>

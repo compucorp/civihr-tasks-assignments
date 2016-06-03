@@ -14,8 +14,10 @@
                             on-select="cacheContact($item); getActivities($item.id);"
                             ng-required="true">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                        <ui-select-choices  class="ui-select-choices"
+                                            repeat="contact.id as contact in contacts | filter: $select.search"
                                             refresh="refreshContacts($select.search)"
                                             refresh-delay="0">
                             <div ng-bind="contact.label"></div>
@@ -40,8 +42,10 @@
                             on-select="cacheContact($item)"
                             ng-required="true">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Start typing a name or email...">{{$select.selected.label}}</ui-select-match>
-                        <ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
+                        <ui-select-choices  class="ui-select-choices"
+                                            repeat="contact.id as contact in contacts | filter: $select.search"
                                             refresh="refreshContacts($select.search)"
                                             refresh-delay="0">
                             <div ng-bind="contact.label"></div>

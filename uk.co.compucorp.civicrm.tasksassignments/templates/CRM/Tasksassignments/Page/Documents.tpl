@@ -2,7 +2,7 @@
 {assign var="prefix" value="ct-" }
 
 <div id="{$module}" ng-controller="MainCtrl" ct-spinner ct-spinner-show>
-    <div class="container fade-in" ng-view>
+    <div class="container fade-in" ui-view>
     </div>
 </div>
 {literal}

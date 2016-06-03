@@ -29,7 +29,6 @@ require_once 'api/v3/Case.php';
  * {@getfields case_create}
  */
 function civicrm_api3_assignment_create($params) {
-
   if (!empty($params['id'])) {
     return civicrm_api3_case_update($params);
   }
@@ -63,7 +62,11 @@ function civicrm_api3_assignment_create($params) {
 
   foreach ((array) $params['contact_id'] as $cid) {
     $contactParams = array('case_id' => $caseBAO->id, 'contact_id' => $cid);
-    CRM_Case_BAO_Case::addCaseToContact($contactParams);
+    if (is_callable('CRM_Case_BAO_Case::addCaseToContact')) {
+        CRM_Case_BAO_Case::addCaseToContact($contactParams);
+    } else {
+        CRM_Case_BAO_CaseContact::create($contactParams);
+    }
   }
 
   $values = array();

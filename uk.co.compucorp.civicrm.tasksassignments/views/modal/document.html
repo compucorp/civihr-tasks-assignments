@@ -7,11 +7,12 @@
                         ng-model="document.target_contact_id[0]"
                         on-select="cacheContact($item)"
                         ng-required="true">
-                    <ui-select-match placeholder="Start typing a name or email...">
+                    <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                         {{$select.selected.label}}
                     </ui-select-match>
-                    <ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search"
-                                       refresh="refreshContacts($select.search)"
+                    <ui-select-choices class="ui-select-choices"
+                                        repeat="contact.id as contact in contacts.target | filter: $select.search"
+                                       refresh="refreshContacts($select.search, 'target')"
                                        refresh-delay="0">
                         <div ng-bind="contact.label"></div>
                         <small ng-bind="contact.description[0]"></small>
@@ -31,28 +32,28 @@
             <!-- Document Type -->
             <div class="row">
                 <div class="col-xs-12">
-                    <ui-select ng-model="document.activity_type_id"
-                               ng-required="true">
-                        <ui-select-match
-                                placeholder="Select document type">{{$select.selected.value}}
-                        </ui-select-match>
-                        <ui-select-choices
-                                repeat="type.key as type in cache.documentType.arr | filter: $select.search">
-                            <div ng-bind="type.value"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                    <div class="crm_custom-select crm_custom-select--full">
+                        <select
+                            ng-required
+                            class="form-control"
+                            ng-model="document.activity_type_id"
+                            ng-options="type.key as type.value for type in cache.documentType.arr">
+                            <option value="">Select document type</option>
+                        </select>
+                        <span class="crm_custom-select__arrow"></span>
+                    </div>
                 </div>
             </div>
             <!-- Dates -->
             <div class="row double-spacing">
                 <!-- Due Date -->
-                <label for="{{prefix}}document-due" class="col-xs-12 col-sm-2 control-label">Due Date:</label>
+                <label for="{{prefix}}document-due" class="col-xs-12 col-sm-2 text-nowrap control-label">Due Date:</label>
 
                 <div class="col-xs-12 col-sm-4 input-group">
                     <input type="text" ng-model="document.activity_date_time"
                            class="form-control"
                            id="{{prefix}}document-due"
-                           custom-date-input
+                           date-input
                            placeholder="dd/mm/yyyy"
                            name="documentDue" ng-required="true"
                     />
@@ -67,16 +68,17 @@
                     </span>
                 </div>
                 <!-- Expires -->
-                <label for="{{prefix}}document-exp"
-                       class="col-xs-12 col-sm-2 control-label no-gutter">Expiry Date:</label>
+                <label for="{{prefix}}document-exp" class="col-xs-12 col-sm-2 control-label no-gutter">
+                    <span class="pull-right">Expiry Date:</span>
+                </label>
 
                 <div class="col-xs-12 col-sm-4 input-group">
                     <input type="text" ng-model="document.expire_date"
                            class="form-control"
                            id="{{prefix}}document-exp"
-                           custom-date-input
+                           date-input
                            placeholder="dd/mm/yyyy"
-                           name="documentExpireDate" ng-required="true"
+                           name="documentExpireDate"
                     />
                     <span class="input-group-addon">
                         <a href class="text-normal calendar-popup-link"
@@ -103,67 +105,66 @@
                            multiple
                            nv-file-select uploader="uploader"/>
                 </div>
-
-                <table class="table table-condensed {{prefix}}table-upload col-xs-12"
-                       ng-show="uploader.queue.length || files.length">
-                    <colgroup>
-                        <col class="col-name">
-                        <col class="col-size" ng-show="uploader.isHTML5">
-                        <col class="col-action">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="file in files">
-                        <td><a ng-href="{{file.url}}">{{file.name}}</a></td>
-                        <td ng-show="uploader.isHTML5" nowrap>
-                            <span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span>
-                        </td>
-                        <td nowrap>
-                            <button type="button" class="btn btn-danger btn-xs"
-                                    ng-click="fileMoveToTrash($index)">
-                                <span class="glyphicon glyphicon-trash"></span> Remove
-                            </button>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="item in uploader.queue">
-                        <td>{{item.file.name}}</td>
-                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB
-                        </td>
-                        <td nowrap>
-                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                                <span class="glyphicon glyphicon-trash"></span> Remove
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="col-xs-12 table-responsive">
+                    <table class="table table-condensed {{prefix}}table-upload"
+                           ng-show="uploader.queue.length || files.length">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th ng-show="uploader.isHTML5">Size</th>
+                            <th class="pull-right"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="file in files">
+                            <td><a ng-href="{{file.url}}">{{file.name}}</a></td>
+                            <td ng-show="uploader.isHTML5" nowrap>
+                                <span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span>
+                            </td>
+                            <td class="text-right" nowrap>
+                                <button type="button" class="btn btn-danger btn-xs"
+                                        ng-click="fileMoveToTrash($index)">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td>{{item.file.name}}</td>
+                            <td ng-show="uploader.isHTML5" nowrap>
+                                <span>{{ item.file.size/1024/1024|number:2 }} MB</span>
+                            </td>
+                            <td class="text-right" nowrap>
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- Assignee & Assignment -->
             <div class="row">
                 <!-- Assignee -->
-                <div class="col-xs-12 col-sm-6" ng-show="!showAssigneeField">
+                <div class="col-xs-12 col-sm-6" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showAssigneeField = true;">Add Assignee</a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-6" ng-show="showAssigneeField">
+                <div class="col-xs-12 col-sm-6" ng-show="document.assignee_contact_id[0] || showAssigneeField">
                     <ui-select
                             ng-required="true"
                             allow-clear
                             ng-model="document.assignee_contact_id[0]"
                             on-select="cacheContact($item)">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Start typing a name or email...">{{$select.selected.label}}
                         </ui-select-match>
                         <ui-select-choices
-                                repeat="contact.id as contact in contacts | filter: $select.search"
-                                refresh="refreshContacts($select.search)"
+                                class="ui-select-choices"
+                                repeat="contact.id as contact in contacts.assignee | filter: $select.search"
+                                refresh="refreshContacts($select.search, 'assignee')"
                                 refresh-delay="0">
                             <div ng-bind="contact.label"></div>
                             <small ng-bind="contact.description[0]"></small>
@@ -183,12 +184,21 @@
                             ng-model="document.case_id"
                             on-select="cacheAssignment($item);">
                         <ui-select-match
+                                class="ui-select-match"
                                 placeholder="Enter search term...">{{$select.selected.label}}
                         </ui-select-match>
-                        <ui-select-choices repeat="assignment.id as assignment in assignments"
+                        <ui-select-choices class="ui-select-choices"
+                                           repeat="assignment.id as assignment in assignments"
                                            refresh="refreshAssignments($select.search)"
                                            refresh-delay="0">
-                            <div ng-class="assignment.label_class" ng-bind="assignment.label"></div>
+                            <div>
+                                <div ng-class="assignment.label_class">{{assignment.label}}</div>
+                                <small>
+                                    #{{assignment.id}}: {{assignment.extra.case_status}} (opened: {{assignment.extra.start_date | date:'MMM d, yyyy'}})
+                                    <br>
+                                    {{assignment.extra.case_subject}}
+                                </small>
+                            </div>
                         </ui-select-choices>
                     </ui-select>
                 </div>
@@ -200,23 +210,23 @@
                 </div>
             </div>
             <div class="row" ng-show="expanded">
-                <label class="col-xs-12 col-sm-6" ng-show="!showStatusField">
+                <label class="col-xs-12 col-sm-6" ng-show="!document.id && !showStatusField">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showStatusField = true;">Set Status</a>
                     </span>
                 </label>
 
-                <div class="col-xs-12 col-sm-6" ng-show="showStatusField">
-                    <ui-select ng-required="true"
-                               allow-clear
-                               ng-model="document.status_id">
-                        <ui-select-match placeholder="Set Status">
-                            {{$select.selected.value}}
-                        </ui-select-match>
-                        <ui-select-choices repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
-                            <div ng-bind="status.value"></div>
-                        </ui-select-choices>
-                    </ui-select>
+                <div class="col-xs-12 col-sm-6" ng-show="document.status_id || showStatusField">
+                    <div class="crm_custom-select crm_custom-select--full">
+                        <select
+                            ng-required
+                            class="form-control"
+                            ng-model="document.status_id"
+                            ng-options="status.key as status.value for status in cache.documentStatus.arr">
+                            <option value="">Set Status</option>
+                        </select>
+                        <span class="crm_custom-select__arrow"></span>
+                    </div>
                 </div>
                 <label class="col-xs-12 control-label">Details</label>
                 <div class="col-xs-12">

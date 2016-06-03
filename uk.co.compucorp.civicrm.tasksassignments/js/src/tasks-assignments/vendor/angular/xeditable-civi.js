@@ -38,10 +38,14 @@ angular.module('xeditable').directive('editableUiSelect', [
             var newEl = angular.element('<' + tag + '/>'), attrs;
 
             newEl.html(el.html());
+
             attrs = el[0].attributes;
             for (var i = 0; i < attrs.length; ++i) {
                 newEl.attr(attrs.item(i).nodeName, attrs.item(i).value);
             }
+
+            newEl.addClass(tag);
+
             return newEl;
         };
 
