@@ -144,6 +144,7 @@ define([
                     contact_id: $item.id,
                     contact_type: $item.icon_class,
                     sort_name: $item.label,
+                    display_name: $item.label,
                     email: $item.description.length ? $item.description[0] : ''
                 };
 

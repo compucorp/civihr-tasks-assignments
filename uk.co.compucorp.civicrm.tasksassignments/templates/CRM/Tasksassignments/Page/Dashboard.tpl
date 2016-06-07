@@ -53,12 +53,12 @@
                             <span class="{$prefix}sidebar-main-title">Calendar</span>
                         </a>
                     </li>
-                    <li ng-class="{literal}{ active: isActive('reports')}{/literal}">
+                    <!--<li ng-class="{literal}{ active: isActive('reports')}{/literal}">
                         <a href="#/reports">
                             <i class="fa fa-bar-chart"></i>
                             <span class="{$prefix}sidebar-main-title">Reports</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li ng-if="settings.tabEnabled.keyDates == '1'" ng-class="{literal}{ active: isActive('keyDates')}{/literal}">
                         <a href="#/key-dates">
                             <i class="fa fa-birthday-cake"></i>

@@ -18,8 +18,8 @@
                     <ui-select
                             multiple
                             ng-model="filterParams.assignmentType">
-                        <ui-select-match placeholder="Select assignment...">{{$item.title}}</ui-select-match>
-                        <ui-select-choices repeat="type.id as type in cache.assignmentType.arr">
+                        <ui-select-match class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                        <ui-select-choices class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                             <div ng-bind-html="type.title | highlight: $select.search"></div>
                         </ui-select-choices>
                     </ui-select>

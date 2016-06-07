@@ -21,12 +21,14 @@
                                    ng-change="assignment.client_id=assignment.contact_id"
                                    on-select="cacheContact($item)"
                                    ng-required="true">
-                            <ui-select-match placeholder="Start typing a name or email...">
+                            <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                                 {{$select.selected.label}}
                             </ui-select-match>
-                            <ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search"
-                                               refresh="refreshContacts($select.search)"
-                                               refresh-delay="0">
+                            <ui-select-choices
+                                class="ui-select-choices"
+                                repeat="contact.id as contact in contacts.target | filter: $select.search"
+                                refresh="refreshContacts($select.search, 'target')"
+                                refresh-delay="0">
                                 <div ng-bind="contact.label"></div>
                                 <small ng-bind="contact.description[0]"></small>
                             </ui-select-choices>
@@ -41,17 +43,17 @@
                     <label class="col-xs-12 col-sm-3 control-label">Assignment Type:</label>
 
                     <div class="col-xs-12 col-sm-5">
-                        <ui-select ng-model="assignment.case_type_id"
-                                   ng-change="setData()"
-                                   ng-required="true"
-                                   search-enabled="false">
-                            <ui-select-match placeholder="- select -">
-                                {{$select.selected.title}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="value.id as value in cache.assignmentType.arr">
-                                <div ng-bind="value.title"></div>
-                            </ui-select-choices>
-                        </ui-select>
+                        <div class="crm_custom-select crm_custom-select--full">
+                            <select
+                                ng-required
+                                class="form-control"
+                                ng-change="setData()"
+                                ng-model="assignment.case_type_id"
+                                ng-options="value.id as value.title for value in cache.assignmentType.arr">
+                                <option value="">- select -</option>
+                            </select>
+                            <span class="crm_custom-select__arrow"></span>
+                        </div>
                     </div>
 
                     <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
@@ -90,10 +92,11 @@
                                    ng-disabled="!taskList.length"
                                    ng-required="true"
                                    search-enabled="false">
-                            <ui-select-match placeholder="- select -">
+                            <ui-select-match class="ui-select-match" placeholder="- select -">
                                 {{$select.selected.label}}
                             </ui-select-match>
                             <ui-select-choices
+                                    class="ui-select-choices"
                                     repeat="value.id as value in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets">
                                 <div ng-bind="value.label"></div>
                             </ui-select-choices>
@@ -115,7 +118,7 @@
                                 <th class="assignee-column">
                                     Assigned To
                                     <span class="pull-right btn" title="{{copyMessage}}"
-                                          ng-click="copyAssignee(taskList)">
+                                          ng-click="copyAssignee(taskList, 'task')">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
@@ -144,10 +147,11 @@
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
                                         <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create">
-                                            <ui-select-match placeholder="Select task type">
+                                            <ui-select-match class="ui-select-match" placeholder="Select task type">
                                                 {{$select.selected.value}}
                                             </ui-select-match>
                                             <ui-select-choices
+                                                    class="ui-select-choices"
                                                     repeat="type.key as type in cache.taskType.arr | filter: $select.search">
                                                 <div ng-bind="type.value"></div>
                                             </ui-select-choices>
@@ -161,12 +165,13 @@
                                                ng-disabled="isDisabled || !activity.create"
                                                ng-required="!isDisabled && activity.create"
                                                on-select="cacheContact($item)">
-                                        <ui-select-match placeholder="Start typing a name or email...">
+                                        <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                                             {{$select.selected.label}}
                                         </ui-select-match>
                                         <ui-select-choices
-                                                repeat="contact.id as contact in contacts | filter: $select.search"
-                                                refresh="refreshContacts($select.search)"
+                                                class="ui-select-choices"
+                                                repeat="contact.id as contact in contacts.task[$index] | filter: $select.search"
+                                                refresh="refreshContacts($select.search, 'task', $index)"
                                                 refresh-delay="0">
                                             <div ng-bind="contact.label"></div>
                                             <small ng-bind="contact.description[0]"></small>
@@ -230,7 +235,7 @@
                                 <th class="assignee-column">
                                     Assigned To
                                     <span class="pull-right btn" title="{{copyMessage}}"
-                                          ng-click="copyAssignee(documentList)">
+                                          ng-click="copyAssignee(documentList, 'document')">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
@@ -260,10 +265,11 @@
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
                                         <ui-select ng-model="activity.activity_type_id" ng-required="true">
-                                            <ui-select-match placeholder="Select document type">
+                                            <ui-select-match class="ui-select-match" placeholder="Select document type">
                                                 {{$select.selected.value}}
                                             </ui-select-match>
                                             <ui-select-choices
+                                                    class="ui-select-choices"
                                                     repeat="type.key as type in cache.documentType.arr | filter: $select.search">
                                                 <div ng-bind="type.value"></div>
                                             </ui-select-choices>
@@ -277,12 +283,13 @@
                                                ng-disabled="isDisabled || !activity.create"
                                                ng-required="!isDisabled && activity.create"
                                                on-select="cacheContact($item)">
-                                        <ui-select-match placeholder="Start typing a name or email...">
+                                        <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                                             {{$select.selected.label}}
                                         </ui-select-match>
                                         <ui-select-choices
-                                                repeat="contact.id as contact in contacts | filter: $select.search"
-                                                refresh="refreshContacts($select.search)"
+                                                class="ui-select-choices"
+                                                repeat="contact.id as contact in contacts.document[$index] | filter: $select.search"
+                                                refresh="refreshContacts($select.search, 'document', $index)"
                                                 refresh-delay="0">
                                             <div ng-bind="contact.label"></div>
                                             <small ng-bind="contact.description[0]"></small>

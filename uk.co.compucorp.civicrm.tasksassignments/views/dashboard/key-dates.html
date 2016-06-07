@@ -71,8 +71,8 @@
                                             <ui-select
                                                     multiple
                                                     ng-model="filterParams.dateType">
-                                                <ui-select-match placeholder="Select date type...">{{$item.value}}</ui-select-match>
-                                                <ui-select-choices repeat="type.key as type in cache.dateType.arr">
+                                                <ui-select-match class="ui-select-match" placeholder="Select date type...">{{$item.value}}</ui-select-match>
+                                                <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.dateType.arr">
                                                     <div ng-bind-html="type.value | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>

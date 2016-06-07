@@ -45,6 +45,14 @@ define([
             angular.extend(scope, Mock);
         }));
 
+        describe('Lookup contacts lists', function () {
+            it('has the lists empty', function () {
+                expect(scope.contacts.target).toEqual([]);
+                expect(scope.contacts.document).toEqual([]);
+                expect(scope.contacts.task).toEqual([]);
+            });
+        });
+
         describe('copyAssignee()', function () {
             var list, assigneeId = [2];
 
@@ -52,12 +60,20 @@ define([
                 list = scope.taskList;
                 list[0].assignee_contact_id = assigneeId;
 
-                scope.copyAssignee(list);
+                fillContactsCollectionOf(list, 'task');
+
+                scope.copyAssignee(list, 'task');
             });
 
             it("assigns the assignee's id of the first item to the whole list", function () {
                 list.forEach(function (item) {
                     expect(item.assignee_contact_id).toEqual(assigneeId);
+                });
+            });
+
+            it('copies the contacts collection of the first item to the other items', function () {
+                list.forEach(function (item, index) {
+                    expect(scope.contacts.task[index]).toEqual(scope.contacts.task[0]);
                 });
             });
         });
@@ -79,5 +95,19 @@ define([
             });
         });
 
+        /**
+         * Fills up with random placeholder data the contacts collection of the
+         * given list
+         *
+         * @param {Array} list
+         * @param {string} type - task or document
+         */
+        function fillContactsCollectionOf(list, type) {
+            list.forEach(function (item, index) {
+                scope.contacts[type][index] = _.range(_.random(5)).map(function () {
+                    return { id: _.uniqueId() };
+                })
+            });
+        }
     });
 });
