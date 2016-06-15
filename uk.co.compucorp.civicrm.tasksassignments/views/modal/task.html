@@ -56,22 +56,19 @@
                 </label>
 
                 <div class="input-group col-sm-4">
-                    <input type="text" ng-model="task.activity_date_time"
-                           class="form-control"
-                           id="{{prefix}}task-due"
-                           date-input
-                           placeholder="{{ format }}"
-                           name="assignmentDue" ng-required="true"
-                    />
-                <span class="input-group-addon">
-                    <a href class="text-normal calendar-popup-link"
-                       ng-model="task.activity_date_time"
-                       is-open="dpOpened"
-                       uib-datepicker-popup
-                       ng-click="dpOpen($event);">
-                        <i class="fa fa-calendar"></i>
-                    </a>
-                </span>
+                  <input
+                    date-input
+                    type="text"
+                    name="assignmentDue"
+                    id="{{prefix}}task-due"
+                    class="form-control"
+                    ng-model="task.activity_date_time"
+                    placeholder="{{ format }}"
+                    ng-required="true"
+                    uib-datepicker-popup
+                    is-open="dpOpened"
+                    ng-click="dpOpen($event);">
+                  <span class="input-group-addon fa fa-calendar"></span>
                 </div>
             </div>
             <!-- Subject -->

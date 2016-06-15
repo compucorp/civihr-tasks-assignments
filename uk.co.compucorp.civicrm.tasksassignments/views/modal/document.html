@@ -49,23 +49,20 @@
                 <!-- Due Date -->
                 <label for="{{prefix}}document-due" class="col-xs-12 col-sm-2 text-nowrap control-label">Due Date:</label>
 
-                <div class="col-xs-12 col-sm-4 input-group">
-                    <input type="text" ng-model="document.activity_date_time"
-                           class="form-control"
-                           id="{{prefix}}document-due"
-                           date-input
-                           placeholder="dd/mm/yyyy"
-                           name="documentDue" ng-required="true"
-                    />
-                    <span class="input-group-addon">
-                        <a href class="text-normal calendar-popup-link"
-                           ng-model="document.activity_date_time"
-                           is-open="dpOpened.due"
-                           uib-datepicker-popup
-                           ng-click="dpOpen($event, 'due')">
-                            <i class="fa fa-calendar"></i>
-                        </a>
-                    </span>
+                <div class="col-xs-12 col-sm-4 input-group input-group-unstyled">
+                  <input
+                    date-input
+                    type="text"
+                    id="{{prefix}}document-due"
+                    class="form-control"
+                    name="documentDue"
+                    ng-model="document.activity_date_time"
+                    placeholder="dd/mm/yyyy"
+                    uib-datepicker-popup
+                    ng-required="true"
+                    is-open="dpOpened.due"
+                    ng-click="dpOpen($event, 'due')">
+                  <span class="input-group-addon fa fa-calendar"></span>
                 </div>
                 <!-- Expires -->
                 <label for="{{prefix}}document-exp" class="col-xs-12 col-sm-2 control-label no-gutter">
@@ -73,22 +70,18 @@
                 </label>
 
                 <div class="col-xs-12 col-sm-4 input-group">
-                    <input type="text" ng-model="document.expire_date"
-                           class="form-control"
-                           id="{{prefix}}document-exp"
-                           date-input
-                           placeholder="dd/mm/yyyy"
-                           name="documentExpireDate"
-                    />
-                    <span class="input-group-addon">
-                        <a href class="text-normal calendar-popup-link"
-                           ng-model="document.expire_date"
-                           is-open="dpOpened.exp"
-                           uib-datepicker-popup
-                           ng-click="dpOpen($event, 'exp')">
-                            <i class="fa fa-calendar"></i>
-                        </a>
-                    </span>
+                    <input
+                      date-input
+                      type="text"
+                      class="form-control"
+                      id="{{prefix}}document-exp"
+                      name="documentExpireDate"
+                      ng-model="document.expire_date"
+                      placeholder="dd/mm/yyyy"
+                      uib-datepicker-popup
+                      is-open="dpOpened.exp"
+                      ng-click="dpOpen($event, 'exp')">
+                    <span class="input-group-addon fa fa-calendar"></span>
                 </div>
             </div>
             <!-- Drop Zone -->
