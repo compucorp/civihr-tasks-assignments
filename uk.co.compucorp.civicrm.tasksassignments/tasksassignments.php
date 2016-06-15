@@ -164,16 +164,20 @@ function tasksassignments_civicrm_pageRun($page) {
 
 /**
  * Implementation of hook_civicrm_tabs
+ * tasks and documents tabs should appear after assignments tab directly
+ * and since assignments tab weight is
+ * set to 30 we set both of those to
+ * 40 & 50 respectively
  */
 
 function tasksassignments_civicrm_tabs(&$tabs) {
     CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
-    
+
     $tabs[] = Array(
         'id'        => 'civitasks',
         'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
         'title'     => ts('Tasks'),
-        'weight'    => 1
+        'weight'    => 40
     );
 
     $documentsTab = civicrm_api3('TASettings', 'get', array(
@@ -184,7 +188,7 @@ function tasksassignments_civicrm_tabs(&$tabs) {
             'id'        => 'cividocuments',
             'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
             'title'     => ts('Documents'),
-            'weight'    => 2
+            'weight'    => 50
         );
     }
 
