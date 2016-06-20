@@ -142,8 +142,9 @@ define([
             };
 
             $scope.confirm = function () {
+                var doc = angular.copy($scope.document);
 
-                if (angular.equals(data, $scope.document) &&
+                if (angular.equals(data, doc) &&
                     angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
                     $modalInstance.dismiss('cancel');
                     return;
@@ -157,10 +158,10 @@ define([
                 $scope.$broadcast('ct-spinner-show');
 
                 //temporary remove case_id
-                +$scope.document.case_id == +data.case_id && delete $scope.document.case_id;
+                +doc.case_id == +data.case_id && delete doc.case_id;
 
-                $scope.document.activity_date_time = $scope.parseDate($scope.document.activity_date_time) || new Date();
-                $scope.document.expire_date = $scope.parseDate($scope.document.expire_date);
+                doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
+                doc.expire_date = $scope.parseDate(doc.expire_date);
 
                 if (filesTrash.length) {
                     for (var i = 0; i < filesTrash.length; i++) {
@@ -170,7 +171,7 @@ define([
                 }
 
                 $q.all({
-                    document: DocumentService.save($scope.document),
+                    document: DocumentService.save(doc),
                     files: !!promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
                 }).then(function (result) {
 

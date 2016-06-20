@@ -135,41 +135,40 @@ define([
             };
 
             $scope.confirm = function () {
+              var task = angular.copy($scope.task);
 
-                if (angular.equals(data, $scope.task)) {
-                    $modalInstance.dismiss('cancel');
-                    return
+              if (angular.equals(data, task)) {
+                  $modalInstance.dismiss('cancel');
+                  return;
+              }
+
+              $scope.$broadcast('ct-spinner-show');
+
+              //temporary remove case_id
+              +task.case_id == +data.case_id && delete task.case_id;
+              task.activity_date_time = task.activity_date_time || new Date();
+
+              TaskService.save(task).then(function (results) {
+                $scope.task.id = results.id;
+                $scope.task.case_id = results.case_id;
+
+                AssignmentService.updateTab();
+
+                if ($scope.openNew) {
+                    $scope.task.open = true;
+                    $scope.openNew = false;
                 }
 
-                $scope.$broadcast('ct-spinner-show');
+                $modalInstance.close($scope.task);
+                $scope.$broadcast('ct-spinner-hide');
 
-                //temporary remove case_id
-                +$scope.task.case_id == +data.case_id && delete $scope.task.case_id;
-                $scope.task.activity_date_time = $scope.task.activity_date_time || new Date();
-
-                TaskService.save($scope.task).then(function (results) {
-
-                    $scope.task.id = results.id;
-                    $scope.task.case_id = results.case_id;
-
-                    AssignmentService.updateTab();
-
-                    if ($scope.openNew) {
-                        $scope.task.open = true;
-                        $scope.openNew = false;
-                    }
-
-                    $modalInstance.close($scope.task);
-                    $scope.$broadcast('ct-spinner-hide');
-
-                    return;
-                }, function (reason) {
-                    CRM.alert(reason, 'Error', 'error');
-                    $modalInstance.dismiss();
-                    $scope.$broadcast('ct-spinner-hide');
-                    return $q.reject();
-                });
-
+                return;
+              }, function (reason) {
+                CRM.alert(reason, 'Error', 'error');
+                $modalInstance.dismiss();
+                $scope.$broadcast('ct-spinner-hide');
+                return $q.reject();
+              });
             };
 
             /**
