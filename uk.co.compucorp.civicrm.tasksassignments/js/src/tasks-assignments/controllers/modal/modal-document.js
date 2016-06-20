@@ -142,78 +142,76 @@ define([
             };
 
             $scope.confirm = function () {
-                var doc = angular.copy($scope.document);
+              var doc = angular.copy($scope.document);
 
-                if (angular.equals(data, doc) &&
-                    angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
-                    $modalInstance.dismiss('cancel');
-                    return;
+              if (angular.equals(data, doc) &&
+                angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
+                $modalInstance.dismiss('cancel');
+                return;
+              }
+
+              var uploader = $scope.uploader,
+                  filesTrash = $scope.filesTrash,
+                  promiseFilesDelete = [],
+                  file;
+
+              $scope.$broadcast('ct-spinner-show');
+
+              //temporary remove case_id
+              +doc.case_id == +data.case_id && delete doc.case_id;
+
+              doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
+              doc.expire_date = $scope.parseDate(doc.expire_date);
+
+              if (filesTrash.length) {
+                for (var i = 0; i < filesTrash.length; i++) {
+                  file = filesTrash[i];
+                  promiseFilesDelete.push(FileService.delete(file.fileID, file.entityID, file.entityTable));
+                }
+              }
+
+              $q.all({
+                document: DocumentService.save(doc),
+                files: !!promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
+              }).then(function (result) {
+                if (uploader.queue.length) {
+                  var modalInstance = $modal.open({
+                    appendTo: $rootElement.find('div').eq(0),
+                    templateUrl: config.path.TPL + '/modal/progress.html?v=1',
+                    size: 'sm',
+                    controller: 'ModalProgressCtrl',
+                    resolve: {
+                      uploader: function () {
+                        return uploader;
+                      },
+                      entityId: function () {
+                        return result.document.id;
+                      }
+                    }
+                  });
+
+                  result.files = modalInstance.result;
+                  return $q.all(result);
                 }
 
-                var uploader = $scope.uploader,
-                    filesTrash = $scope.filesTrash,
-                    promiseFilesDelete = [],
-                    file;
+                return result;
+              }).then(function (result) {
+                $scope.document.id = result.document.id;
+                $scope.document.case_id = result.document.case_id;
+                $scope.document.file_count = $scope.files.length + uploader.queue.length;
 
-                $scope.$broadcast('ct-spinner-show');
+                $scope.document.open = $scope.openNew;
 
-                //temporary remove case_id
-                +doc.case_id == +data.case_id && delete doc.case_id;
+                AssignmentService.updateTab();
+                $modalInstance.close($scope.document);
+                $scope.$broadcast('ta-spinner-hide');
+              }, function (reason) {
+                CRM.alert(reason, 'Error', 'error');
+                $modalInstance.dismiss();
+                $scope.$broadcast('ta-spinner-hide');
 
-                doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
-                doc.expire_date = $scope.parseDate(doc.expire_date);
-
-                if (filesTrash.length) {
-                    for (var i = 0; i < filesTrash.length; i++) {
-                        file = filesTrash[i];
-                        promiseFilesDelete.push(FileService.delete(file.fileID, file.entityID, file.entityTable));
-                    }
-                }
-
-                $q.all({
-                    document: DocumentService.save(doc),
-                    files: !!promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
-                }).then(function (result) {
-
-                    if (uploader.queue.length) {
-                        var modalInstance = $modal.open({
-                            appendTo: $rootElement.find('div').eq(0),
-                            templateUrl: config.path.TPL + '/modal/progress.html?v=1',
-                            size: 'sm',
-                            controller: 'ModalProgressCtrl',
-                            resolve: {
-                                uploader: function () {
-                                    return uploader;
-                                },
-                                entityId: function () {
-                                    return result.document.id;
-                                }
-                            }
-                        });
-
-                        result.files = modalInstance.result;
-                        return $q.all(result);
-                    }
-
-                    return result;
-
-                }).then(function (result) {
-
-                    $scope.document.id = result.document.id;
-                    $scope.document.case_id = result.document.case_id;
-                    $scope.document.file_count = $scope.files.length + uploader.queue.length;
-
-                    $scope.document.open = $scope.openNew;
-
-                    AssignmentService.updateTab();
-                    $modalInstance.close($scope.document);
-                    $scope.$broadcast('ta-spinner-hide');
-                }, function (reason) {
-                    CRM.alert(reason, 'Error', 'error');
-                    $modalInstance.dismiss();
-                    $scope.$broadcast('ta-spinner-hide');
-                    return $q.reject();
-                });
+                return $q.reject();
+              });
             };
 
             /**
