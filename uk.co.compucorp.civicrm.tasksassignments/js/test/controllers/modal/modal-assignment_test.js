@@ -31,7 +31,7 @@ define([
 
             ctrl = $controller('ModalAssignmentCtrl', {
                 $scope: scope,
-                $modalInstance: modalInstance,
+                $uibModalInstance: modalInstance,
                 AssignmentService: AssignmentService,
                 TaskService: TaskService,
                 DocumentService: DocumentService,

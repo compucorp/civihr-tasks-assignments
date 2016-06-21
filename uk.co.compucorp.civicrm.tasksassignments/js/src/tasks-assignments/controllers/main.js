@@ -4,7 +4,7 @@ define([
 ], function (controllers) {
     'use strict';
 
-    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$modal', '$q', 'FileService', 'config',
+    controllers.controller('MainCtrl', ['$scope', '$rootScope', '$rootElement', '$log', '$uibModal', '$q', 'FileService', 'config',
         function ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config) {
             $log.debug('Controller: MainCtrl');
 
@@ -13,7 +13,7 @@ define([
 
                 data = data || {};
                 var modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
+                    appendTo: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL + 'modal/document.html?v=3',
                     controller: 'ModalDocumentCtrl',
                     resolve: {
@@ -46,7 +46,7 @@ define([
             $rootScope.modalTask = function (data) {
                 data = data || {};
                 var modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
+                    appendTo: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL + 'modal/task.html?v=5',
                     controller: 'ModalTaskCtrl',
                     resolve: {
@@ -71,7 +71,7 @@ define([
             $rootScope.modalAssignment = function (data) {
                 data = data || {};
                 var modalInstance = $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
+                    appendTo: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
                     controller: 'ModalAssignmentCtrl',
                     size: 'lg',
@@ -96,7 +96,7 @@ define([
                 }
 
                 $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
+                    appendTo: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
                     controller: 'ModalReminderCtrl',
                     resolve: {

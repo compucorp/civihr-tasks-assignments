@@ -93,7 +93,7 @@ define([
         function initController (){
             ctrl = $controller('ModalDocumentCtrl', {
                 $scope: $scope,
-                $modalInstance: fakeModalInstance(),
+                $uibModalInstance: fakeModalInstance(),
                 data: data,
                 files: files,
                 HR_settings: HR_settings

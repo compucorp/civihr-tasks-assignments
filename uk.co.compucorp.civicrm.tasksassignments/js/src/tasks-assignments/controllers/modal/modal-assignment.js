@@ -9,7 +9,7 @@ define([
 ], function (angular, moment, controllers) {
     'use strict';
 
-    controllers.controller('ModalAssignmentCtrl', ['$scope', '$modalInstance', '$rootScope', '$q', '$log', '$filter',
+    controllers.controller('ModalAssignmentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$q', '$log', '$filter',
         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings', 'HR_settings',
         function ($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
                   ContactService, data, config, settings, HR_settings) {
