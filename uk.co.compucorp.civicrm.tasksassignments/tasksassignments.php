@@ -171,25 +171,21 @@ function tasksassignments_civicrm_pageRun($page) {
  */
 
 function tasksassignments_civicrm_tabs(&$tabs) {
-    CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
+  CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
 
-    if (CRM_Core_Permission::check('access Tasks and Assignments')) {
-      $tabs[] = Array(
-        'id'        => 'civitasks',
-        'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
-        'title'     => ts('Tasks'),
-        'weight'    => 40
-      );
-    }
+  if (CRM_Core_Permission::check('access Tasks and Assignments')) {
+    $tabs[] = Array(
+      'id'        => 'civitasks',
+      'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
+      'title'     => ts('Tasks'),
+      'weight'    => 40
+    );
 
     $documentsTab = civicrm_api3('TASettings', 'get', array(
       'fields' => 'documents_tab',
     ));
 
-    if (
-      CRM_Core_Permission::check('access Tasks and Assignments') &&
-      $documentsTab['values']['documents_tab']['value']
-    ) {
+    if (!empty($documentsTab['values']['documents_tab']['value'])) {
       $tabs[] = Array(
         'id'        => 'cividocuments',
         'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
@@ -197,6 +193,7 @@ function tasksassignments_civicrm_tabs(&$tabs) {
         'weight'    => 50
       );
     }
+  }
 }
 
 /**
