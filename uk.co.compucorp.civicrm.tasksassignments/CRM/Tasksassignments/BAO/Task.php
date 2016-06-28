@@ -11,6 +11,13 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     $entityName = 'Task';
     $hook = empty($params['id']) ? 'create' : 'edit';
 
+    if ($hook === 'create') {
+        // If creating a new Task, we require all three contacts to be defined.
+        if (empty($params['source_contact_id'] || empty($params['target_contact_id']) || empty($params['assignee_contact_id']))) {
+            throw new CiviCRM_API3_Exception("Please specify 'source_contact_id', 'target_contact_id' and 'assignee_contact_id'.");
+        }
+    }
+
     CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
 
     if (empty($params['status_id']) && $hook === 'create') {
