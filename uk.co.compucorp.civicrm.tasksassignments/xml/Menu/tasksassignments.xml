@@ -1,70 +1,42 @@
 <?xml version="1.0"?>
 <menu>
-  <item>
-    <path>civicrm/contact/view/tasks</path>
-    <page_callback>CRM_Tasksassignments_Page_Tasks</page_callback>
-    <title>Tasks</title>
-    <access_arguments>access CiviCRM</access_arguments>
-  </item>
-  <item>
-    <path>civicrm/admin/options/activity_type</path>
-    <page_callback>CRM_Tasksassignments_Page_Options</page_callback>
-    <title>Options</title>
-    <access_arguments>access CiviCRM</access_arguments>
-  </item>
+  <!-- Main Dashboard -->
   <item>
     <path>civicrm/tasksassignments/dashboard</path>
     <page_callback>CRM_Tasksassignments_Page_Dashboard</page_callback>
     <title>Dashboard</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access Tasks and Assignments</access_arguments>
+  </item>
+
+  <!-- Contact Tabs -->
+  <item>
+    <path>civicrm/contact/view/tasks</path>
+    <page_callback>CRM_Tasksassignments_Page_Tasks</page_callback>
+    <title>Tasks</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
   </item>
   <item>
     <path>civicrm/contact/view/documents</path>
     <page_callback>CRM_Tasksassignments_Page_Documents</page_callback>
     <title>Documents</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access Tasks and Assignments</access_arguments>
   </item>
+
+  <!-- Admin -->
   <item>
-    <path>civicrm/tasksassignments/keydatescsv</path>
-    <page_callback>CRM_Tasksassignments_Page_KeyDatesCsv</page_callback>
-    <title>KeyDatesCsv</title>
-    <access_arguments>access CiviCRM</access_arguments>
-  </item>
-  <item>
-    <path>civicrm/tasksassignments/file/list</path>
-    <page_callback>CRM_Tasksassignments_Page_Files::fileList</page_callback>
-    <title>FileList</title>
-    <!--<access_arguments>edit Documents</access_arguments>-->
-  </item>
-  <item>
-    <path>civicrm/tasksassignments/file/upload</path>
-    <page_callback>CRM_Tasksassignments_Page_Files::fileUpload</page_callback>
-    <title>FileSave</title>
-    <!--<access_arguments>edit Documents</access_arguments>-->
-  </item>
-  <item>
-    <path>civicrm/tasksassignments/file/display</path>
-    <page_callback>CRM_Tasksassignments_Page_Files::fileDisplay</page_callback>
-    <title>FileDisplay</title>
-    <!--<access_arguments>edit Documents</access_arguments>-->
-  </item>
-  <item>
-    <path>civicrm/tasksassignments/file/delete</path>
-    <page_callback>CRM_Tasksassignments_Page_Files::fileDelete</page_callback>
-    <title>FileDelete</title>
-    <!--<access_arguments>edit Documents</access_arguments>-->
-  </item>
-  <item>
-    <path>civicrm/tasksassignments/file/zip</path>
-    <page_callback>CRM_Tasksassignments_Page_Files::fileZip</page_callback>
-    <title>FileZip</title>
-    <!--<access_arguments>edit Documents</access_arguments>-->
+    <path>civicrm/admin/options/activity_type</path>
+    <page_callback>CRM_Tasksassignments_Page_Options</page_callback>
+    <title>Options</title>
+    <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/tasksassignments/settings</path>
-    <page_callback>CRM_Tasksassignments_Page_Settings</page_callback>
     <title>Settings</title>
+    <page_callback>CRM_Tasksassignments_Page_Settings</page_callback>
+    <access_arguments>administer CiviCRM</access_arguments>
   </item>
+
+  <!-- Redirects from reminder email to angular dashboard -->
   <item>
     <path>civicrm/tasksassignments/my-tasks</path>
     <page_callback>CRM_Tasksassignments_Page_MyTasks</page_callback>
@@ -74,5 +46,45 @@
     <path>civicrm/tasksassignments/my-documents</path>
     <page_callback>CRM_Tasksassignments_Page_MyDocuments</page_callback>
     <title>MyDocuments</title>
+  </item>
+
+  <!-- API endpoint for angular: key dates -->
+  <item>
+    <path>civicrm/tasksassignments/keydatescsv</path>
+    <page_callback>CRM_Tasksassignments_Page_KeyDatesCsv</page_callback>
+    <title>KeyDatesCsv</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
+  </item>
+
+  <!-- API endpoint for angular: file operations -->
+  <item>
+    <path>civicrm/tasksassignments/file/list</path>
+    <page_callback>CRM_Tasksassignments_Page_Files::fileList</page_callback>
+    <title>FileList</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/tasksassignments/file/upload</path>
+    <page_callback>CRM_Tasksassignments_Page_Files::fileUpload</page_callback>
+    <title>FileSave</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/tasksassignments/file/display</path>
+    <page_callback>CRM_Tasksassignments_Page_Files::fileDisplay</page_callback>
+    <title>FileDisplay</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/tasksassignments/file/delete</path>
+    <page_callback>CRM_Tasksassignments_Page_Files::fileDelete</page_callback>
+    <title>FileDelete</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/tasksassignments/file/zip</path>
+    <page_callback>CRM_Tasksassignments_Page_Files::fileZip</page_callback>
+    <title>FileZip</title>
+    <access_arguments>access Tasks and Assignments</access_arguments>
   </item>
 </menu>
