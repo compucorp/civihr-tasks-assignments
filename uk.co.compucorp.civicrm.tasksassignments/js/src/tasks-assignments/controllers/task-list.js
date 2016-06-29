@@ -210,16 +210,11 @@ define([
             };
 
             $scope.updateTask = function(task, updateObj) {
-
-                var updatePromise = TaskService.save(angular.extend({
-                    id: task.id
-                },updateObj));
-
-                updatePromise.then(null,function(reason){
-                    CRM.alert(reason, 'Error', 'error');
+              return TaskService
+                .save(angular.extend({}, task, updateObj))
+                .catch(function (reason) {
+                  CRM.alert(reason, 'Error', 'error');
                 });
-
-                return updatePromise;
             };
 
             $scope.updateAssignments = function(assignments, targetContactId){
