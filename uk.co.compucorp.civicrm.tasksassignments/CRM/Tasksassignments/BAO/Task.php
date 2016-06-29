@@ -11,11 +11,17 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     $entityName = 'Task';
     $hook = empty($params['id']) ? 'create' : 'edit';
 
-    CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
-
-    if (empty($params['status_id']) && $hook === 'create') {
-      $params['status_id'] = 1;
+    if ($hook === 'create') {
+        // If creating a new Task, we require all three contacts to be defined.
+        if (empty($params['source_contact_id']) || empty($params['target_contact_id']) || empty($params['assignee_contact_id'])) {
+            throw new CRM_Exception("Please specify 'source_contact_id', 'target_contact_id' and 'assignee_contact_id'.");
+        }
+        if (empty($params['status_id'])) {
+          $params['status_id'] = 1;
+        }
     }
+
+    CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
 
     $currentInstance = new static();
     $currentInstance->get('id', $params['id']);
