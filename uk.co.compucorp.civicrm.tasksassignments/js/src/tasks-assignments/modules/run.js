@@ -9,13 +9,15 @@ define([
     'tasks-assignments/modules/settings',
     'common/modules/routers/compu-ui-router',
     'common/filters/angular-date/format-date',
-    'common/directives/angular-date/date-input'
+    'common/directives/angular-date/date-input',
+    'common/directives/prevent-animations'
 ], function (angular) {
     'use strict';
 
     angular.module('civitasks.run', [
         'angularFileUpload',
         'ngResource',
+        'ngAnimate',
         'ngSanitize',
         'compu.ui.router',
         'ui.select',
@@ -30,7 +32,8 @@ define([
         'civitasks.settings',
         'xeditable',
         'xeditable-civi',
-        'common.angularDate'
+        'common.angularDate',
+        'common.directives'
     ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
         'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
         function(config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,

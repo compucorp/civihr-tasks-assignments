@@ -1,7 +1,7 @@
 <?php
 
 class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
-{    
+{
     public function install() {
 
       // $this->executeCustomDataFile('xml/customdata.xml');
@@ -14,13 +14,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             $this->{$methodName}();
           }
       }
-      
+
     $this->setComponentStatuses(array(
       'CiviTask' => true,
       'CiviDocument' => true,
     ));
     }
-    
+
   public function enable() {
     $this->setComponentStatuses(array(
       'CiviTask' => true,
@@ -28,14 +28,14 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     ));
     return TRUE;
   }
-  
+
   public function disable() {
     $this->setComponentStatuses(array(
       'CiviTask' => false,
       'CiviDocument' => false,
     ));
   }
-    
+
   /**
    * Set components as enabled or disabled. Leave any other
    * components unmodified.
@@ -100,29 +100,29 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     }
 
     public function upgrade_0002() {
-          // Add Tasks and Assignments to the Top Navigation menu
-          CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments' and parent_id IS NULL");
+      // Add Tasks and Assignments to the Top Navigation menu
+      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments' and parent_id IS NULL");
 
-          $weight = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'weight', 'name');
-          //$contactNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'id', 'name');
-          $importJobNavigation = new CRM_Core_DAO_Navigation();
-          $params = array (
-              'domain_id'  => CRM_Core_Config::domainID(),
-              'label'      => ts('Tasks and Assignments'),
-              'name'       => 'tasksassignments',
-              'url'        => 'civicrm/tasksassignments/dashboard#/tasks',
-              'parent_id'  => null,
-              'weight'     => $weight+1,
-              //'permission' => 'access Tasksassignments',
-              'separator'  => 1,
-              'is_active'  => 1
-          );
-          $importJobNavigation->copyValues($params);
-          $importJobNavigation->save();
+      $weight = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'weight', 'name');
+      //$contactNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'id', 'name');
+      $importJobNavigation = new CRM_Core_DAO_Navigation();
+      $params = array (
+        'domain_id'  => CRM_Core_Config::domainID(),
+        'label'      => ts('Tasks and Assignments'),
+        'name'       => 'tasksassignments',
+        'url'        => 'civicrm/tasksassignments/dashboard#/tasks',
+        'parent_id'  => null,
+        'weight'     => $weight+1,
+        'permission' => 'access Tasks and Assignments',
+        'separator'  => 1,
+        'is_active'  => 1
+      );
+      $importJobNavigation->copyValues($params);
+      $importJobNavigation->save();
 
-          CRM_Core_BAO_Navigation::resetNavigation();
+      CRM_Core_BAO_Navigation::resetNavigation();
 
-          return TRUE;
+      return TRUE;
     }
 
     public function upgrade_0003() {
@@ -179,10 +179,10 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                 'Block work email ID',
             ),
         ));
-        
+
         return TRUE;
     }
-    
+
     /*
      * Install Documents statuses
      */
@@ -216,7 +216,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
         return TRUE;
     }
-    
+
     /*
      * Install Tasks Assignments custom settings.
      */
@@ -266,21 +266,21 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
         return TRUE;
     }
-    
+
     public function upgrade_0008()
     {
         $this->executeCustomDataFile('xml/activity_custom_fields.xml');
 
         return TRUE;
     }
-    
+
     public function upgrade_0009()
     {
         $this->executeCustomDataFile('xml/probation.xml');
-        
+
         return TRUE;
     }
-    
+
     /*
      * Enable CiviTask and CiviDocument components.
      */
@@ -288,10 +288,10 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     {
         CRM_Core_BAO_ConfigSetting::enableComponent('CiviTask');
         CRM_Core_BAO_ConfigSetting::enableComponent('CiviDocument');
-        
+
         return TRUE;
     }*/
-    
+
     /*
      * Install Document Types
      */
@@ -309,10 +309,10 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                 'Exiting document 3',
             ),
         ));
-        
+
         return TRUE;
     }
-    
+
     /*
      * Set up Daily Reminder job
      */
@@ -335,10 +335,10 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             $dao->is_active = 0;
             $dao->save();
         }
-        
+
         return TRUE;
     }
-    
+
     /*
      * Add Settings page to Tasks and Assignments top menu
      */
@@ -351,7 +351,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         {
             $taNavigation->url = '';
             $taNavigation->save();
-            
+
             $submenu = array(
                 array(
                     'label' => ts('Dashboard'),
@@ -364,7 +364,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                     'url' => 'civicrm/tasksassignments/settings',
                 )
             );
-            
+
             foreach ($submenu as $key => $item)
             {
                 $item['parent_id'] = $taNavigation->id;
@@ -372,13 +372,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
                 $item['is_active'] = 1;
                 CRM_Core_BAO_Navigation::add($item);
             }
-            
+
             CRM_Core_BAO_Navigation::resetNavigation();
         }
-        
+
         return TRUE;
     }
-    
+
     /*
      * Add Settings page to Administer top menu
      */
@@ -418,7 +418,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
             CRM_Core_BAO_Navigation::resetNavigation();
         }
-        
+
         return TRUE;
     }
 
@@ -468,21 +468,48 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
     return false;
   }
-    
+
+  /**
+   * Make sure that the Tasks and Assignments main menu item
+   * (and subsequently the Dashboard menu item) are restricted to only the users
+   * with 'access Tasks and Assignments' permission
+   */
+  public function upgrade_1018() {
+    $taNavigation = new CRM_Core_BAO_Navigation();
+    $taNavigation->name = 'tasksassignments';
+    $taNavigation->find(true);
+
+    if($taNavigation->id && !$taNavigation->permission) {
+      $navigation = new CRM_Core_BAO_Navigation();
+      $foo = array(
+        'id' => $taNavigation->id,
+        'permission' => 'access Tasks and Assignments',
+        'separator'  => 1,
+        'is_active'  => 1
+      );
+
+      $params = $navigation->add($foo);
+
+      return true;
+    }
+
+    return false;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
         CRM_Core_BAO_Navigation::resetNavigation();
-        
+
         return TRUE;
     }
-  
+
     function _installTypes($component, array $types)
     {
         $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
         if ($administerNavId)
         {
-            
+
         }
         $componentId = null;
         $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';

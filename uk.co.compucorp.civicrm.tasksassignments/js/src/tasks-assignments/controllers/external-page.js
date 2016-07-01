@@ -4,7 +4,7 @@ define([
 ], function (controllers) {
     'use strict';
 
-    controllers.controller('ExternalPageCtrl',['$scope', '$log', '$modal', '$rootElement', '$rootScope', '$state', 'config',
+    controllers.controller('ExternalPageCtrl',['$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config',
         function ($scope, $log, $modal, $rootElement, $rootScope, $state, config) {
             $log.debug('Controller: ExternalPageCtrl');
 

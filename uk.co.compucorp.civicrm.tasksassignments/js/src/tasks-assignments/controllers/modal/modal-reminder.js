@@ -7,7 +7,7 @@ define([
 ], function (controllers) {
     'use strict';
 
-    controllers.controller('ModalReminderCtrl',['$scope', '$modalInstance', '$dialog', '$rootScope', '$q', '$log', '$filter',
+    controllers.controller('ModalReminderCtrl',['$scope', '$uibModalInstance', '$dialog', '$rootScope', '$q', '$log', '$filter',
         'TaskService', 'DocumentService', 'data', 'type', 'config',
         function ($scope, $modalInstance, $dialog, $rootScope, $q, $log, $filter, TaskService, DocumentService,
                  data, type, config) {

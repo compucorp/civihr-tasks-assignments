@@ -8,7 +8,7 @@ define([
 ], function (moment, controllers) {
     'use strict';
 
-    controllers.controller('DocumentListCtrl',['$scope', '$modal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
+    controllers.controller('DocumentListCtrl',['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
         '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings',
         function ($scope, $modal, $dialog, $rootElement, $rootScope, $state, $filter, $log, $q, $timeout, documentList,
                  config, ContactService, AssignmentService, DocumentService, FileService, settings) {
@@ -31,6 +31,8 @@ define([
                         AssignmentService.updateCache(data);
                     });
                 }
+
+                watchDateFilters();
 
                 $rootScope.$broadcast('ct-spinner-hide');
                 $log.debug($rootScope.cache);
@@ -128,9 +130,14 @@ define([
             $scope.filterParamsHolder = {
                 documentStatus: [],
                 dateRange: {
-                    from: new Date().setHours(0, 0, 0, 0),
-                    until: moment().add(1, 'month').toDate().setHours(0, 0, 0, 0)
+                    from: moment().startOf('day').toDate(),
+                    until: moment().add(1, 'month').startOf('day').toDate()
                 }
+            };
+
+            $scope.datepickerOptions = {
+                from: { maxDate: $scope.filterParamsHolder.dateRange.until },
+                until: { minDate: $scope.filterParamsHolder.dateRange.from }
             };
 
             $scope.label = {
@@ -326,5 +333,19 @@ define([
 
             this.init();
 
+            /**
+             * Whenever the date filters will change, their corrispondent
+             * datepickers will have the minDate or maxDate setting updated
+             * accordingly
+             */
+            function watchDateFilters() {
+              $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
+                $scope.datepickerOptions.until.minDate = newValue;
+              });
+
+              $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
+                $scope.datepickerOptions.from.maxDate = newValue;
+              });
+            }
         }]);
 });
