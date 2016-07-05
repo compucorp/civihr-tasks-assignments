@@ -5,7 +5,7 @@ define([
     'use strict';
 
     controllers.controller('SettingsCtrl',['$scope', '$rootScope', '$rootElement', '$location', '$dialog', '$q',
-        '$log', '$state', '$modal', 'SettingsService', 'Task', 'config', 'settings',
+        '$log', '$state', '$uibModal', 'SettingsService', 'Task', 'config', 'settings',
         function ($scope, $rootScope, $rootElement, $location, $dialog, $q, $log, $state, $modal, SettingsService,
                  Task, config, settings) {
             $log.debug('Controller: SettingsCtrl');
@@ -33,7 +33,7 @@ define([
 
             $scope.modalTaskMigrate = function() {
                 $modal.open({
-                    targetDomEl: $rootElement.find('div').eq(0),
+                    appendTo: $rootElement.find('div').eq(0),
                     templateUrl: config.path.TPL+'modal/taskMigrate.html?v=1',
                     controller: 'ModalTaskMigrateCtrl',
                     resolve: {

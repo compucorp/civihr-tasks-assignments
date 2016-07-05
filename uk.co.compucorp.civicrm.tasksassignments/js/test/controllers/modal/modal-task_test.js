@@ -107,7 +107,7 @@ define([
             ctrl = $controller('ModalTaskCtrl', {
                 $rootScope: $rootScope,
                 $scope: $scope,
-                $modalInstance: fakeModalInstance(),
+                $uibModalInstance: fakeModalInstance(),
                 data: data,
                 HR_settings: HR_settings
             });

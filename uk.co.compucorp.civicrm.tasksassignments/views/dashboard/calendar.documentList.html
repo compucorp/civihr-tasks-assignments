@@ -63,7 +63,7 @@
     <div class="clearfix"></div>
     <nav class="row" ng-show="(documentListOngoing.length > pagination.itemsPerPage)">
         <div class="col-xs-12 text-center">
-            <pagination boundary-links="true" total-items="documentListOngoing.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+            <uib-pagination boundary-links="true" total-items="documentListOngoing.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
         </div>
     </nav>
 </div>
@@ -76,22 +76,22 @@
     <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
     <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
     <td>
-        <div class="dropdown" dropdown>
+        <div class="dropdown" uib-dropdown>
             <a href class="dropdown-toggle"
                ng-class="{
                 'text-danger-light': (document.status_id == 4 || document.status_id == 1),
                 'text-success-light': (document.status_id == 3),
                 'text-warning-light': (document.status_id == 2)
-            }" dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
-            <ul class="dropdown-menu">
+            }" uib-dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
+            <ul class="dropdown-menu" uib-dropdown-menu>
                 <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
             </ul>
         </div>
     </td>
     <td>
-        <div class="dropdown" dropdown>
-            <a href class="dropdown-toggle {{prefix}}context-menu-toggle" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
-            <ul class="dropdown-menu pull-right">
+        <div class="dropdown" uib-dropdown>
+            <a href class="dropdown-toggle {{prefix}}context-menu-toggle" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
+            <ul class="dropdown-menu pull-right" uib-dropdown-menu>
                 <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
                 <li><a href ng-click="modalDocument(document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
                 <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>

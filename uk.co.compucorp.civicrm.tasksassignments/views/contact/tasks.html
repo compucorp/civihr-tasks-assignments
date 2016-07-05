@@ -46,7 +46,7 @@
             <i ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.taskListResolved, 'fa-chevron-up': isCollapsed.taskListResolved }"></i>
         </a>
     </h4>
-    <div collapse="isCollapsed.taskListResolved">
+    <div uib-collapse="isCollapsed.taskListResolved">
         <div class="well {{prefix}}spinner-container" ng-show="!taskListResolvedLoaded">
             Loading resolved tasks...
             <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
@@ -76,9 +76,9 @@
             <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>
         </div>
         <div class="col-xs-6">
-            <div class="dropdown" dropdown>
-                <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
-                <ul class="dropdown-menu pull-right">
+            <div class="dropdown" uib-dropdown>
+                <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
+                <ul class="dropdown-menu pull-right" uib-dropdown-menu>
                     <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>
                     <li><a href ng-click="modalReminder(task, 'task');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
                     <li ng-if="permissions.allowDelete"><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
@@ -137,7 +137,7 @@
                     class="fa"
                     ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
                     aria-hidden="true"></span> Show More</a>
-            <article class="row" collapse="isCollapsed">
+            <article class="row" uib-collapse="isCollapsed">
                 <div class="col-xs-12">
                     <div class="{{prefix}}task-more">
                         <div editable-ta="task.details"

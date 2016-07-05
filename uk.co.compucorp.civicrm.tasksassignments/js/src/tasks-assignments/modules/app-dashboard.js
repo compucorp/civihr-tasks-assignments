@@ -8,7 +8,7 @@ define([
 
     angular.module('civitasks.appDashboard', ['civitasks.run'])
         .config(['config', '$resourceProvider', '$httpProvider', '$logProvider',
-            '$urlRouterProvider', '$stateProvider', 'calendarConfigProvider', 'datepickerConfig', 'uiSelectConfig',
+            '$urlRouterProvider', '$stateProvider', 'calendarConfigProvider', 'uibDatepickerConfig', 'uiSelectConfig',
             function (config, $resourceProvider, $httpProvider, $logProvider,
                       $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig, uiSelectConfig) {
                 $logProvider.debugEnabled(config.DEBUG);

@@ -6,8 +6,8 @@ define([
 ], function (controllers) {
     'use strict';
 
-    controllers.controller('ModalTaskMigrateCtrl',['$scope', '$modalInstance', '$rootScope', '$rootElement', '$q',
-        '$log', '$filter', '$modal', '$dialog', '$timeout', 'AssignmentService', 'TaskService', 'Task', 'activityType',
+    controllers.controller('ModalTaskMigrateCtrl',['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q',
+        '$log', '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'TaskService', 'Task', 'activityType',
         'ContactService', 'UtilsService', 'settings',
         function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout,
                  AssignmentService, TaskService, Task, activityType, ContactService, UtilsService, settings) {
