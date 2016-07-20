@@ -2,7 +2,7 @@
     <div class="modal-header">
         <div class="row">
             <div class="col-xs-11">
-                <ui-select allow-clear
+                <ui-select ng-if="showCId" allow-clear
                            ng-model="task.target_contact_id[0]"
                            on-select="cacheContact($item)"
                            ng-required="true">
@@ -18,6 +18,7 @@
                         <small ng-bind="contact.description[0]"></small>
                     </ui-select-choices>
                 </ui-select>
+                <span ng-if="!showCId" ng-bind="cache.contact.obj[task.target_contact_id[0]].sort_name || 'No target contact'"></span>
             </div>
             <div class="col-xs-1">
                 <button type="button" class="close" ng-click="cancel()">

@@ -5,12 +5,12 @@ class CRM_Tasksassignments_Reminder
     const ACTIVITY_CONTACT_ASSIGNEE = 1;
     const ACTIVITY_CONTACT_CREATOR = 2;
     const ACTIVITY_CONTACT_TARGET = 3;
-    
+
     private static $_activityOptions = array();
     private static $_relatedExtensions = array(
         'appraisals' => false,
     );
-    
+
     private static function _setActivityOptions()
     {
         if (empty(self::$_activityOptions))
@@ -24,9 +24,12 @@ class CRM_Tasksassignments_Reminder
                 'field' => "activity_status_id",
             ));
             self::$_activityOptions['status'] = $statusResult['values'];
+            self::$_activityOptions['document_status'] = civicrm_api3('Document', 'getoptions', array(
+                'field' => "activity_status_id",
+            ))['values'];
         }
     }
-    
+
     private static function _checkRelatedExtensions()
     {
         $appraisalExtension = CRM_Core_DAO::executeQuery("SELECT id FROM civicrm_extension WHERE full_name = 'uk.co.compucorp.civicrm.appraisals' AND is_active = 1 LIMIT 1");
@@ -208,6 +211,7 @@ class CRM_Tasksassignments_Reminder
 
         foreach ($recipients as $recipient)
         {
+            $isTask = isset($activityResult['subject']);
             $contactId = $emailToContactId[$recipient];
             $activityName = implode(', ', $activityContacts['targets']['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
             $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
@@ -220,7 +224,7 @@ class CRM_Tasksassignments_Reminder
                 'activityTargets' => implode(', ', $activityContacts['targets']['links']),
                 'activityAssignee' => implode(', ', $activityContacts['assignees']['links']),
                 'previousAssignee' => $previousAssignee ? $previousAssignee['link'] : null,
-                'activityStatus' => self::$_activityOptions['status'][$activityResult['status_id']],
+                'activityStatus' => self::$_activityOptions[$isTask ? 'status': 'document_status'][$activityResult['status_id']],
                 'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
                 'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
                 'activityDetails' => isset($activityResult['details']) ? $activityResult['details'] : '',
@@ -228,7 +232,7 @@ class CRM_Tasksassignments_Reminder
                 'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-tasks',
                 'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-documents',
             ));
-            
+
             if($isDelete){
                 $subject = "Your Task ({$activityName}) is deleted";
             }else{
@@ -239,12 +243,12 @@ class CRM_Tasksassignments_Reminder
 
         return true;
     }
-    
+
     public static function sendDailyReminder()
     {
         self::_setActivityOptions();
         self::_checkRelatedExtensions();
-        
+
         $taSettings = civicrm_api3('TASettings', 'get');
         $settings = $taSettings['values'];
         $components = array("'CiviTask'");
@@ -252,7 +256,7 @@ class CRM_Tasksassignments_Reminder
         {
             $components[] = "'CiviDocument'";
         }
-        
+
         $incompleteStatuses = array();
         $incompleteStatusesResult = civicrm_api3('Task', 'getstatuses', array(
             'sequential' => 1,
@@ -262,22 +266,22 @@ class CRM_Tasksassignments_Reminder
         {
             $incompleteStatuses[] = $value['value'];
         }
-        
+
         $now = date('Y-m-d');
         $nbDay = date('N', strtotime($now));
         $sunday = new DateTime($now);
         $sunday->modify('+' . (7 - $nbDay) . ' days');
-        
+
         $to = $sunday->format('Y-m-d');
-        
+
         $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
-        
+
         $appraisalsContacts = array();
         if (self::$_relatedExtensions['appraisals'])
         {
             $appraisalsContacts = CRM_Appraisals_Reminder::getContactIds($now, $to);
         }
-        
+
         $contactsQuery = "SELECT activity_ids, contact_id, email
             FROM (
             SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
@@ -333,11 +337,11 @@ class CRM_Tasksassignments_Reminder
         $contactsQuery .= ") AS reminder
             GROUP BY reminder.contact_id
             ";
-        
+
         $contactsParams = array(
             1 => array($to, 'String'),
         );
-        
+
         $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery, $contactsParams);
         while ($contactsResult->fetch())
         {
@@ -351,14 +355,14 @@ class CRM_Tasksassignments_Reminder
             ));
             self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
         }
-        
+
         return true;
     }
-    
+
     private static function _getContactDailyReminderData($contactId, array $activityIds, $to, array $settings)
     {
         self::_checkRelatedExtensions();
-        
+
         $reminderData = array(
             'overdue' => array(),
             'today_mine' => array(),
@@ -374,7 +378,7 @@ class CRM_Tasksassignments_Reminder
             'birth_date' => 'Birthday',
         );
         $now = date('Y-m-d');
-        
+
         if (!empty($activityIds))
         {
             $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date,
@@ -448,7 +452,7 @@ class CRM_Tasksassignments_Reminder
                 }
             }
         }
-        
+
         $todayKeydatesCount = 0;
         if ($settings['keydates_tab']['value'])
         {
@@ -468,7 +472,7 @@ class CRM_Tasksassignments_Reminder
             }
         }
         $reminderData['today_keydates_count'] = $todayKeydatesCount;
-        
+
         if (self::$_relatedExtensions['appraisals'])
         {
             $appraisals = CRM_Appraisals_Reminder::get($now, $to, $contactId);
@@ -477,10 +481,10 @@ class CRM_Tasksassignments_Reminder
                 $reminderData['appraisals'][] = $appraisal;
             }
         }
-        
+
         return $reminderData;
     }
-    
+
     /**
      * @param int $contactId
      * @param string $email
@@ -494,16 +498,16 @@ class CRM_Tasksassignments_Reminder
         $domain     = CRM_Core_BAO_Domain::getDomain();
         $result     = false;
         $hookTokens = array();
-        
+
         $domainValues = array();
         $domainValues['name'] = CRM_Utils_Token::getDomainTokenReplacement('name', $domain);
-        
+
         $domainValue = CRM_Core_BAO_Domain::getNameAndEmail();
         $domainValues['email'] = $domainValue[1];
         $receiptFrom = '"' . $domainValues['name'] . '" <' . $domainValues['email'] . '>';
-        
+
         $body_text = CRM_Utils_String::htmlToText($body_html);
-        
+
         $params = array(array('contact_id', '=', $contactId, 0, 0));
         list($contact, $_) = CRM_Contact_BAO_Query::apiQuery($params);
 
@@ -594,7 +598,7 @@ class CRM_Tasksassignments_Reminder
         }
 
         $result = CRM_Utils_Mail::send($mailParams);
-        
+
         return $result;
     }
 }
