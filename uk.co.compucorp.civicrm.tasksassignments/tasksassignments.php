@@ -37,6 +37,10 @@ function tasksassignments_civicrm_install() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
 function tasksassignments_civicrm_uninstall() {
+  // PCHR-1263 : hrcase should not be installed/enabled without Task & Assignments extension
+  if (tasksassignments_checkHrcase())  {
+    tasksassignments_extensionsPageRedirect();
+  }
   _tasksassignments_civix_civicrm_uninstall();
 }
 
@@ -59,6 +63,10 @@ function tasksassignments_civicrm_enable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
  */
 function tasksassignments_civicrm_disable() {
+  // PCHR-1263 : hrcase should not be installed/enabled without Task & Assignments extension
+  if (tasksassignments_checkHrcase())  {
+    tasksassignments_extensionsPageRedirect();
+  }
   _toggleMenuItems(false);
   if (_isCaseEnabled()) { _toggleCaseMenuItems(true); }
 
@@ -243,4 +251,35 @@ function _toggleCaseMenuItems($activate = true) {
   $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name = 'Cases' AND parent_id IS NULL";
 
   CRM_Core_DAO::executeQuery($sql);
+}
+
+/**
+ * check if hrcase extension is installed or enabled
+ *
+ * @return int
+ */
+function tasksassignments_checkHrcase()  {
+  $isEnabled = CRM_Core_DAO::getFieldValue(
+    'CRM_Core_DAO_Extension',
+    'org.civicrm.hrcase',
+    'is_active',
+    'full_name'
+  );
+  return $isEnabled;
+}
+
+/**
+ * redirect to extension list page and show error notification if hrcase is installed/enabled
+ *
+ */
+function tasksassignments_extensionsPageRedirect()  {
+  $message = ts("You should disable/uninstall hrcase extension first");
+  CRM_Core_Session::setStatus($message, ts('Cannot disable/uninstall extension'), 'error');
+  $url = CRM_Utils_System::url(
+    'civicrm/admin/extensions',
+    http_build_query([
+      'reset' => 1
+    ])
+  );
+  CRM_Utils_System::redirect($url);
 }

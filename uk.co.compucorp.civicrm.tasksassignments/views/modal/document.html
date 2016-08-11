@@ -201,13 +201,13 @@
                 </div>
             </div>
             <div class="row" ng-show="expanded">
-                <label class="col-xs-12 col-sm-6" ng-show="!document.id && !showStatusField">
+                <label class="col-xs-12 col-sm-6" ng-hide="statusFieldVisible">
                     <span class="form-control-static">
-                        <a href class="btn btn-indent" ng-click="showStatusField = true;">Set Status</a>
+                        <a href class="btn btn-indent" ng-click="showStatusField()">Set Status</a>
                     </span>
                 </label>
 
-                <div class="col-xs-12 col-sm-6" ng-show="document.status_id || showStatusField">
+                <div class="col-xs-12 col-sm-6" ng-show="statusFieldVisible">
                     <div class="crm_custom-select crm_custom-select--full">
                         <select
                             ng-required
