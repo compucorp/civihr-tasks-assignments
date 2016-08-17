@@ -41,24 +41,12 @@
                             <span class="{$prefix}sidebar-main-title">Documents</span>
                         </a>
                     </li>
-                    <li ng-if="settings.extEnabled.assignments" ng-class="{literal}{ active: isActive('assignments')}{/literal}">
-                        <a href="#/assignments">
-                            <i class="fa fa-briefcase"></i>
-                            <span class="{$prefix}sidebar-main-title">Assignments</span>
-                        </a>
-                    </li>
                     <li ng-class="{literal}{ active: isActive('calendar')}{/literal}">
                         <a href="#/calendar">
                             <i class="fa fa-calendar"></i>
                             <span class="{$prefix}sidebar-main-title">Calendar</span>
                         </a>
                     </li>
-                    <!--<li ng-class="{literal}{ active: isActive('reports')}{/literal}">
-                        <a href="#/reports">
-                            <i class="fa fa-bar-chart"></i>
-                            <span class="{$prefix}sidebar-main-title">Reports</span>
-                        </a>
-                    </li>-->
                     <li ng-if="settings.tabEnabled.keyDates == '1'" ng-class="{literal}{ active: isActive('keyDates')}{/literal}">
                         <a href="#/key-dates">
                             <i class="fa fa-birthday-cake"></i>
