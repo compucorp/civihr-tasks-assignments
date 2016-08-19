@@ -492,7 +492,10 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     $this->_installActivityTypes('CiviDocument', array(
       'VISA',
       'Passport',
-      'Government Photo ID'
+      'Government Photo ID',
+      'Driving licence',
+      'Identity card',
+      'Certificate of sponsorship (COS)'
     ));
 
     return TRUE;
