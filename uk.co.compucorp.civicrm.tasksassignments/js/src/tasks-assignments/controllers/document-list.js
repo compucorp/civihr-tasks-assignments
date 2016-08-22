@@ -113,15 +113,15 @@ define([
             };
 
             $scope.filterParams = {
-                contactId: null,
-                documentStatus: [],
-                ownership: null,
-                dateRange: {
-                    from: null,
-                    until: null
-                },
-                due: null,
-                assignmentType: []
+              contactId: null,
+              documentStatus: [],
+              ownership: $state.params.ownership ||  null,
+              dateRange: {
+                from: null,
+                until: null
+              },
+              due: null,
+              assignmentType: []
             };
 
             $scope.filterParamsHolder = {

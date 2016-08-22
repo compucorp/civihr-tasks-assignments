@@ -7,13 +7,25 @@
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
                   <li role="presentation">
-                    <a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByOwnership:filterParams.ownership).length"></span></a>
+                    <a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>
+                      {{label.overdue}}
+                      <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i>
+                      <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByOwnership:filterParams.ownership).length"></span>
+                    </a>
                   </li>
                   <li role="presentation">
-                    <a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByOwnership:filterParams.ownership).length"></span></a>
+                    <a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>
+                      {{label.dueToday}}
+                      <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i>
+                      <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByOwnership:filterParams.ownership).length"></span>
+                    </a>
                   </li>
                   <li role="presentation">
-                    <a href ng-model="filterParams.due"  uib-btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByOwnership:filterParams.ownership).length"></span></a>
+                    <a href ng-model="filterParams.due"  uib-btn-radio="'dueThisWeek'" uncheckable>
+                      {{label.dueThisWeek}}
+                      <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i>
+                      <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByOwnership:filterParams.ownership).length"></span>
+                    </a>
                   </li>
                 </ul>
                 <hr>

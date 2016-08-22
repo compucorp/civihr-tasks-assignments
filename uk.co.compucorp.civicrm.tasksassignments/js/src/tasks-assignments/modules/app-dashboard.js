@@ -35,31 +35,16 @@ define([
                       }
                     })
                     .state('tasks.my', {
-                        url: '/my',
-                        params: {
-                            userRole: {
-                                field: 'assignee_contact_id',
-                                isEqual: true
-                            }
-                        }
+                      url: '/my',
+                      params: { ownership: 'assigned' }
                     })
                     .state('tasks.delegated', {
-                        url: '/delegated',
-                        params: {
-                            userRole: {
-                                field: 'assignee_contact_id',
-                                isEqual: false
-                            }
-                        }
+                      url: '/delegated',
+                      params: { ownership: 'delegated' }
                     })
                     .state('tasks.all', {
-                        url: '/all',
-                        params: {
-                            userRole: {
-                                field: null,
-                                isEqual: null
-                            }
-                        }
+                      url: '/all',
+                      params: { ownership: null }
                     })
                     .state('documents', {
                         url: '/documents',
@@ -190,7 +175,8 @@ define([
                                   'status_id': { 'NOT IN': config.status.resolve.TASK }
                                 })
                               ]).then(function (results) {
-                                deferred.resolve(_(results[0]).assign(results[1]).values().value());
+                                var mergedResults = _(results[0]).assign(results[1]);
+                                deferred.resolve(mergedResults.values().value());
                               });
 
                               return deferred.promise;
