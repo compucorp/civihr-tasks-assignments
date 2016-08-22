@@ -6,31 +6,34 @@
             </div>
             <div class="panel-body">
                 <div class="{{prefix}}filter-date">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation">
-                            <a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>
-                                {{label.overdue}}
-                                <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i>
-                                <span class="badge badge-danger"
-                                      ng-bind="(taskListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
-                            </a>
-                        </li>
-                        <li role="presentation">
-                            <a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>
-                                {{label.dueToday}}
-                                <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i>
-                                <span class="badge badge-primary"
-                                      ng-bind="(taskListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
-                            </a>
-                        </li>
-                        <li role="presentation">
-                            <a href ng-model="filterParams.due" uib-btn-radio="'dueThisWeek'" uncheckable>
-                                {{label.dueThisWeek}}
-                                <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i>
-                                <span class="badge badge-primary"
-                                      ng-bind="(taskListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span>
-                            </a>
-                        </li>
+                  <ul class="nav nav-pills nav-stacked">
+                      <li role="presentation">
+                        <a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>
+                          {{label.overdue}}
+                          <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i>
+                          <span
+                            class="badge badge-danger"
+                            ng-bind="(taskListOngoing | filterByDue:'overdue' | filterByOwnership:filterParams.ownership).length"></span>
+                        </a>
+                      </li>
+                      <li role="presentation">
+                        <a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>
+                          {{label.dueToday}}
+                          <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i>
+                          <span
+                            class="badge badge-primary"
+                            ng-bind="(taskListOngoing | filterByDue:'dueToday' | filterByOwnership:filterParams.ownership).length"></span>
+                        </a>
+                      </li>
+                      <li role="presentation">
+                        <a href ng-model="filterParams.due" uib-btn-radio="'dueThisWeek'" uncheckable>
+                          {{label.dueThisWeek}}
+                          <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i>
+                          <span
+                            class="badge badge-primary"
+                            ng-bind="(taskListOngoing | filterByDue:'dueThisWeek' | filterByOwnership:filterParams.ownership).length"></span>
+                        </a>
+                      </li>
                     </ul>
                     <hr>
                     <a href ng-click="isCollapsed.filterDates = !isCollapsed.filterDates"
@@ -91,34 +94,38 @@
                                 <h3 class="panel-title">{{label[filterParams.due]}}</h3>
                             </div>
                             <div class="col-xs-12 col-sm-6 text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <a ui-sref="tasks.my"
-                                       class="btn btn-gray active panel-filter__filter"
-                                       ng-model="filterParams.userRole"
-                                       uib-btn-radio="{
-                                            field: 'assignee_contact_id',
-                                            isEqual: true
-                                        }">
-                                        My Tasks ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByUserRole:'assignee_contact_id').length}})
-                                    </a>
-                                    <a ui-sref="tasks.delegated"
-                                       class="btn btn-gray panel-filter__filter"
-                                       ng-model="filterParams.userRole"
-                                       uib-btn-radio="{
-                                            field: 'assignee_contact_id',
-                                            isEqual: false
-                                        }">
-                                        Delegated Tasks ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByUserRole:'assignee_contact_id':false).length}})
-                                    </a>
-                                    <a ui-sref="tasks.all"
-                                       class="btn btn-gray panel-filter__filter"
-                                       ng-model="filterParams.userRole"
-                                       uib-btn-radio="{
-                                            field: null,
-                                            isEqual: null
-                                        }">All
-                                    </a>
-                                </div>
+                              <div class="btn-group btn-group-sm">
+                                <a
+                                  ui-sref="tasks.my"
+                                  class="btn btn-gray active panel-filter__filter"
+                                  ng-model="filterParams.ownership"
+                                  uib-btn-radio="'assigned'">
+                                    My Tasks
+                                    <span>
+                                      ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'assigned').length}})
+                                    </span>
+                                </a>
+                                <a
+                                  ui-sref="tasks.delegated"
+                                  class="btn btn-gray panel-filter__filter"
+                                  ng-model="filterParams.ownership"
+                                  uib-btn-radio="'delegated'">
+                                    Delegated Tasks
+                                    <span>
+                                      ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'delegated').length}})
+                                    </span>
+                                </a>
+                                <a
+                                  ui-sref="tasks.all"
+                                  class="btn btn-gray panel-filter__filter"
+                                  ng-model="filterParams.ownership"
+                                  uib-btn-radio="null">
+                                  All
+                                  <span>
+                                    ({{(taskListOngoing | filterByStatus:cache.taskStatusResolve:false).length}})
+                                  </span>
+                                </a>
+                              </div>
                             </div>
                             <div class="col-xs-12 col-sm-3 text-right">
                                 <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced"
@@ -180,17 +187,18 @@
                     </div>
                 </div>
                 <ul class="{{prefix}}list-task">
-                    <li ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterByStatus:cache.taskStatusResolve:false) | filterByDue:filterParams.due:filterParams.dateRange | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual | filterByAssignmentType:filterParams.assignmentType | filterByContactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
-                        ng-controller="TaskCtrl"
-                        ng-class="{
-                            '{{prefix}}task-completed': task.completed,
-                            '{{prefix}}task-due': task.due
-                        }"
-                        ng-include
-                        src="'task.html'"
-                        ct-spinner
-                        ct-spinner-id="task{{task.id}}">
-                    </li>
+                  <li
+                    ng-repeat="task in taskListFiltered = (taskListUnlimited = (taskListOngoing = (taskList | filterByStatus:cache.taskStatusResolve:false) | filterByDue:filterParams.due:filterParams.dateRange | filterByOwnership:filterParams.ownership | filterByAssignmentType:filterParams.assignmentType | filterByContactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: taskListLimit)"
+                    ng-controller="TaskCtrl"
+                    ng-class="{
+                        '{{prefix}}task-completed': task.completed,
+                        '{{prefix}}task-due': task.due
+                    }"
+                    ng-include
+                    src="'task.html'"
+                    ct-spinner
+                    ct-spinner-id="task{{task.id}}">
+                  </li>
                 </ul>
             </div>
         </div>
