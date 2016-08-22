@@ -438,26 +438,6 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   }
 
   /**
-   * Disables the Case menu items if Tasks&Assignments is enabled
-   *
-   * @return {boolean}
-   */
-  public function upgrade_1017()
-  {
-    $isEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.tasksassignments', 'is_active', 'full_name');
-    $isCaseEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'org.civicrm.hrcase', 'is_active', 'full_name');
-
-    if ($isEnabled && $isCaseEnabled) {
-      CRM_Core_DAO::executeQuery("UPDATE civicrm_navigation SET is_active=0 WHERE name = 'Cases' AND parent_id IS NULL");
-      CRM_Core_BAO_Navigation::resetNavigation();
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
    * Make sure that the Tasks and Assignments main menu item
    * (and subsequently the Dashboard menu item) are restricted to only the users
    * with 'access Tasks and Assignments' permission
@@ -482,6 +462,22 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     }
 
     return false;
+  }
+
+  /**
+   * Disables the Case menu items if Tasks&Assignments is enabled
+   *
+   * @return {boolean}
+   */
+  public function upgrade_1019() {
+    $isEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.tasksassignments', 'is_active', 'full_name');
+
+    if ($isEnabled) {
+      CRM_Core_DAO::executeQuery("UPDATE civicrm_navigation SET is_active=0 WHERE name = 'Cases' AND parent_id IS NULL");
+      CRM_Core_BAO_Navigation::resetNavigation();
+    }
+
+    return true;
   }
 
     public function uninstall()
