@@ -1,9 +1,10 @@
 define([
     'common/angular',
     'common/moment',
+    'common/lodash',
     'common/services/angular-date/date-format',
     'tasks-assignments/modules/run'
-], function (angular, moment) {
+], function (angular, moment, _) {
     'use strict';
 
     angular.module('civitasks.appDashboard', ['civitasks.run'])
@@ -175,37 +176,24 @@ define([
                                 return deferred.promise;
                             }],
                             taskList: ['$q', 'TaskService', function ($q, TaskService) {
-                                var deferred = $q.defer();
+                              var deferred = $q.defer();
 
-                                $q.all([
-                                    TaskService.get({
-                                        'sequential': 0,
-                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
-                                        'status_id': {
-                                            'NOT IN': config.status.resolve.TASK
-                                        }
-                                    }),
-                                    TaskService.get({
-                                        'sequential': 0,
-                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
-                                        'status_id': {
-                                            'NOT IN': config.status.resolve.TASK
-                                        }
-                                    })
-                                ]).then(function (results) {
-                                    var taskId, taskList = [];
+                              $q.all([
+                                TaskService.get({
+                                  'sequential': 0,
+                                  'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                  'status_id': { 'NOT IN': config.status.resolve.TASK }
+                                }),
+                                TaskService.get({
+                                  'sequential': 0,
+                                  'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                                  'status_id': { 'NOT IN': config.status.resolve.TASK }
+                                })
+                              ]).then(function (results) {
+                                deferred.resolve(_(results[0]).assign(results[1]).values().value());
+                              });
 
-                                    angular.extend(results[0], results[1]);
-
-                                    for (taskId in results[0]) {
-                                        taskList.push(results[0][taskId]);
-                                    }
-
-                                    deferred.resolve(taskList);
-
-                                });
-
-                                return deferred.promise;
+                              return deferred.promise;
                             }]
                         }
                     })
