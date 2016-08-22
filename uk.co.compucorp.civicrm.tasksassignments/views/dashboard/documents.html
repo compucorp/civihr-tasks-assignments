@@ -6,9 +6,15 @@
         <div class="panel-body">
             <div class="{{prefix}}filter-date">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation"><a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
-                    <li role="presentation"><a href ng-model="filterParams.due"  uib-btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual).length"></span></a></li>
+                  <li role="presentation">
+                    <a href ng-model="filterParams.due" uib-btn-radio="'overdue'" uncheckable>{{label.overdue}} <i class="fa fa-calendar" ng-click="viewInCalendar('month');"></i> <span class="badge badge-danger" ng-bind="(documentListOngoing | filterByDue:'overdue' | filterByOwnership:filterParams.ownership).length"></span></a>
+                  </li>
+                  <li role="presentation">
+                    <a href ng-model="filterParams.due" uib-btn-radio="'dueToday'" uncheckable>{{label.dueToday}} <i class="fa fa-calendar" ng-click="viewInCalendar('day');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueToday' | filterByOwnership:filterParams.ownership).length"></span></a>
+                  </li>
+                  <li role="presentation">
+                    <a href ng-model="filterParams.due"  uib-btn-radio="'dueThisWeek'" uncheckable>{{label.dueThisWeek}} <i class="fa fa-calendar" ng-click="viewInCalendar('week');"></i> <span class="badge badge-primary" ng-bind="(documentListOngoing | filterByDue:'dueThisWeek' | filterByOwnership:filterParams.ownership).length"></span></a>
+                  </li>
                 </ul>
                 <hr>
                 <a href
@@ -78,27 +84,30 @@
                     </div>
                     <div class="col-xs-12 col-sm-6 text-center">
                         <div class="btn-group btn-group-sm">
-                            <a ui-sref="documents.my"
-                               class="btn btn-gray active panel-filter__filter"
-                               ng-model="filterParams.userRole"
-                               uib-btn-radio="{
-                                   field: 'assignee_contact_id',
-                                   isEqual: true
-                               }">My Docs ({{(documentListOngoing | filterByUserRole:'assignee_contact_id').length}})</a>
-                            <a ui-sref="documents.delegated"
-                               class="btn btn-gray panel-filter__filter"
-                               ng-model="filterParams.userRole"
-                               uib-btn-radio="{
-                                   field: 'assignee_contact_id',
-                                   isEqual: false
-                               }">Delegated Docs ({{(documentListOngoing | filterByUserRole:'assignee_contact_id':false).length}})</a>
-                            <a ui-sref="documents.all"
-                               class="btn btn-gray panel-filter__filter"
-                               ng-model="filterParams.userRole"
-                               uib-btn-radio="{
-                                   field: null,
-                                   isEqual: null
-                               }">All</a>
+                          <a
+                            ui-sref="documents.my"
+                            class="btn btn-gray active panel-filter__filter"
+                            ng-model="filterParams.ownership"
+                            uib-btn-radio="'assigned'">
+                            My Docs
+                            <span>({{(documentListOngoing | filterByOwnership:'assigned').length}})</span>
+                          </a>
+                          <a
+                            ui-sref="documents.delegated"
+                            class="btn btn-gray panel-filter__filter"
+                            ng-model="filterParams.ownership"
+                            uib-btn-radio="'delegated'">
+                            Delegated Docs
+                            <span>({{(documentListOngoing | filterByOwnership:'delegated').length}})</span>
+                          </a>
+                          <a
+                            ui-sref="documents.all"
+                            class="btn btn-gray panel-filter__filter"
+                            ng-model="filterParams.ownership"
+                            uib-btn-radio="null">
+                            All
+                            <span>({{(documentListOngoing).length}})</span>
+                          </a>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-3 text-right">
@@ -193,35 +202,36 @@
         </div>
         <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="documentList">
             <table class="table table-striped {{prefix}}table-documents">
-                <thead>
-                    <tr>
-                        <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
-                        <th>Type</th>
-                        <th>Target Contact</th>
-                        <th ng-if="settings.extEnabled.assignments">Assignment</th>
-                        <th>Due Date</th>
-                        <th>Expiry Date</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                 <tr ng-repeat="document in
-                 documentListPaginated = (documentListFiltered = (documentListOngoing = (documentList
+              <thead>
+                <tr>
+                  <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
+                  <th>Type</th>
+                  <th>Target Contact</th>
+                  <th ng-if="settings.extEnabled.assignments">Assignment</th>
+                  <th>Due Date</th>
+                  <th>Expiry Date</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  ng-repeat="document in
+                    documentListPaginated = (documentListFiltered = (documentListOngoing = (documentList
                     | filterByStatus:cache.documentStatusResolve:false)
-                        | filterByDue:filterParams.due:filterParams.dateRange
-                        | filterByUserRole:filterParams.userRole.field:filterParams.userRole.isEqual
-                        | filterByAssignmentType:filterParams.assignmentType
-                        | filterByContactId:filterParams.contactId
-                        | filterByStatus:filterParams.documentStatus
-                        | orderBy: 'activity_date_time')
-                            | offset: (pagination.currentPage-1)*pagination.itemsPerPage
-                            | limitTo: pagination.itemsPerPage)"
-                        ng-controller="DocumentCtrl"
-                        ng-include
-                        src="'document.html'">
-                    </tr>
-                </tbody>
+                    | filterByDue:filterParams.due:filterParams.dateRange
+                    | filterByOwnership:filterParams.ownership
+                    | filterByAssignmentType:filterParams.assignmentType
+                    | filterByContactId:filterParams.contactId
+                    | filterByStatus:filterParams.documentStatus
+                    | orderBy: 'activity_date_time')
+                    | offset: (pagination.currentPage-1)*pagination.itemsPerPage
+                    | limitTo: pagination.itemsPerPage)"
+                  ng-controller="DocumentCtrl"
+                  ng-include
+                  src="'document.html'">
+                </tr>
+              </tbody>
             </table>
             <div class="clearfix"></div>
             <nav class="row" ng-show="(documentListFiltered.length > pagination.itemsPerPage)">
