@@ -29,6 +29,7 @@ define([
     'tasks-assignments/directives/directives',
     'tasks-assignments/directives/civi-events',
     'tasks-assignments/directives/iframe',
+    'tasks-assignments/directives/sidebar-filters',
     'tasks-assignments/directives/spinner',
     'tasks-assignments/directives/validate',
     'tasks-assignments/filters/filters',
