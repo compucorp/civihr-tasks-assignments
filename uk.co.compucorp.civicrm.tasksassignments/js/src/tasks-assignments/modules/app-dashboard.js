@@ -22,43 +22,16 @@ define([
                         }]
                     })
                     .state('tasks', {
-                        url: '/tasks',
-                        controller: 'TaskListCtrl',
-                        templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
-                        resolve: {
-                            taskList: ['$q', 'TaskService', function ($q, TaskService) {
-                                var deferred = $q.defer();
-
-                                $q.all([
-                                    TaskService.get({
-                                        'sequential': 0,
-                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
-                                        'status_id': {
-                                            'NOT IN': config.status.resolve.TASK
-                                        }
-                                    }),
-                                    TaskService.get({
-                                        'sequential': 0,
-                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
-                                        'status_id': {
-                                            'NOT IN': config.status.resolve.TASK
-                                        }
-                                    })
-                                ]).then(function (results) {
-                                    var taskId, taskList = [];
-
-                                    angular.extend(results[0], results[1]);
-
-                                    for (taskId in results[0]) {
-                                        taskList.push(results[0][taskId]);
-                                    }
-
-                                    deferred.resolve(taskList);
-                                });
-
-                                return deferred.promise;
-                            }]
-                        }
+                      url: '/tasks',
+                      controller: 'TaskListCtrl',
+                      templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
+                      resolve: {
+                        taskList: ['TaskService', function (TaskService) {
+                          return TaskService.get({
+                            'status_id': { 'NOT IN': config.status.resolve.TASK }
+                          });
+                        }]
+                      }
                     })
                     .state('tasks.my', {
                         url: '/my',
