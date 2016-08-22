@@ -39,7 +39,7 @@ define([
     'tasks-assignments/filters/date-type',
     'tasks-assignments/filters/due',
     'tasks-assignments/filters/offset',
-    'tasks-assignments/filters/user-role',
+    'tasks-assignments/filters/ownership',
     'tasks-assignments/filters/status',
     'tasks-assignments/services/services',
 ], function () {
