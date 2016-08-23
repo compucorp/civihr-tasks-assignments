@@ -47,71 +47,28 @@ define([
                       params: { ownership: null }
                     })
                     .state('documents', {
-                        url: '/documents',
-                        controller: 'DocumentListCtrl',
-                        templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
-                        resolve: {
-                            documentList: ['$q', 'DocumentService', function ($q, DocumentService) {
-                                var deferred = $q.defer();
-
-                                $q.all([
-                                    DocumentService.get({
-                                        'sequential': 0,
-                                        'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
-                                        'status_id': {
-                                            'NOT IN': config.status.resolve.DOCUMENT
-                                        }
-                                    }),
-                                    DocumentService.get({
-                                        'sequential': 0,
-                                        'source_contact_id': config.LOGGED_IN_CONTACT_ID,
-                                        'status_id': {
-                                            'NOT IN': config.status.resolve.DOCUMENT
-                                        }
-                                    })
-                                ]).then(function (results) {
-                                    var documentId, documentList = [];
-
-                                    angular.extend(results[0], results[1]);
-
-                                    for (documentId in results[0]) {
-                                        documentList.push(results[0][documentId]);
-                                    }
-
-                                    deferred.resolve(documentList);
-
-                                });
-
-                                return deferred.promise;
-                            }]
-                        }
+                      url: '/documents',
+                      controller: 'DocumentListCtrl',
+                      templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
+                      resolve: {
+                        documentList: ['DocumentService', function (DocumentService) {
+                          return DocumentService.get({
+                            'status_id': { 'NOT IN': config.status.resolve.DOCUMENT }
+                          });
+                        }]
+                      }
                     })
                     .state('documents.my', {
-                        url: '/my',
-                        params: {
-                            userRole: {
-                                field: 'assignee_contact_id',
-                                isEqual: true
-                            }
-                        }
+                      url: '/my',
+                      params: { ownership: 'assigned' }
                     })
                     .state('documents.delegated', {
-                        url: '/delegated',
-                        params: {
-                            userRole: {
-                                field: 'assignee_contact_id',
-                                isEqual: false
-                            }
-                        }
+                      url: '/delegated',
+                      params: { ownership: 'delegated' }
                     })
                     .state('documents.all', {
-                        url: '/all',
-                        params: {
-                            userRole: {
-                                field: null,
-                                isEqual: null
-                            }
-                        }
+                      url: '/all',
+                      params: { ownership: null }
                     })
                     .state('assignments', {
                         url: '/assignments',
