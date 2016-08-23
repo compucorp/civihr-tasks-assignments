@@ -9,6 +9,11 @@ require_once 'CiviTest/CiviUnitTestCase.php';
 class Api_DocumentTest extends CiviUnitTestCase {
   private $_documentTypeId = null;
 
+  function __construct() {
+    parent::__construct();
+    self::cleanDB();
+  }
+
   function setUp() {
     parent::setUp();
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
@@ -65,5 +70,79 @@ class Api_DocumentTest extends CiviUnitTestCase {
       'source_contact_id' => 1,
       'assignee_contact_id' => 2,
     ));
+  }
+
+  /**
+   * Test 'clonedocuments' API call on Document entity.
+   * We create two test documents. First one should be cloned as it
+   * meets 'clonedocuments' logic requirements.
+   */
+  function testCreateDocumentClone() {
+    // Setting 'days_to_create_a_document_clone' to 5.
+    civicrm_api3('TASettings', 'set', array(
+      'sequential' => 1,
+      'fields' => array('days_to_create_a_document_clone' => 5),
+    ));
+
+    // Creating a test Contact.
+    $contact = civicrm_api3('Contact', 'create', array(
+      'sequential' => 1,
+      'contact_type' => 'Individual',
+      'display_name' => 'Test Contact',
+      'email' => 'test@email3215155.com',
+    ));
+
+    // Defining test parameters.
+    $details1 = 'Some test Document 1 - clone test';
+    $details2 = 'Some test Document 2 - clone test';
+    // Setting due date to 10 days ago.
+    $dueDate = (new DateTime())->sub(new DateInterval('P10D'))->format('Y-m-d');
+    // Setting expire date in 5 days.
+    $expireDate1 = (new DateTime())->add(new DateInterval('P5D'))->format('Y-m-d');
+    // Setting second expire date in 6 days.
+    $expireDate2 = (new DateTime())->add(new DateInterval('P6D'))->format('Y-m-d');
+
+    // Creating a test Document 1.
+    civicrm_api3('Document', 'create', array(
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => $contact['id'],
+      'target_contact_id' => [$contact['id']],
+      'assignee_contact_id' => [$contact['id']],
+      'details' => $details1,
+      'activity_date_time' => $dueDate,
+      'expire_date' => $expireDate1,
+    ));
+    // Creating a test Document 2.
+    civicrm_api3('Document', 'create', array(
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => $contact['id'],
+      'target_contact_id' => [$contact['id']],
+      'assignee_contact_id' => [$contact['id']],
+      'details' => $details2,
+      'activity_date_time' => $dueDate,
+      'expire_date' => $expireDate2,
+    ));
+
+    // Calling cloneDocuments() function (simulate scheduled job which runs daily).
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    // Now we should have one Document ('Some test Document 1') cloned (as
+    // its expire_date equals current date + 'days_to_create_a_document_clone'
+    // setting value.
+    // So first - we check if $clonedCount equals 1.
+    $this->assertEquals(1, $clonedCount['values']);
+
+    // Then we check if there is properly cloned Document 1.
+    $clonedDocument1 = civicrm_api3('Document', 'get', array(
+      'details' => $details1,
+      'activity_date_time' => $expireDate1,
+    ));
+    $this->assertEquals(1, $clonedDocument1['count']);
+
+    // And we check if there is no cloned Document 2.
+    $clonedDocument2 = civicrm_api3('Document', 'get', array(
+      'details' => $details2,
+      'activity_date_time' => $expireDate2,
+    ));
+    $this->assertEquals(0, $clonedDocument2['count']);
   }
 }

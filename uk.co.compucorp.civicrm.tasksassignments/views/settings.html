@@ -84,6 +84,21 @@
                     </div>
                 </div>
                 <hr>
+                <div class="form-group">
+                    <div class="col-xs-10 col-sm-5 col-lg-3">
+                        <p class="form-control-static">
+                            Number of days to create a document clone before original expiry date:
+                        </p>
+                    </div>
+                    <div class="col-xs-1 col-sm-1">
+                        <input
+                                type="number"
+                                min="0"
+                                class="form-control"
+                                ng-model="settings.daysToCreateADocumentClone">
+                    </div>
+                </div>
+                <hr>
                 <a href class="btn btn-primary" ng-click="modalTaskMigrate();">
                     <span class="fa fa-database" aria-hidden="true"></span> Migrate Tasks
                 </a>

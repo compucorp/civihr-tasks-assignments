@@ -480,6 +480,70 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return true;
   }
 
+  /*
+   * Install Tasks Assignments 'days_to_create_a_document_clone' setting field.
+   * It keeps a number of days to create a document clone before original
+   * expiry date.
+   * 
+   * @return {boolean}
+   */
+  public function upgrade_1020() {
+    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'ta_settings', 'id', 'name');
+    if (!$optionGroupID) {
+      civicrm_api3('OptionGroup', 'create', array(
+        'name' => 'ta_settings',
+        'title' => 'Tasks and Assignments settings',
+        'is_active' => 1,
+        'is_reserved' => 1,
+      ));
+    }
+    $optionValue = civicrm_api3('OptionValue', 'get', array(
+      'sequential' => 1,
+      'option_group_id' => 'ta_settings',
+      'name' => "days_to_create_a_document_clone",
+    ));
+    if (empty($optionValue['id'])) {
+      civicrm_api3('OptionValue', 'create', array(
+        'option_group_id' => 'ta_settings',
+        'name' => 'days_to_create_a_document_clone',
+        'label' => 'Number of days to create a document clone before original expiry date',
+        'value' => 0,
+      ));
+    }
+
+    return TRUE;
+  }
+
+  /*
+   * Set up scheduled job which clones documents on pre-set days before
+   * their original expiry date.
+   * 
+   * @see PCHR-1365
+   * @return bool
+   */
+  public function upgrade_1021()
+  {
+    $dao = new CRM_Core_DAO_Job();
+    $dao->api_entity = 'document';
+    $dao->api_action = 'clonedocuments';
+    $dao->find(TRUE);
+    if (!$dao->id)
+    {
+      $dao = new CRM_Core_DAO_Job();
+      $dao->domain_id = CRM_Core_Config::domainID();
+      $dao->run_frequency = 'Daily';
+      $dao->parameters = null;
+      $dao->name = 'Clone Documents';
+      $dao->description = 'Clone any document on pre-set days before its original expiry date';
+      $dao->api_entity = 'document';
+      $dao->api_action = 'clonedocuments';
+      $dao->is_active = 1;
+      $dao->save();
+    }
+
+    return TRUE;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
