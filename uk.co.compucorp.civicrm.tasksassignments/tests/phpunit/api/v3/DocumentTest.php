@@ -74,8 +74,10 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
 
   /**
    * Test 'clonedocuments' API call on Document entity.
-   * We create two test documents. First one should be cloned as it
-   * meets 'clonedocuments' logic requirements.
+   * Create three test documents and then call clone action.
+   * First and third document should be cloned as they
+   * meet 'clonedocuments' logic requirements (their 'expire_date'
+   * is less than today date + 'days_to_create_a_document_clone' setting value.
    */
   function testCreateDocumentClone() {
     // Setting 'days_to_create_a_document_clone' to 5.
