@@ -506,7 +506,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       civicrm_api3('OptionValue', 'create', array(
         'option_group_id' => 'ta_settings',
         'name' => 'days_to_create_a_document_clone',
-        'label' => 'Number of days within a Document clone should be created before its original expiry date',
+        'label' => "Number of days before Document's expire date when a Document clone should be created",
         'value' => 0,
       ));
     }

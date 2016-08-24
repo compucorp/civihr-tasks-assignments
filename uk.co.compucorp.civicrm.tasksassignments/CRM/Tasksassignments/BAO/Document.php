@@ -64,7 +64,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
   }
 
   /**
-   * Search for approved Documents having expire date between now and given $expireDate
+   * Search for approved Documents having expire date less than given $expireDate
    * and create their clone.
    * Return a count of cloned documents.
    * 
@@ -78,7 +78,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       . "LEFT JOIN civicrm_option_group og ON og.name = 'activity_type' "
       . "LEFT JOIN civicrm_option_value ov ON ov.option_group_id = og.id AND ov.component_id = c.id "
       . "LEFT JOIN civicrm_activity a ON a.id = ac.entity_id "
-      . "WHERE DATE(ac.expire_date) >= CURDATE() AND DATE(ac.expire_date) <= %1 AND ac.clone_date IS NULL AND a.is_deleted = 0 AND a.status_id = 3 AND ov.component_id = c.id AND a.activity_type_id = ov.value";
+      . "WHERE DATE(ac.expire_date) <= %1 AND ac.clone_date IS NULL AND a.is_deleted = 0 AND a.status_id = 3 AND ov.component_id = c.id AND a.activity_type_id = ov.value";
     $params = array(
       1 => array($expireDate->format('Y-m-d'), 'String'),
     );
