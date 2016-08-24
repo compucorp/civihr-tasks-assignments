@@ -111,6 +111,7 @@ class Api_DocumentTest extends CiviUnitTestCase {
       'details' => $details1,
       'activity_date_time' => $dueDate,
       'expire_date' => $expireDate1,
+      'status_id' => 3,
     ));
     // Creating a test Document 2.
     civicrm_api3('Document', 'create', array(
@@ -121,6 +122,7 @@ class Api_DocumentTest extends CiviUnitTestCase {
       'details' => $details2,
       'activity_date_time' => $dueDate,
       'expire_date' => $expireDate2,
+      'status_id' => 3,
     ));
 
     // Calling cloneDocuments() function (simulate scheduled job which runs daily).

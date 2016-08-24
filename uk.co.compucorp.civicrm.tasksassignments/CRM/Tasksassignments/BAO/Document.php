@@ -73,9 +73,12 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    */
   protected static function cloneApprovedDocumentsWithExpireDate($expireDate) {
     $count = 0;
-    $query = 'SELECT ac.id, ac.entity_id FROM civicrm_value_activity_custom_fields_11 ac '
-      . 'LEFT JOIN civicrm_activity a ON a.id = ac.entity_id '
-      . 'WHERE DATE(ac.expire_date) = %1 AND a.status_id = 3';
+    $query = "SELECT ac.id, ac.entity_id FROM civicrm_value_activity_custom_fields_11 ac "
+      . "LEFT JOIN civicrm_component c ON c.name = 'CiviDocument' "
+      . "LEFT JOIN civicrm_option_group og ON og.name = 'activity_type' "
+      . "LEFT JOIN civicrm_option_value ov ON ov.option_group_id = og.id AND ov.component_id = c.id "
+      . "LEFT JOIN civicrm_activity a ON a.id = ac.entity_id "
+      . "WHERE DATE(ac.expire_date) = %1 AND a.is_deleted = 0 AND a.status_id = 3 AND ov.component_id = c.id AND a.activity_type_id = ov.value";
     $params = array(
       1 => array($expireDate, 'String'),
     );
