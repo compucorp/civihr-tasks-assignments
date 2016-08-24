@@ -6,7 +6,7 @@ require_once 'CiviTest/CiviUnitTestCase.php';
 /**
  * Class Api_DocumentTest
  */
-class Api_DocumentTest extends CiviUnitTestCase {
+class api_v3_DocumentTest extends CiviUnitTestCase {
   private $_documentTypeId = null;
 
   function __construct() {
