@@ -8,63 +8,72 @@
                         <div class="form-group">
                             <label class="col-xs-12 col-sm-2 control-label">Action:</label>
                             <div class="col-xs-12 col-sm-10">
-                                <div class="input-group">
-                                    <select class="form-control" ng-model="action">
-                                        <option value="">SELECT ACTION</option>
-                                        <option value="delete" ng-disabled="!permissions.allowDelete">Delete</option>
-                                    </select>
-                                        <span class="input-group-btn">
-                                          <a ng-click="apply(action, (actionApplyTo == 'all' ? documentListOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
-                                              Apply
-                                          </a>
-                                        </span>
-                                </div>
+                              <div class="input-group">
+                                <select class="form-control" ng-model="action">
+                                  <option value="">SELECT ACTION</option>
+                                  <option value="delete" ng-disabled="!permissions.allowDelete">Delete</option>
+                                </select>
+                                <span class="input-group-btn">
+                                  <a
+                                    class="btn btn-default"
+                                    ng-click="apply(action, (actionApplyTo == 'all' ? listOngoing : checklist.selected[pagination.currentPage]))">
+                                    Apply
+                                  </a>
+                                </span>
+                              </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-5 col-xs-offset-1">
-                        <label class="radio-inline">
-                            <input type="radio" ng-model="actionApplyTo" value="all"> All {{documentListFiltered.length}} Docs
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
-                        </label>
+                      <label class="radio-inline">
+                        <input type="radio" ng-model="actionApplyTo" value="all"> All {{listFiltered.length}} Docs
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" ng-model="actionApplyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
+                      </label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <table class="table table-striped {{prefix}}table-documents">
-        <thead>
+      <thead>
         <tr>
-            <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
-            <th>Type</th>
-            <th>Contact</th>
-            <th ng-if="settings.extEnabled.assignments">Assignment</th>
-            <th>Due Date</th>
-            <th>Expiry Date</th>
-            <th>Status</th>
-            <th></th>
+          <th class="{{prefix}}col-select">
+            <input
+              type="checkbox"
+              name="toggleAll"
+              ng-model="checklist.isCheckedAll[pagination.currentPage]"
+              ng-change="toggleAll(pagination.currentPage);">
+          </th>
+          <th>Type</th>
+          <th>Contact</th>
+          <th ng-if="settings.extEnabled.assignments">Assignment</th>
+          <th>Due Date</th>
+          <th>Expiry Date</th>
+          <th>Status</th>
+          <th></th>
         </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="document in documentListPaginated = (documentListOngoing = (documentList
-                    | filterByStatus:cache.documentStatusResolve:false
-                    | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
-                    | orderBy: 'activity_date_time')
-                        | offset: (pagination.currentPage-1)*pagination.itemsPerPage
-                        | limitTo: pagination.itemsPerPage)"
-            ng-controller="DocumentCtrl"
-            ng-include
-            src="'document.html'">
+      </thead>
+      <tbody>
+        <tr
+          ng-repeat="document in listPaginated = (listOngoing = (list
+            | filterByStatus:cache.documentStatusResolve:false
+            | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
+            | orderBy: 'activity_date_time')
+            | offset: (pagination.currentPage-1)*pagination.itemsPerPage
+            | limitTo: pagination.itemsPerPage)"
+          ng-controller="DocumentCtrl"
+          ng-include
+          src="'document.html'">
         </tr>
-        </tbody>
+      </tbody>
     </table>
     <div class="clearfix"></div>
-    <nav class="row" ng-show="(documentListOngoing.length > pagination.itemsPerPage)">
-        <div class="col-xs-12 text-center">
-            <uib-pagination boundary-links="true" total-items="documentListOngoing.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
-        </div>
+    <nav class="row" ng-show="(listOngoing.length > pagination.itemsPerPage)">
+      <div class="col-xs-12 text-center">
+        <uib-pagination boundary-links="true" total-items="listOngoing.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+      </div>
     </nav>
 </div>
 

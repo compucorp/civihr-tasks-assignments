@@ -1,0 +1,52 @@
+<div class="{{prefix}}filter-date">
+  <ul class="nav nav-pills nav-stacked">
+    <li role="presentation" ng-repeat="filter in dueFilters">
+      <a href ng-model="filterParams.due" uib-btn-radio="filter.value" uncheckable>
+        {{label[filter.value]}}
+        <i class="fa fa-calendar" ng-click="viewInCalendar(filter.calendarView)"></i>
+        <span class="badge badge-{{filter.badgeClass}}">
+          {{(list | filterByDue:filter.value | filterByOwnership:filterParams.ownership).length}}
+        </span>
+      </a>
+    </li>
+  </ul>
+  <hr>
+  <a href ng-click="isCollapsed.filterDates = !isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
+    <i class="fa" ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-right': isCollapsed.filterDates }"></i>
+    <em>OR</em> Select Dates
+  </a>
+  <div class="form-horizontal" uib-collapse="isCollapsed.filterDates">
+    <div class="form-group">
+      <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">
+        From
+      </label>
+      <div class="col-xs-12 col-sm-9 col-lg-7">
+        <input
+          is-open="dpOpened.filterDates.from"
+          uib-datepicker-popup="dd/MM/yyyy"
+          datepicker-options="datepickerOptions.from"
+          ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
+          ng-model="filterParamsHolder.dateRange.from"
+          id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">
+        Until
+      </label>
+      <div class="col-xs-12 col-sm-9  col-lg-7">
+        <input
+          is-open="dpOpened.filterDates.until"
+          uib-datepicker-popup="dd/MM/yyyy"
+          datepicker-options="datepickerOptions.until"
+          ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
+          ng-model="filterParamsHolder.dateRange.until"
+          id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+      </div>
+    </div>
+    <div ng-transclude></div>
+    <button class="btn btn-default btn-primary btn-block" ng-click="applySidebarFilters()">
+      Apply Filter
+    </button>
+  </div>
+</div>
