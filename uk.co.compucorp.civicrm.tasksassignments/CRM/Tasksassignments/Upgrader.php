@@ -534,7 +534,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       $dao->run_frequency = 'Daily';
       $dao->parameters = null;
       $dao->name = 'Clone Documents';
-      $dao->description = 'Clone any document on pre-set days before its original expiry date';
+      $dao->description = 'Clone any approved document on pre-set days before its original expiry date';
       $dao->api_entity = 'document';
       $dao->api_action = 'clonedocuments';
       $dao->is_active = 1;
