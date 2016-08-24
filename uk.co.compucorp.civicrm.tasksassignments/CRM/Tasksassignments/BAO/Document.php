@@ -33,7 +33,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
   }
 
   /**
-   * Clone documents if there are 'days_to_create_a_document_clone' days
+   * Clone documents if there are 'days_to_create_a_document_clone' days or less
    * before their expire date.
    * Return a count of cloned documents or NULL if 'days_to_create_a_document_clone'
    * is zero.
@@ -65,7 +65,8 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
   }
 
   /**
-   * Search for approved Documents with given expire date and create their clone.
+   * Search for approved Documents having expire date between now and given $expireDate
+   * and create their clone.
    * Return a count of cloned documents.
    * 
    * @param string $expireDate (date in Y-m-d format)
@@ -78,7 +79,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       . "LEFT JOIN civicrm_option_group og ON og.name = 'activity_type' "
       . "LEFT JOIN civicrm_option_value ov ON ov.option_group_id = og.id AND ov.component_id = c.id "
       . "LEFT JOIN civicrm_activity a ON a.id = ac.entity_id "
-      . "WHERE DATE(ac.expire_date) = %1 AND a.is_deleted = 0 AND a.status_id = 3 AND ov.component_id = c.id AND a.activity_type_id = ov.value";
+      . "WHERE DATE(ac.expire_date) >= CURDATE() AND DATE(ac.expire_date) <= %1 AND ac.clone_date IS NULL AND a.is_deleted = 0 AND a.status_id = 3 AND ov.component_id = c.id AND a.activity_type_id = ov.value";
     $params = array(
       1 => array($expireDate, 'String'),
     );
@@ -108,6 +109,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
     if (empty($document['id'])) {
       return NULL;
     }
+    $originalId = $document['id'];
     $expireDateField = self::getExpireDateCustomFieldName();
     $document['activity_date_time'] = $document[$expireDateField];
     unset($document[$expireDateField]);
@@ -115,7 +117,16 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
     unset($document['expire_date']);
     unset($document['file_count']);
     unset($document['id']);
-    return civicrm_api3('Document', 'create', $document);
+    $clone = civicrm_api3('Document', 'create', $document);
+    if (!empty($clone['id'])) {
+      // Update original document's 'clone_date' with current date
+      // so so we'll know that the document has been already cloned.
+      civicrm_api3('Document', 'create', array(
+        'id' => $originalId,
+        'clone_date' => (new DateTime())->format('Y-m-d'),
+      ));
+    }
+    return $clone;
   }
 
   /**

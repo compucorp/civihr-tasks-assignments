@@ -544,6 +544,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  public function upgrade_1022()
+  {
+    $this->executeCustomDataFile('xml/activity_custom_fields.xml');
+
+    return TRUE;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
