@@ -46,8 +46,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       return NULL;
     }
     $date = (new DateTime())
-            ->add(new DateInterval('P' . $daysToCreateADocumentClone . 'D'))
-            ->format('Y-m-d');
+            ->add(new DateInterval('P' . $daysToCreateADocumentClone . 'D'));
     return self::cloneApprovedDocumentsWithExpireDate($date);
   }
 
@@ -69,10 +68,10 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    * and create their clone.
    * Return a count of cloned documents.
    * 
-   * @param string $expireDate (date in Y-m-d format)
+   * @param DateTime $expireDate
    * @return int
    */
-  protected static function cloneApprovedDocumentsWithExpireDate($expireDate) {
+  protected static function cloneApprovedDocumentsWithExpireDate(DateTime $expireDate) {
     $count = 0;
     $query = "SELECT ac.id, ac.entity_id FROM civicrm_value_activity_custom_fields_11 ac "
       . "LEFT JOIN civicrm_component c ON c.name = 'CiviDocument' "
@@ -81,7 +80,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       . "LEFT JOIN civicrm_activity a ON a.id = ac.entity_id "
       . "WHERE DATE(ac.expire_date) >= CURDATE() AND DATE(ac.expire_date) <= %1 AND ac.clone_date IS NULL AND a.is_deleted = 0 AND a.status_id = 3 AND ov.component_id = c.id AND a.activity_type_id = ov.value";
     $params = array(
-      1 => array($expireDate, 'String'),
+      1 => array($expireDate->format('Y-m-d'), 'String'),
     );
     $result = CRM_Core_DAO::executeQuery($query, $params);
     while ($result->fetch()) {

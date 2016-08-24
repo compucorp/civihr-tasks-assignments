@@ -506,7 +506,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       civicrm_api3('OptionValue', 'create', array(
         'option_group_id' => 'ta_settings',
         'name' => 'days_to_create_a_document_clone',
-        'label' => 'Number of days to create a document clone before original expiry date',
+        'label' => 'Number of days within a Document clone should be created before its original expiry date',
         'value' => 0,
       ));
     }
@@ -534,7 +534,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       $dao->run_frequency = 'Daily';
       $dao->parameters = null;
       $dao->name = 'Clone Documents';
-      $dao->description = 'Clone any approved document on pre-set days before its original expiry date';
+      $dao->description = 'Clone any approved document within pre-set days before its original expiry date';
       $dao->api_entity = 'document';
       $dao->api_action = 'clonedocuments';
       $dao->is_active = 1;
