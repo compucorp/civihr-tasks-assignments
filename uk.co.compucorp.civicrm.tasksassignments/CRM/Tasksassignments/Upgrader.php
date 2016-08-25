@@ -480,6 +480,27 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return true;
   }
 
+  /**
+   * Uninstalls the dummy document types in old CiviHR installs
+   * And adds real, default values
+   */
+  public function upgrade_1020() {
+    $this->_uninstallActivityTypes('CiviDocument', array(
+      'Joining Document 1', 'Exiting Document 1'
+    ));
+
+    $this->_installActivityTypes('CiviDocument', array(
+      'VISA',
+      'Passport',
+      'Government Photo ID',
+      'Driving licence',
+      'Identity card',
+      'Certificate of sponsorship (COS)'
+    ));
+
+    return TRUE;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
@@ -488,46 +509,78 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         return TRUE;
     }
 
-    function _installActivityTypes($component, array $types)
-    {
-        $componentId = null;
-        $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
-        $componentParams = array(
-            1 => array($component, 'String'),
-        );
-        $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
-        if ($componentResult->fetch())
-        {
-            $componentId = $componentResult->id;
-        }
+    /**
+     * Returns the activity type params starting with a component name,
+     * specifically it returns the option group and component id
+     *
+     * @param  string $component
+     * @return Array
+     */
+    private function _fetchActivityTypeParams($component) {
+      $componentId = null;
+      $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
+      $componentParams = array(1 => array($component, 'String'));
+      $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
 
-        if (!$componentId)
-        {
-            throw new Exception($component . ' Component not found.');
-        }
+      if ($componentResult->fetch()) {
+        $componentId = $componentResult->id;
+      }
+
+      if (!$componentId) {
+        throw new Exception($component . ' Component not found.');
+      }
+
+      $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
+
+      if (!$optionGroupID) {
+        civicrm_api3('OptionGroup', 'create', array(
+          'name' => 'activity_type',
+          'title' => 'Activity Type',
+          'is_active' => 1,
+        ));
 
         $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
-        if (!$optionGroupID) {
-            $params = array(
-                'name' => 'activity_type',
-                'title' => 'Activity Type',
-                'is_active' => 1,
-            );
-            civicrm_api3('OptionGroup', 'create', $params);
-            $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
-        }
+      }
 
-        // Create the types:
-      foreach ($types as $type)
-      {
+      return array(
+        'component_id' => $componentId,
+        'option_group_id' => $optionGroupID
+      );
+    }
+
+    private function _installActivityTypes($component, array $types) {
+      $params = $this->_fetchActivityTypeParams($component);
+
+      foreach ($types as $type) {
         civicrm_api3('OptionValue', 'create', array(
           'sequential' => 1,
-          'option_group_id' => $optionGroupID,
-          'component_id' => $componentId,
+          'option_group_id' => $params['option_group_id'],
+          'component_id' => $params['component_id'],
           'label' => $type,
           'name' => $type,
         ));
       }
     }
 
+    /**
+     * Uninstall (if they exist) the given activity types for the given component
+     *
+     * @param  string $component
+     * @param  array  $types
+     */
+    private function _uninstallActivityTypes($component, array $types) {
+      $params = $this->_fetchActivityTypeParams('CiviDocument');
+      $typeIds = array_map(function ($type) {
+        return $type['id'];
+      }, civicrm_api3('OptionValue', 'get', array(
+        'component_id' => $params['component_id'],
+        'option_group_id' => $params['option_group_id'],
+        'name' => array('IN' => $types),
+        'return' => 'id'
+      ))['values']);
+
+      foreach ($typeIds as $id) {
+        civicrm_api3('OptionValue', 'delete', array('id' => $id));
+      }
+    }
 }
