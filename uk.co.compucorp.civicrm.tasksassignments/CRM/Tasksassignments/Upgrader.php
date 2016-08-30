@@ -501,6 +501,32 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  /*
+   * Set up Documents Notification job
+   */
+  public function upgrade_1021()
+  {
+    $dao = new CRM_Core_DAO_Job();
+    $dao->api_entity = 'document';
+    $dao->api_action = 'senddailynotification';
+    $dao->find(TRUE);
+    if (!$dao->id)
+    {
+      $dao = new CRM_Core_DAO_Job();
+      $dao->domain_id = CRM_Core_Config::domainID();
+      $dao->run_frequency = 'Daily';
+      $dao->parameters = null;
+      $dao->name = 'Tasks and Assignments Documents Notification';
+      $dao->description = 'Tasks and Assignments Documents Notification';
+      $dao->api_entity = 'document';
+      $dao->api_action = 'senddailynotification';
+      $dao->is_active = 1;
+      $dao->save();
+    }
+
+    return TRUE;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
