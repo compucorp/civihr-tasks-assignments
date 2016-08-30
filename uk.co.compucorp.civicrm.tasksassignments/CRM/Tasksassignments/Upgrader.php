@@ -508,7 +508,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   {
     $dao = new CRM_Core_DAO_Job();
     $dao->api_entity = 'document';
-    $dao->api_action = 'senddailynotification';
+    $dao->api_action = 'senddocumentsnotification';
     $dao->find(TRUE);
     if (!$dao->id)
     {
@@ -519,7 +519,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       $dao->name = 'Tasks and Assignments Documents Notification';
       $dao->description = 'Tasks and Assignments Documents Notification';
       $dao->api_entity = 'document';
-      $dao->api_action = 'senddailynotification';
+      $dao->api_action = 'senddocumentsnotification';
       $dao->is_active = 1;
       $dao->save();
     }
