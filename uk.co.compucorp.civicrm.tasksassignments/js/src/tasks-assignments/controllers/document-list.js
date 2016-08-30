@@ -81,6 +81,12 @@ define([
                 maxSize: 5
             };
 
+            $scope.dueFilters = [
+              { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
+              { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
+              { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
+            ];
+
             $scope.dueToday = 0;
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
@@ -140,8 +146,8 @@ define([
             $scope.label = {
                 addNew: 'Add Document',
                 overdue: 'Overdue',
-                dueToday: 'Due Today',
-                dueThisWeek: 'Due This Week',
+                dueInNextFortnight: 'Due in next fortnight',
+                dueInNinetyDays: 'Due in 90 days',
                 dateRange: ''
             };
 
