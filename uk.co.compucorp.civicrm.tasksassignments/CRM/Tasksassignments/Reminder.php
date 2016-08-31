@@ -578,8 +578,8 @@ class CRM_Tasksassignments_Reminder
         LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
         LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
         LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id AND e.is_primary = 1
-        WHERE a.status_id <> 3 AND
-          DATE(a.activity_date_time) <= %2 AND
+        WHERE a.status_id <> %2 AND
+          DATE(a.activity_date_time) <= %3 AND
           a.activity_type_id IN (
             SELECT value
             FROM civicrm_option_value ov
@@ -592,7 +592,8 @@ class CRM_Tasksassignments_Reminder
         ORDER BY a.id";
       $activityParams = array(
         1 => array(CRM_Core_DAO::VALUE_SEPARATOR, 'String'),
-        2 => array($upToDate->format('Y-m-d'), 'String'),
+        2 => array(CRM_Tasksassignments_BAO_Document::STATUS_APPROVED, 'Integer'),
+        3 => array($upToDate->format('Y-m-d'), 'String'),
       );
       return CRM_Core_DAO::executeQuery($activityQuery, $activityParams);
     }
