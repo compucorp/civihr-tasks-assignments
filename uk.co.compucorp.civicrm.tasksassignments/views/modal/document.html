@@ -201,23 +201,23 @@
                 </div>
             </div>
             <div class="row" ng-show="expanded">
-                <label class="col-xs-12 col-sm-6" ng-hide="statusFieldVisible">
+                <label class="col-xs-12 col-sm-6" ng-hide="statusFieldVisible()">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showStatusField()">Set Status</a>
                     </span>
                 </label>
 
-                <div class="col-xs-12 col-sm-6" ng-show="statusFieldVisible">
-                    <div class="crm_custom-select crm_custom-select--full">
-                        <select
-                            ng-required
-                            class="form-control"
-                            ng-model="document.status_id"
-                            ng-options="status.key as status.value for status in cache.documentStatus.arr">
-                            <option value="">Set Status</option>
-                        </select>
-                        <span class="crm_custom-select__arrow"></span>
-                    </div>
+                <div class="col-xs-12 col-sm-6" ng-show="statusFieldVisible()">
+                    <ui-select theme="civihr-ui-select" ng-model="document.status_id">
+                        <ui-select-match allow-clear class="ui-select-match" placeholder="Set Status">
+                            {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            class="ui-select-choices"
+                            repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
+                            <div ng-bind="status.value"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <label class="col-xs-12 control-label">Details</label>
                 <div class="col-xs-12">
