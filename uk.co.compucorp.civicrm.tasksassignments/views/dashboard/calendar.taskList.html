@@ -1,19 +1,20 @@
 <h4 class="header-bar header-bar-dark">Tasks:</h4>
 <ul class="{{prefix}}list-task {{prefix}}list-task-small">
-    <li ng-repeat="task in taskListOngoing = (taskList
-                        | filterByStatus:cache.taskStatusResolve:false
-                        | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
-                        | orderBy: 'activity_date_time')"
-        ng-controller="TaskCtrl"
-        ng-class="{
-            '{{prefix}}task-completed': task.completed,
-            '{{prefix}}task-due': task.due
-        }"
-        ng-include
-        src="'task.html'"
-        ct-spinner
-        ct-spinner-id="task{{task.id}}">
-    </li>
+  <li
+    ng-repeat="task in listOngoing = (list
+      | filterByStatus:cache.taskStatusResolve:false
+      | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
+      | orderBy: 'activity_date_time')"
+    ng-controller="TaskCtrl"
+    ng-class="{
+      '{{prefix}}task-completed': task.completed,
+      '{{prefix}}task-due': task.due
+    }"
+    ng-include
+    src="'task.html'"
+    ct-spinner
+    ct-spinner-id="task{{task.id}}">
+  </li>
 </ul>
 
 <script type="text/ng-template" id="task.html">

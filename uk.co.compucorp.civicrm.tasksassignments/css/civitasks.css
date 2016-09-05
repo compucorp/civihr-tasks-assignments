@@ -2952,7 +2952,6 @@
   text-decoration: none;
 }
 #civitasks a:focus, #cividocuments a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4507,7 +4506,6 @@
 #cividocuments input[type="radio"]:focus,
 #civitasks input[type="checkbox"]:focus,
 #cividocuments input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -5194,7 +5192,6 @@ fieldset[disabled]
   user-select: none;
 }
 #civitasks .btn:focus, #cividocuments .btn:focus, #civitasks .btn.focus, #cividocuments .btn.focus, #civitasks .btn:active:focus, #cividocuments .btn:active:focus, #civitasks .btn:active.focus, #cividocuments .btn:active.focus, #civitasks .btn.active:focus, #cividocuments .btn.active:focus, #civitasks .btn.active.focus, #cividocuments .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -10986,9 +10983,6 @@ fieldset[disabled]
 }
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > footer, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > footer {
   clear: both;
-}
-#civitasks #ct-dashboard, #cividocuments #ct-dashboard {
-  margin-top: 25px;
 }
 #civitasks #ct-dashboard .ct-container-main, #cividocuments #ct-dashboard .ct-container-main {
   position: relative;

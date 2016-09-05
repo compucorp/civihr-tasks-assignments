@@ -46,6 +46,14 @@ define([
         expect($filter('filterByDue')(mock, 'dueThisWeek').length).toBe(1);
       });
 
+      it('shows the result for "dueInNextFortnight"', function() {
+        expect($filter('filterByDue')(mock, 'dueInNextFortnight').length).toBe(1);
+      });
+
+      it('shows the result for "dueInNinetyDays"', function() {
+        expect($filter('filterByDue')(mock, 'dueInNinetyDays').length).toBe(1);
+      });
+
       it('shows the result for "dateRange" in the future', function() {
         expect($filter('filterByDue')(mock, 'dateRange', futureDateRange).length).toBe(1);
       });
@@ -73,6 +81,14 @@ define([
 
       it('hides the result for "dueThisWeek"', function() {
         expect($filter('filterByDue')(mock, 'dueThisWeek').length).toBe(0);
+      });
+
+      it('shows the result for "dueInNextFortnight"', function() {
+        expect($filter('filterByDue')(mock, 'dueInNextFortnight').length).toBe(0);
+      });
+
+      it('shows the result for "dueInNinetyDays"', function() {
+        expect($filter('filterByDue')(mock, 'dueInNinetyDays').length).toBe(0);
       });
 
       it('hides the result for "dateRange" in the future', function() {
@@ -104,12 +120,68 @@ define([
         expect($filter('filterByDue')(mock, 'dueThisWeek').length).toBe(0);
       });
 
+      it('shows the result for "dueInNextFortnight"', function() {
+        expect($filter('filterByDue')(mock, 'dueInNextFortnight').length).toBe(1);
+      });
+
+      it('shows the result for "dueInNinetyDays"', function() {
+        expect($filter('filterByDue')(mock, 'dueInNinetyDays').length).toBe(1);
+      });
+
       it('hides the result for "dateRange" in the future', function() {
         expect($filter('filterByDue')(mock, 'dateRange', futureDateRange).length).toBe(0);
       });
 
       it('hides the result for "dateRange" in the past', function() {
         expect($filter('filterByDue')(mock, 'dateRange', pastDateRange).length).toBe(0);
+      });
+    });
+
+    describe('test dueInNextFortnight', function(){
+      var mock;
+      it("show the result if date is after 13 days", function() {
+        mock = [{
+          activity_date_time: new Date(today.setDate(today.getDate() + 13))
+        }];
+        expect($filter('filterByDue')(mock, 'dueInNextFortnight').length).toBe(1);
+      });
+
+      it("show the result if date is after 14 days", function() {
+        mock = [{
+          activity_date_time: new Date(today.setDate(today.getDate() + 14))
+        }];
+        expect($filter('filterByDue')(mock, 'dueInNextFortnight').length).toBe(1);
+      });
+
+      it("hide the result if date is after 15 days", function() {
+        mock = [{
+          activity_date_time: new Date(today.setDate(today.getDate() + 15))
+        }];
+        expect($filter('filterByDue')(mock, 'dueInNextFortnight').length).toBe(0);
+      });
+    });
+
+    describe('test dueInNinetyDays', function(){
+      var mock;
+      it("show the result if date is after 89 days", function() {
+        mock = [{
+          activity_date_time: new Date(today.setDate(today.getDate() + 89))
+        }];
+        expect($filter('filterByDue')(mock, 'dueInNinetyDays').length).toBe(1);
+      });
+
+      it("show the result if date is after 90 days", function() {
+        mock = [{
+          activity_date_time: new Date(today.setDate(today.getDate() + 90))
+        }];
+        expect($filter('filterByDue')(mock, 'dueInNinetyDays').length).toBe(1);
+      });
+
+      it("hide the result if date is after 91 days", function() {
+        mock = [{
+          activity_date_time: new Date(today.setDate(today.getDate() + 91))
+        }];
+        expect($filter('filterByDue')(mock, 'dueInNinetyDays').length).toBe(0);
       });
     });
   });
