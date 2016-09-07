@@ -2,7 +2,7 @@
     <div class="modal-header">
         <div class="row">
             <div class="col-xs-11">
-                <ui-select ng-if="showCId" allow-clear
+                <ui-select ng-if="showCId" allow-clear name="target" ng-class="{'has-error': taskForm.target.$invalid}"
                            ng-model="task.target_contact_id[0]"
                            on-select="cacheContact($item)"
                            ng-required="true">
@@ -42,8 +42,8 @@
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
                     <div class="crm_custom-select crm_custom-select--full">
-                        <select
-                            ng-required
+                        <select name="taskType" ng-class="{'has-error': taskForm.taskType.$invalid}"
+                            ng-required="true"
                             class="form-control"
                             ng-model="task.activity_type_id"
                             ng-options="type.key as type.value for type in cache.taskType.arr">
@@ -52,23 +52,28 @@
                         <span class="crm_custom-select__arrow"></span>
                     </div>
                 </div>
-                <label class="control-label no-gutter col-sm-2" for="{{prefix}}task-due">
-                    <span class="pull-right">Due Date:</span>
-                </label>
 
-                <div class="input-group col-sm-4">
-                  <input
-                    type="text"
-                    name="assignmentDue"
-                    id="{{prefix}}task-due"
-                    class="form-control"
-                    ng-model="task.activity_date_time"
-                    placeholder="{{ format }}"
-                    ng-required="true"
-                    uib-datepicker-popup
-                    is-open="dpOpened"
-                    ng-click="dpOpen($event);">
-                  <span class="input-group-addon fa fa-calendar"></span>
+                <div class="col-xs-12 col-sm-6">
+                  <div class="input-group form-group">
+                    <label class="control-label no-gutter col-sm-4" for="{{prefix}}task-due">
+                      <span class="pull-right">Due Date:</span>
+                    </label>
+
+                    <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
+                      <input
+                      type="text"
+                      name="assignmentDue"
+                      id="{{prefix}}task-due"
+                      class="form-control"
+                      ng-model="task.activity_date_time"
+                      placeholder="{{ format }}"
+                      ng-required="true"
+                      uib-datepicker-popup
+                      is-open="dpOpened"
+                      ng-click="dpOpen($event);">
+                      <span class="input-group-addon fa fa-calendar"></span>
+                    </div>
+                  </div>
                 </div>
             </div>
             <!-- Subject -->
@@ -111,7 +116,7 @@
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="task.assignee_contact_id[0] || showFieldAssignee">
-                    <ui-select ng-required="true"
+                    <ui-select ng-required="true" theme="civihr-ui-select"
                                allow-clear
                                ng-model="task.assignee_contact_id[0]"
                                on-select="cacheContact($item)">

@@ -67,8 +67,39 @@ input[type="checkbox"],
 
 .form-group.required {
   .control-label:after {
-    content:"*";
-    color:red;
+    content: '*';
+    color: $brand-danger-light;
+  }
+}
+
+.ui-select-container:not(.ui-select-bootstrap)[required],
+select[required] + .crm_custom-select__arrow {
+  &::after {
+    content: '*';
+    color: $brand-danger-light;
+    position: absolute;
+    right: -10px;
+    top: 0;
+  }
+}
+
+.ui-select-container.ui-select-bootstrap[required] .ui-select-placeholder::after {
+  content: '*';
+  color: $brand-danger-light;
+  font-size: 13px;
+  position: absolute;
+  top: 2px;
+  padding-left: 5px;
+}
+
+select[required] + .crm_custom-select__arrow::after {
+  top: -6px;
+}
+
+select.has-error {
+  &,
+  + .crm_custom-select__arrow {
+    border-color: $state-danger-text;
   }
 }
 
