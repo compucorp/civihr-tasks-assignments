@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-xs-11">
                 <ui-select name="target" ng-class="{'has-error': documentForm.target.$invalid}"
-                        allow-clear
+                        allow-clear class="required-field-indicator"
                         ng-model="document.target_contact_id[0]"
                         on-select="cacheContact($item)"
                         ng-required="true">
@@ -35,7 +35,7 @@
                     <div class="crm_custom-select crm_custom-select--full">
                         <select name="documentType" ng-class="{'has-error': documentForm.documentType.$invalid}"
                             ng-required="true"
-                            class="form-control"
+                            class="form-control required-field-indicator"
                             ng-model="document.activity_type_id"
                             ng-options="type.key as type.value for type in cache.documentType.arr">
                             <option value="">Select document type</option>
@@ -49,7 +49,7 @@
                 <!-- Due Date -->
                 <div class="col-xs-6">
                   <div class="form-group">
-                    <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label">Due Date:</label>
+                    <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator">Due Date:</label>
 
                     <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': documentForm.dueDate.$invalid}">
                       <input name="dueDate"
@@ -147,12 +147,12 @@
                 <!-- Assignee -->
                 <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
                     <span class="form-control-static">
-                        <a href class="btn btn-indent" ng-click="showAssigneeField = true;">Add Assignee</a>
+                        <a href class="btn btn-indent required-field-indicator" ng-click="showAssigneeField = true;">Add Assignee</a>
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-7" ng-show="document.assignee_contact_id[0] || showAssigneeField">
                     <ui-select name="assignee" theme="civihr-ui-select"
-                            ng-required="true"
+                            ng-required="true" class="required-field-indicator"
                             allow-clear
                             ng-model="document.assignee_contact_id[0]"
                             on-select="cacheContact($item)">
@@ -211,13 +211,13 @@
             <div class="row" ng-show="expanded">
                 <label class="col-xs-12 col-sm-7" ng-hide="statusFieldVisible()">
                     <span class="form-control-static">
-                        <a href class="btn btn-indent" ng-click="showStatusField()">Set Status</a>
+                        <a href class="btn btn-indent required-field-indicator" ng-click="showStatusField()">Set Status</a>
                     </span>
                 </label>
 
                 <div class="col-xs-12 col-sm-7" ng-show="statusFieldVisible()">
                     <ui-select theme="civihr-ui-select" name="documentStatus"
-                            allow-clear
+                            allow-clear class="required-field-indicator"
                             ng-model="document.status_id"
                             ng-required="true">
                         <ui-select-match allow-clear class="ui-select-match" placeholder="Set Status">

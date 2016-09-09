@@ -9727,22 +9727,31 @@ fieldset[disabled]
   margin-top: 15px;
 }
 #civitasks .text-required, #cividocuments .text-required {
-  color: red;
+  color: #e6807f;
 }
 #civitasks .form-group.required .control-label:after, #cividocuments .form-group.required .control-label:after {
   content: '*';
   color: #e6807f;
 }
-#civitasks .ui-select-container:not(.ui-select-bootstrap)[required]::after, #cividocuments .ui-select-container:not(.ui-select-bootstrap)[required]::after,
-#civitasks select[required] + .crm_custom-select__arrow::after,
-#cividocuments select[required] + .crm_custom-select__arrow::after {
+#civitasks .ui-select-container.required-field-indicator:not(.ui-select-bootstrap)[required]::after, #cividocuments .ui-select-container.required-field-indicator:not(.ui-select-bootstrap)[required]::after,
+#civitasks select.required-field-indicator[required] + .crm_custom-select__arrow::after,
+#cividocuments select.required-field-indicator[required] + .crm_custom-select__arrow::after {
   content: '*';
   color: #e6807f;
   position: absolute;
   right: -10px;
   top: 0;
 }
-#civitasks .ui-select-container.ui-select-bootstrap[required] .ui-select-placeholder::after, #cividocuments .ui-select-container.ui-select-bootstrap[required] .ui-select-placeholder::after {
+#civitasks select.required-field-indicator[required] + .crm_custom-select__arrow::after, #cividocuments select.required-field-indicator[required] + .crm_custom-select__arrow::after {
+  top: -6px;
+}
+#civitasks .required-field-indicator:not(.ui-select-container)::after, #cividocuments .required-field-indicator:not(.ui-select-container)::after {
+  content: '*';
+  color: #e6807f;
+  padding-left: 5px;
+  display: inline-block;
+}
+#civitasks .ui-select-container.required-field-indicator.ui-select-bootstrap[required] .ui-select-placeholder::after, #cividocuments .ui-select-container.required-field-indicator.ui-select-bootstrap[required] .ui-select-placeholder::after {
   content: '*';
   color: #e6807f;
   font-size: 13px;

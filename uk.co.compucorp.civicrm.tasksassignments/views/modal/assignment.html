@@ -13,7 +13,7 @@
         <section class="container">
             <div class="col-xs-12">
                 <div class="row separately">
-                    <h2 class="col-xs-12 col-sm-3 control-label">Contact:</h2>
+                    <h2 class="col-xs-12 col-sm-3 control-label required-field-indicator">Contact:</h2>
 
                     <div ng-if="showCId" class="col-xs-12 col-sm-5">
                         <ui-select allow-clear name="contact" theme="civihr-ui-select"
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="row required">
-                    <label class="col-xs-12 col-sm-3 control-label">Assignment Type:</label>
+                    <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Assignment Type:</label>
 
                     <div class="col-xs-12 col-sm-5">
                         <div class="crm_custom-select crm_custom-select--full">
@@ -56,11 +56,11 @@
                         </div>
                     </div>
 
-                    <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
+                    <label class="col-xs-12 col-sm-2 control-label no-wrap required-field-indicator" for="{{prefix}}assignment-due">
                         Key Date:
                     </label>
 
-                    <div class="col-xs-12 col-sm-3">
+                    <div class="col-xs-12 col-sm-2">
                       <div class="input-group input-group-unstyled date-input-group form-group"
                         ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
                         <input type="text" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="dueDate"
@@ -112,14 +112,14 @@
                             <tr>
                                 <th class="action-column"></th>
                                 <th class="title-column">Task Title</th>
-                                <th class="assignee-column">
+                                <th class="assignee-column required-field-indicator">
                                     Assigned To
                                     <span class="pull-right btn" title="{{copyMessage}}"
                                           ng-click="copyAssignee(taskList, 'task')">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
-                                <th class="date-column">
+                                <th class="date-column  required-field-indicator">
                                     Due Date
                                     <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyDate(taskList)">
                                         <i class="fa fa-files-o"></i>
@@ -138,11 +138,11 @@
                                 </td>
 
                                 <td ng-if="!activity.isAdded">
-                                    {{activity.name}}
+                                  {{activity.name}}
                                 </td>
 
                                 <td colspan="2" ng-if="activity.isAdded">
-                                  <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create" theme="civihr-ui-select">
+                                  <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create" theme="civihr-ui-select" class="required-field-indicator">
                                       <ui-select-match class="ui-select-match" placeholder="Select task type">
                                           {{$select.selected.value}}
                                       </ui-select-match>

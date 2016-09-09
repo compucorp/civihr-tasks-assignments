@@ -5,7 +5,7 @@
                 <ui-select ng-if="showCId" allow-clear name="target" ng-class="{'has-error': taskForm.target.$invalid}"
                            ng-model="task.target_contact_id[0]"
                            on-select="cacheContact($item)"
-                           ng-required="true">
+                           ng-required="true" class="required-field-indicator">
                     <ui-select-match class="ui-select-match" placeholder="Select Target Contact">
                         {{$select.selected.label}}
                     </ui-select-match>
@@ -44,7 +44,7 @@
                     <div class="crm_custom-select crm_custom-select--full">
                         <select name="taskType" ng-class="{'has-error': taskForm.taskType.$invalid}"
                             ng-required="true"
-                            class="form-control"
+                            class="form-control required-field-indicator"
                             ng-model="task.activity_type_id"
                             ng-options="type.key as type.value for type in cache.taskType.arr">
                             <option value="">Select Task Type</option>
@@ -56,7 +56,7 @@
                 <div class="col-xs-12 col-sm-6">
                   <div class="input-group form-group">
                     <label class="control-label no-gutter col-sm-4" for="{{prefix}}task-due">
-                      <span class="pull-right">Due Date:</span>
+                      <span class="pull-right required-field-indicator">Due Date:</span>
                     </label>
 
                     <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
@@ -110,13 +110,13 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-5" ng-show="!task.assignee_contact_id[0] && !showFieldAssignee">
                     <span class="form-control-static">
-                        <a href class="btn btn-indent" ng-click="showFieldAssignee = true;">
+                        <a href class="btn btn-indent required-field-indicator" ng-click="showFieldAssignee = true;">
                             Add Assignee
                         </a>
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="task.assignee_contact_id[0] || showFieldAssignee">
-                    <ui-select ng-required="true" theme="civihr-ui-select"
+                    <ui-select ng-required="true" theme="civihr-ui-select" class="required-field-indicator"
                                allow-clear
                                ng-model="task.assignee_contact_id[0]"
                                on-select="cacheContact($item)">
