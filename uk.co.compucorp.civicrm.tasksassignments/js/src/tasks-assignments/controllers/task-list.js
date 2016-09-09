@@ -75,6 +75,12 @@ define([
                 });
             };
 
+            $scope.dueFilters = [
+              { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
+              { badgeClass: 'primary', calendarView: 'day', value: 'dueToday' },
+              { badgeClass: 'primary', calendarView: 'week', value: 'dueThisWeek' }
+            ];
+            
             $scope.format = HR_settings.DATE_FORMAT;
             $scope.assignments = [];
             $scope.contacts = [];

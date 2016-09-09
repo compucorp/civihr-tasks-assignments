@@ -37,10 +37,13 @@ define([
                 assignee: initialContacts('assignee')
             };
 
-            $scope.statusFieldVisible = false;
+            $scope.statusFieldVisible = function() {
+              return !!$scope.document.status_id;
+            };
+
             $scope.showStatusField = function() {
-              $scope.statusFieldVisible = true;
-            }
+              $scope.document.status_id = 1;
+            };
 
             $scope.cacheAssignment = function ($item) {
 

@@ -712,6 +712,7 @@ function _civicrm_api3_document_getfields() {
 }
 
 function _civicrm_api3_document_getcustomfields() {
+    
     $result = array();
     
     $customGroup = civicrm_api3('CustomGroup', 'get', array(
@@ -773,4 +774,12 @@ function civicrm_api3_document_senddailyreminder($params) {
  */
 function civicrm_api3_document_clonedocuments($params) {
   return civicrm_api3_create_success(CRM_Tasksassignments_BAO_Document::cloneDocuments(), $params);
+}
+
+/*
+ * Documents Notification scheduled job's entry point.
+ */
+function civicrm_api3_document_senddocumentsnotification($params) {
+    $count = CRM_Tasksassignments_Reminder::sendDocumentsNotifications();
+    return civicrm_api3_create_success($count, $params, 'document', 'senddocumentsnotification');
 }

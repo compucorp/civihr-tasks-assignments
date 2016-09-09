@@ -486,6 +486,172 @@ class CRM_Tasksassignments_Reminder
     }
 
     /**
+     * Sends out daily email notifications for documents including separate lists
+     * with:
+     * - Overdue documents (!= approved)
+     * - Due in next fortnight (14 days) (!= approved)
+     * - Due in < 90 days (!= approved)
+     * and show status in email.
+     * 
+     * Acceptance criteria:
+     * - Emails are sent out to assignees only.
+     * - Assignee contact receives lists of documents he/she is assigned to only.
+     * - Documents are grouped by due date according to the logic described
+     *   in the task description (@see PCHR-1362).
+     * 
+     * Returns a number of emails sent.
+     * 
+     * @return int
+     */
+    public static function sendDocumentsNotifications() {
+      self::_setActivityOptions();
+      $count = 0;
+      $taSettings = civicrm_api3('TASettings', 'get');
+      $settings = $taSettings['values'];
+      $notifications = self::getDocumentNotificationsData();
+      $myTasksUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my';
+      $myDocumentsUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my';
+      foreach ($notifications as $assignee => $documentsSet) {
+        list($assigneeId, $assigneeEmail) = explode(':', $assignee);
+        $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyDocumentsNotification.tpl', array(
+          'notification' => $documentsSet,
+          'baseUrl' => CIVICRM_UF_BASEURL,
+          'myTasksUrl' => $myTasksUrl,
+          'myDocumentsUrl' => $myDocumentsUrl,
+          'settings' => $settings,
+        ));
+        if (self::_send($assigneeId, $assigneeEmail, t('Documents Notification'), $templateBodyHTML)) {
+          $count++;
+        }
+      }
+
+      return $count;
+    }
+
+    /**
+     * Return an array containing a set of Documents for each Assignee
+     * grouped by due date period ('overdue' - overdue, 'plus14' - due date
+     * within next 14 days, 'plus90' - due date within next 90 days).
+     * 
+     * @return array
+     */
+    protected static function getDocumentNotificationsData() {
+      $today = new DateTime();
+      $todayPlus14 = (new DateTime())->add(new DateInterval('P14D'));
+      $todayPlus90 = (new DateTime())->add(new DateInterval('P90D'));
+      $notifications = array();
+
+      $activityResult = self::queryDbForDocumentsNotificationData($todayPlus90);
+      while ($activityResult->fetch())
+      {
+        $activityContact = self::getExtractedActivityContacts($activityResult->activity_contact);
+        $dueDate = (new DateTime())->createFromFormat('Y-m-d', $activityResult->activity_date);
+        $assigneeId = $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE]['id'];
+        if (empty($assigneeId)) {
+          continue;
+        }
+        $dueIndex = 'overdue';
+        if ($dueDate->format('Y-m-d') >= $today->format('Y-m-d')) {
+          $dueIndex = 'plus14';
+        }
+        if ($dueDate->format('Y-m-d') >= $todayPlus14->format('Y-m-d')) {
+          $dueIndex = 'plus90';
+        }
+        $key = $assigneeId . ':' . $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE]['email'];
+        $notifications[$key][$dueIndex][] = self::getDocumentNotificationTemplateValues($activityResult, $activityContact);
+      }
+
+      return $notifications;
+    }
+
+    /**
+     * Return CRM_Core_DAO object with database results containing data
+     * needed for create a Documents Notification emails.
+     * 
+     * @param DateTime $upToDate
+     * @return CRM_Core_DAO
+     */
+    protected static function queryDbForDocumentsNotificationData(DateTime $upToDate) {
+      $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date,
+        GROUP_CONCAT(ac.record_type_id, ':', ac.contact_id, ':', contact.display_name, ':', e.email SEPARATOR  %1) AS activity_contact
+        FROM `civicrm_activity` a
+        LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
+        LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
+        LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id AND e.is_primary = 1
+        WHERE a.status_id <> %2 AND
+          DATE(a.activity_date_time) <= %3 AND
+          a.activity_type_id IN (
+            SELECT value
+            FROM civicrm_option_value ov
+            LEFT JOIN civicrm_option_group og ON ov.option_group_id = og.id
+            LEFT JOIN civicrm_component co ON ov.component_id = co.id
+            WHERE og.name = 'activity_type'
+            AND co.name = 'CiviDocument'
+          )
+        GROUP BY a.id
+        ORDER BY a.id";
+      $activityParams = array(
+        1 => array(CRM_Core_DAO::VALUE_SEPARATOR, 'String'),
+        2 => array(CRM_Tasksassignments_BAO_Document::STATUS_APPROVED, 'Integer'),
+        3 => array($upToDate->format('Y-m-d'), 'String'),
+      );
+      return CRM_Core_DAO::executeQuery($activityQuery, $activityParams);
+    }
+
+    /**
+     * Extracts data from a single row containing concatenated database values into
+     * array containing three contact types (Creator, Assignee and Target).
+     * 
+     * @param string $activityContactsData
+     * @return array
+     */
+    protected static function getExtractedActivityContacts($activityContactsData) {
+      $result = array(
+        self::ACTIVITY_CONTACT_CREATOR => array(),
+        self::ACTIVITY_CONTACT_ASSIGNEE => array(),
+        self::ACTIVITY_CONTACT_TARGET => array(),
+      );
+      $activityContactRows = explode(CRM_Core_DAO::VALUE_SEPARATOR, $activityContactsData);
+
+      foreach ($activityContactRows as $value)
+      {
+        list($type, $contactId, $contactDisplayName, $email) = explode(':', $value);
+        $result[$type] = array(
+          'id' => $contactId,
+          'url' => CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId,
+          'displayName' => $contactDisplayName,
+          'email' => $email,
+        );
+      }
+
+      return $result;
+    }
+
+    /**
+     * Return an array containing a set of single Document fields needed for
+     * list the Document in notification template.
+     * 
+     * @param CRM_Core_DAO $activityResult
+     * @param array $activityContact
+     * 
+     * @return array
+     */
+    protected static function getDocumentNotificationTemplateValues(CRM_Core_DAO $activityResult, array $activityContact) {
+      return array(
+          'id' => $activityResult->id,
+          'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=&context=activity&searchContext=activity',
+          'typeId' => $activityResult->activity_type_id,
+          'type' => self::$_activityOptions['type'][$activityResult->activity_type_id],
+          'statusId' => $activityResult->status_id,
+          'status' => self::$_activityOptions['document_status'][$activityResult->status_id],
+          'source' => $activityContact[self::ACTIVITY_CONTACT_CREATOR],
+          'target' => $activityContact[self::ACTIVITY_CONTACT_TARGET],
+          'assignee' => $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE],
+          'date' => (new DateTime())->createFromFormat('Y-m-d', $activityResult->activity_date)->format('M d'),
+        );
+    }
+
+    /**
      * @param int $contactId
      * @param string $email
      * @param string $template

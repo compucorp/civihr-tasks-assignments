@@ -2,6 +2,11 @@
 
 class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Document {
 
+  const STATUS_AWAITING_UPLOAD = 1;
+  const STATUS_AWAITING_APPROVAL = 2;
+  const STATUS_APPROVED = 3;
+  const STATUS_REJECTED = 4;
+
   /**
    * Create a new Document based on array-data
    *
