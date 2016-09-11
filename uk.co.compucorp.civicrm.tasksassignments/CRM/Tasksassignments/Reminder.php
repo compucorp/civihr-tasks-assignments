@@ -371,17 +371,17 @@ class CRM_Tasksassignments_Reminder
             'upcoming_keydates' => array(),
         );
         $keyDateLabels = array(
-            'period_start_date' => 'Period start date',
-            'period_end_date' => 'Period end date',
-            'initial_join_date' => 'Initial join date',
-            'final_termination_date' => 'Final termination date',
-            'birth_date' => 'Birthday',
+            'period_start_date' => t('Contract start date'),
+            'period_end_date' => t('Contract end date'),
+            'initial_join_date' => t('Initial join date'),
+            'final_termination_date' => t('Final termination date'),
+            'birth_date' => t('Birthday'),
         );
         $now = date('Y-m-d');
 
         if (!empty($activityIds))
         {
-            $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date,
+            $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date, DATE(acf.expire_date) AS expire_date,
             GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.display_name SEPARATOR  '|') AS activity_contact,
             ca.case_id,
             case_type.title AS case_type
@@ -391,6 +391,7 @@ class CRM_Tasksassignments_Reminder
             LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
             LEFT JOIN civicrm_case tcase ON tcase.id = ca.case_id
             LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
+            LEFT JOIN civicrm_value_activity_custom_fields_11 acf ON acf.entity_id = a.id
             WHERE a.id IN (" . implode(',', $activityIds) . ")
             GROUP BY a.id";
 
@@ -412,30 +413,35 @@ class CRM_Tasksassignments_Reminder
                     $activityContact[$type][$cId] = '<a href="' . $contactUrl . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $cSortName . '</a>';
                 }
 
-                $reminderKeys = array();
+                $reminderKey = null;
                 if (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE]))
                 {
-                    if ($activityResult->activity_date < $now)
+                    if ($activityResult->expire_date === $now) {
+                        $reminderKey = 'today_mine';
+                    }
+                    elseif ($activityResult->expire_date > $now) {
+                        $reminderKey = 'coming_up';
+                    }
+                    elseif ($activityResult->activity_date < $now)
                     {
-                        $reminderKeys[] = 'overdue';
+                        $reminderKey = 'overdue';
                     }
                     elseif ($activityResult->activity_date > $now)
                     {
-                        $reminderKeys[] = 'coming_up';
+                        $reminderKey = 'coming_up';
                     }
                     else
                     {
-                        $reminderKeys[] = 'today_mine';
+                        $reminderKey = 'today_mine';
                     }
                 }
-                if (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_CREATOR]) && $activityResult->activity_date === $now)
+                elseif (array_key_exists($contactId, $activityContact[self::ACTIVITY_CONTACT_CREATOR]) && ($activityResult->activity_date === $now || $activityResult->expire_date === $now))
                 {
-                    $reminderKeys[] = 'today_others';
+                    $reminderKey = 'today_others';
                 }
 
                 // Fill the $reminderData array:
-                foreach ($reminderKeys as $reminderKey)
-                {
+                if ($reminderKey) {
                     $reminderData[$reminderKey][] = array(
                         'id' => $activityResult->id,
                         'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=&context=activity&searchContext=activity',
@@ -454,7 +460,7 @@ class CRM_Tasksassignments_Reminder
         }
 
         $todayKeydatesCount = 0;
-        if ($settings['keydates_tab']['value'])
+        if ($settings['keydates_tab']['value'] && self::canSeeKeydates($contactId))
         {
             $keyDates = CRM_Tasksassignments_KeyDates::get($now, $to);
             foreach ($keyDates as $keyDate)
@@ -483,6 +489,33 @@ class CRM_Tasksassignments_Reminder
         }
 
         return $reminderData;
+    }
+
+    /**
+     * Check if given Contact ID is allowed to see Key Dates section
+     * in Dayly Reminder email. As being said in PCHR-1149 it requires
+     * Administrator role.
+     * 
+     * @param int $contactId
+     * @return boolean
+     */
+    public static function canSeeKeydates($contactId) {
+      $ufMatch = civicrm_api3('UFMatch', 'get', array(
+        'sequential' => 1,
+        'contact_id' => $contactId,
+        'return' => 'uf_id',
+      ));
+      $ufMatchContact = CRM_Utils_Array::first($ufMatch['values']);
+      if (empty($ufMatchContact['uf_id'])) {
+        return FALSE;
+      }
+
+      $user = user_load($ufMatchContact['uf_id']);
+      if (in_array('administrator', $user->roles) || in_array('civihr_admin', $user->roles)) {
+        return TRUE;
+      }
+
+      return FALSE;
     }
 
     /**
