@@ -22,7 +22,7 @@
                     <div class="form-horizontal" uib-collapse="isCollapsed.filterDates">
                         <div class="form-group">
                             <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
-                            <div class="col-xs-12 col-sm-9 col-lg-7">
+                            <div class="input-group col-xs-12 col-sm-9 col-lg-7">
                                 <input
                                         is-open="dpOpened.filterDates.from"
                                         uib-datepicker-popup="dd/MM/yyyy"
@@ -30,11 +30,12 @@
                                         ng-model="filterParams.dateRange.from"
                                         datepicker-options="datepickerOptions.from"
                                         id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+                                <span class="input-group-addon fa fa-calendar"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">Until</label>
-                            <div class="col-xs-12 col-sm-9  col-lg-7">
+                            <div class="input-group col-xs-12 col-sm-9  col-lg-7">
                                 <input
                                         is-open="dpOpened.filterDates.until"
                                         uib-datepicker-popup="dd/MM/yyyy"
@@ -42,6 +43,7 @@
                                         ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
                                         ng-model="filterParams.dateRange.until"
                                         id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+                                <span class="input-group-addon fa fa-calendar"></span>
                             </div>
                         </div>
                         <button class="btn btn-default btn-primary btn-block"

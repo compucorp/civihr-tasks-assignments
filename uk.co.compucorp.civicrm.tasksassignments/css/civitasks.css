@@ -11304,15 +11304,28 @@ fieldset[disabled]
   padding-left: 0;
   padding-right: 0;
 }
-#civitasks form .input-group-addon, #cividocuments form .input-group-addon {
-  background: transparent;
-  border: none;
+#civitasks span.input-group-addon, #cividocuments span.input-group-addon,
+#civitasks div.input-group-unstyled span.input-group-addon,
+#cividocuments div.input-group-unstyled span.input-group-addon,
+#cividocuments span.input-group-addon,
+#cividocuments div.input-group-unstyled span.input-group-addon {
+  border: solid 1px #535a67 !important;
+  background: none !important;
+  border-left: 0 !important;
+  color: #41afcb;
+  cursor: pointer !important;
   width: 0;
-  padding-right: 0;
-  padding-left: 6px;
 }
-#civitasks form .input-group-addon a, #cividocuments form .input-group-addon a {
+#civitasks span.input-group-addon a, #cividocuments span.input-group-addon a,
+#civitasks div.input-group-unstyled span.input-group-addon a,
+#cividocuments div.input-group-unstyled span.input-group-addon a,
+#cividocuments span.input-group-addon a,
+#cividocuments div.input-group-unstyled span.input-group-addon a {
   color: #333333;
+}
+#civitasks .ng-submitted .ng-invalid ~ span.input-group-addon, #cividocuments .ng-submitted .ng-invalid ~ span.input-group-addon,
+#cividocuments .ng-submitted .ng-invalid ~ span.input-group-addon {
+  border-color: #e6807f !important;
 }
 #civitasks form .form-group.has-feedback.has-error .input-group-addon, #cividocuments form .form-group.has-feedback.has-error .input-group-addon {
   background: none;
