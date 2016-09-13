@@ -1,23 +1,30 @@
 @include keyframes(fadeIn) {
   from {
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
-    opacity: 1; }
-}
-
-.fade-in {
-  @include animation(fadeIn .5s);
+    opacity: 1;
+  }
 }
 
 @include keyframes(fadeInUp) {
   0% {
     @include translateY(15px);
-    opacity: 0; }
+    opacity: 0;
+  }
   100% {
     @include translateY(0);
-    opacity: 1; }
+    opacity: 1;
+  }
 }
 
-.fade-in-up {
-  @include animation(fadeInUp .5s);
+:not(.ng-leave) {
+
+  &.fade-in {
+    @include animation(fadeIn .5s);
+  }
+
+  &.fade-in-up {
+    @include animation(fadeInUp .5s);
+  }
 }
