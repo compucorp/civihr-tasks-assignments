@@ -116,6 +116,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
     $originalId = $document['id'];
     $expireDateField = self::getExpireDateCustomFieldName();
     $document['activity_date_time'] = $document[$expireDateField];
+    $document['status_id'] = self::STATUS_AWAITING_UPLOAD;
     unset($document[$expireDateField]);
     unset($document[$expireDateField . '_' . $expireId]);
     unset($document['expire_date']);
