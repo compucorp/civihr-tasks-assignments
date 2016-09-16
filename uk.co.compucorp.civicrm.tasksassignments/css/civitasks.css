@@ -2952,6 +2952,7 @@
   text-decoration: none;
 }
 #civitasks a:focus, #cividocuments a:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4506,6 +4507,7 @@
 #cividocuments input[type="radio"]:focus,
 #civitasks input[type="checkbox"]:focus,
 #cividocuments input[type="checkbox"]:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -5192,6 +5194,7 @@ fieldset[disabled]
   user-select: none;
 }
 #civitasks .btn:focus, #cividocuments .btn:focus, #civitasks .btn.focus, #cividocuments .btn.focus, #civitasks .btn:active:focus, #cividocuments .btn:active:focus, #civitasks .btn:active.focus, #cividocuments .btn:active.focus, #civitasks .btn.active:focus, #cividocuments .btn.active:focus, #civitasks .btn.active.focus, #cividocuments .btn.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -9322,11 +9325,6 @@ fieldset[disabled]
     opacity: 1;
   }
 }
-#civitasks .fade-in, #cividocuments .fade-in {
-  -webkit-animation: fadeIn 0.5s;
-  -o-animation: fadeIn 0.5s;
-  animation: fadeIn 0.5s;
-}
 @-moz-keyframes fadeInUp {
   0% {
     -moz-transform: translateY(15px);
@@ -9367,7 +9365,12 @@ fieldset[disabled]
     opacity: 1;
   }
 }
-#civitasks .fade-in-up, #cividocuments .fade-in-up {
+#civitasks :not(.ng-leave).fade-in, #cividocuments :not(.ng-leave).fade-in {
+  -webkit-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+}
+#civitasks :not(.ng-leave).fade-in-up, #cividocuments :not(.ng-leave).fade-in-up {
   -webkit-animation: fadeInUp 0.5s;
   -o-animation: fadeInUp 0.5s;
   animation: fadeInUp 0.5s;

@@ -37,14 +37,6 @@ define([
                 assignee: initialContacts('assignee')
             };
 
-            $scope.statusFieldVisible = function() {
-              return !!$scope.document.status_id;
-            };
-
-            $scope.showStatusField = function() {
-              $scope.document.status_id = 1;
-            };
-
             $scope.cacheAssignment = function ($item) {
 
                 if ($rootScope.cache.assignment.obj[$item.id]) {
