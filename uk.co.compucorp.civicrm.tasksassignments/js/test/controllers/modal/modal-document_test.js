@@ -79,28 +79,6 @@ define([
       });
     });
 
-    describe('$scope.statusFieldVisible', function () {
-      beforeEach(function () {
-        initController();
-      });
-
-      it('starts defined to false', function () {
-        expect($scope.statusFieldVisible).toBeFalsy();
-      });
-    });
-
-    describe('$scope.showStatusField', function () {
-      beforeEach(function () {
-        initController();
-      });
-
-      it('changes "$scope.statusFieldVisible" to true', function () {
-        expect($scope.statusFieldVisible).toBeFalsy();
-        $scope.showStatusField();
-        expect($scope.statusFieldVisible).toBeTruthy();
-      });
-    });
-
     function fakeModalInstance() {
       return {
         close: jasmine.createSpy('modalInstance.close'),
