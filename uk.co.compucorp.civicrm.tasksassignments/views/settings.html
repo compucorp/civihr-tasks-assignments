@@ -95,6 +95,7 @@
                                 type="number"
                                 min="0"
                                 class="form-control"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                 ng-model="settings.daysToCreateADocumentClone">
                     </div>
                 </div>
