@@ -33,14 +33,16 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="crm_custom-select crm_custom-select--full">
-                        <select name="documentType" ng-class="{'has-error': documentForm.documentType.$invalid}"
-                            ng-required="true"
-                            class="form-control required-field-indicator"
-                            ng-model="document.activity_type_id"
-                            ng-options="type.key as type.value for type in cache.documentType.arr">
-                            <option value="">Select document type</option>
-                        </select>
-                        <span class="crm_custom-select__arrow"></span>
+                      <ui-select theme="civihr-ui-select" ng-model="document.activity_type_id" ng-required="true">
+                        <ui-select-match allow-clear class="ui-select-match" placeholder="Select document type">
+                          {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                          class="ui-select-choices"
+                          repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+                          <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                 </div>
             </div>

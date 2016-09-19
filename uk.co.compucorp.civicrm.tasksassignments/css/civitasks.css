@@ -2952,7 +2952,6 @@
   text-decoration: none;
 }
 #civitasks a:focus, #cividocuments a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -3206,12 +3205,12 @@
   color: #66512c;
 }
 #civitasks .text-danger, #cividocuments .text-danger {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks a.text-danger:hover, #cividocuments a.text-danger:hover,
 #civitasks a.text-danger:focus,
 #cividocuments a.text-danger:focus {
-  color: #eb5468;
+  color: #de5654;
 }
 #civitasks .bg-primary, #cividocuments .bg-primary {
   color: #fff;
@@ -4507,7 +4506,6 @@
 #cividocuments input[type="radio"]:focus,
 #civitasks input[type="checkbox"]:focus,
 #cividocuments input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -5023,25 +5021,25 @@ fieldset[disabled]
 #cividocuments .has-error.radio-inline .radio-label, #civitasks .has-error.checkbox-inline label, #cividocuments .has-error.checkbox-inline label, #civitasks .has-error.checkbox-inline .checkbox-label, #cividocuments .has-error.checkbox-inline .checkbox-label,
 #civitasks .has-error.checkbox-inline .radio-label,
 #cividocuments .has-error.checkbox-inline .radio-label {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .has-error .form-control, #cividocuments .has-error .form-control {
-  border-color: #f08290;
+  border-color: #e6807f;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 #civitasks .has-error .form-control:focus, #cividocuments .has-error .form-control:focus {
-  border-color: #eb5468;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #fbdde1;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #fbdde1;
+  border-color: #de5654;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f7d5d4;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f7d5d4;
 }
 #civitasks .has-error .input-group-addon, #cividocuments .has-error .input-group-addon {
-  color: #f08290;
-  border-color: #f08290;
+  color: #e6807f;
+  border-color: #e6807f;
   background-color: #f2dede;
 }
 #civitasks .has-error .form-control-feedback, #cividocuments .has-error .form-control-feedback {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .has-feedback label ~ .form-control-feedback, #cividocuments .has-feedback label ~ .form-control-feedback, #civitasks .has-feedback .checkbox-label ~ .form-control-feedback, #cividocuments .has-feedback #civitasks .checkbox-label ~ .form-control-feedback, #civitasks .has-feedback #cividocuments .checkbox-label ~ .form-control-feedback, #cividocuments .has-feedback .checkbox-label ~ .form-control-feedback,
 #civitasks .has-feedback .radio-label ~ .form-control-feedback,
@@ -5194,7 +5192,6 @@ fieldset[disabled]
   user-select: none;
 }
 #civitasks .btn:focus, #cividocuments .btn:focus, #civitasks .btn.focus, #cividocuments .btn.focus, #civitasks .btn:active:focus, #cividocuments .btn:active:focus, #civitasks .btn:active.focus, #cividocuments .btn:active.focus, #civitasks .btn.active:focus, #cividocuments .btn.active:focus, #civitasks .btn.active.focus, #cividocuments .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -6929,10 +6926,10 @@ fieldset[disabled]
   background-color: #f49454;
 }
 #civitasks .label-danger, #cividocuments .label-danger {
-  background-color: #f08290;
+  background-color: #e6807f;
 }
 #civitasks .label-danger[href]:hover, #cividocuments .label-danger[href]:hover, #civitasks .label-danger[href]:focus, #cividocuments .label-danger[href]:focus {
-  background-color: #eb5468;
+  background-color: #de5654;
 }
 #civitasks .badge, #cividocuments .badge {
   display: inline-block;
@@ -7122,13 +7119,13 @@ fieldset[disabled]
 #civitasks .alert-danger, #cividocuments .alert-danger {
   background-color: #f2dede;
   border-color: #ebccd1;
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .alert-danger hr, #cividocuments .alert-danger hr {
   border-top-color: #e4b9c0;
 }
 #civitasks .alert-danger .alert-link, #cividocuments .alert-danger .alert-link {
-  color: #eb5468;
+  color: #de5654;
 }
 @-webkit-keyframes progress-bar-stripes {
   from {
@@ -7210,7 +7207,7 @@ fieldset[disabled]
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 #civitasks .progress-bar-danger, #cividocuments .progress-bar-danger {
-  background-color: #f08290;
+  background-color: #e6807f;
 }
 .progress-striped #civitasks .progress-bar-danger, .progress-striped #cividocuments .progress-bar-danger {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -7449,13 +7446,13 @@ fieldset[disabled]
   border-color: #8a6d3b;
 }
 #civitasks .list-group-item-danger, #cividocuments .list-group-item-danger {
-  color: #f08290;
+  color: #e6807f;
   background-color: #f2dede;
 }
 #civitasks a.list-group-item-danger, #cividocuments a.list-group-item-danger,
 #civitasks button.list-group-item-danger,
 #cividocuments button.list-group-item-danger {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks a.list-group-item-danger .list-group-item-heading, #cividocuments a.list-group-item-danger .list-group-item-heading,
 #civitasks button.list-group-item-danger .list-group-item-heading,
@@ -7467,7 +7464,7 @@ fieldset[disabled]
 #cividocuments button.list-group-item-danger:hover,
 #civitasks button.list-group-item-danger:focus,
 #cividocuments button.list-group-item-danger:focus {
-  color: #f08290;
+  color: #e6807f;
   background-color: #ebcccc;
 }
 #civitasks a.list-group-item-danger.active, #cividocuments a.list-group-item-danger.active, #civitasks a.list-group-item-danger.active:hover, #cividocuments a.list-group-item-danger.active:hover, #civitasks a.list-group-item-danger.active:focus, #cividocuments a.list-group-item-danger.active:focus,
@@ -7478,8 +7475,8 @@ fieldset[disabled]
 #civitasks button.list-group-item-danger.active:focus,
 #cividocuments button.list-group-item-danger.active:focus {
   color: #fff;
-  background-color: #f08290;
-  border-color: #f08290;
+  background-color: #e6807f;
+  border-color: #e6807f;
 }
 #civitasks .list-group-item-heading, #cividocuments .list-group-item-heading {
   margin-top: 0;
@@ -7915,7 +7912,7 @@ fieldset[disabled]
   border-color: #ebccd1;
 }
 #civitasks .panel-danger > .panel-heading, #cividocuments .panel-danger > .panel-heading {
-  color: #f08290;
+  color: #e6807f;
   background-color: #f2dede;
   border-color: #ebccd1;
 }
@@ -7924,7 +7921,7 @@ fieldset[disabled]
 }
 #civitasks .panel-danger > .panel-heading .badge, #cividocuments .panel-danger > .panel-heading .badge {
   color: #f2dede;
-  background-color: #f08290;
+  background-color: #e6807f;
 }
 #civitasks .panel-danger > .panel-footer + .panel-collapse > .panel-body, #cividocuments .panel-danger > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: #ebccd1;
@@ -9400,12 +9397,12 @@ fieldset[disabled]
   color: #f49454;
 }
 #civitasks .text-danger-light, #cividocuments .text-danger-light {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks a.text-danger-light:hover, #cividocuments a.text-danger-light:hover,
 #civitasks a.text-danger-light:focus,
 #cividocuments a.text-danger-light:focus {
-  color: #eb5468;
+  color: #de5654;
 }
 #civitasks .header-bar, #cividocuments .header-bar {
   -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
@@ -9437,11 +9434,11 @@ fieldset[disabled]
   color: #fff;
 }
 #civitasks .header-bar.header-bar-warning, #cividocuments .header-bar.header-bar-warning {
-  background-color: #f08290;
+  background-color: #e6807f;
   color: #fff;
 }
 #civitasks .header-bar.header-bar-danger, #cividocuments .header-bar.header-bar-danger {
-  background-color: #f08290;
+  background-color: #e6807f;
   color: #fff;
 }
 #civitasks .header-bar.header-bar-danger a, #cividocuments .header-bar.header-bar-danger a {
@@ -9502,7 +9499,7 @@ fieldset[disabled]
   background-color: #5d6779 !important;
 }
 #civitasks .badge.badge-danger, #cividocuments .badge.badge-danger {
-  background-color: #f08290 !important;
+  background-color: #e6807f !important;
 }
 #civitasks .badge.badge-danger-light, #cividocuments .badge.badge-danger-light {
   background-color: #e6807f !important;
@@ -9762,10 +9759,10 @@ fieldset[disabled]
 #civitasks select[required] + .crm_custom-select__arrow::after, #cividocuments select[required] + .crm_custom-select__arrow::after {
   top: -6px;
 }
-#civitasks select.has-error, #cividocuments select.has-error,
-#civitasks select.has-error + .crm_custom-select__arrow,
-#cividocuments select.has-error + .crm_custom-select__arrow {
-  border-color: #f08290;
+#civitasks .ng-submitted select.has-error, #cividocuments .ng-submitted select.has-error,
+#civitasks .ng-submitted select.has-error + .crm_custom-select__arrow,
+#cividocuments .ng-submitted select.has-error + .crm_custom-select__arrow {
+  border-color: #e6807f;
 }
 #civitasks .control-label, #cividocuments .control-label,
 #civitasks .checkbox-inline,
@@ -9815,6 +9812,27 @@ fieldset[disabled]
 }
 #civitasks .ui-select-toggle[disabled]:hover, #cividocuments .ui-select-toggle[disabled]:hover, #civitasks .ui-select-toggle[disabled]:focus, #cividocuments .ui-select-toggle[disabled]:focus, #civitasks .ui-select-toggle[disabled]:active, #cividocuments .ui-select-toggle[disabled]:active {
   background-color: #f4f7f8;
+}
+#civitasks .form-control.ui-select-container, #cividocuments .form-control.ui-select-container {
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+#civitasks .form-control:not(.ui-select-container), #cividocuments .form-control:not(.ui-select-container) {
+  border-color: #727e8a !important;
+}
+#civitasks .form-control ~ .input-group-addon, #cividocuments .form-control ~ .input-group-addon {
+  color: #586277;
+}
+#civitasks .form-control-feedback, #cividocuments .form-control-feedback {
+  color: #586277 !important;
+}
+#civitasks .ng-submitted .form-control.ng-invalid, #cividocuments .ng-submitted .form-control.ng-invalid {
+  border-color: #e6807f !important;
+}
+#civitasks .ng-submitted .form-control.ng-invalid ~ .input-group-addon, #cividocuments .ng-submitted .form-control.ng-invalid ~ .input-group-addon {
+  color: #e6807f;
+}
+#civitasks .ng-submitted .form-control-feedback, #cividocuments .ng-submitted .form-control-feedback {
+  color: #e6807f !important;
 }
 #civitasks .ct-iframe, #cividocuments .ct-iframe {
   opacity: 0;
@@ -10939,10 +10957,10 @@ fieldset[disabled]
   opacity: 0.75;
 }
 #civitasks .cal-day-past .cal-list-events-num, #cividocuments .cal-day-past .cal-list-events-num {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .cal-day-weekend span[data-cal-date], #cividocuments .cal-day-weekend span[data-cal-date] {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .cal-day-outmonth, #cividocuments .cal-day-outmonth {
   background-color: #f5f7f8;
@@ -10991,7 +11009,7 @@ fieldset[disabled]
   border-left: 5px solid;
 }
 #civitasks .day-highlight.dh-event-overdue-true a.cal-event-week, #cividocuments .day-highlight.dh-event-overdue-true a.cal-event-week {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .day-highlight.dh-event-task, #cividocuments .day-highlight.dh-event-task {
   border-left-color: #5d6779;
@@ -11537,10 +11555,10 @@ fieldset[disabled]
   padding-top: 8px;
 }
 #civitasks .ct-list-task > li.ct-task-due, #cividocuments .ct-list-task > li.ct-task-due {
-  border-color: #f08290;
+  border-color: #e6807f;
 }
 #civitasks .ct-list-task > li.ct-task-due time, #cividocuments .ct-list-task > li.ct-task-due time {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .ct-list-task > li.ct-task-completed .ct-task-title, #cividocuments .ct-list-task > li.ct-task-completed .ct-task-title {
   text-decoration: line-through;
@@ -12002,7 +12020,7 @@ fieldset[disabled]
   color: #41afcb;
 }
 #civitasks .editable-wrap .editable-buttons .glyphicon-remove, #cividocuments .editable-wrap .editable-buttons .glyphicon-remove {
-  color: #f08290;
+  color: #e6807f;
 }
 #civitasks .editable-wrap.editable-ta, #cividocuments .editable-wrap.editable-ta {
   display: block;
@@ -12098,8 +12116,8 @@ fieldset[disabled]
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
 }
-#civitasks .has-error .crm_custom-select__arrow, #cividocuments .has-error .crm_custom-select__arrow {
-  border-color: #f08290 !important;
+#civitasks .ng-submitted .has-error .crm_custom-select__arrow, #cividocuments .ng-submitted .has-error .crm_custom-select__arrow {
+  border-color: #e6807f !important;
 }
 #civitasks .has-feedback > .crm_custom-select > select, #cividocuments .has-feedback > .crm_custom-select > select {
   padding-right: 54px;

@@ -109,7 +109,7 @@ select[required] + .crm_custom-select__arrow::after {
   top: -6px;
 }
 
-select.has-error {
+.ng-submitted select.has-error {
   &,
   + .crm_custom-select__arrow {
     border-color: $state-danger-text;
@@ -172,5 +172,37 @@ select.has-error {
   &:focus,
   &:active {
     background-color: $input-bg-disabled;
+  }
+}
+
+.form-control {
+  &.ui-select-container {
+    border-color: $dropdown-border !important;
+  }
+
+  &:not(.ui-select-container) {
+    border-color: $gray-light !important;
+  }
+
+  ~ .input-group-addon {
+    color: $gray;
+  }
+}
+
+.form-control-feedback {
+  color: $gray !important;
+}
+
+.ng-submitted {
+  .form-control.ng-invalid {
+    border-color: $brand-danger !important;
+
+    ~ .input-group-addon {
+      color: $brand-danger;
+    }
+  }
+
+  .form-control-feedback {
+    color: $brand-danger !important;
   }
 }
