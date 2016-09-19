@@ -9730,9 +9730,7 @@ fieldset[disabled]
   content: '*';
   color: #e6807f;
 }
-#civitasks .ui-select-container.required-field-indicator:not(.ui-select-bootstrap)[required]::after, #cividocuments .ui-select-container.required-field-indicator:not(.ui-select-bootstrap)[required]::after,
-#civitasks select.required-field-indicator[required] + .crm_custom-select__arrow::after,
-#cividocuments select.required-field-indicator[required] + .crm_custom-select__arrow::after {
+#civitasks select.required-field-indicator[required] + .crm_custom-select__arrow::after, #cividocuments select.required-field-indicator[required] + .crm_custom-select__arrow::after {
   content: '*';
   color: #e6807f;
   position: absolute;
@@ -9748,12 +9746,20 @@ fieldset[disabled]
   padding-left: 5px;
   display: inline-block;
 }
-#civitasks .ui-select-container.required-field-indicator.ui-select-bootstrap[required] .ui-select-placeholder::after, #cividocuments .ui-select-container.required-field-indicator.ui-select-bootstrap[required] .ui-select-placeholder::after {
+#civitasks .required-field-indicator.ui-select-container .ui-select-placeholder::after, #cividocuments .required-field-indicator.ui-select-container .ui-select-placeholder::after {
   content: '*';
   color: #e6807f;
   font-size: 13px;
   position: absolute;
   top: 2px;
+  padding-left: 5px;
+}
+#civitasks .required-field-indicator.ui-select-container .select2-chosen.empty::after, #cividocuments .required-field-indicator.ui-select-container .select2-chosen.empty::after {
+  content: '*';
+  color: #e6807f;
+  font-size: 13px;
+  position: absolute;
+  top: -1px;
   padding-left: 5px;
 }
 #civitasks select[required] + .crm_custom-select__arrow::after, #cividocuments select[required] + .crm_custom-select__arrow::after {
@@ -9813,11 +9819,8 @@ fieldset[disabled]
 #civitasks .ui-select-toggle[disabled]:hover, #cividocuments .ui-select-toggle[disabled]:hover, #civitasks .ui-select-toggle[disabled]:focus, #cividocuments .ui-select-toggle[disabled]:focus, #civitasks .ui-select-toggle[disabled]:active, #cividocuments .ui-select-toggle[disabled]:active {
   background-color: #f4f7f8;
 }
-#civitasks .form-control.ui-select-container, #cividocuments .form-control.ui-select-container {
-  border-color: rgba(0, 0, 0, 0.15) !important;
-}
 #civitasks .form-control:not(.ui-select-container), #cividocuments .form-control:not(.ui-select-container) {
-  border-color: #727e8a !important;
+  border-color: #727E8A !important;
 }
 #civitasks .form-control ~ .input-group-addon, #cividocuments .form-control ~ .input-group-addon {
   color: #586277;

@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="crm_custom-select crm_custom-select--full">
-                      <ui-select theme="civihr-ui-select" ng-model="document.activity_type_id" ng-required="true">
+                      <ui-select theme="civihr-ui-select" ng-model="document.activity_type_id" class="required-field-indicator" ng-required="true">
                         <ui-select-match allow-clear class="ui-select-match" placeholder="Select document type">
                           {{$select.selected.value}}
                         </ui-select-match>

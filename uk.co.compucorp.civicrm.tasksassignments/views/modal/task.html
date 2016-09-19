@@ -42,14 +42,19 @@
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
                     <div class="crm_custom-select crm_custom-select--full">
-                        <select name="taskType" ng-class="{'has-error': taskForm.taskType.$invalid}"
-                            ng-required="true"
-                            class="form-control required-field-indicator"
-                            ng-model="task.activity_type_id"
-                            ng-options="type.key as type.value for type in cache.taskType.arr">
-                            <option value="">Select Task Type</option>
-                        </select>
-                        <span class="crm_custom-select__arrow"></span>
+                      <ui-select theme="civihr-ui-select"
+                        ng-model="task.activity_type_id"
+                        ng-required="true"
+                        class="required-field-indicator">
+                        <ui-select-match allow-clear class="ui-select-match" placeholder="Select Task Type">
+                          {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                          class="ui-select-choices"
+                          repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                          <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                 </div>
 
