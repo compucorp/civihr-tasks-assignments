@@ -438,26 +438,6 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   }
 
   /**
-   * Disables the Case menu items if Tasks&Assignments is enabled
-   *
-   * @return {boolean}
-   */
-  public function upgrade_1017()
-  {
-    $isEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.tasksassignments', 'is_active', 'full_name');
-    $isCaseEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'org.civicrm.hrcase', 'is_active', 'full_name');
-
-    if ($isEnabled && $isCaseEnabled) {
-      CRM_Core_DAO::executeQuery("UPDATE civicrm_navigation SET is_active=0 WHERE name = 'Cases' AND parent_id IS NULL");
-      CRM_Core_BAO_Navigation::resetNavigation();
-
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
    * Make sure that the Tasks and Assignments main menu item
    * (and subsequently the Dashboard menu item) are restricted to only the users
    * with 'access Tasks and Assignments' permission
@@ -484,6 +464,69 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return false;
   }
 
+  /**
+   * Disables the Case menu items if Tasks&Assignments is enabled
+   *
+   * @return {boolean}
+   */
+  public function upgrade_1019() {
+    $isEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.tasksassignments', 'is_active', 'full_name');
+
+    if ($isEnabled) {
+      CRM_Core_DAO::executeQuery("UPDATE civicrm_navigation SET is_active=0 WHERE name = 'Cases' AND parent_id IS NULL");
+      CRM_Core_BAO_Navigation::resetNavigation();
+    }
+
+    return true;
+  }
+
+  /**
+   * Uninstalls the dummy document types in old CiviHR installs
+   * And adds real, default values
+   */
+  public function upgrade_1020() {
+    $this->_uninstallActivityTypes('CiviDocument', array(
+      'Joining Document 1', 'Exiting Document 1'
+    ));
+
+    $this->_installActivityTypes('CiviDocument', array(
+      'VISA',
+      'Passport',
+      'Government Photo ID',
+      'Driving licence',
+      'Identity card',
+      'Certificate of sponsorship (COS)'
+    ));
+
+    return TRUE;
+  }
+
+  /*
+   * Set up Documents Notification job
+   */
+  public function upgrade_1021()
+  {
+    $dao = new CRM_Core_DAO_Job();
+    $dao->api_entity = 'document';
+    $dao->api_action = 'senddocumentsnotification';
+    $dao->find(TRUE);
+    if (!$dao->id)
+    {
+      $dao = new CRM_Core_DAO_Job();
+      $dao->domain_id = CRM_Core_Config::domainID();
+      $dao->run_frequency = 'Daily';
+      $dao->parameters = null;
+      $dao->name = 'Tasks and Assignments Documents Notification';
+      $dao->description = 'Tasks and Assignments Documents Notification';
+      $dao->api_entity = 'document';
+      $dao->api_action = 'senddocumentsnotification';
+      $dao->is_active = 1;
+      $dao->save();
+    }
+
+    return TRUE;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
@@ -492,46 +535,78 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         return TRUE;
     }
 
-    function _installActivityTypes($component, array $types)
-    {
-        $componentId = null;
-        $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
-        $componentParams = array(
-            1 => array($component, 'String'),
-        );
-        $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
-        if ($componentResult->fetch())
-        {
-            $componentId = $componentResult->id;
-        }
+    /**
+     * Returns the activity type params starting with a component name,
+     * specifically it returns the option group and component id
+     *
+     * @param  string $component
+     * @return Array
+     */
+    private function _fetchActivityTypeParams($component) {
+      $componentId = null;
+      $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
+      $componentParams = array(1 => array($component, 'String'));
+      $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
 
-        if (!$componentId)
-        {
-            throw new Exception($component . ' Component not found.');
-        }
+      if ($componentResult->fetch()) {
+        $componentId = $componentResult->id;
+      }
+
+      if (!$componentId) {
+        throw new Exception($component . ' Component not found.');
+      }
+
+      $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
+
+      if (!$optionGroupID) {
+        civicrm_api3('OptionGroup', 'create', array(
+          'name' => 'activity_type',
+          'title' => 'Activity Type',
+          'is_active' => 1,
+        ));
 
         $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
-        if (!$optionGroupID) {
-            $params = array(
-                'name' => 'activity_type',
-                'title' => 'Activity Type',
-                'is_active' => 1,
-            );
-            civicrm_api3('OptionGroup', 'create', $params);
-            $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
-        }
+      }
 
-        // Create the types:
-      foreach ($types as $type)
-      {
+      return array(
+        'component_id' => $componentId,
+        'option_group_id' => $optionGroupID
+      );
+    }
+
+    private function _installActivityTypes($component, array $types) {
+      $params = $this->_fetchActivityTypeParams($component);
+
+      foreach ($types as $type) {
         civicrm_api3('OptionValue', 'create', array(
           'sequential' => 1,
-          'option_group_id' => $optionGroupID,
-          'component_id' => $componentId,
+          'option_group_id' => $params['option_group_id'],
+          'component_id' => $params['component_id'],
           'label' => $type,
           'name' => $type,
         ));
       }
     }
 
+    /**
+     * Uninstall (if they exist) the given activity types for the given component
+     *
+     * @param  string $component
+     * @param  array  $types
+     */
+    private function _uninstallActivityTypes($component, array $types) {
+      $params = $this->_fetchActivityTypeParams('CiviDocument');
+      $typeIds = array_map(function ($type) {
+        return $type['id'];
+      }, civicrm_api3('OptionValue', 'get', array(
+        'component_id' => $params['component_id'],
+        'option_group_id' => $params['option_group_id'],
+        'name' => array('IN' => $types),
+        'return' => 'id'
+      ))['values']);
+
+      foreach ($typeIds as $id) {
+        civicrm_api3('OptionValue', 'delete', array('id' => $id));
+      }
+    }
 }

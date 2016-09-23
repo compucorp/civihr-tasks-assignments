@@ -87,4 +87,9 @@
     <title>FileZip</title>
     <access_arguments>access Tasks and Assignments</access_arguments>
   </item>
+
+  <item>
+    <path>civicrm/case/ajax/unclosed</path>
+    <page_callback>CRM_Tasksassignments_Page_AJAX::autocompleteCases</page_callback>
+  </item>
 </menu>

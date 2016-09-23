@@ -75,18 +75,24 @@ define([
                 });
             };
 
+            $scope.dueFilters = [
+              { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
+              { badgeClass: 'primary', calendarView: 'day', value: 'dueToday' },
+              { badgeClass: 'primary', calendarView: 'week', value: 'dueThisWeek' }
+            ];
+            
             $scope.format = HR_settings.DATE_FORMAT;
             $scope.assignments = [];
             $scope.contacts = [];
             $scope.dueToday = 0;
             $scope.dueThisWeek = 0;
             $scope.overdue = 0;
-            $scope.taskList = taskList;
-            $scope.taskListFiltered = [];
-            $scope.taskListLimit = 5;
-            $scope.taskListOngoing = [];
-            $scope.taskListResolved = [];
-            $scope.taskListResolvedLoaded = false;
+            $scope.list = taskList;
+            $scope.listFiltered = [];
+            $scope.listLimit = 5;
+            $scope.listOngoing = [];
+            $scope.listResolved = [];
+            $scope.listResolvedLoaded = false;
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -99,17 +105,14 @@ define([
             };
 
             $scope.filterParams = {
-                contactId: null,
-                userRole: $state.params.userRole || {
-                    field: null,
-                    isEqual: null
-                },
-                dateRange: {
-                    from: null,
-                    until: null
-                },
-                due: null,
-                assignmentType: []
+              contactId: null,
+              ownership: $state.params.ownership ||  null,
+              dateRange: {
+                from: null,
+                until: null
+              },
+              due: null,
+              assignmentType: []
             };
 
             $scope.filterParamsHolder = {
@@ -129,6 +132,15 @@ define([
                 dueToday: 'Due Today',
                 dueThisWeek: 'Due This Week',
                 dateRange: 'Due Tasks'
+            };
+
+            /**
+             * Applies the filters on the sidebar
+             */
+            $scope.applySidebarFilters = function () {
+              $scope.filterParams.dateRange.from = $scope.filterParamsHolder.dateRange.from;
+              $scope.filterParams.dateRange.until = $scope.filterParamsHolder.dateRange.until;
+              $scope.filterParams.due = 'dateRange';
             };
 
             $scope.cacheAssignment = function($item){
@@ -254,62 +266,59 @@ define([
             };
 
             $scope.loadTasksResolved = function(){
+              if ($scope.listResolvedLoaded) {
+                return;
+              }
 
-                if ($scope.taskListResolvedLoaded) {
-                    return;
+              var ctrl = this;
+
+              //Remove resolved tasks from the task list
+              $filter('filterByStatus')($scope.list, $rootScope.cache.taskStatusResolve, false);
+
+              TaskService.get({
+                'target_contact_id': config.CONTACT_ID,
+                'status_id': {
+                  'IN': config.status.resolve.TASK
+                }
+              }).then(function(taskListResolved){
+                var contactIds = ctrl.contactIds,
+                    assignmentIds = ctrl.assignmentIds;
+
+                ctrl.collectId(taskListResolved);
+
+                if (contactIds && contactIds.length) {
+                  ContactService.get({'IN': contactIds}).then(function(data){
+                    ContactService.updateCache(data);
+                  });
                 }
 
-                var ctrl = this;
+                if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+                  AssignmentService.get({'IN': assignmentIds}).then(function(data){
+                    AssignmentService.updateCache(data);
+                  });
+                }
 
-                //Remove resolved tasks from the task list
-                $filter('filterByStatus')($scope.taskList, $rootScope.cache.taskStatusResolve, false);
+                Array.prototype.push.apply($scope.list, taskListResolved);
 
-                TaskService.get({
-                    'target_contact_id': config.CONTACT_ID,
-                    'status_id': {
-                        'IN': config.status.resolve.TASK
-                    }
-                }).then(function(taskListResolved){
-                    var contactIds = ctrl.contactIds,
-                        assignmentIds = ctrl.assignmentIds;
-
-                    ctrl.collectId(taskListResolved);
-
-                    if (contactIds && contactIds.length) {
-                        ContactService.get({'IN': contactIds}).then(function(data){
-                            ContactService.updateCache(data);
-                        });
-                    }
-
-                    if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-                        AssignmentService.get({'IN': assignmentIds}).then(function(data){
-                            AssignmentService.updateCache(data);
-                        });
-                    }
-
-                    Array.prototype.push.apply($scope.taskList, taskListResolved);
-
-                    $scope.taskListResolvedLoaded = true;
-                });
+                $scope.listResolvedLoaded = true;
+              });
             }.bind(this);
 
             $scope.deleteTask = function(task){
+              $dialog.open({
+                msg: 'Are you sure you want to delete this task?'
+              }).then(function(confirm){
+                if (!confirm) {
+                  return;
+                }
 
-                $dialog.open({
-                    msg: 'Are you sure you want to delete this task?'
-                }).then(function(confirm){
-                    if (!confirm) {
-                        return
-                    }
+                TaskService.delete(task.id).then(function(results){
+                  $scope.list.splice($scope.list.indexOf(task),1);
 
-                    TaskService.delete(task.id).then(function(results){
-                        $scope.taskList.splice($scope.taskList.indexOf(task),1);
-
-                        $rootScope.$broadcast('taskDelete', task.id);
-                        AssignmentService.updateTab();
-                    });
+                  $rootScope.$broadcast('taskDelete', task.id);
+                  AssignmentService.updateTab();
                 });
-
+              });
             };
 
             $scope.viewInCalendar = function(view){
@@ -317,11 +326,11 @@ define([
             };
 
             $scope.$on('assignmentFormSuccess',function(e, output){
-                Array.prototype.push.apply($scope.taskList, output.taskList);
+              Array.prototype.push.apply($scope.list, output.taskList);
             });
 
             $scope.$on('taskFormSuccess',function(e, output, input){
-                angular.equals({}, input) ? $scope.taskList.push(output) : angular.extend(input,output);
+              angular.equals({}, input) ? $scope.list.push(output) : angular.extend(input,output);
             });
 
             $scope.$on('crmFormSuccess',function(e, data){

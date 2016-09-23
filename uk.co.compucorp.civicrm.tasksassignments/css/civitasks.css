@@ -9325,11 +9325,6 @@ fieldset[disabled]
     opacity: 1;
   }
 }
-#civitasks .fade-in, #cividocuments .fade-in {
-  -webkit-animation: fadeIn 0.5s;
-  -o-animation: fadeIn 0.5s;
-  animation: fadeIn 0.5s;
-}
 @-moz-keyframes fadeInUp {
   0% {
     -moz-transform: translateY(15px);
@@ -9370,7 +9365,12 @@ fieldset[disabled]
     opacity: 1;
   }
 }
-#civitasks .fade-in-up, #cividocuments .fade-in-up {
+#civitasks :not(.ng-leave).fade-in, #cividocuments :not(.ng-leave).fade-in {
+  -webkit-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+}
+#civitasks :not(.ng-leave).fade-in-up, #cividocuments :not(.ng-leave).fade-in-up {
   -webkit-animation: fadeInUp 0.5s;
   -o-animation: fadeInUp 0.5s;
   animation: fadeInUp 0.5s;
@@ -10986,9 +10986,6 @@ fieldset[disabled]
 }
 #civitasks #ct-dashboard .ct-dashboard-tasks--full-height-columns > footer, #cividocuments #ct-dashboard .ct-dashboard-tasks--full-height-columns > footer {
   clear: both;
-}
-#civitasks #ct-dashboard, #cividocuments #ct-dashboard {
-  margin-top: 25px;
 }
 #civitasks #ct-dashboard .ct-container-main, #cividocuments #ct-dashboard .ct-container-main {
   position: relative;

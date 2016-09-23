@@ -29,6 +29,7 @@ define([
     'tasks-assignments/directives/directives',
     'tasks-assignments/directives/civi-events',
     'tasks-assignments/directives/iframe',
+    'tasks-assignments/directives/sidebar-filters',
     'tasks-assignments/directives/spinner',
     'tasks-assignments/directives/validate',
     'tasks-assignments/filters/filters',
@@ -39,7 +40,7 @@ define([
     'tasks-assignments/filters/date-type',
     'tasks-assignments/filters/due',
     'tasks-assignments/filters/offset',
-    'tasks-assignments/filters/user-role',
+    'tasks-assignments/filters/ownership',
     'tasks-assignments/filters/status',
     'tasks-assignments/services/services',
 ], function () {
