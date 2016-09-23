@@ -764,3 +764,12 @@ function civicrm_api3_document_senddailyreminder($params) {
     CRM_Tasksassignments_Reminder::sendDailyReminder();
     return civicrm_api3_create_success(1, $params, 'document', 'dailyreminder');
 }
+
+/*
+ * Documents Notification scheduled job's entry point.
+ */
+function civicrm_api3_document_senddocumentsnotification($params) {
+    
+    $count = CRM_Tasksassignments_Reminder::sendDocumentsNotifications();
+    return civicrm_api3_create_success($count, $params, 'document', 'senddocumentsnotification');
+}
