@@ -19,6 +19,12 @@ form {
     }
   }
 
+  .form-group.has-feedback.has-error {
+    .input-group-addon {
+      background: none;
+    }
+  }
+
   &.form-horizontal {
 
     .input-group.date-input-group {
@@ -228,7 +234,7 @@ form {
               }
 
               &.title-column {
-                width: 45%;
+                width: 30%;
               }
 
               &.assignee-column {
@@ -335,4 +341,3 @@ form {
     box-shadow: none !important;
   }
 }
-
