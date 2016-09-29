@@ -9,9 +9,9 @@ define([
 ], function (angular, moment, controllers) {
     'use strict';
 
-    controllers.controller('ModalAssignmentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$q', '$log', '$filter',
+    controllers.controller('ModalAssignmentCtrl', ['$timeout', '$scope', '$uibModalInstance', '$rootScope', '$q', '$log', '$filter',
         'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data', 'config', 'settings', 'HR_settings',
-        function ($scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
+        function ($timeout, $scope, $modalInstance, $rootScope, $q, $log, $filter, AssignmentService, TaskService, DocumentService,
                   ContactService, data, config, settings, HR_settings) {
             $log.debug('Controller: ModalAssignmentCtrl');
 
@@ -156,6 +156,10 @@ define([
                     return;
                 }
 
+                if (!validateRequiredFields($scope.assignment)) {
+                  return;
+                }
+
                 $scope.$broadcast('ct-spinner-show');
 
                 var documentListAssignment = [], taskListAssignment = [], taskArr = [], documentArr = [],
@@ -234,14 +238,12 @@ define([
 
                     }, function (reason) {
                         CRM.alert(reason, 'Error', 'error');
-                        $modalInstance.dismiss();
                         $scope.$broadcast('ct-spinner-hide');
                         return $q.reject();
                     });
 
                 }, function (reason) {
                     CRM.alert(reason, 'Error', 'error');
-                    $modalInstance.dismiss();
                     $scope.$broadcast('ct-spinner-hide');
                     return $q.reject();
                 });
@@ -320,6 +322,56 @@ define([
                 angular.copy(documentList, $scope.documentList);
             });
 
+            /**
+             * Validates if the required fields values are present, and shows a notification if needed
+             * @param  {Object} assignment The assignment to validate
+             * @return {boolean}     Whether the required field values are present
+             */
+            function validateRequiredFields(assignment) {
+              var missingRequiredFields = [];
+
+              if (!assignment.contact_id) {
+                missingRequiredFields.push('Contact');
+              }
+
+              if (!assignment.case_type_id) {
+                missingRequiredFields.push('Assignmnt type');
+              }
+
+              if (!assignment.dueDate) {
+                missingRequiredFields.push('Key date');
+              }
+
+              if ($scope.taskList.filter(function(activity){
+                return !activity.activity_type_id;
+              }).length) {
+                missingRequiredFields.push('Activity type');
+              }
+
+              if ($scope.taskList.filter(function(activity){
+                return !activity.assignee_contact_id[0];
+              }).length) {
+                missingRequiredFields.push('Assignee');
+              }
+
+              if ($scope.taskList.filter(function(activity){
+                return !activity.activity_date_time;
+              }).length) {
+                missingRequiredFields.push('Activity Due Date');
+              }
+
+              if (missingRequiredFields.length) {
+                var notification = CRM.alert(missingRequiredFields.join(', '),
+                  missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
+                $timeout(function(){
+                  notification.close();
+                  notification = null;
+                }, 5000);
+                return false;
+              }
+
+              return true;
+            }
         }
     ]);
 

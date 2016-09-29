@@ -158,17 +158,16 @@ function tasksassignments_civicrm_entityTypes(&$entityTypes) {
  * Implementation of hook_civicrm_pageRun
  */
 function tasksassignments_civicrm_pageRun($page) {
+  if ($page instanceof CRM_Tasksassignments_Page_Tasks ||
+      $page instanceof CRM_Tasksassignments_Page_Documents ||
+      $page instanceof CRM_Tasksassignments_Page_Dashboard ||
+      $page instanceof CRM_Tasksassignments_Page_Settings) {
 
-    if ($page instanceof CRM_Contact_Page_View_Summary ||
-        $page instanceof CRM_Tasksassignments_Page_Dashboard ||
-        $page instanceof CRM_Tasksassignments_Page_Settings) {
-
-        CRM_Core_Resources::singleton()
-            ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/src/tasks-assignments.js' : 'js/dist/tasks-assignments.min.js',1010);
-        CRM_Core_Resources::singleton()
-            ->addStyleFile('uk.co.compucorp.civicrm.tasksassignments', 'css/civitasks.css');
-
-    }
+    CRM_Core_Resources::singleton()
+      ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/src/tasks-assignments.js' : 'js/dist/tasks-assignments.min.js',1010);
+    CRM_Core_Resources::singleton()
+      ->addStyleFile('uk.co.compucorp.civicrm.tasksassignments', 'css/civitasks.css');
+  }
 }
 
 /**
