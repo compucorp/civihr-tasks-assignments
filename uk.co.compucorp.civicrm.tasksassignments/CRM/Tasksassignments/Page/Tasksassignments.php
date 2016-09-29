@@ -31,6 +31,9 @@ class CRM_Tasksassignments_Page_Tasksassignments extends CRM_Core_Page {
       foreach ($taSettings['values'] as $key => $value) {
           $settings[$key] = $value['value'];
       }
+      if (!empty($settings['days_to_create_a_document_clone'])) {
+        $settings['days_to_create_a_document_clone'] = (int)$settings['days_to_create_a_document_clone'];
+      }
       return array(
         'Tasksassignments' => array(
             'extensionPath' => CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.tasksassignments'),
