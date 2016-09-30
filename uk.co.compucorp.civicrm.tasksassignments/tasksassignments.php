@@ -186,7 +186,7 @@ function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
   if ($tabsetName === 'civicrm/contact/view') {
     CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
     if (CRM_Core_Permission::check('access Tasks and Assignments')) {
-      $tabs[] = Array(
+      $tabs[] = array(
         'id'        => 'civitasks',
         'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
         'title'     => ts('Tasks'),
@@ -196,7 +196,7 @@ function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
         'fields' => 'documents_tab',
       ));
       if (!empty($documentsTab['values']['documents_tab']['value'])) {
-        $tabs[] = Array(
+        $tabs[] = array(
           'id'        => 'cividocuments',
           'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
           'title'     => ts('Documents'),
