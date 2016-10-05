@@ -2,10 +2,10 @@
     <div class="modal-header">
         <div class="row">
             <div class="col-xs-11">
-                <ui-select ng-if="showCId" allow-clear
+                <ui-select ng-if="showCId" allow-clear name="target" ng-class="{'has-error': taskForm.target.$invalid}"
                            ng-model="task.target_contact_id[0]"
                            on-select="cacheContact($item)"
-                           ng-required="true">
+                           ng-required="true" class="required-field-indicator">
                     <ui-select-match class="ui-select-match" placeholder="Select Target Contact">
                         {{$select.selected.label}}
                     </ui-select-match>
@@ -42,33 +42,43 @@
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
                     <div class="crm_custom-select crm_custom-select--full">
-                        <select
-                            ng-required
-                            class="form-control"
-                            ng-model="task.activity_type_id"
-                            ng-options="type.key as type.value for type in cache.taskType.arr">
-                            <option value="">Select Task Type</option>
-                        </select>
-                        <span class="crm_custom-select__arrow"></span>
+                      <ui-select theme="civihr-ui-select"
+                        ng-model="task.activity_type_id"
+                        ng-required="true"
+                        class="required-field-indicator">
+                        <ui-select-match allow-clear class="ui-select-match" placeholder="Select Task Type">
+                          {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                          class="ui-select-choices"
+                          repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                          <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                 </div>
-                <label class="control-label no-gutter col-sm-2" for="{{prefix}}task-due">
-                    <span class="pull-right">Due Date:</span>
-                </label>
 
-                <div class="input-group col-sm-4">
-                  <input
-                    type="text"
-                    name="assignmentDue"
-                    id="{{prefix}}task-due"
-                    class="form-control"
-                    ng-model="task.activity_date_time"
-                    placeholder="{{ format }}"
-                    ng-required="true"
-                    uib-datepicker-popup
-                    is-open="dpOpened"
-                    ng-click="dpOpen($event);">
-                  <span class="input-group-addon fa fa-calendar"></span>
+                <div class="col-xs-12 col-sm-6">
+                  <div class="input-group form-group">
+                    <label class="control-label no-gutter col-sm-4" for="{{prefix}}task-due">
+                      <span class="pull-right required-field-indicator">Due Date:</span>
+                    </label>
+
+                    <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
+                      <input
+                      type="text"
+                      name="assignmentDue"
+                      id="{{prefix}}task-due"
+                      class="form-control"
+                      ng-model="task.activity_date_time"
+                      placeholder="{{ format }}"
+                      ng-required="true"
+                      uib-datepicker-popup
+                      is-open="dpOpened"
+                      ng-click="dpOpen($event);">
+                      <span class="input-group-addon fa fa-calendar"></span>
+                    </div>
+                  </div>
                 </div>
             </div>
             <!-- Subject -->
@@ -105,13 +115,13 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-5" ng-show="!task.assignee_contact_id[0] && !showFieldAssignee">
                     <span class="form-control-static">
-                        <a href class="btn btn-indent" ng-click="showFieldAssignee = true;">
+                        <a href class="btn btn-indent required-field-indicator" ng-click="showFieldAssignee = true;">
                             Add Assignee
                         </a>
                     </span>
                 </div>
                 <div class="col-xs-12 col-sm-6" ng-show="task.assignee_contact_id[0] || showFieldAssignee">
-                    <ui-select ng-required="true"
+                    <ui-select ng-required="true" theme="civihr-ui-select" class="required-field-indicator"
                                allow-clear
                                ng-model="task.assignee_contact_id[0]"
                                on-select="cacheContact($item)">
@@ -189,10 +199,10 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             Cancel
         </button>
-        <button type="submit" ng-click="openNew = true;" class="btn btn-default" ng-disabled="!taskForm.$valid">
+        <button type="submit" ng-click="openNew = true;" class="btn btn-default">
             Save And New
         </button>
-        <button type="submit" class="btn btn-default btn-primary" ng-disabled="!taskForm.$valid">
+        <button type="submit" class="btn btn-default btn-primary">
             Save
         </button>
     </div>
