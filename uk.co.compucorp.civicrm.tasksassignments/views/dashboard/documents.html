@@ -40,7 +40,11 @@
                             ng-model="filterParams.ownership"
                             uib-btn-radio="'assigned'">
                             My Docs
-                            <span>({{(listOngoing | filterByOwnership:'assigned').length}})</span>
+                            <span>({{(list |
+                              filterByDue:filterParams.due:filterParams.dateRange |
+                              filterByStatus:filterParams.documentStatus |
+                              filterByOwnership:'assigned').length}})
+                            </span>
                           </a>
                           <a
                             ui-sref="documents.delegated"
@@ -48,7 +52,11 @@
                             ng-model="filterParams.ownership"
                             uib-btn-radio="'delegated'">
                             Delegated Docs
-                            <span>({{(listOngoing | filterByOwnership:'delegated').length}})</span>
+                            <span>({{(list |
+                              filterByDue:filterParams.due:filterParams.dateRange |
+                              filterByStatus:filterParams.documentStatus |
+                              filterByOwnership:'delegated').length}})
+                            </span>
                           </a>
                           <a
                             ui-sref="documents.all"
@@ -56,7 +64,10 @@
                             ng-model="filterParams.ownership"
                             uib-btn-radio="null">
                             All
-                            <span>({{(listOngoing).length}})</span>
+                            <span>({{(list |
+                              filterByDue:filterParams.due:filterParams.dateRange |
+                              filterByStatus:filterParams.documentStatus).length}})
+                            </span>
                           </a>
                         </div>
                     </div>
