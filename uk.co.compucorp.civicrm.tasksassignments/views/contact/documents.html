@@ -48,9 +48,9 @@
                 </div>
             </div>
         </div>
-        <div ng-hide="!documentListOngoing.length">
+        <div ng-hide="!listOngoing.length">
             <h4 class="header-bar header-bar-primary">Ongoing:</h4>
-            <div ct-spinner ct-spinner-id="documentList">
+            <div ct-spinner ct-spinner-id="list">
                 <table class="table table-striped {{prefix}}table-documents">
                     <thead>
                     <tr>
@@ -64,7 +64,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="document in documentListOngoing = (documentListFiltered = (documentList
+                    <tr ng-repeat="document in listOngoing = (listFiltered = (list
                     | filterByStatus:filterParams.documentStatus
                     | filterByAssignmentType:filterParams.assignmentType
                     | orderBy: 'activity_date_time')
@@ -83,12 +83,12 @@
             </a>
         </h4>
         <div uib-collapse="isCollapsed.documentListResolved">
-            <div class="well {{prefix}}spinner-container" ng-show="!documentListResolvedLoaded">
+            <div class="well {{prefix}}spinner-container" ng-show="!listResolvedLoaded">
                 Loading resolved documents...
                 <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
             </div>
-            <div class="alert alert-danger" ng-show="documentListResolvedLoaded && !documentListResolved.length">No results found.</div>
-            <div ct-spinner ct-spinner-id="documentList" ng-show="documentListResolved.length">
+            <div class="alert alert-danger" ng-show="listResolvedLoaded && !listResolved.length">No results found.</div>
+            <div ct-spinner ct-spinner-id="list" ng-show="listResolved.length">
                 <table class="table table-striped {{prefix}}table-documents">
                     <thead>
                         <tr>
@@ -102,7 +102,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="document in documentListPaginated = (documentListResolved = (documentListFiltered
+                        <tr ng-repeat="document in listPaginated = (listResolved = (listFiltered
                         | filterByStatus:cache.documentStatusResolve:true)
                             | offset: (pagination.currentPage-1)*pagination.itemsPerPage
                             | limitTo: pagination.itemsPerPage)"
@@ -113,9 +113,9 @@
                     </tbody>
                 </table>
                 <div class="clearfix"></div>
-                <nav class="row" ng-show="(documentListResolved.length > pagination.itemsPerPage)">
+                <nav class="row" ng-show="(listResolved.length > pagination.itemsPerPage)">
                     <div class="col-xs-12 text-center">
-                        <uib-pagination boundary-links="true" total-items="documentListResolved.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                        <uib-pagination boundary-links="true" total-items="listResolved.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
                     </div>
                 </nav>
             </div>
