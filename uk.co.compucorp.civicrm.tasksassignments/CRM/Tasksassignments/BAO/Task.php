@@ -49,10 +49,10 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
       return $id;
     }
 
-    $activityContactResult = civicrm_api3('ActivityContact', 'get', array(
+    $activityContactResult = civicrm_api3('ActivityContact', 'get', [
       'sequential' => 1,
       'activity_id' => $taskId,
-    ));
+    ]);
 
     foreach ($activityContactResult['values'] as $value) {
       if ($value['record_type_id'] == 1) { // 1 is assignee
@@ -74,7 +74,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    */
   public static function checkPermission($activityId, $action) {
     $allow = FALSE;
-    if (!$activityId || !in_array($action, array(CRM_Core_Action::UPDATE, CRM_Core_Action::VIEW))) {
+    if (!$activityId || !in_array($action, [CRM_Core_Action::UPDATE, CRM_Core_Action::VIEW])) {
       return FALSE;
     }
 
@@ -86,9 +86,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     }
 
     $componentId = self::getComponentIdByActivityTypeId($activity->activity_type_id);
-    // Check for Component related permissions.
     $allow = self::checkComponentRelatedPermissions($componentId);
-    // Check for Contact related permissions.
     $allow = self::checkContactsPermissions($componentId, $activity->id, $action, $allow);
 
     return $allow;
@@ -105,7 +103,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    *
    * @return boolean
    */
-  protected static function checkContactsPermissions($componentId, $activityId, $action, $allow) {
+  private static function checkContactsPermissions($componentId, $activityId, $action, $allow) {
     $permission = self::getPermissionByAction($action);
     $activityContacts = CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
     $sourceID = CRM_Utils_Array::key('Activity Source', $activityContacts);
@@ -146,7 +144,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    *
    * @return int
    */
-  protected static function getPermissionByAction($action) {
+  private static function getPermissionByAction($action) {
     return $action === CRM_Core_Action::UPDATE ? CRM_Core_Permission::EDIT : CRM_Core_Permission::VIEW;
   }
 
@@ -158,13 +156,13 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    *
    * @return int|NULL
    */
-  protected static function getComponentIdByActivityTypeId($activityTypeId) {
-    $optionValue = civicrm_api3('OptionValue', 'get', array(
+  private static function getComponentIdByActivityTypeId($activityTypeId) {
+    $optionValue = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
-      'return' => array('component_id'),
+      'return' => ['component_id'],
       'option_group_id' => 'activity_type',
       'value' => $activityTypeId,
-    ));
+    ]);
 
     return !empty($optionValue['values'][0]['component_id']) ? $optionValue['values'][0]['component_id'] : NULL;
   }
@@ -176,11 +174,11 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    *
    * @return boolean
    */
-  protected static function checkComponentRelatedPermissions($componentId) {
-    $compPermissions = array(
-      'CiviTask' => array('access Tasks and Assignments'),
-      'CiviDocument' => array('access Tasks and Assignments'),
-    );
+  private static function checkComponentRelatedPermissions($componentId) {
+    $compPermissions = [
+      'CiviTask' => ['access Tasks and Assignments'],
+      'CiviDocument' => ['access Tasks and Assignments'],
+    ];
 
     if (!empty($componentId)) {
       $componentName = CRM_Core_Component::getComponentName($componentId);
@@ -206,7 +204,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    *
    * @return boolean
    */
-  protected static function checkSuperPermissionsByAction($action) {
+  private static function checkSuperPermissionsByAction($action) {
     $supPermission = 'view all contacts';
 
     if ($action == CRM_Core_Action::UPDATE) {
@@ -225,7 +223,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
    *
    * @return boolean
    */
-  protected static function checkActivityContactsPermission($activityId, $contactKey, $permission) {
+  private static function checkActivityContactsPermission($activityId, $contactKey, $permission) {
     $contacts = CRM_Activity_BAO_ActivityContact::retrieveContactIdsByActivityId($activityId, $contactKey);
 
     foreach ($contacts as $cnt => $contactId) {
