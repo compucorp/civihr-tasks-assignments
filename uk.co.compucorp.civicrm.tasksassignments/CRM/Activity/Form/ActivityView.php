@@ -46,9 +46,12 @@ class CRM_Activity_Form_ActivityView extends CRM_Core_Form {
     $cid = CRM_Utils_Request::retrieve('cid', 'Positive', $this);
 
     // Check for required permissions, CRM-6264.
-    if ($activityId &&
-      !CRM_Activity_BAO_Activity::checkPermission($activityId, CRM_Core_Action::VIEW)
-    ) {
+    if ($activityId && (
+      !CRM_Activity_BAO_Activity::checkPermission($activityId, CRM_Core_Action::VIEW) &&
+      // @custom We add the line below to also check for permission defined in
+      // Tasks and Assignments extension.
+      !CRM_Tasksassignments_BAO_Task::checkPermission($activityId, CRM_Core_Action::VIEW)
+    )) {
       CRM_Core_Error::fatal(ts('You do not have permission to access this page.'));
     }
 

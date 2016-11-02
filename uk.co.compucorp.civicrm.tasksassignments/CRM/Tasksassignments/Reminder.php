@@ -341,7 +341,6 @@ class CRM_Tasksassignments_Reminder
         $contactsParams = array(
             1 => array($to, 'String'),
         );
-
         $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery, $contactsParams);
         while ($contactsResult->fetch())
         {
@@ -371,11 +370,11 @@ class CRM_Tasksassignments_Reminder
             'upcoming_keydates' => array(),
         );
         $keyDateLabels = array(
-            'period_start_date' => t('Contract start date'),
-            'period_end_date' => t('Contract end date'),
-            'initial_join_date' => t('Initial join date'),
-            'final_termination_date' => t('Final termination date'),
-            'birth_date' => t('Birthday'),
+            'period_start_date' => ts('Contract start date'),
+            'period_end_date' => ts('Contract end date'),
+            'initial_join_date' => ts('Initial join date'),
+            'final_termination_date' => ts('Final termination date'),
+            'birth_date' => ts('Birthday'),
         );
         $now = date('Y-m-d');
 
@@ -444,7 +443,7 @@ class CRM_Tasksassignments_Reminder
                 if ($reminderKey) {
                     $reminderData[$reminderKey][] = array(
                         'id' => $activityResult->id,
-                        'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=&context=activity&searchContext=activity',
+                        'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=' . $contactId . '&context=activity&searchContext=activity',
                         'typeId' => $activityResult->activity_type_id,
                         'type' => self::$_activityOptions['type'][$activityResult->activity_type_id],
                         'statusId' => $activityResult->status_id,
@@ -460,7 +459,7 @@ class CRM_Tasksassignments_Reminder
         }
 
         $todayKeydatesCount = 0;
-        if ($settings['keydates_tab']['value'] && self::canSeeKeydates($contactId))
+        if ($settings['keydates_tab']['value'] && self::canSeeKeyDates($contactId))
         {
             $keyDates = CRM_Tasksassignments_KeyDates::get($now, $to);
             foreach ($keyDates as $keyDate)
@@ -499,7 +498,7 @@ class CRM_Tasksassignments_Reminder
      * @param int $contactId
      * @return boolean
      */
-    public static function canSeeKeydates($contactId) {
+    public static function canSeeKeyDates($contactId) {
       $ufMatch = civicrm_api3('UFMatch', 'get', array(
         'sequential' => 1,
         'contact_id' => $contactId,
@@ -553,7 +552,7 @@ class CRM_Tasksassignments_Reminder
           'myDocumentsUrl' => $myDocumentsUrl,
           'settings' => $settings,
         ));
-        if (self::_send($assigneeId, $assigneeEmail, t('Documents Notification'), $templateBodyHTML)) {
+        if (self::_send($assigneeId, $assigneeEmail, ts('Documents Notification'), $templateBodyHTML)) {
           $count++;
         }
       }

@@ -63,4 +63,177 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
 
     return $id;
   }
+
+  /**
+   * Check if user has sufficient permission for view/edit Activity record.
+   *
+   * @param int $activityId
+   * @param int $action
+   *
+   * @return bool
+   */
+  public static function checkPermission($activityId, $action) {
+    $allow = FALSE;
+    if (!$activityId || !in_array($action, array(CRM_Core_Action::UPDATE, CRM_Core_Action::VIEW))) {
+      return FALSE;
+    }
+
+    $activity = new CRM_Activity_DAO_Activity();
+    $activity->id = $activityId;
+
+    if (!$activity->find(TRUE)) {
+      return FALSE;
+    }
+
+    $componentId = self::getComponentIdByActivityTypeId($activity->activity_type_id);
+    // Check for Component related permissions.
+    $allow = self::checkComponentRelatedPermissions($componentId);
+    // Check for Contact related permissions.
+    $allow = self::checkContactsPermissions($componentId, $activity->id, $action, $allow);
+
+    return $allow;
+  }
+
+  /**
+   * Check Contacts related permissions for specified values and initial
+   * $allow state.
+   *
+   * @param int $componentId
+   * @param int $activityId
+   * @param int $action
+   * @param boolean $allow
+   *
+   * @return boolean
+   */
+  protected static function checkContactsPermissions($componentId, $activityId, $action, $allow) {
+    $permission = self::getPermissionByAction($action);
+    $activityContacts = CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
+    $sourceID = CRM_Utils_Array::key('Activity Source', $activityContacts);
+    $targetID = CRM_Utils_Array::key('Activity Targets', $activityContacts);
+    $assigneeID = CRM_Utils_Array::key('Activity Assignees', $activityContacts);
+
+    // Check for source contact.
+    if (!$componentId || $allow) {
+      $sourceContactId = self::getActivityContact($activityId, $sourceID);
+      // Account for possibility of activity not having a source contact (as it may have been deleted).
+      $allow = $sourceContactId ? CRM_Contact_BAO_Contact_Permission::allow($sourceContactId, $permission) : TRUE;
+    }
+
+    // Check for target and assignee contacts.
+    if ($allow) {
+      // Check for super permissions.
+      $allow = self::checkSuperPermissionsByAction($action);
+
+      // User might have sufficient permission, through acls.
+      if (!$allow) {
+        // Check permission for Target contact.
+        $allow = self::checkActivityContactsPermission($activityId, $targetID, $permission);
+
+        if ($allow) {
+          // Check permission for Assignee contact.
+          $allow = self::checkActivityContactsPermission($activityId, $assigneeID, $permission);
+        }
+      }
+    }
+
+    return $allow;
+  }
+
+  /**
+   * Return required permission by specified action.
+   *
+   * @param int $action
+   *
+   * @return int
+   */
+  protected static function getPermissionByAction($action) {
+    return $action === CRM_Core_Action::UPDATE ? CRM_Core_Permission::EDIT : CRM_Core_Permission::VIEW;
+  }
+
+  /**
+   * Return Component ID for given Activity Type ID or NULL if the Component
+   * does not exist.
+   *
+   * @param int $activityTypeId
+   *
+   * @return int|NULL
+   */
+  protected static function getComponentIdByActivityTypeId($activityTypeId) {
+    $optionValue = civicrm_api3('OptionValue', 'get', array(
+      'sequential' => 1,
+      'return' => array('component_id'),
+      'option_group_id' => 'activity_type',
+      'value' => $activityTypeId,
+    ));
+
+    return !empty($optionValue['values'][0]['component_id']) ? $optionValue['values'][0]['component_id'] : NULL;
+  }
+
+  /**
+   * Check Tasks and Documents permissions for given Component ID.
+   *
+   * @param int $componentId
+   *
+   * @return boolean
+   */
+  protected static function checkComponentRelatedPermissions($componentId) {
+    $compPermissions = array(
+      'CiviTask' => array('access Tasks and Assignments'),
+      'CiviDocument' => array('access Tasks and Assignments'),
+    );
+
+    if (!empty($componentId)) {
+      $componentName = CRM_Core_Component::getComponentName($componentId);
+      $compPermission = CRM_Utils_Array::value($componentName, $compPermissions);
+
+      // Here we are interesting in any single permission.
+      if (is_array($compPermission)) {
+        foreach ($compPermission as $per) {
+          if (CRM_Core_Permission::check($per)) {
+            return TRUE;
+          }
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Check super permissions for given action.
+   *
+   * @param string $action
+   *
+   * @return boolean
+   */
+  protected static function checkSuperPermissionsByAction($action) {
+    $supPermission = 'view all contacts';
+
+    if ($action == CRM_Core_Action::UPDATE) {
+      $supPermission = 'edit all contacts';
+    }
+
+    return CRM_Core_Permission::check($supPermission);
+  }
+
+  /**
+   * Check Contacts permission for given Activity ID.
+   *
+   * @param int $activityId
+   * @param int $contactKey
+   * @param int $permission
+   *
+   * @return boolean
+   */
+  protected static function checkActivityContactsPermission($activityId, $contactKey, $permission) {
+    $contacts = CRM_Activity_BAO_ActivityContact::retrieveContactIdsByActivityId($activityId, $contactKey);
+
+    foreach ($contacts as $cnt => $contactId) {
+      if (!CRM_Contact_BAO_Contact_Permission::allow($contactId, $permission)) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
 }
