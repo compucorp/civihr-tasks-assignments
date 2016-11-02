@@ -37,5 +37,23 @@
       <column_name>expire_date</column_name>
       <custom_group_name>Activity_Custom_Fields</custom_group_name>
     </CustomField>
+    <CustomField>
+      <name>Clone_Date</name>
+      <label>Clone Date</label>
+      <data_type>Date</data_type>
+      <html_type>Select Date</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>20</text_length>
+      <date_format>yy-mm-dd</date_format>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>clone_date</column_name>
+      <custom_group_name>Activity_Custom_Fields</custom_group_name>
+    </CustomField>
   </CustomFields>
 </CustomData>
