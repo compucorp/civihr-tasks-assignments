@@ -37,6 +37,14 @@ define([
                 assignee: initialContacts('assignee')
             };
 
+            $scope.statusFieldVisible = function() {
+              return !!$scope.document.status_id;
+            };
+
+            $scope.showStatusField = function() {
+              $scope.document.status_id = 1;
+            };
+
             $scope.cacheAssignment = function ($item) {
 
                 if ($rootScope.cache.assignment.obj[$item.id]) {
@@ -143,6 +151,10 @@ define([
 
             $scope.confirm = function () {
               var doc = angular.copy($scope.document);
+
+              if (!validateRequiredFields(doc)) {
+                return;
+              }
 
               if (angular.equals(data, doc) &&
                 angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
@@ -251,6 +263,51 @@ define([
                     document.getElementById($rootScope.prefix + 'document-files').click();
                 });
             };
+
+            /**
+             * Validates if the required fields values are present, and shows a notification if needed
+             * @param  {Object} doc The document to validate
+             * @return {boolean}     Whether the required field values are present
+             */
+            function validateRequiredFields(doc) {
+              var missingRequiredFields = [];
+
+              if (!doc.target_contact_id[0]) {
+                missingRequiredFields.push('Contact');
+              }
+
+              if (!doc.activity_type_id) {
+                missingRequiredFields.push('Document type');
+              }
+
+              if (!doc.status_id) {
+                missingRequiredFields.push('Document status');
+              }
+
+              if (!doc.activity_date_time) {
+                missingRequiredFields.push('Due Date');
+              }
+
+              if (!doc.assignee_contact_id[0]) {
+                missingRequiredFields.push('Assignee');
+              }
+
+              if (!doc.status_id) {
+                missingRequiredFields.push('Status');
+              }
+
+              if (missingRequiredFields.length) {
+                var notification = CRM.alert(missingRequiredFields.join(', '),
+                  missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
+                $timeout(function(){
+                  notification.close();
+                  notification = null;
+                }, 5000);
+                return false;
+              }
+
+              return true;
+            }
 
             /**
              * The initial contacts that needs to be immediately available

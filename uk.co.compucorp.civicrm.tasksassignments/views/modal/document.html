@@ -2,8 +2,8 @@
     <div class="modal-header">
         <div class="row">
             <div class="col-xs-11">
-                <ui-select
-                        allow-clear
+                <ui-select name="target" ng-class="{'has-error': documentForm.target.$invalid}"
+                        allow-clear class="required-field-indicator"
                         ng-model="document.target_contact_id[0]"
                         on-select="cacheContact($item)"
                         ng-required="true">
@@ -33,24 +33,28 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="crm_custom-select crm_custom-select--full">
-                        <select
-                            ng-required
-                            class="form-control"
-                            ng-model="document.activity_type_id"
-                            ng-options="type.key as type.value for type in cache.documentType.arr">
-                            <option value="">Select document type</option>
-                        </select>
-                        <span class="crm_custom-select__arrow"></span>
+                      <ui-select theme="civihr-ui-select" ng-model="document.activity_type_id" class="required-field-indicator" ng-required="true">
+                        <ui-select-match allow-clear class="ui-select-match" placeholder="Select document type">
+                          {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                          class="ui-select-choices"
+                          repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+                          <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                 </div>
             </div>
             <!-- Dates -->
             <div class="row double-spacing">
                 <!-- Due Date -->
-                <label for="{{prefix}}document-due" class="col-xs-12 col-sm-2 text-nowrap control-label">Due Date:</label>
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator">Due Date:</label>
 
-                <div class="col-xs-12 col-sm-4 input-group input-group-unstyled">
-                  <input
+                    <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': documentForm.dueDate.$invalid}">
+                      <input name="dueDate"
                     type="text"
                     id="{{prefix}}document-due"
                     class="form-control"
@@ -62,13 +66,17 @@
                     is-open="dpOpened.due"
                     ng-click="dpOpen($event, 'due')">
                   <span class="input-group-addon fa fa-calendar"></span>
+            </div>
+                  </div>
                 </div>
                 <!-- Expires -->
-                <label for="{{prefix}}document-exp" class="col-xs-12 col-sm-2 control-label no-gutter">
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label for="{{prefix}}document-exp" class="col-xs-4 control-label no-gutter">
                     <span class="pull-right">Expiry Date:</span>
                 </label>
 
-                <div class="col-xs-12 col-sm-4 input-group">
+                    <div class="col-xs-8 input-group">
                     <input
                       type="text"
                       class="form-control"
@@ -80,6 +88,8 @@
                       is-open="dpOpened.exp"
                       ng-click="dpOpen($event, 'exp')">
                     <span class="input-group-addon fa fa-calendar"></span>
+                </div>
+            </div>
                 </div>
             </div>
             <!-- Drop Zone -->
@@ -137,14 +147,14 @@
             <!-- Assignee & Assignment -->
             <div class="row">
                 <!-- Assignee -->
-                <div class="col-xs-12 col-sm-6" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
+                <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
                     <span class="form-control-static">
-                        <a href class="btn btn-indent" ng-click="showAssigneeField = true;">Add Assignee</a>
+                        <a href class="btn btn-indent required-field-indicator" ng-click="showAssigneeField = true;">Add Assignee</a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-6" ng-show="document.assignee_contact_id[0] || showAssigneeField">
-                    <ui-select
-                            ng-required="true"
+                <div class="col-xs-12 col-sm-7" ng-show="document.assignee_contact_id[0] || showAssigneeField">
+                    <ui-select name="assignee" theme="civihr-ui-select"
+                            ng-required="true" class="required-field-indicator"
                             allow-clear
                             ng-model="document.assignee_contact_id[0]"
                             on-select="cacheContact($item)">
@@ -164,12 +174,12 @@
                 </div>
 
                 <!-- Assignment -->
-                <div class="col-xs-12 col-sm-6" ng-show="!showAssignmentField">
+                <div class="col-xs-12 col-sm-5" ng-show="!showAssignmentField">
                     <span class="form-control-static">
                         <a href class="btn btn-indent" ng-click="showAssignmentField = true;">Add to Assignment</a>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-6" ng-show="showAssignmentField">
+                <div class="col-xs-12 col-sm-5" ng-show="showAssignmentField">
                     <ui-select
                             allow-clear
                             ng-model="document.case_id"
@@ -201,26 +211,34 @@
                 </div>
             </div>
             <div class="row" ng-show="expanded">
-              <div class="col-xs-12 col-sm-6">
-                <ui-select theme="civihr-ui-select" ng-model="document.status_id">
-                  <ui-select-match allow-clear class="ui-select-match" placeholder="Set Status">
-                    {{$select.selected.value}}
-                  </ui-select-match>
-                  <ui-select-choices
-                    class="ui-select-choices"
-                    repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
-                    <div ng-bind="status.value"></div>
-                  </ui-select-choices>
-                </ui-select>
-              </div>
-              <label class="col-xs-12 control-label">Details</label>
-              <div class="col-xs-12">
-                <div
-                  text-angular
-                  ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
-                  ng-model="document.details">
+                <label class="col-xs-12 col-sm-7" ng-hide="statusFieldVisible()">
+                    <span class="form-control-static">
+                        <a href class="btn btn-indent required-field-indicator" ng-click="showStatusField()">Set Status</a>
+                    </span>
+                </label>
+
+                <div class="col-xs-12 col-sm-7" ng-show="statusFieldVisible()">
+                    <ui-select theme="civihr-ui-select" name="documentStatus"
+                            allow-clear class="required-field-indicator"
+                            ng-model="document.status_id"
+                            ng-required="true">
+                        <ui-select-match allow-clear class="ui-select-match" placeholder="Set Status">
+                            {{$select.selected.value}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            class="ui-select-choices"
+                            repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
+                            <div ng-bind="status.value"></div>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
-              </div>
+                <label class="col-xs-12 control-label">Details</label>
+                <div class="col-xs-12">
+                    <div text-angular
+                        ta-toolbar="[['bold','italics','underline','strikeThrough','ul','ol','undo','redo','clear']]"
+                        ng-model="document.details">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,7 +251,7 @@
             Save And New
         </button>
 
-        <button type="submit" class="btn btn-default btn-primary" ng-disabled="!documentForm.$valid">
+        <button type="submit" class="btn btn-default btn-primary">
             Save
         </button>
     </div>

@@ -27,9 +27,9 @@
             </div>
         </div>
     </div>
-    <h4 class="header-bar header-bar-primary" ng-show="taskListOngoing.length">Ongoing:</h4>
+    <h4 class="header-bar header-bar-primary" ng-show="listOngoing.length">Ongoing:</h4>
     <ul class="{{prefix}}list-task">
-        <li ng-repeat="task in taskListOngoing = (taskListFiltered = (taskList | filterByAssignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterByStatus:cache.taskStatusResolve:false)"
+        <li ng-repeat="task in listOngoing = (listFiltered = (list | filterByAssignmentType:filterParams.assignmentType | orderBy: 'activity_date_time') | filterByStatus:cache.taskStatusResolve:false)"
             ng-controller="TaskCtrl"
             ng-class="{
                 '{{prefix}}task-completed': task.completed,
@@ -47,13 +47,13 @@
         </a>
     </h4>
     <div uib-collapse="isCollapsed.taskListResolved">
-        <div class="well {{prefix}}spinner-container" ng-show="!taskListResolvedLoaded">
+        <div class="well {{prefix}}spinner-container" ng-show="!listResolvedLoaded">
             Loading resolved tasks...
             <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
         </div>
-        <div class="alert alert-danger" ng-show="taskListResolvedLoaded && !taskListResolved.length">No results found.</div>
+        <div class="alert alert-danger" ng-show="listResolvedLoaded && !listResolved.length">No results found.</div>
         <ul class="{{prefix}}list-task">
-            <li ng-repeat="task in taskListResolved = (taskListFiltered | filterByStatus:cache.taskStatusResolve:true)"
+            <li ng-repeat="task in listResolved = (listFiltered | filterByStatus:cache.taskStatusResolve:true)"
                 ng-controller="TaskCtrl"
                 ng-class="'{{prefix}}task-resolved'"
                 ng-include

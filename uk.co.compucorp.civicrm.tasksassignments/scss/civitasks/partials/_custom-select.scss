@@ -85,7 +85,7 @@ $customselect-feedback-padding-right: $customselect-padding-right + 10;
     }
 }
 
-.has-error {
+.ng-submitted .has-error {
 
     .crm_custom-select__arrow {
         border-color: $brand-danger !important;
