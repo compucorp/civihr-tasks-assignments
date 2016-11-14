@@ -27,7 +27,10 @@
                                   uib-btn-radio="'assigned'">
                                     My Tasks
                                     <span>
-                                      ({{(listOngoing | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'assigned').length}})
+                                      ({{(list |
+                                      filterByDue:filterParams.due:filterParams.dateRange |
+                                      filterByStatus:cache.taskStatusResolve:false |
+                                      filterByOwnership:'assigned').length}})
                                     </span>
                                 </a>
                                 <a
@@ -37,7 +40,10 @@
                                   uib-btn-radio="'delegated'">
                                     Delegated Tasks
                                     <span>
-                                      ({{(listOngoing | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'delegated').length}})
+                                      ({{(list |
+                                      filterByDue:filterParams.due:filterParams.dateRange |
+                                      filterByStatus:cache.taskStatusResolve:false |
+                                      filterByOwnership:'delegated').length}})
                                     </span>
                                 </a>
                                 <a
@@ -47,7 +53,9 @@
                                   uib-btn-radio="null">
                                   All
                                   <span>
-                                    ({{(listOngoing | filterByStatus:cache.taskStatusResolve:false).length}})
+                                    ({{(list |
+                                    filterByDue:filterParams.due:filterParams.dateRange |
+                                    filterByStatus:cache.taskStatusResolve:false).length}})
                                   </span>
                                 </a>
                               </div>

@@ -13,10 +13,10 @@
         <section class="container">
             <div class="col-xs-12">
                 <div class="row separately">
-                    <h2 class="col-xs-12 col-sm-3 control-label">Contact:</h2>
+                    <h2 class="col-xs-12 col-sm-3 control-label required-field-indicator">Contact:</h2>
 
                     <div ng-if="showCId" class="col-xs-12 col-sm-5">
-                        <ui-select allow-clear
+                        <ui-select allow-clear name="contact" theme="civihr-ui-select"
                                    ng-model="assignment.contact_id"
                                    ng-change="assignment.client_id=assignment.contact_id"
                                    on-select="cacheContact($item)"
@@ -40,12 +40,12 @@
                 </div>
 
                 <div class="row required">
-                    <label class="col-xs-12 col-sm-3 control-label">Assignment Type:</label>
+                    <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Assignment Type:</label>
 
                     <div class="col-xs-12 col-sm-5">
                         <div class="crm_custom-select crm_custom-select--full">
-                            <select
-                                ng-required
+                            <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}"
+                                ng-required="true"
                                 class="form-control"
                                 ng-change="setData()"
                                 ng-model="assignment.case_type_id"
@@ -56,13 +56,14 @@
                         </div>
                     </div>
 
-                    <label class="col-xs-12 col-sm-1 control-label no-wrap" for="{{prefix}}assignment-due">
+                    <label class="col-xs-12 col-sm-2 control-label no-wrap required-field-indicator" for="{{prefix}}assignment-due">
                         Key Date:
                     </label>
 
-                    <div class="col-xs-12 col-sm-3">
-                      <div class="input-group input-group-unstyled date-input-group">
-                        <input type="text" id="{{prefix}}assignment-due" ng-model="assignment.dueDate"
+                    <div class="col-xs-12 col-sm-2">
+                      <div class="input-group input-group-unstyled date-input-group form-group"
+                        ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
+                        <input type="text" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="dueDate"
                           class="form-control"
                           placeholder="{{ format }}"
                           name="assignmentDue"
@@ -84,7 +85,7 @@
                     </label>
 
                     <div class="col-xs-12 col-sm-5">
-                        <ui-select ng-model="activitySet"
+                        <ui-select ng-model="activitySet" theme="civihr-ui-select"
                                    ng-disabled="!taskList.length"
                                    ng-required="true"
                                    search-enabled="false">
@@ -111,14 +112,14 @@
                             <tr>
                                 <th class="action-column"></th>
                                 <th class="title-column">Task Title</th>
-                                <th class="assignee-column">
+                                <th class="assignee-column required-field-indicator">
                                     Assigned To
                                     <span class="pull-right btn" title="{{copyMessage}}"
                                           ng-click="copyAssignee(taskList, 'task')">
                                         <i class="fa fa-files-o"></i>
                                     </span>
                                 </th>
-                                <th class="date-column">
+                                <th class="date-column  required-field-indicator">
                                     Due Date
                                     <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyDate(taskList)">
                                         <i class="fa fa-files-o"></i>
@@ -137,26 +138,24 @@
                                 </td>
 
                                 <td ng-if="!activity.isAdded">
-                                    {{activity.name}}
+                                  {{activity.name}}
                                 </td>
 
                                 <td colspan="2" ng-if="activity.isAdded">
-                                    <div class="ui-select-required">
-                                        <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create">
-                                            <ui-select-match class="ui-select-match" placeholder="Select task type">
-                                                {{$select.selected.value}}
-                                            </ui-select-match>
-                                            <ui-select-choices
-                                                    class="ui-select-choices"
-                                                    repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                                                <div ng-bind="type.value"></div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
+                                  <ui-select ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create" theme="civihr-ui-select" class="required-field-indicator">
+                                      <ui-select-match class="ui-select-match" placeholder="Select task type">
+                                          {{$select.selected.value}}
+                                      </ui-select-match>
+                                      <ui-select-choices
+                                              class="ui-select-choices"
+                                              repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                                          <div ng-bind="type.value"></div>
+                                      </ui-select-choices>
+                                  </ui-select>
                                 </td>
 
                                 <td>
-                                    <ui-select allow-clear
+                                    <ui-select allow-clear theme="civihr-ui-select"
                                                ng-model="activity.assignee_contact_id[0]"
                                                ng-disabled="isDisabled || !activity.create"
                                                ng-required="!isDisabled && activity.create"
@@ -175,10 +174,10 @@
                                     </ui-select>
                                 </td>
                                 <td>
-                                  <div class="input-group input-group-unstyled date-input-group">
+                                  <div class="input-group input-group-unstyled date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
                                     <input type="text"
                                       id="{{prefix}}assignment-task-due-{{$index}}"
-                                      name="assignmentDue"
+                                      name="assignmentDue-{{$index}}"
                                       class="form-control"
                                       placeholder="{{ format }}"
                                       ng-model="activity.activity_date_time"
@@ -253,7 +252,7 @@
 
                                 <td colspan="2" ng-if="activity.isAdded">
                                     <div class="ui-select-required">
-                                        <ui-select ng-model="activity.activity_type_id" ng-required="true">
+                                        <ui-select ng-model="activity.activity_type_id" ng-required="true" theme="civihr-ui-select">
                                             <ui-select-match class="ui-select-match" placeholder="Select document type">
                                                 {{$select.selected.value}}
                                             </ui-select-match>
@@ -267,7 +266,7 @@
                                 </td>
 
                                 <td>
-                                    <ui-select allow-clear
+                                    <ui-select allow-clear theme="civihr-ui-select"
                                                ng-model="activity.assignee_contact_id[0]"
                                                ng-disabled="isDisabled || !activity.create"
                                                ng-required="!isDisabled && activity.create"
@@ -331,7 +330,7 @@
         <button type="button" class="btn btn-default" ng-click="cancel()">
             <span class="fa fa-remove" aria-hidden="true"></span> Cancel
         </button>
-        <button type="submit" class="btn btn-default btn-primary" ng-disabled="!assignmentForm.$valid">
+        <button type="submit" class="btn btn-default btn-primary">
             <span class="fa fa-check" aria-hidden="true"></span> Save
         </button>
     </div>

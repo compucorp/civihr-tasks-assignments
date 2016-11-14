@@ -62,13 +62,67 @@ input[type="checkbox"],
 }
 
 .text-required {
-  color:red;
+  color: $brand-danger-light;
 }
 
 .form-group.required {
   .control-label:after {
-    content:"*";
-    color:red;
+    content: '*';
+    color: $brand-danger-light;
+  }
+}
+
+select.required-field-indicator[required] + .crm_custom-select__arrow {
+  &::after {
+    content: '*';
+    color: $brand-danger-light;
+    position: absolute;
+    right: -10px;
+    top: 0;
+  }
+}
+
+select.required-field-indicator[required] + .crm_custom-select__arrow::after {
+  top: -6px;
+}
+
+.required-field-indicator {
+  &:not(.ui-select-container)::after {
+    content: '*';
+    color: $brand-danger-light;
+    padding-left: 5px;
+    display: inline-block;
+  }
+
+  &.ui-select-container {
+    .ui-select-placeholder::after {
+      content: '*';
+      color: $brand-danger-light;
+      font-size: 13px;
+      position: absolute;
+      top: 2px;
+      padding-left: 5px;
+    }
+
+    .select2-chosen.empty::after {
+      content: '*';
+      color: $brand-danger-light;
+      font-size: 13px;
+      position: absolute;
+      top: -1px;
+      padding-left: 5px;
+    }
+  }
+}
+
+select[required] + .crm_custom-select__arrow::after {
+  top: -6px;
+}
+
+.ng-submitted select.has-error {
+  &,
+  + .crm_custom-select__arrow {
+    border-color: $state-danger-text;
   }
 }
 
@@ -128,5 +182,33 @@ input[type="checkbox"],
   &:focus,
   &:active {
     background-color: $input-bg-disabled;
+  }
+}
+
+.form-control {
+  &:not(.ui-select-container) {
+    border-color: #727E8A !important;
+  }
+
+  ~ .input-group-addon {
+    color: $gray;
+  }
+}
+
+.form-control-feedback {
+  color: $gray !important;
+}
+
+.ng-submitted {
+  .form-control.ng-invalid {
+    border-color: $brand-danger !important;
+
+    ~ .input-group-addon {
+      color: $brand-danger;
+    }
+  }
+
+  .form-control-feedback {
+    color: $brand-danger !important;
   }
 }

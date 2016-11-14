@@ -8,9 +8,9 @@ define([
 ], function (angular, moment, controllers) {
     'use strict';
 
-    controllers.controller('ModalTaskCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
+    controllers.controller('ModalTaskCtrl', ['$timeout', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', '$filter',
         '$uibModal', '$dialog', 'AssignmentService', 'TaskService', 'ContactService', 'data', 'config', 'HR_settings',
-        function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
+        function ($timeout, $scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, AssignmentService, TaskService, ContactService,
                   data, config, HR_settings) {
             $log.debug('Controller: ModalTaskCtrl');
 
@@ -137,6 +137,10 @@ define([
             $scope.confirm = function () {
               var task = angular.copy($scope.task);
 
+              if (!validateRequiredFields(task)) {
+                return;
+              }
+
               if (angular.equals(data, task)) {
                   $modalInstance.dismiss('cancel');
                   return;
@@ -165,11 +169,47 @@ define([
                 return;
               }, function (reason) {
                 CRM.alert(reason, 'Error', 'error');
-                $modalInstance.dismiss();
                 $scope.$broadcast('ct-spinner-hide');
                 return $q.reject();
               });
             };
+
+            /**
+             * Validates if the required fields values are present, and shows a notification if needed
+             * @param  {Object} task The task to validate
+             * @return {boolean}     Whether the required field values are present
+             */
+            function validateRequiredFields(task) {
+              var missingRequiredFields = [];
+
+              if (!task.target_contact_id[0]) {
+                missingRequiredFields.push('Task Target');
+              }
+
+              if (!task.activity_type_id) {
+                missingRequiredFields.push('Task type');
+              }
+
+              if (!task.activity_date_time) {
+                missingRequiredFields.push('Due date');
+              }
+
+              if (!task.assignee_contact_id[0]) {
+                missingRequiredFields.push('Assignee');
+              }
+
+              if (missingRequiredFields.length) {
+                var notification = CRM.alert(missingRequiredFields.join(', '),
+                  missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
+                $timeout(function(){
+                  notification.close();
+                  notification = null;
+                }, 5000);
+                return false;
+              }
+
+              return true;
+            }
 
             /**
              * The initial assignments that needs to be immediately available

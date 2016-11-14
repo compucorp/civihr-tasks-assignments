@@ -7,18 +7,36 @@ form {
   }
 
   /* Bootstrap override */
-  .input-group-addon {
-    background: transparent;
-    border: none;
-    width: 0;
-    padding-right: 0;
-    padding-left: 6px;
+  @at-root {
+    #civitasks,
+    #cividocuments {
+      &,
+      div.input-group-unstyled {
+        span.input-group-addon {
+          border: solid 1px $gray-dark !important;
+          background: none !important;
+          border-left: 0 !important;
+          color: $brand-primary;
+          cursor: pointer !important;
+          width: 0;
 
-    a {
-      color: #333333;
+          a {
+            color: #333333;
+          }
+        }
+      }
+
+      .ng-submitted .ng-invalid ~ span.input-group-addon {
+        border-color: $brand-danger !important;
+      }
     }
   }
 
+  .form-group.has-feedback.has-error {
+    .input-group-addon {
+      background: none;
+    }
+  }
   &.form-horizontal {
 
     .input-group.date-input-group {
@@ -228,7 +246,7 @@ form {
               }
 
               &.title-column {
-                width: 45%;
+                width: 30%;
               }
 
               &.assignee-column {
@@ -327,7 +345,6 @@ form {
  * so that the addon has no background or border set
  */
 .input-group-unstyled {
-
   .input-group-addon,
   .input-group-btn > button {
     background: transparent !important;
@@ -335,4 +352,3 @@ form {
     box-shadow: none !important;
   }
 }
-

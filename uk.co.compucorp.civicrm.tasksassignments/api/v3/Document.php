@@ -669,6 +669,10 @@ function civicrm_api3_document_getstatuses($params) {
     return null;
 }
 
+function civicrm_api3_document_getcustomfields() {
+  return _civicrm_api3_document_getcustomfields();
+}
+
 function _civicrm_api3_document_gettypesbycomponent($component, $sequential = 1) {
     
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
@@ -766,10 +770,16 @@ function civicrm_api3_document_senddailyreminder($params) {
 }
 
 /*
+ * CRON action for cloning documents pre-set days before original expiry date.
+ */
+function civicrm_api3_document_clonedocuments($params) {
+  return civicrm_api3_create_success(CRM_Tasksassignments_BAO_Document::cloneDocuments(), $params);
+}
+
+/*
  * Documents Notification scheduled job's entry point.
  */
 function civicrm_api3_document_senddocumentsnotification($params) {
-    
     $count = CRM_Tasksassignments_Reminder::sendDocumentsNotifications();
     return civicrm_api3_create_success($count, $params, 'document', 'senddocumentsnotification');
 }

@@ -6,7 +6,7 @@ require_once 'CiviTest/CiviUnitTestCase.php';
 /**
  * Class Api_TaskTest
  */
-class Api_TaskTest extends CiviUnitTestCase {
+class api_v3_TaskTest extends CiviUnitTestCase {
   private $_taskTypeId = null;
 
   function setUp() {
