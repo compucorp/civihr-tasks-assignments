@@ -32,9 +32,8 @@ class CRM_Tasksassignments_Reminder
 
     private static function _checkRelatedExtensions()
     {
-        $appraisalExtension = CRM_Core_DAO::executeQuery("SELECT id FROM civicrm_extension WHERE full_name = 'uk.co.compucorp.civicrm.appraisals' AND is_active = 1 LIMIT 1");
-        $appraisalExtension->fetch();
-        if ($appraisalExtension->id)
+        $isEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.appraisals', 'is_active', 'full_name');
+        if ($isEnabled)
         {
             self::$_relatedExtensions['appraisals'] = true;
         }
@@ -373,6 +372,7 @@ class CRM_Tasksassignments_Reminder
             'period_start_date' => ts('Contract start date'),
             'period_end_date' => ts('Contract end date'),
             'initial_join_date' => ts('Initial join date'),
+            'probation_end_date' => ts('Probation end date'),
             'final_termination_date' => ts('Final termination date'),
             'birth_date' => ts('Birthday'),
         );
