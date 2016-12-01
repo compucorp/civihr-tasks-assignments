@@ -40,7 +40,11 @@
                             ng-model="filterParams.ownership"
                             uib-btn-radio="'assigned'">
                             My Docs
-                            <span>({{(listOngoing | filterByOwnership:'assigned').length}})</span>
+                            <span>({{(list |
+                              filterByDue:filterParams.due:filterParams.dateRange |
+                              filterByStatus:filterParams.documentStatus |
+                              filterByOwnership:'assigned').length}})
+                            </span>
                           </a>
                           <a
                             ui-sref="documents.delegated"
@@ -48,7 +52,11 @@
                             ng-model="filterParams.ownership"
                             uib-btn-radio="'delegated'">
                             Delegated Docs
-                            <span>({{(listOngoing | filterByOwnership:'delegated').length}})</span>
+                            <span>({{(list |
+                              filterByDue:filterParams.due:filterParams.dateRange |
+                              filterByStatus:filterParams.documentStatus |
+                              filterByOwnership:'delegated').length}})
+                            </span>
                           </a>
                           <a
                             ui-sref="documents.all"
@@ -56,7 +64,10 @@
                             ng-model="filterParams.ownership"
                             uib-btn-radio="null">
                             All
-                            <span>({{(listOngoing).length}})</span>
+                            <span>({{(list |
+                              filterByDue:filterParams.due:filterParams.dateRange |
+                              filterByStatus:filterParams.documentStatus).length}})
+                            </span>
                           </a>
                         </div>
                     </div>
@@ -186,7 +197,7 @@
             <div class="clearfix"></div>
             <nav class="row" ng-show="(listFiltered.length > pagination.itemsPerPage)">
                 <div class="col-xs-12 text-center">
-                    <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                    <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
                 </div>
             </nav>
         </div>
@@ -196,7 +207,7 @@
 <script type="text/ng-template" id="document.html">
     <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected[pagination.currentPage]" checklist-value="document" ng-change="toggleIsCheckedAll()"></td>
     <td><a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument(document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
-    <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
+    <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
     <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
     <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
     <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>

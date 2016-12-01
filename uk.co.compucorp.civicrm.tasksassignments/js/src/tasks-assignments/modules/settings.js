@@ -16,6 +16,7 @@ define([
                 assignmentAdd: CRM.Tasksassignments.settings.add_assignment_button_title
             }
         },
-        isTaskDashboardDefault: CRM.Tasksassignments.settings.is_task_dashboard_default
+        isTaskDashboardDefault: CRM.Tasksassignments.settings.is_task_dashboard_default,
+        daysToCreateADocumentClone: CRM.Tasksassignments.settings.days_to_create_a_document_clone
     });
 });

@@ -480,11 +480,44 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return true;
   }
 
+  /*
+   * Install Tasks Assignments 'days_to_create_a_document_clone' setting field.
+   * It keeps a number of days to create a document clone before original
+   * expiry date.
+   * 
+   * @return {boolean}
+   */
+  public function upgrade_1020() {
+    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'ta_settings', 'id', 'name');
+    if (!$optionGroupID) {
+      civicrm_api3('OptionGroup', 'create', array(
+        'name' => 'ta_settings',
+        'title' => 'Tasks and Assignments settings',
+        'is_active' => 1,
+        'is_reserved' => 1,
+      ));
+    }
+    $optionValue = civicrm_api3('OptionValue', 'get', array(
+      'sequential' => 1,
+      'option_group_id' => 'ta_settings',
+      'name' => "days_to_create_a_document_clone",
+    ));
+    if (empty($optionValue['id'])) {
+      civicrm_api3('OptionValue', 'create', array(
+        'option_group_id' => 'ta_settings',
+        'name' => 'days_to_create_a_document_clone',
+        'label' => t('Renewed document creation date offset (days)'),
+        'value' => 0,
+      ));
+    }
+    return TRUE;
+  }
+
   /**
    * Uninstalls the dummy document types in old CiviHR installs
    * And adds real, default values
    */
-  public function upgrade_1020() {
+  public function upgrade_1021() {
     $this->_uninstallActivityTypes('CiviDocument', array(
       'Joining Document 1', 'Exiting Document 1'
     ));
@@ -502,9 +535,38 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   }
 
   /*
-   * Set up Documents Notification job
+   * Set up scheduled job which clones documents on pre-set days before
+   * their original expiry date.
+   * 
+   * @see PCHR-1365
    */
-  public function upgrade_1021()
+  public function upgrade_1022()
+  {
+    $dao = new CRM_Core_DAO_Job();
+    $dao->api_entity = 'document';
+    $dao->api_action = 'clonedocuments';
+    $dao->find(TRUE);
+    if (!$dao->id)
+    {
+      $dao = new CRM_Core_DAO_Job();
+      $dao->domain_id = CRM_Core_Config::domainID();
+      $dao->run_frequency = 'Daily';
+      $dao->parameters = null;
+      $dao->name = 'Clone Documents';
+      $dao->description = 'Clone any approved document within pre-set days before its original expiry date';
+      $dao->api_entity = 'document';
+      $dao->api_action = 'clonedocuments';
+      $dao->is_active = 1;
+      $dao->save();
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Set up Documents Notification scheduled job.
+   */
+  public function upgrade_1023()
   {
     $dao = new CRM_Core_DAO_Job();
     $dao->api_entity = 'document';
@@ -516,13 +578,20 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       $dao->domain_id = CRM_Core_Config::domainID();
       $dao->run_frequency = 'Daily';
       $dao->parameters = null;
-      $dao->name = 'Tasks and Assignments Documents Notification';
+      $dao->name = 'Documents Notification';
       $dao->description = 'Tasks and Assignments Documents Notification';
       $dao->api_entity = 'document';
       $dao->api_action = 'senddocumentsnotification';
       $dao->is_active = 1;
       $dao->save();
     }
+
+    return TRUE;
+  }
+
+  public function upgrade_1024()
+  {
+    $this->executeCustomDataFile('xml/activity_custom_fields.xml');
 
     return TRUE;
   }
