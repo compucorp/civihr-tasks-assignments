@@ -4,7 +4,7 @@ define([
 ], function (moment, filters) {
     'use strict';
 
-    filters.filter('filterBy.date',['$filter', '$log', function ($filter, $log) {
+    filters.filter('filterByDate',['$filter', '$log', function ($filter, $log) {
         $log.debug('Filter: filterBy.date');
 
         return function(inputArr, type) {
