@@ -3,7 +3,7 @@ define([
 ], function (filters) {
     'use strict';
 
-    filters.filter('filterBy.dateType',['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
+    filters.filter('filterByDateType',['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
         $log.debug('Filter: filterBy.dateType');
 
         return function(inputArr, dateTypeArr) {
