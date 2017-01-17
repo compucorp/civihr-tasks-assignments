@@ -7,9 +7,9 @@
             <div class="panel-body">
                 <div class="{{prefix}}filter-date">
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'isoWeek'">{{label.isoWeek}} <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'isoWeek').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'month'">{{label.month}} <span class="badge badge-primary" ng-bind="(dateList | filterBy.date:'month').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date"  uib-btn-radio="'year'">{{label.year}} <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterBy.date:'year').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'isoWeek'">{{label.isoWeek}} <span class="badge badge-primary" ng-bind="(dateList | filterByDate:'isoWeek').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'month'">{{label.month}} <span class="badge badge-primary" ng-bind="(dateList | filterByDate:'month').length"></span></a></li>
+                        <li role="presentation"><a href ng-model="filterParams.date"  uib-btn-radio="'year'">{{label.year}} <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterByDate:'year').length"></span></a></li>
                     </ul>
                     <hr>
                     <a href
@@ -88,7 +88,7 @@
             </div>
             <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
                 <li
-                        ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterBy.date:filterParams.date | filterBy.dateType:filterParams.dateType) | limitTo: dateListLimit)"
+                        ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
                         ng-include
                         src="'key-date.html'"
                         class="panel panel-light panel-secondary">
@@ -96,7 +96,7 @@
             </ul>
             <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
                 <li
-                        ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterBy.dateType:filterParams.dateType) | limitTo: dateListLimit)"
+                        ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
                         ng-include
                         src="'key-date.html'"
                         class="panel panel-light panel-secondary">

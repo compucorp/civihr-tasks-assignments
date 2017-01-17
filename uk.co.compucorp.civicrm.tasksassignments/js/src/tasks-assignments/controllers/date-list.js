@@ -25,7 +25,7 @@ define([
 
                 watchDateFilters();
             };
-            
+
             // Create date list from contact list
             this.createDateList = function (contactList) {
                 var i = 0, len = contactList.length, date, dateObj = {}, dateList = [];
