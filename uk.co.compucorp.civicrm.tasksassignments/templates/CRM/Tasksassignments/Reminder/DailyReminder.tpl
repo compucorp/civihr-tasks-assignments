@@ -1,6 +1,6 @@
 {include file='CRM/Tasksassignments/Reminder/Header.tpl'}
 <span class="h4" style="color:#202020;display:block;font-family:Arial;font-size:22px;font-weight:normal;line-height:100%;margin-bottom:10px;text-align:left;">Daily Task Reminder</span>
-You have {math equation="x + y" x=$reminder.todayMine|@count y=$reminder.today_keydates_count} task(s){if $settings.documents_tab.value} and document(s){/if} due today. You have {$reminder.overdue|@count} overdue task(s){if $settings.documents_tab.value} and document(s){/if}.
+You have {math equation="x + y" x=$reminder.today_mine|@count y=$reminder.today_keydates_count} task(s){if $settings.documents_tab.value} and document(s){/if} due today. You have {$reminder.overdue|@count} overdue task(s){if $settings.documents_tab.value} and document(s){/if}.
 
 {if $reminder.overdue}
 <span class="h4 dailyreminder overdue" style="color:#202020;display:block;font-family:Arial;font-size:22px;font-weight:normal;line-height:100%;margin-bottom:10px;text-align:left;margin-top: 16px;margin-bottom: 16px;">Overdue Tasks{if $settings.documents_tab.value} and Documents{/if} ({$reminder.overdue|@count})</span>
