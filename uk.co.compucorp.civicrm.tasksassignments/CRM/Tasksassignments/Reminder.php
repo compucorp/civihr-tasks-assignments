@@ -409,7 +409,7 @@ class CRM_Tasksassignments_Reminder {
         if ($reminderKey) {
           $reminderData[$reminderKey][] = array(
             'id' => $activityResult->id,
-            'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResult->id . '&cid=' . $contactId . '&context=activity&searchContext=activity',
+            'activityUrl' => self::createActivityURL($contactId, $activityResult->id),
             'typeId' => $activityResult->activity_type_id,
             'type' => self::$_activityOptions['type'][$activityResult->activity_type_id],
             'statusId' => $activityResult->status_id,
@@ -475,6 +475,30 @@ class CRM_Tasksassignments_Reminder {
     }
 
     return FALSE;
+  }
+
+  /**
+   * Check if given Contact ID has access to required permission to create
+   * activityURL.
+   *
+   * @param int $contactId
+   * @return string
+   */
+  public static function createActivityURL($contactId = NULL, $activityResultId = NULL) {
+
+    if ($contactId) {
+      $activityUrl = '';
+      $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
+
+      if (user_access('access CiviCRM', $drupal_user)) {
+        $activityUrl = CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResultId . '&cid=' . $contactId . '&context=activity&searchContext=activity';
+      }
+      else {
+        $activityUrl = CIVICRM_UF_BASEURL . '/dashboard';
+      }
+      return $activityUrl;
+    }
+    return '';
   }
 
   /**
