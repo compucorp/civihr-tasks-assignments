@@ -212,8 +212,10 @@
                 Due:
                 <time editable-bsdate="task.activity_date_time"
                       onbeforesave="updateTask(task, { activity_date_time: $data });"
+                      onshow="dpOpen()"
                       class="editable-small stick-to-label"
-                      e-ng-click="dpOpen($event)"
+                      e-ng-click="dpOpen()"
+                      e-show-calendar-button="false"
                       e-is-open="picker.opened"
                       e-datepicker-popup>
                     {{task.activity_date_time | date: 'MMM d'}}
