@@ -125,6 +125,10 @@
     @include box-shadow(none);
     border-color: $gray-light;
   }
+
+  .uib-datepicker-popup {
+    z-index: 1200;
+  }
 }
 
 .editable-small + .editable-wrap {

@@ -12053,6 +12053,9 @@ fieldset[disabled]
   box-shadow: none;
   border-color: #727e8a;
 }
+#civitasks .editable-wrap .uib-datepicker-popup, #cividocuments .editable-wrap .uib-datepicker-popup {
+  z-index: 1200;
+}
 #civitasks .editable-small + .editable-wrap input, #cividocuments .editable-small + .editable-wrap input,
 #civitasks .editable-small + .editable-wrap select,
 #cividocuments .editable-small + .editable-wrap select {
