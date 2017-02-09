@@ -2952,6 +2952,7 @@
   text-decoration: none;
 }
 #civitasks a:focus, #cividocuments a:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4506,6 +4507,7 @@
 #cividocuments input[type="radio"]:focus,
 #civitasks input[type="checkbox"]:focus,
 #cividocuments input[type="checkbox"]:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -5192,6 +5194,7 @@ fieldset[disabled]
   user-select: none;
 }
 #civitasks .btn:focus, #cividocuments .btn:focus, #civitasks .btn.focus, #cividocuments .btn.focus, #civitasks .btn:active:focus, #cividocuments .btn:active:focus, #civitasks .btn:active.focus, #cividocuments .btn:active.focus, #civitasks .btn.active:focus, #cividocuments .btn.active:focus, #civitasks .btn.active.focus, #cividocuments .btn.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -12049,6 +12052,9 @@ fieldset[disabled]
   -webkit-box-shadow: none;
   box-shadow: none;
   border-color: #727e8a;
+}
+#civitasks .editable-wrap .uib-datepicker-popup, #cividocuments .editable-wrap .uib-datepicker-popup {
+  z-index: 1200;
 }
 #civitasks .editable-small + .editable-wrap input, #cividocuments .editable-small + .editable-wrap input,
 #civitasks .editable-small + .editable-wrap select,
