@@ -31,7 +31,7 @@
                     editable-ui-select="task.target_contact_id[0]"
                     e-required="true"
                     ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
-                    onbeforesave="updateTask(task, { target_contact_id: [select.$data] });"
+                    onbeforesave="updateTask(task, { target_contact_id: [$data] });"
                     onshow="updateContacts(cache.contact.arrSearch);"
                     on-select="cacheContact($item);">
                 <editable-ui-select-match
@@ -59,7 +59,7 @@
                 e-required="true"
                 ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                 onshow="updateContacts(cache.contact.arrSearch);"
-                onbeforesave="updateTask(task, { assignee_contact_id: [select.$data] });"
+                onbeforesave="updateTask(task, { assignee_contact_id: [$data] });"
                 on-select="cacheContact($item);">
                 <editable-ui-select-match
                         placeholder="Start typing a name or email...">{{$select.selected.label}}</editable-ui-select-match>
@@ -75,19 +75,30 @@
     </header>
     <div class="row">
         <div class="col-xs-6">
-            <p class="{{prefix}}task-subject">Due: <time editable-bsdate="task.activity_date_time"
-                                                         onbeforesave="updateTask(task, { activity_date_time: $data });"
-                                                         class="editable-small"
-                                                         e-ng-click="dpOpen($event)"
-                                                         e-is-open="picker.opened"
-                                                         e-datepicker-popup>{{task.activity_date_time | date: 'MMM d'}}</time><!--<time ng-bind="task.activity_date_time | date: 'MMM d'"></time>--> <span ng-if="!!task.subject">Subject: </span><span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">{{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}</span></p>
+            <p class="{{prefix}}task-subject">
+              Due:
+              <time editable-bsdate="task.activity_date_time"
+                onbeforesave="updateTask(task, { activity_date_time: $data });"
+                onshow="dpOpen()"
+                class="editable-small"
+                e-ng-click="dpOpen()"
+                e-is-open="picker.opened"
+                e-show-calendar-button="false"
+                e-datepicker-popup>
+                {{task.activity_date_time | date: 'MMM d'}}
+              </time>
+              <span ng-if="!!task.subject">Subject: </span>
+              <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">
+                {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
+              </span>
+            </p>
         </div>
         <div class="col-xs-6">
             <span class="{{prefix}}assignment-type">
                 <span
                         editable-ui-select="task.case_id"
                         onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"
-                        onbeforesave="updateTask(task, { case_id: select.$data });"
+                        onbeforesave="updateTask(task, { case_id: $data });"
                         on-select="cacheAssignment($item);">
                     <editable-ui-select-match
                             placeholder="Enter search term...">{{$select.selected.label}}</editable-ui-select-match>
