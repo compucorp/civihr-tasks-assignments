@@ -76,8 +76,7 @@ class CRM_Tasksassignments_Reminder {
     $contacts = self::_getContactsWithEmail($contactIds);
 
     foreach ($contacts as $id => $contact) {
-      $url = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $id;
-
+      $url = self::createContactURL($id);
       $details['ids'][] = $id;
       $details['links'][] = '<a href="' . $url . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $contact['display_name'] . '</a>';
       $details['names'][] = $contact['display_name'];
@@ -383,8 +382,7 @@ class CRM_Tasksassignments_Reminder {
         $activityContactRow = explode('|', $activityResult->activity_contact);
         foreach ($activityContactRow as $value) {
           list($type, $cId, $cSortName) = explode(':', $value);
-
-          $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $cId;
+          $contactUrl = self::createContactURL($cId);
           $activityContact[$type][$cId] = '<a href="' . $contactUrl . '" style="color:#42b0cb;font-weight:normal;text-decoration:underline;">' . $cSortName . '</a>';
         }
 
@@ -497,6 +495,30 @@ class CRM_Tasksassignments_Reminder {
         $activityUrl = CIVICRM_UF_BASEURL . '/dashboard';
       }
       return $activityUrl;
+    }
+    return '';
+  }
+
+   /**
+   * Check if given Contact ID has access to required permission to create
+   * contactURL.
+   *
+   * @param int $contactId
+   * @return string
+   */
+  public static function createContactURL($contactId = NULL) {
+
+    if ($contactId) {
+      $contactUrl = '';
+      $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
+
+      if (user_access('access CiviCRM', $drupal_user)) {
+        $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId;
+      }
+      else {
+        $contactUrl = CIVICRM_UF_BASEURL . '/dashboard';
+      }
+      return $contactUrl;
     }
     return '';
   }
