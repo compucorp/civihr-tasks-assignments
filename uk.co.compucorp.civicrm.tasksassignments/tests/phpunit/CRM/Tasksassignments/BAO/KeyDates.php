@@ -20,24 +20,19 @@ class CRM_Tasksassignments_KeyDatesTest extends PHPUnit_Framework_TestCase imple
   }
   
   public function testDatesForDeletedContactsNotInResult() {
-    $contact = ContactFabricator::fabricate(['birth_date' => '1977-06-27']);
-    ContactFabricator::fabricate(['birth_date' => '1978-06-19']);
-    ContactFabricator::fabricate(['birth_date' => '1982-08-16']);
-
-    $query = '
-      UPDATE civicrm_contact
-      SET is_deleted = 1
-      WHERE id = %1
-    ';
-    $params = [1 => [$contact['id'], 'Int']];
-    CRM_Core_DAO::executeQuery($query, $params);
+    $deletedContact = ContactFabricator::fabricate(['birth_date' => '1977-06-27', 'is_deleted' => 1]);
+    $contacts[] = ContactFabricator::fabricate(['birth_date' => '1978-06-19']);
+    $contacts[] = ContactFabricator::fabricate(['birth_date' => '1982-08-16']);
 
     $keyDates = civicrm_api3('KeyDates', 'get', [
       'sequential' => 1,
     ]);
 
+    $this->assertEquals(sizeof($contacts), $keyDates['count']);
+
+    // Verify deleted contact is not in result
     foreach ($keyDates['values'] as $currentDate) {
-      $this->assertNotEquals($contact['id'], $currentDate['contact_id']);
+      $this->assertNotEquals($currentDate['contact_id'], $deletedContact['id']);
     }
   }
 }
