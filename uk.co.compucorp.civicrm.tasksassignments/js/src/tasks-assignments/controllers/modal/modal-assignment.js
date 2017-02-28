@@ -149,9 +149,7 @@ define([
             };
 
             $scope.confirm = function () {
-
                 if (!($filter('filter')($scope.taskList, { create: true })).length && !($filter('filter')($scope.documentList, { create: true })).length) {
-
                     $scope.alert.msg = 'Please add at least one task.';
                     $scope.alert.show = true;
                     return;
@@ -162,27 +160,24 @@ define([
                 }
 
                 $scope.$broadcast('ct-spinner-show');
-
-                var documentListAssignment = [], taskListAssignment = [], taskArr = [], documentArr = [],
-                    cacheAssignmentObj = {}, i, len;
-
                 $scope.assignment.start_date = new Date();
 
                 AssignmentService.save($scope.assignment).then(function (resultAssignment) {
+                    var documentListAssignment = $scope.documentList.filter(function (doc) {
+                        return doc.create;
+                      })
+                      .map(function (doc) {
+                        doc.case_id = resultAssignment.id;
+                        return doc;
+                      });
 
-                    angular.forEach($scope.taskList, function (task) {
-                        if (task.create) {
-                            task.case_id = resultAssignment.id;
-                            this.push(task);
-                        }
-                    }, taskListAssignment);
-
-                    angular.forEach($scope.documentList, function (document) {
-                        if (document.create) {
-                            document.case_id = resultAssignment.id;
-                            this.push(document);
-                        }
-                    }, documentListAssignment);
+                    var taskListAssignment = $scope.taskList.filter(function (task) {
+                        return task.create;
+                      })
+                      .map(function (task) {
+                        task.case_id = resultAssignment.id;
+                        return task;
+                      });
 
                     $q.all({
                       relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
@@ -193,8 +188,9 @@ define([
                         return angular.copy(task);
                       }))
                     }).then(function (results) {
+                        var i = 0, len = results.task.length, taskArr = [],
+                          documentArr = [], cacheAssignmentObj = {};
 
-                        i = 0, len = results.task.length;
                         for (i; i < len; i++) {
                             taskListAssignment[i].id = results.task[i].id;
                             taskArr.push(results.task[i].id);
