@@ -191,12 +191,12 @@ define([
                 .then(function (results) {
                   var i, taskArr = [], documentArr = [], cacheAssignmentObj = {};
 
-                  for (i; i < results.task.length; i++) {
+                  for (i = 0; i < results.task.length; i++) {
                     taskListAssignment[i].id = results.task[i].id;
                     taskArr.push(results.task[i].id);
                   }
 
-                  for (i; i < results.document.length; i++) {
+                  for (i = 0; i < results.document.length; i++) {
                     documentListAssignment[i].id = results.document[i].id;
                     documentArr.push(results.document[i].id);
                   }
@@ -337,12 +337,17 @@ define([
             }
 
             /**
-             * Validates if the required fields values are present, and shows a notification if needed
+             * Validates if the required fields values are present
+             * and shows a notification if needed
+             *
              * @param  {Object} assignment The assignment to validate
              * @return {boolean}     Whether the required field values are present
              */
             function validateRequiredFields(assignment) {
-              var missingRequiredFields = [];
+              var missingRequiredFields = [],
+                enabledTasks = $scope.taskList.filter(function (task) {
+                  return task.create;
+                });
 
               if (!assignment.contact_id) {
                 missingRequiredFields.push('Contact');
@@ -356,20 +361,20 @@ define([
                 missingRequiredFields.push('Key date');
               }
 
-              if ($scope.taskList.filter(function(activity){
-                return !activity.activity_type_id;
+              if (enabledTasks.filter(function (task) {
+                return !task.activity_type_id;
               }).length) {
                 missingRequiredFields.push('Activity type');
               }
 
-              if ($scope.taskList.filter(function(activity){
-                return !activity.assignee_contact_id[0];
+              if (enabledTasks.filter(function (task) {
+                return !task.assignee_contact_id[0];
               }).length) {
                 missingRequiredFields.push('Assignee');
               }
 
-              if ($scope.taskList.filter(function(activity){
-                return !activity.activity_date_time;
+              if (enabledTasks.filter(function (task) {
+                return !task.activity_date_time;
               }).length) {
                 missingRequiredFields.push('Activity Due Date');
               }
@@ -377,10 +382,12 @@ define([
               if (missingRequiredFields.length) {
                 var notification = CRM.alert(missingRequiredFields.join(', '),
                   missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
+
                 $timeout(function(){
                   notification.close();
                   notification = null;
                 }, 5000);
+
                 return false;
               }
 
