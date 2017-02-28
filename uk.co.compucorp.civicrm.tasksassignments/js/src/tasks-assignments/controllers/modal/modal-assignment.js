@@ -185,9 +185,13 @@ define([
                     }, documentListAssignment);
 
                     $q.all({
-                        task: TaskService.saveMultiple(taskListAssignment),
-                        document: DocumentService.saveMultiple(documentListAssignment),
-                        relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id)
+                      relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
+                      document: DocumentService.saveMultiple(documentListAssignment.map(function (doc) {
+                        return angular.copy(doc);
+                      })),
+                      task: TaskService.saveMultiple(taskListAssignment.map(function (task) {
+                        return angular.copy(task);
+                      }))
                     }).then(function (results) {
 
                         i = 0, len = results.task.length;

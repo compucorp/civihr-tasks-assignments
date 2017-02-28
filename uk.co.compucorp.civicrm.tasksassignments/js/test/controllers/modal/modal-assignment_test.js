@@ -1,48 +1,33 @@
 define([
-    'common/angular',
-    'mocks/assignment',
-    'common/angularMocks',
-    'tasks-assignments/app'
-], function (angular, Mock) {
+  'common/lodash',
+  'common/angular',
+  'mocks/assignment',
+  'common/angularMocks',
+  'tasks-assignments/app'
+], function (_, angular, Mock) {
     'use strict';
 
     describe('ModalAssignmentCtrl', function () {
-        var ctrl, modalInstance, scope, AssignmentService, TaskService, DocumentService, ContactService, HR_settings;
+        var $q, $controller, ctrl, modalInstance, scope, AssignmentService,
+          TaskService, DocumentService, ContactService, HR_settings;
 
         beforeEach(module('civitasks.appDashboard'));
-        beforeEach(inject(function ($controller, $rootScope) {
-            modalInstance = {
-                close: jasmine.createSpy('modalInstance.close'),
-                dismiss: jasmine.createSpy('modalInstance.dismiss'),
-                result: {
-                    then: jasmine.createSpy('modalInstance.result.then')
-                }
-            };
+        beforeEach(inject(function (_$q_, _$controller_, $httpBackend, $rootScope, _AssignmentService_, _DocumentService_, _TaskService_) {
+          // A workaround to avoid actual API calls
+          $httpBackend.whenGET(/action=/).respond({});
 
-            scope = $rootScope.$new();
+          $q = _$q_;
+          $controller = _$controller_;
+          AssignmentService = _AssignmentService_;
+          DocumentService = _DocumentService_;
+          TaskService = _TaskService_;
+          ContactService = {};
+          HR_settings = { DATE_FORMAT: 'DD/MM/YYYY'};
 
-            AssignmentService = {};
-            TaskService = {};
-            DocumentService = {};
-            ContactService = {};
-            HR_settings = {
-                DATE_FORMAT: 'DD/MM/YYYY'
-            };
+          scope = $rootScope.$new();
 
-            ctrl = $controller('ModalAssignmentCtrl', {
-                $scope: scope,
-                $uibModalInstance: modalInstance,
-                AssignmentService: AssignmentService,
-                TaskService: TaskService,
-                DocumentService: DocumentService,
-                ContactService: ContactService,
-                data: {},
-                config: {},
-                settings: {},
-                HR_settings: HR_settings
-            });
-
-            angular.extend(scope, Mock);
+          initController();
+          angular.extend(scope, Mock);
         }));
 
         describe('Lookup contacts lists', function () {
@@ -51,6 +36,53 @@ define([
                 expect(scope.contacts.document).toEqual([]);
                 expect(scope.contacts.task).toEqual([]);
             });
+        });
+
+        describe('confirm()', function () {
+          beforeEach(function () {
+            spyOn($q, 'all').and.returnValue({ then: _.noop });
+            spyOn(TaskService, 'saveMultiple');
+            spyOn(DocumentService, 'saveMultiple');
+            spyOn(AssignmentService, 'save').and.returnValue({ then: function (cb) {
+              // fakes the db permanence, attaching an id to the assignment on the scope
+              cb(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
+            }});
+          });
+          beforeEach(function () {
+            prepAssignment();
+            scope.confirm() && scope.$digest();
+          });
+
+          it('does not pass the original documents objects to the DocumentService', function () {
+            var documents = DocumentService.saveMultiple.calls.mostRecent().args[0];
+
+            expect(documents.every(function (doc, index) {
+              return doc !== scope.taskList[index];
+            })).toBe(true);
+          });
+
+          it('does not pass the original tasks objects to the TaskService', function () {
+            var tasks = TaskService.saveMultiple.calls.mostRecent().args[0];
+
+            expect(tasks.every(function (task, index) {
+              return task !== scope.taskList[index];
+            })).toBe(true);
+          });
+
+          /**
+           * Prepares the assignment data to pass the confirm() validation
+           */
+          function prepAssignment() {
+            _.assign(scope.assignment, {
+              contact_id: jasmine.any(Number),
+              case_type_id: jasmine.any(Number),
+              dueDate: jasmine.any(Date),
+            });
+
+            scope.taskList.forEach(function (task) {
+              _.assign(task, { activity_date_time: '2013-01-01', assignee_contact_id: [3] });
+            });
+          }
         });
 
         describe('copyAssignee()', function () {
@@ -145,6 +177,31 @@ define([
                     return { id: _.uniqueId() };
                 })
             });
+        }
+
+        /**
+         * [initController description]
+         * @return {[type]} [description]
+         */
+        function initController() {
+          ctrl = $controller('ModalAssignmentCtrl', {
+            $scope: scope,
+            AssignmentService: AssignmentService,
+            TaskService: TaskService,
+            DocumentService: DocumentService,
+            ContactService: ContactService,
+            data: {},
+            config: {},
+            settings: {},
+            HR_settings: HR_settings,
+            $uibModalInstance: {
+              close: jasmine.createSpy('modalInstance.close'),
+              dismiss: jasmine.createSpy('modalInstance.dismiss'),
+              result: {
+                then: jasmine.createSpy('modalInstance.result.then')
+              }
+            }
+          });
         }
     });
 });
