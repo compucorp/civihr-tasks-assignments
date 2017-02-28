@@ -1,27 +1,27 @@
-<form novalidate name="documentForm" class="form-horizontal form-document" role="form" ng-submit="confirm()" ct-spinner>
+<form novalidate name="documentForm" class="form-document form-horizontal modal-inverted" role="form" ng-submit="confirm()" ct-spinner>
   <div class="modal-header">
-    <div class="row">
-      <div class="col-xs-11">
-        <ui-select name="target" ng-class="{'has-error': documentForm.target.$invalid}" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
-          <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
-            {{$select.selected.label}}
-          </ui-select-match>
-          <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
-            <div ng-bind="contact.label"></div>
-            <small ng-bind="contact.description[0]"></small>
-          </ui-select-choices>
-        </ui-select>
-      </div>
-      <div class="col-xs-1">
-        <button type="button" class="close" ng-click="cancel()">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-    </div>
+    <button type="button" class="close" ng-click="cancel()">
+      <span aria-hidden="true">&times;</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title">New Document</h4>
   </div>
   <div class="modal-body" nv-file-drop uploader="uploader">
     <div class="container">
+      <!-- Search and select by name and email -->
+      <div class="row">
+        <div class="col-xs-12">
+          <ui-select name="target" ng-class="{'has-error': documentForm.target.$invalid}" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
+            <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
+              {{$select.selected.label}}
+            </ui-select-match>
+            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
+              <div ng-bind="contact.label"></div>
+              <small ng-bind="contact.description[0]"></small>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
       <!-- Document Type -->
       <div class="row">
         <div class="col-xs-12">
