@@ -149,106 +149,102 @@ define([
             };
 
             $scope.confirm = function () {
-                if (!($filter('filter')($scope.taskList, { create: true })).length && !($filter('filter')($scope.documentList, { create: true })).length) {
-                    $scope.alert.msg = 'Please add at least one task.';
-                    $scope.alert.show = true;
-                    return;
-                }
+              if (!($filter('filter')($scope.taskList, { create: true })).length && !($filter('filter')($scope.documentList, { create: true })).length) {
+                $scope.alert.msg = 'Please add at least one task.';
+                $scope.alert.show = true;
+                return;
+              }
 
-                if (!validateRequiredFields($scope.assignment)) {
-                  return;
-                }
+              if (!validateRequiredFields($scope.assignment)) {
+                return;
+              }
 
-                $scope.$broadcast('ct-spinner-show');
-                $scope.assignment.start_date = new Date();
+              $scope.$broadcast('ct-spinner-show');
+              $scope.assignment.start_date = new Date();
 
-                AssignmentService.save($scope.assignment).then(function (resultAssignment) {
-                    var documentListAssignment = $scope.documentList.filter(function (doc) {
-                        return doc.create;
-                      })
-                      .map(function (doc) {
-                        doc.case_id = resultAssignment.id;
-                        return doc;
-                      });
-
-                    var taskListAssignment = $scope.taskList.filter(function (task) {
-                        return task.create;
-                      })
-                      .map(function (task) {
-                        task.case_id = resultAssignment.id;
-                        return task;
-                      });
-
-                    $q.all({
-                      relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
-                      document: DocumentService.saveMultiple(documentListAssignment.map(function (doc) {
-                        return angular.copy(doc);
-                      })),
-                      task: TaskService.saveMultiple(taskListAssignment.map(function (task) {
-                        return angular.copy(task);
-                      }))
-                    }).then(function (results) {
-                        var i = 0, len = results.task.length, taskArr = [],
-                          documentArr = [], cacheAssignmentObj = {};
-
-                        for (i; i < len; i++) {
-                            taskListAssignment[i].id = results.task[i].id;
-                            taskArr.push(results.task[i].id);
-                        }
-
-                        i = 0, len = results.document.length;
-                        for (i; i < len; i++) {
-                            documentListAssignment[i].id = results.document[i].id;
-                            documentArr.push(results.document[i].id);
-                        }
-
-                        cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment), {
-                            id: resultAssignment.id,
-                            client_id: {
-                                '1': $scope.assignment.client_id
-                            },
-                            contact_id: {
-                                '1': $scope.assignment.contact_id
-                            },
-                            contacts: [
-                                {
-                                    sort_name: $rootScope.cache.contact.obj[$scope.assignment.contact_id].sort_name,
-                                    contact_id: $scope.assignment.contact_id,
-                                    role: 'Client'
-                                },
-                                {
-                                    sort_name: $rootScope.cache.contact.obj[config.LOGGED_IN_CONTACT_ID].sort_name,
-                                    contact_id: config.LOGGED_IN_CONTACT_ID,
-                                    role: 'Case Coordinator'
-                                }
-                            ],
-                            is_deleted: '0',
-                            end_date: '',
-                            activities: taskArr.concat(documentArr)
-                        });
-
-                        AssignmentService.updateCache(cacheAssignmentObj);
-                        AssignmentService.updateTab(1);
-                        //CRM.refreshParent('#civitasks');
-                        //CRM.refreshParent('#cividocuments');
-                        $modalInstance.close({
-                            documentList: documentListAssignment,
-                            taskList: taskListAssignment
-                        });
-                        $scope.$broadcast('ct-spinner-hide');
-
-                    }, function (reason) {
-                        CRM.alert(reason, 'Error', 'error');
-                        $scope.$broadcast('ct-spinner-hide');
-                        return $q.reject();
-                    });
-
-                }, function (reason) {
-                    CRM.alert(reason, 'Error', 'error');
-                    $scope.$broadcast('ct-spinner-hide');
-                    return $q.reject();
+              AssignmentService.save($scope.assignment).then(function (resultAssignment) {
+                var documentListAssignment = $scope.documentList.filter(function (doc) {
+                  return doc.create;
+                })
+                .map(function (doc) {
+                  doc.case_id = resultAssignment.id;
+                  return doc;
                 });
 
+                var taskListAssignment = $scope.taskList.filter(function (task) {
+                  return task.create;
+                })
+                .map(function (task) {
+                  task.case_id = resultAssignment.id;
+                  return task;
+                });
+
+                $q.all({
+                  relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
+                  document: DocumentService.saveMultiple(documentListAssignment.map(function (doc) {
+                    return angular.copy(doc);
+                  })),
+                  task: TaskService.saveMultiple(taskListAssignment.map(function (task) {
+                    return angular.copy(task);
+                  }))
+                })
+                .then(function (results) {
+                  var i, taskArr = [], documentArr = [], cacheAssignmentObj = {};
+
+                  for (i; i < results.task.length; i++) {
+                    taskListAssignment[i].id = results.task[i].id;
+                    taskArr.push(results.task[i].id);
+                  }
+
+                  for (i; i < results.document.length; i++) {
+                    documentListAssignment[i].id = results.document[i].id;
+                    documentArr.push(results.document[i].id);
+                  }
+
+                  cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment), {
+                    id: resultAssignment.id,
+                    client_id: {
+                      '1': $scope.assignment.client_id
+                    },
+                    contact_id: {
+                      '1': $scope.assignment.contact_id
+                    },
+                    contacts: [
+                      {
+                        sort_name: $rootScope.cache.contact.obj[$scope.assignment.contact_id].sort_name,
+                        contact_id: $scope.assignment.contact_id,
+                        role: 'Client'
+                      },
+                      {
+                        sort_name: $rootScope.cache.contact.obj[config.LOGGED_IN_CONTACT_ID].sort_name,
+                        contact_id: config.LOGGED_IN_CONTACT_ID,
+                        role: 'Case Coordinator'
+                      }
+                    ],
+                    is_deleted: '0',
+                    end_date: '',
+                    activities: taskArr.concat(documentArr)
+                  });
+
+                  AssignmentService.updateCache(cacheAssignmentObj);
+                  AssignmentService.updateTab(1);
+
+                  $modalInstance.close({
+                    documentList: documentListAssignment,
+                    taskList: taskListAssignment
+                  });
+
+                  $scope.$broadcast('ct-spinner-hide');
+                }, function (reason) {
+                  CRM.alert(reason, 'Error', 'error');
+                  $scope.$broadcast('ct-spinner-hide');
+                  return $q.reject();
+                });
+              }, function (reason) {
+                CRM.alert(reason, 'Error', 'error');
+                $scope.$broadcast('ct-spinner-hide');
+                return $q.reject();
+              });
             };
 
             /**
