@@ -54,45 +54,82 @@ define([
         });
 
         describe('copyAssignee()', function () {
-            var list, assigneeId = [2];
+          var assigneeId = [2];
 
-            beforeEach(function () {
-                list = scope.taskList;
-                list[0].assignee_contact_id = assigneeId;
+          beforeEach(function () {
+            _.assign(scope.taskList[0], { create: false, assignee_contact_id: [3] });
+            _.assign(scope.taskList[1], { create: false, assignee_contact_id: [1] });
+            _.assign(scope.taskList[2], { create: true, assignee_contact_id: assigneeId });
+            _.assign(scope.taskList[4], { create: false });
 
-                fillContactsCollectionOf(list, 'task');
+            fillContactsCollectionOf(scope.taskList, 'task');
+            scope.copyAssignee(scope.taskList, 'task');
+          });
 
-                scope.copyAssignee(list, 'task');
+          describe('assignee id', function () {
+            it("assigns the assignee id of the first enabled item to the other enabled items", function () {
+              scope.taskList.filter(function (item) {
+                return item.create;
+              }).forEach(function (item) {
+                expect(item.assignee_contact_id).toEqual(assigneeId);
+              });
             });
 
-            it("assigns the assignee's id of the first item to the whole list", function () {
-                list.forEach(function (item) {
-                    expect(item.assignee_contact_id).toEqual(assigneeId);
-                });
+            it('does not assign the assignee id to the disabled items', function () {
+              scope.taskList.filter(function (item) {
+                return !item.create;
+              }).forEach(function (item) {
+                expect(item.assignee_contact_id).not.toEqual(assigneeId);
+              });
+            });
+          });
+
+          describe('contact collection', function () {
+            it('copies the contacts collection of the first enabled item to the other items', function () {
+              scope.taskList.forEach(function (item, index) {
+                if (item.create) {
+                  expect(scope.contacts.task[index]).toEqual(scope.contacts.task[2]);
+                }
+              });
             });
 
-            it('copies the contacts collection of the first item to the other items', function () {
-                list.forEach(function (item, index) {
-                    expect(scope.contacts.task[index]).toEqual(scope.contacts.task[0]);
-                });
+            it('does not copy the contacts collection to the disabled items', function () {
+              scope.taskList.forEach(function (item, index) {
+                if (item.create) {
+                  expect(scope.contacts.task[index]).toEqual(scope.contacts.task[2]);
+                }
+              });
             });
+          });
         });
 
         describe('copyDate()', function () {
-            var list, activityDate = '2015-05-05';
+          var activityDate = '2015-05-05';
 
-            beforeEach(function () {
-                list = scope.taskList;
-                list[0].activity_date_time = activityDate;
+          beforeEach(function () {
+            _.assign(scope.taskList[0], { create: false, activity_date_time: '2013-01-01' });
+            _.assign(scope.taskList[1], { create: false, activity_date_time: '2014-01-01' });
+            _.assign(scope.taskList[2], { create: true, activity_date_time: activityDate });
+            _.assign(scope.taskList[4], { create: false });
 
-                scope.copyDate(list);
+            scope.copyDate(scope.taskList);
+          });
+
+          it("assigns the date of the first enabled item to the whole list", function () {
+            scope.taskList.filter(function (item) {
+              return item.create;
+            }).forEach(function (item) {
+              expect(item.activity_date_time).toEqual(activityDate);
             });
+          });
 
-            it("assigns the date of the first item to the whole list", function () {
-                list.forEach(function (item) {
-                    expect(item.activity_date_time).toEqual(activityDate);
-                });
+          it("does not assign the date to the disabled items", function () {
+            scope.taskList.filter(function (item) {
+              return !item.create;
+            }).forEach(function (item) {
+              expect(item.activity_date_time).not.toEqual(activityDate);
             });
+          });
         });
 
         /**

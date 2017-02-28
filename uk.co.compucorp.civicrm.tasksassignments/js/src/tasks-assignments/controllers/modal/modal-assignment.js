@@ -1,12 +1,13 @@
 define([
-    'common/angular',
-    'common/moment',
-    'tasks-assignments/controllers/controllers',
-    'tasks-assignments/services/contact',
-    'tasks-assignments/services/document',
-    'tasks-assignments/services/task',
-    'tasks-assignments/services/assignment'
-], function (angular, moment, controllers) {
+  'common/lodash',
+  'common/angular',
+  'common/moment',
+  'tasks-assignments/controllers/controllers',
+  'tasks-assignments/services/contact',
+  'tasks-assignments/services/document',
+  'tasks-assignments/services/task',
+  'tasks-assignments/services/assignment'
+], function (_, angular, moment, controllers) {
     'use strict';
 
     controllers.controller('ModalAssignmentCtrl', ['$timeout', '$scope', '$uibModalInstance', '$rootScope', '$q', '$log', '$filter',
@@ -251,33 +252,37 @@ define([
             };
 
             /**
-             * Copy assignee from the first row of list to the rest of records.
-             * It also copies to the other items the contacts collection of the first one
+             * Copy assignee id and contacts collection from the first
+             * enabled item of the list to the rest of the items
              *
              * @param {Array} list
              * @param {string} type (document, task)
              */
             $scope.copyAssignee = function copyAssignee(list, type) {
-                list.forEach(function (item, index) {
-                    if (item.create) {
-                        $scope.contacts[type][index] = $scope.contacts[type][0].slice();
-                        item.assignee_contact_id = [list[0].assignee_contact_id[0]];
-                    }
-                });
+              var firstEnabled = firstEnabledItem(list);
+
+              list.forEach(function (item, index) {
+                if (item.create) {
+                  var firstEnabledIndex = _.indexOf(list, firstEnabled);
+
+                  $scope.contacts[type][index] = $scope.contacts[type][firstEnabledIndex].slice();
+                  item.assignee_contact_id = [firstEnabled.assignee_contact_id[0]];
+                }
+              });
             };
 
             /**
-             * Copy date from the first row of the list to the rest of records.
+             * Copy date from the first enabled item of the list
+             * to the rest of the items
+             *
              * @param {Array} list
              */
             $scope.copyDate = function copyDate(list) {
-                var firstRowDate = list[0].activity_date_time;
-
-                list.forEach(function (item) {
-                    if (item.create) {
-                        item.activity_date_time = firstRowDate;
-                    }
-                });
+              list.forEach(function (item) {
+                if (item.create) {
+                  item.activity_date_time = firstEnabledItem(list).activity_date_time;
+                }
+              });
             };
 
             $scope.$watch('activitySet', function (activitySet) {
@@ -321,6 +326,18 @@ define([
 
                 angular.copy(documentList, $scope.documentList);
             });
+
+            /**
+             * Returns the first enable item in the given collection
+             *
+             * @param  {Array} collection
+             * @return {Object}
+             */
+            function firstEnabledItem(collection) {
+              return _.find(collection, function (item) {
+                return item.create;
+              });
+            }
 
             /**
              * Validates if the required fields values are present, and shows a notification if needed
