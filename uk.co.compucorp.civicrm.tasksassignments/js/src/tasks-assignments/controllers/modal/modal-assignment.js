@@ -255,11 +255,12 @@ define([
              * @param {string} type (document, task)
              */
             $scope.copyAssignee = function copyAssignee(list, type) {
-              var firstEnabled = firstEnabledItem(list),
-                firstEnabledContacts = $scope.contacts[type][_.indexOf(list, firstEnabled)] || [],
-                firstEnabledAssignee = firstEnabled.assignee_contact_id ? [firstEnabled.assignee_contact_id[0]] : firstEnabled.assignee_contact_id;
+              var firstEnabled = firstEnabledItem(list);
 
               list.forEach(function (item, index) {
+                var firstEnabledContacts = $scope.contacts[type][_.indexOf(list, firstEnabled)] || [],
+                  firstEnabledAssignee = firstEnabled.assignee_contact_id ? [firstEnabled.assignee_contact_id[0]] : firstEnabled.assignee_contact_id;
+
                 if (item.create) {
                   $scope.contacts[type][index] = firstEnabledContacts.slice();
                   item.assignee_contact_id = firstEnabledAssignee;
