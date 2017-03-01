@@ -149,7 +149,10 @@ define([
             };
 
             $scope.confirm = function () {
-              if (!($filter('filter')($scope.taskList, { create: true })).length && !($filter('filter')($scope.documentList, { create: true })).length) {
+              if (
+                !($filter('filter')($scope.taskList, { create: true })).length &&
+                !($filter('filter')($scope.documentList, { create: true })).length
+              ) {
                 $scope.alert.msg = 'Please add at least one task.';
                 $scope.alert.show = true;
                 return;
@@ -344,40 +347,28 @@ define([
              * @return {boolean}     Whether the required field values are present
              */
             function validateRequiredFields(assignment) {
-              var missingRequiredFields = [],
-                enabledTasks = $scope.taskList.filter(function (task) {
-                  return task.create;
-                });
+              var missingRequiredFields = [];
 
-              if (!assignment.contact_id) {
-                missingRequiredFields.push('Contact');
-              }
+              !assignment.contact_id   && missingRequiredFields.push('Contact');
+              !assignment.case_type_id && missingRequiredFields.push('Assignment type');
+              !assignment.dueDate      && missingRequiredFields.push('Key date');
 
-              if (!assignment.case_type_id) {
-                missingRequiredFields.push('Assignmnt type');
-              }
+              $scope.taskList.filter(function (task) {
+                return task.create;
+              })
+              .forEach(function (task) {
+                if (!_.includes(missingRequiredFields, 'Activity type')) {
+                  !task.activity_type_id && missingRequiredFields.push('Activity type');
+                }
 
-              if (!assignment.dueDate) {
-                missingRequiredFields.push('Key date');
-              }
+                if (!_.includes(missingRequiredFields, 'Assignee')) {
+                  !task.assignee_contact_id[0] && missingRequiredFields.push('Assignee');
+                }
 
-              if (enabledTasks.filter(function (task) {
-                return !task.activity_type_id;
-              }).length) {
-                missingRequiredFields.push('Activity type');
-              }
-
-              if (enabledTasks.filter(function (task) {
-                return !task.assignee_contact_id[0];
-              }).length) {
-                missingRequiredFields.push('Assignee');
-              }
-
-              if (enabledTasks.filter(function (task) {
-                return !task.activity_date_time;
-              }).length) {
-                missingRequiredFields.push('Activity Due Date');
-              }
+                if (!_.includes(missingRequiredFields, 'Activity Due Date')) {
+                  !task.activity_date_time && missingRequiredFields.push('Activity Due Date');
+                }
+              });
 
               if (missingRequiredFields.length) {
                 var notification = CRM.alert(missingRequiredFields.join(', '),
