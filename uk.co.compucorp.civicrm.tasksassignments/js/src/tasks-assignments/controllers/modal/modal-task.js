@@ -172,15 +172,14 @@ define([
              * @param  {string} contactId
              */
             function loadContactAssignments(contactId) {
-              var promise;
+              $scope.assignments = [];
 
-              if (contactId[0]) {
-                promise = AssignmentService.search(null, null, contactId);
-              } else {
-                promise = $q.resolve([]);
+              if (!contactId[0]) {
+                return;
               }
 
-              promise.then(function (results) {
+              AssignmentService.search(null, null, contactId)
+                .then(function (results) {
                 $scope.assignments = results;
               });
             };
