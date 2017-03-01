@@ -161,7 +161,7 @@ define([
             },
             search: function(input, excludeId){
                 return AssignmentSearch.query({
-                    term: input,
+                    sortName: input,
                     excludeCaseIds: excludeId
                 }).$promise;
             },

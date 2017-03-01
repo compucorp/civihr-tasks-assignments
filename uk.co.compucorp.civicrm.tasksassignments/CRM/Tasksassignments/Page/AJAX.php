@@ -43,7 +43,7 @@ class CRM_Tasksassignments_Page_AJAX {
   public static function autocompleteCases() {
     $params = array(
       'limit' => CRM_Core_BAO_Setting::getItem(CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'search_autocomplete_count', NULL, 10),
-      'sort_name' => CRM_Utils_Type::escape(CRM_Utils_Array::value('term', $_GET, ''), 'String'),
+      'sort_name' => CRM_Utils_Type::escape(CRM_Utils_Array::value('sortName', $_GET, ''), 'String'),
     );
 
     $excludeCaseIds = array();
