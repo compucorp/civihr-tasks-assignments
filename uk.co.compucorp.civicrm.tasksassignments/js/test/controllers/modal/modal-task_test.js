@@ -96,6 +96,7 @@ define([
         initController();
 
         $scope.task.case_id = _.uniqueId();
+        $scope.showFieldAssignment = true;
         $scope.$digest();
 
         $scope.task.target_contact_id = [_.uniqueId()];
@@ -109,6 +110,10 @@ define([
         it('resets the assignment id', function () {
           expect($scope.task.case_id).toBe(null);
         });
+
+        it('hides the assignment field', function () {
+          expect($scope.showFieldAssignment).toBe(false);
+        })
       });
 
       describe("contact's assignment", function () {

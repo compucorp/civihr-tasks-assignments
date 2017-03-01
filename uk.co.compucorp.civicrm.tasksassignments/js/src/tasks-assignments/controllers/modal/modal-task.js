@@ -26,6 +26,8 @@ define([
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
             $scope.showCId = !config.CONTACT_ID;
 
+            $scope.showFieldAssignment = false;
+
             $scope.assignments = [];
             $scope.contacts = {
                 target: initialContacts('target'),
@@ -250,6 +252,8 @@ define([
                 }
 
                 $scope.task.case_id = null;
+                $scope.showFieldAssignment = false;
+
                 loadContactAssignments(contactId);
               }, true);
             }
