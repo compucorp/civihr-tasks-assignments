@@ -1,25 +1,35 @@
 define([
+  'common/lodash',
   'common/angular',
   'common/moment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment) {
+], function (_, angular, moment) {
   'use strict';
 
   describe('ModalTaskCtrl', function () {
-    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings,
-      data, initController;
+    var $controller, $q, $rootScope, $scope, ctrl, modalInstance, HR_settings,
+      data, AssignmentService;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$rootScope_, _$controller_) {
+    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _AssignmentService_, $httpBackend) {
+      // A workaround to avoid actual API calls
+      $httpBackend.whenGET(/action=/).respond({});
+
+      $q = _$q_;
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
+      AssignmentService = _AssignmentService_;
 
       data = {};
       HR_settings = { DATE_FORMAT: 'DD/MM/YYYY' };
 
       initializeCaches();
+
+      spyOn(AssignmentService, 'search').and.returnValue({
+        then: function (cb) { cb([jasmine.any(Object), jasmine.any(Object)]); }
+      });
     }));
 
     describe('Default due date', function () {
@@ -78,6 +88,74 @@ define([
           expect($scope.contacts.assignee).toEqual([{ id: '3' }]);
           expect($scope.contacts.target).toEqual([{ id: '1' }]);
         });
+      });
+    });
+
+    describe('when the target contact id changes', function () {
+      beforeEach(function () {
+        initController();
+
+        $scope.task.case_id = _.uniqueId();
+        $scope.$digest();
+
+        $scope.task.target_contact_id = [_.uniqueId()];
+      });
+
+      describe('basic tests', function () {
+        beforeEach(function () {
+          $scope.$digest();
+        });
+
+        it('resets the assignment id', function () {
+          expect($scope.task.case_id).toBe(null);
+        });
+      });
+
+      describe("contact's assignment", function () {
+        describe('when the contact has been selected', function () {
+          beforeEach(function () {
+            AssignmentService.search.calls.reset();
+            $scope.$digest();
+          });
+
+          it('queries the assignment via the contact id', function () {
+            expect(AssignmentService.search).toHaveBeenCalledWith(null, null, $scope.task.target_contact_id);
+          });
+
+          it('stores the assignments', function () {
+            expect(_.isEmpty($scope.assignments)).toBe(false);
+          });
+        });
+
+        describe('when the contact has been deselected', function () {
+          beforeEach(function () {
+            $scope.task.target_contact_id = [null];
+            $scope.$digest();
+          });
+
+          it('does not query the assignments', function () {
+            expect(AssignmentService.search).not.toHaveBeenCalled();
+          });
+
+          it('empties the stored assignments', function () {
+            expect(_.isEmpty($scope.assignments)).toBe(true);
+          });
+        });
+      });
+    });
+
+    describe('edit mode', function () {
+      var targetContactId;
+
+      beforeEach(function () {
+        targetContactId = [_.uniqueId()];
+        data = { id: _.uniqueId(), target_contact_id: targetContactId };
+
+        initController();
+      });
+
+      it("loads the target contact's assignments", function () {
+        expect(AssignmentService.search).toHaveBeenCalledWith(null, null, targetContactId);
       });
     });
 

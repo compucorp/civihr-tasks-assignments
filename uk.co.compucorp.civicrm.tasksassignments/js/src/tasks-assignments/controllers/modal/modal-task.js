@@ -78,21 +78,6 @@ define([
                 ContactService.updateCache(obj);
             };
 
-            $scope.refreshAssignments = function (input) {
-
-                if (!input) {
-                    return
-                }
-
-                var targetContactId = $scope.task.target_contact_id;
-
-                AssignmentService.search(input, $scope.task.case_id).then(function (results) {
-                    $scope.assignments = $filter('filter')(results, function (val) {
-                        return +val.extra.contact_id == +targetContactId;
-                    });
-                });
-            };
-
             $scope.refreshContacts = function (input, type) {
                 if (!input) {
                     return
@@ -174,6 +159,32 @@ define([
               });
             };
 
+            // Init code
+            (function init() {
+              initWatchers();
+
+              $scope.task.id && loadContactAssignments($scope.task.target_contact_id);
+            })();
+
+            /**
+             * Fetches the assignments assigned to the contact with the given id
+             *
+             * @param  {string} contactId
+             */
+            function loadContactAssignments(contactId) {
+              var promise;
+
+              if (contactId[0]) {
+                promise = AssignmentService.search(null, null, contactId);
+              } else {
+                promise = $q.resolve([]);
+              }
+
+              promise.then(function (results) {
+                $scope.assignments = results;
+              });
+            };
+
             /**
              * Validates if the required fields values are present, and shows a notification if needed
              * @param  {Object} task The task to validate
@@ -242,6 +253,20 @@ define([
 
                     return +currContactId === +contact.id;
                 });
+            }
+
+            /**
+             * Initializes the watchers on scope's properties
+             */
+            function initWatchers() {
+              $scope.$watch('task.target_contact_id', function (contactId, old) {
+                if (contactId == old) {
+                  return;
+                }
+
+                $scope.task.case_id = null;
+                loadContactAssignments(contactId);
+              }, true);
             }
         }]);
 });
