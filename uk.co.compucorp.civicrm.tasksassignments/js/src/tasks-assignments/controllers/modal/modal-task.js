@@ -26,7 +26,7 @@ define([
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
             $scope.showCId = !config.CONTACT_ID;
 
-            $scope.assignments = initialAssignments();
+            $scope.assignments = [];
             $scope.contacts = {
                 target: initialContacts('target'),
                 assignee: initialContacts('assignee')
@@ -220,20 +220,6 @@ define([
               }
 
               return true;
-            }
-
-            /**
-             * The initial assignments that needs to be immediately available
-             * in the lookup directive
-             *
-             * @return {Array}
-             */
-            function initialAssignments() {
-                var cachedAssignments = $rootScope.cache.assignment.arrSearch;
-
-                return cachedAssignments.filter(function (assignment) {
-                    return +assignment.extra.contact_id === +$scope.task.target_contact_id;
-                });
             }
 
             /**
