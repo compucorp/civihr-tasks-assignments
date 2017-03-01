@@ -163,7 +163,7 @@ define([
               return AssignmentSearch.query({
                 sortName: input,
                 excludeCaseIds: excludeCaseId,
-                includeContactIds: includeContactIds
+                includeContactIds: includeContactIds.join(',')
               }).$promise;
             },
             updateTab: function(count) {
