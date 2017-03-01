@@ -159,11 +159,12 @@ define([
                 return deferred.promise;
 
             },
-            search: function(input, excludeId){
-                return AssignmentSearch.query({
-                    sortName: input,
-                    excludeCaseIds: excludeId
-                }).$promise;
+            search: function(input, excludeCaseId, includeContactIds){
+              return AssignmentSearch.query({
+                sortName: input,
+                excludeCaseIds: excludeCaseId,
+                includeContactIds: includeContactIds
+              }).$promise;
             },
             updateTab: function(count) {
                 if (document.getElementsByClassName('CRM_Case_Form_Search').length) {
