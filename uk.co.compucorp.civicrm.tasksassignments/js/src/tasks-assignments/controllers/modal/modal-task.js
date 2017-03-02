@@ -180,9 +180,12 @@ define([
                 return;
               }
 
+              $timeout(function () { $scope.$broadcast('ct-spinner-show'); }, 0);
+
               AssignmentService.search(null, null, contactId)
                 .then(function (results) {
                 $scope.assignments = results;
+                $scope.$broadcast('ct-spinner-hide');
               });
             };
 
