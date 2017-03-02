@@ -11355,12 +11355,10 @@ fieldset[disabled]
   margin-bottom: 20px;
 }
 #civitasks form.form-task .modal-header, #cividocuments form.form-task .modal-header, #civitasks form.form-document .modal-header, #cividocuments form.form-document .modal-header {
-  padding: 10px 15px 0;
+  padding: 10px 15px 10px;
   /* using this override until we have a separate directive for that */
 }
 #civitasks form.form-task .modal-header .close, #cividocuments form.form-task .modal-header .close, #civitasks form.form-document .modal-header .close, #cividocuments form.form-document .modal-header .close {
-  float: none;
-  opacity: .7;
   margin-top: 7px;
   margin-left: -3px;
 }
