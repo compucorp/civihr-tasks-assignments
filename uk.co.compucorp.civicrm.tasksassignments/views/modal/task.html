@@ -122,17 +122,23 @@
         <!-- Assignment -->
         <div class="col-xs-12 col-sm-7" ng-show="!task.case_id && !showFieldAssignment">
           <span class="form-control-static">
-            <a href class="btn btn-indent" ng-click="showFieldAssignment = true;">
+            <a href class="btn btn-indent" ng-click="showFieldAssignment = true;" ng-class="{ disabled: !assignments.length }">
               Add to assignment
             </a>
           </span>
         </div>
-        <div class="col-xs-12 col-sm-7" ng-show="task.case_id || showFieldAssignment">
-          <ui-select allow-clear ng-model="task.case_id" on-select="cacheAssignment($item);">
+        <div class="col-xs-12 col-sm-7" ng-show="(task.case_id || showFieldAssignment) && assignments.length">
+          <ui-select
+            theme="civihr-ui-select"
+            ng-model="task.case_id"
+            on-select="cacheAssignment($item);"
+            search-enabled="false">
             <ui-select-match class="ui-select-match" placeholder="Assignment">
               {{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
+            <ui-select-choices
+              class="ui-select-choices"
+              repeat="assignment.id as assignment in assignments">
               <div>
                 <div ng-class="assignment.label_class">{{assignment.label}}</div>
                 <small>
