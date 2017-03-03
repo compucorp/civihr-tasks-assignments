@@ -30,19 +30,23 @@ class CRM_Tasksassignments_BAO_Assignment extends CRM_Tasksassignments_DAO_Assig
    *  - 'sort_name' : Sort name for the user you want to retrieve cases for.
    *  - 'limit' : The number of cases you want to retrieve.
    * @param array $excludeCaseIds
+   * @param array $includeContactIds
    *
    * @return array Of case and related data keyed on case id
    */
-  public static function retrieveCases($params = array(), $excludeCaseIds = array()) {
+  public static function retrieveCases($params = array(), $excludeCaseIds = array(), $includeContactIds = array()) {
     if ($sortName = CRM_Utils_Array::value('sort_name', $params)) {
       $config = CRM_Core_Config::singleton();
       $search = ($config->includeWildCardInName) ? "%$sortName%" : "$sortName%";
       $where[] = "( sort_name LIKE '$search' )";
     }
-    if (is_array($excludeCaseIds) &&
-      !CRM_Utils_System::isNull($excludeCaseIds)
-    ) {
+
+    if (is_array($excludeCaseIds) && !CRM_Utils_System::isNull($excludeCaseIds)) {
       $where[] = ' ( ca.id NOT IN ( ' . implode(',', $excludeCaseIds) . ' ) ) ';
+    }
+
+    if (is_array($includeContactIds) && !CRM_Utils_System::isNull($includeContactIds)) {
+      $where[] = ' ( contact_id IN ( ' . implode(',', $includeContactIds) . ' ) ) ';
     }
 
     $where[] = ' ( ca.is_deleted = 0 OR ca.is_deleted IS NULL ) ';
@@ -50,14 +54,16 @@ class CRM_Tasksassignments_BAO_Assignment extends CRM_Tasksassignments_DAO_Assig
     //filter for permissioned cases.
     $filterCases = array();
     $doFilterCases = FALSE;
+
     if (!CRM_Core_Permission::check('access all cases and activities')) {
       $doFilterCases = TRUE;
       $session = CRM_Core_Session::singleton();
       $filterCases = CRM_Case_BAO_Case::getCases(FALSE, $session->get('userID'));
     }
-    $whereClause = implode(' AND ', $where);
 
+    $whereClause = implode(' AND ', $where);
     $limitClause = '';
+
     if ($limit = CRM_Utils_Array::value('limit', $params)) {
       $limitClause = "LIMIT 0, $limit";
     }
@@ -80,12 +86,13 @@ class CRM_Tasksassignments_BAO_Assignment extends CRM_Tasksassignments_DAO_Assig
 ";
     $dao = CRM_Core_DAO::executeQuery($query);
     $statuses = CRM_Case_BAO_Case::buildOptions('status_id', 'create');
-
     $cases = array();
+
     while ($dao->fetch()) {
       if ($doFilterCases && !array_key_exists($dao->id, $filterCases)) {
         continue;
       }
+
       $cases[$dao->id] = array(
         'sort_name' => $dao->sort_name,
         'case_type' => $dao->case_type,
@@ -96,6 +103,7 @@ class CRM_Tasksassignments_BAO_Assignment extends CRM_Tasksassignments_DAO_Assig
         'case_status' => $statuses[$dao->status_id],
       );
     }
+
     $dao->free();
 
     return $cases;

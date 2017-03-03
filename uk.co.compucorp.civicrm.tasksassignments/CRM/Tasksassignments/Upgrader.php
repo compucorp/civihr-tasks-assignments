@@ -156,30 +156,6 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     }
 
     /*
-     * Install Task Types
-     */
-    public function upgrade_0004() {
-
-      $this->_installActivityTypes('CiviTask', array(
-        'Schedule joining date',
-        'Probation appraisal (start probation workflow)',
-        'Group Orientation to organization, values, policies',
-        'Enter employee data in CiviHR',
-        'Issue appointment letter',
-        'Fill Employee Details Form',
-        'Submission of ID/Residence proofs and photos',
-        'Program and work induction by program supervisor',
-        'Schedule Exit Interview',
-        'Conduct Exit Interview',
-        'Get "No Dues" certification',
-        'Revoke Access to Database',
-        'Block work email ID',
-      ));
-
-      return TRUE;
-    }
-
-    /*
      * Install Documents statuses
      */
     public function upgrade_0006() {
@@ -506,7 +482,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       civicrm_api3('OptionValue', 'create', array(
         'option_group_id' => 'ta_settings',
         'name' => 'days_to_create_a_document_clone',
-        'label' => t('Renewed document creation date offset (days)'),
+        'label' => is_callable('t') ? t('Renewed document creation date offset (days)') : 'Renewed document creation date offset (days)',
         'value' => 0,
       ));
     }
