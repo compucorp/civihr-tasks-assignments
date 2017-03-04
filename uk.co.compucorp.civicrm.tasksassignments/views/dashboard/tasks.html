@@ -191,7 +191,7 @@
             <span editable-ui-select="task.target_contact_id[0]"
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
-                  onbeforesave="cacheContact(select.$data) && updateTask(task, { target_contact_id: [select.$data] })"
+                  onbeforesave="cacheContact($data) && updateTask(task, { target_contact_id: [$data] })"
                   onshow="updateContacts(cache.contact.arrSearch);">
                 <editable-ui-select-match placeholder="Start typing a name or email...">
                     {{$select.selected.label}}
@@ -212,8 +212,10 @@
                 Due:
                 <time editable-bsdate="task.activity_date_time"
                       onbeforesave="updateTask(task, { activity_date_time: $data });"
+                      onshow="dpOpen()"
                       class="editable-small stick-to-label"
-                      e-ng-click="dpOpen($event)"
+                      e-ng-click="dpOpen()"
+                      e-show-calendar-button="false"
                       e-is-open="picker.opened"
                       e-datepicker-popup>
                     {{task.activity_date_time | date: 'MMM d'}}
@@ -233,7 +235,7 @@
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                   onshow="updateContacts(cache.contact.arrSearch);"
-                  onbeforesave="cacheContact(select.$data) && updateTask(task, { assignee_contact_id: [select.$data] });">
+                  onbeforesave="cacheContact($data) && updateTask(task, { assignee_contact_id: [$data] });">
                 <editable-ui-select-match placeholder="Start typing a name or email...">
                     {{$select.selected.label}}
                 </editable-ui-select-match>

@@ -41,17 +41,24 @@ class CRM_Tasksassignments_Page_AJAX {
    * Retrieve cases for auto-complete input.
    */
   public static function autocompleteCases() {
+    $excludeCaseIds = array();
+    $includeContactIds = array();
     $params = array(
       'limit' => CRM_Core_BAO_Setting::getItem(CRM_Core_BAO_Setting::SYSTEM_PREFERENCES_NAME, 'search_autocomplete_count', NULL, 10),
-      'sort_name' => CRM_Utils_Type::escape(CRM_Utils_Array::value('term', $_GET, ''), 'String'),
+      'sort_name' => CRM_Utils_Type::escape(CRM_Utils_Array::value('sortName', $_GET, ''), 'String'),
     );
 
-    $excludeCaseIds = array();
-    if (!empty($_GET['excludeCaseIds'])) {
+    if (CRM_Utils_Array::value('excludeCaseIds', $_GET)) {
       $excludeCaseIds = explode(',', CRM_Utils_Type::escape($_GET['excludeCaseIds'], 'String'));
     }
-    $unclosedCases = CRM_Tasksassignments_BAO_Assignment::retrieveCases($params, $excludeCaseIds);
+
+    if (CRM_Utils_Array::value('includeContactIds', $_GET)) {
+      $includeContactIds = explode(',', CRM_Utils_Type::escape($_GET['includeContactIds'], 'String'));
+    }
+
+    $unclosedCases = CRM_Tasksassignments_BAO_Assignment::retrieveCases($params, $excludeCaseIds, $includeContactIds);
     $results = array();
+
     foreach ($unclosedCases as $caseId => $details) {
       $results[] = array(
         'id' => $caseId,
@@ -61,8 +68,7 @@ class CRM_Tasksassignments_Page_AJAX {
         'extra' => $details,
       );
     }
+
     CRM_Utils_JSON::output($results);
   }
-
 }
-

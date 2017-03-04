@@ -26,7 +26,9 @@ define([
             $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
             $scope.showCId = !config.CONTACT_ID;
 
-            $scope.assignments = initialAssignments();
+            $scope.showFieldAssignment = false;
+
+            $scope.assignments = [];
             $scope.contacts = {
                 target: initialContacts('target'),
                 assignee: initialContacts('assignee')
@@ -76,21 +78,6 @@ define([
                 };
 
                 ContactService.updateCache(obj);
-            };
-
-            $scope.refreshAssignments = function (input) {
-
-                if (!input) {
-                    return
-                }
-
-                var targetContactId = $scope.task.target_contact_id;
-
-                AssignmentService.search(input, $scope.task.case_id).then(function (results) {
-                    $scope.assignments = $filter('filter')(results, function (val) {
-                        return +val.extra.contact_id == +targetContactId;
-                    });
-                });
             };
 
             $scope.refreshContacts = function (input, type) {
@@ -174,6 +161,34 @@ define([
               });
             };
 
+            // Init code
+            (function init() {
+              initWatchers();
+
+              $scope.task.id && loadContactAssignments($scope.task.target_contact_id);
+            })();
+
+            /**
+             * Fetches the assignments assigned to the contact with the given id
+             *
+             * @param  {string} contactId
+             */
+            function loadContactAssignments(contactId) {
+              $scope.assignments = [];
+
+              if (!contactId[0]) {
+                return;
+              }
+
+              $timeout(function () { $scope.$broadcast('ct-spinner-show'); }, 0);
+
+              AssignmentService.search(null, null, contactId)
+                .then(function (results) {
+                $scope.assignments = results;
+                $scope.$broadcast('ct-spinner-hide');
+              });
+            };
+
             /**
              * Validates if the required fields values are present, and shows a notification if needed
              * @param  {Object} task The task to validate
@@ -212,20 +227,6 @@ define([
             }
 
             /**
-             * The initial assignments that needs to be immediately available
-             * in the lookup directive
-             *
-             * @return {Array}
-             */
-            function initialAssignments() {
-                var cachedAssignments = $rootScope.cache.assignment.arrSearch;
-
-                return cachedAssignments.filter(function (assignment) {
-                    return +assignment.extra.contact_id === +$scope.task.target_contact_id;
-                });
-            }
-
-            /**
              * The initial contacts that needs to be immediately available
              * in the lookup directive for the given type
              *
@@ -242,6 +243,22 @@ define([
 
                     return +currContactId === +contact.id;
                 });
+            }
+
+            /**
+             * Initializes the watchers on scope's properties
+             */
+            function initWatchers() {
+              $scope.$watch('task.target_contact_id', function (contactId, old) {
+                if (contactId == old) {
+                  return;
+                }
+
+                $scope.task.case_id = null;
+                $scope.showFieldAssignment = false;
+
+                loadContactAssignments(contactId);
+              }, true);
             }
         }]);
 });
