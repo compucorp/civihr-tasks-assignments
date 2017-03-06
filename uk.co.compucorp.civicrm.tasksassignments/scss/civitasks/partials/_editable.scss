@@ -1,1 +1,160 @@
-.editable {  @include transition(border-color ease-in-out .15s,  background-color ease-in-out .15s);  border: 1px solid transparent;  padding: 3px 35px 3px 3px;  position: relative;  &.editable-with-link {    @include transition(color ease-in-out .25s);    color: $brand-primary;    .editable-link {      @include transition(all ease-in-out .15s);      background-color: #fff;      border: 1px solid $gray-light;      color: $gray;      font-weight: normal;      height: 100%;      display: block;      right: 19px;      font-size: 11px;      position: absolute;      z-index: 999;      opacity: 0;      padding: 6px 9px;      bottom: 0;      &:hover {        text-decoration: underline;      }    }  }  .fa-pencil {    @include transition(opacity ease-in-out .15s);    background-color: #f4f7f8;    color: $gray;    height: 100%;    padding: 6px 6px 5px 6px;    position: absolute;    right: 0;    top: 0;    font-size: 12px;    border-left: 1px solid $gray-light;    opacity: 0;  }  &:hover {    background-color: #fff;    border-color: $gray-light;    .fa-pencil,    &.editable-with-link .editable-link {      opacity: 1;      z-index: 1000;    }    &.editable-with-link .editable-link {      bottom: -27px;      height: auto;    }  }}.editable-empty {  width: 100px;  &:before {    content: "\f";    line-height: inherit;  }}.editable-bsdate {  input[type="text"] {    max-width: 80px;  }}.editable-wrap {  position: relative;  .editable-buttons {    right: 0;    position: absolute;    bottom: -24px;    z-index: 1100;    .btn {      background-color: #f4f7f8;      border-color: $gray-light;      font-size: 11px;      font-weight: normal;      margin-left: -1px;      padding: 4px 6px;      height: 25px;      &:active,      &:focus {        background-color: #f4f7f8;        outline: none;      }    }    .glyphicon-ok {      color: $brand-primary;    }    .glyphicon-remove {      color: $brand-danger;    }  }  &.editable-ta {    display: block;    white-space: normal;        .editable-input {      display: block;    }  }  .form-control:focus {    @include box-shadow(none);    border-color: $gray-light;  }}.editable-small + .editable-wrap {  input,  select {    height: 26px;    padding: 3px;  }  .input-group-btn .btn {    font-size: 12px;    height: 25px;    padding: 3px;    width: 25px;  }}.editable-click {  color: inherit;  display: inline-block;  &:hover {    color: inherit;  }}.editable-error {  display: none;}
+.editable {
+  @include transition(border-color ease-in-out .15s,  background-color ease-in-out .15s);
+  border: 1px solid transparent;
+  padding: 3px 35px 3px 3px;
+  position: relative;
+
+  &.editable-with-link {
+    @include transition(color ease-in-out .25s);
+    color: $brand-primary;
+
+    .editable-link {
+      @include transition(all ease-in-out .15s);
+      background-color: #fff;
+      border: 1px solid $gray-light;
+      color: $gray;
+      font-weight: normal;
+      height: 100%;
+      display: block;
+      right: 19px;
+      font-size: 11px;
+      position: absolute;
+      z-index: 999;
+      opacity: 0;
+      padding: 6px 9px;
+      bottom: 0;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .fa-pencil {
+    @include transition(opacity ease-in-out .15s);
+    background-color: #f4f7f8;
+    color: $gray;
+    height: 100%;
+    padding: 6px 6px 5px 6px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 12px;
+    border-left: 1px solid $gray-light;
+    opacity: 0;
+  }
+
+  &:hover {
+    background-color: #fff;
+    border-color: $gray-light;
+
+    .fa-pencil,
+    &.editable-with-link .editable-link {
+      opacity: 1;
+      z-index: 1000;
+    }
+
+    &.editable-with-link .editable-link {
+      bottom: -27px;
+      height: auto;
+    }
+  }
+
+}
+
+.editable-empty {
+  width: 100px;
+
+  &:before {
+    content: "\f";
+    line-height: inherit;
+  }
+}
+
+.editable-bsdate {
+  input[type="text"] {
+    max-width: 80px;
+  }
+}
+
+.editable-wrap {
+  position: relative;
+
+  .editable-buttons {
+    right: 0;
+    position: absolute;
+    bottom: -24px;
+    z-index: 1100;
+
+    .btn {
+      background-color: #f4f7f8;
+      border-color: $gray-light;
+      font-size: 11px;
+      font-weight: normal;
+      margin-left: -1px;
+      padding: 4px 6px;
+      height: 25px;
+
+      &:active,
+      &:focus {
+        background-color: #f4f7f8;
+        outline: none;
+      }
+    }
+
+    .glyphicon-ok {
+      color: $brand-primary;
+    }
+
+    .glyphicon-remove {
+      color: $brand-danger;
+    }
+  }
+
+  &.editable-ta {
+    display: block;
+    white-space: normal;
+
+    .editable-input {
+      display: block;
+    }
+
+  }
+
+  .form-control:focus {
+    @include box-shadow(none);
+    border-color: $gray-light;
+  }
+
+  .uib-datepicker-popup {
+    z-index: 1200;
+  }
+}
+
+.editable-small + .editable-wrap {
+  input,
+  select {
+    height: 26px;
+    padding: 3px;
+  }
+
+  .input-group-btn .btn {
+    font-size: 12px;
+    height: 25px;
+    padding: 3px;
+    width: 25px;
+  }
+}
+
+.editable-click {
+  color: inherit;
+  display: inline-block;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+.editable-error {
+  display: none;
+}

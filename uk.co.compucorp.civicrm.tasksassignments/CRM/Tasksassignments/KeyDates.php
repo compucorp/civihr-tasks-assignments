@@ -146,14 +146,20 @@ class CRM_Tasksassignments_KeyDates
         
         if ($tableExists['civicrm_value_jobcontract_dates_13'])
         {
-            $queries[] = "SELECT jcd.entity_id AS contact_id, external_identifier AS contact_external_identifier, c.sort_name AS contact_name, DATE(contract_start_date) AS keydate, 'period_start_date' AS type FROM civicrm_value_jobcontract_dates_13 jcd 
-                LEFT JOIN civicrm_contact c ON jcd.entity_id = c.id 
-                WHERE contract_start_date IS NOT NULL 
+            $queries[] = "
+              SELECT jcd.entity_id AS contact_id, external_identifier AS contact_external_identifier, c.sort_name AS contact_name, DATE(contract_start_date) AS keydate, 'period_start_date' AS type 
+              FROM civicrm_value_jobcontract_dates_13 jcd 
+              LEFT JOIN civicrm_contact c ON jcd.entity_id = c.id 
+              WHERE contract_start_date IS NOT NULL 
+              AND c.is_deleted = 0
             " . self::_buildWhereDateRange('contract_start_date', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
-            $queries[] = "SELECT jcd.entity_id AS contact_id, external_identifier AS contact_external_identifier, c.sort_name AS contact_name, DATE(contract_end_date) AS keydate, 'period_end_date' AS type FROM civicrm_value_jobcontract_dates_13 jcd 
-                LEFT JOIN civicrm_contact c ON jcd.entity_id = c.id 
-                WHERE contract_end_date IS NOT NULL 
+            $queries[] = "
+              SELECT jcd.entity_id AS contact_id, external_identifier AS contact_external_identifier, c.sort_name AS contact_name, DATE(contract_end_date) AS keydate, 'period_end_date' AS type 
+              FROM civicrm_value_jobcontract_dates_13 jcd 
+              LEFT JOIN civicrm_contact c ON jcd.entity_id = c.id 
+              WHERE contract_end_date IS NOT NULL 
+              AND c.is_deleted = 0
             " . self::_buildWhereDateRange('contract_end_date', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
         }
@@ -186,6 +192,7 @@ class CRM_Tasksassignments_KeyDates
                       CONCAT( {$sy} ,  '-', DATE_FORMAT(  `birth_date` ,  '%m-%d' ) )
                     ) AS keydate, 'birth_date' as type FROM civicrm_contact
                 WHERE birth_date IS NOT NULL
+                AND is_deleted = 0
             " . self::_buildWhereContactId('id', $contactId);
             
             if (!empty($whereDate))
@@ -201,12 +208,14 @@ class CRM_Tasksassignments_KeyDates
                 SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(initial_join_date_56) as keydate, 'initial_join_date' as type FROM civicrm_value_jobcontract_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE initial_join_date_56 IS NOT NULL
+                AND c.is_deleted = 0
             " . self::_buildWhereDateRange('initial_join_date_56', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
             $queries[] = "
                 SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(final_termination_date_57) as keydate, 'final_termination_date' as type FROM civicrm_value_jobcontract_summary_10 vjs
                 LEFT JOIN civicrm_contact c ON vjs.entity_id = c.id
                 WHERE final_termination_date_57 IS NOT NULL
+                AND c.is_deleted = 0
             " . self::_buildWhereDateRange('final_termination_date_57', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
         }
@@ -216,6 +225,7 @@ class CRM_Tasksassignments_KeyDates
                 SELECT entity_id as contact_id, external_identifier as contact_external_identifier, c.sort_name as contact_name, DATE(probation_end_date) as keydate, 'probation_end_date' as type FROM civicrm_value_probation_12 vp
                 LEFT JOIN civicrm_contact c ON vp.entity_id = c.id
                 WHERE probation_end_date IS NOT NULL
+                AND c.is_deleted = 0
             " . self::_buildWhereDateRange('probation_end_date', $startDate, $endDate)
               . self::_buildWhereContactId('entity_id', $contactId);
         }
