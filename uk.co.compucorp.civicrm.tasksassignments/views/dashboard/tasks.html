@@ -189,6 +189,7 @@
             </div>
             Target:
             <span editable-ui-select="task.target_contact_id[0]"
+                  theme="civihr-ui-select"
                   e-required="true"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
                   onbeforesave="cacheContact($data) && updateTask(task, { target_contact_id: [$data] })"
@@ -233,6 +234,7 @@
             Assigned to:
             <span editable-ui-select="task.assignee_contact_id[0]"
                   e-required="true"
+                  theme="civihr-ui-select"
                   ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                   onshow="updateContacts(cache.contact.arrSearch);"
                   onbeforesave="cacheContact($data) && updateTask(task, { assignee_contact_id: [$data] });">
