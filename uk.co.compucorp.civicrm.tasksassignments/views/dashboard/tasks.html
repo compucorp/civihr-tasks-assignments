@@ -75,29 +75,21 @@
                             <div class="row form-horizontal">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
-
-                                        <div class="col-xs-12 col-sm-10">
-                                            <div class="input-group">
-                                                <ui-select allow-clear ng-model="filterParams.contactId">
-                                                    <ui-select-match class="ui-select-match" placeholder="Search / Filter">
-                                                        {{$select.selected.label}}
-                                                    </ui-select-match>
-                                                    <ui-select-choices
-                                                            class="ui-select-choices"
-                                                            repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
-                                                            refresh-delay="0">
-                                                        <div ng-bind="contact.label"></div>
-                                                        <small ng-bind="contact.description[0]"></small>
-                                                    </ui-select-choices>
-                                                </ui-select>
-                                                <span class="input-group-btn">
-                                                  <a ng-click="filterParams.contactId = ''" class="btn btn-default">
-                                                      <span class="fa fa-remove"></span>
-                                                  </a>
-                                                </span>
-                                            </div>
-                                        </div>
+                                      <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
+                                      <div class="col-xs-12 col-sm-10">
+                                        <ui-select  ng-model="filterParams.contactId" theme="civihr-ui-select">
+                                          <ui-select-match allow-clear class="ui-select-match" placeholder="Search / Filter">
+                                            {{$select.selected.label}}
+                                          </ui-select-match>
+                                          <ui-select-choices
+                                            class="ui-select-choices"
+                                            repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
+                                            refresh-delay="0">
+                                            <div ng-bind="contact.label"></div>
+                                            <small ng-bind="contact.description[0]"></small>
+                                          </ui-select-choices>
+                                        </ui-select>
+                                      </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
@@ -105,7 +97,7 @@
                                         <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
 
                                         <div class="col-xs-12 col-sm-8">
-                                            <ui-select multiple ng-model="filterParams.assignmentType">
+                                            <ui-select multiple ng-model="filterParams.assignmentType" theme="civihr-ui-select">
                                                 <ui-select-match class="ui-select-match" placeholder="Select assignment...">{{$item.title}}
                                                 </ui-select-match>
                                                 <ui-select-choices class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
