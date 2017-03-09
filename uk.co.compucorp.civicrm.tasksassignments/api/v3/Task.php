@@ -490,88 +490,90 @@ function _civicrm_api3_task_getlist_output($result, $request) {
 }
 
 function civicrm_api3_task_get($params) {
-    
-    $activityIds = array();
-    
-    $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
-    $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
-    $caseId = isset($params['case_id']) ? $params['case_id'] : null;
-    
-    if ($assigneeContactId) {
-        $result = civicrm_api3('ActivityContact', 'get', array(
-          'sequential' => 1,
-          'return' => 'activity_id',
-          'contact_id' => array('IN' => $assigneeContactId),
-          'record_type_id' => 1,
-          'options' => array('limit' => 0),
-        ));
-        foreach ($result['values'] as $value) {
-            $activityIds[] = $value['activity_id'];
+  $activityIds = [];
+
+  $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
+  $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
+  $caseId = isset($params['case_id']) ? $params['case_id'] : null;
+
+  if ($assigneeContactId) {
+    _loadActivityIDsForContactIntoArray($assigneeContactId, $activityIds);
+  }
+
+  if ($sourceContactId) {
+    _loadActivityIDsForContactIntoArray($sourceContactId, $activityIds);
+  }
+
+  if (($assigneeContactId || $sourceContactId) && empty($activityIds)) {
+    return civicrm_api3_create_success([], $params, 'task', 'getbycomponent');
+  }
+
+  if ($caseId) {
+    $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
+    $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
+    if (empty($activityIds)) {
+      $activityIds[] = 0;
+    }
+  }
+
+  if (!isset($params['id']) && !empty($activityIds)) {
+    $params['id'] = array('IN' => $activityIds);
+  }
+
+  $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
+  $typesIds = [];
+
+  if (!empty($types['values'])) {
+    foreach ($types['values'] as $type) {
+      $typesIds[] = $type['value'];
+    }
+
+    $getResult = civicrm_api3('Activity', 'get', array_merge(
+      $params,
+      ['activity_type_id' => ['IN' => $typesIds]]
+    ));
+
+    if (CRM_Core_DAO::checkTableExists('civicrm_case_activity')) {
+      $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
+
+      foreach ($getResult['values'] as $key => $value) {
+        $caseActivityParams = [
+          1 => [$value['id'], 'Integer'],
+        ];
+        $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
+        $getResult['values'][$key]['case_id'] = null;
+
+        if ($caseActivityResult->fetch()) {
+          $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
         }
+      }
     }
-    
-    if ($sourceContactId) {
-        $result = civicrm_api3('ActivityContact', 'get', array(
-          'sequential' => 1,
-          'return' => 'activity_id',
-          'contact_id' => array('IN' => $sourceContactId),
-          'record_type_id' => 2,
-          'options' => array('limit' => 0),
-        ));
-        foreach ($result['values'] as $value) {
-            $activityIds[] = $value['activity_id'];
-        }
-    }
-    
-    if (($assigneeContactId || $sourceContactId) && empty($activityIds)) {
-        return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
-    }
-    
-    if ($caseId) {
-        $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
-        $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
-        if (empty($activityIds)) {
-            $activityIds[] = 0;
-        }
-    }
-    
-    if (!isset($params['id']) && !empty($activityIds)) {
-        $params['id'] = array('IN' => $activityIds);
-    }
-    
-    $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
-    $typesIds = array();
-    
-    if (!empty($types['values'])) {
-        foreach ($types['values'] as $type) {
-            $typesIds[] = $type['value'];
-        }
-        
-        $getResult = civicrm_api3('Activity', 'get', array_merge(
-            $params,
-            array(
-                'activity_type_id' => array('IN' => $typesIds),
-            )
-        ));
-        
-        if (CRM_Core_DAO::checkTableExists('civicrm_case_activity')) {
-            $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
-            foreach ($getResult['values'] as $key => $value) {
-                $caseActivityParams = array(
-                    1 => array($value['id'], 'Integer'),
-                );
-                $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
-                $getResult['values'][$key]['case_id'] = null;
-                if ($caseActivityResult->fetch())
-                {
-                    $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
-                }
-            }
-        }
-        return $getResult;
-    }
-    
-    return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
+
+    return $getResult;
+  }
+
+  return civicrm_api3_create_success([], $params, 'task', 'getbycomponent');
+}
+
+/**
+ * Loads activity ID's for given contact into provided array.
+ * 
+ * @param int $contactID
+ *   ID for contact
+ * @param array $activityIds
+ *   Reference to array of activity ID's
+ */
+function _loadActivityIDsForContactIntoArray($contactID, &$activityIds) {
+  $result = civicrm_api3('ActivityContact', 'get', [
+    'sequential' => 1,
+    'return' => 'activity_id',
+    'contact_id' => ['IN' => $contactID],
+    'record_type_id' => 1,
+    'options' => ['limit' => 0],
+  ]);
+  foreach ($result['values'] as $value) {
+    $activityIds[] = $value['activity_id'];
+  }
 }
 
 function civicrm_api3_task_getoptions($params) {
