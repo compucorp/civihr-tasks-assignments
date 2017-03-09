@@ -575,7 +575,7 @@ function civicrm_api3_task_get($params) {
 }
 
 function civicrm_api3_task_getoptions($params) {
-    
+
     if ($params['field'] == 'activity_type_id') {
         $result = array();
         $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
@@ -594,7 +594,7 @@ function civicrm_api3_task_getoptions($params) {
 
         return civicrm_api3_create_success($result, $params, 'task', 'get');
     }
-    
+
     return civicrm_api3_generic_getoptions(array('entity' => 'Task', 'params' => $params));
 }
 
@@ -634,6 +634,7 @@ function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
         $result = civicrm_api3('OptionValue', 'get', array(
           'sequential' => $sequential,
           'option_group_id' => $optionGroup['id'],
+          'options' => ['limit' => 0],
           'component_id' => $componentId,
         ));
         
