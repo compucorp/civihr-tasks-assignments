@@ -218,6 +218,7 @@
                       e-show-calendar-button="false"
                       e-is-open="picker.opened"
                       e-datepicker-popup>
+                      <i class="fa fa-pencil"></i>
                     {{task.activity_date_time | date: 'MMM d'}}
                 </time>
 
@@ -225,6 +226,7 @@
                 <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })"
                       class="editable-small"
                       e-placeholder="Subject...">
+                      <i class="fa fa-pencil"></i>
                     {{ (task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '') }}
                 </span>
             </p>
@@ -245,6 +247,7 @@
                     <div ng-bind="contact.label"></div>
                     <small ng-bind="contact.description[0]"></small>
                 </editable-ui-select-choices>
+                <i class="fa fa-pencil"></i>
                 {{cache.contact.obj[task.assignee_contact_id[0]].display_name}}
             </span>
 
