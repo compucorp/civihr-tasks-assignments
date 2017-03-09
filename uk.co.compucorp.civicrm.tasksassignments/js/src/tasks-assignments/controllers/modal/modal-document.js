@@ -209,19 +209,17 @@ define([
                 return result;
               }).then(function (result) {
                 if(!!result.files[0].result){
-                  $scope.$broadcast('ct-spinner-show');
                   DocumentService.save({
                       id: result.document.id,
-                      status_id: '1'
+                      status_id: '1' // 1 => 'awaiting upload'
                   }).then(function(results){
                     $scope.document.status_id = results.status_id;
                     $modalInstance.close($scope.document);
                   });
                 } else if(!!result.files[0].values[0].result){
-                  $scope.$broadcast('ct-spinner-show');
                   DocumentService.save({
                       id: result.document.id,
-                      status_id: '3'
+                      status_id: '3' // 3 => 'approved'
                   }).then(function(results){
                     $scope.document.status_id = results.status_id;
                     $modalInstance.close($scope.document);
