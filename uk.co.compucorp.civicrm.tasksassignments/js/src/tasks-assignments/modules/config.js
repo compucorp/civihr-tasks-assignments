@@ -26,7 +26,7 @@ define([
         status: {
             resolve: {
                 //TODO
-                DOCUMENT: ['3', '4'],
+                DOCUMENT: ['4'],
                 TASK: ['2', '3', '6', '8']
             }
         }

@@ -208,14 +208,32 @@ define([
 
                 return result;
               }).then(function (result) {
+                if(!!result.files[0].result){
+                  $scope.$broadcast('ct-spinner-show');
+                  DocumentService.save({
+                      id: result.document.id,
+                      status_id: '1'
+                  }).then(function(results){
+                    $scope.document.status_id = results.status_id;
+                    $modalInstance.close($scope.document);
+                  });
+                } else if(!!result.files[0].values[0].result){
+                  $scope.$broadcast('ct-spinner-show');
+                  DocumentService.save({
+                      id: result.document.id,
+                      status_id: '3'
+                  }).then(function(results){
+                    $scope.document.status_id = results.status_id;
+                    $modalInstance.close($scope.document);
+                  });
+                }
+
                 $scope.document.id = result.document.id;
                 $scope.document.case_id = result.document.case_id;
                 $scope.document.file_count = $scope.files.length + uploader.queue.length;
-
-                $scope.document.open = $scope.openNew;
+                $scope.document.open = $scope.openNew
 
                 AssignmentService.updateTab();
-                $modalInstance.close($scope.document);
                 $scope.$broadcast('ta-spinner-hide');
               }, function (reason) {
                 CRM.alert(reason, 'Error', 'error');
