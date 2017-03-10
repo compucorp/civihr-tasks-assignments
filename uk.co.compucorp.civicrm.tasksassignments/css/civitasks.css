@@ -9810,7 +9810,7 @@ fieldset[disabled]
   text-transform: none;
 }
 #civitasks .ui-select-match-text, #cividocuments .ui-select-match-text {
-  color: #586277;
+  color: #586277 !important;
 }
 #civitasks .ui-select-toggle[disabled], #cividocuments .ui-select-toggle[disabled] {
   background-color: #f4f7f8;
@@ -11391,7 +11391,7 @@ fieldset[disabled]
 #cividocuments form.form-task .modal-header .ui-select-container .ui-select-toggle .ui-select-match-text, #civitasks form.form-document .modal-header .ui-select-container .ui-select-toggle .ui-select-placeholder, #cividocuments form.form-document .modal-header .ui-select-container .ui-select-toggle .ui-select-placeholder,
 #civitasks form.form-document .modal-header .ui-select-container .ui-select-toggle .ui-select-match-text,
 #cividocuments form.form-document .modal-header .ui-select-container .ui-select-toggle .ui-select-match-text {
-  color: #41afcb !important;
+  color: #586277 !important;
   font-size: 20px !important;
 }
 #civitasks form.form-task .modal-body .input-group[class^="col-"], #cividocuments form.form-task .modal-body .input-group[class^="col-"], #civitasks form.form-document .modal-body .input-group[class^="col-"], #cividocuments form.form-document .modal-body .input-group[class^="col-"] {
