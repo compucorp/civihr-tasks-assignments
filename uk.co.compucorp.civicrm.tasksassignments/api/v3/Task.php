@@ -24,11 +24,11 @@ function civicrm_api3_task_create($params) {
       )
     );
   }
-  
+
   /* This code prevents creating a copy of Activity each time we pass 'case_id'
    * to 'create' method and when the Activity is already connected to the Case.
    * The code is commented out due to front-end JavaScript solution to the issue.
-   * 
+   *
   if (!empty($params['id']) && !empty($params['case_id'])) {
     $activity = civicrm_api3('Task', 'get', array(
       'sequential' => 1,
@@ -538,15 +538,19 @@ function civicrm_api3_task_get($params) {
     if (!isset($params['id']) && !empty($activityIds)) {
         $params['id'] = array('IN' => $activityIds);
     }
-    
-    $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
+
+    // all types must be fetched
+    $types = _civicrm_api3_task_gettypesbycomponent(
+      'CiviTask',
+      ['sequential' => 1, 'options' => ['limit' => 0]]
+    );
     $typesIds = array();
     
     if (!empty($types['values'])) {
         foreach ($types['values'] as $type) {
             $typesIds[] = $type['value'];
         }
-        
+
         $getResult = civicrm_api3('Activity', 'get', array_merge(
             $params,
             array(
@@ -575,11 +579,18 @@ function civicrm_api3_task_get($params) {
 }
 
 function civicrm_api3_task_getoptions($params) {
+    $field = CRM_Utils_Array::value('field', $params);
+    $context = CRM_Utils_Array::value('context', $params);
 
-    if ($params['field'] == 'activity_type_id') {
+    // return all values @see _civicrm_api3_api_match_pseudoconstant
+    if ($context === 'validate') {
+      $params['options']['limit'] = 0;
+    }
+
+    if ($field == 'activity_type_id') {
         $result = array();
         $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
-        $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
+        $types = _civicrm_api3_task_gettypesbycomponent('CiviTask', $params);
 
         foreach ($types['values'] as $type) {
             if (!$sequential) {
@@ -611,8 +622,7 @@ function civicrm_api3_task_getstatuses($params) {
     return null;
 }
 
-function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
-    
+function _civicrm_api3_task_gettypesbycomponent($component, $params = []) {
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
       'sequential' => 1,
       'name' => "activity_type",
@@ -621,22 +631,17 @@ function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
     if (!isset($optionGroup['id'])) {
       throw new API_Exception(ts("Cannot find OptionGroup with 'name' = 'activity_type'."));
     }
-    
+
     $componentQuery = 'SELECT * FROM civicrm_component WHERE name = %1';
     $componentParams = array(
         1 => array($component, 'String'),
     );
     $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
-    if ($componentResult->fetch())
-    {
-        $componentId = $componentResult->id;
-        
-        $result = civicrm_api3('OptionValue', 'get', array(
-          'sequential' => $sequential,
-          'option_group_id' => $optionGroup['id'],
-          'options' => ['limit' => 0],
-          'component_id' => $componentId,
-        ));
+
+    if ($componentResult->fetch()) {
+        $params['component_id'] = $componentResult->id;
+        $params['option_group_id'] = $optionGroup['id'];
+        $result = civicrm_api3('OptionValue', 'get', $params);
         
         return $result;
     }
