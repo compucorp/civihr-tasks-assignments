@@ -208,7 +208,7 @@ define([
 
                 return result;
               }).then(function (result) {
-                if(!!result.files[0].result){
+                if(result.files.length && !!result.files[0].result){
                   DocumentService.save({
                       id: result.document.id,
                       status_id: '1' // 1 => 'awaiting upload'
@@ -216,7 +216,7 @@ define([
                     $scope.document.status_id = results.status_id;
                     $modalInstance.close($scope.document);
                   });
-                } else if(!!result.files[0].values[0].result){
+                } else if(result.files.length && !!result.files[0].values[0].result){
                   DocumentService.save({
                       id: result.document.id,
                       status_id: '3' // 3 => 'approved'
@@ -224,6 +224,8 @@ define([
                     $scope.document.status_id = results.status_id;
                     $modalInstance.close($scope.document);
                   });
+                } else {
+                  $modalInstance.close($scope.document);
                 }
 
                 $scope.document.id = result.document.id;

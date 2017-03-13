@@ -32,7 +32,7 @@ define([
                  * 3: 'approved'
                  * 4: 'rejected'
                  */
-                DOCUMENT: ['4'],
+                DOCUMENT: ['3','4'],
 
                 /**
                  * For tasks
