@@ -202,6 +202,7 @@
                     <div ng-bind="contact.label"></div>
                     <small ng-bind="contact.description[0]"></small>
                 </editable-ui-select-choices>
+                <i class="fa fa-pencil"></i>
                 {{ cache.contact.obj[task.target_contact_id[0]].display_name }}
             </span>
         </div>
@@ -271,6 +272,7 @@
                 <div editable-ta="task.details" onbeforesave="updateTask(task, { details: ta.$data });">
                     <div ta-bind ng-model="task.details">
                     </div>
+                    <i class="fa fa-pencil"></i>
                 </div>
             </div>
         </div>
