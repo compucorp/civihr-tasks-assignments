@@ -123,49 +123,11 @@
           </div>
         </div>
       </div>
-      <div class="panel-body">
-        <div class="{{prefix}}form-action">
-          <div class="row form-horizontal">
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label class="col-xs-12 col-sm-2 control-label">Action:</label>
-                <div class="col-xs-12 col-sm-10">
-                  <div class="input-group">
-                    <ui-select
-                      ng-model="action.selected">
-                      <ui-select-match class="ui-select-match"
-                        placeholder="Select action">{{$select.selected.label}}</ui-select-match>
-                      <ui-select-choices class="ui-select-choices"
-                        repeat="actionObj.type as actionObj in actionList">
-                        <div ng-bind="actionObj.label"></div>
-                      </ui-select-choices>
-                    </ui-select>
-                    <span class="input-group-btn">
-                      <a ng-click="apply(action.selected, (action.applyTo == 'all' ? listOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
-                        Apply
-                      </a>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-5 col-xs-offset-1">
-              <label class="radio-inline">
-                <input type="radio" ng-model="action.applyTo" value="all"> All {{listFiltered.length}} Docs
-              </label>
-              <label class="radio-inline">
-                <input type="radio" ng-model="action.applyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="list">
       <table class="table table-striped {{prefix}}table-documents">
         <thead>
           <tr>
-            <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
             <th>Type</th>
             <th>Target Contact</th>
             <th ng-if="settings.extEnabled.assignments">Assignment</th>
@@ -204,7 +166,6 @@
   </div>
 </div>
 <script type="text/ng-template" id="document.html">
-  <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected[pagination.currentPage]" checklist-value="document" ng-change="toggleIsCheckedAll()"></td>
   <td><a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument(document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
   <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
   <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
