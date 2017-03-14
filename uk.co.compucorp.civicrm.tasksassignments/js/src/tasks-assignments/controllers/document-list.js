@@ -96,17 +96,6 @@ define([
             $scope.listPaginated = [];
             $scope.listResolved = [];
             $scope.listResolvedLoaded = false;
-            $scope.action = {
-                selected: null,
-                applyTo: 'selected'
-            };
-            $scope.actionList = [{type:'delete',label:'Delete'}];
-
-
-            $scope.checklist = {
-                selected: {},
-                isCheckedAll: {}
-            };
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -187,8 +176,6 @@ define([
                                 $scope.list.splice($scope.list.indexOf(documentList[i]),1);
                               }
 
-                              $scope.checklist.isCheckedAll = {};
-                              $scope.checklist.selected = {};
                               $scope.$broadcast('ct-spinner-hide','documentList');
                               AssignmentService.updateTab();
                             });
@@ -229,16 +216,6 @@ define([
                     $scope.$broadcast('ct-spinner-hide','documentList');
                     AssignmentService.updateTab();
                 })
-            };
-
-            $scope.toggleAll = function(page){
-              $scope.checklist.isCheckedAll[page] ? $scope.checklist.selected[page] = angular.copy($scope.listPaginated) : $scope.checklist.selected[page] = [];
-            };
-
-            $scope.toggleIsCheckedAll = function() {
-              $timeout(function(){
-                $scope.checklist.isCheckedAll[$scope.pagination.currentPage] = $scope.checklist.selected[$scope.pagination.currentPage].length == $scope.listPaginated.length;
-              });
             };
 
             $scope.labelDateRange = function(from, until){
@@ -304,10 +281,6 @@ define([
 
                 DocumentService.delete(document.id).then(function(results){
                   $scope.list.splice($scope.list.indexOf(document),1);
-
-                  angular.forEach($scope.checklist.selected, function(page){
-                    page.splice(page.indexOf(document),1);
-                  });
 
                   $rootScope.$broadcast('documentDelete', document.id);
                   AssignmentService.updateTab();
