@@ -2952,7 +2952,6 @@
   text-decoration: none;
 }
 #civitasks a:focus, #cividocuments a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4507,7 +4506,6 @@
 #cividocuments input[type="radio"]:focus,
 #civitasks input[type="checkbox"]:focus,
 #cividocuments input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -5194,7 +5192,6 @@ fieldset[disabled]
   user-select: none;
 }
 #civitasks .btn:focus, #cividocuments .btn:focus, #civitasks .btn.focus, #cividocuments .btn.focus, #civitasks .btn:active:focus, #cividocuments .btn:active:focus, #civitasks .btn:active.focus, #cividocuments .btn:active.focus, #civitasks .btn.active:focus, #cividocuments .btn.active:focus, #civitasks .btn.active.focus, #cividocuments .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -11359,7 +11356,7 @@ fieldset[disabled]
   /* using this override until we have a separate directive for that */
 }
 #civitasks form.form-task .modal-header .close, #cividocuments form.form-task .modal-header .close, #civitasks form.form-document .modal-header .close, #cividocuments form.form-document .modal-header .close {
-  margin-top: 7px;
+  margin-top: 5px;
   margin-left: -3px;
 }
 #civitasks form.form-task .modal-header > *[class^='col-'], #cividocuments form.form-task .modal-header > *[class^='col-'], #civitasks form.form-document .modal-header > *[class^='col-'], #cividocuments form.form-document .modal-header > *[class^='col-'] {
