@@ -19,8 +19,8 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
 
     if ($hook === 'create') {
       // If creating a new Document, we require all three contacts to be defined.
-      if (empty($params['source_contact_id']) || empty($params['target_contact_id']) || empty($params['assignee_contact_id'])) {
-        throw new CRM_Exception("Please specify 'source_contact_id', 'target_contact_id' and 'assignee_contact_id'.");
+      if (empty($params['source_contact_id']) || empty($params['target_contact_id'])) {
+        throw new CRM_Exception("Please specify 'source_contact_id' and 'target_contact_id'");
       }
       if (empty($params['status_id'])) {
         $params['status_id'] = 1;
