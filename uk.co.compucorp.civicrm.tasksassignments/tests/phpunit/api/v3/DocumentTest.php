@@ -53,17 +53,6 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   /**
    * @expectedException CiviCRM_API3_Exception
    */
-  function testCreateDocumentWithNoAssignee() {
-    civicrm_api3('Document', 'create', array(
-      'activity_type_id' => $this->_documentTypeId,
-      'source_contact_id' => 1,
-      'target_contact_id' => 2,
-    ));
-  }
-
-  /**
-   * @expectedException CiviCRM_API3_Exception
-   */
   function testCreateDocumentWithNoTarget() {
     civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,

@@ -50,18 +50,6 @@ class CRM_Tasksassignments_BAO_TaskTest extends CiviUnitTestCase {
   /**
    * @expectedException CRM_Exception
    */
-  function testCreateTaskWithNoAssignee() {
-    $params = array(
-      'activity_type_id' => $this->_taskTypeId,
-      'source_contact_id' => 1,
-      'target_contact_id' => 2,
-    );
-    CRM_Tasksassignments_BAO_Task::create($params);
-  }
-
-  /**
-   * @expectedException CRM_Exception
-   */
   function testCreateTaskWithNoTarget() {
     $params = array(
       'activity_type_id' => $this->_taskTypeId,
