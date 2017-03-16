@@ -132,14 +132,19 @@ class CRM_Tasksassignments_Reminder {
    * Gets the full list of the recipients of the reminder email
    * Makes sure there are no duplicates or no empty emails in the list
    *
-   * @param array $activityContacts
+   * @param array $contacts
    * @param array $previousAssignee
    * @return array
    */
-  private static function _reminderRecipients($activityContacts, $previousAssignee) {
-    return array_filter(array_unique(array_merge(
-                            $activityContacts['assignees']['emails'], $activityContacts['source']['emails'], [$previousAssignee['email']]
-    )));
+  private static function _reminderRecipients($contacts, $previousAssignee) {
+    $hasSources = !empty($contacts['source']['emails']);
+    $hasAssignees = !empty($contacts['assignees']['emails']);
+    $assignees = $hasAssignees ? $contacts['assignees']['emails'] : [];
+    $sources = $hasSources ? $contacts['source']['emails'] : [];
+    $previous = $previousAssignee ? [$previousAssignee] : [];
+    $recipients = array_merge($assignees, $sources, $previous);
+
+    return array_filter(array_unique($recipients));
   }
 
   public static function sendReminder($activityId, $notes = null, $isReminder = false, $previousAssigneeId = null, $isDelete = false) {
@@ -177,7 +182,7 @@ class CRM_Tasksassignments_Reminder {
     }
 
     foreach ($activityContacts as $type => $contacts) {
-      if (empty($value)) {
+      if (empty($value) || empty($contacts)) {
         continue;
       }
 
