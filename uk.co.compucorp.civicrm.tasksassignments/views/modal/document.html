@@ -42,8 +42,8 @@
         <!-- Due Date -->
         <div class="col-xs-6">
           <div class="form-group">
-            <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator">Due Date:</label>
-            <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': documentForm.dueDate.$invalid}">
+            <label for="{{prefix}}document-due" class="col-xs-3 text-nowrap control-label required-field-indicator">Due:</label>
+            <div class="col-xs-9 input-group input-group-unstyled" ng-class="{'has-error': documentForm.dueDate.$invalid}">
               <input name="dueDate" type="text" id="{{prefix}}document-due" class="form-control" name="documentDue" ng-model="document.activity_date_time" placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true" is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
               <span class="input-group-addon fa fa-calendar"></span>
             </div>
@@ -52,10 +52,10 @@
         <!-- Expires -->
         <div class="col-xs-6">
           <div class="form-group">
-            <label for="{{prefix}}document-exp" class="col-xs-4 control-label no-gutter">
-              <span class="pull-right">Expiry Date:</span>
+            <label for="{{prefix}}document-exp" class="col-xs-3 control-label no-gutter">
+              <span class="pull-right">Expiry:</span>
             </label>
-            <div class="col-xs-8 input-group">
+            <div class="col-xs-9 input-group">
               <input type="text" class="form-control" id="{{prefix}}document-exp" name="documentExpireDate" ng-model="document.expire_date" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="dpOpened.exp" ng-click="dpOpen($event, 'exp')">
               <span class="input-group-addon fa fa-calendar"></span>
             </div>
