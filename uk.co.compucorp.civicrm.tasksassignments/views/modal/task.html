@@ -11,7 +11,7 @@
       <!--  Select Target Contact-->
       <div class="row">
         <div class="col-xs-12">
-          <ui-select ng-if="showCId" allow-clear name="target" ng-class="{'has-error': taskForm.target.$invalid}" ng-model="task.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" class="required-field-indicator">
+          <ui-select theme="civihr-ui-select" ng-if="showCId" allow-clear name="target" ng-model="task.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" class="required-field-indicator">
             <ui-select-match class="ui-select-match" placeholder="Select Target Contact">
               {{$select.selected.label}}
             </ui-select-match>

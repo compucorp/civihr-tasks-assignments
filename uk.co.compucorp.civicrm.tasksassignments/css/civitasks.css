@@ -32,23 +32,28 @@
   /*!
    * ui-select
    * http://github.com/angular-ui/ui-select
-   * Version: 0.11.2 - 2015-03-17T04:08:46.478Z
+   * Version: 0.19.5 - 2016-10-24T23:13:59.551Z
    * License: MIT
    */
   /* Style when highlighting a search. */
   /* Select2 theme */
   /* Mark invalid Select2 */
+  /* Handle up direction Select2 */
   /* Selectize theme */
   /* Helper class to show styles when focus */
   /* Fix input width for Selectize theme */
+  /* Fix line break when there's at least one item selected with the Selectize theme */
   /* Fix dropdown width for Selectize theme */
   /* Mark invalid Selectize */
+  /* Handle up direction Selectize */
   /* Bootstrap theme */
   /* Helper class to show styles when focus */
   /* Fix Bootstrap dropdown position when inside a input-group */
   /* See Scrollable Menu with Bootstrap 3 http://stackoverflow.com/questions/19227496 */
   /* fix hide/show angular animation */
   /* Mark invalid Bootstrap */
+  /* Handle up direction Bootstrap */
+  /* Spinner */
   /*
   @license textAngular
   Author : Austin Anderson
@@ -8955,7 +8960,7 @@ fieldset[disabled]
   box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
 #civitasks .ui-select-highlight, #cividocuments .ui-select-highlight {
-  font-weight: 600;
+  font-weight: bold;
 }
 #civitasks .ui-select-offscreen, #cividocuments .ui-select-offscreen {
   clip: rect(0 0 0 0) !important;
@@ -8969,6 +8974,9 @@ fieldset[disabled]
   outline: 0 !important;
   left: 0px !important;
   top: 0px !important;
+}
+#civitasks .ui-select-choices-row:hover, #cividocuments .ui-select-choices-row:hover {
+  background-color: #f5f5f5;
 }
 #civitasks .ng-dirty.ng-invalid > a.select2-choice, #cividocuments .ng-dirty.ng-invalid > a.select2-choice {
   border-color: #D44950;
@@ -8986,17 +8994,77 @@ fieldset[disabled]
   z-index: 9999;
   /* The z-index Select2 applies to the select2-drop */
 }
+#civitasks .ui-select-container[theme="select2"].direction-up .ui-select-match, #cividocuments .ui-select-container[theme="select2"].direction-up .ui-select-match,
+#civitasks .ui-select-container.select2.direction-up .ui-select-match,
+#cividocuments .ui-select-container.select2.direction-up .ui-select-match {
+  border-radius: 4px;
+  /* FIXME hardcoded value :-/ */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+#civitasks .ui-select-container[theme="select2"].direction-up .ui-select-dropdown, #cividocuments .ui-select-container[theme="select2"].direction-up .ui-select-dropdown,
+#civitasks .ui-select-container.select2.direction-up .ui-select-dropdown,
+#cividocuments .ui-select-container.select2.direction-up .ui-select-dropdown {
+  border-radius: 4px;
+  /* FIXME hardcoded value :-/ */
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-width: 1px;
+  /* FIXME hardcoded value :-/ */
+  border-top-style: solid;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.25);
+  margin-top: -4px;
+  /* FIXME hardcoded value :-/ */
+}
+#civitasks .ui-select-container[theme="select2"].direction-up .ui-select-dropdown .select2-search, #cividocuments .ui-select-container[theme="select2"].direction-up .ui-select-dropdown .select2-search,
+#civitasks .ui-select-container.select2.direction-up .ui-select-dropdown .select2-search,
+#cividocuments .ui-select-container.select2.direction-up .ui-select-dropdown .select2-search {
+  margin-top: 4px;
+  /* FIXME hardcoded value :-/ */
+}
+#civitasks .ui-select-container[theme="select2"].direction-up.select2-dropdown-open .ui-select-match, #cividocuments .ui-select-container[theme="select2"].direction-up.select2-dropdown-open .ui-select-match,
+#civitasks .ui-select-container.select2.direction-up.select2-dropdown-open .ui-select-match,
+#cividocuments .ui-select-container.select2.direction-up.select2-dropdown-open .ui-select-match {
+  border-bottom-color: #5897fb;
+}
+#civitasks .ui-select-container[theme="select2"] .ui-select-dropdown .ui-select-search-hidden, #cividocuments .ui-select-container[theme="select2"] .ui-select-dropdown .ui-select-search-hidden,
+#civitasks .ui-select-container[theme="select2"] .ui-select-dropdown .ui-select-search-hidden input,
+#cividocuments .ui-select-container[theme="select2"] .ui-select-dropdown .ui-select-search-hidden input {
+  opacity: 0;
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
 #civitasks .selectize-input.selectize-focus, #cividocuments .selectize-input.selectize-focus {
   border-color: #007FBB !important;
 }
-#civitasks .selectize-control > .selectize-input > input, #cividocuments .selectize-control > .selectize-input > input {
+#civitasks .selectize-control.single > .selectize-input > input, #cividocuments .selectize-control.single > .selectize-input > input {
   width: 100%;
+}
+#civitasks .selectize-control.multi > .selectize-input > input, #cividocuments .selectize-control.multi > .selectize-input > input {
+  margin: 0 !important;
 }
 #civitasks .selectize-control > .selectize-dropdown, #cividocuments .selectize-control > .selectize-dropdown {
   width: 100%;
 }
 #civitasks .ng-dirty.ng-invalid > div.selectize-input, #cividocuments .ng-dirty.ng-invalid > div.selectize-input {
   border-color: #D44950;
+}
+#civitasks .ui-select-container[theme="selectize"].direction-up .ui-select-dropdown, #cividocuments .ui-select-container[theme="selectize"].direction-up .ui-select-dropdown {
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.25);
+  margin-top: -2px;
+  /* FIXME hardcoded value :-/ */
+}
+#civitasks .ui-select-container[theme="selectize"] input.ui-select-search-hidden, #cividocuments .ui-select-container[theme="selectize"] input.ui-select-search-hidden {
+  opacity: 0;
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: 0;
 }
 #civitasks .btn-default-focus, #cividocuments .btn-default-focus {
   color: #333;
@@ -9022,10 +9090,24 @@ fieldset[disabled]
   position: static;
 }
 #civitasks .input-group > .ui-select-bootstrap > input.ui-select-search.form-control, #cividocuments .input-group > .ui-select-bootstrap > input.ui-select-search.form-control {
-  border-radius: 0;
+  border-radius: 4px;
   /* FIXME hardcoded value :-/ */
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+}
+#civitasks .input-group > .ui-select-bootstrap > input.ui-select-search.form-control.direction-up, #cividocuments .input-group > .ui-select-bootstrap > input.ui-select-search.form-control.direction-up {
+  border-radius: 4px !important;
+  /* FIXME hardcoded value :-/ */
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+#civitasks .ui-select-bootstrap .ui-select-search-hidden, #cividocuments .ui-select-bootstrap .ui-select-search-hidden {
+  opacity: 0;
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 #civitasks .ui-select-bootstrap > .ui-select-match > .btn, #cividocuments .ui-select-bootstrap > .ui-select-match > .btn {
   /* Instead of center because of .btn */
@@ -9036,13 +9118,12 @@ fieldset[disabled]
   top: 45%;
   right: 15px;
 }
-#civitasks .ui-select-bootstrap > .ui-select-choices, #cividocuments .ui-select-bootstrap > .ui-select-choices {
+#civitasks .ui-select-bootstrap > .ui-select-choices, #cividocuments .ui-select-bootstrap > .ui-select-choices, #civitasks .ui-select-bootstrap > .ui-select-no-choice, #cividocuments .ui-select-bootstrap > .ui-select-no-choice {
   width: 100%;
   height: auto;
   max-height: 200px;
   overflow-x: hidden;
   margin-top: -1px;
-  z-index: 1500;
 }
 #civitasks body > .ui-select-bootstrap.open, #cividocuments body > .ui-select-bootstrap.open {
   z-index: 1000;
@@ -9071,7 +9152,10 @@ fieldset[disabled]
 #civitasks .ui-select-multiple .ui-select-match-item, #cividocuments .ui-select-multiple .ui-select-match-item {
   position: relative;
 }
-#civitasks .ui-select-multiple .ui-select-match-item.dropping-before:before, #cividocuments .ui-select-multiple .ui-select-match-item.dropping-before:before {
+#civitasks .ui-select-multiple .ui-select-match-item.dropping .ui-select-match-close, #cividocuments .ui-select-multiple .ui-select-match-item.dropping .ui-select-match-close {
+  pointer-events: none;
+}
+#civitasks .ui-select-multiple:hover .ui-select-match-item.dropping-before:before, #cividocuments .ui-select-multiple:hover .ui-select-match-item.dropping-before:before {
   content: "";
   position: absolute;
   top: 0;
@@ -9080,7 +9164,7 @@ fieldset[disabled]
   margin-right: 2px;
   border-left: 1px solid #428bca;
 }
-#civitasks .ui-select-multiple .ui-select-match-item.dropping-after:after, #cividocuments .ui-select-multiple .ui-select-match-item.dropping-after:after {
+#civitasks .ui-select-multiple:hover .ui-select-match-item.dropping-after:after, #cividocuments .ui-select-multiple:hover .ui-select-match-item.dropping-after:after {
   content: "";
   position: absolute;
   top: 0;
@@ -9089,7 +9173,8 @@ fieldset[disabled]
   margin-left: 2px;
   border-right: 1px solid #428bca;
 }
-#civitasks .ui-select-bootstrap .ui-select-choices-row > a, #cividocuments .ui-select-bootstrap .ui-select-choices-row > a {
+#civitasks .ui-select-bootstrap .ui-select-choices-row > span, #cividocuments .ui-select-bootstrap .ui-select-choices-row > span {
+  cursor: pointer;
   display: block;
   padding: 3px 20px;
   clear: both;
@@ -9098,20 +9183,20 @@ fieldset[disabled]
   color: #333;
   white-space: nowrap;
 }
-#civitasks .ui-select-bootstrap .ui-select-choices-row > a:hover, #cividocuments .ui-select-bootstrap .ui-select-choices-row > a:hover, #civitasks .ui-select-bootstrap .ui-select-choices-row > a:focus, #cividocuments .ui-select-bootstrap .ui-select-choices-row > a:focus {
+#civitasks .ui-select-bootstrap .ui-select-choices-row > span:hover, #cividocuments .ui-select-bootstrap .ui-select-choices-row > span:hover, #civitasks .ui-select-bootstrap .ui-select-choices-row > span:focus, #cividocuments .ui-select-bootstrap .ui-select-choices-row > span:focus {
   text-decoration: none;
   color: #262626;
   background-color: #f5f5f5;
 }
-#civitasks .ui-select-bootstrap .ui-select-choices-row.active > a, #cividocuments .ui-select-bootstrap .ui-select-choices-row.active > a {
+#civitasks .ui-select-bootstrap .ui-select-choices-row.active > span, #cividocuments .ui-select-bootstrap .ui-select-choices-row.active > span {
   color: #fff;
   text-decoration: none;
   outline: 0;
   background-color: #428bca;
 }
-#civitasks .ui-select-bootstrap .ui-select-choices-row.disabled > a, #cividocuments .ui-select-bootstrap .ui-select-choices-row.disabled > a,
-#civitasks .ui-select-bootstrap .ui-select-choices-row.active.disabled > a,
-#cividocuments .ui-select-bootstrap .ui-select-choices-row.active.disabled > a {
+#civitasks .ui-select-bootstrap .ui-select-choices-row.disabled > span, #cividocuments .ui-select-bootstrap .ui-select-choices-row.disabled > span,
+#civitasks .ui-select-bootstrap .ui-select-choices-row.active.disabled > span,
+#cividocuments .ui-select-bootstrap .ui-select-choices-row.active.disabled > span {
   color: #777;
   cursor: not-allowed;
   background-color: #fff;
@@ -9123,6 +9208,63 @@ fieldset[disabled]
 }
 #civitasks .ui-select-bootstrap.ng-dirty.ng-invalid > button.btn.ui-select-match, #cividocuments .ui-select-bootstrap.ng-dirty.ng-invalid > button.btn.ui-select-match {
   border-color: #D44950;
+}
+#civitasks .ui-select-container[theme="bootstrap"].direction-up .ui-select-dropdown, #cividocuments .ui-select-container[theme="bootstrap"].direction-up .ui-select-dropdown {
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.25);
+}
+#civitasks .ui-select-bootstrap .ui-select-match-text, #cividocuments .ui-select-bootstrap .ui-select-match-text {
+  width: 100%;
+  padding-right: 1em;
+}
+#civitasks .ui-select-bootstrap .ui-select-match-text span, #cividocuments .ui-select-bootstrap .ui-select-match-text span {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+}
+#civitasks .ui-select-bootstrap .ui-select-toggle > a.btn, #cividocuments .ui-select-bootstrap .ui-select-toggle > a.btn {
+  position: absolute;
+  height: 10px;
+  right: 10px;
+  margin-top: -2px;
+}
+#civitasks .ui-select-refreshing, #cividocuments .ui-select-refreshing {
+  position: absolute;
+  right: 0;
+  padding: 8px 27px;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+@-webkit-keyframes ui-select-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes ui-select-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+#civitasks .ui-select-spin, #cividocuments .ui-select-spin {
+  -webkit-animation: ui-select-spin 2s infinite linear;
+  animation: ui-select-spin 2s infinite linear;
+}
+#civitasks .ui-select-refreshing.ng-animate, #cividocuments .ui-select-refreshing.ng-animate {
+  -webkit-animation: none 0s;
 }
 #civitasks .ta-hidden-input, #cividocuments .ta-hidden-input {
   width: 1px;
@@ -11359,7 +11501,7 @@ fieldset[disabled]
   /* using this override until we have a separate directive for that */
 }
 #civitasks form.form-task .modal-header .close, #cividocuments form.form-task .modal-header .close, #civitasks form.form-document .modal-header .close, #cividocuments form.form-document .modal-header .close {
-  margin-top: 7px;
+  margin-top: 5px;
   margin-left: -3px;
 }
 #civitasks form.form-task .modal-header > *[class^='col-'], #cividocuments form.form-task .modal-header > *[class^='col-'], #civitasks form.form-document .modal-header > *[class^='col-'], #cividocuments form.form-document .modal-header > *[class^='col-'] {

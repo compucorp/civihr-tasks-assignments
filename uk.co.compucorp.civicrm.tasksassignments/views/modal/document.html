@@ -11,7 +11,7 @@
       <!-- Search and select by name and email -->
       <div class="row">
         <div class="col-xs-12">
-          <ui-select name="target" ng-class="{'has-error': documentForm.target.$invalid}" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
+          <ui-select name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
             <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
               {{$select.selected.label}}
             </ui-select-match>
@@ -132,7 +132,7 @@
           </span>
         </div>
         <div class="col-xs-12 col-sm-5" ng-show="showAssignmentField">
-          <ui-select allow-clear ng-model="document.case_id" on-select="cacheAssignment($item);">
+          <ui-select theme="civihr-ui-select" allow-clear ng-model="document.case_id" on-select="cacheAssignment($item);">
             <ui-select-match class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
             </ui-select-match>
             <ui-select-choices class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
