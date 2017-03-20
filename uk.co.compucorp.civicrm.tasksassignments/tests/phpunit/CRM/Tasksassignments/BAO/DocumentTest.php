@@ -47,6 +47,15 @@ class CRM_Tasksassignments_BAO_DocumentTest extends CiviUnitTestCase {
     CRM_Tasksassignments_BAO_Document::create($params);
   }
 
+  function testCreateDocumentWithNoAssignee() {
+    $params = array(
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => 1,
+      'target_contact_id' => 2,
+    );
+    CRM_Tasksassignments_BAO_Document::create($params);
+  }
+
   /**
    * @expectedException CRM_Exception
    */

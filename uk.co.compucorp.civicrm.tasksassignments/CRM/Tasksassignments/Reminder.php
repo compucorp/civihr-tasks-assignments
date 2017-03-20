@@ -134,6 +134,7 @@ class CRM_Tasksassignments_Reminder {
    *
    * @param array $contacts
    * @param array $previousAssignee
+   *
    * @return array
    */
   private static function _reminderRecipients($contacts, $previousAssignee) {
@@ -141,7 +142,7 @@ class CRM_Tasksassignments_Reminder {
     $hasAssignees = !empty($contacts['assignees']['emails']);
     $assignees = $hasAssignees ? $contacts['assignees']['emails'] : [];
     $sources = $hasSources ? $contacts['source']['emails'] : [];
-    $previous = $previousAssignee ? [$previousAssignee] : [];
+    $previous = $previousAssignee ? [$previousAssignee['email']] : [];
     $recipients = array_merge($assignees, $sources, $previous);
 
     return array_filter(array_unique($recipients));
