@@ -58,7 +58,7 @@
             Select Task List:
           </label>
           <div class="col-xs-12 col-sm-5">
-            <ui-select ng-model="activitySet" theme="civihr-ui-select" ng-disabled="!taskList.length" ng-required="true" search-enabled="false">
+            <ui-select ng-model="activitySet" theme="civihr-ui-select" ng-disabled="!taskList.length" ng-required="true" search-enabled="false" on-select="updateTimeline($item)">
               <ui-select-match class="ui-select-match" placeholder="- select -">
                 {{$select.selected.label}}
               </ui-select-match>

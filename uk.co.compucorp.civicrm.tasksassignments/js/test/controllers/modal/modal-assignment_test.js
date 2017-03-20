@@ -164,6 +164,22 @@ define([
           });
         });
 
+        describe('updateTimeline()', function () {
+          var newActivitySet;
+
+          beforeEach(function () {
+            newActivitySet = Mock.timeline[0];
+          });
+
+          it('should update taskList according with activitySet', function () {
+            expect(scope.taskList.length).toEqual(5);
+
+            scope.updateTimeline(newActivitySet);
+            scope.$digest();
+            expect(scope.taskList.length).toEqual(1);
+          });
+        });
+
         /**
          * Fills up with random placeholder data the contacts collection of the
          * given list
@@ -192,7 +208,7 @@ define([
             ContactService: ContactService,
             data: {},
             config: {},
-            settings: {},
+            settings: {"tabEnabled":{"documents":"1","keyDates":"1"}},
             HR_settings: HR_settings,
             $uibModalInstance: {
               close: jasmine.createSpy('modalInstance.close'),
