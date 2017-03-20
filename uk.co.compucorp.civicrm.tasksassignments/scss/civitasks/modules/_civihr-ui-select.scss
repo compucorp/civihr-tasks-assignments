@@ -1,0 +1,51 @@
+// This is all temporary until the Bootstrap consolidation happens!
+
+// Override variables so they match the values in the shoreditch theme
+$dropdown-border:        #727E8A;
+$input-border-radius:    0;
+$brand-primary:          #42AFCB;
+$brand-danger:           #E6807F;
+$gray-lighter:           #F3F6F7;
+$gray-dark:              #727E8A;
+
+// Include the original ui-select css + the civihr-ui-select dropdown theme
+@import "../../../../../civihr/org.civicrm.bootstrapcivicrm/scss/bootstrap/vendor/ui-select/ui-select";
+@import "../../../../../civihr/org.civicrm.bootstrapcivicrm/scss/bootstrap/components/civihr-ui-select/civihr-ui-select";
+
+// Customizations specific for T&A
+.civihr-ui-select {
+  .select2-search-choice-close {
+    background: none !important;
+    top: 3px !important;
+  }
+
+  & a.select2-search-choice-close {
+    top: 0 !important;
+  }
+
+  &.open {
+
+    .select2-chosen {
+      border: 1px solid $dropdown-border !important;
+      padding-left: 12px !important;
+      border-bottom: 0 !important;
+    }
+
+    .select2-arrow {
+      line-height: 31px;
+    }
+  }
+
+  .select2-drop-active {
+    @extend %ui-select-border;
+    border-top: 0 !important;
+  }
+
+  &.ui-select-multiple {
+    &:not(.open) {
+      .select2-choices::before {
+        content: '\f002' !important;
+      }
+    }
+  }
+}

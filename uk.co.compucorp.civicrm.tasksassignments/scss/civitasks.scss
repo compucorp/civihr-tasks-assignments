@@ -131,6 +131,7 @@
   @import "civitasks/partials/custom-select";
 
   @import "civitasks/modules/ie";
+  @import "civitasks/modules/civihr-ui-select";
 }
 
 @for $i from 2 through length($module-list) {
