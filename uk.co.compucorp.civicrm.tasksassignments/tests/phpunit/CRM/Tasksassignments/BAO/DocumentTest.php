@@ -53,7 +53,9 @@ class CRM_Tasksassignments_BAO_DocumentTest extends CiviUnitTestCase {
       'source_contact_id' => 1,
       'target_contact_id' => 2,
     );
-    CRM_Tasksassignments_BAO_Document::create($params);
+    $result = CRM_Tasksassignments_BAO_Document::create($params);
+
+    $this->assertTrue($result instanceof CRM_Tasksassignments_DAO_Document);
   }
 
   /**

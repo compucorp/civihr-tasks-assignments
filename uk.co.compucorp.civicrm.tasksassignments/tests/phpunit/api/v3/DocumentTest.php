@@ -51,11 +51,13 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   }
 
   function testCreateDocumentWithNoAssignee() {
-    civicrm_api3('Document', 'create', array(
+    $result = civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,
       'source_contact_id' => 1,
       'target_contact_id' => 2,
     ));
+
+    $this->assertFalse($result['is_error']);
   }
 
   /**
