@@ -58,6 +58,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     ));
 
     $this->assertFalse($result['is_error']);
+    $this->assertEquals(1, $result['values'][0]['source_contact_id']);
   }
 
   /**

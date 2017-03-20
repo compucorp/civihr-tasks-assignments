@@ -56,6 +56,7 @@ class CRM_Tasksassignments_BAO_DocumentTest extends CiviUnitTestCase {
     $result = CRM_Tasksassignments_BAO_Document::create($params);
 
     $this->assertTrue($result instanceof CRM_Tasksassignments_DAO_Document);
+    $this->assertEquals($this->_documentTypeId, $result->activity_type_id);
   }
 
   /**
