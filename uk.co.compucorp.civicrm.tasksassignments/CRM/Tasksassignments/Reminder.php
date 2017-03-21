@@ -10,7 +10,6 @@ class CRM_Tasksassignments_Reminder {
   private static $_relatedExtensions = array(
     'appraisals' => false,
   );
-  private static $_reminderSettings = [];
 
   private static function _setActivityOptions() {
     if (empty(self::$_activityOptions)) {
@@ -230,98 +229,17 @@ class CRM_Tasksassignments_Reminder {
     return true;
   }
 
-  /**
-   * Sends daily digest to administrators, task creators and assignees.
-   * 
-   * @return boolean
-   *   True on completion
-   */
   public static function sendDailyReminder() {
     self::_setActivityOptions();
     self::_checkRelatedExtensions();
 
-    $now = date('Y-m-d');
-    $to = self::_getNextSunday($now);
-
-    $assigneeQuery = self::_buildTaskAssigneeCreatorQuery($to);
-    $otherContactsQuery = self::_buildAdminsKeyDatesAndAppraisalsQuery($now, $to);
-
-    if (!empty($otherContactsQuery)) {
-      $otherContactsQuery = "UNION $otherContactsQuery";
-    }
-
-    $contactsQuery = "
-      SELECT activity_ids, contact_id, email
-      FROM (
-        $assigneeQuery
-        $otherContactsQuery
-      ) AS reminder
-      GROUP BY reminder.contact_id, reminder.email
-    ";
-    $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery);
-
-    $settings = self::_getReminderSettings();
-
-    while ($contactsResult->fetch()) {
-      $reminderData = self::_getContactDailyReminderData(
-        $contactsResult->contact_id, 
-        !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : [], 
-        $to, 
-        $settings
-      );
-
-      $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', [
-        'reminder' => $reminderData,
-        'baseUrl' => CIVICRM_UF_BASEURL,
-        'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
-        'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
-        'settings' => $settings,
-      ]);
-
-      self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
-    }
-
-    return true;
-  }
-
-  /**
-   * Obtains settings used to send daily reminder.
-   * 
-   * @return array
-   *   Values in TASettings entity
-   */
-  private static function _getReminderSettings() {
-    if (empty(self::$_reminderSettings)) {
-      self::$_reminderSettings = civicrm_api3('TASettings', 'get');
-    }
-
-    return self::$_reminderSettings['values'];
-  }
-
-  /**
-   * Obtains list of components to be included in reminder.
-   * 
-   * @return array
-   *   List of components
-   */
-  private static function _getReminderComponents() {
-    $settings = self::_getReminderSettings();
-
+    $taSettings = civicrm_api3('TASettings', 'get');
+    $settings = $taSettings['values'];
     $components = array("'CiviTask'");
     if ($settings['documents_tab']['value']) {
       $components[] = "'CiviDocument'";
     }
 
-    return $components;
-  }
-
-  /**
-   * Obtains list of task statuses that correspond to incomplete tasks.
-   * 
-   * @return array
-   *   List of statuses that denote an incomplete task
-   */
-  private static function _getTaskIncompleteStatuses() {
     $incompleteStatuses = array();
     $incompleteStatusesResult = civicrm_api3('Task', 'getstatuses', array(
       'sequential' => 1,
@@ -330,130 +248,92 @@ class CRM_Tasksassignments_Reminder {
     foreach ($incompleteStatusesResult['values'] as $value) {
       $incompleteStatuses[] = $value['value'];
     }
-    
-    return $incompleteStatuses;
-  }
 
-  /**
-   * Given a date in 'yyyy-mm-dd' format, calculates the date of next sunday.
-   * 
-   * @param string $now
-   *   Date in 'yyyy-mm-dd' format from which to do the calculation
-   * 
-   * @return string
-   *   Date in 'yyyy-mm-dd' format of next sunday, as calculated from $now
-   */
-  private static function _getNextSunday($now) {
+    $now = date('Y-m-d');
     $nbDay = date('N', strtotime($now));
     $sunday = new DateTime($now);
     $sunday->modify('+' . (7 - $nbDay) . ' days');
 
-    return $sunday->format('Y-m-d');
-  }
+    $to = $sunday->format('Y-m-d');
 
-  /**
-   * Returns contact ID's for users with the 'administrator' or 'civihr_admin'
-   * roles.
-   * 
-   * @return array
-   *   List of contact ID's
-   */
-  private static function _getAdminContactIds() {
-    $adminRole = user_role_load_by_name('administrator');
-    $civihrAdminRole = user_role_load_by_name('civihr_admin');
-
-    $query = '
-      SELECT ur.uid
-      FROM {users_roles} AS ur
-      WHERE ur.rid IN (:admin, :civi)
-    ';
-    $queryParams = [
-      ':admin' => $adminRole->rid, 
-      ':civi' => $civihrAdminRole->rid
-    ];
-
-    $result = db_query($query, $queryParams);
-    $uids = $result->fetchCol();
-
-    return $uids;
-  }
-
-  /**
-   * Builds query to obtain assignee and creator contact ID's for tasks due 
-   * before the given date.
-   * 
-   * @param string $to
-   *   Date until where tasks should be searched, in yyyy-mm-dd format
-   * 
-   * @return string
-   *   Query to obtain task assignees and creators.
-   */
-  private static function _buildTaskAssigneeCreatorQuery($to) {
-    $components = self::_getReminderComponents();
-    $incompleteStatuses = self::_getTaskIncompleteStatuses();
-
-    return "
-      SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
-      FROM `civicrm_activity` a
-      LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
-      LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id
-      WHERE (
-        activity_date_time <= '$to'
-        AND a.status_id IN (" . implode(', ', $incompleteStatuses) . ")
-        AND ac.record_type_id IN ( 1, 2 )
-        AND e.is_primary = 1
-        AND a.activity_type_id IN (
-          SELECT value
-          FROM civicrm_option_value ov
-          LEFT JOIN civicrm_option_group og ON ov.option_group_id = og.id
-          LEFT JOIN civicrm_component co ON ov.component_id = co.id
-          WHERE og.name = 'activity_type'
-          AND co.name IN (
-            " . implode(', ', $components) . "
-          )
-        )
-      )
-      GROUP BY e.contact_id
-    ";
-  }
-
-  /**
-   * Builds query to obtain contact ID's for the following:
-   * 
-   *   - Users with administrator or civihr_admin roles
-   *   - Contacts with key dates in given time period
-   *   - Appraisals due in the given timeframe
-   * 
-   * @param string $now
-   *   Date from where key dates and appraisals should be searched, yyyy-mm-dd 
-   * @param type $to
-   *   Date until where key dates and appraisals should be searched, yyyy-mm-dd
-   * 
-   * @return string
-   *   Query to obtain contact ID's for admins and contacts involved in key 
-   *   dates and appraisals
-   */
-  private static function _buildAdminsKeyDatesAndAppraisalsQuery($now, $to) {
-    $adminContacts = self::_getAdminContactIds();
     $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
-    $appraisalsContacts = self::$_relatedExtensions['appraisals'] 
-      ? CRM_Appraisals_Reminder::getContactIds($now, $to) 
-      : array();
 
-    $contacts = array_merge($adminContacts, $keyDatesContacts, $appraisalsContacts);
-
-    if (!empty($contacts)) {
-      return '
-        SELECT NULL AS activity_ids, e.contact_id, e.email
-        FROM `civicrm_email` e
-        WHERE (
-          e.contact_id IN (' . implode(',', $contacts) . ')
-        )
-        GROUP BY e.contact_id
-      ';
+    $appraisalsContacts = array();
+    if (self::$_relatedExtensions['appraisals']) {
+      $appraisalsContacts = CRM_Appraisals_Reminder::getContactIds($now, $to);
     }
 
-    return '';
+    $contactsQuery = "SELECT activity_ids, contact_id, email
+            FROM (
+            SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
+            FROM `civicrm_activity` a
+            LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
+            LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id
+            WHERE (
+            activity_date_time <= %1
+            AND a.status_id
+            IN (" . implode(',', $incompleteStatuses) . ")
+            AND ac.record_type_id
+            IN ( 1, 2 )
+            AND e.is_primary =1
+            AND a.activity_type_id
+            IN (
+            SELECT value
+            FROM civicrm_option_value ov
+            LEFT JOIN civicrm_option_group og ON ov.option_group_id = og.id
+            LEFT JOIN civicrm_component co ON ov.component_id = co.id
+            WHERE og.name = 'activity_type'
+            AND co.name
+            IN (
+            " . implode(',', $components) . "
+            )
+            )
+            )
+            GROUP BY e.contact_id
+            ";
+    if (!empty($keyDatesContacts)) {
+      $contactsQuery .= "UNION
+            SELECT NULL AS activity_ids, e.contact_id, e.email
+            FROM `civicrm_email` e
+            WHERE (
+            e.contact_id
+            IN (" . implode(',', $keyDatesContacts) . ")
+            )
+            GROUP BY e.contact_id
+            ";
+    }
+    if (!empty($appraisalsContacts)) {
+      $contactsQuery .= "UNION
+            SELECT NULL AS activity_ids, e.contact_id, e.email
+            FROM `civicrm_email` e
+            WHERE (
+            e.contact_id
+            IN (" . implode(',', $appraisalsContacts) . ")
+            )
+            GROUP BY e.contact_id
+            ";
+    }
+    $contactsQuery .= ") AS reminder
+            GROUP BY reminder.contact_id
+            ";
+
+    $contactsParams = array(
+      1 => array($to, 'String'),
+    );
+    $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery, $contactsParams);
+    while ($contactsResult->fetch()) {
+      $reminderData = self::_getContactDailyReminderData($contactsResult->contact_id, !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : array(), $to, $settings);
+      $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', array(
+        'reminder' => $reminderData,
+        'baseUrl' => CIVICRM_UF_BASEURL,
+        'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
+        'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
+        'settings' => $settings,
+      ));
+      self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
+    }
+
+    return true;
   }
 
   private static function _getContactDailyReminderData($contactId, array $activityIds, $to, array $settings) {
