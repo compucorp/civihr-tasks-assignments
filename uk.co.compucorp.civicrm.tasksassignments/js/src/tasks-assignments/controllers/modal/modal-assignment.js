@@ -28,10 +28,6 @@ define([
                 offset: 0
             };
 
-            $scope.updateTimeline = function(item) {
-              $scope.activitySet = item;
-            }
-
             $scope.format = HR_settings.DATE_FORMAT.toLowerCase();
             $scope.copyMessage = 'Click here to copy the value in row one to all rows.';
 
@@ -60,6 +56,15 @@ define([
                 target: [],
                 document: [],
                 task: []
+            };
+
+            /**
+             * Update activitySet with the current timeline
+             *
+             * @param  {object} item Timeline item
+             */
+            $scope.updateTimeline = function(item) {
+              $scope.activitySet = item;
             };
 
             $scope.addActivity = function (activityArr) {

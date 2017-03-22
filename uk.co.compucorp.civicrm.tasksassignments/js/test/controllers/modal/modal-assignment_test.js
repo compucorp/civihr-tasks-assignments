@@ -169,14 +169,12 @@ define([
 
           beforeEach(function () {
             newActivitySet = Mock.timeline[0];
+            scope.updateTimeline(newActivitySet);
+            scope.$digest();
           });
 
           it('should update taskList according with activitySet', function () {
-            expect(scope.taskList.length).toEqual(5);
-
-            scope.updateTimeline(newActivitySet);
-            scope.$digest();
-            expect(scope.taskList.length).toEqual(1);
+            expect(scope.activitySet).toEqual(newActivitySet);
           });
         });
 
@@ -208,7 +206,12 @@ define([
             ContactService: ContactService,
             data: {},
             config: {},
-            settings: {"tabEnabled":{"documents":"1","keyDates":"1"}},
+            settings: {
+              tabEnabled: {
+                documents: "1",
+                keyDates: "1"
+              }
+            },
             HR_settings: HR_settings,
             $uibModalInstance: {
               close: jasmine.createSpy('modalInstance.close'),

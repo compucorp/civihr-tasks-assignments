@@ -148,8 +148,7 @@ define(function () {
                 reference_offset: "1",
                 reference_select: "newest"
               }
-            ],
-            $$hashKey:"object:309"
+            ]
           }
         ]
     }
