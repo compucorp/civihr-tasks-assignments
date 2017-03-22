@@ -324,7 +324,12 @@ define([
             });
 
             $scope.$on('documentFormSuccess',function(e, output, input){
-              angular.equals({}, input) ? $scope.list.push(output) : angular.extend(input,output);
+              if (angular.equals({}, input)) {
+                addRemoveDocument($scope.list, output, input);
+              } else {
+                addRemoveDocument($scope.list, output, input);
+                angular.extend(input,output);
+              }
             });
 
             $scope.$on('crmFormSuccess',function(e, data){
@@ -345,6 +350,30 @@ define([
             });
 
             this.init();
+
+            /**
+             * Adds or Removes Document fom the document list
+             * "3" => approved & 4 => rejected
+             * @param array list
+             * @param object output
+             * @param object input
+             */
+            function addRemoveDocument (list, output, input) {
+              var newDoc = list.indexOf(output),
+                existingDoc = list.indexOf(input);
+
+              switch (true) {
+                case (newDoc + 1) && (output.status_id == "3"):
+                  list.splice(newDoc, 1);
+                  break;
+                case (output.status_id != "3") && (output.status_id != "4"):
+                  list.push(output);
+                  break;
+                case (existingDoc + 1) && (output.status_id == "3"):
+                  list.splice(existingDoc, 1);
+                  break;
+              }
+            }
 
             /**
              * Whenever the date filters will change, their corrispondent
