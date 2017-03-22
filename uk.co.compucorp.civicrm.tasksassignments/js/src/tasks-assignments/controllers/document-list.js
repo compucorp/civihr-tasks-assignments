@@ -328,7 +328,7 @@ define([
                 addRemoveDocument($scope.list, output, input);
               } else {
                 addRemoveDocument($scope.list, output, input);
-                angular.extend(input,output);
+                angular.extend(input, output);
               }
             });
 
@@ -366,7 +366,7 @@ define([
                 case (newDoc + 1) && (output.status_id == "3"):
                   list.splice(newDoc, 1);
                   break;
-                case (output.status_id != "3") && (output.status_id != "4"):
+                case (output.status_id != "3") && (output.status_id != "4") && (!input.status_id):
                   list.push(output);
                   break;
                 case (existingDoc + 1) && (output.status_id == "3"):
