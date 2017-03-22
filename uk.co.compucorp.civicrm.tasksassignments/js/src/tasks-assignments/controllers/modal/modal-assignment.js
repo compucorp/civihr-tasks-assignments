@@ -370,10 +370,6 @@ define([
                   !task.activity_type_id && missingRequiredFields.push('Activity type');
                 }
 
-                if (!_.includes(missingRequiredFields, 'Assignee')) {
-                  !task.assignee_contact_id[0] && missingRequiredFields.push('Assignee');
-                }
-
                 if (!_.includes(missingRequiredFields, 'Activity Due Date')) {
                   !task.activity_date_time && missingRequiredFields.push('Activity Due Date');
                 }
