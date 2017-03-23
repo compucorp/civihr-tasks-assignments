@@ -15,7 +15,7 @@ function civicrm_api3_task_create($params) {
   if (!empty($params['task'])) {
       return civicrm_api3_task_create_multiple($params);
   }
-    
+
   if (empty($params['id'])) {
     civicrm_api3_verify_one_mandatory($params,
       NULL,
@@ -147,21 +147,21 @@ function civicrm_api3_task_create($params) {
 }
 
 function civicrm_api3_task_copy_to_assignment($params) {
-    
+
     if (empty($params['id'])) {
         throw new API_Exception(ts("Please specify 'id' value(s)."));
     }
     if (empty($params['case_id'])) {
         throw new API_Exception(ts("Please specify 'case_id' value."));
     }
-    
+
     if (empty($params['sequential'])) {
         $params['sequential'] = 0;
     }
     if (empty($params['debug'])) {
         $params['debug'] = 0;
     }
-    
+
     $ids = (array)$params['id'];
     $caseId = (int)$params['case_id'];
     $result = array();
@@ -177,23 +177,23 @@ function civicrm_api3_task_copy_to_assignment($params) {
             $result[] = array_shift($createResult['values']);
         }
     }
-    
+
     return civicrm_api3_create_success($result, $params);
 }
 
 function civicrm_api3_task_create_multiple($params) {
-    
+
     if (empty($params['task'])) {
         throw new API_Exception(ts("Please specify 'task' array."));
     }
-    
+
     if (empty($params['sequential'])) {
         $params['sequential'] = 0;
     }
     if (empty($params['debug'])) {
         $params['debug'] = 0;
     }
-    
+
     $tasks = (array)$params['task'];
     $result = array();
     foreach ($tasks as $task) {
@@ -204,7 +204,7 @@ function civicrm_api3_task_create_multiple($params) {
             $result[] = array_shift($createResult['values']);
         }
     }
-    
+
     return civicrm_api3_create_success($result, $params);
 }
 
@@ -316,11 +316,11 @@ function _civicrm_api3_task_get_formatResult($params, $activities) {
  *
  */
 function civicrm_api3_task_delete($params) {
-  
+
   if (!CRM_Core_Permission::check('delete Tasks and Documents')) {
     throw new API_Exception('You don\'t have permissions to delete Tasks');
   }
-  
+
   CRM_Tasksassignments_Reminder::sendReminder($params['id'], null, false, null, true);
   if (CRM_Activity_BAO_Activity::deleteActivity($params)) {
     return civicrm_api3_create_success(1, $params, 'activity', 'delete');
@@ -490,92 +490,92 @@ function _civicrm_api3_task_getlist_output($result, $request) {
 }
 
 function civicrm_api3_task_get($params) {
-    
-    $activityIds = array();
-    
-    $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
-    $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
-    $caseId = isset($params['case_id']) ? $params['case_id'] : null;
-    
-    if ($assigneeContactId) {
-        $result = civicrm_api3('ActivityContact', 'get', array(
-          'sequential' => 1,
-          'return' => 'activity_id',
-          'contact_id' => array('IN' => $assigneeContactId),
-          'record_type_id' => 1,
-          'options' => array('limit' => 0),
-        ));
-        foreach ($result['values'] as $value) {
-            $activityIds[] = $value['activity_id'];
-        }
-    }
-    
-    if ($sourceContactId) {
-        $result = civicrm_api3('ActivityContact', 'get', array(
-          'sequential' => 1,
-          'return' => 'activity_id',
-          'contact_id' => array('IN' => $sourceContactId),
-          'record_type_id' => 2,
-          'options' => array('limit' => 0),
-        ));
-        foreach ($result['values'] as $value) {
-            $activityIds[] = $value['activity_id'];
-        }
-    }
-    
-    if (($assigneeContactId || $sourceContactId) && empty($activityIds)) {
-        return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
-    }
-    
-    if ($caseId) {
-        $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
-        $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
-        if (empty($activityIds)) {
-            $activityIds[] = 0;
-        }
-    }
-    
-    if (!isset($params['id']) && !empty($activityIds)) {
-        $params['id'] = array('IN' => $activityIds);
-    }
 
-    // all types must be fetched
-    $types = _civicrm_api3_task_gettypesbycomponent(
-      'CiviTask',
-      ['sequential' => 1, 'options' => ['limit' => 0]]
-    );
-    $typesIds = array();
-    
-    if (!empty($types['values'])) {
-        foreach ($types['values'] as $type) {
-            $typesIds[] = $type['value'];
-        }
+  $activityIds = array();
 
-        $getResult = civicrm_api3('Activity', 'get', array_merge(
-            $params,
-            array(
-                'activity_type_id' => array('IN' => $typesIds),
-            )
-        ));
-        
-        if (CRM_Core_DAO::checkTableExists('civicrm_case_activity')) {
-            $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
-            foreach ($getResult['values'] as $key => $value) {
-                $caseActivityParams = array(
-                    1 => array($value['id'], 'Integer'),
-                );
-                $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
-                $getResult['values'][$key]['case_id'] = null;
-                if ($caseActivityResult->fetch())
-                {
-                    $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
-                }
-            }
-        }
-        return $getResult;
+  $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
+  $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
+  $caseId = isset($params['case_id']) ? $params['case_id'] : null;
+
+  if ($assigneeContactId) {
+    $result = civicrm_api3('ActivityContact', 'get', array(
+      'sequential' => 1,
+      'return' => 'activity_id',
+      'contact_id' => array('IN' => $assigneeContactId),
+      'record_type_id' => 1,
+      'options' => array('limit' => 0),
+    ));
+    foreach ($result['values'] as $value) {
+      $activityIds[] = $value['activity_id'];
     }
-    
+  }
+
+  if ($sourceContactId) {
+    $result = civicrm_api3('ActivityContact', 'get', array(
+      'sequential' => 1,
+      'return' => 'activity_id',
+      'contact_id' => array('IN' => $sourceContactId),
+      'record_type_id' => 2,
+      'options' => array('limit' => 0),
+    ));
+    foreach ($result['values'] as $value) {
+      $activityIds[] = $value['activity_id'];
+    }
+  }
+
+  if (($assigneeContactId || $sourceContactId) && empty($activityIds)) {
     return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
+  }
+
+  if ($caseId) {
+    $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
+    $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
+    if (empty($activityIds)) {
+      $activityIds[] = 0;
+    }
+  }
+
+  if (!isset($params['id']) && !empty($activityIds)) {
+    $params['id'] = array('IN' => $activityIds);
+  }
+
+  // all types must be fetched
+  $types = _civicrm_api3_task_gettypesbycomponent(
+    'CiviTask',
+    ['sequential' => 1, 'options' => ['limit' => 0]]
+  );
+  $typesIds = array();
+
+  if (!empty($types['values'])) {
+    foreach ($types['values'] as $type) {
+      $typesIds[] = $type['value'];
+    }
+
+    $getResult = civicrm_api3('Activity', 'get', array_merge(
+      $params,
+      array(
+        'activity_type_id' => array('IN' => $typesIds),
+      )
+    ));
+
+    if (CRM_Core_DAO::checkTableExists('civicrm_case_activity')) {
+      $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
+      foreach ($getResult['values'] as $key => $value) {
+        $caseActivityParams = array(
+          1 => array($value['id'], 'Integer'),
+        );
+        $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
+        $getResult['values'][$key]['case_id'] = null;
+        if ($caseActivityResult->fetch())
+        {
+          $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
+        }
+      }
+    }
+    return $getResult;
+  }
+
+  return civicrm_api3_create_success(array(), $params, 'task', 'getbycomponent');
 }
 
 function civicrm_api3_task_getoptions($params) {
@@ -610,15 +610,15 @@ function civicrm_api3_task_getoptions($params) {
 }
 
 function civicrm_api3_task_getstatuses($params) {
-    
+
     $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
-    
+
     if ($optionGroupID) {
         return $result = civicrm_api3('OptionValue', 'get', array_merge($params, array(
           'option_group_id' => $optionGroupID,
         )));
     }
-    
+
     return null;
 }
 
@@ -642,10 +642,10 @@ function _civicrm_api3_task_gettypesbycomponent($component, $params = []) {
         $params['component_id'] = $componentResult->id;
         $params['option_group_id'] = $optionGroup['id'];
         $result = civicrm_api3('OptionValue', 'get', $params);
-        
+
         return $result;
     }
-    
+
     return null;
 }
 
@@ -653,11 +653,11 @@ function _civicrm_api3_task_gettypesbycomponent($component, $params = []) {
  * Task Reminder on demand.
  */
 function civicrm_api3_task_sendreminder($params) {
-    
+
     if (empty($params['activity_id'])) {
         throw new API_Exception(ts("Please specify 'activity_id' value."));
     }
-    
+
     $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '', true);
     return civicrm_api3_create_success($result, $params, 'task', 'reminder');
 }
@@ -666,7 +666,7 @@ function civicrm_api3_task_sendreminder($params) {
  * Daily Task Reminder.
  */
 function civicrm_api3_task_senddailyreminder($params) {
-    
+
     CRM_Tasksassignments_Reminder::sendDailyReminder();
     return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
 }
@@ -690,7 +690,7 @@ function civicrm_api3_task_getcontactlist($params) {
     "check_permissions" => false,
     "version" => 3,
   );
-  
+
   if ($relationshipName && $relatedContactId) {
     $relationshipTypeResult = civicrm_api3('RelationshipType', 'get', array(
       'sequential' => 1,
@@ -717,7 +717,7 @@ function civicrm_api3_task_getcontactlist($params) {
       $params['id'] = array('IN' => $relationshipContactIds);
     }
   }
-  
+
   _civicrm_api3_task_get_supportanomalies($params, $options);
   $contacts = _civicrm_api3_get_using_query_object('contact', $params, $options);
   return civicrm_api3_create_success($contacts, $params, 'contact');
