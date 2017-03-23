@@ -15,7 +15,7 @@ function civicrm_api3_task_create($params) {
   if (!empty($params['task'])) {
       return civicrm_api3_task_create_multiple($params);
   }
-    
+
   if (empty($params['id'])) {
     civicrm_api3_verify_one_mandatory($params,
       NULL,
@@ -24,11 +24,11 @@ function civicrm_api3_task_create($params) {
       )
     );
   }
-  
+
   /* This code prevents creating a copy of Activity each time we pass 'case_id'
    * to 'create' method and when the Activity is already connected to the Case.
    * The code is commented out due to front-end JavaScript solution to the issue.
-   * 
+   *
   if (!empty($params['id']) && !empty($params['case_id'])) {
     $activity = civicrm_api3('Task', 'get', array(
       'sequential' => 1,
@@ -147,21 +147,21 @@ function civicrm_api3_task_create($params) {
 }
 
 function civicrm_api3_task_copy_to_assignment($params) {
-    
+
     if (empty($params['id'])) {
         throw new API_Exception(ts("Please specify 'id' value(s)."));
     }
     if (empty($params['case_id'])) {
         throw new API_Exception(ts("Please specify 'case_id' value."));
     }
-    
+
     if (empty($params['sequential'])) {
         $params['sequential'] = 0;
     }
     if (empty($params['debug'])) {
         $params['debug'] = 0;
     }
-    
+
     $ids = (array)$params['id'];
     $caseId = (int)$params['case_id'];
     $result = array();
@@ -177,23 +177,23 @@ function civicrm_api3_task_copy_to_assignment($params) {
             $result[] = array_shift($createResult['values']);
         }
     }
-    
+
     return civicrm_api3_create_success($result, $params);
 }
 
 function civicrm_api3_task_create_multiple($params) {
-    
+
     if (empty($params['task'])) {
         throw new API_Exception(ts("Please specify 'task' array."));
     }
-    
+
     if (empty($params['sequential'])) {
         $params['sequential'] = 0;
     }
     if (empty($params['debug'])) {
         $params['debug'] = 0;
     }
-    
+
     $tasks = (array)$params['task'];
     $result = array();
     foreach ($tasks as $task) {
@@ -204,7 +204,7 @@ function civicrm_api3_task_create_multiple($params) {
             $result[] = array_shift($createResult['values']);
         }
     }
-    
+
     return civicrm_api3_create_success($result, $params);
 }
 
@@ -316,11 +316,11 @@ function _civicrm_api3_task_get_formatResult($params, $activities) {
  *
  */
 function civicrm_api3_task_delete($params) {
-  
+
   if (!CRM_Core_Permission::check('delete Tasks and Documents')) {
     throw new API_Exception('You don\'t have permissions to delete Tasks');
   }
-  
+
   CRM_Tasksassignments_Reminder::sendReminder($params['id'], null, false, null, true);
   if (CRM_Activity_BAO_Activity::deleteActivity($params)) {
     return civicrm_api3_create_success(1, $params, 'activity', 'delete');
@@ -490,6 +490,7 @@ function _civicrm_api3_task_getlist_output($result, $request) {
 }
 
 function civicrm_api3_task_get($params) {
+
   $activityIds = [];
 
   $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
@@ -520,7 +521,11 @@ function civicrm_api3_task_get($params) {
     $params['id'] = array('IN' => $activityIds);
   }
 
-  $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
+  // all types must be fetched
+  $types = _civicrm_api3_task_gettypesbycomponent(
+    'CiviTask',
+    ['sequential' => 1, 'options' => ['limit' => 0]]
+  );
   $typesIds = [];
 
   if (!empty($types['values'])) {
@@ -557,7 +562,7 @@ function civicrm_api3_task_get($params) {
 
 /**
  * Loads activity ID's for given contact into provided array.
- * 
+ *
  * @param int $contactID
  *   ID for contact
  * @param array $activityIds
@@ -577,11 +582,18 @@ function _loadActivityIDsForContactIntoArray($contactID, &$activityIds) {
 }
 
 function civicrm_api3_task_getoptions($params) {
-    
-    if ($params['field'] == 'activity_type_id') {
+    $field = CRM_Utils_Array::value('field', $params);
+    $context = CRM_Utils_Array::value('context', $params);
+
+    // return all values @see _civicrm_api3_api_match_pseudoconstant
+    if ($context === 'validate') {
+      $params['options']['limit'] = 0;
+    }
+
+    if ($field == 'activity_type_id') {
         $result = array();
         $sequential = isset($params['sequential']) ? $params['sequential'] : 0;
-        $types = _civicrm_api3_task_gettypesbycomponent('CiviTask');
+        $types = _civicrm_api3_task_gettypesbycomponent('CiviTask', $params);
 
         foreach ($types['values'] as $type) {
             if (!$sequential) {
@@ -596,25 +608,24 @@ function civicrm_api3_task_getoptions($params) {
 
         return civicrm_api3_create_success($result, $params, 'task', 'get');
     }
-    
+
     return civicrm_api3_generic_getoptions(array('entity' => 'Task', 'params' => $params));
 }
 
 function civicrm_api3_task_getstatuses($params) {
-    
+
     $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
-    
+
     if ($optionGroupID) {
         return $result = civicrm_api3('OptionValue', 'get', array_merge($params, array(
           'option_group_id' => $optionGroupID,
         )));
     }
-    
+
     return null;
 }
 
-function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
-    
+function _civicrm_api3_task_gettypesbycomponent($component, $params = []) {
     $optionGroup = civicrm_api3('OptionGroup', 'get', array(
       'sequential' => 1,
       'name' => "activity_type",
@@ -623,25 +634,21 @@ function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
     if (!isset($optionGroup['id'])) {
       throw new API_Exception(ts("Cannot find OptionGroup with 'name' = 'activity_type'."));
     }
-    
+
     $componentQuery = 'SELECT * FROM civicrm_component WHERE name = %1';
     $componentParams = array(
         1 => array($component, 'String'),
     );
     $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
-    if ($componentResult->fetch())
-    {
-        $componentId = $componentResult->id;
-        
-        $result = civicrm_api3('OptionValue', 'get', array(
-          'sequential' => $sequential,
-          'option_group_id' => $optionGroup['id'],
-          'component_id' => $componentId,
-        ));
-        
+
+    if ($componentResult->fetch()) {
+        $params['component_id'] = $componentResult->id;
+        $params['option_group_id'] = $optionGroup['id'];
+        $result = civicrm_api3('OptionValue', 'get', $params);
+
         return $result;
     }
-    
+
     return null;
 }
 
@@ -649,11 +656,11 @@ function _civicrm_api3_task_gettypesbycomponent($component, $sequential = 1) {
  * Task Reminder on demand.
  */
 function civicrm_api3_task_sendreminder($params) {
-    
+
     if (empty($params['activity_id'])) {
         throw new API_Exception(ts("Please specify 'activity_id' value."));
     }
-    
+
     $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '', true);
     return civicrm_api3_create_success($result, $params, 'task', 'reminder');
 }
@@ -662,7 +669,7 @@ function civicrm_api3_task_sendreminder($params) {
  * Daily Task Reminder.
  */
 function civicrm_api3_task_senddailyreminder($params) {
-    
+
     CRM_Tasksassignments_Reminder::sendDailyReminder();
     return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
 }
@@ -686,7 +693,7 @@ function civicrm_api3_task_getcontactlist($params) {
     "check_permissions" => false,
     "version" => 3,
   );
-  
+
   if ($relationshipName && $relatedContactId) {
     $relationshipTypeResult = civicrm_api3('RelationshipType', 'get', array(
       'sequential' => 1,
@@ -713,7 +720,7 @@ function civicrm_api3_task_getcontactlist($params) {
       $params['id'] = array('IN' => $relationshipContactIds);
     }
   }
-  
+
   _civicrm_api3_task_get_supportanomalies($params, $options);
   $contacts = _civicrm_api3_get_using_query_object('contact', $params, $options);
   return civicrm_api3_create_success($contacts, $params, 'contact');
