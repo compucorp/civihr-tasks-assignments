@@ -5,7 +5,12 @@
         {{label[filter.value]}}
         <i class="fa fa-calendar" ng-click="viewInCalendar(filter.calendarView)"></i>
         <span class="badge badge-{{filter.badgeClass}}">
-          {{(list | filterByDue:filter.value | filterByOwnership:filterParams.ownership).length}}
+          {{(list
+            | filterByDue:filterParams.due:filterParams.dateRange
+            | filterByOwnership:filterParams.ownership
+            | filterByAssignmentType:filterParams.assignmentType
+            | filterByContactId:filterParams.contactId
+            | filterByStatus:filterParams.documentStatus).length}}
         </span>
       </a>
     </li>
