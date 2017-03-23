@@ -78,7 +78,6 @@
   @import "civihr/modules/fonts";
   @import "civihr/modules/angular";
   @import "civihr/modules/utils";
-  @import "civihr/modules/select";
   @import "civihr/modules/textangular";
   @import "civihr/modules/mixins";
   @import "civihr/modules/animate";
@@ -98,7 +97,6 @@
   @import "civihr/partials/page-contact";
   @import "civihr/partials/pagination";
   @import "civihr/partials/panels";
-  @import "civihr/partials/select";
   @import "civihr/partials/tables";
   @import "civihr/partials/tooltip";
   @import "civihr/partials/wells";
@@ -133,6 +131,7 @@
   @import "civitasks/partials/custom-select";
 
   @import "civitasks/modules/ie";
+  @import "civitasks/modules/civihr-ui-select";
 }
 
 @for $i from 2 through length($module-list) {

@@ -11,7 +11,7 @@
       <!--  Select Target Contact-->
       <div class="row">
         <div class="col-xs-12">
-          <ui-select ng-if="showCId" allow-clear name="target" ng-class="{'has-error': taskForm.target.$invalid}" ng-model="task.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" class="required-field-indicator">
+          <ui-select theme="civihr-ui-select" ng-if="showCId" allow-clear name="target" ng-model="task.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" class="required-field-indicator">
             <ui-select-match class="ui-select-match" placeholder="Select Target Contact">
               {{$select.selected.label}}
             </ui-select-match>
@@ -47,10 +47,10 @@
         </div>
         <div class="col-xs-12 col-sm-6">
           <div class="input-group form-group">
-            <label class="control-label no-gutter col-sm-4" for="{{prefix}}task-due">
-              <span class="pull-right required-field-indicator">Due Date:</span>
+            <label class="control-label no-gutter col-sm-3" for="{{prefix}}task-due">
+              <span class="pull-right required-field-indicator">Due:</span>
             </label>
-            <div class="col-xs-8 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
+            <div class="col-xs-9 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
               <input type="text" name="assignmentDue" id="{{prefix}}task-due" class="form-control" ng-model="task.activity_date_time" placeholder="{{ format }}" ng-required="true" uib-datepicker-popup is-open="dpOpened" ng-click="dpOpen($event);">
               <span class="input-group-addon fa fa-calendar"></span>
             </div>

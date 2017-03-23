@@ -208,14 +208,32 @@ define([
 
                 return result;
               }).then(function (result) {
+                if(result.files.length && !!result.files[0].result){
+                  DocumentService.save({
+                      id: result.document.id,
+                      status_id: '1' // 1 => 'awaiting upload'
+                  }).then(function(results){
+                    $scope.document.status_id = results.status_id;
+                    $modalInstance.close($scope.document);
+                  });
+                } else if(result.files.length && !!result.files[0].values[0].result){
+                  DocumentService.save({
+                      id: result.document.id,
+                      status_id: '3' // 3 => 'approved'
+                  }).then(function(results){
+                    $scope.document.status_id = results.status_id;
+                    $modalInstance.close($scope.document);
+                  });
+                } else {
+                  $modalInstance.close($scope.document);
+                }
+
                 $scope.document.id = result.document.id;
                 $scope.document.case_id = result.document.case_id;
                 $scope.document.file_count = $scope.files.length + uploader.queue.length;
-
-                $scope.document.open = $scope.openNew;
+                $scope.document.open = $scope.openNew
 
                 AssignmentService.updateTab();
-                $modalInstance.close($scope.document);
                 $scope.$broadcast('ta-spinner-hide');
               }, function (reason) {
                 CRM.alert(reason, 'Error', 'error');

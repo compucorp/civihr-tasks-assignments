@@ -120,7 +120,7 @@ form {
 
           .ui-select-placeholder,
           .ui-select-match-text {
-            color: #41afcb !important;
+            color: $input-color !important;
             font-size: 20px !important;
           }
         }
@@ -278,6 +278,11 @@ form {
 
     .separately {
       margin-bottom: 20px;
+
+      label {
+        margin-top: 3px;
+        margin-bottom: 12px;
+      }
     }
   }
 

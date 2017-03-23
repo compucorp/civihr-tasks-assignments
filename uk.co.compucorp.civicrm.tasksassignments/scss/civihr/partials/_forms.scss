@@ -171,7 +171,7 @@ select[required] + .crm_custom-select__arrow::after {
 }
 
 .ui-select-match-text {
-  color: $input-color;
+  color: $input-color !important;
 }
 
 .ui-select-toggle[disabled] {
