@@ -11,9 +11,8 @@
     <section class="container">
       <div class="col-xs-12">
         <div class="row separately">
-          <h2 class="col-xs-12 col-sm-3 control-label required-field-indicator">Contact:</h2>
-
-          <div ng-if="showCId" class="col-xs-12 col-sm-4">
+          <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Target Contact:</label>
+          <div ng-if="showCId" class="col-xs-12 col-sm-5">
             <ui-select allow-clear name="contact" theme="civihr-ui-select" ng-model="assignment.contact_id" ng-change="assignment.client_id=assignment.contact_id" on-select="cacheContact($item)" ng-required="true">
               <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                 {{$select.selected.label}}

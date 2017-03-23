@@ -61,7 +61,7 @@ class CRM_Tasksassignments_Page_AJAX {
 
     foreach ($unclosedCases as $caseId => $details) {
       $results[] = array(
-        'id' => $caseId,
+        'id' => "{$caseId}",
         'label' => $details['sort_name'] . ' - ' . $details['case_type'] . ($details['end_date'] ? ' (' . ts('closed') . ')' : ''),
         'label_class' => $details['end_date'] ? 'strikethrough' : '',
         'description' => array($details['case_subject'] . ' (' . $details['case_status'] . ')'),
