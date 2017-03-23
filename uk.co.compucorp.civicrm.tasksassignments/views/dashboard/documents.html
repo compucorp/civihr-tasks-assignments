@@ -122,44 +122,44 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="list">
-      <table class="table table-striped {{prefix}}table-documents">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Target Contact</th>
-            <th ng-if="settings.extEnabled.assignments">Assignment</th>
-            <th>Due Date</th>
-            <th>Expiry Date</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            ng-repeat="document in
-            listPaginated = (listFiltered = (listOngoing = (list
-            | filterByStatus:cache.documentStatusResolve:false)
-            | filterByDue:filterParams.due:filterParams.dateRange
-            | filterByOwnership:filterParams.ownership
-            | filterByAssignmentType:filterParams.assignmentType
-            | filterByContactId:filterParams.contactId
-            | filterByStatus:filterParams.documentStatus
-            | orderBy: 'activity_date_time')
-            | offset: (pagination.currentPage-1)*pagination.itemsPerPage
-            | limitTo: pagination.itemsPerPage)"
-            ng-controller="DocumentCtrl"
-            ng-include
-            src="'document.html'">
-          </tr>
-        </tbody>
-      </table>
-      <div class="clearfix"></div>
-      <nav class="row" ng-show="(listFiltered.length > pagination.itemsPerPage)">
-        <div class="col-xs-12 text-center">
-          <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+        <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="list">
+            <table class="table table-striped {{prefix}}table-documents">
+              <thead>
+                <tr>
+                  <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
+                  <th>Type</th>
+                  <th>Target Contact</th>
+                  <th ng-if="settings.extEnabled.assignments">Assignment</th>
+                  <th>Due Date</th>
+                  <th>Expiry Date</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  ng-repeat="document in
+                    listPaginated = (listFiltered = (listOngoing = (list)
+                    | filterByDue:filterParams.due:filterParams.dateRange
+                    | filterByOwnership:filterParams.ownership
+                    | filterByAssignmentType:filterParams.assignmentType
+                    | filterByContactId:filterParams.contactId
+                    | filterByStatus:filterParams.documentStatus
+                    | orderBy: 'activity_date_time')
+                    | offset: (pagination.currentPage-1)*pagination.itemsPerPage
+                    | limitTo: pagination.itemsPerPage)"
+                  ng-controller="DocumentCtrl"
+                  ng-include
+                  src="'document.html'">
+                </tr>
+              </tbody>
+            </table>
+            <div class="clearfix"></div>
+            <nav class="row" ng-show="(listFiltered.length > pagination.itemsPerPage)">
+                <div class="col-xs-12 text-center">
+                    <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+                </div>
+            </nav>
         </div>
       </nav>
     </div>
