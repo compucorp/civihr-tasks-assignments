@@ -92,6 +92,7 @@
                       <i class="fa fa-files-o"></i>
                     </span>
                   </th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -128,18 +129,20 @@
                       <input type="text" id="{{prefix}}assignment-task-due-{{$index}}" name="assignmentDue-{{$index}}" class="form-control" placeholder="{{ format }}" ng-model="activity.activity_date_time" uib-datepicker-popup is-open="dpOpened['task' + $index]" ng-required="!isDisabled && activity.create"
                           ng-click="!isDisabled && activity.create ? dpOpen($event, 'task'+$index) : return;" ng-disabled="isDisabled || !activity.create">
                         <span class="input-group-addon fa fa-calendar"></span>
-                        <span class="input-group-btn" ng-if="activity.isAdded">
-                          <a class="btn btn-default btn-danger" ng-click="removeActivity(taskList, $index)">
-                            <span class="fa fa-remove" aria-hidden="true"></span>
-                          </a>
-                        </span>
                     </div>
+                  </td>
+                  <td align="center">
+                    <span class="input-group-btn" ng-if="activity.isAdded">
+                      <a class="btn btn-default btn-danger" ng-click="removeActivity(taskList, $index)">
+                        <span class="fa fa-remove" aria-hidden="true"></span>
+                      </a>
+                    </span>
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="4">
+                  <td colspan="5">
                     <a href class="btn" ng-click="addActivity(taskList)">
                       <span class="fa fa-plus" aria-hidden="true"></span> Add a task
                     </a>
@@ -173,6 +176,7 @@
                       <i class="fa fa-files-o"></i>
                     </span>
                   </th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -184,16 +188,14 @@
                     {{activity.name}}
                   </td>
                   <td colspan="2" ng-if="activity.isAdded">
-                    <div class="ui-select-required">
-                      <ui-select ng-model="activity.activity_type_id" ng-required="true" theme="civihr-ui-select">
-                        <ui-select-match class="ui-select-match" placeholder="Select document type">
+                    <ui-select ng-model="activity.activity_type_id" ng-required="true" theme="civihr-ui-select" class="required-field-indicator">
+                      <ui-select-match class="ui-select-match" placeholder="Select document type">
                           {{$select.selected.value}}
-                        </ui-select-match>
-                        <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.documentType.arr | filter: $select.search">
-                          <div ng-bind="type.value"></div>
-                        </ui-select-choices>
-                      </ui-select>
-                    </div>
+                      </ui-select-match>
+                      <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+                        <div ng-bind="type.value"></div>
+                      </ui-select-choices>
+                    </ui-select>
                   </td>
                   <td>
                     <ui-select allow-clear theme="civihr-ui-select" ng-model="activity.assignee_contact_id[0]" ng-disabled="isDisabled || !activity.create" ng-required="!isDisabled && activity.create" on-select="cacheContact($item)">
@@ -211,18 +213,20 @@
                       <input type="text" id="{{prefix}}assignment-doc-due-{{$index}}" class="form-control" name="assignmentDue" placeholder="{{ format }}" uib-datepicker-popup ng-model="activity.activity_date_time" ng-disabled="isDisabled" ng-required="true" is-open="dpOpened['doc'+$index]"
                           ng-click="!isDisabled && activity.create ? dpOpen($event, 'doc'+$index) : return;" ng-disabled="isDisabled || !activity.create">
                         <span class="input-group-addon fa fa-calendar"></span>
-                        <span class="input-group-btn" ng-if="activity.isAdded">
-                          <a class="btn btn-default btn-danger" ng-click="removeActivity(documentList, $index)">
-                            <span class="fa fa-remove" aria-hidden="true"></span>
-                          </a>
-                        </span>
                     </div>
+                  </td>
+                  <td align="center">
+                    <span class="input-group-btn" ng-if="activity.isAdded">
+                      <a class="btn btn-default btn-danger" ng-click="removeActivity(documentList, $index)">
+                        <span class="fa fa-remove" aria-hidden="true"></span>
+                      </a>
+                    </span>
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="4">
+                  <td colspan="5">
                     <a href class="btn" ng-click="addActivity(documentList)">
                       <span class="fa fa-plus" aria-hidden="true"></span> Add a document
                     </a>
