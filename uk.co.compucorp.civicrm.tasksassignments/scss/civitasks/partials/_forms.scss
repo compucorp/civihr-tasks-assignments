@@ -40,11 +40,9 @@ form {
   &.form-horizontal {
 
     .input-group.date-input-group {
+      margin-left: 0;
+      margin-right: 0;
       text-align: right;
-
-      input{
-        width: 105px;
-      }
     }
   }
 
@@ -185,6 +183,10 @@ form {
 
       .container {
         padding: 0 15px;
+
+        .show-more {
+          padding-top: $padding-large-vertical;
+        }
       }
     }
 
