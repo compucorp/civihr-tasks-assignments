@@ -222,7 +222,7 @@ define([
             };
 
             $scope.updateTask = function(task, updateObj) {
-              $scope.cacheContact(updateObj.assignee_contact_id[0]);
+              $scope.cacheContact(task.assignee_contact_id[0]);
 
               return TaskService
                 .save(angular.extend({}, task, updateObj))
