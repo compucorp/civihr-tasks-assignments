@@ -80,7 +80,7 @@
                 <tr>
                   <th class="action-column"></th>
                   <th class="title-column">Task Title</th>
-                  <th class="assignee-column required-field-indicator">
+                  <th class="assignee-column">
                     Assigned To
                     <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyAssignee(taskList, 'task')">
                       <i class="fa fa-files-o"></i>
@@ -113,7 +113,7 @@
                     </ui-select>
                   </td>
                   <td>
-                    <ui-select allow-clear theme="civihr-ui-select" ng-model="activity.assignee_contact_id[0]" ng-disabled="isDisabled || !activity.create" ng-required="!isDisabled && activity.create" on-select="cacheContact($item)">
+                    <ui-select allow-clear theme="civihr-ui-select" ng-model="activity.assignee_contact_id[0]" ng-disabled="isDisabled || !activity.create" on-select="cacheContact($item)">
                       <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
                         {{$select.selected.label}}
                       </ui-select-match>
