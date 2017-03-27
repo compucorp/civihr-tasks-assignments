@@ -77,7 +77,7 @@ define([
             $scope.updateTask(task, updateObj);
           });
 
-          it('should call TaskService with the correct object', function () {
+          it('calls TaskService with the correct object', function () {
             expect(TaskService.save).toHaveBeenCalledWith(saveObj);
           });
         });
