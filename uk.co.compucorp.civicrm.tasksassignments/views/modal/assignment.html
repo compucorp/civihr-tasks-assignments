@@ -95,7 +95,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="activity in taskList" ng-controller="ModalAssignmentActivityCtrl" ng-class="{required: !isDisabled && activity.create}">
+                <tr ng-repeat="activity in taskList" ng-controller="ModalAssignmentActivityCtrl">
                   <td ng-if="!activity.isAdded">
                     <input type="checkbox" ng-model="activity.create" ng-change="!activity.create && (activity.assignee_contact_id = undefined) || (activity.activity_date_time = undefined);" ng-disabled="isDisabled">
                   </td>
@@ -176,7 +176,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="activity in documentList" ng-controller="ModalAssignmentActivityCtrl" ng-class="{required: !isDisabled && activity.create}">
+                <tr ng-repeat="activity in documentList" ng-controller="ModalAssignmentActivityCtrl">
                   <td ng-if="!activity.isAdded">
                     <input type="checkbox" ng-model="activity.create" ng-change="!activity.create && (activity.assignee_contact_id = undefined) || (activity.activity_date_time = undefined);" ng-disabled="isDisabled">
                   </td>
