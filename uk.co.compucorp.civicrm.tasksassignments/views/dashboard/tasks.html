@@ -69,6 +69,7 @@
                           </a>
                         </span>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -110,7 +111,6 @@
   <header class="row">
     <div class="col-xs-6">
       <input type="checkbox" ng-change="changeStatus(task, 2)" ng-disabled="task.completed" ng-model="task.completed" class="{{prefix}}task-checkbox" name="task" />
-
       <p class="task-title">
         <span ng-show="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title">{{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}:</span>
         <a href class="task-title" ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>

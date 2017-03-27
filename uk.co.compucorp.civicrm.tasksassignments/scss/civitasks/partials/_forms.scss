@@ -40,11 +40,9 @@ form {
   &.form-horizontal {
 
     .input-group.date-input-group {
+      margin-left: 0;
+      margin-right: 0;
       text-align: right;
-
-      input{
-        width: 105px;
-      }
     }
   }
 
@@ -120,7 +118,7 @@ form {
 
           .ui-select-placeholder,
           .ui-select-match-text {
-            color: #41afcb !important;
+            color: $input-color !important;
             font-size: 20px !important;
           }
         }
@@ -185,6 +183,10 @@ form {
 
       .container {
         padding: 0 15px;
+
+        .show-more {
+          padding-top: $padding-large-vertical;
+        }
       }
     }
 
@@ -278,6 +280,11 @@ form {
 
     .separately {
       margin-bottom: 20px;
+
+      label {
+        margin-top: 3px;
+        margin-bottom: 12px;
+      }
     }
   }
 
