@@ -124,25 +124,6 @@
               </span>
             </p>
         </div>
-        <div class="col-xs-6">
-            <span class="{{prefix}}assignment-type">
-                <span
-                        editable-ui-select="task.case_id"
-                        theme="civihr-ui-select"
-                        onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"
-                        onbeforesave="updateTask(task, { case_id: $data });"
-                        on-select="cacheAssignment($item);">
-                    <editable-ui-select-match
-                            placeholder="Enter search term...">{{$select.selected.label}}</editable-ui-select-match>
-                    <editable-ui-select-choices  repeat="assignment.id as assignment in assignments | filter: $select.search"
-                                                 refresh="refreshAssignments($select.search, task.target_contact_id[0], task.case_id)"
-                                                 refresh-delay="0">
-                        <div ng-bind="assignment.label"></div>
-                    </editable-ui-select-choices>
-                    {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
-                </span>
-            </span>
-        </div>
     </div>
     <div class="row">
         <div class="col-xs-12">

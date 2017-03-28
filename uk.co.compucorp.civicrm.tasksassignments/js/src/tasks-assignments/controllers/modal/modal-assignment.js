@@ -58,6 +58,15 @@ define([
                 task: []
             };
 
+            /**
+             * Update activitySet with the current timeline
+             *
+             * @param  {object} item Timeline item
+             */
+            $scope.updateTimeline = function(item) {
+              $scope.activitySet = item;
+            };
+
             $scope.addActivity = function (activityArr) {
 
                 if (!activityArr) {
@@ -359,10 +368,6 @@ define([
               .forEach(function (task) {
                 if (!_.includes(missingRequiredFields, 'Activity type')) {
                   !task.activity_type_id && missingRequiredFields.push('Activity type');
-                }
-
-                if (!_.includes(missingRequiredFields, 'Assignee')) {
-                  !task.assignee_contact_id[0] && missingRequiredFields.push('Assignee');
                 }
 
                 if (!_.includes(missingRequiredFields, 'Activity Due Date')) {
