@@ -96,7 +96,10 @@ define([
                     Task.get({
                         action: 'getoptions',
                         json: {
-                            'field': 'activity_type_id'
+                            'field': 'activity_type_id',
+                            'options': {
+                                'limit': 0
+                            }
                         }
                     }, function (data) {
                         var optionId;

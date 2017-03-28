@@ -122,12 +122,12 @@ define([
 
                               $q.all([
                                 TaskService.get({
-                                  'sequential': 0,
+                                  'sequential': 1,
                                   'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
                                   'status_id': { 'NOT IN': config.status.resolve.TASK }
                                 }),
                                 TaskService.get({
-                                  'sequential': 0,
+                                  'sequential': 1,
                                   'source_contact_id': config.LOGGED_IN_CONTACT_ID,
                                   'status_id': { 'NOT IN': config.status.resolve.TASK }
                                 })
