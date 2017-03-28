@@ -84,13 +84,13 @@
       <div class="row">
         <div class="col-xs-12 col-sm-5" ng-show="!task.assignee_contact_id[0] && !showFieldAssignee">
           <span class="form-control-static">
-            <a href class="btn btn-indent required-field-indicator" ng-click="showFieldAssignee = true;">
+            <a href class="btn btn-indent" ng-click="showFieldAssignee = true;">
                 Add Assignee
             </a>
           </span>
         </div>
         <div class="col-xs-12 col-sm-6" ng-show="task.assignee_contact_id[0] || showFieldAssignee">
-          <ui-select ng-required="true" theme="civihr-ui-select" class="required-field-indicator" allow-clear ng-model="task.assignee_contact_id[0]" on-select="cacheContact($item)">
+          <ui-select theme="civihr-ui-select" class="required-field-indicator" allow-clear ng-model="task.assignee_contact_id[0]" on-select="cacheContact($item)">
             <ui-select-match class="ui-select-match" placeholder="Assignee">
               {{$select.selected.label}}
             </ui-select-match>
