@@ -58,6 +58,15 @@ define([
                 task: []
             };
 
+            /**
+             * Update activitySet with the current timeline
+             *
+             * @param  {object} item Timeline item
+             */
+            $scope.updateTimeline = function(item) {
+              $scope.activitySet = item;
+            };
+
             $scope.addActivity = function (activityArr) {
 
                 if (!activityArr) {
