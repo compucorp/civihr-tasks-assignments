@@ -298,7 +298,7 @@ define([
 
                 if (!activitySet.activityTypes) {
                   $scope.taskList = [];
-                  return
+                  return;
                 }
 
                 var activity,
