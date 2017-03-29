@@ -6,11 +6,12 @@
         <i class="fa fa-calendar" ng-click="viewInCalendar(filter.calendarView)"></i>
         <span class="badge badge-{{filter.badgeClass}}">
           {{(list
+            | filterByStatus:filterParams.documentStatus || ''
+            | filterByDue:filter.value
             | filterByDue:filterParams.due:filterParams.dateRange
             | filterByOwnership:filterParams.ownership
             | filterByAssignmentType:filterParams.assignmentType
-            | filterByContactId:filterParams.contactId
-            | filterByStatus:filterParams.documentStatus).length}}
+            ).length}}
         </span>
       </a>
     </li>
