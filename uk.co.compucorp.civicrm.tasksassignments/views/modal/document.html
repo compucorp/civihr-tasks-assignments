@@ -112,11 +112,11 @@
         <!-- Assignee -->
         <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
           <span class="form-control-static">
-            <a href class="btn btn-indent required-field-indicator" ng-click="showAssigneeField = true;">Add Assignee</a>
+            <a href class="btn btn-indent" ng-click="showAssigneeField = true;">Add Assignee</a>
           </span>
         </div>
         <div class="col-xs-12 col-sm-7" ng-show="document.assignee_contact_id[0] || showAssigneeField">
-          <ui-select name="assignee" theme="civihr-ui-select" ng-required="true" class="required-field-indicator" allow-clear ng-model="document.assignee_contact_id[0]" on-select="cacheContact($item)">
+          <ui-select name="assignee" theme="civihr-ui-select" allow-clear ng-model="document.assignee_contact_id[0]" on-select="cacheContact($item)">
             <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">{{$select.selected.label}}
             </ui-select-match>
             <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.assignee | filter: $select.search" refresh="refreshContacts($select.search, 'assignee')" refresh-delay="0">

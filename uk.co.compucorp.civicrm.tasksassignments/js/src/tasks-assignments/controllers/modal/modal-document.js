@@ -306,10 +306,6 @@ define([
                 missingRequiredFields.push('Due Date');
               }
 
-              if (!doc.assignee_contact_id[0]) {
-                missingRequiredFields.push('Assignee');
-              }
-
               if (!doc.status_id) {
                 missingRequiredFields.push('Status');
               }
