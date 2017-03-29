@@ -14,6 +14,8 @@ define([
                  config, ContactService, AssignmentService, DocumentService, FileService, settings) {
             $log.debug('Controller: DocumentListCtrl');
 
+            var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
+
             this.init = function(){
                 var contactIds = this.contactIds,
                     assignmentIds = this.assignmentIds;
@@ -103,13 +105,13 @@ define([
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
-                filterDates: true,
+                filterDates: false,
                 documentListResolved: true
             };
 
             $scope.filterParams = {
               contactId: null,
-              documentStatus: [],
+              documentStatus: defaultDocumentStatus,
               ownership: $state.params.ownership ||  null,
               dateRange: {
                 from: null,
@@ -120,7 +122,7 @@ define([
             };
 
             $scope.filterParamsHolder = {
-                documentStatus: [],
+                documentStatus: defaultDocumentStatus,
                 dateRange: {
                     from: moment().startOf('day').toDate(),
                     until: moment().add(1, 'month').startOf('day').toDate()
