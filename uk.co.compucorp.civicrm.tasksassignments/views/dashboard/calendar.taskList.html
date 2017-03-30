@@ -26,6 +26,7 @@
           <div ng-bind="contact.label"></div>
           <small ng-bind="contact.description[0]"></small>
         </editable-ui-select-choices>
+        <i class="fa fa-pencil"></i>
         {{cache.contact.obj[task.target_contact_id[0]].sort_name}}
       </span>
     </div>
@@ -46,6 +47,7 @@
           <div ng-bind="contact.label"></div>
           <small ng-bind="contact.description[0]"></small>
         </editable-ui-select-choices>
+        <i class="fa fa-pencil"></i>
         {{cache.contact.obj[task.assignee_contact_id[0]].sort_name}}
         </span>
     </div>
@@ -55,10 +57,12 @@
       <p class="{{prefix}}task-subject">
         Due:
         <time editable-bsdate="task.activity_date_time" onbeforesave="updateTask(task, { activity_date_time: $data });" onshow="dpOpen()" class="editable-small" e-ng-click="dpOpen()" e-is-open="picker.opened" e-show-calendar-button="false" e-datepicker-popup>
+          <i class="fa fa-pencil"></i>
           {{task.activity_date_time | date: 'MMM d'}}
         </time>
         <span ng-if="!!task.subject">Subject: </span>
         <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">
+          <i class="fa fa-pencil"></i>
           {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
         </span>
       </p>
@@ -78,7 +82,8 @@
             refresh-delay="0">
             <div ng-bind="assignment.label"></div>
           </editable-ui-select-choices>
-            {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
+          <i class="fa fa-pencil"></i>
+          {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
         </span>
       </span>
     </div>
@@ -98,6 +103,7 @@
           <div class="{{prefix}}task-more">
             <div editable-ta="task.details" onbeforesave="updateTask(task, { details: ta.$data });">
               <div ta-bind ng-model="task.details"></div>
+              <i class="fa fa-pencil"></i>
             </div>
           </div>
         </div>
