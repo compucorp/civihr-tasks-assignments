@@ -86,6 +86,7 @@
             </div>
             Assigned to: <span
                 editable-ui-select="task.assignee_contact_id[0]"
+                theme="civihr-ui-select"
                 e-required="true"
                 ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
                 onshow="updateContacts(cache.contact.arrSearch);"
@@ -122,24 +123,6 @@
                 {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
               </span>
             </p>
-        </div>
-        <div class="col-xs-6">
-            <span class="{{prefix}}assignment-type">
-                <span
-                        editable-ui-select="task.case_id"
-                        onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"
-                        onbeforesave="updateTask(task, { case_id: $data });"
-                        on-select="cacheAssignment($item);">
-                    <editable-ui-select-match
-                            placeholder="Enter search term...">{{$select.selected.label}}</editable-ui-select-match>
-                    <editable-ui-select-choices  repeat="assignment.id as assignment in assignments | filter: $select.search"
-                                                 refresh="refreshAssignments($select.search, task.target_contact_id[0], task.case_id)"
-                                                 refresh-delay="0">
-                        <div ng-bind="assignment.label"></div>
-                    </editable-ui-select-choices>
-                    {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
-                </span>
-            </span>
         </div>
     </div>
     <div class="row">

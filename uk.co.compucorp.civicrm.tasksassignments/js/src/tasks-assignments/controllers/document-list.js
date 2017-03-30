@@ -96,17 +96,6 @@ define([
             $scope.listPaginated = [];
             $scope.listResolved = [];
             $scope.listResolvedLoaded = false;
-            $scope.action = {
-                selected: null,
-                applyTo: 'selected'
-            };
-            $scope.actionList = [{type:'delete',label:'Delete'}];
-
-
-            $scope.checklist = {
-                selected: {},
-                isCheckedAll: {}
-            };
 
             $scope.dpOpened = {
                 filterDates: {}
@@ -187,8 +176,6 @@ define([
                                 $scope.list.splice($scope.list.indexOf(documentList[i]),1);
                               }
 
-                              $scope.checklist.isCheckedAll = {};
-                              $scope.checklist.selected = {};
                               $scope.$broadcast('ct-spinner-hide','documentList');
                               AssignmentService.updateTab();
                             });
@@ -229,16 +216,6 @@ define([
                     $scope.$broadcast('ct-spinner-hide','documentList');
                     AssignmentService.updateTab();
                 })
-            };
-
-            $scope.toggleAll = function(page){
-              $scope.checklist.isCheckedAll[page] ? $scope.checklist.selected[page] = angular.copy($scope.listPaginated) : $scope.checklist.selected[page] = [];
-            };
-
-            $scope.toggleIsCheckedAll = function() {
-              $timeout(function(){
-                $scope.checklist.isCheckedAll[$scope.pagination.currentPage] = $scope.checklist.selected[$scope.pagination.currentPage].length == $scope.listPaginated.length;
-              });
             };
 
             $scope.labelDateRange = function(from, until){
@@ -305,10 +282,6 @@ define([
                 DocumentService.delete(document.id).then(function(results){
                   $scope.list.splice($scope.list.indexOf(document),1);
 
-                  angular.forEach($scope.checklist.selected, function(page){
-                    page.splice(page.indexOf(document),1);
-                  });
-
                   $rootScope.$broadcast('documentDelete', document.id);
                   AssignmentService.updateTab();
                 });
@@ -324,7 +297,12 @@ define([
             });
 
             $scope.$on('documentFormSuccess',function(e, output, input){
-              angular.equals({}, input) ? $scope.list.push(output) : angular.extend(input,output);
+              if (angular.equals({}, input)) {
+                addRemoveDocument($scope.list, output, input);
+              } else {
+                addRemoveDocument($scope.list, output, input);
+                angular.extend(input, output);
+              }
             });
 
             $scope.$on('crmFormSuccess',function(e, data){
@@ -345,6 +323,30 @@ define([
             });
 
             this.init();
+
+            /**
+             * Adds or Removes Document fom the document list
+             * "3" => approved & 4 => rejected
+             * @param array list
+             * @param object output
+             * @param object input
+             */
+            function addRemoveDocument (list, output, input) {
+              var newDoc = list.indexOf(output),
+                existingDoc = list.indexOf(input);
+
+              switch (true) {
+                case (newDoc + 1) && (output.status_id == "3"):
+                  list.splice(newDoc, 1);
+                  break;
+                case (output.status_id != "3") && (output.status_id != "4") && (!input.status_id):
+                  list.push(output);
+                  break;
+                case (existingDoc + 1) && (output.status_id == "3"):
+                  list.splice(existingDoc, 1);
+                  break;
+              }
+            }
 
             /**
              * Whenever the date filters will change, their corrispondent

@@ -134,6 +134,22 @@ define(function () {
                 target_contact_id: []
             },
 
+        ],
+        timeline: [
+          {
+            name: "timeline_1",
+            label: "Timeline",
+            timeline: "1",
+            activityTypes: [
+              {
+                name: "Start Probation workflow",
+                status: "Scheduled",
+                reference_activity: "Open Case",
+                reference_offset: "1",
+                reference_select: "newest"
+              }
+            ]
+          }
         ]
     }
 });

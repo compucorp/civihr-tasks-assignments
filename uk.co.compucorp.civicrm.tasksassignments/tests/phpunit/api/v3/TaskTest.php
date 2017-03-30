@@ -45,15 +45,15 @@ class api_v3_TaskTest extends CiviUnitTestCase {
     ));
   }
 
-  /**
-   * @expectedException CiviCRM_API3_Exception
-   */
   function testCreateTaskWithNoAssignee() {
-    civicrm_api3('Task', 'create', array(
+    $result = civicrm_api3('Task', 'create', array(
       'activity_type_id' => $this->_taskTypeId,
       'source_contact_id' => 1,
       'target_contact_id' => 2,
     ));
+
+    $this->assertFalse($result['is_error']);
+    $this->assertEquals(1, $result['values'][0]['source_contact_id']);
   }
 
   /**
