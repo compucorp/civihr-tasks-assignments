@@ -60,8 +60,8 @@
           <i class="fa fa-pencil"></i>
           {{task.activity_date_time | date: 'MMM d'}}
         </time>
-        <span ng-if="!!task.subject">Subject: </span>
-        <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">
+        <span>Subject:</span>
+        <span ng-if="!!task.subject" editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">
           <i class="fa fa-pencil"></i>
           {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
         </span>

@@ -162,8 +162,9 @@
         <time editable-bsdate="task.activity_date_time" onbeforesave="updateTask(task, { activity_date_time: $data });" onshow="dpOpen()" class="editable-small stick-to-label" e-ng-click="dpOpen()" e-show-calendar-button="false" e-is-open="picker.opened" e-datepicker-popup>
           <i class="fa fa-pencil"></i>
           {{task.activity_date_time | date: 'MMM d'}}
-        </time> Subject:
-        <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small" e-placeholder="Subject...">
+        </time>
+        <span>Subject:</span>
+        <span ng-if="!!task.subject" editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small" e-placeholder="Subject...">
           <i class="fa fa-pencil"></i>
           {{ (task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '') }}
         </span>
