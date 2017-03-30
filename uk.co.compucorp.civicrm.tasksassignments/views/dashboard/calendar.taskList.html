@@ -1,132 +1,108 @@
 <h4 class="header-bar header-bar-dark">Tasks:</h4>
 <ul class="{{prefix}}list-task {{prefix}}list-task-small">
-  <li
-    ng-repeat="task in listOngoing = (list
-      | filterByStatus:cache.taskStatusResolve:false
-      | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
-      | orderBy: 'activity_date_time')"
+  <li ng-repeat="task in listOngoing = (list
+    | filterByStatus:cache.taskStatusResolve:false
+    | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
+    | orderBy: 'activity_date_time')"
     ng-controller="TaskCtrl"
     ng-class="{
       '{{prefix}}task-completed': task.completed,
       '{{prefix}}task-due': task.due
     }"
-    ng-include
-    src="'task.html'"
-    ct-spinner
-    ct-spinner-id="task{{task.id}}">
+    ng-include src="'task.html'"
+    ct-spinner ct-spinner-id="task{{task.id}}">
   </li>
 </ul>
 
 <script type="text/ng-template" id="task.html">
-    <header class="row">
-        <div class="col-xs-6">
-            <input type="checkbox"
-                   ng-change="changeStatus(task, 2)"
-                   ng-disabled="task.completed"
-                   ng-model="task.completed"
-                   class="{{prefix}}task-checkbox"
-                   name="task">
-            <a href class="{{prefix}}task-title"  ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>:
-            <span
-                    editable-ui-select="task.target_contact_id[0]"
-                    e-required="true"
-                    ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}"
-                    onbeforesave="updateTask(task, { target_contact_id: [$data] });"
-                    onshow="updateContacts(cache.contact.arrSearch);"
-                    on-select="cacheContact($item);">
-                <editable-ui-select-match
-                        placeholder="Start typing a name or email...">{{$select.selected.label}}</editable-ui-select-match>
-                <editable-ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                             refresh="refreshContacts($select.search)"
-                                             refresh-delay="0">
-                    <div ng-bind="contact.label"></div>
-                    <small ng-bind="contact.description[0]"></small>
-                </editable-ui-select-choices>
-                {{cache.contact.obj[task.target_contact_id[0]].sort_name}}
-            </span>
-        </div>
-        <div class="col-xs-6">
-            <div class="dropdown" uib-dropdown>
-                <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
-                <ul class="dropdown-menu pull-right" uib-dropdown-menu>
-                    <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>
-                    <li><a href ng-click="modalReminder(task, 'task');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
-                    <li ng-if="permissions.allowDelete"><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
-                </ul>
-            </div>
-            Assigned to: <span
-                editable-ui-select="task.assignee_contact_id[0]"
-                e-required="true"
-                ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}"
-                onshow="updateContacts(cache.contact.arrSearch);"
-                onbeforesave="updateTask(task, { assignee_contact_id: [$data] });"
-                on-select="cacheContact($item);">
-                <editable-ui-select-match
-                        placeholder="Start typing a name or email...">{{$select.selected.label}}</editable-ui-select-match>
-                <editable-ui-select-choices  repeat="contact.id as contact in contacts | filter: $select.search"
-                                             refresh="refreshContacts($select.search)"
-                                             refresh-delay="0">
-                    <div ng-bind="contact.label"></div>
-                    <small ng-bind="contact.description[0]"></small>
-                </editable-ui-select-choices>
-                {{cache.contact.obj[task.assignee_contact_id[0]].sort_name}}
-            </span>
-        </div>
-    </header>
-    <div class="row">
-        <div class="col-xs-6">
-            <p class="{{prefix}}task-subject">
-              Due:
-              <time editable-bsdate="task.activity_date_time"
-                onbeforesave="updateTask(task, { activity_date_time: $data });"
-                onshow="dpOpen()"
-                class="editable-small"
-                e-ng-click="dpOpen()"
-                e-is-open="picker.opened"
-                e-show-calendar-button="false"
-                e-datepicker-popup>
-                {{task.activity_date_time | date: 'MMM d'}}
-              </time>
-              <span ng-if="!!task.subject">Subject: </span>
-              <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">
-                {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
-              </span>
-            </p>
-        </div>
-        <div class="col-xs-6">
-            <span class="{{prefix}}assignment-type">
-                <span
-                        editable-ui-select="task.case_id"
-                        onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"
-                        onbeforesave="updateTask(task, { case_id: $data });"
-                        on-select="cacheAssignment($item);">
-                    <editable-ui-select-match
-                            placeholder="Enter search term...">{{$select.selected.label}}</editable-ui-select-match>
-                    <editable-ui-select-choices  repeat="assignment.id as assignment in assignments | filter: $select.search"
-                                                 refresh="refreshAssignments($select.search, task.target_contact_id[0], task.case_id)"
-                                                 refresh-delay="0">
-                        <div ng-bind="assignment.label"></div>
-                    </editable-ui-select-choices>
-                    {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
-                </span>
-            </span>
-        </div>
+  <header class="row">
+    <div class="col-xs-6">
+      <input type="checkbox" ng-change="changeStatus(task, 2)" ng-disabled="task.completed" ng-model="task.completed" class="{{prefix}}task-checkbox" name="task">
+      <a href class="{{prefix}}task-title" ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>:
+      <span editable-ui-select="task.target_contact_id[0]" e-required="true" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.target_contact_id[0]].id}}" onbeforesave="updateTask(task, { target_contact_id: [$data] });" onshow="updateContacts(cache.contact.arrSearch);"
+          on-select="cacheContact($item);">
+        <editable-ui-select-match placeholder="Start typing a name or email...">{{$select.selected.label}}</editable-ui-select-match>
+        <editable-ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search" refresh="refreshContacts($select.search)" refresh-delay="0">
+          <div ng-bind="contact.label"></div>
+          <small ng-bind="contact.description[0]"></small>
+        </editable-ui-select-choices>
+        {{cache.contact.obj[task.target_contact_id[0]].sort_name}}
+      </span>
     </div>
-    <div class="row">
+    <div class="col-xs-6">
+      <div class="dropdown" uib-dropdown>
+        <a href class="dropdown-toggle {{prefix}}context-menu-toggle pull-right" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
+        <ul class="dropdown-menu pull-right" uib-dropdown-menu>
+          <li><a href ng-click="modalTask(task);"><i class="fa fa-pencil"></i> Edit</a></li>
+          <li><a href ng-click="modalReminder(task, 'task');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+          <li ng-if="permissions.allowDelete"><a href ng-click="deleteTask(task);"><i class="fa fa-trash-o"></i> Delete</a></li>
+        </ul>
+      </div>
+      Assigned to:
+      <span editable-ui-select="task.assignee_contact_id[0]" e-required="true" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.assignee_contact_id[0]].id}}" onshow="updateContacts(cache.contact.arrSearch);" onbeforesave="updateTask(task, { assignee_contact_id: [$data] });"
+          on-select="cacheContact($item);">
+        <editable-ui-select-match placeholder="Start typing a name or email...">{{$select.selected.label}}</editable-ui-select-match>
+        <editable-ui-select-choices repeat="contact.id as contact in contacts | filter: $select.search" refresh="refreshContacts($select.search)" refresh-delay="0">
+          <div ng-bind="contact.label"></div>
+          <small ng-bind="contact.description[0]"></small>
+        </editable-ui-select-choices>
+        {{cache.contact.obj[task.assignee_contact_id[0]].sort_name}}
+        </span>
+    </div>
+  </header>
+  <div class="row">
+    <div class="col-xs-6">
+      <p class="{{prefix}}task-subject">
+        Due:
+        <time editable-bsdate="task.activity_date_time" onbeforesave="updateTask(task, { activity_date_time: $data });" onshow="dpOpen()" class="editable-small" e-ng-click="dpOpen()" e-is-open="picker.opened" e-show-calendar-button="false" e-datepicker-popup>
+          {{task.activity_date_time | date: 'MMM d'}}
+        </time>
+        <span ng-if="!!task.subject">Subject: </span>
+        <span editable-text="task.subject" onbeforesave="updateTask(task, { subject: $data })" class="editable-small">
+          {{(task.subject | limitTo: 60) + (task.subject.length > 60 ? '...' : '')}}
+        </span>
+      </p>
+    </div>
+    <div class="col-xs-6">
+      <span class="{{prefix}}assignment-type">
+        <span editable-ui-select="task.case_id"
+          onshow="updateAssignments(cache.assignment.arrSearch, task.target_contact_id[0]);"
+          onbeforesave="updateTask(task, { case_id: $data });"
+          on-select="cacheAssignment($item);">
+          <editable-ui-select-match placeholder="Enter search term...">
+            {{$select.selected.label}}
+          </editable-ui-select-match>
+          <editable-ui-select-choices
+            repeat="assignment.id as assignment in assignments | filter: $select.search"
+            refresh="refreshAssignments($select.search, task.target_contact_id[0], task.case_id)"
+            refresh-delay="0">
+            <div ng-bind="assignment.label"></div>
+          </editable-ui-select-choices>
+            {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse">
+        <span
+          class="fa"
+          ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
+          aria-hidden="true">
+        </span>
+        Show More
+      </a>
+      <article class="row" uib-collapse="isCollapsed">
         <div class="col-xs-12">
-            <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse"><span
-                    class="fa"
-                    ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
-                    aria-hidden="true"></span> Show More</a>
-            <article class="row" uib-collapse="isCollapsed">
-                <div class="col-xs-12">
-                    <div class="{{prefix}}task-more">
-                        <div editable-ta="task.details"
-                             onbeforesave="updateTask(task, { details: ta.$data });"><div ta-bind ng-model="task.details"></div></div>
-                        <p class="{{prefix}}task-contact-source">Created by:&nbsp; <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}"><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span></a></p>
-                    </div>
-                </div>
-            </article>
+          <div class="{{prefix}}task-more">
+            <div editable-ta="task.details" onbeforesave="updateTask(task, { details: ta.$data });">
+              <div ta-bind ng-model="task.details"></div>
+            </div>
+            <p class="{{prefix}}task-contact-source">Created by:&nbsp; <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}"><span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span></a></p>
+          </div>
         </div>
+      </article>
     </div>
+  </div>
 </script>
