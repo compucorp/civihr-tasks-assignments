@@ -149,6 +149,11 @@ define(function () {
                 reference_select: "newest"
               }
             ]
+          },
+          {
+            name: "timeline_2",
+            label: "Timeline 2",
+            timeline: "2"
           }
         ]
     }

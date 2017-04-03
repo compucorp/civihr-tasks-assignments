@@ -297,7 +297,8 @@ define([
             $scope.$watch('activitySet', function (activitySet) {
 
                 if (!activitySet.activityTypes) {
-                    return
+                  $scope.taskList = [];
+                  return;
                 }
 
                 var activity,

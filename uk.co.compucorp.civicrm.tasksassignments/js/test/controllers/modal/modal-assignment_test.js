@@ -167,14 +167,28 @@ define([
         describe('updateTimeline()', function () {
           var newActivitySet;
 
-          beforeEach(function () {
-            newActivitySet = Mock.timeline[0];
-            scope.updateTimeline(newActivitySet);
-            scope.$digest();
+          describe('when activity types exist', function () {
+            beforeEach(function () {
+              newActivitySet = Mock.timeline[0];
+              scope.updateTimeline(newActivitySet);
+              scope.$digest();
+            });
+
+            it('updates taskList according with activitySet', function () {
+              expect(scope.activitySet).toEqual(newActivitySet);
+            });
           });
 
-          it('should update taskList according with activitySet', function () {
-            expect(scope.activitySet).toEqual(newActivitySet);
+          describe('when activity types do not exist', function () {
+            beforeEach(function () {
+              newActivitySet = Mock.timeline[1];
+              scope.updateTimeline(newActivitySet);
+              scope.$digest();
+            });
+
+            it('defines an empty array for taskList', function () {
+              expect(scope.taskList).toEqual([]);
+            });
           });
         });
 
