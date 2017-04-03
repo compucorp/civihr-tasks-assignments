@@ -36,6 +36,7 @@ define([
 
                 watchDateFilters();
 
+                $scope.applySidebarFilters();
                 $rootScope.$broadcast('ct-spinner-hide');
                 $log.debug($rootScope.cache);
             };
