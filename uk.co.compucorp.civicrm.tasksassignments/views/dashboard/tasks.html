@@ -54,11 +54,11 @@
                     <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
                     <div class="col-xs-12 col-sm-10">
                       <div class="input-group">
-                        <ui-select allow-clear ng-model="filterParams.contactId">
-                          <ui-select-match class="ui-select-match" placeholder="Search / Filter">
+                        <ui-select prevent-animations allow-clear ng-model="filterParams.contactId">
+                          <ui-select-match prevent-animations class="ui-select-match" placeholder="Search / Filter">
                             {{$select.selected.label}}
                           </ui-select-match>
-                          <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search" refresh-delay="0">
+                          <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search" refresh-delay="0">
                             <div ng-bind="contact.label"></div>
                             <small ng-bind="contact.description[0]"></small>
                           </ui-select-choices>
@@ -77,10 +77,10 @@
                   <div class="form-group">
                     <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
                     <div class="col-xs-12 col-sm-8">
-                      <ui-select multiple ng-model="filterParams.assignmentType">
-                        <ui-select-match class="ui-select-match" placeholder="Select assignment...">{{$item.title}}
+                      <ui-select prevent-animations multiple ng-model="filterParams.assignmentType">
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}
                         </ui-select-match>
-                        <ui-select-choices class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
+                        <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                           <div ng-bind-html="type.title | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>

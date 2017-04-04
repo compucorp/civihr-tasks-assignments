@@ -71,10 +71,11 @@
                                         <label class="col-xs-12 col-sm-2 control-label">Date Type:</label>
                                         <div class="col-xs-12 col-sm-10">
                                             <ui-select
+                                                    prevent-animations
                                                     multiple
                                                     ng-model="filterParams.dateType">
-                                                <ui-select-match class="ui-select-match" placeholder="Select date type...">{{$item.value}}</ui-select-match>
-                                                <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.dateType.arr">
+                                                <ui-select-match prevent-animations class="ui-select-match" placeholder="Select date type...">{{$item.value}}</ui-select-match>
+                                                <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.dateType.arr">
                                                     <div ng-bind-html="type.value | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>

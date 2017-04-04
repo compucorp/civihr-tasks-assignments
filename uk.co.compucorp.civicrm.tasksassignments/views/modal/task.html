@@ -11,11 +11,11 @@
       <!--  Select Target Contact-->
       <div class="row">
         <div class="col-xs-12">
-          <ui-select theme="civihr-ui-select" ng-if="showCId" allow-clear name="target" ng-model="task.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" class="required-field-indicator">
-            <ui-select-match class="ui-select-match" placeholder="Select Target Contact">
+          <ui-select prevent-animations theme="civihr-ui-select" ng-if="showCId" allow-clear name="target" ng-model="task.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" class="required-field-indicator">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Select Target Contact">
               {{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
               <div ng-bind="contact.label"></div>
               <small ng-bind="contact.description[0]"></small>
             </ui-select-choices>
@@ -35,11 +35,11 @@
         </div>
         <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
           <div class="crm_custom-select crm_custom-select--full">
-            <ui-select theme="civihr-ui-select" ng-model="task.activity_type_id" ng-required="true" class="required-field-indicator">
-              <ui-select-match allow-clear class="ui-select-match" placeholder="Select Task Type">
+            <ui-select prevent-animations theme="civihr-ui-select" ng-model="task.activity_type_id" ng-required="true" class="required-field-indicator">
+              <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Select Task Type">
                 {{$select.selected.value}}
               </ui-select-match>
-              <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+              <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.taskType.arr | filter: $select.search">
                 <div ng-bind="type.value"></div>
               </ui-select-choices>
             </ui-select>
@@ -90,11 +90,11 @@
           </span>
         </div>
         <div class="col-xs-12 col-sm-6" ng-show="task.assignee_contact_id[0] || showFieldAssignee">
-          <ui-select theme="civihr-ui-select" class="required-field-indicator" allow-clear ng-model="task.assignee_contact_id[0]" on-select="cacheContact($item)">
-            <ui-select-match class="ui-select-match" placeholder="Assignee">
+          <ui-select prevent-animations theme="civihr-ui-select" class="required-field-indicator" allow-clear ng-model="task.assignee_contact_id[0]" on-select="cacheContact($item)">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Assignee">
               {{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.assignee | filter: $select.search" refresh="refreshContacts($select.search, 'assignee')" refresh-delay="0">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.assignee | filter: $select.search" refresh="refreshContacts($select.search, 'assignee')" refresh-delay="0">
               <div ng-bind="contact.label"></div>
               <small ng-bind="contact.description[0]"></small>
             </ui-select-choices>
@@ -129,14 +129,16 @@
         </div>
         <div class="col-xs-12 col-sm-7" ng-show="(task.case_id || showFieldAssignment) && assignments.length">
           <ui-select
+            prevent-animations
             theme="civihr-ui-select"
             ng-model="task.case_id"
             on-select="cacheAssignment($item);"
             search-enabled="false">
-            <ui-select-match class="ui-select-match" placeholder="Assignment">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Assignment">
               {{$select.selected.label}}
             </ui-select-match>
             <ui-select-choices
+              prevent-animations
               class="ui-select-choices"
               repeat="assignment.id as assignment in assignments">
               <div>
