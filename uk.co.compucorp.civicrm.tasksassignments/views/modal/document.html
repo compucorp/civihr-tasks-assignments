@@ -11,11 +11,11 @@
       <!-- Search and select by name and email -->
       <div class="row">
         <div class="col-xs-12">
-          <ui-select name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
-            <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">
+          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
               {{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
               <div ng-bind="contact.label"></div>
               <small ng-bind="contact.description[0]"></small>
             </ui-select-choices>
@@ -26,11 +26,11 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="crm_custom-select crm_custom-select--full">
-            <ui-select theme="civihr-ui-select" ng-model="document.activity_type_id" class="required-field-indicator" ng-required="true">
-              <ui-select-match allow-clear class="ui-select-match" placeholder="Select document type">
+            <ui-select prevent-animations theme="civihr-ui-select" ng-model="document.activity_type_id" class="required-field-indicator" ng-required="true">
+              <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Select document type">
                 {{$select.selected.value}}
               </ui-select-match>
-              <ui-select-choices class="ui-select-choices" repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+              <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.documentType.arr | filter: $select.search">
                 <div ng-bind="type.value"></div>
               </ui-select-choices>
             </ui-select>
@@ -116,10 +116,10 @@
           </span>
         </div>
         <div class="col-xs-12 col-sm-7" ng-show="document.assignee_contact_id[0] || showAssigneeField">
-          <ui-select name="assignee" theme="civihr-ui-select" allow-clear ng-model="document.assignee_contact_id[0]" on-select="cacheContact($item)">
-            <ui-select-match class="ui-select-match" placeholder="Start typing a name or email...">{{$select.selected.label}}
+          <ui-select prevent-animations name="assignee" theme="civihr-ui-select" allow-clear ng-model="document.assignee_contact_id[0]" on-select="cacheContact($item)">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">{{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in contacts.assignee | filter: $select.search" refresh="refreshContacts($select.search, 'assignee')" refresh-delay="0">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.assignee | filter: $select.search" refresh="refreshContacts($select.search, 'assignee')" refresh-delay="0">
               <div ng-bind="contact.label"></div>
               <small ng-bind="contact.description[0]"></small>
             </ui-select-choices>
@@ -132,10 +132,10 @@
           </span>
         </div>
         <div class="col-xs-12 col-sm-5" ng-show="showAssignmentField">
-          <ui-select theme="civihr-ui-select" allow-clear ng-model="document.case_id" on-select="cacheAssignment($item);">
-            <ui-select-match class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
+          <ui-select prevent-animations theme="civihr-ui-select" allow-clear ng-model="document.case_id" on-select="cacheAssignment($item);">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
               <div>
                 <div ng-class="assignment.label_class">{{assignment.label}}</div>
                 <small>
@@ -161,11 +161,11 @@
           </span>
         </label>
         <div class="col-xs-12 col-sm-7" ng-show="statusFieldVisible()">
-          <ui-select theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
-            <ui-select-match allow-clear class="ui-select-match" placeholder="Set Status">
+          <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
+            <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Set Status">
               {{$select.selected.value}}
             </ui-select-match>
-            <ui-select-choices class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
               <div ng-bind="status.value"></div>
             </ui-select-choices>
           </ui-select>
