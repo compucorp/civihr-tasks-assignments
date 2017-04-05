@@ -339,14 +339,8 @@ define([
                 existingDoc = list.indexOf(input);
 
               switch (true) {
-                case (newDoc + 1) && (output.status_id == "3"):
-                  list.splice(newDoc, 1);
-                  break;
                 case (output.status_id != "3") && (output.status_id != "4") && (!input.status_id):
                   list.push(output);
-                  break;
-                case (existingDoc + 1) && (output.status_id == "3"):
-                  list.splice(existingDoc, 1);
                   break;
               }
             }
