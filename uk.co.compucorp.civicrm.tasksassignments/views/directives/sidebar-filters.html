@@ -8,7 +8,6 @@
           {{(list
             | filterByStatus:filterParams.documentStatus || ''
             | filterByDue:filter.value
-            | filterByDue:filterParams.due:filterParams.dateRange
             | filterByOwnership:filterParams.ownership
             | filterByAssignmentType:filterParams.assignmentType
             ).length}}
