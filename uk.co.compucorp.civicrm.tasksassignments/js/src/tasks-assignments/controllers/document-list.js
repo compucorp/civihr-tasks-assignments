@@ -14,6 +14,8 @@ define([
                  config, ContactService, AssignmentService, DocumentService, FileService, settings) {
             $log.debug('Controller: DocumentListCtrl');
 
+            var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
+
             this.init = function(){
                 var contactIds = this.contactIds,
                     assignmentIds = this.assignmentIds;
@@ -34,6 +36,7 @@ define([
 
                 watchDateFilters();
 
+                $scope.applySidebarFilters();
                 $rootScope.$broadcast('ct-spinner-hide');
                 $log.debug($rootScope.cache);
             };
@@ -103,13 +106,13 @@ define([
 
             $scope.isCollapsed = {
                 filterAdvanced: true,
-                filterDates: true,
+                filterDates: false,
                 documentListResolved: true
             };
 
             $scope.filterParams = {
               contactId: null,
-              documentStatus: [],
+              documentStatus: defaultDocumentStatus,
               ownership: $state.params.ownership ||  null,
               dateRange: {
                 from: null,
@@ -120,7 +123,7 @@ define([
             };
 
             $scope.filterParamsHolder = {
-                documentStatus: [],
+                documentStatus: defaultDocumentStatus,
                 dateRange: {
                     from: moment().startOf('day').toDate(),
                     until: moment().add(1, 'month').startOf('day').toDate()
@@ -336,14 +339,8 @@ define([
                 existingDoc = list.indexOf(input);
 
               switch (true) {
-                case (newDoc + 1) && (output.status_id == "3"):
-                  list.splice(newDoc, 1);
-                  break;
                 case (output.status_id != "3") && (output.status_id != "4") && (!input.status_id):
                   list.push(output);
-                  break;
-                case (existingDoc + 1) && (output.status_id == "3"):
-                  list.splice(existingDoc, 1);
                   break;
               }
             }

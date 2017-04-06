@@ -52,9 +52,7 @@ define([
                       templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
                       resolve: {
                         documentList: ['DocumentService', function (DocumentService) {
-                          return DocumentService.get({
-                            'status_id': { 'NOT IN': config.status.resolve.DOCUMENT }
-                          });
+                          return DocumentService.get({});
                         }]
                       }
                     })
