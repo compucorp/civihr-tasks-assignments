@@ -231,12 +231,6 @@ define([
                 });
             };
 
-            $scope.updateAssignments = function(assignments, targetContactId){
-                $scope.assignments = $filter('filter')(assignments, function(val){
-                    return +val.extra.contact_id == +targetContactId;
-                });
-            };
-
             $scope.updateContacts = function(contacts){
                 $scope.contacts = contacts;
             };
