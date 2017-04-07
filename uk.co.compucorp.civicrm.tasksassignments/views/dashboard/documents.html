@@ -10,11 +10,11 @@
             Status
           </label>
           <div class="col-xs-12 col-sm-9">
-            <ui-select multiple ng-model="filterParamsHolder.documentStatus">
-              <ui-select-match class="ui-select-match" placeholder="Select status...">
+            <ui-select prevent-animations multiple ng-model="filterParamsHolder.documentStatus">
+              <ui-select-match prevent-animations class="ui-select-match" placeholder="Select status...">
                 {{$item.value}}
               </ui-select-match>
-              <ui-select-choices class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr">
+              <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr">
                 <div ng-bind-html="status.value | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
@@ -25,147 +25,109 @@
   </div>
 </div>
 <div class="{{prefix}}content-wrapper">
-    <div class="{{prefix}}content">
-        <div class="panel panel-light panel-secondary panel-filter">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-3">
-                        <h3 class="panel-title">{{label[filterParams.due]}}</h3>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 text-center">
-                        <div class="btn-group btn-group-sm">
-                          <a
-                            ui-sref="documents.my"
-                            class="btn btn-gray active panel-filter__filter"
-                            ng-model="filterParams.ownership"
-                            uib-btn-radio="'assigned'">
-                            My Docs
-                            <span>({{(list |
-                              filterByDue:filterParams.due:filterParams.dateRange |
-                              filterByStatus:filterParams.documentStatus |
-                              filterByOwnership:'assigned').length}})
-                            </span>
-                          </a>
-                          <a
-                            ui-sref="documents.delegated"
-                            class="btn btn-gray panel-filter__filter"
-                            ng-model="filterParams.ownership"
-                            uib-btn-radio="'delegated'">
-                            Delegated Docs
-                            <span>({{(list |
-                              filterByDue:filterParams.due:filterParams.dateRange |
-                              filterByStatus:filterParams.documentStatus |
-                              filterByOwnership:'delegated').length}})
-                            </span>
-                          </a>
-                          <a
-                            ui-sref="documents.all"
-                            class="btn btn-gray panel-filter__filter"
-                            ng-model="filterParams.ownership"
-                            uib-btn-radio="null">
-                            All
-                            <span>({{(list |
-                              filterByDue:filterParams.due:filterParams.dateRange |
-                              filterByStatus:filterParams.documentStatus).length}})
-                            </span>
-                          </a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-3 text-right">
-                        <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced" class="btn btn-collapse"><span
-                                class="fa"
-                                ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterAdvanced, 'fa-chevron-right': isCollapsed.filterAdvanced }"
-                                aria-hidden="true"></span> Filter Documents</a>
-                    </div>
-                </div>
-                <div class="{{prefix}}filter-advanced" uib-collapse="isCollapsed.filterAdvanced">
-                    <div class="row form-horizontal">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
-                                <div class="col-xs-12 col-sm-10">
-                                    <div class="input-group">
-                                        <ui-select
-                                                allow-clear
-                                                ng-model="filterParams.contactId">
-                                            <ui-select-match class="ui-select-match"
-                                                    placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
-                                                                refresh-delay="0">
-                                                <div ng-bind="contact.label"></div>
-                                                <small ng-bind="contact.description[0]"></small>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                        <span class="input-group-btn">
-                                          <a ng-click="filterParams.contactId = ''" class="btn btn-default">
-                                              <span class="fa fa-remove"></span>
-                                          </a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
-                                <div class="col-xs-12 col-sm-8">
-                                    <ui-select
-                                            multiple
-                                            ng-model="filterParams.assignmentType">
-                                        <ui-select-match class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
-                                        <ui-select-choices class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
-                                            <div ng-bind-html="type.title | highlight: $select.search"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <div class="{{prefix}}content">
+    <div class="panel panel-light panel-secondary panel-filter">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-12 col-sm-3">
+            <h3 class="panel-title">{{label[filterParams.due]}}</h3>
+          </div>
+          <div class="col-xs-12 col-sm-6 text-center">
+            <div class="btn-group btn-group-sm">
+              <a
+                ui-sref="documents.my"
+                class="btn btn-gray active panel-filter__filter"
+                ng-model="filterParams.ownership"
+                uib-btn-radio="'assigned'">
+                My Docs
+              <span>({{(list |
+                filterByDue:filterParams.due:filterParams.dateRange |
+                filterByStatus:filterParams.documentStatus |
+                filterByOwnership:'assigned').length}})
+              </span>
+              </a>
+              <a
+                ui-sref="documents.delegated"
+                class="btn btn-gray panel-filter__filter"
+                ng-model="filterParams.ownership"
+                uib-btn-radio="'delegated'">
+                Delegated Docs
+              <span>({{(list |
+                filterByDue:filterParams.due:filterParams.dateRange |
+                filterByStatus:filterParams.documentStatus |
+                filterByOwnership:'delegated').length}})
+              </span>
+              </a>
+              <a
+                ui-sref="documents.all"
+                class="btn btn-gray panel-filter__filter"
+                ng-model="filterParams.ownership"
+                uib-btn-radio="null">
+                All
+              <span>({{(list |
+                filterByDue:filterParams.due:filterParams.dateRange |
+                filterByStatus:filterParams.documentStatus).length}})
+              </span>
+              </a>
             </div>
-            <div class="panel-body">
-                <div class="{{prefix}}form-action">
-                    <div class="row form-horizontal">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label class="col-xs-12 col-sm-2 control-label">Action:</label>
-                                <div class="col-xs-12 col-sm-10">
-                                    <div class="input-group">
-                                        <ui-select
-                                                ng-model="action.selected">
-                                            <ui-select-match class="ui-select-match"
-                                                    placeholder="Select action">{{$select.selected.label}}</ui-select-match>
-                                            <ui-select-choices class="ui-select-choices"
-                                                    repeat="actionObj.type as actionObj in actionList">
-                                                <div ng-bind="actionObj.label"></div>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                        <span class="input-group-btn">
-                                          <a ng-click="apply(action.selected, (action.applyTo == 'all' ? listOngoing : checklist.selected[pagination.currentPage]))" class="btn btn-default">
-                                              Apply
-                                          </a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-5 col-xs-offset-1">
-                            <label class="radio-inline">
-                                <input type="radio" ng-model="action.applyTo" value="all"> All {{listFiltered.length}} Docs
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" ng-model="action.applyTo" value="selected"> {{checklist.selected[pagination.currentPage].length || 0}} Selected Docs Only
-                            </label>
-                        </div>
-                    </div>
+          </div>
+          <div class="col-xs-12 col-sm-3 text-right">
+            <a href ng-click="isCollapsed.filterAdvanced = !isCollapsed.filterAdvanced" class="btn btn-collapse"><span
+              class="fa"
+              ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterAdvanced, 'fa-chevron-right': isCollapsed.filterAdvanced }"
+              aria-hidden="true"></span> Filter Documents</a>
+          </div>
+        </div>
+        <div class="{{prefix}}filter-advanced" uib-collapse="isCollapsed.filterAdvanced">
+          <div class="row form-horizontal">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
+                <div class="col-xs-12 col-sm-10">
+                  <div class="input-group">
+                    <ui-select
+                      prevent-animations
+                      allow-clear
+                      ng-model="filterParams.contactId">
+                      <ui-select-match prevent-animations class="ui-select-match"
+                        placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
+                      <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
+                        refresh-delay="0">
+                        <div ng-bind="contact.label"></div>
+                        <small ng-bind="contact.description[0]"></small>
+                      </ui-select-choices>
+                    </ui-select>
+                    <span class="input-group-btn">
+                    <a ng-click="filterParams.contactId = ''" class="btn btn-default">
+                    <span class="fa fa-remove"></span>
+                    </a>
+                    </span>
+                  </div>
                 </div>
+              </div>
             </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
+                <div class="col-xs-12 col-sm-8">
+                  <ui-select
+                    prevent-animations
+                    multiple
+                    ng-model="filterParams.assignmentType">
+                    <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
+                      <div ng-bind-html="type.title | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="list">
             <table class="table table-striped {{prefix}}table-documents">
               <thead>
                 <tr>
-                  <th class="{{prefix}}col-select"><input type="checkbox" name="toggleAll" ng-model="checklist.isCheckedAll[pagination.currentPage]" ng-change="toggleAll(pagination.currentPage);"></th>
                   <th>Type</th>
                   <th>Target Contact</th>
                   <th ng-if="settings.extEnabled.assignments">Assignment</th>
@@ -178,8 +140,7 @@
               <tbody>
                 <tr
                   ng-repeat="document in
-                    listPaginated = (listFiltered = (listOngoing = (list
-                    | filterByStatus:cache.documentStatusResolve:false)
+                    listPaginated = (listFiltered = (listOngoing = (list)
                     | filterByDue:filterParams.due:filterParams.dateRange
                     | filterByOwnership:filterParams.ownership
                     | filterByAssignmentType:filterParams.assignmentType
@@ -196,43 +157,44 @@
             </table>
             <div class="clearfix"></div>
             <nav class="row" ng-show="(listFiltered.length > pagination.itemsPerPage)">
-                <div class="col-xs-12 text-center">
-                    <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
-                </div>
+              <div class="col-xs-12 text-center">
+                <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+              </div>
             </nav>
         </div>
+      </nav>
     </div>
+  </div>
 </div>
-
 <script type="text/ng-template" id="document.html">
-    <td class="{{prefix}}col-select"><input type="checkbox" checklist-model="checklist.selected[pagination.currentPage]" checklist-value="document" ng-change="toggleIsCheckedAll()"></td>
-    <td><a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument(document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
-    <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
-    <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
-    <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
-    <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
-    <td>
-        <div class="dropdown" uib-dropdown>
-            <a href class="dropdown-toggle"
-               ng-class="{
-                'text-danger-light': (document.status_id == 4 || document.status_id == 1),
-                'text-success-light': (document.status_id == 3),
-                'text-warning-light': (document.status_id == 2)
-            }" uib-dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
-            <ul class="dropdown-menu" uib-dropdown-menu>
-                <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
-            </ul>
-        </div>
-    </td>
-    <td>
-        <div class="dropdown" uib-dropdown>
-            <a href class="dropdown-toggle {{prefix}}context-menu-toggle" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
-            <ul class="dropdown-menu pull-right" uib-dropdown-menu>
-                <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
-                <li><a href ng-click="modalDocument(document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
-                <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
-                <li ng-if="permissions.allowDelete"><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
-            </ul>
-        </div>
-    </td>
+  <td><a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument(document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
+  <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
+  <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
+  <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
+  <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
+  <td>
+    <div class="dropdown" uib-dropdown>
+      <a href class="dropdown-toggle"
+        ng-class="{
+          'text-danger-light': (document.status_id == 4 || document.status_id == 1),
+          'text-success-light': (document.status_id == 3),
+          'text-warning-light': (document.status_id == 2)
+        }" uib-dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i>
+      </a>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
+      </ul>
+    </div>
+  </td>
+  <td>
+    <div class="dropdown" uib-dropdown>
+      <a href class="dropdown-toggle {{prefix}}context-menu-toggle" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
+      <ul class="dropdown-menu pull-right" uib-dropdown-menu>
+        <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
+        <li><a href ng-click="modalDocument(document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
+        <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
+        <li ng-if="permissions.allowDelete"><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
+      </ul>
+    </div>
+  </td>
 </script>

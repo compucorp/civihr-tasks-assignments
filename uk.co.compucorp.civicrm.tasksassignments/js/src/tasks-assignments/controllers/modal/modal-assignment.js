@@ -58,6 +58,15 @@ define([
                 task: []
             };
 
+            /**
+             * Update activitySet with the current timeline
+             *
+             * @param  {object} item Timeline item
+             */
+            $scope.updateTimeline = function(item) {
+              $scope.activitySet = item;
+            };
+
             $scope.addActivity = function (activityArr) {
 
                 if (!activityArr) {
@@ -288,7 +297,8 @@ define([
             $scope.$watch('activitySet', function (activitySet) {
 
                 if (!activitySet.activityTypes) {
-                    return
+                  $scope.taskList = [];
+                  return;
                 }
 
                 var activity,
@@ -349,7 +359,7 @@ define([
             function validateRequiredFields(assignment) {
               var missingRequiredFields = [];
 
-              !assignment.contact_id   && missingRequiredFields.push('Contact');
+              !assignment.contact_id   && missingRequiredFields.push('Target Contact');
               !assignment.case_type_id && missingRequiredFields.push('Assignment type');
               !assignment.dueDate      && missingRequiredFields.push('Key date');
 
@@ -359,10 +369,6 @@ define([
               .forEach(function (task) {
                 if (!_.includes(missingRequiredFields, 'Activity type')) {
                   !task.activity_type_id && missingRequiredFields.push('Activity type');
-                }
-
-                if (!_.includes(missingRequiredFields, 'Assignee')) {
-                  !task.assignee_contact_id[0] && missingRequiredFields.push('Assignee');
                 }
 
                 if (!_.includes(missingRequiredFields, 'Activity Due Date')) {

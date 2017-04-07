@@ -5,12 +5,13 @@ define([
     'use strict';
 
     describe('TaskListCtrl', function () {
-        var $scope, ContactService;
+        var $scope, ContactService, TaskService;
 
         beforeEach(module('civitasks.appDashboard'));
-        beforeEach(inject(function ($controller, $rootScope, _ContactService_) {
+        beforeEach(inject(function ($controller, $rootScope, _ContactService_, _TaskService_) {
             $scope = $rootScope.$new();
             ContactService = _ContactService_;
+            TaskService = _TaskService_;
 
             $controller('TaskListCtrl', {
                 $scope: $scope,
@@ -43,6 +44,42 @@ define([
                     }
                 });
             });
+        });
+
+        describe('updateTask()', function () {
+          var task, updateObj, saveObj;
+
+          beforeEach(function () {
+            spyOn(TaskService, 'save').and.callThrough();
+
+            task = {
+              "id":"625",
+              "activity_date_time":"2017-03-15T03:00:00.000Z",
+              "activity_type_id":"13",
+              "details":"<p>Test</p>",
+              "subject":"test",
+              "status_id":"1",
+              "assignee_contact_id":["6"],
+              "source_contact_id":"205",
+              "target_contact_id":["84"],
+              "case_id":"",
+              "resolved":false,
+              "completed":false,
+              "due":true
+            };
+
+            updateObj = {
+              subject: 'Test 2'
+            };
+
+            saveObj = angular.extend({}, task, updateObj);
+
+            $scope.updateTask(task, updateObj);
+          });
+
+          it('calls TaskService with the correct object', function () {
+            expect(TaskService.save).toHaveBeenCalledWith(saveObj);
+          });
         });
 
         function mockedTempCachedContacts() {

@@ -209,10 +209,6 @@ define([
                 missingRequiredFields.push('Due date');
               }
 
-              if (!task.assignee_contact_id[0]) {
-                missingRequiredFields.push('Assignee');
-              }
-
               if (missingRequiredFields.length) {
                 var notification = CRM.alert(missingRequiredFields.join(', '),
                   missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
