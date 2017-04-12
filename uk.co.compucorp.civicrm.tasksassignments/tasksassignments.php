@@ -16,6 +16,8 @@ function tasksassignments_civicrm_config(&$config) {
 }
 
 /**
+ * Implements hook_apiWrappers.
+ *
  * @param array $wrappers
  * @param array $apiRequest
  */
@@ -32,7 +34,8 @@ function tasksassignments_civicrm_apiWrappers(&$wrappers, $apiRequest) {
 
   if ($isAssignmentEdit && $entity === 'OptionValue' && $action === 'get' && $isActivityType) {
     $wrappers[] = new StripInvalidTaskTypesWrapper();
-  } elseif ($entity === 'CaseType' && $action === 'create') {
+  }
+  elseif ($entity === 'CaseType' && $action === 'create') {
     $wrappers[] = new AssignmentDefinitionValidationWrapper();
   }
 }

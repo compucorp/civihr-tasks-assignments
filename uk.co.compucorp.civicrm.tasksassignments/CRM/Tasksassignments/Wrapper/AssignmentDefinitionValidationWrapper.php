@@ -1,7 +1,7 @@
 <?php
 
-class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper implements API_Wrapper
-{
+class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper implements API_Wrapper {
+
   /**
    * @var array
    */
@@ -11,8 +11,7 @@ class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper impleme
    * @param array $apiRequest
    * @return array
    */
-  public function fromApiInput($apiRequest)
-  {
+  public function fromApiInput($apiRequest) {
     $params = CRM_Utils_Array::value('params', $apiRequest);
     $definition = CRM_Utils_Array::value('definition', $params);
 
@@ -35,8 +34,7 @@ class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper impleme
    * @param array $result
    * @return array
    */
-  public function toApiOutput($apiRequest, $result)
-  {
+  public function toApiOutput($apiRequest, $result) {
     return $result;
   }
 
@@ -44,13 +42,8 @@ class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper impleme
    * @param $definition
    * @return array
    */
-  private function getActivityTypes($definition)
-  {
+  private function getActivityTypes($definition) {
     $types = [];
-
-    foreach ($definition['activityTypes'] as $activityType) {
-      $types[] = $activityType['name'];
-    }
 
     foreach ($definition['activitySets'] as $activitySet) {
       foreach ($activitySet['activityTypes'] as $activityType) {
@@ -64,8 +57,7 @@ class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper impleme
   /**
    * @return array
    */
-  private function getValidTypes()
-  {
+  private function getValidTypes() {
     $result = civicrm_api3('OptionValue', 'get', [
       'component_id' => ['IN' => $this->validComponents],
       'is_active' => 1,
@@ -76,4 +68,5 @@ class CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper impleme
       return $value['name'];
     }, $result['values']);
   }
+
 }

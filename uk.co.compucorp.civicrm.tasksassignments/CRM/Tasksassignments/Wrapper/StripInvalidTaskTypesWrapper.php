@@ -1,7 +1,6 @@
 <?php
 
-class CRM_Tasksassignments_Wrapper_StripInvalidTaskTypesWrapper implements \API_Wrapper
-{
+class CRM_Tasksassignments_Wrapper_StripInvalidTaskTypesWrapper implements \API_Wrapper {
   /**
    * @var array
    */
@@ -13,8 +12,7 @@ class CRM_Tasksassignments_Wrapper_StripInvalidTaskTypesWrapper implements \API_
    * @param array $apiRequest
    * @return array
    */
-  public function fromApiInput($apiRequest)
-  {
+  public function fromApiInput($apiRequest) {
     $apiRequest['params']['component_id'] = ['IN' => $this->validComponents];
     $apiRequest['params']['is_active'] = 1;
 
@@ -26,8 +24,8 @@ class CRM_Tasksassignments_Wrapper_StripInvalidTaskTypesWrapper implements \API_
    * @param array $result
    * @return array
    */
-  public function toApiOutput($apiRequest, $result)
-  {
+  public function toApiOutput($apiRequest, $result) {
     return $result;
   }
+
 }
