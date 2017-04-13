@@ -4,7 +4,6 @@ require_once 'tasksassignments.civix.php';
 
 use \CRM_Utils_Array as ArrayHelper;
 use \CRM_Tasksassignments_Wrapper_StripInvalidTaskTypesWrapper as StripInvalidTaskTypesWrapper;
-use \CRM_Tasksassignments_Wrapper_AssignmentDefinitionValidationWrapper as AssignmentDefinitionValidationWrapper;
 
 /**
  * Implementation of hook_civicrm_config
@@ -23,20 +22,19 @@ function tasksassignments_civicrm_config(&$config) {
  */
 function tasksassignments_civicrm_apiWrappers(&$wrappers, $apiRequest) {
   $requestJson = ArrayHelper::value('json', $_REQUEST);
-  $params = ArrayHelper::value('params', $apiRequest, []);
-  $optionGroup = ArrayHelper::value('option_group_id', $params);
-  $isActivityType = $optionGroup === 'activity_type';
+
   $entity = ArrayHelper::value('entity', $apiRequest);
   $action = ArrayHelper::value('action', $apiRequest);
+  $params = ArrayHelper::value('params', $apiRequest, []);
+
+  $optionGroup = ArrayHelper::value('option_group_id', $params);
+  $isActivityType = $optionGroup === 'activity_type';
 
   $jsonFromCaseEdit = '"actTypes":["OptionValue","get",{"option_group_id":"activity_type","options":{"sort":"name","limit":0}}]';
   $isAssignmentEdit = strpos($requestJson, $jsonFromCaseEdit) !== FALSE;
 
   if ($isAssignmentEdit && $entity === 'OptionValue' && $action === 'get' && $isActivityType) {
     $wrappers[] = new StripInvalidTaskTypesWrapper();
-  }
-  elseif ($entity === 'CaseType' && $action === 'create') {
-    $wrappers[] = new AssignmentDefinitionValidationWrapper();
   }
 }
 
