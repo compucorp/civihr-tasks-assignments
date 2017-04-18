@@ -97,6 +97,7 @@ define([
                         action: 'getoptions',
                         json: {
                             'field': 'activity_type_id',
+                            'is_active': 1,
                             'options': {
                                 'limit': 0
                             }
