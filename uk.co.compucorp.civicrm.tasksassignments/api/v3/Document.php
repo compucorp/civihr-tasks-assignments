@@ -217,9 +217,6 @@ function _civicrm_api3_document_create_spec(&$params) {
   $activityFields = _civicrm_api_get_fields('Activity');
   $params = array_merge($params, $activityFields);
 
-  //default for source_contact_id = currently logged in user
-  $params['source_contact_id']['api.default'] = 'user_contact_id';
-
   $params['status_id']['api.aliases'] = ['activity_status'];
 
   $params['assignee_contact_id'] = [
@@ -228,6 +225,7 @@ function _civicrm_api3_document_create_spec(&$params) {
     'type' => 1,
     'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
   ];
+
   $params['target_contact_id'] = [
     'name' => 'target_id',
     'title' => 'Activity Target',
@@ -245,8 +243,12 @@ function _civicrm_api3_document_create_spec(&$params) {
 
   // replace custom data options with their column name
   foreach ($params as $key => $param) {
-    if (substr($key, 0, 7) === 'custom_') {
-      $params[$key]['name'] = $param['column_name'];
+    if (substr($key, 0, 7) === 'custom_' && isset($param['column_name'])) {
+      $name = $param['column_name'];
+      $params[$name] = $params[$key];
+      $params[$name]['api.aliases'] = $key;
+      $params[$name]['name'] = $name;
+      unset($params[$key]);
     }
   }
 }
@@ -506,7 +508,6 @@ function civicrm_api3_document_get($params) {
             $params['return'] = explode(',', $params['return']);
             $params['return'] = array_map('trim', $params['return']);
         }
-        $activityCustomValues = array();
         $customFields = _civicrm_api3_document_getcustomfieldsflipped();
         foreach ($customFields as $key => $value) {
             if (in_array($key, $params['return'])) {
