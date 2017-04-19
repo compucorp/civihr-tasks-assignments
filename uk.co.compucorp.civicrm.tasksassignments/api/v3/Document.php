@@ -27,29 +27,11 @@ function civicrm_api3_document_create($params) {
     );
   }
 
-  /* This code prevents creating a copy of Activity each time we pass 'case_id'
-   * to 'create' method and when the Activity is already connected to the Case.
-   * The code is commented out due to front-end JavaScript solution to the issue.
-   *
-  if (!empty($params['id']) && !empty($params['case_id'])) {
-    $activity = civicrm_api3('Document', 'get', array(
-      'sequential' => 1,
-      'id' => $params['id'],
-      'return' => 'case_id',
-    ));
-    $activityValues = CRM_Utils_Array::first($activity['values']);
-    if (!empty($activityValues['case_id']) && $activityValues['case_id'] == $params['case_id']) {
-        unset($params['case_id']);
-    }
-  }
-  */
-
   $errors = _civicrm_api3_document_check_params($params);
 
   if (!empty($errors)) {
     return $errors;
   }
-
 
   $values = $activityArray = array();
   _civicrm_api3_custom_format_params($params, $values, 'Document');
@@ -232,32 +214,41 @@ function civicrm_api3_document_create_multiple($params) {
  */
 function _civicrm_api3_document_create_spec(&$params) {
 
+  $activityFields = _civicrm_api_get_fields('Activity');
+  $params = array_merge($params, $activityFields);
+
   //default for source_contact_id = currently logged in user
   $params['source_contact_id']['api.default'] = 'user_contact_id';
 
-  $params['status_id']['api.aliases'] = array('activity_status');
+  $params['status_id']['api.aliases'] = ['activity_status'];
 
-  $params['assignee_contact_id'] = array(
+  $params['assignee_contact_id'] = [
     'name' => 'assignee_id',
     'title' => 'assigned to',
     'type' => 1,
     'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
-  );
-  $params['target_contact_id'] = array(
+  ];
+  $params['target_contact_id'] = [
     'name' => 'target_id',
     'title' => 'Activity Target',
     'type' => 1,
     'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
-  );
+  ];
 
-  $params['source_contact_id'] = array(
+  $params['source_contact_id'] = [
       'name' => 'source_contact_id',
       'title' => 'Activity Source Contact',
       'type' => 1,
       'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
       'api.default' => 'user_contact_id',
-  );
+  ];
 
+  // replace custom data options with their column name
+  foreach ($params as $key => $param) {
+    if (substr($key, 0, 7) === 'custom_') {
+      $params[$key]['name'] = $param['column_name'];
+    }
+  }
 }
 
 /**
