@@ -8,7 +8,7 @@ class CRM_Activity_Service_ActivityService {
    * @param $componentName
    *  The name of the component
    * @param int $limit
-   *  The maximium number of results to return
+   *  The maximum number of results to return (zero = unlimited)
    *
    * @return array
    */
