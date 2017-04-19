@@ -3,7 +3,8 @@
 class CRM_Activity_Service_ActivityService {
 
   /**
-   * Returns the activity types for a certain component. Default limit is 25
+   * Returns the activity types for a certain component.
+   * Default limit is 0 (unlimited)
    *
    * @param $componentName
    *  The name of the component
