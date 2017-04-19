@@ -521,7 +521,6 @@ function civicrm_api3_document_get($params) {
     $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
     $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
     $caseId = isset($params['case_id']) ? $params['case_id'] : null;
-    $customFields = _civicrm_api3_document_getcustomfields();
 
     if ($assigneeContactId) {
         $result = civicrm_api3('ActivityContact', 'get', array(
@@ -601,22 +600,21 @@ function civicrm_api3_document_get($params) {
             $fileCountResult->fetch();
             $getResult['values'][$key]['file_count'] = (int)$fileCountResult->file_count;
 
+            $customFields = _civicrm_api3_document_getcustomfields();
             foreach ($customFields as $customFieldKey => $customFieldData) {
-                $customColumnResult = CRM_Core_DAO::executeQuery(
-                    "SELECT {$customFieldData['name']} FROM {$customFieldData['table']} WHERE entity_id = %1",
-                    array(
-                        1 => array($getResult['values'][$key]['id'], 'Integer'),
-                    )
-                );
-                if (!$customColumnResult->fetch()) {
+
+                if (!isset($value[$customFieldKey])) {
                     continue;
                 }
-                $customFieldValue = $customColumnResult->$customFieldData['name'];
+
+                $customFieldValue = $value[$customFieldKey];
+
                 if ($customFieldData['data_type'] == 'Date') {
-                    $processDate = CRM_Utils_Date::processDate($customColumnResult->$customFieldData['name']);
+                    $processDate = CRM_Utils_Date::processDate($customFieldValue);
                     $customFieldValue = CRM_Utils_Date::customFormat($processDate, '%Y-%m-%d');
                 }
                 $getResult['values'][$key][$customFieldData['name']] = $customFieldValue;
+                unset($getResult['values'][$key][$customFieldKey]);
             }
         }
 
@@ -692,7 +690,6 @@ function _civicrm_api3_document_getcustomfields() {
     $customFields = civicrm_api3('CustomField', 'get', array(
       'sequential' => 1,
       'custom_group_id' => $customGroup['id'],
-      'return' => array('id', 'name', 'data_type'),
     ));
 
     foreach ($customFields['values'] as $customField) {
