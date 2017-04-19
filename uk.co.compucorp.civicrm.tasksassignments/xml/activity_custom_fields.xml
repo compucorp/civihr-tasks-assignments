@@ -99,5 +99,25 @@
       <in_selector>0</in_selector>
       <custom_group_name>Activity_Custom_Fields</custom_group_name>
     </CustomField>
+    <CustomField>
+      <name>Document_ID</name>
+      <label>Document ID</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>21</weight>
+      <help_pre>The ID of the document, e.g. passport number</help_pre>
+      <help_post>The ID of the document, e.g. passport number</help_post>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>document_id</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Activity_Custom_Fields</custom_group_name>
+    </CustomField>
   </CustomFields>
 </CustomData>
