@@ -35,6 +35,7 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>expire_date</column_name>
+      <in_selector>0</in_selector>
       <custom_group_name>Activity_Custom_Fields</custom_group_name>
     </CustomField>
     <CustomField>
@@ -53,6 +54,49 @@
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
       <column_name>clone_date</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Activity_Custom_Fields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Valid_From</name>
+      <label>Valid From</label>
+      <data_type>Date</data_type>
+      <html_type>Select Date</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>1</is_search_range>
+      <weight>19</weight>
+      <help_pre>When the document is valid from</help_pre>
+      <help_post>When the document is valid from</help_post>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <date_format>yy-mm-dd</date_format>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>valid_from</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Activity_Custom_Fields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Remind_Me</name>
+      <label>Remind Me</label>
+      <data_type>Boolean</data_type>
+      <html_type>Radio</html_type>
+      <default_value>0</default_value>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>20</weight>
+      <help_pre>Generate a reminder when this document is about to expire</help_pre>
+      <help_post>Generate a reminder when this document is about to expire</help_post>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>remind_me</column_name>
+      <in_selector>0</in_selector>
       <custom_group_name>Activity_Custom_Fields</custom_group_name>
     </CustomField>
   </CustomFields>
