@@ -65,7 +65,7 @@
       <is_required>0</is_required>
       <is_searchable>1</is_searchable>
       <is_search_range>1</is_search_range>
-      <weight>19</weight>
+      <weight>3</weight>
       <help_pre>When the document is valid from</help_pre>
       <help_post>When the document is valid from</help_post>
       <is_active>1</is_active>
@@ -87,7 +87,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>20</weight>
+      <weight>4</weight>
       <help_pre>Generate a reminder when this document is about to expire</help_pre>
       <help_post>Generate a reminder when this document is about to expire</help_post>
       <is_active>1</is_active>
@@ -107,7 +107,7 @@
       <is_required>0</is_required>
       <is_searchable>1</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>21</weight>
+      <weight>5</weight>
       <help_pre>The ID of the document, e.g. passport number</help_pre>
       <help_post>The ID of the document, e.g. passport number</help_post>
       <is_active>1</is_active>
