@@ -577,8 +577,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
    *
    * @return bool
    */
-  public function upgrade_1025()
-  {
+  public function upgrade_1025() {
     $this->executeCustomDataFile('xml/activity_custom_fields.xml');
 
     return TRUE;
