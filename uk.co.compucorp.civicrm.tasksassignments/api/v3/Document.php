@@ -243,7 +243,11 @@ function _civicrm_api3_document_create_spec(&$params) {
 
   // replace custom data options with their column name
   foreach ($params as $key => $param) {
-    if (substr($key, 0, 7) === 'custom_' && isset($param['column_name'])) {
+
+    $parent = CRM_Utils_Array::value('extends', $param);
+    $isCustom = substr($key, 0, 7) === 'custom_';
+
+    if ($isCustom && $parent === 'Activity' && isset($param['column_name'])) {
       $name = $param['column_name'];
       $params[$name] = $params[$key];
       $params[$name]['api.aliases'] = $key;
