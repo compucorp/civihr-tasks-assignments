@@ -690,6 +690,7 @@ function _civicrm_api3_document_getcustomfields() {
     $customFields = civicrm_api3('CustomField', 'get', array(
       'sequential' => 1,
       'custom_group_id' => $customGroup['id'],
+      'return' => array('id', 'name', 'data_type'),
     ));
 
     foreach ($customFields['values'] as $customField) {
