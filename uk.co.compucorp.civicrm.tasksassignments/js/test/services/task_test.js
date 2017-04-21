@@ -4,8 +4,8 @@ define([
 ], function(TaskMock) {
   'use strict';
 
-  describe('TaskService', function() {
-    var Task, TaskService, $provide, $httpBackend;
+  describe('Task', function() {
+    var Task, TaskService, $httpBackend, requestBody, request = {};
 
     beforeEach(module('civitasks.appDashboard'));
 
@@ -13,7 +13,140 @@ define([
       Task = _Task_;
       TaskService = _TaskService_;
       $httpBackend = _$httpBackend_;
+
       spyOn(Task, 'save').and.callThrough();
+    }));
+
+    beforeEach(function() {
+      $httpBackend.whenGET(/action=getoptions&entity=Task/).respond({});
+      $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
+      $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
+      $httpBackend.whenGET(/action=get&entity=contact/).respond({});
+      $httpBackend.whenGET(/action=get&entity=Task/).respond({});
+      $httpBackend.whenGET(/views.*/).respond({});
+    });
+
+    describe('$resource.save()', function() {
+      describe('when calling TaskService.save()', function () {
+        beforeEach(function() {
+          $httpBackend.whenPOST(/action=create&entity=Task/).respond(function(method, url, data, headers, params) {
+            request.method  = method;
+            request.headers = headers;
+            request.data = data;
+
+            return [200];
+          });
+
+          TaskService.save(TaskMock.task);
+          $httpBackend.flush();
+        });
+
+        it('makes call to save()', function() {
+          expect(Task.save).toHaveBeenCalled();
+        });
+
+        it('makes request with Content-Type as application/x-www-form-urlencoded; charset=UTF-8', function() {
+          expect(request.headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
+        });
+
+        it('adds url encoding to Task list', function () {
+          expect(request.data).toEqual(TaskMock.urlEncodedData.onSave);
+        });
+
+        it('calls save() as POST request with Task data', function() {
+          requestBody = Task.save.calls.argsFor(0)[1];
+
+          expect(request.method).toEqual('POST');
+          expect(requestBody.json).toEqual(TaskMock.task);
+        });
+      });
+
+      describe("when calling TaskService.assign()", function() {
+        beforeEach(function() {
+          $httpBackend.whenPOST(/action=copy_to_assignment&entity=Task/).respond(function(method, url, data, headers, params) {
+            request.headers = headers;
+            request.data = data;
+
+            return [200];
+          });
+
+          TaskService.assign(TaskMock.taskList, 1);
+          $httpBackend.flush();
+        });
+
+        it('calls to save() with Task list', function() {
+          var params = {
+            json: {
+              id: TaskMock.taskList,
+              case_id: 1
+            }
+          };
+          requestBody = Task.save.calls.argsFor(0)[1];
+
+          expect(requestBody.json).toEqual(params.json);
+        });
+      });
+
+      describe("when calling TaskService.saveMultiple()", function() {
+        beforeEach(function() {
+          $httpBackend.whenPOST(/action=create_multiple&entity=Task/).respond(function(method, url, data, headers, params) {
+            request.headers = headers;
+            request.data = data;
+
+            return [200];
+          });
+
+          TaskService.saveMultiple(TaskMock.taskList);
+          $httpBackend.flush();
+        });
+
+        it('calls to save() with Task list', function() {
+          var params = {
+            json: {
+              task: TaskMock.taskList
+            }
+          };
+          requestBody = Task.save.calls.argsFor(0)[1],
+
+          expect(requestBody.json).toEqual(params.json);
+        });
+      });
+
+      describe("when calling TaskService.sendReminder()", function() {
+        beforeEach(function() {
+          $httpBackend.whenPOST(/action=sendreminder&entity=Task/).respond(function(method, url, data, headers, params) {
+            request.headers = headers;
+            request.data = data;
+
+            return [200];
+          });
+
+          TaskService.sendReminder(1, TaskMock.reminderNote);
+          $httpBackend.flush();
+        });
+
+        it('calls to save() with Reminder Note', function() {
+          var params = {
+            json: {
+              notes: TaskMock.reminderNote
+            }
+          };
+          requestBody = Task.save.calls.argsFor(0)[1],
+
+          expect(requestBody.json).toEqual(params.json);
+        });
+      });
+    });
+  });
+
+  describe('TaskService', function() {
+    var Task, TaskService, $httpBackend, request = {};;
+
+    beforeEach(module('civitasks.appDashboard'));
+
+    beforeEach(inject(function(_TaskService_, _$httpBackend_) {
+      TaskService = _TaskService_;
+      $httpBackend = _$httpBackend_;
     }));
 
     beforeEach(function() {
@@ -27,218 +160,64 @@ define([
 
     describe("save()", function() {
       beforeEach(function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/).respond({
-          is_error: 0,
-          values: [TaskMock.task]
+        $httpBackend.whenPOST(/action=create&entity=Task/).respond(function() {
+          return [200, TaskMock.response.onSave];
         });
-        TaskService.save(TaskMock.task);
+      });
+
+      it('responds correct Task details', function (){
+        TaskService.save(TaskMock.task).then(function(data){
+          expect(data).toEqual(TaskMock.task);
+        });
+
         $httpBackend.flush();
-      });
-
-      it('makes call to save()', function() {
-        expect(Task.save).toHaveBeenCalled();
-      });
-
-      it('calls save() with correct data', function() {
-        var params = {
-          action: 'create',
-          entity: 'Task',
-          sequential: 1,
-          debug: true,
-          json: Object({
-            sequential: 1,
-            debug: true,
-            activity_date_time: '2017-04-21',
-            assignee_contact_id: ['6'],
-            source_contact_id: '205',
-            target_contact_id: ['10'],
-            details: '<p>Detailed description of the task</p>',
-            case_id: null,
-            activity_type_id: '88',
-            subject: 'Sample Task Subject'
-          })
-        };
-
-        expect(Task.save.calls.argsFor(0)[1]).toEqual(params);
-      });
-
-      it("calls request with correct Content-Type headers", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
-            return {};
-          });
-
-        TaskService.save(TaskMock.task);
-        $httpBackend.flush();
-      });
-
-      it("adds url encodning to task lists", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(data).toEqual(TaskMock.urlEncodedData.onSave);
-            return {};
-          });
-
-        TaskService.save(TaskMock.task);
-        $httpBackend.flush();
-      });
+      })
     });
 
     describe("assign()", function() {
       beforeEach(function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/).respond({
-          is_error: 0,
-          values: [TaskMock.task]
+        $httpBackend.whenPOST(/action=copy_to_assignment&entity=Task/).respond(function() {
+          return [200, TaskMock.response.onAssign];
         });
-        TaskService.assign(TaskMock.taskList, 1);
-        $httpBackend.flush();
       });
 
-      it('calls to $resource\'s save()', function() {
-        expect(Task.save).toHaveBeenCalled();
-      });
+      it('responds assigned Task List', function (){
+        TaskService.assign(TaskMock.taskList, 1).then(function(data){
+          expect(data).toEqual(TaskMock.taskList);
+        });
 
-      it('makes call to save() with correct data', function() {
-        var params = {
-          action: 'copy_to_assignment',
-          entity: 'Task',
-          sequential: 1,
-          debug: true,
-          json: JSON.stringify({
-            "id": TaskMock.taskList,
-            "case_id": 1
-          })
-        };
-
-        expect(Task.save.calls.argsFor(0)[1]).toEqual(params);
-      });
-
-      it("calls request with corect Content-Type header", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
-            return {};
-          });
-
-        TaskService.assign(TaskMock.taskList, 1); // 1 =>addignmentId
-        $httpBackend.flush();
-      });
-
-      it("adds url encodning to task list", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(data).toEqual(TaskMock.urlEncodedData.onAssign);
-            return {};
-          });
-
-        TaskService.assign(TaskMock.taskList, 1);
         $httpBackend.flush();
       });
     });
 
     describe("saveMultiple()", function() {
       beforeEach(function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/).respond({
-          is_error: 0,
-          values: [{}, {}]
+        $httpBackend.whenPOST(/action=create_multiple&entity=Task/).respond(function() {
+          return [200, TaskMock.response.onSaveMultiple];
         });
-        TaskService.saveMultiple(TaskMock.taskList);
-        $httpBackend.flush();
       });
 
-      it('calls to $resource\'s save()', function() {
-        expect(Task.save).toHaveBeenCalled();
-      });
+      it('responds saved Task List', function (){
+        TaskService.saveMultiple(TaskMock.taskList).then(function(data){
+          expect(data).toEqual(TaskMock.response.onSaveMultiple.values);
+        });
 
-      it('makes calls save() with correct data', function() {
-        var params = {
-          action: 'create_multiple',
-          entity: 'Task',
-          sequential: 1,
-          debug: true,
-          json: JSON.stringify({
-            "task": TaskMock.taskList
-          })
-        };
-
-        expect(Task.save.calls.argsFor(0)[1]).toEqual(params);
-      });
-
-      it("calls request with Content-Typeheader", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
-            return {};
-          });
-
-        TaskService.saveMultiple(TaskMock.taskList);
-        $httpBackend.flush();
-      });
-
-      it("adds url encodning to task lists", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(data).toEqual(TaskMock.urlEncodedData.onSaveMultiple);
-            return {};
-          });
-
-        TaskService.saveMultiple(TaskMock.taskList);
         $httpBackend.flush();
       });
     });
 
     describe("sendReminder()", function() {
       beforeEach(function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/).respond({
-          is_error: 0,
-          values: true
+        $httpBackend.whenPOST(/action=sendreminder&entity=Task/).respond(function() {
+          return [200, TaskMock.response.onSendReminder];
         });
-        TaskService.sendReminder(1, TaskMock.remonderNode);
-        $httpBackend.flush();
       });
 
-      it('calls to $resource\'s save()', function() {
-        expect(Task.save).toHaveBeenCalled();
-      });
+      it('responds with reminder sent status', function (){
+        TaskService.sendReminder(1, TaskMock.reminderNote).then(function(data){
+          expect(data.values).toEqual(TaskMock.response.onSendReminder.values);
+        });
 
-      it('makes call to save() with correct data', function() {
-        var params = {
-          action: 'sendreminder',
-          entity: 'Task',
-          sequential: 1,
-          debug: true,
-          activity_id: 1,
-          json: JSON.stringify({
-            "notes": TaskMock.remonderNode
-          })
-        };
-
-        expect(Task.save.calls.argsFor(0)[1]).toEqual(params);
-        TaskService.sendReminder(1, TaskMock.remonderNode);
-        $httpBackend.flush();
-      });
-
-      it("calls request with Content-Type header", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            expect(headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
-            return {};
-          });
-
-        TaskService.sendReminder(1, TaskMock.remonderNode);
-        $httpBackend.flush();
-      });
-
-      it("adds url encodning to notes data", function() {
-        $httpBackend.whenPOST(/rest&action=get&entity=Task/)
-          .respond(function(method, url, data, headers, params) {
-            console.log(data);
-            expect(data).toEqual(TaskMock.urlEncodedData.onSendReminder);
-            return {};
-          });
-
-        TaskService.sendReminder(1, TaskMock.remonderNote);
         $httpBackend.flush();
       });
     });
