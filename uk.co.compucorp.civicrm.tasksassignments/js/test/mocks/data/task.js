@@ -1,5 +1,4 @@
 define(function() {
-  var that = this;
   return {
     task: {
       activity_date_time: "2017-04-21",

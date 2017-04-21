@@ -9,10 +9,6 @@ define([
   services.factory('Task', ['$resource', '$httpParamSerializer', 'config', '$log', function($resource, $httpParamSerializer, config, $log) {
     $log.debug('Service: Task');
 
-    function transformUrlEncoded(data) {
-      return $httpParamSerializer(data);
-    }
-
     return $resource(config.url.REST, {
       'action': 'get',
       'entity': 'Task'
@@ -23,7 +19,9 @@ define([
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
-        transformRequest: transformUrlEncoded
+        transformRequest: function (data) {
+          return $httpParamSerializer(data);
+        }
       }
     });
   }]);
@@ -46,15 +44,13 @@ define([
 
           var deferred = $q.defer();
 
-          Task.save({}, {
-            action: 'copy_to_assignment',
-            entity: 'Task',
+          Task.save({action: 'copy_to_assignment'}, {
             sequential: 1,
             debug: config.DEBUG,
-            json: JSON.stringify({
+            json: {
               id: taskArr,
               case_id: assignmentId
-            } || {})
+            } || {}
           }, function (data) {
 
             if (UtilsService.errorHandler(data, 'Unable to assign tasks', deferred)) {
@@ -171,15 +167,10 @@ define([
           }
 
           var deferred = $q.defer(),
-            params = angular.extend({
-              sequential: 1,
-              debug: config.DEBUG
-            }, task),
+            params = angular.extend({}, task),
             val;
 
-          Task.save({}, {
-            action: 'create',
-            entity: 'Task',
+          Task.save({action: 'create'}, {
             sequential: 1,
             debug: config.DEBUG,
             json: params || {}
@@ -216,14 +207,12 @@ define([
 
           var deferred = $q.defer();
 
-          Task.save({}, {
-            action: 'create_multiple',
-            entity: 'Task',
+          Task.save({action: 'create_multiple'}, {
             sequential: 1,
             debug: config.DEBUG,
-            json: JSON.stringify({
+            json: {
               task: taskArr
-            } || {})
+            } || {}
           }, function (data) {
 
             if (UtilsService.errorHandler(data, 'Unable to save tasks', deferred)) {
@@ -245,15 +234,12 @@ define([
 
           var deferred = $q.defer();
 
-          Task.save({}, {
-            action: 'sendreminder',
-            entity: 'Task',
+          Task.save({action: 'sendreminder'}, {
             sequential: 1,
             debug: config.DEBUG,
-            activity_id: taskId,
-            json: JSON.stringify({
+            json: {
               notes: notes
-            } || {})
+            } || {}
           }, function (data) {
 
             if (UtilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
