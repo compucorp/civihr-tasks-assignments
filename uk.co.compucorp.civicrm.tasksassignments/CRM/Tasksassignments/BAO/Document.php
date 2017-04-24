@@ -102,7 +102,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
     $clone['activity_date_time'] = $original['expire_date'];
     $clone['status_id'] = self::STATUS_AWAITING_UPLOAD;
 
-    $fieldsToUnset = ['id', 'file_count', 'expire_date', 'document_id', 'valid_from'];
+    $fieldsToUnset = ['id', 'file_count', 'expire_date', 'document_number', 'valid_from'];
     foreach ($fieldsToUnset as $field) {
       unset($clone[$field]);
     }
