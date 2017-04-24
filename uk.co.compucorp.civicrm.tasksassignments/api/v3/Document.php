@@ -243,7 +243,7 @@ function _civicrm_api3_document_create_spec(&$params) {
   ];
 
   $metadata = civicrm_api3('CustomField', 'get', [
-    'custom_group_id' => "Activity_Custom_Fields",
+    'custom_group_id' => 'Activity_Custom_Fields',
     'options' => ['limit' => 0],
   ])['values'];
 
@@ -252,6 +252,7 @@ function _civicrm_api3_document_create_spec(&$params) {
     $isCustom = substr($key, 0, 7) === 'custom_';
 
     if ($isCustom && $parent === 'Activity' && isset($param['column_name'])) {
+      // custom field names have the format custom_<id>
       $customFieldId = substr($key, strrpos($key, '_') + 1);
 
       // replace custom data options with their column name
