@@ -5,7 +5,7 @@ define([
 ], function(taskMock, taskFabricator) {
   'use strict';
 
-  var taskMock = taskMock.response();
+  var taskMock = taskMock;
   var fakeTask = taskFabricator.single();
   var fakeTaskList  = taskFabricator.list();
   var fakeReminderNote  = taskFabricator.reminderNote();

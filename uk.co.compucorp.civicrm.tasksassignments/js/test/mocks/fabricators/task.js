@@ -1,19 +1,18 @@
-define(function () {
+define(function() {
   return {
-    single: function () {
-        return {
-          activity_date_time: "2017-04-21",
-          assignee_contact_id: ["6"],
-          source_contact_id: "205",
-          target_contact_id: ["10"],
-          details: "<p>Detailed description of the task</p>",
-          case_id: null,
-          activity_type_id: "88",
-          subject: "Sample Task Subject"
-        };
+    single: function() {
+      return {
+        activity_date_time: "2017-04-21",
+        assignee_contact_id: ["6"],
+        source_contact_id: "205",
+        target_contact_id: ["10"],
+        details: "<p>Detailed description of the task</p>",
+        case_id: null,
+        activity_type_id: "88",
+        subject: "Sample Task Subject"
+      };
     },
-
-    list: function () {
+    list: function() {
       return [
         {
           "activity_type_id": "83",
@@ -66,8 +65,7 @@ define(function () {
         }
       ]
     },
-
-    reminderNote: function () {
+    reminderNote: function() {
       return "<p>Sample reminder note</p>";
     }
   }
