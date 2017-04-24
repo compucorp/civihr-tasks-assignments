@@ -11,7 +11,9 @@ define([
 
     return $resource(config.url.REST, {
       'action': 'get',
-      'entity': 'Task'
+      'entity': 'Task',
+      sequential: 1,
+      debug: config.DEBUG
     }, {
       save: {
         method: "POST",
@@ -19,9 +21,7 @@ define([
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
-        transformRequest: function (data) {
-          return $httpParamSerializer(data);
-        }
+        transformRequest: $httpParamSerializer
       }
     });
   }]);
@@ -44,9 +44,7 @@ define([
 
           var deferred = $q.defer();
 
-          Task.save({action: 'copy_to_assignment'}, {
-            sequential: 1,
-            debug: config.DEBUG,
+          Task.save({ action: 'copy_to_assignment' }, {
             json: {
               id: taskArr,
               case_id: assignmentId
@@ -116,8 +114,8 @@ define([
 
             for (optionId in data.values) {
               taskType.arr.push({
-                key: optionId,
-                value: data.values[optionId]
+                key: data.values[optionId].key,
+                value: data.values[optionId].value
               })
             }
 
@@ -170,9 +168,7 @@ define([
             params = angular.extend({}, task),
             val;
 
-          Task.save({action: 'create'}, {
-            sequential: 1,
-            debug: config.DEBUG,
+          Task.save({ action: 'create' }, {
             json: params || {}
           }, function (data) {
 
@@ -207,9 +203,7 @@ define([
 
           var deferred = $q.defer();
 
-          Task.save({action: 'create_multiple'}, {
-            sequential: 1,
-            debug: config.DEBUG,
+          Task.save({ action: 'create_multiple' }, {
             json: {
               task: taskArr
             } || {}
@@ -234,9 +228,7 @@ define([
 
           var deferred = $q.defer();
 
-          Task.save({action: 'sendreminder'}, {
-            sequential: 1,
-            debug: config.DEBUG,
+          Task.save({ action: 'sendreminder' }, {
             json: {
               notes: notes
             } || {}
