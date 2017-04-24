@@ -10,10 +10,6 @@ define([
   var fakeTaskList  = taskFabricator.list();
   var fakeReminderNote  = taskFabricator.reminderNote();
 
-  var jsonToUrlEncode = function (data) {
-    return encodeURIComponent(JSON.stringify(data));
-  }
-
   var mockBackendCalls = function ($httpBackend) {
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
     $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
