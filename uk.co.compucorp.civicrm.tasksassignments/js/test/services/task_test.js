@@ -1,221 +1,153 @@
 define([
   'mocks/data/task',
+  'mocks/fabricators/task',
   'tasks-assignments/app'
-], function(TaskMock) {
+], function(taskMock, taskFabricator) {
   'use strict';
 
-  describe('Task', function() {
-    var Task, TaskService, $httpBackend, requestBody, request = {};
+  var taskMock = taskMock.response();
+  var fakeTask = taskFabricator.single();
+  var fakeTaskList  = taskFabricator.list();
+  var fakeReminderNote  = taskFabricator.reminderNote();
+
+  var jsonToUrlEncode = function (data) {
+    return encodeURIComponent(JSON.stringify(data));
+  }
+
+  var mockBackendCalls = function ($httpBackend) {
+    $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
+    $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
+    $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
+    $httpBackend.whenGET(/action=get&entity=contact/).respond({});
+    $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
+    $httpBackend.whenGET(/views.*/).respond({});
+  }
+
+  describe('Task', function () {
+    var Task, $httpBackend, $httpParamSerializer, requestBody, request = {};
 
     beforeEach(module('civitasks.appDashboard'));
 
-    beforeEach(inject(function(_Task_, _TaskService_, _$httpBackend_) {
+    beforeEach(inject(function (_Task_, _$httpParamSerializer_, _$httpBackend_) {
       Task = _Task_;
-      TaskService = _TaskService_;
       $httpBackend = _$httpBackend_;
+      $httpParamSerializer = _$httpParamSerializer_
 
       spyOn(Task, 'save').and.callThrough();
     }));
 
-    beforeEach(function() {
-      $httpBackend.whenGET(/action=getoptions&entity=Task/).respond({});
-      $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
-      $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
-      $httpBackend.whenGET(/action=get&entity=contact/).respond({});
-      $httpBackend.whenGET(/action=get&entity=Task/).respond({});
-      $httpBackend.whenGET(/views.*/).respond({});
+    beforeEach(function () {
+      mockBackendCalls($httpBackend);
     });
 
-    describe('$resource.save()', function() {
-      describe('when calling TaskService.save()', function () {
-        beforeEach(function() {
-          $httpBackend.whenPOST(/action=create&entity=Task/).respond(function(method, url, data, headers, params) {
-            request.method  = method;
-            request.headers = headers;
-            request.data = data;
+    describe('save()', function () {
+      beforeEach(function () {
+        $httpBackend.whenPOST(/action=create&debug=true&entity=Task/).respond(function (method, url, data, headers) {
+          request.method = method;
+          request.headers = headers;
+          request.data = data;
 
-            return [200];
-          });
-
-          TaskService.save(TaskMock.task);
-          $httpBackend.flush();
+          return [200];
         });
 
-        it('makes call to save()', function() {
-          expect(Task.save).toHaveBeenCalled();
+        Task.save({
+          action: 'create'
+        }, {
+          json: fakeTask || {}
         });
 
-        it('makes request with Content-Type as application/x-www-form-urlencoded; charset=UTF-8', function() {
-          expect(request.headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
-        });
-
-        it('adds url encoding to Task list', function () {
-          expect(request.data).toEqual(TaskMock.urlEncodedData.onSave);
-        });
-
-        it('calls save() as POST request with Task data', function() {
-          requestBody = Task.save.calls.argsFor(0)[1];
-
-          expect(request.method).toEqual('POST');
-          expect(requestBody.json).toEqual(TaskMock.task);
-        });
+        $httpBackend.flush();
       });
 
-      describe("when calling TaskService.assign()", function() {
-        beforeEach(function() {
-          $httpBackend.whenPOST(/action=copy_to_assignment&entity=Task/).respond(function(method, url, data, headers, params) {
-            request.headers = headers;
-            request.data = data;
-
-            return [200];
-          });
-
-          TaskService.assign(TaskMock.taskList, 1);
-          $httpBackend.flush();
-        });
-
-        it('calls to save() with Task list', function() {
-          var params = {
-            json: {
-              id: TaskMock.taskList,
-              case_id: 1
-            }
-          };
-          requestBody = Task.save.calls.argsFor(0)[1];
-
-          expect(requestBody.json).toEqual(params.json);
-        });
+      it('makes request with Content-Type as application/x-www-form-urlencoded; charset=UTF-8', function () {
+        expect(request.headers['Content-Type']).toEqual('application/x-www-form-urlencoded; charset=UTF-8');
       });
 
-      describe("when calling TaskService.saveMultiple()", function() {
-        beforeEach(function() {
-          $httpBackend.whenPOST(/action=create_multiple&entity=Task/).respond(function(method, url, data, headers, params) {
-            request.headers = headers;
-            request.data = data;
-
-            return [200];
-          });
-
-          TaskService.saveMultiple(TaskMock.taskList);
-          $httpBackend.flush();
-        });
-
-        it('calls to save() with Task list', function() {
-          var params = {
-            json: {
-              task: TaskMock.taskList
-            }
-          };
-          requestBody = Task.save.calls.argsFor(0)[1],
-
-          expect(requestBody.json).toEqual(params.json);
-        });
+      it('adds url encoding to Task list', function () {
+        expect(request.data).toEqual($httpParamSerializer({ json: fakeTask }));
       });
 
-      describe("when calling TaskService.sendReminder()", function() {
-        beforeEach(function() {
-          $httpBackend.whenPOST(/action=sendreminder&entity=Task/).respond(function(method, url, data, headers, params) {
-            request.headers = headers;
-            request.data = data;
+      it('calls save() as POST request with Task data', function () {
+        requestBody = Task.save.calls.argsFor(0)[1];
 
-            return [200];
-          });
-
-          TaskService.sendReminder(1, TaskMock.reminderNote);
-          $httpBackend.flush();
-        });
-
-        it('calls to save() with Reminder Note', function() {
-          var params = {
-            json: {
-              notes: TaskMock.reminderNote
-            }
-          };
-          requestBody = Task.save.calls.argsFor(0)[1],
-
-          expect(requestBody.json).toEqual(params.json);
-        });
+        expect(request.method).toEqual('POST');
+        expect(requestBody.json).toEqual(fakeTask);
       });
     });
   });
 
-  describe('TaskService', function() {
-    var Task, TaskService, $httpBackend, request = {};;
+  describe('TaskService', function () {
+    var TaskService, $httpBackend;
 
     beforeEach(module('civitasks.appDashboard'));
 
-    beforeEach(inject(function(_TaskService_, _$httpBackend_) {
+    beforeEach(inject(function (_TaskService_, _$httpBackend_) {
       TaskService = _TaskService_;
       $httpBackend = _$httpBackend_;
     }));
 
-    beforeEach(function() {
-      $httpBackend.whenGET(/action=getoptions&entity=Task/).respond({});
-      $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
-      $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
-      $httpBackend.whenGET(/action=get&entity=contact/).respond({});
-      $httpBackend.whenGET(/action=get&entity=Task/).respond({});
-      $httpBackend.whenGET(/views.*/).respond({});
+    beforeEach(function () {
+      mockBackendCalls($httpBackend);
     });
 
-    describe("save()", function() {
-      beforeEach(function() {
-        $httpBackend.whenPOST(/action=create&entity=Task/).respond(function() {
-          return [200, TaskMock.response.onSave];
+    describe("save()", function () {
+      beforeEach(function () {
+        $httpBackend.whenPOST(/action=create&debug=true&entity=Task/).respond(function () {
+          return [200, taskMock.onSave];
         });
       });
 
-      it('responds correct Task details', function (){
-        TaskService.save(TaskMock.task).then(function(data){
-          expect(data).toEqual(TaskMock.task);
+      it('returns saved Task on saving task', function () {
+        TaskService.save(fakeTask).then(function (data) {
+          expect(data).toEqual(fakeTask);
         });
 
         $httpBackend.flush();
       })
     });
 
-    describe("assign()", function() {
-      beforeEach(function() {
-        $httpBackend.whenPOST(/action=copy_to_assignment&entity=Task/).respond(function() {
-          return [200, TaskMock.response.onAssign];
+    describe("assign()", function () {
+      beforeEach(function () {
+        $httpBackend.whenPOST(/action=copy_to_assignment&debug=true&entity=Task/).respond(function () {
+          return [200, taskMock.onAssign];
         });
       });
 
-      it('responds assigned Task List', function (){
-        TaskService.assign(TaskMock.taskList, 1).then(function(data){
-          expect(data).toEqual(TaskMock.taskList);
-        });
-
-        $httpBackend.flush();
-      });
-    });
-
-    describe("saveMultiple()", function() {
-      beforeEach(function() {
-        $httpBackend.whenPOST(/action=create_multiple&entity=Task/).respond(function() {
-          return [200, TaskMock.response.onSaveMultiple];
-        });
-      });
-
-      it('responds saved Task List', function (){
-        TaskService.saveMultiple(TaskMock.taskList).then(function(data){
-          expect(data).toEqual(TaskMock.response.onSaveMultiple.values);
+      it('returns list of assigned tasks on task assign', function () {
+        TaskService.assign(fakeTaskList, 1).then(function (data) {
+          expect(data).toEqual(fakeTaskList);
         });
 
         $httpBackend.flush();
       });
     });
 
-    describe("sendReminder()", function() {
+    describe("saveMultiple()", function () {
       beforeEach(function() {
-        $httpBackend.whenPOST(/action=sendreminder&entity=Task/).respond(function() {
-          return [200, TaskMock.response.onSendReminder];
+        $httpBackend.whenPOST(/action=create_multiple&debug=true&entity=Task/).respond(function () {
+          return [200, taskMock.onSaveMultiple];
         });
       });
 
-      it('responds with reminder sent status', function (){
-        TaskService.sendReminder(1, TaskMock.reminderNote).then(function(data){
-          expect(data.values).toEqual(TaskMock.response.onSendReminder.values);
+      it('returns saved task list on saving multiple tasks', function () {
+        TaskService.saveMultiple(fakeTaskList).then(function (data) {
+          expect(data).toEqual(fakeTaskList);
+        });
+
+        $httpBackend.flush();
+      });
+    });
+
+    describe("sendReminder()", function () {
+      beforeEach(function () {
+        $httpBackend.whenPOST(/action=sendreminder&debug=true&entity=Task/).respond(function () {
+          return [200, taskMock.onSendReminder];
+        });
+      });
+
+      it('returns reminder sent status on sending reminder for a task', function () {
+        TaskService.sendReminder(1, fakeReminderNote).then(function (data) {
+          expect(data.values).toEqual(true);
         });
 
         $httpBackend.flush();
