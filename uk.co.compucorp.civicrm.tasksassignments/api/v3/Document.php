@@ -1,6 +1,7 @@
 <?php
 
 use CRM_Activity_Service_ActivityService as ActivityService;
+use CRM_Utils_Array as ArrayHelper;
 
 /**
  * Creates or updates an Document. See the example for usage
@@ -241,18 +242,30 @@ function _civicrm_api3_document_create_spec(&$params) {
       'api.default' => 'user_contact_id',
   ];
 
-  // replace custom data options with their column name
-  foreach ($params as $key => $param) {
+  $metadata = civicrm_api3('CustomField', 'get', [
+    'custom_group_id' => "Activity_Custom_Fields",
+    'options' => ['limit' => 0],
+  ])['values'];
 
-    $parent = CRM_Utils_Array::value('extends', $param);
+  foreach ($params as $key => $param) {
+    $parent = ArrayHelper::value('extends', $param);
     $isCustom = substr($key, 0, 7) === 'custom_';
 
     if ($isCustom && $parent === 'Activity' && isset($param['column_name'])) {
+      $customFieldId = substr($key, strrpos($key, '_') + 1);
+
+      // replace custom data options with their column name
       $name = $param['column_name'];
       $params[$name] = $params[$key];
       $params[$name]['api.aliases'] = $key;
       $params[$name]['name'] = $name;
       unset($params[$key]);
+
+      // add help text for API explorer
+      if (isset($metadata[$customFieldId]) && !isset($param['description'])) {
+        $description = ArrayHelper::value('help_pre', $metadata[$customFieldId]);
+        $params[$name]['description'] = $description;
+      }
     }
   }
 }
