@@ -246,11 +246,6 @@ class CRM_Tasksassignments_DAO_Document extends CRM_Activity_BAO_Activity
           'dataPattern' => '',
           'export' => true,
         ) ,
-        /*'source_record_id' => array(
-          'name' => 'source_record_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Source Record') ,
-        ) ,*/
         'activity_type_id' => array(
           'name' => 'activity_type_id',
           'type' => CRM_Utils_Type::T_INT,
@@ -297,53 +292,6 @@ class CRM_Tasksassignments_DAO_Document extends CRM_Activity_BAO_Activity
             'type' => 'Select Date',
           ) ,
         ) ,
-        /*'activity_duration' => array(
-          'name' => 'duration',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Duration') ,
-          'import' => true,
-          'where' => 'civicrm_activity.duration',
-          'headerPattern' => '/(activity.)?duration(s)?$/i',
-          'dataPattern' => '',
-          'export' => true,
-          'html' => array(
-            'type' => 'Text',
-          ) ,
-        ) ,*/
-        /*'activity_location' => array(
-          'name' => 'location',
-          'type' => CRM_Utils_Type::T_STRING,
-          'title' => ts('Location') ,
-          'maxlength' => 255,
-          'size' => CRM_Utils_Type::HUGE,
-          'import' => true,
-          'where' => 'civicrm_activity.location',
-          'headerPattern' => '/(activity.)?location$/i',
-          'dataPattern' => '',
-          'export' => true,
-          'html' => array(
-            'type' => 'Text',
-          ) ,
-        ) ,*/
-        /*'phone_id' => array(
-          'name' => 'phone_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Phone (called) ID') ,
-          'FKClassName' => 'CRM_Core_DAO_Phone',
-          'html' => array(
-            'type' => 'Autocomplete-Select',
-          ) ,
-        ) ,*/
-        /*'phone_number' => array(
-          'name' => 'phone_number',
-          'type' => CRM_Utils_Type::T_STRING,
-          'title' => ts('Phone (called) Number') ,
-          'maxlength' => 64,
-          'size' => CRM_Utils_Type::BIG,
-          'html' => array(
-            'type' => 'Text',
-          ) ,
-        ) ,*/
         'activity_details' => array(
           'name' => 'details',
           'type' => CRM_Utils_Type::T_TEXT,
@@ -372,94 +320,9 @@ class CRM_Tasksassignments_DAO_Document extends CRM_Activity_BAO_Activity
             'type' => 'Select',
           ) ,
           'pseudoconstant' => array(
-            //'optionGroupName' => 'activity_status',
             'optionGroupName' => 'document_status',
           )
         ) ,
-        /*'priority_id' => array(
-          'name' => 'priority_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Priority') ,
-          'html' => array(
-            'type' => 'Select',
-          ) ,
-          'pseudoconstant' => array(
-            'optionGroupName' => 'priority',
-          )
-        ) ,*/
-        /*'parent_id' => array(
-          'name' => 'parent_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Parent Activity Id') ,
-          'FKClassName' => 'CRM_Activity_DAO_Activity',
-        ) ,*/
-        /*'activity_is_test' => array(
-          'name' => 'is_test',
-          'type' => CRM_Utils_Type::T_BOOLEAN,
-          'title' => ts('Test') ,
-          'import' => true,
-          'where' => 'civicrm_activity.is_test',
-          'headerPattern' => '/(is.)?test(.activity)?/i',
-          'dataPattern' => '',
-          'export' => true,
-          'html' => array(
-            'type' => 'Select',
-          ) ,
-        ) ,*/
-        /*'activity_medium_id' => array(
-          'name' => 'medium_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Activity Medium') ,
-          'default' => 'NULL',
-          'html' => array(
-            'type' => 'Select',
-          ) ,
-          'pseudoconstant' => array(
-            'optionGroupName' => 'encounter_medium',
-          )
-        ) ,*/
-        /*'is_auto' => array(
-          'name' => 'is_auto',
-          'type' => CRM_Utils_Type::T_BOOLEAN,
-          'title' => ts('Auto') ,
-        ) ,*/
-        /*'relationship_id' => array(
-          'name' => 'relationship_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Relationship Id') ,
-          'default' => 'NULL',
-          'FKClassName' => 'CRM_Contact_DAO_Relationship',
-        ) ,*/
-        /*'is_current_revision' => array(
-          'name' => 'is_current_revision',
-          'type' => CRM_Utils_Type::T_BOOLEAN,
-          'title' => ts('Is this activity a current revision in versioning chain?') ,
-          'import' => true,
-          'where' => 'civicrm_activity.is_current_revision',
-          'headerPattern' => '/(is.)?(current.)?(revision|version(ing)?)/i',
-          'dataPattern' => '',
-          'export' => true,
-          'default' => '1',
-          'html' => array(
-            'type' => 'CheckBox',
-          ) ,
-        ) ,*/
-        /*'original_id' => array(
-          'name' => 'original_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Original Activity ID ') ,
-          'FKClassName' => 'CRM_Activity_DAO_Activity',
-        ) ,*/
-        /*'activity_result' => array(
-          'name' => 'result',
-          'type' => CRM_Utils_Type::T_STRING,
-          'title' => ts('Result') ,
-          'maxlength' => 255,
-          'size' => CRM_Utils_Type::HUGE,
-          'html' => array(
-            'type' => 'Text',
-          ) ,
-        ) ,*/
         'activity_is_deleted' => array(
           'name' => 'is_deleted',
           'type' => CRM_Utils_Type::T_BOOLEAN,
@@ -473,49 +336,6 @@ class CRM_Tasksassignments_DAO_Document extends CRM_Activity_BAO_Activity
             'type' => 'Text',
           ) ,
         ) ,
-        /*'activity_campaign_id' => array(
-          'name' => 'campaign_id',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Campaign') ,
-          'import' => true,
-          'where' => 'civicrm_activity.campaign_id',
-          'headerPattern' => '',
-          'dataPattern' => '',
-          'export' => true,
-          'FKClassName' => 'CRM_Campaign_DAO_Campaign',
-          'html' => array(
-            'type' => 'CheckBox',
-          ) ,
-          'pseudoconstant' => array(
-            'table' => 'civicrm_campaign',
-            'keyColumn' => 'id',
-            'labelColumn' => 'title',
-          )
-        ) ,*/
-        /*'activity_engagement_level' => array(
-          'name' => 'engagement_level',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Engagement Index') ,
-          'import' => true,
-          'where' => 'civicrm_activity.engagement_level',
-          'headerPattern' => '',
-          'dataPattern' => '',
-          'export' => true,
-          'html' => array(
-            'type' => 'Select',
-          ) ,
-          'pseudoconstant' => array(
-            'optionGroupName' => 'engagement_index',
-          )
-        ) ,*/
-        /*'weight' => array(
-          'name' => 'weight',
-          'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('Weight') ,
-          'html' => array(
-            'type' => 'Text',
-          ) ,
-        ) ,*/
       );
     }
     return self::$_fields;
@@ -532,30 +352,12 @@ class CRM_Tasksassignments_DAO_Document extends CRM_Activity_BAO_Activity
     if (!(self::$_fieldKeys)) {
       self::$_fieldKeys = array(
         'id' => 'activity_id',
-        //'source_record_id' => 'source_record_id',
         'activity_type_id' => 'activity_type_id',
-          //'activity_type_id' => 'activity_type_id',
         'subject' => 'activity_subject',
         'date_time' => 'activity_date_time',
-        //'duration' => 'activity_duration',
-        //'location' => 'activity_location',
-        //'phone_id' => 'phone_id',
-        //'phone_number' => 'phone_number',
         'details' => 'activity_details',
         'status_id' => 'activity_status_id',
-        //'priority_id' => 'priority_id',
-        //'parent_id' => 'parent_id',
-        //'is_test' => 'activity_is_test',
-        //'medium_id' => 'activity_medium_id',
-        //'is_auto' => 'is_auto',
-        //'relationship_id' => 'relationship_id',
-        //'is_current_revision' => 'is_current_revision',
-        //'original_id' => 'original_id',
-        //'result' => 'activity_result',
         'is_deleted' => 'activity_is_deleted',
-        //'campaign_id' => 'activity_campaign_id',
-        //'engagement_level' => 'activity_engagement_level',
-        //'weight' => 'weight',
       );
     }
     return self::$_fieldKeys;
