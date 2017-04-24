@@ -82,6 +82,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       'is_deleted' => 0,
       'status_id' => self::STATUS_APPROVED,
       'options' => ['limit' => 0],
+      'return' => ["target_contact_id", "activity_type_id", "details"]
     ];
 
     $result = civicrm_api3('Document', 'get', $params);
@@ -97,18 +98,16 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
   protected static function cloneDocument(array $original) {
     $clone = $original;
     $origId = $original['id'];
-    $expiryField = static::getCustomFieldName('expire_date');
 
     $clone['activity_date_time'] = $original['expire_date'];
     $clone['status_id'] = self::STATUS_AWAITING_UPLOAD;
 
-    $fields = [$expiryField, 'expire_date', 'file_count', 'id'];
-    $fields[] = sprintf('%s_%s', $expiryField, $origId); // alternate name
-    foreach ($fields as $field) {
+    $fieldsToUnset = ['id', 'file_count', 'expire_date', 'document_id', 'valid_from'];
+    foreach ($fieldsToUnset as $field) {
       unset($clone[$field]);
     }
 
-    civicrm_api3('Document', 'create', $original);
+    civicrm_api3('Document', 'create', $clone);
 
     // Update original's clone_date' so we know it has been cloned.
     $today = (new DateTime())->format('Y-m-d');
@@ -131,6 +130,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       array_walk($fieldNames, function (&$customField) {
         $customField = $customField['name'];
       });
+      $fieldNames = array_flip($fieldNames);
     }
 
     return CRM_Utils_Array::value($fieldName, $fieldNames);
