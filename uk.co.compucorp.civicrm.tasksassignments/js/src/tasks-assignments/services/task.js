@@ -116,10 +116,10 @@ define([
               taskType.arr.push({
                 key: data.values[optionId].key,
                 value: data.values[optionId].value
-              })
-            }
+              });
 
-            taskType.obj = data.values;
+              taskType.obj[data.values[optionId].key] = data.values[optionId].value;
+            }
 
             deferredTaskType.resolve(taskType);
           });
@@ -134,12 +134,12 @@ define([
 
             for (optionId in data.values) {
               taskStatus.arr.push({
-                key: optionId,
-                value: data.values[optionId]
-              })
-            }
+                key: data.values[optionId].key,
+                value: data.values[optionId].value
+              });
 
-            taskStatus.obj = data.values;
+              taskStatus.obj[data.values[optionId].key] = data.values[optionId].value;
+            }
 
             deferredTaskStatus.resolve(taskStatus);
           });
