@@ -89,14 +89,47 @@ define([
           return deferred.promise;
         },
         getOptions: function() {
-          var deferred = $q.defer(),
-            deferredTaskType = $q.defer(),
-            deferredTaskStatus = $q.defer(),
-            taskType = {
+          var deferred = $q.defer();
+
+          $q.all({
+            taskType: this.getActivityTypeIdOption(),
+            taskStatus: this.getStatusIdOption()
+          }).then(function(options) {
+            deferred.resolve(options);
+          });
+
+          return deferred.promise;
+        },
+        getStatusIdOption: function() {
+          var deferredTaskStatus = $q.defer(),
+            taskStatus = {
               arr: [],
               obj: {}
-            },
-            taskStatus = {
+            }
+
+          Task.get({
+            action: 'getoptions',
+            json: {
+              'field': 'status_id'
+            }
+          }, function(data) {
+            _.each(data.values, function(option) {
+              taskStatus.arr.push({
+                key: option.key,
+                value: option.value
+              });
+
+              taskStatus.obj[option.key] = option.value;
+            });
+
+            deferredTaskStatus.resolve(taskStatus);
+          });
+
+          return deferredTaskStatus.promise;
+        },
+        getActivityTypeIdOption: function() {
+          var deferredTaskType = $q.defer(),
+            taskType = {
               arr: [],
               obj: {}
             }
@@ -110,48 +143,19 @@ define([
               }
             }
           }, function(data) {
-            var optionId;
-
-            for (optionId in data.values) {
+            _.each(data.values, function(option) {
               taskType.arr.push({
-                key: data.values[optionId].key,
-                value: data.values[optionId].value
+                key: option.key,
+                value: option.value
               });
 
-              taskType.obj[data.values[optionId].key] = data.values[optionId].value;
-            }
+              taskType.obj[option.key] = option.value;
+            });
 
             deferredTaskType.resolve(taskType);
           });
 
-          Task.get({
-            action: 'getoptions',
-            json: {
-              'field': 'status_id'
-            }
-          }, function(data) {
-            var optionId;
-
-            for (optionId in data.values) {
-              taskStatus.arr.push({
-                key: data.values[optionId].key,
-                value: data.values[optionId].value
-              });
-
-              taskStatus.obj[data.values[optionId].key] = data.values[optionId].value;
-            }
-
-            deferredTaskStatus.resolve(taskStatus);
-          });
-
-          $q.all({
-            taskType: deferredTaskType.promise,
-            taskStatus: deferredTaskStatus.promise
-          }).then(function(options) {
-            deferred.resolve(options);
-          });
-
-          return deferred.promise;
+          return deferredTaskType.promise;
         },
         save: function(task) {
 
