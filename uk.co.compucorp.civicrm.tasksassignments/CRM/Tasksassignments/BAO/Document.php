@@ -11,6 +11,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    * Create a new Document based on array-data
    *
    * @param array $params key-value pairs
+   *
    * @return CRM_Tasksassignments_DAO_Document|NULL|object
    */
   public static function create(&$params) {
@@ -67,7 +68,8 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    * Finds all documents that should be cloned
    *
    * @param DateTime $cutOffDate
-   *  Documents with an expiry date less than this will be cloned.
+   *  Documents with an expiry date less than or equal to this will be cloned.
+   *
    * @return array
    */
   protected static function getDocumentsToClone(DateTime $cutOffDate) {
@@ -82,7 +84,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       'is_deleted' => 0,
       'status_id' => self::STATUS_APPROVED,
       'options' => ['limit' => 0],
-      'return' => ["target_contact_id", "activity_type_id", "details"]
+      'return' => ['target_contact_id', 'activity_type_id', 'details']
     ];
 
     $result = civicrm_api3('Document', 'get', $params);
@@ -94,6 +96,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    * Creates a copy of a document with no attached files
    *
    * @param array $original
+   *   The document to be cloned
    */
   protected static function cloneDocument(array $original) {
     $clone = $original;
@@ -110,8 +113,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
     civicrm_api3('Document', 'create', $clone);
 
     // Update original's clone_date' so we know it has been cloned.
-    $today = (new DateTime())->format('Y-m-d');
-    $params = ['id' => $origId, 'clone_date' => $today];
+    $params = ['id' => $origId, 'clone_date' => date('Y-m-d')];
     civicrm_api3('Document', 'create', $params);
   }
 
@@ -120,17 +122,17 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    *
    * @param string $fieldName
    *  The human-readable name for the field, e.g. "expiry_date"
-   * @return mixed|null
+   *
+   * @return string|null
    */
   private static function getCustomFieldName($fieldName) {
     static $fieldNames;
 
     if (empty($fieldNames)) {
-      $fieldNames = civicrm_api3('Document', 'getcustomfields');
-      array_walk($fieldNames, function (&$customField) {
-        $customField = $customField['name'];
-      });
-      $fieldNames = array_flip($fieldNames);
+      $result = civicrm_api3('Document', 'getcustomfields');
+      foreach ($result as $customFieldName => $data) {
+        $fieldNames[$data['name']] = $customFieldName;
+      }
     }
 
     return CRM_Utils_Array::value($fieldName, $fieldNames);
@@ -143,7 +145,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
    */
   protected static function getDaysBeforeExpiryToClone() {
     $setting = civicrm_api3('TASettings', 'getsingle', [
-      'fields' => "days_to_create_a_document_clone",
+      'fields' => 'days_to_create_a_document_clone',
     ]);
 
     return CRM_Utils_Array::value('value', $setting, 0);
