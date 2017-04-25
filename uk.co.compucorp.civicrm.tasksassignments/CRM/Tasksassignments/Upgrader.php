@@ -460,7 +460,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
    * Install Tasks Assignments 'days_to_create_a_document_clone' setting field.
    * It keeps a number of days to create a document clone before original
    * expiry date.
-   * 
+   *
    * @return {boolean}
    */
   public function upgrade_1020() {
@@ -513,7 +513,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   /*
    * Set up scheduled job which clones documents on pre-set days before
    * their original expiry date.
-   * 
+   *
    * @see PCHR-1365
    */
   public function upgrade_1022()
@@ -572,6 +572,23 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  /**
+   * Add new custom fields for activities
+   *
+   * @return bool
+   */
+  public function upgrade_1025() {
+    $this->executeCustomDataFile('xml/activity_custom_fields.xml');
+
+    // set "remind_me" to true for all existing documents
+    civicrm_api3('Document', 'get', [
+      'options' => ['limit' => 0],
+      'api.Document.create' => ['id' => '$value.id', 'remind_me' => 1],
+    ]);
+
+    return TRUE;
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
@@ -585,7 +602,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
      * specifically it returns the option group and component id
      *
      * @param  string $component
-     * @return Array
+     * @return array
      */
     private function _fetchActivityTypeParams($component) {
       $componentId = null;

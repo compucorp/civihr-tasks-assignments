@@ -1,6 +1,7 @@
 <?php
 
 use CRM_Activity_Service_ActivityService as ActivityService;
+use CRM_Utils_Array as ArrayHelper;
 
 /**
  * Creates or updates an Document. See the example for usage
@@ -27,29 +28,11 @@ function civicrm_api3_document_create($params) {
     );
   }
 
-  /* This code prevents creating a copy of Activity each time we pass 'case_id'
-   * to 'create' method and when the Activity is already connected to the Case.
-   * The code is commented out due to front-end JavaScript solution to the issue.
-   *
-  if (!empty($params['id']) && !empty($params['case_id'])) {
-    $activity = civicrm_api3('Document', 'get', array(
-      'sequential' => 1,
-      'id' => $params['id'],
-      'return' => 'case_id',
-    ));
-    $activityValues = CRM_Utils_Array::first($activity['values']);
-    if (!empty($activityValues['case_id']) && $activityValues['case_id'] == $params['case_id']) {
-        unset($params['case_id']);
-    }
-  }
-  */
-
   $errors = _civicrm_api3_document_check_params($params);
 
   if (!empty($errors)) {
     return $errors;
   }
-
 
   $values = $activityArray = array();
   _civicrm_api3_custom_format_params($params, $values, 'Document');
@@ -232,32 +215,60 @@ function civicrm_api3_document_create_multiple($params) {
  */
 function _civicrm_api3_document_create_spec(&$params) {
 
-  //default for source_contact_id = currently logged in user
-  $params['source_contact_id']['api.default'] = 'user_contact_id';
+  $activityFields = _civicrm_api_get_fields('Activity');
+  $params = array_merge($params, $activityFields);
 
-  $params['status_id']['api.aliases'] = array('activity_status');
+  $params['status_id']['api.aliases'] = ['activity_status'];
 
-  $params['assignee_contact_id'] = array(
+  $params['assignee_contact_id'] = [
     'name' => 'assignee_id',
     'title' => 'assigned to',
     'type' => 1,
     'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
-  );
-  $params['target_contact_id'] = array(
+  ];
+
+  $params['target_contact_id'] = [
     'name' => 'target_id',
     'title' => 'Activity Target',
     'type' => 1,
     'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
-  );
+  ];
 
-  $params['source_contact_id'] = array(
+  $params['source_contact_id'] = [
       'name' => 'source_contact_id',
       'title' => 'Activity Source Contact',
       'type' => 1,
       'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
       'api.default' => 'user_contact_id',
-  );
+  ];
 
+  $metadata = civicrm_api3('CustomField', 'get', [
+    'custom_group_id' => 'Activity_Custom_Fields',
+    'options' => ['limit' => 0],
+  ])['values'];
+
+  foreach ($params as $key => $param) {
+    $parent = ArrayHelper::value('extends', $param);
+    $isCustom = substr($key, 0, 7) === 'custom_';
+
+    if ($isCustom && $parent === 'Activity' && isset($param['column_name'])) {
+      // custom field names have the format custom_<id>
+      $customFieldId = substr($key, strrpos($key, '_') + 1);
+
+      // replace custom data options with their column name
+      $name = $param['column_name'];
+      $params[$name] = $params[$key];
+      $params[$name]['api.aliases'] = $key;
+      $params[$name]['name'] = $name;
+      unset($params[$key]);
+
+      // add help text for API explorer
+      if (isset($metadata[$customFieldId]) && !isset($param['description'])) {
+        $description = ArrayHelper::value('help_pre', $metadata[$customFieldId]);
+        $params[$name]['description'] = $description;
+      }
+    }
+  }
 }
 
 /**
@@ -515,7 +526,6 @@ function civicrm_api3_document_get($params) {
             $params['return'] = explode(',', $params['return']);
             $params['return'] = array_map('trim', $params['return']);
         }
-        $activityCustomValues = array();
         $customFields = _civicrm_api3_document_getcustomfieldsflipped();
         foreach ($customFields as $key => $value) {
             if (in_array($key, $params['return'])) {
@@ -529,7 +539,6 @@ function civicrm_api3_document_get($params) {
     $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
     $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
     $caseId = isset($params['case_id']) ? $params['case_id'] : null;
-    $customFields = _civicrm_api3_document_getcustomfields();
 
     if ($assigneeContactId) {
         $result = civicrm_api3('ActivityContact', 'get', array(
@@ -609,22 +618,21 @@ function civicrm_api3_document_get($params) {
             $fileCountResult->fetch();
             $getResult['values'][$key]['file_count'] = (int)$fileCountResult->file_count;
 
+            $customFields = _civicrm_api3_document_getcustomfields();
             foreach ($customFields as $customFieldKey => $customFieldData) {
-                $customColumnResult = CRM_Core_DAO::executeQuery(
-                    "SELECT {$customFieldData['name']} FROM {$customFieldData['table']} WHERE entity_id = %1",
-                    array(
-                        1 => array($getResult['values'][$key]['id'], 'Integer'),
-                    )
-                );
-                if (!$customColumnResult->fetch()) {
+
+                if (!isset($value[$customFieldKey])) {
                     continue;
                 }
-                $customFieldValue = $customColumnResult->$customFieldData['name'];
+
+                $customFieldValue = $value[$customFieldKey];
+
                 if ($customFieldData['data_type'] == 'Date') {
-                    $processDate = CRM_Utils_Date::processDate($customColumnResult->$customFieldData['name']);
+                    $processDate = CRM_Utils_Date::processDate($customFieldValue);
                     $customFieldValue = CRM_Utils_Date::customFormat($processDate, '%Y-%m-%d');
                 }
                 $getResult['values'][$key][$customFieldData['name']] = $customFieldValue;
+                unset($getResult['values'][$key][$customFieldKey]);
             }
         }
 
