@@ -580,6 +580,12 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   public function upgrade_1025() {
     $this->executeCustomDataFile('xml/activity_custom_fields.xml');
 
+    // set "remind_me" to true for all existing documents
+    civicrm_api3('Document', 'get', [
+      'options' => ['limit' => 0],
+      'api.Document.create' => ['id' => '$value.id', 'remind_me' => 1],
+    ]);
+
     return TRUE;
   }
 
