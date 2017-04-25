@@ -65,6 +65,54 @@ define(function() {
         }
       ]
     },
+    activityTypesOptions: function() {
+      return [
+        {
+          "key": "13",
+          "value": "Open Case"
+        },
+        {
+          "key": "83",
+          "value": "Schedule Exit Interview"
+        },
+        {
+          "key": "84",
+          "value": "Get \"No Dues\" certification"
+        },
+        {
+          "key": "85",
+          "value": "Conduct Exit Interview"
+        },
+        {
+          "key": "86",
+          "value": "Revoke Access to Database"
+        }
+      ]
+    },
+    statusIdFieldsOptions: function() {
+      return [
+        {
+          "key": 1,
+          "value": "Scheduled"
+        },
+        {
+          "key": 2,
+          "value": "Completed"
+        },
+        {
+          "key": 3,
+          "value": "Cancelled"
+        },
+        {
+          "key": 4,
+          "value": "Left Message"
+        },
+        {
+          "key": 5,
+          "value": "Unreachable"
+        }
+      ]
+    },
     reminderNote: function() {
       return "<p>Sample reminder note</p>";
     }
