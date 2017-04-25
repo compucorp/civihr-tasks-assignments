@@ -1,8 +1,5 @@
 <?php
 
-
-require_once 'CiviTest/CiviUnitTestCase.php';
-
 /**
  * Class CRM_Tasksassignments_BAO_TaskTest
  */
@@ -19,10 +16,6 @@ class CRM_Tasksassignments_BAO_TaskTest extends CiviUnitTestCase {
       'field' => 'activity_type_id',
     ));
     $this->_taskTypeId = array_shift($taskTypes['values']);
-  }
-
-  function tearDown() {
-    parent::tearDown();
   }
 
   /**

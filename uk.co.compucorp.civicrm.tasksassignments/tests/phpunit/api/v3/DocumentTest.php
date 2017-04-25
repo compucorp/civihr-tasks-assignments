@@ -1,18 +1,11 @@
 <?php
 
-
-require_once 'CiviTest/CiviUnitTestCase.php';
-
 /**
  * Class Api_DocumentTest
  */
 class api_v3_DocumentTest extends CiviUnitTestCase {
-  private $_documentTypeId = null;
 
-  function __construct() {
-    parent::__construct();
-    self::cleanDB();
-  }
+  private $_documentTypeId = null;
 
   function setUp() {
     parent::setUp();
@@ -24,10 +17,6 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       'field' => 'activity_type_id',
     ));
     $this->_documentTypeId = array_shift($documentTypes['values']);
-  }
-
-  function tearDown() {
-    parent::tearDown();
   }
 
   /**

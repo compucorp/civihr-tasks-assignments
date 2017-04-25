@@ -1,8 +1,5 @@
 <?php
 
-
-require_once 'CiviTest/CiviUnitTestCase.php';
-
 /**
  * Class Api_TaskTest
  */
@@ -19,10 +16,6 @@ class api_v3_TaskTest extends CiviUnitTestCase {
       'field' => 'activity_type_id',
     ));
     $this->_taskTypeId = array_shift($taskTypes['values']);
-  }
-
-  function tearDown() {
-    parent::tearDown();
   }
 
   /**

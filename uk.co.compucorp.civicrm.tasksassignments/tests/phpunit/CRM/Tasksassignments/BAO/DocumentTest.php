@@ -1,8 +1,5 @@
 <?php
 
-
-require_once 'CiviTest/CiviUnitTestCase.php';
-
 /**
  * Class CRM_Tasksassignments_BAO_DocumentTest
  */
@@ -19,10 +16,6 @@ class CRM_Tasksassignments_BAO_DocumentTest extends CiviUnitTestCase {
       'field' => 'activity_type_id',
     ));
     $this->_documentTypeId = array_shift($documentTypes['values']);
-  }
-
-  function tearDown() {
-    parent::tearDown();
   }
 
   /**
@@ -55,7 +48,7 @@ class CRM_Tasksassignments_BAO_DocumentTest extends CiviUnitTestCase {
     );
     $result = CRM_Tasksassignments_BAO_Document::create($params);
 
-    $this->assertTrue($result instanceof CRM_Tasksassignments_DAO_Document);
+    $this->assertTrue($result instanceof CRM_Activity_DAO_Activity);
     $this->assertEquals($this->_documentTypeId, $result->activity_type_id);
   }
 
