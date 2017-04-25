@@ -126,6 +126,62 @@ define(function() {
     onSendReminder: {
       is_error: 0,
       values: true
+    },
+    onGetOptions: {
+      activityTypeIdFields: {
+        "is_error": 0,
+        "version": 3,
+        "count": 5,
+        "values": [
+          {
+            "key": "13",
+            "value": "Open Case"
+          },
+          {
+            "key": "83",
+            "value": "Schedule Exit Interview"
+          },
+          {
+            "key": "84",
+            "value": "Get \"No Dues\" certification"
+          },
+          {
+            "key": "85",
+            "value": "Conduct Exit Interview"
+          },
+          {
+            "key": "86",
+            "value": "Revoke Access to Database"
+          }
+        ]
+      },
+      statusIdFields: {
+        "is_error": 0,
+        "version": 3,
+        "count": 5,
+        "values": [
+          {
+            "key": 1,
+            "value": "Scheduled"
+          },
+          {
+            "key": 2,
+            "value": "Completed"
+          },
+          {
+            "key": 3,
+            "value": "Cancelled"
+          },
+          {
+            "key": 4,
+            "value": "Left Message"
+          },
+          {
+            "key": 5,
+            "value": "Unreachable"
+          }
+        ]
+      }
     }
   }
 });
