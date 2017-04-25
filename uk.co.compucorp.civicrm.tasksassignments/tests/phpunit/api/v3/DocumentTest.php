@@ -50,15 +50,15 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     ));
   }
 
-  /**
-   * @expectedException CiviCRM_API3_Exception
-   */
   function testCreateDocumentWithNoAssignee() {
-    civicrm_api3('Document', 'create', array(
+    $result = civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,
       'source_contact_id' => 1,
       'target_contact_id' => 2,
     ));
+
+    $this->assertFalse($result['is_error']);
+    $this->assertEquals(1, $result['values'][0]['source_contact_id']);
   }
 
   /**

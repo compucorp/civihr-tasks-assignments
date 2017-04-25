@@ -80,7 +80,7 @@ define([
               { badgeClass: 'primary', calendarView: 'day', value: 'dueToday' },
               { badgeClass: 'primary', calendarView: 'week', value: 'dueThisWeek' }
             ];
-            
+
             $scope.format = HR_settings.DATE_FORMAT;
             $scope.assignments = [];
             $scope.contacts = [];
@@ -222,16 +222,12 @@ define([
             };
 
             $scope.updateTask = function(task, updateObj) {
+              $scope.cacheContact(task.assignee_contact_id[0]);
+
               return TaskService
                 .save(angular.extend({}, task, updateObj))
                 .catch(function (reason) {
                   CRM.alert(reason, 'Error', 'error');
-                });
-            };
-
-            $scope.updateAssignments = function(assignments, targetContactId){
-                $scope.assignments = $filter('filter')(assignments, function(val){
-                    return +val.extra.contact_id == +targetContactId;
                 });
             };
 

@@ -52,9 +52,7 @@ define([
                       templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
                       resolve: {
                         documentList: ['DocumentService', function (DocumentService) {
-                          return DocumentService.get({
-                            'status_id': { 'NOT IN': config.status.resolve.DOCUMENT }
-                          });
+                          return DocumentService.get({});
                         }]
                       }
                     })
@@ -122,12 +120,12 @@ define([
 
                               $q.all([
                                 TaskService.get({
-                                  'sequential': 0,
+                                  'sequential': 1,
                                   'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
                                   'status_id': { 'NOT IN': config.status.resolve.TASK }
                                 }),
                                 TaskService.get({
-                                  'sequential': 0,
+                                  'sequential': 1,
                                   'source_contact_id': config.LOGGED_IN_CONTACT_ID,
                                   'status_id': { 'NOT IN': config.status.resolve.TASK }
                                 })
