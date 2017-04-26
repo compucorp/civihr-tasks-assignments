@@ -187,8 +187,8 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     ]);
     $details1 = 'First sample document details';
     $details2 = 'Second sample document details';
-    $today = (new DateTime())->format('Y-m-d');
-    $tomorrow = (new DateTime('tomorrow'))->format('Y-m-d');
+    $today = date('Y-m-d');
+    $tomorrow = date('Y-m-d', strtotime('tomorrow'));
 
     // document with "remind me" = true
     civicrm_api3('Document', 'create', [

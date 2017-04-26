@@ -19,13 +19,27 @@ class api_v3_TaskTest extends CiviUnitTestCase {
     $upgrader->install();
 
     $result = civicrm_api3('OptionValue', 'create', [
-      'option_group_id' => "activity_type",
-      'component_id' => "CiviTask",
-      'label' => "Sample Task Type",
+      'option_group_id' => 'activity_type',
+      'component_id' => 'CiviTask',
+      'label' => 'Sample Task Type',
     ]);
     $result = array_pop($result['values']);
 
     $this->_taskTypeId = $result['value'];
+  }
+
+  /**
+   * Remove data created in setUp()
+   */
+  protected function tearDown() {
+    civicrm_api3('OptionValue', 'get', [
+      'option_group_id' => 'activity_type',
+      'component_id' => 'CiviTask',
+      'value' => $this->_taskTypeId,
+      'api.OptionValue.delete' => ['id' => '$value.id'],
+    ]);
+
+    parent::tearDown();
   }
 
   /**
