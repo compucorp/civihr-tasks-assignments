@@ -46,8 +46,10 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       'target_contact_id' => 2,
     ));
 
-    $this->assertFalse($result['is_error']);
-    $this->assertEquals(1, $result['values'][0]['source_contact_id']);
+    $firstResult = array_pop($result['values']);
+
+    $this->assertEquals(0, $result['is_error']);
+    $this->assertEquals(1, $firstResult['source_contact_id']);
   }
 
   /**
@@ -103,6 +105,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       'target_contact_id' => [$contact['id']],
       'assignee_contact_id' => [$contact['id']],
       'details' => $details1,
+      'remind_me' => 1,
       'activity_date_time' => $dueDate,
       'expire_date' => $expireDate1,
       'status_id' => 3,
@@ -114,6 +117,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       'target_contact_id' => [$contact['id']],
       'assignee_contact_id' => [$contact['id']],
       'details' => $details2,
+      'remind_me' => 1,
       'activity_date_time' => $dueDate,
       'expire_date' => $expireDate2,
       'status_id' => 3,
@@ -125,6 +129,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       'target_contact_id' => [$contact['id']],
       'assignee_contact_id' => [$contact['id']],
       'details' => $details3,
+      'remind_me' => 1,
       'activity_date_time' => $dueDate,
       'expire_date' => $expireDate3,
       'status_id' => 3,
