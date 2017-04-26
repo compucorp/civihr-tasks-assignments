@@ -242,7 +242,7 @@ function _civicrm_api3_document_create_spec(&$params) {
       'api.default' => 'user_contact_id',
   ];
 
-  $params['id']['title'] = "Document ID";
+  $params['id']['title'] = 'Document ID';
 
   $metadata = civicrm_api3('CustomField', 'get', [
     'custom_group_id' => 'Activity_Custom_Fields',
