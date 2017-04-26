@@ -57,7 +57,8 @@ class CRM_Tasksassignments_Reminder {
     ))['values'];
 
     foreach ($contacts as $id => $contact) {
-      $contacts[$id]['email'] = $contact['api.Email.getsingle']['email'];
+      $email = CRM_Utils_Array::value('email', $contact['api.Email.getsingle']);
+      $contacts[$id]['email'] = $email;
       unset($contacts[$id]['api.Email.getsingle']);
     }
 
@@ -240,7 +241,7 @@ class CRM_Tasksassignments_Reminder {
 
   /**
    * Sends daily digest to administrators, task creators and assignees.
-   * 
+   *
    * @return boolean
    *   True on completion
    */
@@ -272,9 +273,9 @@ class CRM_Tasksassignments_Reminder {
 
     while ($contactsResult->fetch()) {
       $reminderData = self::_getContactDailyReminderData(
-        $contactsResult->contact_id, 
-        !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : [], 
-        $to, 
+        $contactsResult->contact_id,
+        !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : [],
+        $to,
         $settings
       );
 
@@ -294,7 +295,7 @@ class CRM_Tasksassignments_Reminder {
 
   /**
    * Obtains settings used to send daily reminder.
-   * 
+   *
    * @return array
    *   Values in TASettings entity
    */
@@ -308,7 +309,7 @@ class CRM_Tasksassignments_Reminder {
 
   /**
    * Obtains list of components to be included in reminder.
-   * 
+   *
    * @return array
    *   List of components
    */
@@ -325,7 +326,7 @@ class CRM_Tasksassignments_Reminder {
 
   /**
    * Obtains list of task statuses that correspond to incomplete tasks.
-   * 
+   *
    * @return array
    *   List of statuses that denote an incomplete task
    */
@@ -338,16 +339,16 @@ class CRM_Tasksassignments_Reminder {
     foreach ($incompleteStatusesResult['values'] as $value) {
       $incompleteStatuses[] = $value['value'];
     }
-    
+
     return $incompleteStatuses;
   }
 
   /**
    * Given a date in 'yyyy-mm-dd' format, calculates the date of next sunday.
-   * 
+   *
    * @param string $now
    *   Date in 'yyyy-mm-dd' format from which to do the calculation
-   * 
+   *
    * @return string
    *   Date in 'yyyy-mm-dd' format of next sunday, as calculated from $now
    */
@@ -362,7 +363,7 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Returns contact ID's for users with the 'administrator' or 'civihr_admin'
    * roles.
-   * 
+   *
    * @return array
    *   List of contact ID's
    */
@@ -376,7 +377,7 @@ class CRM_Tasksassignments_Reminder {
       WHERE ur.rid IN (:admin, :civi)
     ';
     $queryParams = [
-      ':admin' => $adminRole->rid, 
+      ':admin' => $adminRole->rid,
       ':civi' => $civihrAdminRole->rid
     ];
 
@@ -387,12 +388,12 @@ class CRM_Tasksassignments_Reminder {
   }
 
   /**
-   * Builds query to obtain assignee and creator contact ID's for tasks due 
+   * Builds query to obtain assignee and creator contact ID's for tasks due
    * before the given date.
-   * 
+   *
    * @param string $to
    *   Date until where tasks should be searched, in yyyy-mm-dd format
-   * 
+   *
    * @return string
    *   Query to obtain task assignees and creators.
    */
@@ -427,25 +428,25 @@ class CRM_Tasksassignments_Reminder {
 
   /**
    * Builds query to obtain contact ID's for the following:
-   * 
+   *
    *   - Users with administrator or civihr_admin roles
    *   - Contacts with key dates in given time period
    *   - Appraisals due in the given timeframe
-   * 
+   *
    * @param string $now
-   *   Date from where key dates and appraisals should be searched, yyyy-mm-dd 
+   *   Date from where key dates and appraisals should be searched, yyyy-mm-dd
    * @param type $to
    *   Date until where key dates and appraisals should be searched, yyyy-mm-dd
-   * 
+   *
    * @return string
-   *   Query to obtain contact ID's for admins and contacts involved in key 
+   *   Query to obtain contact ID's for admins and contacts involved in key
    *   dates and appraisals
    */
   private static function _buildAdminsKeyDatesAndAppraisalsQuery($now, $to) {
     $adminContacts = self::_getAdminContactIds();
     $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
-    $appraisalsContacts = self::$_relatedExtensions['appraisals'] 
-      ? CRM_Appraisals_Reminder::getContactIds($now, $to) 
+    $appraisalsContacts = self::$_relatedExtensions['appraisals']
+      ? CRM_Appraisals_Reminder::getContactIds($now, $to)
       : array();
 
     $contacts = array_merge($adminContacts, $keyDatesContacts, $appraisalsContacts);
@@ -580,7 +581,7 @@ class CRM_Tasksassignments_Reminder {
    * Check if given Contact ID is allowed to see Key Dates section
    * in Dayly Reminder email. As being said in PCHR-1149 it requires
    * Administrator role.
-   * 
+   *
    * @param int $contactId
    * @return boolean
    */
@@ -637,7 +638,6 @@ class CRM_Tasksassignments_Reminder {
   public static function createContactURL($contactId = NULL) {
 
     if ($contactId) {
-      $contactUrl = '';
       $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
 
       if (user_access('access CiviCRM', $drupal_user)) {
@@ -658,15 +658,15 @@ class CRM_Tasksassignments_Reminder {
    * - Due in next fortnight (14 days) (!= approved)
    * - Due in < 90 days (!= approved)
    * and show status in email.
-   * 
+   *
    * Acceptance criteria:
    * - Emails are sent out to assignees only.
    * - Assignee contact receives lists of documents he/she is assigned to only.
    * - Documents are grouped by due date according to the logic described
    *   in the task description (@see PCHR-1362).
-   * 
+   *
    * Returns a number of emails sent.
-   * 
+   *
    * @return int
    */
   public static function sendDocumentsNotifications() {
@@ -698,7 +698,7 @@ class CRM_Tasksassignments_Reminder {
    * Return an array containing a set of Documents for each Assignee
    * grouped by due date period ('overdue' - overdue, 'plus14' - due date
    * within next 14 days, 'plus90' - due date within next 90 days).
-   * 
+   *
    * @return array
    */
   protected static function getDocumentNotificationsData() {
@@ -732,7 +732,7 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Return CRM_Core_DAO object with database results containing data
    * needed for create a Documents Notification emails.
-   * 
+   *
    * @param DateTime $upToDate
    * @return CRM_Core_DAO
    */
@@ -766,7 +766,7 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Extracts data from a single row containing concatenated database values into
    * array containing three contact types (Creator, Assignee and Target).
-   * 
+   *
    * @param string $activityContactsData
    * @return array
    */
@@ -794,10 +794,10 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Return an array containing a set of single Document fields needed for
    * list the Document in notification template.
-   * 
+   *
    * @param CRM_Core_DAO $activityResult
    * @param array $activityContact
-   * 
+   *
    * @return array
    */
   protected static function getDocumentNotificationTemplateValues(CRM_Core_DAO $activityResult, array $activityContact) {
@@ -916,4 +916,5 @@ class CRM_Tasksassignments_Reminder {
 
     return $result;
   }
+
 }

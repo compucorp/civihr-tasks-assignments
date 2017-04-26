@@ -77,6 +77,14 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
     $clonedField = static::getCustomFieldName('clone_date');
     $remindMeField = static::getCustomFieldName('remind_me');
 
+    $fieldsRequiredForClone = [
+      'target_contact_id',
+      'activity_type_id',
+      'details',
+      'expire_date',
+      'activity_date_time',
+    ];
+
     $params = [
       $expiryField => ['<=' => $cutOffDate->format('Y-m-d')],
       $clonedField => ['IS NULL' => 1],
@@ -84,7 +92,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       'is_deleted' => 0,
       'status_id' => self::STATUS_APPROVED,
       'options' => ['limit' => 0],
-      'return' => ['target_contact_id', 'activity_type_id', 'details']
+      'return' => $fieldsRequiredForClone
     ];
 
     $result = civicrm_api3('Document', 'get', $params);
