@@ -83,6 +83,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       'details',
       'expire_date',
       'activity_date_time',
+      'assignee_contact_id',
     ];
 
     $params = [
