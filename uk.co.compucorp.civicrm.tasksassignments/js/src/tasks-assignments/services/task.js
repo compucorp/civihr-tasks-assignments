@@ -92,20 +92,20 @@ define([
           var deferred = $q.defer();
 
           $q.all({
-            taskType: this.getActivityTypeIdOption(),
-            taskStatus: this.getStatusIdOption()
+            taskType: this.getActivityTypes(),
+            taskStatus: this.getTaskStatus()
           }).then(function(options) {
             deferred.resolve(options);
           });
 
           return deferred.promise;
         },
-        getStatusIdOption: function() {
+        getTaskStatus: function() {
           var deferredTaskStatus = $q.defer(),
             taskStatus = {
               arr: [],
               obj: {}
-            }
+            };
 
           Task.get({
             action: 'getoptions',
@@ -127,12 +127,12 @@ define([
 
           return deferredTaskStatus.promise;
         },
-        getActivityTypeIdOption: function() {
+        getActivityTypes: function() {
           var deferredTaskType = $q.defer(),
             taskType = {
               arr: [],
               obj: {}
-            }
+            };
 
           Task.get({
             action: 'getoptions',

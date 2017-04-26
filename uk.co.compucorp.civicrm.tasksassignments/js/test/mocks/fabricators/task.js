@@ -65,7 +65,7 @@ define(function() {
         }
       ]
     },
-    activityTypesOptions: function() {
+    activityTypes: function() {
       return [
         {
           "key": "13",
@@ -89,7 +89,7 @@ define(function() {
         }
       ]
     },
-    statusIdFieldsOptions: function() {
+    taskStatus: function() {
       return [
         {
           "key": 1,
