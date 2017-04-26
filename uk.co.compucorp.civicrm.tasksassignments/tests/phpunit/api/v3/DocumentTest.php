@@ -5,10 +5,17 @@
  */
 class api_v3_DocumentTest extends CiviUnitTestCase {
 
-  private $_documentTypeId = null;
+  /**
+   * @var int
+   */
+  private $_documentTypeId;
 
-  function setUp() {
+  /**
+   * Runs installer and sets default document type
+   */
+  public function setUp() {
     parent::setUp();
+    $this->quickCleanup(['civicrm_activity'], TRUE);
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
 
@@ -22,7 +29,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   /**
    * @expectedException CiviCRM_API3_Exception
    */
-  function testCreateDocumentWithNoContacts() {
+  public function testCreateDocumentWithNoContacts() {
     civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,
     ));
@@ -31,7 +38,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   /**
    * @expectedException CiviCRM_API3_Exception
    */
-  function testCreateDocumentWithNoSource() {
+  public function testCreateDocumentWithNoSource() {
     civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,
       'assignee_contact_id' => 1,
@@ -39,7 +46,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     ));
   }
 
-  function testCreateDocumentWithNoAssignee() {
+  public function testCreateDocumentWithNoAssignee() {
     $result = civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,
       'source_contact_id' => 1,
@@ -55,7 +62,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   /**
    * @expectedException CiviCRM_API3_Exception
    */
-  function testCreateDocumentWithNoTarget() {
+  public function testCreateDocumentWithNoTarget() {
     civicrm_api3('Document', 'create', array(
       'activity_type_id' => $this->_documentTypeId,
       'source_contact_id' => 1,
@@ -70,7 +77,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
    * meet 'clonedocuments' logic requirements (their 'expire_date'
    * is less than today date + 'days_to_create_a_document_clone' setting value.
    */
-  function testCreateDocumentClone() {
+  public function testCreateDocumentClone() {
     // Setting 'days_to_create_a_document_clone' to 5.
     civicrm_api3('TASettings', 'set', array(
       'sequential' => 1,
@@ -164,4 +171,65 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     // cloned document.
     $this->assertEquals(0, $clonedCount['values']);
   }
+
+  /**
+   * Only documents with "remind me" = true should be cloned
+   */
+  public function testRemindMeDocumentClone() {
+    civicrm_api3('TASettings', 'set', [
+      'fields' => ['days_to_create_a_document_clone' => 5],
+    ]);
+
+    $contact = civicrm_api3('Contact', 'create', [
+      'contact_type' => 'Individual',
+      'display_name' => 'First Contact',
+      'email' => 'test1@email3215155.com',
+    ]);
+    $details1 = 'First sample document details';
+    $details2 = 'Second sample document details';
+    $today = (new DateTime())->format('Y-m-d');
+    $tomorrow = (new DateTime('tomorrow'))->format('Y-m-d');
+
+    // document with "remind me" = true
+    civicrm_api3('Document', 'create', [
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => $contact['id'],
+      'target_contact_id' => [$contact['id']],
+      'assignee_contact_id' => [$contact['id']],
+      'details' => $details1,
+      'remind_me' => 1,
+      'activity_date_time' => $today,
+      'expire_date' => $tomorrow,
+      'status_id' => 3,
+    ]);
+    // document with "remind me" = false
+    civicrm_api3('Document', 'create', [
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => $contact['id'],
+      'target_contact_id' => [$contact['id']],
+      'assignee_contact_id' => [$contact['id']],
+      'details' => $details2,
+      'remind_me' => 0,
+      'activity_date_time' => $today,
+      'expire_date' => $tomorrow,
+      'status_id' => 3,
+    ]);
+
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    $this->assertEquals(1, $clonedCount['values']);
+
+    // Then we check if there is properly cloned Document 1.
+    $params = ['details' => $details1, 'activity_date_time' => $tomorrow];
+    $clonedDocument1 = civicrm_api3('Document', 'get', $params);
+    $this->assertEquals(1, $clonedDocument1['count']);
+
+    // And we check if there is no cloned Document 2.
+    $params = ['details' => $details2, 'activity_date_time' => $tomorrow];
+    $clonedDocument2 = civicrm_api3('Document', 'get', $params);
+    $this->assertEquals(0, $clonedDocument2['count']);
+
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    $this->assertEquals(0, $clonedCount['values']);
+  }
+
 }
