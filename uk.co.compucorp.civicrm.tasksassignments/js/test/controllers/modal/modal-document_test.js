@@ -7,19 +7,33 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, files, initController;
+    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, files, initController, $httpBackend, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$httpBackend_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
 
       HR_settings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      sampleAssignee = {
+        id: 5,
+        label: "sample label",
+        icon_class: 'fa fa-plus',
+        description: "this is sample desc"
+      };
 
       data = {};
       files = {};
     }));
+
+    beforeEach(function () {
+      $httpBackend.whenGET(/action=getoptions&entity=Task/).respond({});
+      $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
+      $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
+      $httpBackend.whenGET(/action=get&entity=contact/).respond({});
+    });
 
     describe('Lookup contacts lists', function () {
       describe('when in "new task" mode', function () {
@@ -78,6 +92,55 @@ define([
         expect($scope.parseDate(false)).toBe(null);
       });
     });
+
+    describe('addAssignee()', function () {
+      beforeEach(function () {
+        initController();
+        addAssignee(sampleAssignee);
+      });
+
+      it('adds contact of id 5 as assignee for document', function () {
+        expect($scope.document.assignee_contact_id[0]).toBe(sampleAssignee.id);
+      });
+
+      it('adds contact of id 5 in contact search list', function () {
+        expect($rootScope.cache.contact.arrSearch[0].id).toEqual(sampleAssignee.id);
+        expect($rootScope.cache.contact.arrSearch[0].label).toEqual(sampleAssignee.label);
+      });
+    });
+
+    describe('removeAssignee()', function () {
+      beforeEach(function () {
+        initController();
+        addAssignee(sampleAssignee);
+      });
+
+      it('removes assignee form the list of assignees', function () {
+        expect($scope.document.assignee_contact_id.length).toEqual(1);
+        $scope.removeAssignee(0);
+        expect($scope.document.assignee_contact_id.length).toEqual(0);
+      });
+    });
+
+    describe('remindMeInfo()', function () {
+      beforeEach(function () {
+        initController();
+
+        spyOn(CRM,'help');
+
+        $scope.remindMeInfo();
+      });
+
+      it('makes calls to CRM.help() to display help message', function () {
+        expect(CRM.help).toHaveBeenCalled();
+        expect(CRM.help).toHaveBeenCalledWith('Remind me?', $scope.remindMeMessage, 'error');
+      });
+    });
+
+    function addAssignee(assignee) {
+      $scope.addAssignee(assignee);
+      $scope.$digest();
+    }
 
     function fakeModalInstance() {
       return {
