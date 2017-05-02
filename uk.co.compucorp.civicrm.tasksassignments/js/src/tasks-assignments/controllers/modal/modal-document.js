@@ -32,10 +32,27 @@ define([
       $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val) {
         return +val.extra.contact_id == +$scope.document.target_contact_id;
       });
+
       $scope.contacts = {
         target: initialContacts('target'),
         assignee: initialContacts('assignee')
       };
+
+      $scope.dpOpened = {
+        due: false,
+        exp: false,
+        form: false
+      };
+
+      $scope.remindMeMessage = `
+        If you check this box CiviHR will “remind” you that this document needs to
+        be reviewed. CiviHR will do this by creating a copy of  the document with
+        the  status of awaiting upload a number of days or months before the document
+        expires. You can set the date to create the copy. The copy will have
+        the same document  types and set the assignee to be the same assignee as
+        for this original version of the document. You will then see it in your
+        documents list and be able to action renewing the document.
+        `;
 
       $scope.statusFieldVisible = function() {
         return !!$scope.document.status_id;
@@ -46,23 +63,20 @@ define([
       };
 
       $scope.cacheAssignment = function($item) {
+        var obj = {};
 
         if ($rootScope.cache.assignment.obj[$item.id]) {
           return
         }
 
-        var obj = {};
-
         obj[$item.id] = {
           case_type_id: $filter('filter')($rootScope.cache.assignmentType.arr, {title: $item.extra.case_type})[0].id,
           client_id: {'1': $item.extra.contact_id},
           contact_id: {'1': $item.extra.contact_id},
-          contacts: [
-            {
-              sort_name: $item.extra.sort_name,
-              contact_id: $item.extra.contact_id
-            }
-          ],
+          contacts: [{
+            sort_name: $item.extra.sort_name,
+            contact_id: $item.extra.contact_id
+          }],
           end_date: $item.extra.end_date,
           id: $item.id,
           is_deleted: $item.label_class == 'strikethrough' ? '1' : '0',
@@ -86,6 +100,19 @@ define([
 
         ContactService.updateCache(obj);
       };
+
+      $scope.addAssignee = function ($item) {
+
+        if($scope.document.assignee_contact_id.indexOf($item.id) == -1){
+          $scope.document.assignee_contact_id.push($item.id);
+        }
+
+        $scope.cacheContact($item);
+      }
+
+      $scope.removeAssignee = function(index) {
+        $scope.document.assignee_contact_id.splice(index,1);
+      }
 
       $scope.fileMoveToTrash = function(index) {
         $scope.filesTrash.push($scope.files[index]);
@@ -119,11 +146,6 @@ define([
         });
       };
 
-      $scope.dpOpened = {
-        due: false,
-        exp: false
-      };
-
       $scope.cancel = function() {
 
         if ($scope.documentForm.$pristine) {
@@ -142,7 +164,6 @@ define([
           $scope.$broadcast('ct-spinner-hide');
           $modalInstance.dismiss('cancel');
         });
-
       };
 
       $scope.confirm = function() {
@@ -258,10 +279,10 @@ define([
          *  - date format we get from server
          */
         var formatted = moment(date, [
-          HR_settings.DATE_FORMAT.toUpperCase(),
-          'x',
-          'YYYY-MM-DD'
-        ]);
+            HR_settings.DATE_FORMAT.toUpperCase(),
+            'x',
+            'YYYY-MM-DD'
+          ]);
 
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
       };
@@ -277,6 +298,11 @@ define([
           document.getElementById($rootScope.prefix + 'document-files').click();
         });
       };
+
+      // Display help message
+      $scope.remindMeInfo = function() {
+        CRM.help("Remind me?", $scope.remindMeMessage, 'error');
+      }
 
       /**
        * Validates if the required fields values are present, and shows a notification if needed
