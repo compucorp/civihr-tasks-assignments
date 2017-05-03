@@ -7,13 +7,12 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, files, initController, $httpBackend, sampleAssignee;
+    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, files, initController, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$httpBackend_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
-      $httpBackend = _$httpBackend_;
       $scope = $rootScope.$new();
 
       HR_settings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -27,13 +26,6 @@ define([
       data = {};
       files = {};
     }));
-
-    beforeEach(function () {
-      $httpBackend.whenGET(/action=getoptions&entity=Task/).respond({});
-      $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
-      $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
-      $httpBackend.whenGET(/action=get&entity=contact/).respond({});
-    });
 
     describe('Lookup contacts lists', function () {
       describe('when in "new task" mode', function () {
@@ -99,11 +91,11 @@ define([
         addAssignee(sampleAssignee);
       });
 
-      it('adds contact of id 5 as assignee for document', function () {
+      it('adds contacts to list of assignees', function () {
         expect($scope.document.assignee_contact_id[0]).toBe(sampleAssignee.id);
       });
 
-      it('adds contact of id 5 in contact search list', function () {
+      it('adds assignee to contact search list', function () {
         expect($rootScope.cache.contact.arrSearch[0].id).toEqual(sampleAssignee.id);
         expect($rootScope.cache.contact.arrSearch[0].label).toEqual(sampleAssignee.label);
       });
@@ -125,21 +117,17 @@ define([
     describe('remindMeInfo()', function () {
       beforeEach(function () {
         initController();
-
         spyOn(CRM,'help');
-
         $scope.remindMeInfo();
       });
 
       it('makes calls to CRM.help() to display help message', function () {
-        expect(CRM.help).toHaveBeenCalled();
         expect(CRM.help).toHaveBeenCalledWith('Remind me?', $scope.remindMeMessage, 'error');
       });
     });
 
     function addAssignee(assignee) {
       $scope.addAssignee(assignee);
-      $scope.$digest();
     }
 
     function fakeModalInstance() {

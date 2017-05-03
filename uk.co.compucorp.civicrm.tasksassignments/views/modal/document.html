@@ -9,8 +9,7 @@
   <div class="modal-body" nv-file-drop uploader="uploader">
     <div class="container">
       <div class="row">
-        <div class="col-xs-12 col-sm-7"></div>
-        <div class="col-xs-12 col-sm-5" ng-show="statusFieldVisible()">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-7" ng-show="statusFieldVisible()">
           <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
             <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Set Status">
               {{$select.selected.value}}
@@ -59,7 +58,7 @@
           <br>
           <div class="row">
             <div class="col-xs-12">
-              <div class="well drop-zone" ng-click="dropzoneClick();">
+              <div class="well drop-zone" ng-click="dropzoneClick()">
                 <i class="fa fa-cloud-upload"></i><br/>
                 <strong>Drop file here</strong><br/> or click to browse
               </div>
@@ -113,7 +112,7 @@
             </div>
           </div>
           <div class="row">
-            <!-- Form Date -->
+            <!-- Valid From Date -->
             <div class="col-xs-6">
               <div class="form-group">
                 <label for="{{prefix}}document-from" class="col-xs-3 text-nowrap control-label">From:</label>
@@ -137,8 +136,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-sm-8"></div>
-            <div class="col-xs-12 col-sm-4" ng-show="statusFieldVisible()">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-8" ng-show="statusFieldVisible()">
               <input type="checkbox" ng-model="document.remind_me" ng-click="!document.remind_me">&nbsp; Remind me
               <a class="helpicon" title="Remind Me info" href ng-click="remindMeInfo()"></a>
             </div>
@@ -161,12 +159,12 @@
           <!-- Assignee & Assignment -->
           <div class="row">
             <!-- Assignee -->
-            <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id[0] && !showAssigneeField">
+            <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id.length && !showAssigneeField">
               <span class="form-control-static">
                 <a href class="btn btn-indent" ng-click="showAssigneeField = true;">Add Assignee</a>
               </span>
             </div>
-            <div class="col-xs-12 col-sm-8" ng-show="document.assignee_contact_id[0] || showAssigneeField">
+            <div class="col-xs-12 col-sm-8" ng-show="document.assignee_contact_id.length || showAssigneeField">
               <ui-select prevent-animations name="assignee" theme="civihr-ui-select" ng-model="document.temp" on-select="addAssignee($item);">
                 <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
                   {{$select.placeholder}}
@@ -176,12 +174,12 @@
                   <small ng-bind="contact.description[0]"></small>
                 </ui-select-choices>
               </ui-select>
-              <h4 ng-show="document.assignee_contact_id[0]">Assignees:</h4>
+              <h4 ng-show="document.assignee_contact_id.length">Assignees:</h4>
               <ul class="list-unstyled">
                 <li ng-repeat="(key,assigneeId) in document.assignee_contact_id" >
                   <span ng-repeat="contact in cache.contact.arrSearch">
                     <p ng-if="contact.id == assigneeId">{{ contact.label }}
-                      <a href="javascript:void(0)">&nbsp;<i ng-click="removeAssignee(key)" class="fa fa-times" aria-hidden="true"></i></a>
+                      <a href="javascript:void(0)" ng-click="removeAssignee(key)"> &nbsp; <i class="fa fa-times" aria-hidden="true"></i></a>
                     </p>
                   </span>
                 </li>
