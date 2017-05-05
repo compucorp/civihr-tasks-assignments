@@ -589,6 +589,14 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  /**
+   * Redo upgrade_1020 since a change in the code in v1.6.2 re-purposed it and
+   * it is possible that it the option_value was not created in some cases
+   */
+  public function upgrade_1026() {
+    return $this->upgrade_1020();
+  }
+
     public function uninstall()
     {
         CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
