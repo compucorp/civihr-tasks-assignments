@@ -279,6 +279,10 @@ class CRM_Tasksassignments_Reminder {
         $settings
       );
 
+      if (empty(array_filter($reminderData))) {
+        continue;
+      }
+
       $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', [
         'reminder' => $reminderData,
         'baseUrl' => CIVICRM_UF_BASEURL,
@@ -435,7 +439,7 @@ class CRM_Tasksassignments_Reminder {
    *
    * @param string $now
    *   Date from where key dates and appraisals should be searched, yyyy-mm-dd
-   * @param type $to
+   * @param string $to
    *   Date until where key dates and appraisals should be searched, yyyy-mm-dd
    *
    * @return string
@@ -447,7 +451,7 @@ class CRM_Tasksassignments_Reminder {
     $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
     $appraisalsContacts = self::$_relatedExtensions['appraisals']
       ? CRM_Appraisals_Reminder::getContactIds($now, $to)
-      : array();
+      : [];
 
     $contacts = array_merge($adminContacts, $keyDatesContacts, $appraisalsContacts);
 
