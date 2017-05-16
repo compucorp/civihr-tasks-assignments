@@ -1,0 +1,34 @@
+// Variables
+$inactive-tab:    #F4F7F8;
+$active-tab:      #FFFFFF;
+
+$inactive-text:   #586277;
+$active-text:     #41AFCB;
+
+// Tabs
+.nav-tabs {
+  li {
+    background-color: $inactive-tab;
+
+    a,
+    a:hover,
+    a:focus {
+      background-color: $inactive-tab;
+      border-color: $inactive-tab;
+      color: $inactive-text;
+    }
+  }
+
+  li.active a {
+    background-color: $active-tab;
+    border-bottom-color: transparent;
+    color: $active-text;
+
+    &:hover,
+    &:focus {
+      background-color: $active-tab;
+      color: $active-text;
+      cursor: default;
+    }
+  }
+}
