@@ -34,7 +34,7 @@
   Author : Austin Anderson
   License : 2013 MIT
   Version 1.3.7
-
+  
   See README.md or https://github.com/fraywing/textAngular/wiki for requirements and use.
   */
   /* add generic styling for the editor */
@@ -11949,6 +11949,28 @@ fieldset[disabled]
 #civitasks .has-feedback > .crm_custom-select + .form-control-feedback, #cividocuments .has-feedback > .crm_custom-select + .form-control-feedback {
   right: 27px !important;
 }
+#civitasks .nav-tabs li, #cividocuments .nav-tabs li {
+  background-color: #F4F7F8;
+}
+#civitasks .nav-tabs li a, #cividocuments .nav-tabs li a,
+#civitasks .nav-tabs li a:hover,
+#cividocuments .nav-tabs li a:hover,
+#civitasks .nav-tabs li a:focus,
+#cividocuments .nav-tabs li a:focus {
+  background-color: #F4F7F8;
+  border-color: #F4F7F8;
+  color: #586277;
+}
+#civitasks .nav-tabs li.active a, #cividocuments .nav-tabs li.active a {
+  background-color: #FFFFFF;
+  border-bottom-color: transparent;
+  color: #41AFCB;
+}
+#civitasks .nav-tabs li.active a:hover, #cividocuments .nav-tabs li.active a:hover, #civitasks .nav-tabs li.active a:focus, #cividocuments .nav-tabs li.active a:focus {
+  background-color: #FFFFFF;
+  color: #41AFCB;
+  cursor: default;
+}
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   #civitasks .ct-sidebar-main, #cividocuments .ct-sidebar-main {
     margin-left: 0;
@@ -12622,6 +12644,9 @@ fieldset[disabled]
 }
 #civitasks .civihr-ui-select .select2-drop-active, #cividocuments .civihr-ui-select .select2-drop-active {
   border-top: 0 !important;
+}
+#civitasks .civihr-ui-select .select2-chosen span, #cividocuments .civihr-ui-select .select2-chosen span {
+  color: #586277;
 }
 #civitasks .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before {
   content: '\f002' !important;
