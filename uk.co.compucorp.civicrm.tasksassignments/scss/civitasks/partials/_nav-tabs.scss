@@ -1,33 +1,36 @@
 // Variables
-$inactive-tab:    #F4F7F8;
-$active-tab:      #FFFFFF;
+$light-gray:        #F4F7F8;
+$white:             #FFFFFF;
 
-$inactive-text:   #586277;
-$active-text:     #41AFCB;
+$light-black-blue:  #586277;
+$light-blue:        #41AFCB;
 
 // Tabs
 .nav-tabs {
-  li {
-    background-color: $inactive-tab;
+  li,
+  a {
+    background-color: $light-gray;
+  }
 
-    a,
-    a:hover,
-    a:focus {
-      background-color: $inactive-tab;
-      border-color: $inactive-tab;
-      color: $inactive-text;
+  li a {
+    &:hover,
+    &:focus {
+      background-color: $light-gray;
+      border-color: $light-gray;
+      color: $light-black-blue;
+      margin-right: 0;
     }
   }
 
   li.active a {
-    background-color: $active-tab;
+    background-color: $white;
     border-bottom-color: transparent;
-    color: $active-text;
+    color: $light-blue;
 
     &:hover,
     &:focus {
-      background-color: $active-tab;
-      color: $active-text;
+      background-color: $white;
+      color: $light-blue;
       cursor: default;
     }
   }

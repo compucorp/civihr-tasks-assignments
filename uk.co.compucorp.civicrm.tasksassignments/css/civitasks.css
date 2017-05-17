@@ -11949,17 +11949,16 @@ fieldset[disabled]
 #civitasks .has-feedback > .crm_custom-select + .form-control-feedback, #cividocuments .has-feedback > .crm_custom-select + .form-control-feedback {
   right: 27px !important;
 }
-#civitasks .nav-tabs li, #cividocuments .nav-tabs li {
+#civitasks .nav-tabs li, #cividocuments .nav-tabs li,
+#civitasks .nav-tabs a,
+#cividocuments .nav-tabs a {
   background-color: #F4F7F8;
 }
-#civitasks .nav-tabs li a, #cividocuments .nav-tabs li a,
-#civitasks .nav-tabs li a:hover,
-#cividocuments .nav-tabs li a:hover,
-#civitasks .nav-tabs li a:focus,
-#cividocuments .nav-tabs li a:focus {
+#civitasks .nav-tabs li a:hover, #cividocuments .nav-tabs li a:hover, #civitasks .nav-tabs li a:focus, #cividocuments .nav-tabs li a:focus {
   background-color: #F4F7F8;
   border-color: #F4F7F8;
   color: #586277;
+  margin-right: 0;
 }
 #civitasks .nav-tabs li.active a, #cividocuments .nav-tabs li.active a {
   background-color: #FFFFFF;

@@ -6,7 +6,7 @@ $brand-primary:          #42AFCB;
 $dropdown-border:        #727E8A;
 $gray-dark:              #727E8A;
 $gray-lighter:           #F3F6F7;
-$field-data-color:       #586277;
+$text-color-light-black: #586277;
 $input-border-radius:    0;
 
 // Include the original ui-select css + the civihr-ui-select dropdown theme
@@ -43,7 +43,7 @@ $input-border-radius:    0;
 
   .select2-chosen {
     span {
-      color: $field-data-color;
+      color: $text-color-light-black;
     }
   }
 

@@ -177,7 +177,7 @@
               <div class="row">
                 <label class="col-xs-4 text-nowrap control-label"> Assignees: </label>
                 <div class="col-xs-8 input-group">
-                  <ui-select prevent-animations name="assignee" theme="civihr-ui-select" ng-model="document.temp" on-select="addAssignee($item);">
+                  <ui-select prevent-animations name="assignee" theme="civihr-ui-select" ng-model="document.assignee_contact" on-select="addAssignee($item);">
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
                       {{$select.placeholder}}
                     </ui-select-match>
