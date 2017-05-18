@@ -1,0 +1,37 @@
+// Variables
+$light-gray:        #F4F7F8;
+$white:             #FFFFFF;
+
+$light-black-blue:  #586277;
+$light-blue:        #41AFCB;
+
+// Tabs
+.nav-tabs {
+  li,
+  a {
+    background-color: $light-gray;
+  }
+
+  li a {
+    &:hover,
+    &:focus {
+      background-color: $light-gray;
+      border-color: $light-gray;
+      color: $light-black-blue;
+      margin-right: 0;
+    }
+  }
+
+  li.active a {
+    background-color: $white;
+    border-bottom-color: transparent;
+    color: $light-blue;
+
+    &:hover,
+    &:focus {
+      background-color: $white;
+      color: $light-blue;
+      cursor: default;
+    }
+  }
+}
