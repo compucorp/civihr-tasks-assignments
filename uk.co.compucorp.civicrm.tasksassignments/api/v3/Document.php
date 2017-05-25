@@ -756,6 +756,12 @@ function civicrm_api3_document_senddailyreminder($params) {
  * CRON action for cloning documents pre-set days before original expiry date.
  */
 function civicrm_api3_document_clonedocuments($params) {
+
+  // request can be very slow
+  if (!ini_get('safe_mode')) {
+    set_time_limit(0);
+  }
+
   return civicrm_api3_create_success(CRM_Tasksassignments_BAO_Document::cloneDocuments(), $params);
 }
 
