@@ -1,3 +1,5 @@
+/* global define, CRM */
+
 define([
   'common/angular',
   'common/moment',
@@ -6,17 +8,17 @@ define([
   'tasks-assignments/services/file',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document'
-], function(angular, moment, controllers) {
+], function (angular, moment, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
-    function($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout, AssignmentService,
+    function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout, AssignmentService,
       DocumentService, ContactService, FileService, data, files, config, HR_settings) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       // Init call
-      (function init() {
+      (function init () {
         $scope.files = [];
         $scope.document = {};
 
@@ -25,10 +27,10 @@ define([
 
         $scope.data = data;
 
-        $scope.document.activity_date_time = !!$scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
-        $scope.document.expire_date = !!$scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
-        $scope.document.valid_from = !!$scope.document.valid_from ? moment($scope.document.valid_from).toDate() : null;
-        $scope.document.remind_me = $scope.document.remind_me == 1 ? true : false;
+        $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
+        $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
+        $scope.document.valid_from = $scope.document.valid_from ? moment($scope.document.valid_from).toDate() : null;
+        $scope.document.remind_me = $scope.document.remind_me === '1';
         $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
         $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
         $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
@@ -37,8 +39,8 @@ define([
         $scope.filesTrash = [];
         $scope.uploader = FileService.uploader('civicrm_activity');
         $scope.showCId = !config.CONTACT_ID;
-        $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val) {
-          return +val.extra.contact_id == +$scope.document.target_contact_id;
+        $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
+          return +val.extra.contact_id === +$scope.document.target_contact_id;
         });
 
         $scope.contacts = {
@@ -52,28 +54,22 @@ define([
           form: false
         };
 
-        $scope.remindMeMessage = "If you check this box CiviHR will “remind” you \
-          that this document needs to be reviewed. CiviHR will do this by creating \
-          a copy of  the document with the  status of awaiting upload a number of days \
-          or months before the documentexpires. You can set the date to create the copy. \
-          The copy will have the same document  types and set the assignee to be the same \
-          assignee as for this original version of the document. You will then see it in \
-          your documents list and be able to action renewing the document.";
+        $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be reviewed. CiviHR will do this by creating a copy of  the document with the  status of awaiting upload a number of days or months before the documentexpires. You can set the date to create the copy. The copy will have the same document  types and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
       })();
 
-      $scope.statusFieldVisible = function() {
+      $scope.statusFieldVisible = function () {
         return !!$scope.document.status_id;
       };
 
-      $scope.showStatusField = function() {
+      $scope.showStatusField = function () {
         $scope.document.status_id = 1;
       };
 
-      $scope.cacheAssignment = function($item) {
+      $scope.cacheAssignment = function ($item) {
         var obj = {};
 
         if ($rootScope.cache.assignment.obj[$item.id]) {
-          return
+          return;
         }
 
         obj[$item.id] = {
@@ -86,7 +82,7 @@ define([
           }],
           end_date: $item.extra.end_date,
           id: $item.id,
-          is_deleted: $item.label_class == 'strikethrough' ? '1' : '0',
+          is_deleted: $item.label_class === 'strikethrough' ? '1' : '0',
           start_date: $item.extra.start_date,
           subject: $item.extra.case_subject
         };
@@ -94,7 +90,7 @@ define([
         AssignmentService.updateCache(obj);
       };
 
-      $scope.cacheContact = function($item) {
+      $scope.cacheContact = function ($item) {
         var obj = {};
 
         obj[$item.id] = {
@@ -109,63 +105,60 @@ define([
       };
 
       $scope.addAssignee = function ($item) {
-
-        if($scope.document.assignee_contact_id.indexOf($item.id) == -1){
+        if ($scope.document.assignee_contact_id.indexOf($item.id) === -1) {
           $scope.document.assignee_contact_id.push($item.id);
         }
 
         $scope.cacheContact($item);
-      }
+      };
 
-      $scope.removeAssignee = function(index) {
-        $scope.document.assignee_contact_id.splice(index,1);
-      }
+      $scope.removeAssignee = function (index) {
+        $scope.document.assignee_contact_id.splice(index, 1);
+      };
 
-      $scope.fileMoveToTrash = function(index) {
+      $scope.fileMoveToTrash = function (index) {
         $scope.filesTrash.push($scope.files[index]);
         $scope.files.splice(index, 1);
       };
 
-      $scope.refreshAssignments = function(input) {
-
+      $scope.refreshAssignments = function (input) {
         if (!input) {
-          return
+          return;
         }
 
         var targetContactId = $scope.document.target_contact_id;
 
-        AssignmentService.search(input, $scope.document.case_id).then(function(results) {
-          $scope.assignments = $filter('filter')(results, function(val) {
-            return +val.extra.contact_id == +targetContactId;
+        AssignmentService.search(input, $scope.document.case_id).then(function (results) {
+          $scope.assignments = $filter('filter')(results, function (val) {
+            return +val.extra.contact_id === +targetContactId;
           });
         });
       };
 
-      $scope.refreshContacts = function(input, type) {
+      $scope.refreshContacts = function (input, type) {
         if (!input) {
-          return
+          return;
         }
 
         ContactService.search(input, {
           contact_type: 'Individual'
-        }).then(function(results) {
+        }).then(function (results) {
           $scope.contacts[type] = results;
         });
       };
 
-      $scope.cancel = function() {
-
+      $scope.cancel = function () {
         if ($scope.documentForm.$pristine) {
           $modalInstance.dismiss('cancel');
-          return
+          return;
         }
 
         $dialog.open({
           copyCancel: 'No',
           msg: 'Are you sure you want to cancel? Changes will be lost!'
-        }).then(function(confirm) {
+        }).then(function (confirm) {
           if (!confirm) {
-            return
+            return;
           }
 
           $scope.$broadcast('ct-spinner-hide');
@@ -173,7 +166,7 @@ define([
         });
       };
 
-      $scope.confirm = function() {
+      $scope.confirm = function () {
         var doc = angular.copy($scope.document);
 
         if (!validateRequiredFields(doc)) {
@@ -186,15 +179,15 @@ define([
           return;
         }
 
-        var uploader = $scope.uploader,
-          filesTrash = $scope.filesTrash,
-          promiseFilesDelete = [],
-          file;
+        var uploader = $scope.uploader;
+        var filesTrash = $scope.filesTrash;
+        var promiseFilesDelete = [];
+        var file;
 
         $scope.$broadcast('ct-spinner-show');
 
-        //temporary remove case_id
-        +doc.case_id == +data.case_id && delete doc.case_id;
+        // temporary remove case_id
+        +doc.case_id === +data.case_id && delete doc.case_id;
 
         doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
         doc.expire_date = $scope.parseDate(doc.expire_date);
@@ -208,8 +201,8 @@ define([
 
         $q.all({
           document: DocumentService.save(doc),
-          files: !!promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
-        }).then(function(result) {
+          files: promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
+        }).then(function (result) {
           if (uploader.queue.length) {
             var modalInstance = $modal.open({
               appendTo: $rootElement.find('div').eq(0),
@@ -217,10 +210,10 @@ define([
               size: 'sm',
               controller: 'ModalProgressCtrl',
               resolve: {
-                uploader: function() {
+                uploader: function () {
                   return uploader;
                 },
-                entityId: function() {
+                entityId: function () {
                   return result.document.id;
                 }
               }
@@ -231,12 +224,12 @@ define([
           }
 
           return result;
-        }).then(function(result) {
+        }).then(function (result) {
           if (result.files.length && !!result.files[0].result) {
             DocumentService.save({
               id: result.document.id,
               status_id: '1' // 1 => 'awaiting upload'
-            }).then(function(results) {
+            }).then(function (results) {
               $scope.document.status_id = results.status_id;
               $modalInstance.close($scope.document);
             });
@@ -244,7 +237,7 @@ define([
             DocumentService.save({
               id: result.document.id,
               status_id: '3' // 3 => 'approved'
-            }).then(function(results) {
+            }).then(function (results) {
               $scope.document.status_id = results.status_id;
               $modalInstance.close($scope.document);
             });
@@ -255,11 +248,11 @@ define([
           $scope.document.id = result.document.id;
           $scope.document.case_id = result.document.case_id;
           $scope.document.file_count = $scope.files.length + uploader.queue.length;
-          $scope.document.open = $scope.openNew
+          $scope.document.open = $scope.openNew;
 
           AssignmentService.updateTab();
           $scope.$broadcast('ta-spinner-hide');
-        }, function(reason) {
+        }, function (reason) {
           CRM.alert(reason, 'Error', 'error');
           $modalInstance.dismiss();
           $scope.$broadcast('ta-spinner-hide');
@@ -274,8 +267,7 @@ define([
        * @param {string|Date} date
        * @returns {string|null}
        */
-      $scope.parseDate = function(date) {
-
+      $scope.parseDate = function (date) {
         if (date instanceof Date) {
           date = date.getTime();
         }
@@ -285,38 +277,34 @@ define([
          *  - timestamps (Date object is used by some 3rd party directives)
          *  - date format we get from server
          */
-        var formatted = moment(date, [
-            HR_settings.DATE_FORMAT.toUpperCase(),
-            'x',
-            'YYYY-MM-DD'
-          ]);
+        var formatted = moment(date, [HR_settings.DATE_FORMAT.toUpperCase(), 'x', 'YYYY-MM-DD']);
 
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
       };
 
-      $scope.dpOpen = function($event, name) {
+      $scope.dpOpen = function ($event, name) {
         $event.preventDefault();
         $event.stopPropagation();
         $scope.dpOpened[name] = true;
       };
 
-      $scope.dropzoneClick = function() {
-        $timeout(function() {
+      $scope.dropzoneClick = function () {
+        $timeout(function () {
           document.getElementById($rootScope.prefix + 'document-files').click();
         });
       };
 
       // Display help message
-      $scope.remindMeInfo = function() {
-        CRM.help("Remind me?", $scope.remindMeMessage, 'error');
-      }
+      $scope.remindMeInfo = function () {
+        CRM.help('Remind me?', $scope.remindMeMessage, 'error');
+      };
 
       /**
        * Validates if the required fields values are present, and shows a notification if needed
        * @param  {Object} doc The document to validate
        * @return {boolean}     Whether the required field values are present
        */
-      function validateRequiredFields(doc) {
+      function validateRequiredFields (doc) {
         var missingRequiredFields = [];
 
         if (!doc.target_contact_id[0]) {
@@ -342,7 +330,7 @@ define([
         if (missingRequiredFields.length) {
           var notification = CRM.alert(missingRequiredFields.join(', '),
             missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
-          $timeout(function() {
+          $timeout(function () {
             notification.close();
             notification = null;
           }, 5000);
@@ -361,10 +349,10 @@ define([
        * @param {string} type - Either 'assignee' or 'target'
        * @return {Array}
        */
-      function initialContacts(type) {
+      function initialContacts (type) {
         var cachedContacts = $rootScope.cache.contact.arrSearch;
 
-        return !$scope.document.id ? [] : cachedContacts.filter(function(contact) {
+        return !$scope.document.id ? [] : cachedContacts.filter(function (contact) {
           var currContactId = $scope.document[type + '_contact_id'][0];
 
           return +currContactId === +contact.id;
