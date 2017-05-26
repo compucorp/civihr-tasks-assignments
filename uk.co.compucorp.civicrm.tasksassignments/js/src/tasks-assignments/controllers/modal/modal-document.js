@@ -15,42 +15,51 @@ define([
       DocumentService, ContactService, FileService, data, files, config, HR_settings) {
       $log.debug('Controller: ModalDocumentCtrl');
 
-      $scope.files = [];
-      $scope.document = {};
+      // Init call
+      (function init() {
+        $scope.files = [];
+        $scope.document = {};
 
-      angular.copy(data, $scope.document);
-      angular.copy(files, $scope.files);
+        angular.copy(data, $scope.document);
+        angular.copy(files, $scope.files);
 
-      $scope.data = data;
-      $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
-      $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
-      $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
-      $scope.document.status_id = $scope.document.status_id || '1';
-      $scope.filesTrash = [];
-      $scope.uploader = FileService.uploader('civicrm_activity');
-      $scope.showCId = !config.CONTACT_ID;
-      $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val) {
-        return +val.extra.contact_id == +$scope.document.target_contact_id;
-      });
+        $scope.data = data;
 
-      $scope.contacts = {
-        target: initialContacts('target'),
-        assignee: initialContacts('assignee')
-      };
+        $scope.document.activity_date_time = !!$scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
+        $scope.document.expire_date = !!$scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
+        $scope.document.valid_from = !!$scope.document.valid_from ? moment($scope.document.valid_from).toDate() : null;
+        $scope.document.remind_me = $scope.document.remind_me == 1 ? true : false;
+        $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
+        $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
+        $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
+        $scope.document.status_id = $scope.document.status_id || '1';
 
-      $scope.dpOpened = {
-        due: false,
-        exp: false,
-        form: false
-      };
+        $scope.filesTrash = [];
+        $scope.uploader = FileService.uploader('civicrm_activity');
+        $scope.showCId = !config.CONTACT_ID;
+        $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function(val) {
+          return +val.extra.contact_id == +$scope.document.target_contact_id;
+        });
 
-      $scope.remindMeMessage = "If you check this box CiviHR will “remind” you \
-        that this document needs to be reviewed. CiviHR will do this by creating \
-        a copy of  the document with the  status of awaiting upload a number of days \
-        or months before the documentexpires. You can set the date to create the copy. \
-        The copy will have the same document  types and set the assignee to be the same \
-        assignee as for this original version of the document. You will then see it in \
-        your documents list and be able to action renewing the document.";
+        $scope.contacts = {
+          target: initialContacts('target'),
+          assignee: initialContacts('assignee')
+        };
+
+        $scope.dpOpened = {
+          due: false,
+          exp: false,
+          form: false
+        };
+
+        $scope.remindMeMessage = "If you check this box CiviHR will “remind” you \
+          that this document needs to be reviewed. CiviHR will do this by creating \
+          a copy of  the document with the  status of awaiting upload a number of days \
+          or months before the documentexpires. You can set the date to create the copy. \
+          The copy will have the same document  types and set the assignee to be the same \
+          assignee as for this original version of the document. You will then see it in \
+          your documents list and be able to action renewing the document.";
+      })();
 
       $scope.statusFieldVisible = function() {
         return !!$scope.document.status_id;
