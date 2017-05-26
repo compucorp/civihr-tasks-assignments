@@ -1,4 +1,4 @@
-<form novalidate name="documentForm" class="form-document form-horizontal modal-inverted" role="form" ng-submit="confirm()" ct-spinner>
+<form novalidate name="documentForm" class="form-document modal-inverted" role="form" ng-submit="confirm()" ct-spinner>
   <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()">
       <span aria-hidden="true">&times;</span>
@@ -22,7 +22,6 @@
           </ui-select>
         </div>
       </div>
-
       <!-- Document Type -->
       <div class="row">
         <div class="col-xs-12">
@@ -87,65 +86,54 @@
                 </tbody>
               </table>
             </div>
-
             <!-- Document Number -->
             <div class="col-xs-12">
-              <div class="row">
-                <label for="{{prefix}}document-number" class="col-xs-12 text-nowrap control-label"> Document Number: </label>
-                <div class="col-xs-12 input-group input-group-unstyled">
-                  <input name="documentNumber" type="text" id="{{prefix}}document-number" class="form-control" placeholder="e.g 59327437539" ng-model="document.document_number">
-                </div>
+              <div class="form-group">
+                <label for="{{prefix}}document-number" class="text-nowrap control-label"> Document Number: </label>
+                <input name="documentNumber" type="text" id="{{prefix}}document-number" class="form-control" placeholder="e.g 59327437539" ng-model="document.document_number">
               </div>
             </div>
-
             <!-- Valid From Date -->
             <div class="col-xs-6">
-              <div class="row">
-                <label for="{{prefix}}document-from" class="col-xs-12 text-nowrap control-label"> Valid From: </label>
-                <div class="col-xs-12 input-group">
+              <div class="form-group">
+                <label for="{{prefix}}document-from" class="text-nowrap control-label"> Valid From: </label>
+                <div class="input-group">
                   <input type="text" id="{{prefix}}document-from" class="form-control" name="documentFrom" ng-model="document.valid_from" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="dpOpened.from" ng-click="dpOpen($event, 'from')">
-                  <span class="input-group-addon fa fa-calendar"></span>
+                  <div class="input-group-addon"><span class="fa fa-calendar"></span></div>
                 </div>
               </div>
             </div>
-
             <!-- Expiry Date -->
             <div class="col-xs-6">
-              <div class="row">
-                <label for="{{prefix}}document-exp" class="col-xs-12 text-nowrap control-label"> Expiry Date: </label>
-                <div class="col-xs-12 input-group">
+              <div class="form-group">
+                <label for="{{prefix}}document-exp" class="text-nowrap control-label"> Expiry Date: </label>
+                <div class="input-group">
                   <input type="text" class="form-control" id="{{prefix}}document-exp" name="documentExpireDate" ng-model="document.expire_date" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="dpOpened.exp" ng-click="dpOpen($event, 'exp')">
-                  <span class="input-group-addon fa fa-calendar"></span>
+                  <div class="input-group-addon"><span class="fa fa-calendar"></span></div>
                 </div>
               </div>
             </div>
-
             <!-- Document Status -->
             <div class="col-xs-12 col-sm-6">
-              <div class="row">
-                <label class="col-xs-12 text-nowrap control-label"> Status: </label>
-                <div class="col-xs-12 input-group">
-                  <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
-                    <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Set Status">
-                      {{$select.selected.value}}
-                    </ui-select-match>
-                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
-                      <div ng-bind="status.value"></div>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
+              <div class="form-group">
+                <label class="text-nowrap control-label"> Status: </label>
+                <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
+                  <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Set Status">
+                    {{$select.selected.value}}
+                  </ui-select-match>
+                  <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr | filter: $select.search">
+                    <div ng-bind="status.value"></div>
+                  </ui-select-choices>
+                </ui-select>
               </div>
             </div>
-
             <!-- Remind Me checkbox -->
             <div class="col-xs-12 col-sm-6">
-              <div class="row">
+              <div class="form-group">
                 <label class="col-xs-12 text-nowrap control-label"> &nbsp; </label>
-                <div class="col-xs-12 input-group">
-                  <div class="pull-right">
-                    <input type="checkbox" ng-model="document.remind_me" ng-click="!document.remind_me"> Remind me
-                    <a class="helpicon" title="Remind Me info" href ng-click="remindMeInfo()"></a>
-                  </div>
+                <div class="col-xs-12 text-right">
+                  <input type="checkbox" ng-model="document.remind_me" ng-click="!document.remind_me"> Remind me
+                  <a class="helpicon" title="Remind Me info" href ng-click="remindMeInfo()"></a>
                 </div>
               </div>
             </div>
@@ -156,27 +144,26 @@
             <!-- Due Date -->
             </br>
             <div class="col-xs-10 col-sm-12">
-              <div class="row">
+              <div class="form-group">
                 <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator"> Due Date: </label>
                 <div class="col-xs-6 input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
                   <input name="dueDate" type="text" id="{{prefix}}document-due" class="form-control" name="documentDue" ng-model="document.activity_date_time" placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true" is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
-                  <span class="input-group-addon fa fa-calendar"></span>
+                  <div class="input-group-addon"><span class="fa fa-calendar"></span></div>
                 </div>
               </div>
             </div>
           </div>
           <!-- Assignee & Assignment -->
+          <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id.length && !showAssigneeField">
+            <span class="form-control-static pull-left">
+              <a href ng-click="showAssigneeField = true;"> Add Assignee </a>
+            </span>
+          </div>
           <div class="row">
-            <!-- Assignee -->
-            <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id.length && !showAssigneeField">
-              <span class="form-control-static pull-left">
-                <a href class="btn btn-indent" ng-click="showAssigneeField = true;"> Add Assignee </a>
-              </span>
-            </div>
             <div class="col-xs-12 col-sm-12" ng-show="document.assignee_contact_id.length || showAssigneeField">
-              <div class="row">
+              <div class="form-group">
                 <label class="col-xs-4 text-nowrap control-label"> Assignees: </label>
-                <div class="col-xs-8 input-group">
+                <div class="col-xs-8 no-left-margin">
                   <ui-select prevent-animations name="assignee" theme="civihr-ui-select" ng-model="document.assignee_contact" on-select="addAssignee($item);">
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
                       {{$select.placeholder}}
@@ -188,29 +175,29 @@
                   </ui-select>
                 </div>
               </div>
-              <!-- <h4 ng-show="document.assignee_contact_id.length">Assignees:</h4> -->
-              <ul class="list-unstyled">
-                <li ng-repeat="(key,assigneeId) in document.assignee_contact_id" >
-                  <span ng-repeat="contact in cache.contact.arrSearch">
-                    <p ng-if="contact.id == assigneeId">{{ contact.label }}
-                      <a href="javascript:void(0)" ng-click="removeAssignee(key)"> &nbsp; <i class="fa fa-times" aria-hidden="true"></i></a>
-                    </p>
-                  </span>
-                </li>
-              </ul>
+              <div class="col-xs-12" ng-show="document.assignee_contact_id.length">
+                <ul class="list-unstyled">
+                  <li ng-repeat="(key,assigneeId) in document.assignee_contact_id" >
+                    <span ng-repeat="contact in cache.contact.arrSearch">
+                      <p ng-if="contact.id == assigneeId">{{ contact.label }}
+                        <a href="javascript:void(0)" ng-click="removeAssignee(key)"> &nbsp; <i class="fa fa-times" aria-hidden="true"></i></a>
+                      </p>
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
+          <div class="col-xs-12 col-sm-12" ng-show="!showAssignmentField">
+            <span class="form-control-static pull-left">
+              <a href ng-click="showAssignmentField = true;">Link to Assignment</a>
+            </span>
+          </div>
           <div class="row">
-            <!-- Assignment -->
-            <div class="col-xs-12 col-sm-12" ng-show="!showAssignmentField">
-              <span class="form-control-static pull-left">
-                <a href class="btn btn-indent" ng-click="showAssignmentField = true;">Link to Assignment</a>
-              </span>
-            </div>
             <div class="col-xs-12 col-sm-12" ng-show="showAssignmentField">
-              <div class="row">
+              <div class="form-group">
                 <label class="col-xs-4 text-nowrap control-label"> Link to assignment: </label>
-                <div class="col-xs-8 input-group">
+                <div class="col-xs-8 no-left-margin">
                   <ui-select prevent-animations theme="civihr-ui-select" allow-clear ng-model="document.case_id" on-select="cacheAssignment($item);">
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
                     </ui-select-match>
