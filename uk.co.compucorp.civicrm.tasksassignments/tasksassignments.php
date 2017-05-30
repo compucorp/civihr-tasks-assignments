@@ -248,6 +248,7 @@ function tasksassignments_civicrm_permission(&$permissions) {
   $permissions += array(
     'delete Tasks and Documents' => $prefix . ts('delete Tasks and Documents'),
     'access Tasks and Assignments' => $prefix . ts('access Tasks and Assignments'),
+    'access Tasks and Assignments Files' => $prefix . ts('access Tasks and Assignments Files'),
   );
 }
 
