@@ -151,11 +151,17 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
   _tasksassignments_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions)
-{
-    $permissions['contact']['get'] = array();
-    $permissions['contact']['getquick'] = array();
-  if ($entity == 'document' || $entity == 'task' || $entity == 'assignment') {
+function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['contact']['get'] = array();
+  $permissions['contact']['getquick'] = array();
+  $entitiesToAvoidPermissions = [
+    'document',
+    'task',
+    'assignment',
+    'activity',
+    'case_type'
+  ];
+  if (in_array($entity, $entitiesToAvoidPermissions)) {
     $params['check_permissions'] = false;
   }
 }
