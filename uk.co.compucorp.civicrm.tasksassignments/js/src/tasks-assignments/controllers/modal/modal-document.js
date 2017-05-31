@@ -11,9 +11,9 @@ define([
 ], function (angular, moment, controllers) {
   'use strict';
 
-  controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log',
+  controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
-    function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter, $modal, $dialog, $timeout, AssignmentService,
+    function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
       DocumentService, ContactService, FileService, data, files, config, HR_settings) {
       $log.debug('Controller: ModalDocumentCtrl');
 
@@ -26,6 +26,7 @@ define([
         angular.copy(files, $scope.files);
 
         $scope.data = data;
+        $scope.role = role[0] || 'admin';
 
         $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
         $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;

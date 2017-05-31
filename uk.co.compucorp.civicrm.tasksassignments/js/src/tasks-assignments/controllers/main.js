@@ -19,6 +19,9 @@ define([
           templateUrl: config.path.TPL + 'modal/document.html?v=3',
           controller: 'ModalDocumentCtrl',
           resolve: {
+            role: function () {
+              return ['admin'];
+            },
             data: function () {
               return data;
             },
