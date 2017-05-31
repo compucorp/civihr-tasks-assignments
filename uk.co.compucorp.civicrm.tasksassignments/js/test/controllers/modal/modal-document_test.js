@@ -7,7 +7,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, files, initController, sampleAssignee;
+    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, role, files, initController, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_) {
@@ -25,6 +25,7 @@ define([
 
       data = {};
       files = {};
+      role = 'admin';
     }));
 
     describe('Lookup contacts lists', function () {
@@ -146,6 +147,7 @@ define([
         $uibModalInstance: fakeModalInstance(),
         data: data,
         files: files,
+        role: role,
         HR_settings: HR_settings
       });
     };
