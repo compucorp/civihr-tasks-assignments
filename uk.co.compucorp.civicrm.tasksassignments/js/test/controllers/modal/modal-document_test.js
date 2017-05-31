@@ -1,3 +1,5 @@
+/* globals define, jasmine, describe, beforeEach, it, expect, spyOn */
+
 define([
   'common/angular',
   'common/moment',
@@ -7,7 +9,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, role, files, initController, sampleAssignee;
+    var $controller, $rootScope, $scope, hrSettings, data, role, files, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_) {
@@ -15,12 +17,12 @@ define([
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
 
-      HR_settings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      hrSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
       sampleAssignee = {
         id: 5,
-        label: "sample label",
+        label: 'sample label',
         icon_class: 'fa fa-plus',
-        description: "this is sample desc"
+        description: 'this is sample desc'
       };
 
       data = {};
@@ -58,7 +60,7 @@ define([
        * A mocked list of cached contacts
        * @return {Array}
        */
-      function cachedContacts() {
+      function cachedContacts () {
         return [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
       }
     });
@@ -118,7 +120,7 @@ define([
     describe('remindMeInfo()', function () {
       beforeEach(function () {
         initController();
-        spyOn(CRM,'help');
+        spyOn(CRM, 'help');
         $scope.remindMeInfo();
       });
 
@@ -127,11 +129,11 @@ define([
       });
     });
 
-    function addAssignee(assignee) {
+    function addAssignee (assignee) {
       $scope.addAssignee(assignee);
     }
 
-    function fakeModalInstance() {
+    function fakeModalInstance () {
       return {
         close: jasmine.createSpy('modalInstance.close'),
         dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -141,15 +143,15 @@ define([
       };
     }
 
-    function initController() {
-      ctrl = $controller('ModalDocumentCtrl', {
+    function initController () {
+      $controller('ModalDocumentCtrl', {
         $scope: $scope,
         $uibModalInstance: fakeModalInstance(),
         data: data,
         files: files,
         role: role,
-        HR_settings: HR_settings
+        HR_settings: hrSettings
       });
-    };
+    }
   });
 });
