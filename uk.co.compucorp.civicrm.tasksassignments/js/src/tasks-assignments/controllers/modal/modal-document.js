@@ -26,7 +26,7 @@ define([
         angular.copy(files, $scope.files);
 
         $scope.data = data;
-        $scope.role = role[0] || 'admin';
+        $scope.role = role || 'admin';
 
         $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
         $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
@@ -57,6 +57,16 @@ define([
 
         $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be reviewed. CiviHR will do this by creating a copy of  the document with the  status of awaiting upload a number of days or months before the documentexpires. You can set the date to create the copy. The copy will have the same document  types and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
       })();
+
+      /**
+       * Checks if the role is matched
+       *
+       * @param  {string}  role
+       * @return {boolean}
+       */
+      $scope.isRole = function (role) {
+        return $scope.role === role;
+      }
 
       $scope.statusFieldVisible = function () {
         return !!$scope.document.status_id;
@@ -249,7 +259,6 @@ define([
           $scope.document.id = result.document.id;
           $scope.document.case_id = result.document.case_id;
           $scope.document.file_count = $scope.files.length + uploader.queue.length;
-          $scope.document.open = $scope.openNew;
 
           AssignmentService.updateTab();
           $scope.$broadcast('ta-spinner-hide');

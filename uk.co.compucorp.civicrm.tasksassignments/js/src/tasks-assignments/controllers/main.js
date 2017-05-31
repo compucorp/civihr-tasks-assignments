@@ -20,7 +20,7 @@ define([
           controller: 'ModalDocumentCtrl',
           resolve: {
             role: function () {
-              return ['admin'];
+              return 'admin';
             },
             data: function () {
               return data;
@@ -37,10 +37,6 @@ define([
 
         modalInstance.result.then(function (results) {
           $scope.$broadcast('documentFormSuccess', results, data);
-
-          if (results.open) {
-            $rootScope.modalDocument(data);
-          }
         }, function () {
           $log.info('Modal dismissed');
         });

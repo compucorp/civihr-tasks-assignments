@@ -1,4 +1,4 @@
-/* globals define, jasmine, describe, beforeEach, it, expect, spyOn */
+/* eslint-env jasmine */
 
 define([
   'common/angular',
@@ -9,7 +9,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $scope, hrSettings, data, role, files, sampleAssignee;
+    var $controller, $rootScope, $scope, HRSettings, data, role, files, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_) {
@@ -17,7 +17,7 @@ define([
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
 
-      hrSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
       sampleAssignee = {
         id: 5,
         label: 'sample label',
@@ -27,7 +27,7 @@ define([
 
       data = {};
       files = {};
-      role = 'admin';
+      role = [];
     }));
 
     describe('Lookup contacts lists', function () {
@@ -150,7 +150,7 @@ define([
         data: data,
         files: files,
         role: role,
-        HR_settings: hrSettings
+        HR_settings: HRSettings
       });
     }
   });

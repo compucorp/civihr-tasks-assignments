@@ -153,7 +153,7 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
 
 function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
   $permissions['contact']['get'] = [];
-  $permissions['contact']['getquick'] = [];1
+  $permissions['contact']['getquick'] = [];
 
   $entitiesToAvoidPermissions = [
     'document',
