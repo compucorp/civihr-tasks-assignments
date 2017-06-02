@@ -296,7 +296,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
             $dao->description = 'Tasks and Assignments Daily Reminder';
             $dao->api_entity = 'task';
             $dao->api_action = 'senddailyreminder';
-            $dao->is_active = 0;
+            $dao->is_active = 1;
             $dao->save();
         }
 
