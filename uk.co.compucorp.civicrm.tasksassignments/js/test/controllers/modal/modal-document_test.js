@@ -1,20 +1,23 @@
+/* globals define, inject, CRM */
 /* eslint-env jasmine */
 
 define([
   'common/angular',
   'common/moment',
+  'mocks/document',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment) {
+], function (angular, moment, documentMock) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $scope, HRSettings, data, role, files, sampleAssignee;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $filter = _$filter_;
       $scope = $rootScope.$new();
 
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -27,8 +30,21 @@ define([
 
       data = {};
       files = {};
-      role = [];
+      role = '';
     }));
+
+    describe('init()', function () {
+      beforeEach(function () {
+        data = documentMock.document;
+        initController();
+      });
+
+      it('corectly formats date time in document', function () {
+        expect($scope.document.activity_date_time).toEqual(new Date(documentMock.document.activity_date_time));
+        expect($scope.document.expire_date).toEqual(new Date(documentMock.document.expire_date));
+        expect($scope.document.valid_from).toEqual(new Date(documentMock.document.valid_from));
+      });
+    });
 
     describe('Lookup contacts lists', function () {
       describe('when in "new task" mode', function () {
@@ -129,6 +145,31 @@ define([
       });
     });
 
+    describe('$scope.role', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('defaults to as admin', function () {
+        expect($scope.role).toBe('admin');
+      });
+    });
+
+    describe('isRole()', function () {
+      beforeEach(function () {
+        initController();
+        $scope.role = 'staff';
+      });
+
+      it('returns truthy value for correct username', function () {
+        expect($scope.isRole('staff')).toBeTruthy();
+      });
+
+      it('returns falsy value for correct username', function () {
+        expect($scope.isRole('admin')).toBeFalsy();
+      });
+    });
+
     function addAssignee (assignee) {
       $scope.addAssignee(assignee);
     }
@@ -146,6 +187,7 @@ define([
     function initController () {
       $controller('ModalDocumentCtrl', {
         $scope: $scope,
+        $filter: $filter,
         $uibModalInstance: fakeModalInstance(),
         data: data,
         files: files,
