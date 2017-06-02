@@ -52,7 +52,7 @@ define([
         contact: {
           obj: {},
           arr: [],
-          addSearch: []
+          arrSearch: []
         },
         assignment: {
           obj: {},
