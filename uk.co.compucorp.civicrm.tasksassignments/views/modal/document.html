@@ -14,7 +14,7 @@
       <!-- Search and select by name and email -->
       <div class="row" ng-hide="isRole('staff')">
         <div class="col-xs-12">
-          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true">
+          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" ng-disabled="isRole('manager')">
             <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
               {{$select.selected.label}}
             </ui-select-match>
@@ -26,7 +26,7 @@
         </div>
       </div>
       <!-- Document Type -->
-      <div class="row" ng-hide="isRole('staff')">
+      <div class="row" ng-hide="isRole('staff')" ng-show="!isRole('manager')">
         <div class="col-xs-12">
           <div class="crm_custom-select crm_custom-select--full">
             <ui-select prevent-animations theme="civihr-ui-select" ng-model="document.activity_type_id" class="required-field-indicator" ng-required="true">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="container">
-      <ul class="nav nav-tabs" ng-hide="isRole('staff')">
+      <ul class="nav nav-tabs" ng-hide="isRole('staff') || isRole('manager')">
         <li class="active"><a href data-target="#detailsTab" data-toggle="tab">Details</a></li>
         <li><a href data-target="#assignmentsTab" data-toggle="tab">Assignments</a></li>
       </ul>
@@ -121,7 +121,7 @@
               </div>
             </div>
             <!-- Document Status -->
-            <div class="col-xs-12 col-sm-6" ng-hide="isRole('staff')">
+            <div class="col-xs-12 col-sm-6" ng-hide="isRole('staff')"  ng-show="isRole('manager')">
               <div class="form-group">
                 <label class="text-nowrap control-label"> Status: </label>
                 <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
@@ -135,7 +135,7 @@
               </div>
             </div>
             <!-- Remind Me checkbox -->
-            <div class="col-xs-12 col-sm-6" ng-hide="isRole('staff')">
+            <div class="col-xs-12 col-sm-6" ng-hide="isRole('staff') || isRole('manager')">
               <div class="form-group">
                 <label class="col-xs-12 text-nowrap control-label"> &nbsp; </label>
                 <div class="col-xs-12 text-right">
@@ -144,22 +144,33 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="tab-pane" id="assignmentsTab" ng-hide="isRole('staff')">
-          <div class="row">
-            <!-- Due Date -->
-          </br>
-          <div class="col-xs-10 col-sm-12">
-            <div class="form-group">
-              <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator"> Due Date: </label>
-              <div class="col-xs-6 input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
-                <input name="dueDate" type="text" id="{{prefix}}document-due" class="form-control" ng-model="document.activity_date_time" placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true" is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
-                <span class="input-group-addon fa fa-calendar"></span>
+
+            <!-- Display only for manager role and hidden removed from DOM for other uasers -->
+            <div class="col-xs-6" ng-if="isRole('manager')">
+              <div class="form-group">
+                <label for="{{prefix}}document-due" class="text-nowrap control-label required-field-indicator"> Due Date: </label>
+                <div class="input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
+                  <input name="dueDate" type="text" id="{{prefix}}document-due" class="form-control" ng-model="document.activity_date_time" placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true" is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
+                  <span class="input-group-addon fa fa-calendar"></span>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="tab-pane" id="assignmentsTab" ng-hide="isRole('staff') || isRole('manager')">
+          <div class="row">
+            <!-- Due Date -->
+            </br>
+            <div class="col-xs-10 col-sm-12">
+              <div class="form-group">
+                <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator"> Due Date: </label>
+                <div class="col-xs-6 input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
+                  <input name="dueDate" type="text" id="{{prefix}}document-due" class="form-control" ng-model="document.activity_date_time" placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true" is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
+                  <span class="input-group-addon fa fa-calendar"></span>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Assignee & Assignment -->
           <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id.length && !showAssigneeField">
             <span class="form-control-static pull-left">
