@@ -31,7 +31,6 @@ define([
         $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
         $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
         $scope.document.valid_from = $scope.document.valid_from ? moment($scope.document.valid_from).toDate() : null;
-        $scope.document.remind_me = $scope.document.remind_me === '1';
         $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
         $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
         $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
@@ -66,7 +65,7 @@ define([
        */
       $scope.isRole = function (role) {
         return $scope.role === role;
-      }
+      };
 
       $scope.statusFieldVisible = function () {
         return !!$scope.document.status_id;
