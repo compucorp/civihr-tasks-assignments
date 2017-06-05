@@ -260,6 +260,7 @@ define([
           $scope.document.file_count = $scope.files.length + uploader.queue.length;
 
           AssignmentService.updateTab();
+          $rootScope.$broadcast('document-saved');
           $scope.$broadcast('ta-spinner-hide');
         }, function (reason) {
           CRM.alert(reason, 'Error', 'error');
