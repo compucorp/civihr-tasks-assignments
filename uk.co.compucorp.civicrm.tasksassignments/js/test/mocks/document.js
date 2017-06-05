@@ -1,4 +1,4 @@
-/* globals define */
+/* eslint-env amd */
 
 define(function () {
   return {

@@ -11,7 +11,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee, options;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
@@ -37,6 +37,10 @@ define([
       beforeEach(function () {
         data = documentMock.document;
         initController();
+      });
+
+      it('sets the role as admin by default', function () {
+        expect($scope.role).toBe('admin');
       });
 
       it('corectly formats date time in document', function () {
@@ -145,28 +149,15 @@ define([
       });
     });
 
-    describe('$scope.role', function () {
-      beforeEach(function () {
-        initController();
-      });
-
-      it('defaults to as admin', function () {
-        expect($scope.role).toBe('admin');
-      });
-    });
-
     describe('isRole()', function () {
       beforeEach(function () {
         initController();
         $scope.role = 'staff';
       });
 
-      it('returns truthy value for correct username', function () {
-        expect($scope.isRole('staff')).toBeTruthy();
-      });
-
-      it('returns falsy value for correct username', function () {
-        expect($scope.isRole('admin')).toBeFalsy();
+      it('checks if the given role is the current one', function () {
+        expect($scope.isRole('staff')).toBe(true);
+        expect($scope.isRole('admin')).toBe(false);
       });
     });
 
@@ -184,9 +175,9 @@ define([
       };
     }
 
-    function initController () {
+    function initController(scopeValues) {
       $controller('ModalDocumentCtrl', {
-        $scope: $scope,
+        $scope: _.assign($scope, scopeValues),
         $filter: $filter,
         $uibModalInstance: fakeModalInstance(),
         data: data,
