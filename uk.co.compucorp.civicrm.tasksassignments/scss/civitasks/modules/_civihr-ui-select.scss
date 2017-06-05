@@ -6,11 +6,12 @@ $brand-primary:          #42AFCB;
 $dropdown-border:        #727E8A;
 $gray-dark:              #727E8A;
 $gray-lighter:           #F3F6F7;
+$text-color-light-black: #586277;
 $input-border-radius:    0;
 
 // Include the original ui-select css + the civihr-ui-select dropdown theme
-@import "../../../../../civihr/org.civicrm.shoreditch/scss/bootstrap/vendor/ui-select/ui-select";
-@import "../../../../../civihr/org.civicrm.shoreditch/scss/bootstrap/components/civihr-ui-select/civihr-ui-select";
+@import "../../../../../org.civicrm.shoreditch/scss/bootstrap/vendor/ui-select/ui-select";
+@import "../../../../../org.civicrm.shoreditch/scss/bootstrap/components/civihr-ui-select/civihr-ui-select";
 
 // Customizations specific for T&A
 .civihr-ui-select {
@@ -24,7 +25,6 @@ $input-border-radius:    0;
   }
 
   &.open {
-
     .select2-chosen {
       border: 1px solid $dropdown-border !important;
       padding-left: 12px !important;
@@ -39,6 +39,12 @@ $input-border-radius:    0;
   .select2-drop-active {
     @extend %ui-select-border;
     border-top: 0 !important;
+  }
+
+  .select2-chosen {
+    span {
+      color: $text-color-light-black;
+    }
   }
 
   &.ui-select-multiple {
