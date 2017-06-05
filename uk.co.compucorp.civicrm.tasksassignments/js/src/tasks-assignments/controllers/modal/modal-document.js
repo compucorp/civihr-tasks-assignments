@@ -54,7 +54,7 @@ define([
           form: false
         };
 
-        $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be reviewed. CiviHR will do this by creating a copy of  the document with the  status of awaiting upload a number of days or months before the documentexpires. You can set the date to create the copy. The copy will have the same document  types and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
+        $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be reviewed. CiviHR will do this by creating a copy of  the document with the  status of awaiting upload a number of days or months before the document expires. You can set the date to create the copy. The copy will have the same document  types and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
       })();
 
       /**
