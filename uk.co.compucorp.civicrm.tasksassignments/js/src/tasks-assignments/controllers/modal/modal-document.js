@@ -216,6 +216,7 @@ define([
 
         doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
         doc.expire_date = $scope.parseDate(doc.expire_date);
+        doc.status_id = (!$scope.isRole('admin')) ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
         if (filesTrash.length) {
           for (var i = 0; i < filesTrash.length; i++) {
@@ -261,7 +262,7 @@ define([
           } else if (result.files.length && !!result.files[0].values[0].result) {
             DocumentService.save({
               id: result.document.id,
-              status_id: '3' // 3 => 'approved'
+              status_id: ($scope.isRole('admin')) ? '3' : '1' // 3 => 'approved', 1 => 'awaiting upload'
             }).then(function (results) {
               $scope.document.status_id = results.status_id;
               $modalInstance.close($scope.document);
