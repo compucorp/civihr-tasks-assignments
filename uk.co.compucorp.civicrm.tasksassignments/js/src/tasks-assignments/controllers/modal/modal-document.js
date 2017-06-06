@@ -173,7 +173,7 @@ define([
       };
 
       $scope.cancel = function () {
-        if ($scope.documentForm.$pristine) {
+        if ($scope.documentForm.$pristine && angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
           $modalInstance.dismiss('cancel');
           return;
         }
