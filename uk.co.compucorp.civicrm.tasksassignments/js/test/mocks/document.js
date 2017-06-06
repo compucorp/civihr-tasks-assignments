@@ -22,6 +22,36 @@ define(function () {
       document_number: '999999922',
       $$hashKey: 'object:182',
       due: false
-    }
+    },
+    documentTypes: [
+      {
+        'key': '66',
+        'value': 'VISA'
+      },
+      {
+        'key': '67',
+        'value': 'Passport'
+      },
+      {
+        'key': '68',
+        'value': 'Government Photo ID'
+      },
+      {
+        'key': '69',
+        'value': 'Driving licence'
+      },
+      {
+        'key': '70',
+        'value': 'Identity card'
+      },
+      {
+        'key': '71',
+        'value': 'Certificate of sponsorship (COS)'
+      },
+      {
+        'key': '121',
+        'value': 'P45'
+      }
+    ]
   };
 });
