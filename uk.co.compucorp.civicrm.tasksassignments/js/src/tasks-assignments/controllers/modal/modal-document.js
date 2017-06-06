@@ -67,6 +67,21 @@ define([
         return $scope.role === role;
       };
 
+      /**
+       * Gets Document Type name for id
+       *
+       * @param  {integer} documentTypeId
+       * @return {string}
+       */
+      $scope.getDocumentType = function (documentTypeId) {
+        var documentTypes = $rootScope.cache.documentType.arr;
+        var documents = documentTypes.map(function (document) {
+          return document.key;
+        });
+
+        return documentTypeId && documentTypes[documents.indexOf(documentTypeId)].value;
+      };
+
       $scope.statusFieldVisible = function () {
         return !!$scope.document.status_id;
       };
