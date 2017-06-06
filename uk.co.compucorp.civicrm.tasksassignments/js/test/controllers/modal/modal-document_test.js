@@ -1,5 +1,5 @@
-/* globals define, inject, CRM */
-/* eslint-env jasmine */
+/* globals CRM, _ */
+/* eslint-env amd, jasmine */
 
 define([
   'common/angular',
@@ -11,7 +11,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee, options;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
@@ -161,6 +161,19 @@ define([
       });
     });
 
+    describe('getDocumentType()', function () {
+      beforeEach(function () {
+        initController();
+        $rootScope.cache.documentType.arr = documentMock.documentTypes;
+      });
+
+      it('returns document type for document given id', function () {
+        expect($scope.getDocumentType(documentMock.documentTypes[1].key)).toEqual(documentMock.documentTypes[1].value);
+        expect($scope.getDocumentType(documentMock.documentTypes[3].key)).toEqual(documentMock.documentTypes[3].value);
+        expect($scope.getDocumentType(documentMock.documentTypes[6].key)).toEqual(documentMock.documentTypes[6].value);
+      });
+    });
+
     function addAssignee (assignee) {
       $scope.addAssignee(assignee);
     }
@@ -175,7 +188,7 @@ define([
       };
     }
 
-    function initController(scopeValues) {
+    function initController (scopeValues) {
       $controller('ModalDocumentCtrl', {
         $scope: _.assign($scope, scopeValues),
         $filter: $filter,
