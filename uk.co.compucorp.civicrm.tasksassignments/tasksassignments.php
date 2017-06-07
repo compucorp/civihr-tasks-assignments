@@ -151,11 +151,19 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
   _tasksassignments_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions)
-{
-    $permissions['contact']['get'] = array();
-    $permissions['contact']['getquick'] = array();
-  if ($entity == 'document' || $entity == 'task' || $entity == 'assignment') {
+function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['contact']['get'] = [];
+  $permissions['contact']['getquick'] = [];
+
+  $entitiesToAvoidPermissions = [
+    'document',
+    'task',
+    'assignment',
+    'activity',
+    'case_type'
+  ];
+
+  if (in_array($entity, $entitiesToAvoidPermissions)) {
     $params['check_permissions'] = false;
   }
 }
@@ -239,10 +247,11 @@ function tasksassignments_civicrm_tabs(&$tabs) {
  */
 function tasksassignments_civicrm_permission(&$permissions) {
   $prefix = ts('CiviTasksassignments') . ': ';
-  $permissions += array(
+  $permissions += [
     'delete Tasks and Documents' => $prefix . ts('delete Tasks and Documents'),
     'access Tasks and Assignments' => $prefix . ts('access Tasks and Assignments'),
-  );
+    'access Tasks and Assignments Files' => $prefix . ts('access Tasks and Assignments Files'),
+  ];
 }
 
 /**
