@@ -1,14 +1,16 @@
-/* global define, CRM */
+/* global CRM */
+/* eslint-env amd */
 
 define([
   'common/angular',
   'common/moment',
+  'common/lodash',
   'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/file',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document'
-], function (angular, moment, controllers) {
+], function (angular, moment, _, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
@@ -70,16 +72,13 @@ define([
       /**
        * Gets Document Type name for id
        *
-       * @param  {integer} documentTypeId
+       * @param  {int} documentTypeId
        * @return {string}
        */
       $scope.getDocumentType = function (documentTypeId) {
-        var documentTypes = $rootScope.cache.documentType.arr;
-        var documents = documentTypes.map(function (document) {
-          return document.key;
-        });
-
-        return documentTypeId && documentTypes[documents.indexOf(documentTypeId)].value;
+        return _.find($rootScope.cache.documentType.arr, function (documentType) {
+          return documentType.key === documentTypeId;
+        }).value;
       };
 
       $scope.statusFieldVisible = function () {
@@ -216,7 +215,7 @@ define([
 
         doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
         doc.expire_date = $scope.parseDate(doc.expire_date);
-        doc.status_id = (!$scope.isRole('admin')) ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
+        doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
         if (filesTrash.length) {
           for (var i = 0; i < filesTrash.length; i++) {
@@ -262,7 +261,7 @@ define([
           } else if (result.files.length && !!result.files[0].values[0].result) {
             DocumentService.save({
               id: result.document.id,
-              status_id: ($scope.isRole('admin')) ? '3' : '1' // 3 => 'approved', 1 => 'awaiting upload'
+              status_id: $scope.isRole('admin') ? '3' : '1' // 3 => 'approved', 1 => 'awaiting upload'
             }).then(function (results) {
               $scope.document.status_id = results.status_id;
               $modalInstance.close($scope.document);

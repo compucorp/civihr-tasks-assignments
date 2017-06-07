@@ -4,8 +4,10 @@
       <span aria-hidden="true">&times;</span>
       <span class="sr-only">Close</span>
     </button>
-    <h4 class="modal-title" ng-if="isRole('admin')">New Document</h4>
-    <h4 class="modal-title" ng-if="!isRole('admin')">{{ getDocumentType(document.activity_type_id) }}</h4>
+    <h4 class="modal-title" ng-switch="isRole('admin')">
+      <span ng-switch-when="true">New Document</span>
+      <span ng-switch-when="false">{{getDocumentType(document.activity_type_id)}}</span>
+    </h4>
   </div>
   <div class="modal-body" nv-file-drop uploader="uploader">
     <div class="container">
