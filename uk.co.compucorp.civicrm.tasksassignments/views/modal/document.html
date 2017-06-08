@@ -6,7 +6,7 @@
     </button>
     <h4 class="modal-title" ng-switch="isRole('admin')">
       <span ng-switch-when="true">New Document</span>
-      <span ng-switch-when="false">{{getDocumentType(document.activity_type_id)}}</span>
+      <span ng-switch-when="false">{{getDocumentType(document.activity_type_id) || 'Select Document Type'}}</span>
     </h4>
   </div>
   <div class="modal-body" nv-file-drop uploader="uploader">
