@@ -17,65 +17,14 @@ define([
             var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
             this.init = function(){
-                var contactIds = this.contactIds,
-                    assignmentIds = this.assignmentIds;
 
-                this.collectId(documentList);
-
-                if (contactIds && contactIds.length) {
-                    ContactService.get({'IN': contactIds}).then(function(data){
-                        ContactService.updateCache(data);
-                    });
-                }
-
-                if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-                    AssignmentService.get({'IN': assignmentIds}).then(function(data){
-                        AssignmentService.updateCache(data);
-                    });
-                }
+                DocumentService.CacheContactsAndAssignments(documentList, ['contacts', 'assignments']);
 
                 watchDateFilters();
 
                 $scope.applySidebarFilters();
                 $rootScope.$broadcast('ct-spinner-hide');
                 $log.debug($rootScope.cache);
-            };
-
-            this.assignmentIds = [];
-            this.contactIds = [];
-
-            this.collectId = function(documentList){
-                var contactIds = this.contactIds,
-                    assignmentIds = this.assignmentIds;
-
-                contactIds.push(config.LOGGED_IN_CONTACT_ID);
-
-                if (config.CONTACT_ID) {
-                    contactIds.push(config.CONTACT_ID);
-                }
-
-                function collectCId(document) {
-                    contactIds.push(document.source_contact_id);
-
-                    if (document.assignee_contact_id && document.assignee_contact_id.length) {
-                        contactIds.push(document.assignee_contact_id[0]);
-                    }
-
-                    if (document.target_contact_id && document.target_contact_id.length) {
-                        contactIds.push(document.target_contact_id[0]);
-                    }
-                }
-
-                function collectAId(document) {
-                    if (document.case_id) {
-                        assignmentIds.push(document.case_id);
-                    }
-                }
-
-                angular.forEach(documentList,function(document){
-                    collectCId(document);
-                    collectAId(document);
-                });
             };
 
             $scope.pagination = {
