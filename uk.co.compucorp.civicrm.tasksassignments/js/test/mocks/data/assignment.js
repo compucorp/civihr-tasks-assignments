@@ -11,6 +11,28 @@ define(function () {
       status_id: '1',
       subject: 'Joining'
     },
+    assignmentList: [
+      {
+        id: '1',
+        case_type_id: '4',
+        subject: 'Joining',
+        start_date: '2017-04-12',
+        status_id: '1',
+        is_deleted: '0',
+        contact_id: { '1': '204' },
+        client_id: { '1': '204' }
+      },
+      {
+        id: '2',
+        case_type_id: '3',
+        subject: 'Exiting',
+        start_date: '2017-04-12',
+        status_id: '1',
+        is_deleted: '0',
+        contact_id: { '1': '204' },
+        client_id: { '1': '204' }
+      }
+    ],
     taskList: [
       {
         activity_date_time: '',
