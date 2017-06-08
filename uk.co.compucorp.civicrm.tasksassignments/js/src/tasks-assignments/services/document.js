@@ -17,9 +17,39 @@ define([
     });
   }]);
 
-  services.factory('DocumentService', ['Document', '$q', 'config', 'UtilsService', '$log',
-    function (Document, $q, config, UtilsService, $log) {
+  services.factory('DocumentService', ['Document', '$q', 'config', 'settings', 'UtilsService', 'ContactService', 'AssignmentService', '$log',
+    function (Document, $q, config, settings, UtilsService, ContactService, AssignmentService, $log) {
       $log.debug('Service: DocumentService');
+
+      function collectContactIds (documentList) {
+        var contactIds = [];
+
+        angular.forEach(documentList, function (document) {
+          contactIds.push(document.source_contact_id);
+
+          if (document.assignee_contact_id && document.assignee_contact_id.length) {
+            contactIds.push(document.assignee_contact_id[0]);
+          }
+
+          if (document.target_contact_id && document.target_contact_id.length) {
+            contactIds.push(document.target_contact_id[0]);
+          }
+        });
+
+        return contactIds;
+      }
+
+      function collectAssignmentIds (documentList) {
+        var assignmentIds = [];
+
+        angular.forEach(documentList, function (document) {
+          if (document.case_id) {
+            assignmentIds.push(document.case_id);
+          }
+        });
+
+        return assignmentIds;
+      }
 
       return {
         assign: function (documentArr, assignmentId) {
@@ -242,6 +272,41 @@ define([
           });
 
           return deferred.promise;
+        },
+        CacheContactsAndAssignments: function (documentList, options) {
+          var contactIds = [];
+          var assignmentIds = [];
+
+          angular.forEach(options, function (type) {
+            switch (type) {
+              case 'contacts':
+                contactIds = collectContactIds(documentList);
+
+                if (config.CONTACT_ID) {
+                  contactIds.push(config.CONTACT_ID);
+                }
+
+                if (contactIds && contactIds.length) {
+                  ContactService.get({
+                    'IN': contactIds
+                  }).then(function (data) {
+                    ContactService.updateCache(data);
+                  });
+                }
+                break;
+              case 'assignments':
+                assignmentIds = collectAssignmentIds(documentList);
+
+                if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+                  AssignmentService.get({
+                    'IN': assignmentIds
+                  }).then(function (data) {
+                    AssignmentService.updateCache(data);
+                  });
+                }
+                break;
+            }
+          });
         }
       };
     }]);
