@@ -21,40 +21,10 @@ define([
     function (Document, $q, config, settings, UtilsService, ContactService, AssignmentService, $log) {
       $log.debug('Service: DocumentService');
 
-      function collectContactIds (documentList) {
-        var contactIds = [];
-
-        angular.forEach(documentList, function (document) {
-          contactIds.push(document.source_contact_id);
-
-          if (document.assignee_contact_id && document.assignee_contact_id.length) {
-            contactIds.push(document.assignee_contact_id[0]);
-          }
-
-          if (document.target_contact_id && document.target_contact_id.length) {
-            contactIds.push(document.target_contact_id[0]);
-          }
-        });
-
-        return contactIds;
-      }
-
-      function collectAssignmentIds (documentList) {
-        var assignmentIds = [];
-
-        angular.forEach(documentList, function (document) {
-          if (document.case_id) {
-            assignmentIds.push(document.case_id);
-          }
-        });
-
-        return assignmentIds;
-      }
-
       return {
         assign: function (documentArr, assignmentId) {
           if ((!documentArr || !angular.isArray(documentArr)) ||
-                    (!assignmentId || typeof +assignmentId !== 'number')) {
+          (!assignmentId || typeof +assignmentId !== 'number')) {
             return null;
           }
 
@@ -273,41 +243,97 @@ define([
 
           return deferred.promise;
         },
-        cacheContactsAndAssignments: function (documentList, options) {
+
+        /**
+         * Form the available documents, takes contact ids and assignment ids
+         * then fetches respective contacts and addignments and caches them.
+         *
+         * @param  {array} documents
+         * @param  {Array}  [options=['contacts','assignments']
+         */
+        cacheContactsAndAssignments: function (documents, options = ['contacts', 'assignments']) {
           var contactIds = [];
           var assignmentIds = [];
+          var contactPromise;
+          var assignmentsPromise;
 
-          angular.forEach(options, function (type) {
-            switch (type) {
-              case 'contacts':
-                contactIds = collectContactIds(documentList);
+          // IE Fix
+          if (options === undefined) {
+            options = ['contacts', 'assignments'];
+          };
 
-                if (config.CONTACT_ID) {
-                  contactIds.push(config.CONTACT_ID);
-                }
+          options = Array.isArray(options)? options : [options];
 
-                if (contactIds && contactIds.length) {
-                  ContactService.get({
-                    'IN': contactIds
-                  }).then(function (data) {
-                    ContactService.updateCache(data);
-                  });
-                }
-                break;
-              case 'assignments':
-                assignmentIds = collectAssignmentIds(documentList);
-
-                if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-                  AssignmentService.get({
-                    'IN': assignmentIds
-                  }).then(function (data) {
-                    AssignmentService.updateCache(data);
-                  });
-                }
-                break;
+          if (_.contains(options, 'contacts')) {
+            contactIds = collectContactIds(documents);
+            config.CONTACT_ID && contactIds.push(config.CONTACT_ID);
+            if (contactIds && contactIds.length) {
+              contactPromise = ContactService.get({
+                  'IN': contactIds
+                }).then(function (data) {
+                  ContactService.updateCache(data);
+                });
+            } else {
+              contactPromise = $q.resolve();
             }
-          });
+          };
+
+          if (_.contains(options, 'assignments')) {
+            assignmentIds = collectAssignmentIds(documents);
+            if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+              assignmentsPromise = AssignmentService.get({
+                  'IN': assignmentIds
+                }).then(function (data) {
+                  AssignmentService.updateCache(data);
+                });
+            } else {
+              assignmentsPromise = $q.resolve();
+            }
+          };
+
+          return $q.all([
+            contactPromise,
+            assignmentsPromise
+          ]);
         }
       };
-    }]);
+
+      /**
+       * Makes collection of contact ids form list of documents
+       * @param  {array} documents
+       * @return {array}
+       */
+      function collectContactIds (documents) {
+        return _(documents).map(function (document) {
+          var contactIds = [];
+
+          contactIds.push(document.source_contact_id);
+
+          if (document.assignee_contact_id && document.assignee_contact_id.length) {
+            contactIds.push(document.assignee_contact_id[0]);
+          }
+
+          if (document.target_contact_id && document.target_contact_id.length) {
+            contactIds.push(document.target_contact_id[0]);
+          }
+
+          return contactIds;
+        }).flatten().value();
+      };
+
+      /**
+       * Makes collection of assignment ids form list of documents
+       * @param  {array} documents
+       * @return {array}
+       */
+      function collectAssignmentIds (documents) {
+        return documents.filter(function (document) {
+          return !!document.case_id;
+        })
+        .map(function (document) {
+          return document.case_id;
+        });
+      };
+    }
+  ]);
 });

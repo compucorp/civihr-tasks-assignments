@@ -11,7 +11,7 @@ define([
   'use strict';
 
   describe('DocumentService', function () {
-    var AssignmentService, ContactService, DocumentService, $q, deferred;
+    var AssignmentService, ContactService, DocumentService, $q, deferred, promise;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_AssignmentService_, _ContactService_, _DocumentService_, _$q_) {
@@ -22,56 +22,88 @@ define([
       deferred = $q.defer();
     }));
 
-    describe('collectAssignmentIds()', function () {
-      describe('ContactService.get()', function () {
-        beforeEach(function () {
-          spyOn(ContactService, 'updateCache').and.returnValue(deferred.promise);
-          spyOn(ContactService, 'get').and.callFake(function () {
-            return {
-              then: function (callback) {
-                callback(contactMock.contactList);
-              }
-            };
-          });
+    beforeEach(function () {
+      spyOn(ContactService, 'get').and.callFake(fakePromise(contactMock.contactList));
+      spyOn(AssignmentService, 'get').and.callFake(fakePromise(assignmentMock.assignmentList));
+      spyOn(ContactService, 'updateCache').and.returnValue(deferred.promise);
+      spyOn(AssignmentService, 'updateCache').and.returnValue(deferred.promise);
+    });
 
-          DocumentService.cacheContactsAndAssignments(documentMock.documentList, ['contacts']);
+    describe('cacheContactsAndAssignments()', function () {
+      describe('needs to cache the contacts and assignments of the given documents', function () {
+        beforeEach(function () {
+          promise = DocumentService.cacheContactsAndAssignments(documentMock.documentList);
         });
 
-        it('calls contact service to get details from contactIds', function () {
+        it('calls contact service to get details using contactIds', function () {
           expect(ContactService.get).toHaveBeenCalledWith(jasmine.objectContaining({
             'IN': ['204', '4', '205', '205', '204', '204', '205', '202', '202', '205', '3', '203', '205', '203', '203']
           }));
         });
 
-        it('calls contact service to cache contacts', function () {
-          expect(ContactService.updateCache).toHaveBeenCalledWith(jasmine.objectContaining(contactMock.contactList));
-        });
-      });
-
-      describe('AssignmentService.get()', function () {
-        beforeEach(function () {
-          spyOn(AssignmentService, 'updateCache').and.returnValue(deferred.promise);
-          spyOn(AssignmentService, 'get').and.callFake(function () {
-            return {
-              then: function (callback) {
-                callback(assignmentMock.assignmentList);
-              }
-            };
-          });
-
-          DocumentService.cacheContactsAndAssignments(documentMock.documentList, ['assignments']);
-        });
-
-        it('calls contact service to get details from assignmentIds', function () {
+        it('calls contact service to get details using assignmentIds', function () {
           expect(AssignmentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
             'IN': ['45', '46', '49']
           }));
         });
 
+        it('calls contact service to cache contacts', function () {
+          expect(ContactService.updateCache).toHaveBeenCalled();
+        });
+
         it('calls contact service to cache assignments', function () {
-          expect(AssignmentService.updateCache).toHaveBeenCalledWith(jasmine.objectContaining(assignmentMock.assignmentList));
+          expect(AssignmentService.updateCache).toHaveBeenCalled();
+        });
+
+        it('returns a promise', function () {
+          expect(typeof(promise.then)).toEqual('function');
+        });
+      });
+
+      describe('needs to cache either contacts or assignments exclusively', function () {
+        describe('needs to cache only contacts', function () {
+          beforeEach(function () {
+            DocumentService.cacheContactsAndAssignments(documentMock.documentList, 'contacts');
+          });
+
+          it('calls contact service to cache contacts', function () {
+            expect(ContactService.updateCache).toHaveBeenCalled();
+          });
+
+          it('does not call assignment service to cache contacts', function () {
+            expect(AssignmentService.updateCache).not.toHaveBeenCalled();
+          });
+        });
+
+        describe('needs to cache only assignments', function () {
+          beforeEach(function () {
+            DocumentService.cacheContactsAndAssignments(documentMock.documentList, 'assignments');
+          });
+
+          it('calls assignment service to cache assignments', function () {
+            expect(AssignmentService.updateCache).toHaveBeenCalled();
+          });
+
+          it('does not calls contact service to cache assignments', function () {
+            expect(ContactService.updateCache).not.toHaveBeenCalled();
+          });
         });
       });
     });
+
+    /**
+     * Creates a fake promise then call
+     *
+     * @param  {array} data Data to pass to callback function
+     */
+    function fakePromise (data) {
+      return function () {
+        return {
+          then: function (callback) {
+            callback(data);
+          }
+        }
+      };
+    };
   });
 });
