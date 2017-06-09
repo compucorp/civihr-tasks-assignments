@@ -273,7 +273,7 @@ define([
 
           return deferred.promise;
         },
-        CacheContactsAndAssignments: function (documentList, options) {
+        cacheContactsAndAssignments: function (documentList, options) {
           var contactIds = [];
           var assignmentIds = [];
 

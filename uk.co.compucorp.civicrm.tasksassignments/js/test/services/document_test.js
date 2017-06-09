@@ -34,7 +34,7 @@ define([
             };
           });
 
-          DocumentService.CacheContactsAndAssignments(documentMock.documentList, ['contacts']);
+          DocumentService.cacheContactsAndAssignments(documentMock.documentList, ['contacts']);
         });
 
         it('calls contact service to get details from contactIds', function () {
@@ -59,7 +59,7 @@ define([
             };
           });
 
-          DocumentService.CacheContactsAndAssignments(documentMock.documentList, ['assignments']);
+          DocumentService.cacheContactsAndAssignments(documentMock.documentList, ['assignments']);
         });
 
         it('calls contact service to get details from assignmentIds', function () {

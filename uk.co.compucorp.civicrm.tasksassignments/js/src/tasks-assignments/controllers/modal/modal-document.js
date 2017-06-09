@@ -77,11 +77,11 @@ define([
        * @return {string}
        */
       $scope.getDocumentType = function (documentTypeId) {
-        var documentTypes = _.find($rootScope.cache.documentType.arr, function (documentType) {
+        var documentType = _.find($rootScope.cache.documentType.arr, function (documentType) {
           return documentType.key === documentTypeId;
         });
 
-        return documentTypes && documentTypes.value;
+        return documentType && documentType.value;
       };
 
       $scope.statusFieldVisible = function () {

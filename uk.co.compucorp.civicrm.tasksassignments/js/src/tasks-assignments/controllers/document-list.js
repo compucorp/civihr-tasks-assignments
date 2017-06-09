@@ -36,9 +36,9 @@ define([
       };
 
       $scope.dueFilters = [
-              { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
-              { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
-              { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
+        { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
+        { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
+        { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
       ];
 
       $scope.dueToday = 0;
@@ -137,9 +137,9 @@ define([
         }
       };
 
-            /**
-             * Applies the filters on the sidebar
-             */
+      /**
+       * Applies the filters on the sidebar
+       */
       $scope.applySidebarFilters = function () {
         $scope.filterParams.dateRange.from = $scope.filterParamsHolder.dateRange.from;
         $scope.filterParams.dateRange.until = $scope.filterParamsHolder.dateRange.until;
@@ -190,7 +190,7 @@ define([
 
         var ctrl = this;
 
-              // Remove resolved documents from the document list
+        // Remove resolved documents from the document list
         $scope.list = $filter('filterByStatus')($scope.list, $rootScope.cache.documentStatusResolve, false);
 
         DocumentService.get({
@@ -260,9 +260,9 @@ define([
           var pattern = /case|activity|assignment/i;
 
           if (pattern.test(data.title) ||
-                        (data.crmMessages && data.crmMessages.length) &&
-                        (pattern.test(data.crmMessages[0].title) ||
-                        pattern.test(data.crmMessages[0].text))) {
+               (data.crmMessages && data.crmMessages.length) &&
+               (pattern.test(data.crmMessages[0].title) ||
+               pattern.test(data.crmMessages[0].text))) {
             $rootScope.cache.assignment = {
               obj: {},
               arr: []
@@ -274,13 +274,13 @@ define([
 
       this.init();
 
-            /**
-             * Adds or Removes Document fom the document list
-             * "3" => approved & 4 => rejected
-             * @param array list
-             * @param object output
-             * @param object input
-             */
+      /**
+       * Adds or Removes Document fom the document list
+       * "3" => approved & 4 => rejected
+       * @param array list
+       * @param object output
+       * @param object input
+       */
       function addRemoveDocument (list, output, input) {
         switch (true) {
           case (output.status_id !== '3') && (output.status_id !== '4') && (!input.status_id):
@@ -289,11 +289,11 @@ define([
         }
       }
 
-            /**
-             * Whenever the date filters will change, their corrispondent
-             * datepickers will have the minDate or maxDate setting updated
-             * accordingly
-             */
+      /**
+       * Whenever the date filters will change, their corrispondent
+       * datepickers will have the minDate or maxDate setting updated
+       * accordingly
+       */
       function watchDateFilters () {
         $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
           $scope.datepickerOptions.until.minDate = newValue;
