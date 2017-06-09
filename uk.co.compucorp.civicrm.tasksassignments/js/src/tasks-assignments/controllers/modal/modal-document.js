@@ -41,6 +41,7 @@ define([
         $scope.filesTrash = [];
         $scope.uploader = FileService.uploader('civicrm_activity');
         $scope.showCId = !config.CONTACT_ID;
+
         $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
           return +val.extra.contact_id === +$scope.document.target_contact_id;
         });
@@ -76,9 +77,11 @@ define([
        * @return {string}
        */
       $scope.getDocumentType = function (documentTypeId) {
-        return _.find($rootScope.cache.documentType.arr, function (documentType) {
+        var documentType = _.find($rootScope.cache.documentType.arr, function (documentType) {
           return documentType.key === documentTypeId;
-        }).value;
+        });
+
+        return documentType && documentType.value;
       };
 
       $scope.statusFieldVisible = function () {
