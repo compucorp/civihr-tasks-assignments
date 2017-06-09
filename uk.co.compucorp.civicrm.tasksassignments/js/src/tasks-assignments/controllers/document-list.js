@@ -20,13 +20,13 @@ define([
       var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
       this.init = function () {
-        DocumentService.cacheContactsAndAssignments(documentList, ['contacts', 'assignments']);
+        DocumentService.cacheContactsAndAssignments(documentList).then(function () {
+          watchDateFilters();
 
-        watchDateFilters();
-
-        $scope.applySidebarFilters();
-        $rootScope.$broadcast('ct-spinner-hide');
-        $log.debug($rootScope.cache);
+          $scope.applySidebarFilters();
+          $rootScope.$broadcast('ct-spinner-hide');
+          $log.debug($rootScope.cache);
+        });
       };
 
       $scope.pagination = {
