@@ -151,11 +151,19 @@ function tasksassignments_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
   _tasksassignments_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions)
-{
-    $permissions['contact']['get'] = array();
-    $permissions['contact']['getquick'] = array();
-  if ($entity == 'document' || $entity == 'task' || $entity == 'assignment') {
+function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['contact']['get'] = [];
+  $permissions['contact']['getquick'] = [];
+
+  $entitiesToAvoidPermissions = [
+    'document',
+    'task',
+    'assignment',
+    'activity',
+    'case_type'
+  ];
+
+  if (in_array($entity, $entitiesToAvoidPermissions)) {
     $params['check_permissions'] = false;
   }
 }
@@ -198,35 +206,38 @@ function tasksassignments_civicrm_pageRun($page) {
 }
 
 /**
- * Implementation of hook_civicrm_tabs
- * tasks and documents tabs should appear after assignments tab directly
- * and since assignments tab weight is
- * set to 30 we set both of those to
- * 40 & 50 respectively
+ * Implementation of hook_civicrm_tabset.
+ *
+ * Tasks and documents tabs should appear after Assignments tab directly
+ * and since assignments tab weight is set to 30 we set both of those to
+ * 40 and 50 respectively.
+ *
+ * @param string $tabsetName
+ * @param array &$tabs
+ * @param array $context
  */
 
-function tasksassignments_civicrm_tabs(&$tabs) {
-  CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
-
-  if (CRM_Core_Permission::check('access Tasks and Assignments')) {
-    $tabs[] = Array(
-      'id'        => 'civitasks',
-      'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
-      'title'     => ts('Tasks'),
-      'weight'    => 40
-    );
-
-    $documentsTab = civicrm_api3('TASettings', 'get', array(
-      'fields' => 'documents_tab',
-    ));
-
-    if (!empty($documentsTab['values']['documents_tab']['value'])) {
-      $tabs[] = Array(
-        'id'        => 'cividocuments',
-        'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
-        'title'     => ts('Documents'),
-        'weight'    => 50
+function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
+  if ($tabsetName === 'civicrm/contact/view') {
+    CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
+    if (CRM_Core_Permission::check('access Tasks and Assignments')) {
+      $tabs[] = array(
+        'id'        => 'civitasks',
+        'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
+        'title'     => ts('Tasks'),
+        'weight'    => 40,
       );
+      $documentsTab = civicrm_api3('TASettings', 'get', array(
+        'fields' => 'documents_tab',
+      ));
+      if (!empty($documentsTab['values']['documents_tab']['value'])) {
+        $tabs[] = array(
+          'id'        => 'cividocuments',
+          'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
+          'title'     => ts('Documents'),
+          'weight'    => 50,
+        );
+      }
     }
   }
 }
@@ -239,10 +250,11 @@ function tasksassignments_civicrm_tabs(&$tabs) {
  */
 function tasksassignments_civicrm_permission(&$permissions) {
   $prefix = ts('CiviTasksassignments') . ': ';
-  $permissions += array(
+  $permissions += [
     'delete Tasks and Documents' => $prefix . ts('delete Tasks and Documents'),
     'access Tasks and Assignments' => $prefix . ts('access Tasks and Assignments'),
-  );
+    'access Tasks and Assignments Files' => $prefix . ts('access Tasks and Assignments Files'),
+  ];
 }
 
 /**

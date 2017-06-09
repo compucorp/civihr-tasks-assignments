@@ -1,25 +1,54 @@
+/* globals CRM, _ */
+/* eslint-env amd, jasmine */
+
 define([
   'common/angular',
   'common/moment',
+  'mocks/document',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment) {
+], function (angular, moment, documentMock) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var ctrl, modalInstance, $controller, $rootScope, $scope, HR_settings, data, files, initController;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $filter = _$filter_;
       $scope = $rootScope.$new();
 
-      HR_settings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      sampleAssignee = {
+        id: 5,
+        label: 'sample label',
+        icon_class: 'fa fa-plus',
+        description: 'this is sample desc'
+      };
 
       data = {};
       files = {};
+      role = '';
     }));
+
+    describe('init()', function () {
+      beforeEach(function () {
+        data = documentMock.document;
+        initController();
+      });
+
+      it('sets the role as admin by default', function () {
+        expect($scope.role).toBe('admin');
+      });
+
+      it('corectly formats date time in document', function () {
+        expect($scope.document.activity_date_time).toEqual(new Date(documentMock.document.activity_date_time));
+        expect($scope.document.expire_date).toEqual(new Date(documentMock.document.expire_date));
+        expect($scope.document.valid_from).toEqual(new Date(documentMock.document.valid_from));
+      });
+    });
 
     describe('Lookup contacts lists', function () {
       describe('when in "new task" mode', function () {
@@ -51,7 +80,7 @@ define([
        * A mocked list of cached contacts
        * @return {Array}
        */
-      function cachedContacts() {
+      function cachedContacts () {
         return [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
       }
     });
@@ -79,7 +108,77 @@ define([
       });
     });
 
-    function fakeModalInstance() {
+    describe('addAssignee()', function () {
+      beforeEach(function () {
+        initController();
+        addAssignee(sampleAssignee);
+      });
+
+      it('adds contacts to list of assignees', function () {
+        expect($scope.document.assignee_contact_id[0]).toBe(sampleAssignee.id);
+      });
+
+      it('adds assignee to contact search list', function () {
+        expect($rootScope.cache.contact.arrSearch[0].id).toEqual(sampleAssignee.id);
+        expect($rootScope.cache.contact.arrSearch[0].label).toEqual(sampleAssignee.label);
+      });
+    });
+
+    describe('removeAssignee()', function () {
+      beforeEach(function () {
+        initController();
+        addAssignee(sampleAssignee);
+      });
+
+      it('removes assignee form the list of assignees', function () {
+        expect($scope.document.assignee_contact_id.length).toEqual(1);
+        $scope.removeAssignee(0);
+        expect($scope.document.assignee_contact_id.length).toEqual(0);
+      });
+    });
+
+    describe('remindMeInfo()', function () {
+      beforeEach(function () {
+        initController();
+        spyOn(CRM, 'help');
+        $scope.remindMeInfo();
+      });
+
+      it('makes calls to CRM.help() to display help message', function () {
+        expect(CRM.help).toHaveBeenCalledWith('Remind me?', $scope.remindMeMessage, 'error');
+      });
+    });
+
+    describe('isRole()', function () {
+      beforeEach(function () {
+        initController();
+        $scope.role = 'staff';
+      });
+
+      it('checks if the given role is the current one', function () {
+        expect($scope.isRole('staff')).toBe(true);
+        expect($scope.isRole('admin')).toBe(false);
+      });
+    });
+
+    describe('getDocumentType()', function () {
+      beforeEach(function () {
+        initController();
+        $rootScope.cache.documentType.arr = documentMock.documentTypes;
+      });
+
+      it('returns document type for document given id', function () {
+        expect($scope.getDocumentType(documentMock.documentTypes[1].key)).toEqual(documentMock.documentTypes[1].value);
+        expect($scope.getDocumentType(documentMock.documentTypes[3].key)).toEqual(documentMock.documentTypes[3].value);
+        expect($scope.getDocumentType(documentMock.documentTypes[6].key)).toEqual(documentMock.documentTypes[6].value);
+      });
+    });
+
+    function addAssignee (assignee) {
+      $scope.addAssignee(assignee);
+    }
+
+    function fakeModalInstance () {
       return {
         close: jasmine.createSpy('modalInstance.close'),
         dismiss: jasmine.createSpy('modalInstance.dismiss'),
@@ -89,14 +188,16 @@ define([
       };
     }
 
-    function initController() {
-      ctrl = $controller('ModalDocumentCtrl', {
-        $scope: $scope,
+    function initController (scopeValues) {
+      $controller('ModalDocumentCtrl', {
+        $scope: _.assign($scope, scopeValues),
+        $filter: $filter,
         $uibModalInstance: fakeModalInstance(),
         data: data,
         files: files,
-        HR_settings: HR_settings
+        role: role,
+        HR_settings: HRSettings
       });
-    };
+    }
   });
 });
