@@ -20,7 +20,7 @@ define([
       var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
       this.init = function () {
-        DocumentService.CacheContactsAndAssignments(documentList, ['contacts', 'assignments']);
+        DocumentService.cacheContactsAndAssignments(documentList, ['contacts', 'assignments']);
 
         watchDateFilters();
 
