@@ -1,7 +1,7 @@
 var TEST_REGEXP = /(spec|test)\.js$/i;
 var allTestFiles = [];
-var mocksPath = CRM.Tasksassignments.extensionPath + '/js/test/mocks';
-var srcPath = CRM.Tasksassignments.extensionPath + '/js/src/tasks-assignments';
+var mocksPath = CRM.tasksAssignments.extensionPath + '/js/test/mocks';
+var srcPath = CRM.tasksAssignments.extensionPath + '/js/src/tasks-assignments';
 
 Object.keys(window.__karma__.files).forEach(function(file) {
     if (TEST_REGEXP.test(file)) {

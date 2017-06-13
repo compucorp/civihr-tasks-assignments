@@ -9,11 +9,11 @@ define([
         CONTACT_ID: CRM.contactId ||null,
         LOGGED_IN_CONTACT_ID: CRM.adminId ||null,
         path: {
-            EXT: CRM.Tasksassignments.extensionPath,
-            TPL: CRM.Tasksassignments.extensionPath + 'views/'
+            EXT: CRM.tasksAssignments.extensionPath,
+            TPL: CRM.tasksAssignments.extensionPath + 'views/'
         },
         permissions: {
-            allowDelete: CRM.Tasksassignments.permissions.delete_tasks_and_documents
+            allowDelete: CRM.tasksAssignments.permissions.delete_tasks_and_documents
         },
         url: {
             REST: CRM.url('civicrm/ajax/rest'),

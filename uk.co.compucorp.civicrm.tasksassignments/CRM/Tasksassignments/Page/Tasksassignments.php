@@ -9,7 +9,7 @@ class CRM_Tasksassignments_Page_Tasksassignments extends CRM_Core_Page {
         CRM_Utils_System::redirect('/civicrm');
         return FALSE;
     }
-      
+
     parent::run();
   }
 
@@ -35,7 +35,7 @@ class CRM_Tasksassignments_Page_Tasksassignments extends CRM_Core_Page {
         $settings['days_to_create_a_document_clone'] = (int)$settings['days_to_create_a_document_clone'];
       }
       return array(
-        'Tasksassignments' => array(
+        'tasksAssignments' => array(
             'extensionPath' => CRM_Core_Resources::singleton()->getUrl('uk.co.compucorp.civicrm.tasksassignments'),
             'case_extension' => !empty(CRM_Core_Component::get('CiviCase')),
             'settings' => $settings,

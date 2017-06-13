@@ -1,5 +1,5 @@
 (function () {
-  var extPath = CRM.Tasksassignments.extensionPath + 'js/src/tasks-assignments';
+  var extPath = CRM.tasksAssignments.extensionPath + 'js/src/tasks-assignments';
 
   require.config({
     urlArgs: 'bust=' + (new Date()).getTime(),
