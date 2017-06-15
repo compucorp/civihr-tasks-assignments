@@ -375,10 +375,6 @@ define([
           missingRequiredFields.push('Document status');
         }
 
-        if (!doc.activity_date_time) {
-          missingRequiredFields.push('Due Date');
-        }
-
         if (!doc.status_id) {
           missingRequiredFields.push('Status');
         }
