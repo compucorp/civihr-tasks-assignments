@@ -230,6 +230,9 @@
   -webkit-padding-start: 40px;
   list-style: initial;
 }
+#civitasks ol, #cividocuments ol {
+  list-style: decimal;
+}
 #civitasks blockquote, #cividocuments blockquote,
 #civitasks q,
 #cividocuments q {
@@ -12336,7 +12339,7 @@ fieldset[disabled]
   box-shadow: none !important;
 }
 #civitasks .civihr-ui-select .select2-drop, #cividocuments .civihr-ui-select .select2-drop {
-  border-radius: 0 !important;
+  border-radius: 0 0 0 0 !important;
 }
 #civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
   height: 15px;
@@ -12428,6 +12431,8 @@ fieldset[disabled]
 }
 #civitasks .civihr-ui-select .select2-arrow, #cividocuments .civihr-ui-select .select2-arrow {
   cursor: pointer !important;
+  right: 0 !important;
+  top: 0 !important;
 }
 #civitasks .civihr-ui-select .select2-arrow::before, #cividocuments .civihr-ui-select .select2-arrow::before {
   color: #727E8A;
