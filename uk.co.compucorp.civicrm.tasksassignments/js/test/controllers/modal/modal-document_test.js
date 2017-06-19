@@ -44,10 +44,6 @@ define([
         expect($scope.role).toBe('admin');
       });
 
-      it('sets the modal title as "New Document" by default', function () {
-        expect($scope.modalTitle).toBe('New Document');
-      });
-
       it('corectly formats date time in document', function () {
         expect($scope.document.activity_date_time).toEqual(new Date(documentMock.document.activity_date_time));
         expect($scope.document.expire_date).toEqual(new Date(documentMock.document.expire_date));
@@ -179,14 +175,26 @@ define([
       });
     });
 
-    describe('$scope.modalTitle', function () {
-      beforeEach(function () {
-        modalMode = 'edit';
-        initController();
+    describe('$scope.modalTitle()', function () {
+      describe('when modalMode is not set', function () {
+        beforeEach(function () {
+          initController();
+        });
+
+        it('sets the modal title as "New Document" by default', function () {
+          expect($scope.modalTitle).toBe('New Document');
+        });
       });
 
-      it('sets the document modal title to "Edit Document"', function () {
-        expect($scope.modalTitle).toBe('Edit Document');
+      describe('when modalMode is edit', function () {
+        beforeEach(function () {
+          modalMode = 'edit';
+          initController();
+        });
+
+        it('sets the document modal title to "Edit Document"', function () {
+          expect($scope.modalTitle).toBe('Edit Document');
+        });
       });
     });
 
