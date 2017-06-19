@@ -10,15 +10,20 @@ define([
     function ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService, config) {
       $log.debug('Controller: MainCtrl');
 
-      $rootScope.modalDocument = function (data, e) {
+      $rootScope.modalDocument = function (modalMode, data, e) {
         e && e.preventDefault();
 
+        modalMode = modalMode || 'new';
         data = data || {};
+
         var modalInstance = $modal.open({
           appendTo: $rootElement.find('div').eq(0),
           templateUrl: config.path.TPL + 'modal/document.html?v=3',
           controller: 'ModalDocumentCtrl',
           resolve: {
+            modalMode: function () {
+              return modalMode;
+            },
             role: function () {
               return 'admin';
             },
