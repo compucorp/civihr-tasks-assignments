@@ -8,26 +8,47 @@ define([
   'use strict';
 
   describe('DocumentListCtrl', function () {
-    var $controller, $rootScope, DocumentService, $scope, $q, deferred;
+    var $controller, $rootScope, DocumentService, $scope;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$q_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       DocumentService = _DocumentService_;
-      $q = _$q_;
-      deferred = $q.defer();
     }));
+
+    beforeEach(function (){
+      spyOn(DocumentService, 'get').and.callFake(fakePromise([]));
+      spyOn(DocumentService, 'cacheContactsAndAssignments').and.callFake(fakePromise([]));
+    });
 
     describe('init()', function () {
       beforeEach(function () {
-        spyOn(DocumentService, 'cacheContactsAndAssignments').and.returnValue(deferred.promise);
         initController();
       });
 
       it('calls document service to cache contacts and assigments', function () {
         expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+      });
+    });
+
+    describe('$scope.loadDocumentsResolved', function () {
+      beforeEach(function () {
+        initController();
+        $scope.loadDocumentsResolved();
+      });
+
+      it('calls document service to document list', function () {
+        expect(DocumentService.get).toHaveBeenCalled();
+      });
+
+      it('calls document service to cache contacts and assignments', function () {
+          expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+      });
+
+      it('marks relolved section as loaded', function () {
+        expect($scope.listResolvedLoaded).toBe(true);
       });
     });
 
@@ -37,5 +58,20 @@ define([
         documentList: documentMock.documentList
       });
     }
+
+    /**
+     * Creates a fake promise then call
+     *
+     * @param  {array} data Data to pass to callback function
+     */
+    function fakePromise (data) {
+      return function () {
+        return {
+          then: function (callback) {
+            callback(data);
+          }
+        }
+      };
+    };
   });
 });
