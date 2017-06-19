@@ -11,7 +11,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee, modalMode;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
@@ -31,6 +31,7 @@ define([
       data = {};
       files = {};
       role = '';
+      modalMode = '';
     }));
 
     describe('init()', function () {
@@ -41,6 +42,10 @@ define([
 
       it('sets the role as admin by default', function () {
         expect($scope.role).toBe('admin');
+      });
+
+      it('sets the modal title as "New Document" by default', function () {
+        expect($scope.modalTitle).toBe('New Document');
       });
 
       it('corectly formats date time in document', function () {
@@ -174,6 +179,17 @@ define([
       });
     });
 
+    describe('$scope.modalTitle', function () {
+      beforeEach(function () {
+        modalMode = 'edit';
+        initController();
+      });
+
+      it('sets the document modal title to "Edit Document"', function () {
+        expect($scope.modalTitle).toBe('Edit Document');
+      });
+    });
+
     function addAssignee (assignee) {
       $scope.addAssignee(assignee);
     }
@@ -196,6 +212,7 @@ define([
         data: data,
         files: files,
         role: role,
+        modalMode: modalMode,
         HR_settings: HRSettings
       });
     }
