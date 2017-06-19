@@ -8,19 +8,25 @@ define([
   'use strict';
 
   describe('DocumentListCtrl', function () {
-    var $controller, $rootScope, DocumentService, $scope;
+    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
+      $q = _$q_;
+      config = _config_;
       DocumentService = _DocumentService_;
+      $httpBackend = _$httpBackend_;
+
+      // Avoid actual API calls
+      $httpBackend.whenGET(/action=/).respond({});
     }));
 
-    beforeEach(function (){
-      spyOn(DocumentService, 'get').and.callFake(fakePromise([]));
-      spyOn(DocumentService, 'cacheContactsAndAssignments').and.callFake(fakePromise([]));
+    beforeEach(function () {
+      spyOn(DocumentService, 'get').and.returnValue($q.resolve([]));
+      spyOn(DocumentService, 'cacheContactsAndAssignments').and.returnValue($q.resolve([]));
     });
 
     describe('init()', function () {
@@ -34,44 +40,46 @@ define([
     });
 
     describe('$scope.loadDocumentsResolved', function () {
+      var promise;
+
       beforeEach(function () {
+        config.CONTACT_ID = 204;
+        config.status.resolve.DOCUMENT = [1, 2];
+
         initController();
-        $scope.loadDocumentsResolved();
+        promise = $scope.loadDocumentsResolved();
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
       });
 
       it('calls document service to document list', function () {
-        expect(DocumentService.get).toHaveBeenCalled();
+        expect(DocumentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
+          target_contact_id: config.CONTACT_ID,
+          status_id: { IN: config.status.resolve.DOCUMENT }
+        }));
       });
 
       it('calls document service to cache contacts and assignments', function () {
+        promise.then(function () {
           expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+        });
       });
 
       it('marks relolved section as loaded', function () {
-        expect($scope.listResolvedLoaded).toBe(true);
+        promise.then(function () {
+          expect($scope.listResolvedLoaded).toBe(true);
+        });
       });
     });
 
     function initController (scopeValues) {
       $controller('DocumentListCtrl', {
         $scope: $scope,
+        config: config,
         documentList: documentMock.documentList
       });
     }
-
-    /**
-     * Creates a fake promise then call
-     *
-     * @param  {array} data Data to pass to callback function
-     */
-    function fakePromise (data) {
-      return function () {
-        return {
-          then: function (callback) {
-            callback(data);
-          }
-        }
-      };
-    };
   });
 });

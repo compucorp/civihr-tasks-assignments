@@ -191,7 +191,7 @@ define([
         // Remove resolved documents from the document list
         $scope.list = $filter('filterByStatus')($scope.list, $rootScope.cache.documentStatusResolve, false);
 
-        DocumentService.get({
+        return DocumentService.get({
           'target_contact_id': config.CONTACT_ID,
           'status_id': {
             'IN': config.status.resolve.DOCUMENT
