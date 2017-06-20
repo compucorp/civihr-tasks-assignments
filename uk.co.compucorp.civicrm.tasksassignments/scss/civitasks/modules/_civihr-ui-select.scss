@@ -55,3 +55,10 @@ $input-border-radius:    0;
     }
   }
 }
+
+// Do not display dropdown for ui-select-multiple with attribute no-dropdown
+[no-dropdown].ui-select-multiple {
+  &:after {
+    display: none;
+  }
+}
