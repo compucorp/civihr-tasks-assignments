@@ -11,13 +11,14 @@ define([
   'use strict';
 
   describe('DocumentService', function () {
-    var AssignmentService, ContactService, DocumentService, $q, deferred, promise;
+    var AssignmentService, ContactService, DocumentService, $q, deferred, config, promise;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_AssignmentService_, _ContactService_, _DocumentService_, _$q_) {
+    beforeEach(inject(function (_AssignmentService_, _ContactService_, _DocumentService_, _config_, _$q_) {
       AssignmentService = _AssignmentService_;
       ContactService = _ContactService_;
       DocumentService = _DocumentService_;
+      config = _config_;
       $q = _$q_;
       deferred = $q.defer();
     }));
@@ -32,12 +33,13 @@ define([
     describe('cacheContactsAndAssignments()', function () {
       describe('needs to cache the contacts and assignments of the given documents', function () {
         beforeEach(function () {
+          config.CONTACT_ID = '210';
           promise = DocumentService.cacheContactsAndAssignments(documentMock.documentList);
         });
 
         it('calls contact service to get details using contactIds', function () {
           expect(ContactService.get).toHaveBeenCalledWith(jasmine.objectContaining({
-            'IN': ['204', '4', '205', '205', '204', '204', '205', '202', '202', '205', '3', '203', '205', '203', '203']
+            'IN': ['204', '4', '205', '205', '204', '204', '205', '202', '202', '205', '3', '203', '205', '203', '203', '210']
           }));
         });
 

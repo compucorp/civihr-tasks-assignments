@@ -14,9 +14,10 @@ define([
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
-    '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
+    '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
+    'files', 'config', 'HR_settings', 'modalMode',
     function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
-      DocumentService, ContactService, FileService, data, files, config, HR_settings) {
+      DocumentService, ContactService, FileService, data, files, config, HR_settings, modalMode) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       // Init call
@@ -29,6 +30,7 @@ define([
 
         $scope.data = data;
         $scope.role = role || 'admin';
+        $scope.modalTitle = modalMode === 'edit' ? 'Edit Document' : 'New Document';
 
         $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
         $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
@@ -359,10 +361,12 @@ define([
         if (missingRequiredFields.length) {
           var notification = CRM.alert(missingRequiredFields.join(', '),
             missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
-          $timeout(function () {
+
+          notification && $timeout(function () {
             notification.close();
             notification = null;
           }, 5000);
+
           return false;
         }
 
