@@ -362,8 +362,8 @@ define([
           var notification = CRM.alert(missingRequiredFields.join(', '),
             missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
 
-          $timeout(function () {
-            notification && notification.close();
+          notification && $timeout(function () {
+            notification.close();
             notification = null;
           }, 5000);
 
