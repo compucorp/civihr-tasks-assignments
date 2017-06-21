@@ -12652,3 +12652,6 @@ fieldset[disabled]
 #civitasks .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before {
   content: '\f002' !important;
 }
+#civitasks [no-dropdown].ui-select-multiple:after, #cividocuments [no-dropdown].ui-select-multiple:after {
+  display: none;
+}
