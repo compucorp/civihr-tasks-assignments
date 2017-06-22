@@ -213,18 +213,18 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-12" ng-show="!showAssignmentField">
+          <div class="col-xs-12 col-sm-12" ng-show="!showAssignmentField && !document.case_id">
             <span class="form-control-static pull-left">
               <a href ng-click="showAssignmentField = true;">Link to Assignment</a>
             </span>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-sm-12" ng-show="showAssignmentField">
+            <div class="col-xs-12 col-sm-12" ng-show="showAssignmentField || document.case_id">
               <div class="form-group">
                 <label class="col-xs-4 text-nowrap control-label"> Link to assignment: </label>
                 <div class="col-xs-8 no-left-margin">
-                  <ui-select prevent-animations theme="civihr-ui-select" allow-clear ng-model="document.case_id" on-select="cacheAssignment($item);">
-                    <ui-select-match prevent-animations class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
+                  <ui-select prevent-animations theme="civihr-ui-select" ng-model="document.case_id" on-select="cacheAssignment($item);">
+                    <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
                     </ui-select-match>
                     <ui-select-choices prevent-animations class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
                       <div>
