@@ -155,7 +155,7 @@ define([
           return AssignmentSearch.query({
             sortName: input,
             excludeCaseIds: excludeCaseId,
-            includeContactIds: includeContactIds.join(',')
+            includeContactIds: Array.isArray(includeContactIds) ? includeContactIds.join(',') : includeContactIds
           }).$promise;
         },
         updateTab: function (count) {
