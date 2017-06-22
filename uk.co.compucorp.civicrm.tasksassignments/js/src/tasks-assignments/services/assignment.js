@@ -152,10 +152,12 @@ define([
           return deferred.promise;
         },
         search: function (input, excludeCaseId, includeContactIds) {
+          includeContactIds = Array.isArray(includeContactIds) ? includeContactIds.join(',') : '';
+
           return AssignmentSearch.query({
             sortName: input,
             excludeCaseIds: excludeCaseId,
-            includeContactIds: Array.isArray(includeContactIds) ? includeContactIds.join(',') : includeContactIds
+            includeContactIds: includeContactIds
           }).$promise;
         },
         updateTab: function (count) {
@@ -177,12 +179,10 @@ define([
           $log.debug('updateCache');
           $log.debug(data);
 
+          var assignment, assignmentId, assignmentType;
           var obj = $rootScope.cache.assignment.obj || {};
           var arr = [];
           var arrSearch = [];
-          var assignment;
-          var assignmentId;
-          var assignmentType;
 
           angular.extend(obj, data);
 
