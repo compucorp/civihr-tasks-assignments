@@ -10,7 +10,8 @@ define(function () {
       email_id: '16',
       hrjobroles_id: '',
       id: '3',
-      sort_name: 'Jacobs, Teresa'
+      sort_name: 'Jacobs, Teresa',
+      description: []
     },
     contactList: [
       {
@@ -21,7 +22,8 @@ define(function () {
         email_id: '16',
         hrjobroles_id: '',
         id: '3',
-        sort_name: 'Jacobs, Teresa'
+        sort_name: 'Jacobs, Teresa',
+        description: []
       },
       {
         contact_id: '4',
@@ -31,7 +33,8 @@ define(function () {
         email_id: '124',
         hrjobroles_id: '',
         id: '4',
-        sort_name: 'Yadav-Roberts, Felisha'
+        sort_name: 'Yadav-Roberts, Felisha',
+        description: []
       }
     ]
   };
