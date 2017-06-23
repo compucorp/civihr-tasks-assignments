@@ -243,7 +243,7 @@ define([
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
 
-        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
+        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || null;
         doc.expire_date = $scope.parseDate(doc.expire_date);
         doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
