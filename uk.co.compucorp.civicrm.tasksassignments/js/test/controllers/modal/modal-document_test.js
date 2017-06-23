@@ -5,19 +5,25 @@ define([
   'common/angular',
   'common/moment',
   'mocks/document',
+  'mocks/contact',
+  'mocks/data/assignment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment, documentMock) {
+], function (angular, moment, documentMock, contactMock, assignmentMock) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee, modalMode;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files,
+      sampleAssignee, modalMode, ContactService, AssignmentService, $q;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _AssignmentService_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $filter = _$filter_;
+      $q = _$q_;
+      ContactService = _ContactService_;
+      AssignmentService = _AssignmentService_;
       $scope = $rootScope.$new();
 
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -195,6 +201,57 @@ define([
         it('sets the document modal title to "Edit Document"', function () {
           expect($scope.modalTitle).toBe('Edit Document');
         });
+      });
+    });
+
+    describe('$scope.onContactChanged', function () {
+      beforeEach(function () {
+        spyOn(ContactService, 'updateCache').and.returnValue({});
+        spyOn(AssignmentService, 'search').and.returnValue($q.resolve([]));
+      });
+
+      beforeEach(function () {
+        initController();
+        $scope.onContactChanged(contactMock.contact);
+      });
+
+      it('calls contact service to cache selected Contact', function () {
+        expect(ContactService.updateCache).toHaveBeenCalled();
+      });
+    });
+
+    describe('$scope.onContactChanged', function () {
+      beforeEach(function () {
+        spyOn(ContactService, 'updateCache').and.returnValue({});
+        spyOn(AssignmentService, 'search').and.returnValue($q.resolve([]));
+      });
+
+      beforeEach(function () {
+        initController();
+        $scope.onContactChanged(contactMock.contact);
+      });
+
+      it('resets the document case id to empty', function () {
+        expect($scope.document.case_id).toEqual('');
+      });
+
+      it('calls contact service to cache selected Contact', function () {
+        expect(ContactService.updateCache).toHaveBeenCalled();
+      });
+    });
+
+    describe('$scope.cacheTargetContactAssignments', function () {
+      beforeEach(function () {
+        spyOn(AssignmentService, 'search').and.returnValue($q.resolve([]));
+      });
+
+      beforeEach(function () {
+        initController();
+        $scope.cacheTargetContactAssignments({ id: '204'});
+      });
+
+      it("calls assignment service to search assignments of target contact", function () {
+        expect(AssignmentService.search).toHaveBeenCalledWith(null, null);
       });
     });
 
