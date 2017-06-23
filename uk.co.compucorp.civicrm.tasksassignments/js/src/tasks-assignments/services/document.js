@@ -249,9 +249,9 @@ define([
          * then fetches respective contacts and addignments and caches them.
          *
          * @param  {array} documents
-         * @param  {Array}  [options=['contacts','assignments']
+         * @param  {Array} options Possible values ['contacts','assignments']
          */
-        cacheContactsAndAssignments: function (documents, options = ['contacts', 'assignments']) {
+        cacheContactsAndAssignments: function (documents, options) {
           var contactIds = [];
           var assignmentIds = [];
           var contactPromise;
