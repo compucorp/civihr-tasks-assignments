@@ -214,7 +214,7 @@
             </div>
           </div>
           <!-- Assignment -->
-          <div class="col-xs-12 col-sm-12" ng-show="!showFieldAssignment || !assignments.length">
+          <div class="col-xs-12 col-sm-12" ng-show="(!showFieldAssignment || !assignments.length) && !document.case_id">
             <div class="row">
               <span class="form-control-static">
                 <a href class="btn" ng-click="showFieldAssignment = true;" ng-class="{ disabled: !assignments.length }">
