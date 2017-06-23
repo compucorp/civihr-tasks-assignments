@@ -25,7 +25,12 @@ define([
       switch(type){
         case 'overdue':
           for (i; i < inputArrlen; i++) {
-            if (new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) < today) {
+            itemDueDate = null;
+            if (inputArr[i].activity_date_time) {
+              var itemDueDate = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
+            }
+
+            if (itemDueDate < today && itemDueDate !== null) {
               filteredArr.push(inputArr[i]);
             }
           }
