@@ -101,7 +101,6 @@ define([
           return;
         }
 
-
         obj[$item.id] = {
           case_type_id: $filter('filter')($rootScope.cache.assignmentType.arr, {title: $item.extra.case_type})[0].id,
           client_id: {'1': $item.extra.contact_id},
@@ -125,19 +124,16 @@ define([
        *
        * @param  {string | integer} targetContactId
        */
-      $scope.cacheTargetContactAssignments = function (targetContactId) {
-        AssignmentService.search(null, null).then(function (assignments) {
-          $scope.assignments = $filter('filter')(assignments, function (val) {
-            return +val.extra.contact_id === +targetContactId;
-          });
+      $scope.searchContactAssignments = function (targetContactId) {
+        return AssignmentService.search(null, null, targetContactId)
+        .then(function (assignments) {
+          $scope.assignments = assignments;
           $rootScope.$broadcast('ct-spinner-hide');
         });
       };
 
       /**
-       * Resets document case id, calls to cache Contact and search assignments
-       * for given Target Contact
-       * (This function is called when change in target contact)
+       * Handler for target contact's change event
        *
        * @param  {object} selectedContact
        */
@@ -145,7 +141,7 @@ define([
         $rootScope.$broadcast('ct-spinner-show');
         $scope.document.case_id = '';
         $scope.cacheContact(selectedContact);
-        $scope.cacheTargetContactAssignments(selectedContact.id);
+        $scope.searchContactAssignments(selectedContact.id);
       };
 
       $scope.cacheContact = function ($item) {

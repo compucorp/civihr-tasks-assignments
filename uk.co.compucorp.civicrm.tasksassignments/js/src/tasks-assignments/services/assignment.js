@@ -152,7 +152,7 @@ define([
           return deferred.promise;
         },
         search: function (input, excludeCaseId, includeContactIds) {
-          includeContactIds = Array.isArray(includeContactIds) ? includeContactIds.join(',') : '';
+          includeContactIds = Array.isArray(includeContactIds) ? includeContactIds.join(',') : includeContactIds;
 
           return AssignmentSearch.query({
             sortName: input,

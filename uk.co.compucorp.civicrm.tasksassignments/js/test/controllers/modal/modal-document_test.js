@@ -6,21 +6,22 @@ define([
   'common/moment',
   'mocks/document',
   'mocks/contact',
-  'mocks/data/assignment',
+  'mocks/fabricators/assignment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment, documentMock, contactMock, assignmentMock) {
+], function (angular, moment, documentMock, contactMock, assignmentFabricator) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
     var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files,
-      sampleAssignee, modalMode, ContactService, AssignmentService, $q;
+      sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _AssignmentService_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _AssignmentService_, _$httpBackend_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $filter = _$filter_;
+      $httpBackend = _$httpBackend_;
       $q = _$q_;
       ContactService = _ContactService_;
       AssignmentService = _AssignmentService_;
@@ -38,6 +39,9 @@ define([
       files = {};
       role = '';
       modalMode = '';
+
+      // A workaround to avoid actual API calls
+      $httpBackend.whenGET(/action=/).respond({});
     }));
 
     describe('init()', function () {
@@ -207,26 +211,7 @@ define([
     describe('$scope.onContactChanged', function () {
       beforeEach(function () {
         spyOn(ContactService, 'updateCache').and.returnValue({});
-        spyOn(AssignmentService, 'search').and.returnValue($q.resolve([]));
-      });
 
-      beforeEach(function () {
-        initController();
-        $scope.onContactChanged(contactMock.contact);
-      });
-
-      it('calls contact service to cache selected Contact', function () {
-        expect(ContactService.updateCache).toHaveBeenCalled();
-      });
-    });
-
-    describe('$scope.onContactChanged', function () {
-      beforeEach(function () {
-        spyOn(ContactService, 'updateCache').and.returnValue({});
-        spyOn(AssignmentService, 'search').and.returnValue($q.resolve([]));
-      });
-
-      beforeEach(function () {
         initController();
         $scope.onContactChanged(contactMock.contact);
       });
@@ -240,18 +225,35 @@ define([
       });
     });
 
-    describe('$scope.cacheTargetContactAssignments', function () {
+    describe('$scope.searchContactAssignments', function () {
       beforeEach(function () {
-        spyOn(AssignmentService, 'search').and.returnValue($q.resolve([]));
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
       });
 
       beforeEach(function () {
         initController();
-        $scope.cacheTargetContactAssignments({ id: '204'});
+        promise = $scope.searchContactAssignments('204');
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
       });
 
       it("calls assignment service to search assignments of target contact", function () {
-        expect(AssignmentService.search).toHaveBeenCalledWith(null, null);
+        expect(AssignmentService.search).toHaveBeenCalledWith(null, null, '204');
+      });
+
+      it("search for assignments for a target contact and stores in $scope.assignments", function () {
+        promise.then(function () {
+          expect($scope.assignments).toEqual(assignmentFabricator.listResponse());
+        })
+      });
+
+      it("hides spinner once the search is done", function () {
+        promise.then(function () {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('ct-spinner-hide');
+        })
       });
     });
 
