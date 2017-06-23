@@ -209,6 +209,12 @@ class CRM_Tasksassignments_Reminder {
       $isTask = isset($activityResult['subject']);
       $contactId = $emailToContactId[$recipient];
       $activityName = implode(', ', $activityContacts['targets']['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
+
+      $activityDueDate = null;
+      if (!empty($activityResult['activity_date_time'])) {
+        $activityDueDate = substr($activityResult['activity_date_time'], 0, 10);
+      }
+
       $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
         'isReminder' => $isReminder,
         'isDelete' => $isDelete,
@@ -220,7 +226,7 @@ class CRM_Tasksassignments_Reminder {
         'activityAssignee' => implode(', ', $activityContacts['assignees']['links']),
         'previousAssignee' => $previousAssignee ? $previousAssignee['link'] : null,
         'activityStatus' => self::$_activityOptions[$isTask ? 'status' : 'document_status'][$activityResult['status_id']],
-        'activityDue' => substr($activityResult['activity_date_time'], 0, 10),
+        'activityDue' => $activityDueDate,
         'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
         'activityDetails' => isset($activityResult['details']) ? $activityResult['details'] : '',
         'baseUrl' => CIVICRM_UF_BASEURL,
