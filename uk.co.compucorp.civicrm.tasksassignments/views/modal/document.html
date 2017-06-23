@@ -14,7 +14,7 @@
       <!-- Search and select by name and email -->
       <div class="row" ng-hide="isRole('staff')">
         <div class="col-xs-12">
-          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="cacheContact($item)" ng-required="true" ng-disabled="isRole('manager')">
+          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="onContactChanged($item)" ng-required="true" ng-disabled="isRole('manager')">
             <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
               {{$select.selected.label}}
             </ui-select-match>
@@ -213,22 +213,27 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-12 col-sm-12" ng-show="!showAssignmentField && !document.case_id">
-            <span class="form-control-static pull-left">
-              <a href ng-click="showAssignmentField = true;">Link to Assignment</a>
-            </span>
+          <!-- Assignment -->
+          <div class="col-xs-12 col-sm-12" ng-show="!showFieldAssignment || !assignments.length">
+            <div class="row">
+              <span class="form-control-static">
+                <a href class="btn" ng-click="showFieldAssignment = true;" ng-class="{ disabled: !assignments.length }">
+                  Add to Assignment
+                </a>
+              </span>
+            </div>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-sm-12" ng-show="showAssignmentField || document.case_id">
+            <div class="col-xs-12 col-sm-12" ng-show="(document.case_id || showFieldAssignment) && assignments.length">
               <div class="form-group">
-                <label class="col-xs-4 text-nowrap control-label"> Link to assignment: </label>
+                <label class="col-xs-4 text-nowrap control-label"> Link to Assignment: </label>
                 <div class="col-xs-8 no-left-margin">
                   <ui-select prevent-animations theme="civihr-ui-select" ng-model="document.case_id" on-select="cacheAssignment($item);">
                     <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
                     </ui-select-match>
                     <ui-select-choices prevent-animations class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
                       <div>
-                        <div ng-class="assignment.label_class">{{assignment.label}}</div>
+                        <div ng-class="assignment.label_class">#{{document.case_id}} | {{assignment.label}}</div>
                         <small>
                           #{{assignment.id}}: {{assignment.extra.case_status}} (opened: {{assignment.extra.start_date | date:'MMM d, yyyy'}})
                           <br>
