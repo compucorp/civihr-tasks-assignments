@@ -61,6 +61,18 @@ define([
       });
     });
 
+    describe('Document without Due Date (activity_date_time)', function () {
+      beforeEach(function () {
+        data = documentMock.document;
+        delete data['activity_date_time'];
+        initController();
+      });
+
+      it('due date should default to null', function () {
+        expect($scope.document.activity_date_time).toBe(null);
+      });
+    });
+
     describe('Lookup contacts lists', function () {
       describe('when in "new task" mode', function () {
         beforeEach(function () {
