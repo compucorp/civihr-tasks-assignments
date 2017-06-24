@@ -63,7 +63,7 @@ define([
 
     describe('Document without Due Date (activity_date_time)', function () {
       beforeEach(function () {
-        data = documentMock.document;
+        data = documentFabricator.single();
         delete data['activity_date_time'];
         initController();
       });
