@@ -97,7 +97,7 @@ define([
       $scope.cacheAssignment = function ($item) {
         var obj = {};
 
-        if ($rootScope.cache.assignment.obj[$item.id]) {
+        if (!$item || $rootScope.cache.assignment.obj[$item.id]) {
           return;
         }
 
@@ -117,6 +117,31 @@ define([
         };
 
         AssignmentService.updateCache(obj);
+      };
+
+      /**
+       * Searches the list of assignments for the given target contact
+       *
+       * @param  {string | integer} targetContactId
+       */
+      $scope.searchContactAssignments = function (targetContactId) {
+        return AssignmentService.search(null, null, targetContactId)
+        .then(function (assignments) {
+          $scope.assignments = assignments;
+          $rootScope.$broadcast('ct-spinner-hide');
+        });
+      };
+
+      /**
+       * Handler for target contact's change event
+       *
+       * @param  {object} selectedContact
+       */
+      $scope.onContactChanged = function (selectedContact) {
+        $rootScope.$broadcast('ct-spinner-show');
+        $scope.document.case_id = '';
+        $scope.cacheContact(selectedContact);
+        $scope.searchContactAssignments(selectedContact.id);
       };
 
       $scope.cacheContact = function ($item) {
