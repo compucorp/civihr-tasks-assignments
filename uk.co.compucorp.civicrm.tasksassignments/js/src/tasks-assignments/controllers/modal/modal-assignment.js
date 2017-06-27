@@ -1,3 +1,6 @@
+/* global CRM */
+/* eslint-env amd */
+
 define([
   'common/lodash',
   'common/angular',
@@ -49,6 +52,9 @@ define([
             $scope.activitySet = {};
             $scope.taskList = [];
             $scope.documentList = [];
+            $scope.activity = {
+              selected: []
+            };
 
             // The contacts collections used by the lookup directives
             // divided by type
@@ -147,7 +153,8 @@ define([
                     return;
                 }
 
-                $scope.activitySet = assignmentType.definition.activitySets[0];
+                $scope.activity.selected = assignmentType.definition.activitySets[0];
+                $scope.activitySet = $scope.activity.selected;
                 $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
 
                 $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
