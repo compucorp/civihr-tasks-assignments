@@ -179,7 +179,7 @@ define([
             });
 
             it('updates taskList according with activitySet', function () {
-              expect(scope.activitySet).toEqual(newActivitySet);
+              expect(scope.activity.activitySet).toEqual(newActivitySet);
             });
           });
 
@@ -229,11 +229,7 @@ define([
           });
 
           it('sets the selected activity type', function () {
-            expect(scope.activity.selected).toEqual($rootScope.cache.assignmentType.obj['2'].definition.activitySets[0]);
-          });
-
-          it('sets the activitySet, which is used for filtering tasks', function () {
-            expect(scope.activitySet).toEqual($rootScope.cache.assignmentType.obj['2'].definition.activitySets[0]);
+            expect(scope.activity.activitySet).toEqual($rootScope.cache.assignmentType.obj['2'].definition.activitySets[0]);
           });
         });
 

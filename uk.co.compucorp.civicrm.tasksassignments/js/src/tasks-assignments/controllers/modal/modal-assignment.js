@@ -49,12 +49,11 @@ define([
 
             $scope.dpOpened = {};
             $scope.showCId = !config.CONTACT_ID;
-            $scope.activitySet = {};
+            $scope.activity = {
+              activitySet: {}
+            }
             $scope.taskList = [];
             $scope.documentList = [];
-            $scope.activity = {
-              selected: []
-            };
 
             // The contacts collections used by the lookup directives
             // divided by type
@@ -70,7 +69,7 @@ define([
              * @param  {object} item Timeline item
              */
             $scope.updateTimeline = function(item) {
-              $scope.activitySet = item;
+              $scope.activity.activitySet = item;
             };
 
             $scope.addActivity = function (activityArr) {
@@ -147,14 +146,13 @@ define([
                 var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
 
                 if (!assignmentType) {
-                    $scope.activitySet = {};
+                    $scope.activity.activitySet = {};
                     $scope.assignment.subject = '';
 
                     return;
                 }
 
-                $scope.activity.selected = assignmentType.definition.activitySets[0];
-                $scope.activitySet = $scope.activity.selected;
+                $scope.activity.activitySet = assignmentType.definition.activitySets[0];
                 $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
 
                 $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
@@ -301,9 +299,8 @@ define([
               });
             };
 
-            $scope.$watch('activitySet', function (activitySet) {
-
-                if (!activitySet.activityTypes) {
+            $scope.$watch('activity.activitySet', function (activitySet) {
+                if (!activitySet || !activitySet.activityTypes) {
                   $scope.taskList = [];
                   return;
                 }
