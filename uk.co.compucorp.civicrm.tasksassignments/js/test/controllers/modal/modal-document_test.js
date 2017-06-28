@@ -68,7 +68,7 @@ define([
         initController();
       });
 
-      it('due date should default to null', function () {
+      it('due date default to null', function () {
         expect($scope.document.activity_date_time).toBe(null);
       });
     });

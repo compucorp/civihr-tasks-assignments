@@ -27,7 +27,7 @@ define([
           for (i; i < inputArrlen; i++) {
             itemDueDate = null;
             if (inputArr[i].activity_date_time) {
-              var itemDueDate = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
+              itemDueDate = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
             }
 
             if (itemDueDate < today && itemDueDate !== null) {
@@ -105,27 +105,27 @@ define([
       return filteredArr;
     };
 
-      /**
-       * Validates if the target date resides
-       * between two other dates
-       *
-       * @param targetDate
-       * @param fromDate
-       * @param toDate
-       *
-       * @return {boolean}
-       */
+    /**
+     * Validates if the target date resides
+     * between two other dates
+     *
+     * @param targetDate
+     * @param fromDate
+     * @param toDate
+     *
+     * @return {boolean}
+     */
     function isDateBetweenTwoDates(targetDate, fromDate, toDate) {
       return (
-            targetDate !== null
-            && targetDate >= fromDate
-            && (targetDate <= toDate || toDate === null)
-          )
-          ||
-          (
-            targetDate === null
-            && toDate === null
-          )
+        targetDate !== null
+        && targetDate >= fromDate
+        && (targetDate <= toDate || toDate === null)
+      )
+      ||
+      (
+        targetDate === null
+        && toDate === null
+      )
     }
   }]);
 
