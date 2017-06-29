@@ -5,19 +5,26 @@ define([
   'common/angular',
   'common/moment',
   'mocks/document',
+  'mocks/contact',
+  'mocks/fabricators/assignment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment, documentMock) {
+], function (angular, moment, documentMock, contactMock, assignmentFabricator) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee, modalMode;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files,
+      sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _AssignmentService_, _$httpBackend_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $filter = _$filter_;
+      $httpBackend = _$httpBackend_;
+      $q = _$q_;
+      ContactService = _ContactService_;
+      AssignmentService = _AssignmentService_;
       $scope = $rootScope.$new();
 
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -32,6 +39,9 @@ define([
       files = {};
       role = '';
       modalMode = '';
+
+      // A workaround to avoid actual API calls
+      $httpBackend.whenGET(/action=/).respond({});
     }));
 
     describe('init()', function () {
@@ -195,6 +205,55 @@ define([
         it('sets the document modal title to "Edit Document"', function () {
           expect($scope.modalTitle).toBe('Edit Document');
         });
+      });
+    });
+
+    describe('$scope.onContactChanged', function () {
+      beforeEach(function () {
+        spyOn(ContactService, 'updateCache').and.returnValue({});
+
+        initController();
+        $scope.onContactChanged(contactMock.contact);
+      });
+
+      it('resets the document case id to empty', function () {
+        expect($scope.document.case_id).toEqual('');
+      });
+
+      it('calls contact service to cache selected Contact', function () {
+        expect(ContactService.updateCache).toHaveBeenCalled();
+      });
+    });
+
+    describe('$scope.searchContactAssignments', function () {
+      beforeEach(function () {
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
+      });
+
+      beforeEach(function () {
+        initController();
+        promise = $scope.searchContactAssignments('204');
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      it("calls assignment service to search assignments of target contact", function () {
+        expect(AssignmentService.search).toHaveBeenCalledWith(null, null, '204');
+      });
+
+      it("search for assignments for a target contact and stores in $scope.assignments", function () {
+        promise.then(function () {
+          expect($scope.assignments).toEqual(assignmentFabricator.listResponse());
+        })
+      });
+
+      it("hides spinner once the search is done", function () {
+        promise.then(function () {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('ct-spinner-hide');
+        })
       });
     });
 
