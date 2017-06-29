@@ -24,6 +24,8 @@ define([
 
       switch(type){
         case 'overdue':
+          var itemDueDate;
+
           for (i; i < inputArrlen; i++) {
             itemDueDate = null;
             if (inputArr[i].activity_date_time) {
