@@ -7,13 +7,23 @@ define([
 ], function (services) {
   'use strict';
 
-  services.factory('Document', ['$resource', 'config', '$log', function ($resource, config, $log) {
+  services.factory('Document', ['$resource',  '$httpParamSerializer', 'config', '$log', function ($resource, $httpParamSerializer, config, $log) {
     $log.debug('Service: Document');
 
     return $resource(config.url.REST, {
       'action': 'get',
       'entity': 'Document',
-      'json': {}
+      'sequential': 1,
+      'debug': config.DEBUG
+    }, {
+      save: {
+        method: "POST",
+        isArray: false,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        transformRequest: $httpParamSerializer
+      }
     });
   }]);
 
@@ -34,15 +44,12 @@ define([
 
           var deferred = $q.defer();
 
-          Document.save({
-            action: 'copy_to_assignment',
+          Document.save({ action: 'copy_to_assignment' }, {
             json: {
-              sequential: 1,
-              debug: config.DEBUG,
               id: documentArr,
               case_id: assignmentId
-            }
-          }, null, function (data) {
+            } || {}
+          }, function (data) {
             if (UtilsService.errorHandler(data, 'Unable to assign documents', deferred)) {
               return;
             }
@@ -78,67 +85,74 @@ define([
 
           return deferred.promise;
         },
-        getOptions: function () {
+        getOptions: function() {
           var deferred = $q.defer();
-          var deferredDocumentType = $q.defer();
-          var deferredDocumentStatus = $q.defer();
-          var documentType = {
-            arr: [],
-            obj: {}
-          };
-          var documentStatus = {
-            arr: [],
-            obj: {}
-          };
 
-          Document.get({
-            action: 'getoptions',
-            json: {
-              'field': 'activity_type_id'
-            }
-          }, function (data) {
-            var optionId;
-
-            for (optionId in data.values) {
-              documentType.arr.push({
-                key: optionId,
-                value: data.values[optionId]
-              });
-            }
-
-            documentType.obj = data.values;
-
-            deferredDocumentType.resolve(documentType);
+          $q.all({
+            documentType: this.getDocumentTypes(),
+            documentStatus: this.getDocumentStatus()
+          }).then(function(options) {
+            deferred.resolve(options);
           });
+
+          return deferred.promise;
+        },
+        getDocumentStatus: function() {
+          var deferredDocumentStatus = $q.defer();
+          var documentStatus = {
+              arr: [],
+              obj: {}
+            };
 
           Document.get({
             action: 'getoptions',
             json: {
               'field': 'status_id'
             }
-          }, function (data) {
-            var optionId;
-
-            for (optionId in data.values) {
+          }, function(data) {
+            _.each(data.values, function(option) {
               documentStatus.arr.push({
-                key: optionId,
-                value: data.values[optionId]
+                key: option.key.toString(),
+                value: option.value
               });
-            }
 
-            documentStatus.obj = data.values;
+              documentStatus.obj[option.key] = option.value;
+            });
 
             deferredDocumentStatus.resolve(documentStatus);
           });
 
-          $q.all({
-            documentType: deferredDocumentType.promise,
-            documentStatus: deferredDocumentStatus.promise
-          }).then(function (options) {
-            deferred.resolve(options);
+          return deferredDocumentStatus.promise;
+        },
+        getDocumentTypes: function() {
+          var deferredDocumentType = $q.defer();
+          var documentType = {
+              arr: [],
+              obj: {}
+            };
+
+          Document.get({
+            action: 'getoptions',
+            json: {
+              'field': 'activity_type_id',
+              'options': {
+                'limit': 0
+              }
+            }
+          }, function(data) {
+            _.each(data.values, function(option) {
+              documentType.arr.push({
+                key: option.key,
+                value: option.value
+              });
+
+              documentType.obj[option.key] = option.value;
+            });
+
+            deferredDocumentType.resolve(documentType);
           });
 
-          return deferred.promise;
+          return deferredDocumentType.promise;
         },
         save: function (document) {
           if (!document || typeof document !== 'object') {
@@ -152,10 +166,10 @@ define([
           }, document);
           var val;
 
-          Document.save({
-            action: 'create',
-            json: params
-          }, null, function (data) {
+          Document.save({ action: 'create' }, {
+            json: params || {}
+          }, function (data) {
+
             if (UtilsService.errorHandler(data, 'Unable to save document', deferred)) {
               return;
             }
@@ -179,14 +193,11 @@ define([
 
           var deferred = $q.defer();
 
-          Document.save({
-            action: 'create_multiple',
+          Document.save({ action: 'create_multiple'}, {
             json: {
-              sequential: 1,
-              debug: config.DEBUG,
               document: documentArr
-            }
-          }, null, function (data) {
+            } || {}
+          }, function (data) {
             if (UtilsService.errorHandler(data, 'Unable to save documents', deferred)) {
               return;
             }
@@ -205,15 +216,12 @@ define([
 
           var deferred = $q.defer();
 
-          Document.save({
-            action: 'sendreminder',
+          Document.save({ action: 'sendreminder' }, {
             json: {
-              sequential: 1,
-              debug: config.DEBUG,
               activity_id: documentId,
               notes: notes || ''
-            }
-          }, null, function (data) {
+            } || {}
+          }, function (data) {
             if (UtilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
               return;
             }
