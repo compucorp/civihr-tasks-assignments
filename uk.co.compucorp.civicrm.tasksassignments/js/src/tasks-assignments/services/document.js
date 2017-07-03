@@ -1,10 +1,11 @@
-/* globals angular, _ */
 /* eslint-env amd */
 
 define([
+  'common/angular',
+  'common/lodash',
   'tasks-assignments/services/services',
   'tasks-assignments/services/utils'
-], function (services) {
+], function (angular, _, services) {
   'use strict';
 
   services.factory('Document', ['$resource', '$httpParamSerializer', 'config', '$log', function ($resource, $httpParamSerializer, config, $log) {
@@ -87,11 +88,9 @@ define([
         },
         getOptions: function () {
           return $q.all({
-              documentType: this.getDocumentTypes(),
-              documentStatus: this.getDocumentStatus()
-            }).then(function (options) {
-              return options;
-            });
+            documentType: this.getDocumentTypes(),
+            documentStatus: this.getDocumentStatus()
+          });
         },
         getDocumentStatus: function () {
           var deferredDocumentStatus = $q.defer();
