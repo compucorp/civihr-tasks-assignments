@@ -1,6 +1,8 @@
-define(function() {
+/* eslint-env amd */
+
+define(function () {
   return {
-    single: function() {
+    single: function () {
       return {
         id: '1216',
         activity_date_time: '2017-06-09T18:15:00.000Z',
@@ -22,7 +24,7 @@ define(function() {
         due: false
       };
     },
-    list: function() {
+    list: function () {
       return [
         {
           id: '1200',
@@ -116,9 +118,9 @@ define(function() {
           remind_me: '1',
           document_number: '123121123412'
         }
-      ]
+      ];
     },
-    documentStatus: function() {
+    documentStatus: function () {
       return [
         {
           key: '66',
@@ -150,7 +152,7 @@ define(function() {
         }
       ];
     },
-    documentTypes: function() {
+    documentTypes: function () {
       return [
         {
           key: 1,
@@ -170,8 +172,8 @@ define(function() {
         }
       ];
     },
-    reminderNote: function() {
+    reminderNote: function () {
       return '<p>Sample reminder note</p>';
     }
-  }
+  };
 });

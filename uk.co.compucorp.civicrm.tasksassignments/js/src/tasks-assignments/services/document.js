@@ -1,4 +1,4 @@
-/* globals angular */
+/* globals angular, _ */
 /* eslint-env amd */
 
 define([
@@ -7,7 +7,7 @@ define([
 ], function (services) {
   'use strict';
 
-  services.factory('Document', ['$resource',  '$httpParamSerializer', 'config', '$log', function ($resource, $httpParamSerializer, config, $log) {
+  services.factory('Document', ['$resource', '$httpParamSerializer', 'config', '$log', function ($resource, $httpParamSerializer, config, $log) {
     $log.debug('Service: Document');
 
     return $resource(config.url.REST, {
@@ -17,7 +17,7 @@ define([
       'debug': config.DEBUG
     }, {
       save: {
-        method: "POST",
+        method: 'POST',
         isArray: false,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -85,32 +85,28 @@ define([
 
           return deferred.promise;
         },
-        getOptions: function() {
-          var deferred = $q.defer();
-
-          $q.all({
-            documentType: this.getDocumentTypes(),
-            documentStatus: this.getDocumentStatus()
-          }).then(function(options) {
-            deferred.resolve(options);
-          });
-
-          return deferred.promise;
+        getOptions: function () {
+          return $q.all({
+              documentType: this.getDocumentTypes(),
+              documentStatus: this.getDocumentStatus()
+            }).then(function (options) {
+              return options;
+            });
         },
-        getDocumentStatus: function() {
+        getDocumentStatus: function () {
           var deferredDocumentStatus = $q.defer();
           var documentStatus = {
-              arr: [],
-              obj: {}
-            };
+            arr: [],
+            obj: {}
+          };
 
           Document.get({
             action: 'getoptions',
             json: {
               'field': 'status_id'
             }
-          }, function(data) {
-            _.each(data.values, function(option) {
+          }, function (data) {
+            _.each(data.values, function (option) {
               documentStatus.arr.push({
                 key: option.key.toString(),
                 value: option.value
@@ -124,12 +120,12 @@ define([
 
           return deferredDocumentStatus.promise;
         },
-        getDocumentTypes: function() {
+        getDocumentTypes: function () {
           var deferredDocumentType = $q.defer();
           var documentType = {
-              arr: [],
-              obj: {}
-            };
+            arr: [],
+            obj: {}
+          };
 
           Document.get({
             action: 'getoptions',
@@ -139,8 +135,8 @@ define([
                 'limit': 0
               }
             }
-          }, function(data) {
-            _.each(data.values, function(option) {
+          }, function (data) {
+            _.each(data.values, function (option) {
               documentType.arr.push({
                 key: option.key,
                 value: option.value
@@ -169,7 +165,6 @@ define([
           Document.save({ action: 'create' }, {
             json: params || {}
           }, function (data) {
-
             if (UtilsService.errorHandler(data, 'Unable to save document', deferred)) {
               return;
             }
@@ -193,7 +188,7 @@ define([
 
           var deferred = $q.defer();
 
-          Document.save({ action: 'create_multiple'}, {
+          Document.save({ action: 'create_multiple' }, {
             json: {
               document: documentArr
             } || {}
@@ -268,36 +263,36 @@ define([
           // IE Fix
           if (options === undefined) {
             options = ['contacts', 'assignments'];
-          };
+          }
 
-          options = Array.isArray(options)? options : [options];
+          options = Array.isArray(options) ? options : [options];
 
           if (_.contains(options, 'contacts')) {
             contactIds = collectContactIds(documents);
             config.CONTACT_ID && contactIds.push(config.CONTACT_ID);
             if (contactIds && contactIds.length) {
               contactPromise = ContactService.get({
-                  'IN': contactIds
-                }).then(function (data) {
-                  ContactService.updateCache(data);
-                });
+                'IN': contactIds
+              }).then(function (data) {
+                ContactService.updateCache(data);
+              });
             } else {
               contactPromise = $q.resolve();
             }
-          };
+          }
 
           if (_.contains(options, 'assignments')) {
             assignmentIds = collectAssignmentIds(documents);
             if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
               assignmentsPromise = AssignmentService.get({
-                  'IN': assignmentIds
-                }).then(function (data) {
-                  AssignmentService.updateCache(data);
-                });
+                'IN': assignmentIds
+              }).then(function (data) {
+                AssignmentService.updateCache(data);
+              });
             } else {
               assignmentsPromise = $q.resolve();
             }
-          };
+          }
 
           return $q.all([
             contactPromise,
@@ -327,7 +322,7 @@ define([
 
           return contactIds;
         }).flatten().value();
-      };
+      }
 
       /**
        * Makes collection of assignment ids form list of documents
@@ -341,7 +336,7 @@ define([
         .map(function (document) {
           return document.case_id;
         });
-      };
+      }
     }
   ]);
 });

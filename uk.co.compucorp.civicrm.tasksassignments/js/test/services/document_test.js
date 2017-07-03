@@ -12,7 +12,8 @@ define([
   'use strict';
 
   describe('Document', function () {
-    var Document, request = {}, requestBody, $httpBackend, $httpParamSerializer;
+    var Document, requestBody, $httpBackend, $httpParamSerializer;
+    var request = {};
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_Document_, _$httpBackend_, _$httpParamSerializer_) {
@@ -64,19 +65,14 @@ define([
   });
 
   describe('DocumentService', function () {
-    var request = {};
-    var AssignmentService, ContactService, Document, DocumentService, $q,
-      deferred, config, promise, requestBody, $httpBackend,
-      $httpParamSerializer;
+    var AssignmentService, ContactService, DocumentService, $q,
+      deferred, config, promise, $httpBackend;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_AssignmentService_, _ContactService_,
-      _Document_, _DocumentService_, _config_, _$q_, _$httpBackend_,
-      _$httpParamSerializer_) {
-      $httpParamSerializer = _$httpParamSerializer_;
+      _DocumentService_, _config_, _$q_, _$httpBackend_) {
       AssignmentService = _AssignmentService_;
       ContactService = _ContactService_;
-      Document = _Document_;
       DocumentService = _DocumentService_;
       config = _config_;
       $q = _$q_;
@@ -134,7 +130,7 @@ define([
         });
 
         it('returns a promise', function () {
-          expect(typeof(promise.then)).toEqual('function');
+          expect(typeof (promise.then)).toEqual('function');
         });
       });
 
@@ -169,7 +165,7 @@ define([
       });
     });
 
-    describe("save()", function () {
+    describe('save()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
         $httpBackend.whenPOST(/action=create&debug=true&entity=Document/).respond(documentFabricator.onSave);
@@ -179,10 +175,10 @@ define([
         DocumentService.save(documentMock.single()).then(function (data) {
           expect(data).toEqual(documentMock.single());
         });
-      })
+      });
     });
 
-    describe("assign()", function () {
+    describe('assign()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions/).respond({});
         $httpBackend.whenPOST(/action=copy_to_assignment&debug=true&entity=Document/).respond(documentFabricator.onAssign);
@@ -195,7 +191,7 @@ define([
       });
     });
 
-    describe("saveMultiple()", function () {
+    describe('saveMultiple()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions/).respond({});
         $httpBackend.whenPOST(/action=create_multiple&debug=true&entity=Document/).respond(documentFabricator.onSaveMultiple);
@@ -208,7 +204,7 @@ define([
       });
     });
     //
-    describe("sendReminder()", function () {
+    describe('sendReminder()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions/).respond({});
         $httpBackend.whenPOST(/action=sendreminder&debug=true&entity=Document/).respond(documentFabricator.onSendReminder);
@@ -221,7 +217,7 @@ define([
       });
     });
     //
-    describe("getDocumentTypes()", function () {
+    describe('getDocumentTypes()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond(documentFabricator.onGetOptions.documentTypes);
         promise = $q.all({
@@ -229,7 +225,7 @@ define([
         });
       });
 
-      it("returns promise with array of list of document types", function () {
+      it('returns promise with array of list of document types', function () {
         promise.then(function (options) {
           expect(options.documentType.obj).toBeDefined();
           expect(options.documentType.arr).toEqual(documentMock.documentTypes());
@@ -237,7 +233,7 @@ define([
       });
     });
 
-    describe("getDocumentStatus()", function () {
+    describe('getDocumentStatus()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond(documentFabricator.onGetOptions.documentStatus);
         promise = $q.all({
@@ -245,7 +241,7 @@ define([
         });
       });
 
-      it("returns promise with array of list of document status", function () {
+      it('returns promise with array of list of document status', function () {
         promise.then(function (options) {
           expect(options.documentStatus.obj).toBeDefined();
           expect(options.documentStatus.arr).toEqual(documentMock.documentStatus());
@@ -253,14 +249,14 @@ define([
       });
     });
 
-    describe("getOptions()", function () {
-      beforeEach(function() {
+    describe('getOptions()', function () {
+      beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document&json=%7B%22field%22:%22activity_type_id/).respond(documentFabricator.onGetOptions.documentTypes);
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document&json=%7B%22field%22:%22status_id/).respond(documentFabricator.onGetOptions.documentStatus);
         promise = $q.resolve(DocumentService.getOptions());
       });
 
-      it("returns promise with array of list of document types and document status", function () {
+      it('returns promise with array of list of document types and document status', function () {
         promise.then(function (options) {
           expect(options.documentType.arr).toEqual(documentMock.documentTypes());
           expect(options.documentStatus.arr).toEqual(documentMock.documentStatus());
@@ -279,8 +275,8 @@ define([
           then: function (callback) {
             callback(data);
           }
-        }
+        };
       };
-    };
+    }
   });
 });

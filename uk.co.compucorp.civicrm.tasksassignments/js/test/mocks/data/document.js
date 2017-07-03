@@ -1,3 +1,5 @@
+/* eslint-env amd */
+
 define([
   'mocks/fabricators/document'
 ], function (documentFabricator) {
@@ -8,7 +10,7 @@ define([
     },
     onSave: {
       is_error: 0,
-      values:  [documentFabricator.single()]
+      values: [documentFabricator.single()]
     },
     onSaveMultiple: {
       is_error: 0,
@@ -20,17 +22,17 @@ define([
     },
     onGetOptions: {
       documentTypes: {
-        "is_error": 0,
-        "version": 3,
-        "count": 5,
-        "values": documentFabricator.documentTypes()
+        'is_error': 0,
+        'version': 3,
+        'count': 5,
+        'values': documentFabricator.documentTypes()
       },
       documentStatus: {
-        "is_error": 0,
-        "version": 3,
-        "count": 7,
-        "values": documentFabricator.documentStatus()
+        'is_error': 0,
+        'version': 3,
+        'count': 7,
+        'values': documentFabricator.documentStatus()
       }
     }
-  }
+  };
 });

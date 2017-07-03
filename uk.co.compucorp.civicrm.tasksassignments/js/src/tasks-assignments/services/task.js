@@ -1,3 +1,6 @@
+/* globals angular, _ */
+/* eslint-env amd */
+
 define([
   'common/angular',
   'common/moment',
@@ -89,16 +92,12 @@ define([
           return deferred.promise;
         },
         getOptions: function() {
-          var deferred = $q.defer();
-
-          $q.all({
+          return $q.all({
             taskType: this.getActivityTypes(),
             taskStatus: this.getTaskStatus()
           }).then(function(options) {
-            deferred.resolve(options);
+            return options;
           });
-
-          return deferred.promise;
         },
         getTaskStatus: function() {
           var deferredTaskStatus = $q.defer(),
