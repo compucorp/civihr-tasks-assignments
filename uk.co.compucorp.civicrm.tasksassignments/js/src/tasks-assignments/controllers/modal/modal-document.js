@@ -14,9 +14,10 @@ define([
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
-    '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'files', 'config', 'HR_settings',
+    '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
+    'files', 'config', 'HR_settings', 'modalMode',
     function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
-      DocumentService, ContactService, FileService, data, files, config, HR_settings) {
+      DocumentService, ContactService, FileService, data, files, config, HR_settings, modalMode) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       // Init call
@@ -29,6 +30,7 @@ define([
 
         $scope.data = data;
         $scope.role = role || 'admin';
+        $scope.modalTitle = modalMode === 'edit' ? 'Edit Document' : 'New Document';
 
         $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
         $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
@@ -57,7 +59,7 @@ define([
           form: false
         };
 
-        $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be reviewed. CiviHR will do this by creating a copy of  the document with the  status of awaiting upload a number of days or months before the document expires. You can set the date to create the copy. The copy will have the same document  types and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
+        $scope.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
       })();
 
       /**
@@ -95,7 +97,7 @@ define([
       $scope.cacheAssignment = function ($item) {
         var obj = {};
 
-        if ($rootScope.cache.assignment.obj[$item.id]) {
+        if (!$item || $rootScope.cache.assignment.obj[$item.id]) {
           return;
         }
 
@@ -115,6 +117,31 @@ define([
         };
 
         AssignmentService.updateCache(obj);
+      };
+
+      /**
+       * Searches the list of assignments for the given target contact
+       *
+       * @param  {string | integer} targetContactId
+       */
+      $scope.searchContactAssignments = function (targetContactId) {
+        return AssignmentService.search(null, null, targetContactId)
+        .then(function (assignments) {
+          $scope.assignments = assignments;
+          $rootScope.$broadcast('ct-spinner-hide');
+        });
+      };
+
+      /**
+       * Handler for target contact's change event
+       *
+       * @param  {object} selectedContact
+       */
+      $scope.onContactChanged = function (selectedContact) {
+        $rootScope.$broadcast('ct-spinner-show');
+        $scope.document.case_id = '';
+        $scope.cacheContact(selectedContact);
+        $scope.searchContactAssignments(selectedContact.id);
       };
 
       $scope.cacheContact = function ($item) {
@@ -215,8 +242,7 @@ define([
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
-
-        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
+        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || "";
         doc.expire_date = $scope.parseDate(doc.expire_date);
         doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
@@ -348,10 +374,6 @@ define([
           missingRequiredFields.push('Document status');
         }
 
-        if (!doc.activity_date_time) {
-          missingRequiredFields.push('Due Date');
-        }
-
         if (!doc.status_id) {
           missingRequiredFields.push('Status');
         }
@@ -359,10 +381,12 @@ define([
         if (missingRequiredFields.length) {
           var notification = CRM.alert(missingRequiredFields.join(', '),
             missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
-          $timeout(function () {
+
+          notification && $timeout(function () {
             notification.close();
             notification = null;
           }, 5000);
+
           return false;
         }
 

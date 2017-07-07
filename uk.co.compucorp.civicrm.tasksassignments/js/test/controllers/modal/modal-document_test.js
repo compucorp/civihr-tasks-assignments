@@ -4,20 +4,28 @@
 define([
   'common/angular',
   'common/moment',
-  'mocks/document',
+  'mocks/fabricators/document',
+  'mocks/contact',
+  'mocks/fabricators/assignment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment, documentMock) {
+], function (angular, moment, documentFabricator, contactMock, assignmentFabricator) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, sampleAssignee;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, DocumentService,
+      sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise, document;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $filter = _$filter_;
+      $httpBackend = _$httpBackend_;
+      $q = _$q_;
+      ContactService = _ContactService_;
+      DocumentService = _DocumentService_;
+      AssignmentService = _AssignmentService_;
       $scope = $rootScope.$new();
 
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -31,11 +39,15 @@ define([
       data = {};
       files = {};
       role = '';
+      modalMode = '';
+
+      // A workaround to avoid actual API calls
+      $httpBackend.whenGET(/action=/).respond({});
     }));
 
     describe('init()', function () {
       beforeEach(function () {
-        data = documentMock.document;
+        data = documentFabricator.single();
         initController();
       });
 
@@ -44,9 +56,21 @@ define([
       });
 
       it('corectly formats date time in document', function () {
-        expect($scope.document.activity_date_time).toEqual(new Date(documentMock.document.activity_date_time));
-        expect($scope.document.expire_date).toEqual(new Date(documentMock.document.expire_date));
-        expect($scope.document.valid_from).toEqual(new Date(documentMock.document.valid_from));
+        expect($scope.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
+        expect($scope.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
+        expect($scope.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
+      });
+    });
+
+    describe('Document without Due Date (activity_date_time)', function () {
+      beforeEach(function () {
+        data = documentFabricator.single();
+        delete data['activity_date_time'];
+        initController();
+      });
+
+      it('due date default to null', function () {
+        expect($scope.document.activity_date_time).toBe(null);
       });
     });
 
@@ -152,6 +176,7 @@ define([
     describe('isRole()', function () {
       beforeEach(function () {
         initController();
+
         $scope.role = 'staff';
       });
 
@@ -164,13 +189,120 @@ define([
     describe('getDocumentType()', function () {
       beforeEach(function () {
         initController();
-        $rootScope.cache.documentType.arr = documentMock.documentTypes;
+        $rootScope.cache.documentType.arr = documentFabricator.documentTypes();
       });
 
       it('returns document type for document given id', function () {
-        expect($scope.getDocumentType(documentMock.documentTypes[1].key)).toEqual(documentMock.documentTypes[1].value);
-        expect($scope.getDocumentType(documentMock.documentTypes[3].key)).toEqual(documentMock.documentTypes[3].value);
-        expect($scope.getDocumentType(documentMock.documentTypes[6].key)).toEqual(documentMock.documentTypes[6].value);
+        expect($scope.getDocumentType(documentFabricator.documentTypes()[1].key)).toEqual(documentFabricator.documentTypes()[1].value);
+        expect($scope.getDocumentType(documentFabricator.documentTypes()[2].key)).toEqual(documentFabricator.documentTypes()[2].value);
+        expect($scope.getDocumentType(documentFabricator.documentTypes()[3].key)).toEqual(documentFabricator.documentTypes()[3].value);
+      });
+    });
+
+    describe('$scope.modalTitle()', function () {
+      describe('when modalMode is not set', function () {
+        beforeEach(function () {
+          initController();
+        });
+
+        it('sets the modal title as "New Document" by default', function () {
+          expect($scope.modalTitle).toBe('New Document');
+        });
+      });
+
+      describe('when modalMode is edit', function () {
+        beforeEach(function () {
+          modalMode = 'edit';
+          initController();
+        });
+
+        it('sets the document modal title to "Edit Document"', function () {
+          expect($scope.modalTitle).toBe('Edit Document');
+        });
+      });
+    });
+
+    describe('$scope.onContactChanged', function () {
+      beforeEach(function () {
+        spyOn(ContactService, 'updateCache').and.returnValue({});
+
+        initController();
+        $scope.onContactChanged(contactMock.contact);
+      });
+
+      it('resets the document case id to empty', function () {
+        expect($scope.document.case_id).toEqual('');
+      });
+
+      it('calls contact service to cache selected Contact', function () {
+        expect(ContactService.updateCache).toHaveBeenCalled();
+      });
+    });
+
+    describe('$scope.searchContactAssignments', function () {
+      beforeEach(function () {
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
+      });
+
+      beforeEach(function () {
+        initController();
+        promise = $scope.searchContactAssignments('204');
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      it("calls assignment service to search assignments of target contact", function () {
+        expect(AssignmentService.search).toHaveBeenCalledWith(null, null, '204');
+      });
+
+      it("search for assignments for a target contact and stores in $scope.assignments", function () {
+        promise.then(function () {
+          expect($scope.assignments).toEqual(assignmentFabricator.listResponse());
+        })
+      });
+
+      it("hides spinner once the search is done", function () {
+        promise.then(function () {
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('ct-spinner-hide');
+        })
+      });
+    });
+
+    describe('$scope.confirm', function () {
+      beforeEach(function () {
+        document = {
+          target_contact_id: ['202'],
+          activity_type_id: '1'
+        };
+        spyOn(DocumentService, 'save').and.returnValue($q.resolve([]));
+        initController();
+      });
+
+      describe('document due date is null', function () {
+        beforeEach(function () {
+          document.activity_date_time = null;
+          angular.extend($scope.document, document);
+          $scope.confirm();
+        });
+
+        it('sets document with null due date to empty', function () {
+          expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
+        });
+      });
+
+      describe('document due date is empty', function () {
+        beforeEach(function () {
+          document.activity_date_time = '';
+          angular.extend($scope.document, document);
+          $scope.confirm();
+        });
+
+        it('sets document with empty due date to empty', function () {
+          expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
+        });
       });
     });
 
@@ -196,6 +328,7 @@ define([
         data: data,
         files: files,
         role: role,
+        modalMode: modalMode,
         HR_settings: HRSettings
       });
     }

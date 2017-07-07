@@ -12336,7 +12336,7 @@ fieldset[disabled]
   box-shadow: none !important;
 }
 #civitasks .civihr-ui-select .select2-drop, #cividocuments .civihr-ui-select .select2-drop {
-  border-radius: 0 !important;
+  border-radius: 0 0 0 0 !important;
 }
 #civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
   height: 15px;
@@ -12428,6 +12428,8 @@ fieldset[disabled]
 }
 #civitasks .civihr-ui-select .select2-arrow, #cividocuments .civihr-ui-select .select2-arrow {
   cursor: pointer !important;
+  right: 0 !important;
+  top: 0 !important;
 }
 #civitasks .civihr-ui-select .select2-arrow::before, #cividocuments .civihr-ui-select .select2-arrow::before {
   color: #727E8A;
@@ -12649,4 +12651,7 @@ fieldset[disabled]
 }
 #civitasks .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before {
   content: '\f002' !important;
+}
+#civitasks [no-dropdown].ui-select-multiple:after, #cividocuments [no-dropdown].ui-select-multiple:after {
+  display: none;
 }

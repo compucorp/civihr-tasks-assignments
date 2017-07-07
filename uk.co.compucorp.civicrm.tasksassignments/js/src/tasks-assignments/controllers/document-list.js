@@ -188,38 +188,22 @@ define([
           return;
         }
 
-        var ctrl = this;
-
         // Remove resolved documents from the document list
         $scope.list = $filter('filterByStatus')($scope.list, $rootScope.cache.documentStatusResolve, false);
 
-        DocumentService.get({
+        return DocumentService.get({
           'target_contact_id': config.CONTACT_ID,
           'status_id': {
             'IN': config.status.resolve.DOCUMENT
           }
         }).then(function (documentListResolved) {
-          var contactIds = ctrl.contactIds;
-          var assignmentIds = ctrl.assignmentIds;
-
-          ctrl.collectId(documentListResolved);
-
-          if (contactIds && contactIds.length) {
-            ContactService.get({'IN': contactIds}).then(function (data) {
-              ContactService.updateCache(data);
-            });
-          }
-
-          if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-            AssignmentService.get({'IN': assignmentIds}).then(function (data) {
-              AssignmentService.updateCache(data);
-            });
-          }
+          DocumentService.cacheContactsAndAssignments(documentListResolved).then(function () {
+            $scope.listResolvedLoaded = true;
+          });
 
           Array.prototype.push.apply($scope.list, documentListResolved);
-          $scope.listResolvedLoaded = true;
         });
-      }.bind(this);
+      };
 
       $scope.deleteDocument = function (document) {
         $dialog.open({
