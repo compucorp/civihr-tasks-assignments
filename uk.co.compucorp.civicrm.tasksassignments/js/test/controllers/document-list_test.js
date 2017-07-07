@@ -2,9 +2,9 @@
 
 define([
   'common/angular',
-  'mocks/document',
+  'mocks/fabricators/document',
   'tasks-assignments/app'
-], function (angular, documentMock) {
+], function (angular, documentFabricator) {
   'use strict';
 
   describe('DocumentListCtrl', function () {
@@ -78,7 +78,7 @@ define([
       $controller('DocumentListCtrl', {
         $scope: $scope,
         config: config,
-        documentList: documentMock.documentList
+        documentList: documentFabricator.list()
       });
     }
   });

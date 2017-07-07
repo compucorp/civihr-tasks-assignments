@@ -4,12 +4,12 @@
 define([
   'common/angular',
   'common/moment',
-  'mocks/document',
+  'mocks/fabricators/document',
   'mocks/contact',
   'mocks/fabricators/assignment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment, documentMock, contactMock, assignmentFabricator) {
+], function (angular, moment, documentFabricator, contactMock, assignmentFabricator) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
@@ -46,7 +46,7 @@ define([
 
     describe('init()', function () {
       beforeEach(function () {
-        data = documentMock.document;
+        data = documentFabricator.single();
         initController();
       });
 
@@ -55,9 +55,9 @@ define([
       });
 
       it('corectly formats date time in document', function () {
-        expect($scope.document.activity_date_time).toEqual(new Date(documentMock.document.activity_date_time));
-        expect($scope.document.expire_date).toEqual(new Date(documentMock.document.expire_date));
-        expect($scope.document.valid_from).toEqual(new Date(documentMock.document.valid_from));
+        expect($scope.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
+        expect($scope.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
+        expect($scope.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
       });
     });
 
@@ -175,13 +175,13 @@ define([
     describe('getDocumentType()', function () {
       beforeEach(function () {
         initController();
-        $rootScope.cache.documentType.arr = documentMock.documentTypes;
+        $rootScope.cache.documentType.arr = documentFabricator.documentTypes();
       });
 
       it('returns document type for document given id', function () {
-        expect($scope.getDocumentType(documentMock.documentTypes[1].key)).toEqual(documentMock.documentTypes[1].value);
-        expect($scope.getDocumentType(documentMock.documentTypes[3].key)).toEqual(documentMock.documentTypes[3].value);
-        expect($scope.getDocumentType(documentMock.documentTypes[6].key)).toEqual(documentMock.documentTypes[6].value);
+        expect($scope.getDocumentType(documentFabricator.documentTypes()[1].key)).toEqual(documentFabricator.documentTypes()[1].value);
+        expect($scope.getDocumentType(documentFabricator.documentTypes()[2].key)).toEqual(documentFabricator.documentTypes()[2].value);
+        expect($scope.getDocumentType(documentFabricator.documentTypes()[3].key)).toEqual(documentFabricator.documentTypes()[3].value);
       });
     });
 

@@ -1,9 +1,12 @@
+/* eslint-env amd */
+
 define([
   'common/angular',
+  'common/lodash',
   'common/moment',
   'tasks-assignments/services/services',
   'tasks-assignments/services/utils'
-], function(angular, moment, services) {
+], function(angular, _, moment, services) {
   'use strict';
 
   services.factory('Task', ['$resource', '$httpParamSerializer', 'config', '$log', function($resource, $httpParamSerializer, config, $log) {
@@ -89,16 +92,10 @@ define([
           return deferred.promise;
         },
         getOptions: function() {
-          var deferred = $q.defer();
-
-          $q.all({
+          return $q.all({
             taskType: this.getActivityTypes(),
             taskStatus: this.getTaskStatus()
-          }).then(function(options) {
-            deferred.resolve(options);
           });
-
-          return deferred.promise;
         },
         getTaskStatus: function() {
           var deferredTaskStatus = $q.defer(),
