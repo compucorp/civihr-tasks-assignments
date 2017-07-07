@@ -175,8 +175,8 @@ define([
 
     describe('isRole()', function () {
       beforeEach(function () {
-
         initController();
+
         $scope.role = 'staff';
       });
 
@@ -292,6 +292,7 @@ define([
           expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
         });
       });
+
       describe('document due date is empty', function () {
         beforeEach(function () {
           document.activity_date_time = '';
