@@ -59,7 +59,7 @@ define([
           form: false
         };
 
-        $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be renewed. CiviHR will do this by creating a copy of the document with a status of awaiting upload a number of days or months before the document expires. You can set the date to create the copy <a target="_blank" href="/civicrm/tasksassignments/settings#/">here</a>. The copy will have the same document type and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
+        $scope.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
       })();
 
       /**
