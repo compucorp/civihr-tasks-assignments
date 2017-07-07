@@ -7,9 +7,9 @@ define([
   'use strict';
 
   describe('Due filter', function () {
-    var $filter, today, pastDateRange, futureDateRange,
-      emptyDateRange, emptyFromDateAndUntilDateInTheFuture, emptyFromDateAndUntilDateInPast,
-      emptyFromDateAndUntilDateIsToday, emptyUntilDateAndFromDateInThePast,
+    var $filter, today, pastDateRange, futureDateRange, mockDueDate, mockPlusTwoDays, mockPlusThreeDays,
+      mockMinusTwoDays, mockMinusThreeDays, emptyDateRange, emptyFromDateAndUntilDateInTheFuture,
+      emptyFromDateAndUntilDateInPast, emptyFromDateAndUntilDateIsToday, emptyUntilDateAndFromDateInThePast,
       emptyUntilDateAndFromDateIsToday,emptyUntilDateAndFromDateInTheFuture;
 
     var oneDay = 86400000;
@@ -18,9 +18,6 @@ define([
     beforeEach(inject(function (_$filter_) {
       $filter = _$filter_;
       today = new Date();
-
-      var mockDueDate, mockPlusTwoDays, mockPlusThreeDays,
-        mockMinusTwoDays, mockMinusThreeDays;
 
       pastDateRange = {
         from: new Date(today.getTime() - oneDay * 2),
