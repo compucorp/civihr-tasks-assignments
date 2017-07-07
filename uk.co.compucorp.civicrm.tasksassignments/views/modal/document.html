@@ -147,12 +147,12 @@
             <!-- Display only for manager role and removed from DOM for other users -->
             <div class="col-xs-6" ng-if="isRole('manager')">
               <div class="form-group">
-                <label for="{{prefix}}document-due" class="text-nowrap control-label required-field-indicator"> Due Date: </label>
+                <label for="{{prefix}}document-due" class="text-nowrap control-label"> Due Date: </label>
                 <div class="input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
                   <input
                     name="dueDate" type="text" id="{{prefix}}document-due"
                     class="form-control" ng-model="document.activity_date_time"
-                    placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true"
+                    placeholder="dd/mm/yyyy" uib-datepicker-popup
                     is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
                   <span class="input-group-addon fa fa-calendar"></span>
                 </div>
@@ -166,12 +166,12 @@
             </br>
             <div class="col-xs-10 col-sm-12">
               <div class="form-group">
-                <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label required-field-indicator"> Due Date: </label>
+                <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label"> Due Date: </label>
                 <div class="col-xs-6 input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
                   <input
                     name="dueDate" type="text" id="{{prefix}}document-due"
                     class="form-control" ng-model="document.activity_date_time"
-                    placeholder="dd/mm/yyyy" uib-datepicker-popup ng-required="true"
+                    placeholder="dd/mm/yyyy" uib-datepicker-popup
                     is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
                   <span class="input-group-addon fa fa-calendar"></span>
                 </div>

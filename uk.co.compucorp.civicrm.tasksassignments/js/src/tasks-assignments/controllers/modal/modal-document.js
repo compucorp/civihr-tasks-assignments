@@ -242,8 +242,7 @@ define([
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
-
-        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
+        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || "";
         doc.expire_date = $scope.parseDate(doc.expire_date);
         doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
@@ -373,10 +372,6 @@ define([
 
         if (!doc.status_id) {
           missingRequiredFields.push('Document status');
-        }
-
-        if (!doc.activity_date_time) {
-          missingRequiredFields.push('Due Date');
         }
 
         if (!doc.status_id) {

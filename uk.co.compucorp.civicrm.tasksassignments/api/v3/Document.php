@@ -460,14 +460,6 @@ SELECT  count(*)
     throw new API_Exception('Invalid Activity Duration (in minutes)');
   }
 
-
-  //if adding a new activity & date_time not set make it now
-  // this should be managed by the wrapper layer & setting ['api.default'] in speces
-  // needs testing
-  if (empty($params['id']) && empty($params['activity_date_time'])) {
-    $params['activity_date_time'] = CRM_Utils_Date::processDate(date('Y-m-d H:i:s'));
-  }
-
   return NULL;
 }
 

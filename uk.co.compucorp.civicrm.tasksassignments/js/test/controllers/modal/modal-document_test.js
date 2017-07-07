@@ -13,17 +13,18 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files,
-      sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise;
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, DocumentService,
+      sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise, document;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _AssignmentService_, _$httpBackend_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $filter = _$filter_;
       $httpBackend = _$httpBackend_;
       $q = _$q_;
       ContactService = _ContactService_;
+      DocumentService = _DocumentService_;
       AssignmentService = _AssignmentService_;
       $scope = $rootScope.$new();
 
@@ -58,6 +59,18 @@ define([
         expect($scope.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
         expect($scope.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
         expect($scope.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
+      });
+    });
+
+    describe('Document without Due Date (activity_date_time)', function () {
+      beforeEach(function () {
+        data = documentFabricator.single();
+        delete data['activity_date_time'];
+        initController();
+      });
+
+      it('due date default to null', function () {
+        expect($scope.document.activity_date_time).toBe(null);
       });
     });
 
@@ -163,6 +176,7 @@ define([
     describe('isRole()', function () {
       beforeEach(function () {
         initController();
+
         $scope.role = 'staff';
       });
 
@@ -254,6 +268,41 @@ define([
         promise.then(function () {
           expect($rootScope.$broadcast).toHaveBeenCalledWith('ct-spinner-hide');
         })
+      });
+    });
+
+    describe('$scope.confirm', function () {
+      beforeEach(function () {
+        document = {
+          target_contact_id: ['202'],
+          activity_type_id: '1'
+        };
+        spyOn(DocumentService, 'save').and.returnValue($q.resolve([]));
+        initController();
+      });
+
+      describe('document due date is null', function () {
+        beforeEach(function () {
+          document.activity_date_time = null;
+          angular.extend($scope.document, document);
+          $scope.confirm();
+        });
+
+        it('sets document with null due date to empty', function () {
+          expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
+        });
+      });
+
+      describe('document due date is empty', function () {
+        beforeEach(function () {
+          document.activity_date_time = '';
+          angular.extend($scope.document, document);
+          $scope.confirm();
+        });
+
+        it('sets document with empty due date to empty', function () {
+          expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
+        });
       });
     });
 
