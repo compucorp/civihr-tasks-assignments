@@ -58,7 +58,7 @@
             Select Task List:
           </label>
           <div class="col-xs-12 col-sm-5">
-            <ui-select prevent-animations ng-model="activitySet" theme="civihr-ui-select" ng-required="true" search-enabled="false" on-select="updateTimeline($item)">
+            <ui-select prevent-animations ng-model="activity.activitySet" theme="civihr-ui-select" ng-required="true" search-enabled="false" on-select="updateTimeline($item)">
               <ui-select-match prevent-animations class="ui-select-match" placeholder="- select -">
                 {{$select.selected.label}}
               </ui-select-match>
@@ -71,7 +71,7 @@
 
         <hr class="separately" ng-show="assignment.case_type_id" />
 
-        <div ng-show="activitySet.name" class="row">
+        <div ng-show="activity.activitySet.name" class="row">
           <section class="col-xs-12">
             <h2>Tasks:</h2>
 
@@ -151,9 +151,9 @@
           </section>
         </div>
 
-        <hr class="separately" ng-show="activitySet.name && +settings.tabEnabled.documents" />
+        <hr class="separately" ng-show="activity.activitySet.name && +settings.tabEnabled.documents" />
 
-        <div ng-if="activitySet.name && +settings.tabEnabled.documents" class="row">
+        <div ng-show="activity.activitySet.name && +settings.tabEnabled.documents" class="row">
           <section class="col-xs-12">
             <h2>Documents:</h2>
 

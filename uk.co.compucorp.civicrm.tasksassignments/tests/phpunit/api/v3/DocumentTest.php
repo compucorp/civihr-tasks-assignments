@@ -70,6 +70,31 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     ));
   }
 
+  public function testDocumentCreationWorksWithoutDueDate() {
+    $document = civicrm_api3('Document', 'create', array(
+      'sequential' => 1,
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => 1,
+      'assignee_contact_id' => 1,
+      'target_contact_id' => 1,
+    ));
+
+    $this->assertEquals(0, $document['is_error']);
+    $this->assertEquals(1, $document['values'][0]['source_contact_id']);
+  }
+
+  public function testDueDateWillBeEmptyWhenItsNotSet() {
+    $document = civicrm_api3('Document', 'create', array(
+      'sequential' => 1,
+      'activity_type_id' => $this->_documentTypeId,
+      'source_contact_id' => 1,
+      'assignee_contact_id' => 1,
+      'target_contact_id' => 1,
+    ));
+
+    $this->assertArrayNotHasKey('activity_date_time', $document['values'][0]);
+  }
+
   /**
    * Test 'clonedocuments' API call on Document entity.
    * Create three test documents and then call clone action.

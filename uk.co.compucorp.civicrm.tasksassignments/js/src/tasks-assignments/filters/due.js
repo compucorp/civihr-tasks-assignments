@@ -24,8 +24,15 @@ define([
 
       switch(type){
         case 'overdue':
+          var itemDueDate;
+
           for (i; i < inputArrlen; i++) {
-            if (new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) < today) {
+            itemDueDate = null;
+            if (inputArr[i].activity_date_time) {
+              itemDueDate = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
+            }
+
+            if (itemDueDate < today && itemDueDate !== null) {
               filteredArr.push(inputArr[i]);
             }
           }
@@ -38,13 +45,13 @@ define([
           }
 
           var itemDateTime,
-            filterDateTimeFrom = dateRange.from ? new Date(dateRange.from).setHours(0, 0, 0, 0) : -Infinity,
-            filterDateTimeUntil = dateRange.until ? new Date(dateRange.until).setHours(0, 0, 0, 0) : Infinity;
+            filterDateTimeFrom = dateRange.from ? new Date(dateRange.from).setHours(0, 0, 0, 0) : null,
+            filterDateTimeUntil = dateRange.until ? new Date(dateRange.until).setHours(0, 0, 0, 0) : null;
 
           for (i; i < inputArrlen; i++) {
-            itemDateTime = new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0);
+            itemDateTime = inputArr[i].activity_date_time ? new Date(inputArr[i].activity_date_time).setHours(0, 0, 0, 0) : null;
 
-            if (itemDateTime >= filterDateTimeFrom && itemDateTime <= filterDateTimeUntil) {
+            if (isDateBetweenTwoDates(itemDateTime, filterDateTimeFrom, filterDateTimeUntil)) {
               filteredArr.push(inputArr[i]);
             }
           }
@@ -98,6 +105,29 @@ define([
       }
 
       return filteredArr;
+    };
+
+    /**
+     * Validates if the target date resides
+     * between two other dates
+     *
+     * @param targetDate
+     * @param fromDate
+     * @param toDate
+     *
+     * @return {boolean}
+     */
+    function isDateBetweenTwoDates(targetDate, fromDate, toDate) {
+      return (
+        targetDate !== null
+        && targetDate >= fromDate
+        && (targetDate <= toDate || toDate === null)
+      )
+      ||
+      (
+        targetDate === null
+        && toDate === null
+      )
     }
   }]);
 
