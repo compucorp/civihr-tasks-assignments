@@ -1,3 +1,6 @@
+/* globals CRM, _ */
+/* eslint-env amd, jasmine */
+
 define([
   'common/lodash',
   'common/angular',
@@ -9,10 +12,10 @@ define([
 
     describe('ModalAssignmentCtrl', function () {
         var $q, $controller, ctrl, modalInstance, scope, AssignmentService,
-          TaskService, DocumentService, ContactService, HR_settings;
+          TaskService, DocumentService, ContactService, HR_settings, $rootScope;
 
         beforeEach(module('civitasks.appDashboard'));
-        beforeEach(inject(function (_$q_, _$controller_, $httpBackend, $rootScope, _AssignmentService_, _DocumentService_, _TaskService_) {
+        beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _AssignmentService_, _DocumentService_, _TaskService_) {
           // A workaround to avoid actual API calls
           $httpBackend.whenGET(/action=/).respond({});
 
@@ -22,6 +25,7 @@ define([
           DocumentService = _DocumentService_;
           TaskService = _TaskService_;
           ContactService = {};
+          $rootScope = _$rootScope_;
           HR_settings = { DATE_FORMAT: 'DD/MM/YYYY'};
 
           scope = $rootScope.$new();
@@ -175,7 +179,7 @@ define([
             });
 
             it('updates taskList according with activitySet', function () {
-              expect(scope.activitySet).toEqual(newActivitySet);
+              expect(scope.activity.activitySet).toEqual(newActivitySet);
             });
           });
 
@@ -189,6 +193,43 @@ define([
             it('defines an empty array for taskList', function () {
               expect(scope.taskList).toEqual([]);
             });
+          });
+        });
+
+        describe('setData()', function () {
+          beforeEach(function () {
+            scope.assignment.case_type_id = '2';
+            $rootScope.cache = {
+              assignmentType: {
+                obj: [],
+                arr: []
+              }
+            };
+
+            $rootScope.cache.assignmentType.obj['2'] = {
+              definition : {
+                activitySets: [
+                  {
+                    "name": "standard_timeline",
+                    "label": "Standard Timeline",
+                    "timeline": "1",
+                    "activityTypes": []
+                  },
+                  {
+                    "name": "standard_timeline",
+                    "label": "Standard Timeline",
+                    "timeline": "1",
+                    "activityTypes": []
+                  }
+                ]
+              }
+            };
+
+            scope.setData();
+          });
+
+          it('sets the selected activity type', function () {
+            expect(scope.activity.activitySet).toEqual($rootScope.cache.assignmentType.obj['2'].definition.activitySets[0]);
           });
         });
 
@@ -208,12 +249,12 @@ define([
         }
 
         /**
-         * [initController description]
-         * @return {[type]} [description]
+         * initialize ModalAssignmentCtrl controller
          */
         function initController() {
           ctrl = $controller('ModalAssignmentCtrl', {
             $scope: scope,
+            $rootScope: $rootScope,
             AssignmentService: AssignmentService,
             TaskService: TaskService,
             DocumentService: DocumentService,

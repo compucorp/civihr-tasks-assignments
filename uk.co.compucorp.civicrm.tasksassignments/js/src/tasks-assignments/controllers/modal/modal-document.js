@@ -59,7 +59,7 @@ define([
           form: false
         };
 
-        $scope.remindMeMessage = 'If you check this box CiviHR will “remind” you that this document needs to be renewed. CiviHR will do this by creating a copy of the document with a status of awaiting upload a number of days or months before the document expires. You can set the date to create the copy <a target="_blank" href="/civicrm/tasksassignments/settings#/">here</a>. The copy will have the same document type and set the assignee to be the same assignee as for this original version of the document. You will then see it in your documents list and be able to action renewing the document.';
+        $scope.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
       })();
 
       /**
@@ -242,8 +242,7 @@ define([
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
-
-        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || new Date();
+        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || "";
         doc.expire_date = $scope.parseDate(doc.expire_date);
         doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
@@ -373,10 +372,6 @@ define([
 
         if (!doc.status_id) {
           missingRequiredFields.push('Document status');
-        }
-
-        if (!doc.activity_date_time) {
-          missingRequiredFields.push('Due Date');
         }
 
         if (!doc.status_id) {
