@@ -8,15 +8,20 @@ define([
 ], function (angular, _, services) {
   'use strict';
 
-  services.factory('ContactService', ['$resource', 'config', '$q', '$filter', '$rootScope', 'UtilsService', '$log',
-    function ($resource, config, $q, $filter, $rootScope, UtilsService, $log) {
-      $log.debug('Service: ContactService');
+  services.factory('Contact', ['$resource', '$httpParamSerializer', 'config', '$log', function($resource, $httpParamSerializer, config, $log) {
+    $log.debug('Service: Contact');
 
-      var Contact = $resource(config.url.REST, {
-        action: 'get',
-        entity: 'contact',
-        json: {}
-      });
+    return $resource(config.url.REST, {
+      action: 'get',
+      entity: 'contact',
+      debug: config.DEBUG
+    });
+  }]);
+
+
+  services.factory('ContactService', ['Contact', '$resource', 'config', '$q', '$filter', '$rootScope', 'UtilsService', '$log',
+    function (Contact, $resource, config, $q, $filter, $rootScope, UtilsService, $log) {
+      $log.debug('Service: ContactService');
 
       return {
         get: function (id) {
@@ -26,11 +31,13 @@ define([
 
           var deferred = $q.defer();
 
+          // Get only the ubique contact ids to be fetched.
+          id = {IN: _.uniq(id.IN)};
+
           Contact.get({
             'json': {
               'id': id,
-              'return': 'display_name, sort_name, id, contact_id, contact_type, email',
-              'debug': config.DEBUG
+              'return': 'display_name, sort_name, id, contact_id, contact_type, email'
             }
           }, function (data) {
             if (UtilsService.errorHandler(data, 'Unable to fetch contacts', deferred)) {
