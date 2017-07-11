@@ -21,14 +21,14 @@ define([
 
     beforeEach(module('civitasks.appDashboard'));
 
-    beforeEach(inject(function (_Contact_, _ContactService_, _$httpBackend_, _$q_) {
+    beforeEach(inject(function (_Contact_, _ContactService_, _$httpBackend_) {
       ContactService = _ContactService_;
       Contact = _Contact_;
       $httpBackend = _$httpBackend_;
 
       jsonData = {
         json: {
-          id: { IN: [1,2,3,5,6,7]},
+          id: { IN: [1,2,3,5,6,7] },
           return: 'display_name, sort_name, id, contact_id, contact_type, email'
         }
       };
@@ -39,7 +39,7 @@ define([
       $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond(contactMock.onGetContacts);
       spyOn(Contact, 'get').and.callThrough();
 
-      promise = ContactService.get(jsonData.json.id);
+      promise = ContactService.get({ IN: [1,2,3,5,6,7,2,3,6] });
     });
 
     afterEach(function () {
@@ -47,7 +47,7 @@ define([
     });
 
     describe('get()', function () {
-      it('calls Contact.get to get contacts with correct contact ids', function () {
+      it('calls Contact get() with unique contact ids to get respective contacts', function () {
         expect(Contact.get).toHaveBeenCalledWith(jsonData, jasmine.any(Function), jasmine.any(Function));
       });
 

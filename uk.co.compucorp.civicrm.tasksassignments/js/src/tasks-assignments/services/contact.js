@@ -31,8 +31,8 @@ define([
 
           var deferred = $q.defer();
 
-          // Get only the ubique contact ids to be fetched.
-          id = {IN: _.uniq(id.IN)};
+          // Get only the unique contact ids to be fetched.
+          id = { IN: _.uniq(id.IN) };
 
           Contact.get({
             'json': {
