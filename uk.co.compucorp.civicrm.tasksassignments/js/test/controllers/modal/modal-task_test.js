@@ -1,3 +1,6 @@
+/* globals inject */
+/* eslint-env amd, jasmine */
+
 define([
   'common/lodash',
   'common/angular',
@@ -8,7 +11,7 @@ define([
   'use strict';
 
   describe('ModalTaskCtrl', function () {
-    var $controller, $q, $rootScope, $scope, ctrl, modalInstance, HR_settings,
+    var $controller, $q, $rootScope, $scope, HRSettings,
       data, AssignmentService;
 
     beforeEach(module('civitasks.appDashboard'));
@@ -23,13 +26,11 @@ define([
       AssignmentService = _AssignmentService_;
 
       data = {};
-      HR_settings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
 
       initializeCaches();
 
-      spyOn(AssignmentService, 'search').and.returnValue({
-        then: function (cb) { cb([jasmine.any(Object), jasmine.any(Object)]); }
-      });
+      spyOn(AssignmentService, 'search').and.returnValue($q.resolve([{}, {}]));
     }));
 
     describe('Default due date', function () {
@@ -57,7 +58,7 @@ define([
           initController();
         });
 
-        it("does not change the task due date", function () {
+        it('does not change the task due date', function () {
           expect(moment($scope.task.activity_date_time).isSame(moment(), 'day')).toBe(false);
           expect(moment($scope.task.activity_date_time).isSame(customDate)).toBe(true);
         });
@@ -113,7 +114,7 @@ define([
 
         it('hides the assignment field', function () {
           expect($scope.showFieldAssignment).toBe(false);
-        })
+        });
       });
 
       describe("contact's assignment", function () {
@@ -165,7 +166,7 @@ define([
     });
 
     function initController () {
-      ctrl = $controller('ModalTaskCtrl', {
+      $controller('ModalTaskCtrl', {
         $rootScope: $rootScope,
         $scope: $scope,
         $uibModalInstance: {
@@ -176,11 +177,11 @@ define([
           }
         },
         data: data,
-        HR_settings: HR_settings
+        HR_settings: HRSettings
       });
-    };
+    }
 
-    function initializeCaches() {
+    function initializeCaches () {
       $rootScope.cache = {
         assignment: { arrSearch: [] },
         contact: { arrSearch: [] }

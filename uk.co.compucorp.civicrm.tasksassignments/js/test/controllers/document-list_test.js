@@ -1,3 +1,4 @@
+/* globals inject */
 /* eslint-env amd, jasmine */
 
 define([
