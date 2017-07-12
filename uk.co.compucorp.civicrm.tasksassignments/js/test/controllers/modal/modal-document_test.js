@@ -1,15 +1,15 @@
-/* globals CRM, _ */
+/* globals CRM, _, inject */
 /* eslint-env amd, jasmine */
 
 define([
   'common/angular',
   'common/moment',
   'mocks/fabricators/document',
-  'mocks/contact',
+  'mocks/fabricators/contact',
   'mocks/fabricators/assignment',
   'common/angularMocks',
   'tasks-assignments/app'
-], function (angular, moment, documentFabricator, contactMock, assignmentFabricator) {
+], function (angular, moment, documentFabricator, contactFabricator, assignmentFabricator) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
@@ -227,7 +227,7 @@ define([
         spyOn(ContactService, 'updateCache').and.returnValue({});
 
         initController();
-        $scope.onContactChanged(contactMock.contact);
+        $scope.onContactChanged(contactFabricator.single());
       });
 
       it('resets the document case id to empty', function () {
@@ -254,20 +254,20 @@ define([
         $rootScope.$apply();
       });
 
-      it("calls assignment service to search assignments of target contact", function () {
+      it('calls assignment service to search assignments of target contact', function () {
         expect(AssignmentService.search).toHaveBeenCalledWith(null, null, '204');
       });
 
-      it("search for assignments for a target contact and stores in $scope.assignments", function () {
+      it('search for assignments for a target contact and stores in $scope.assignments', function () {
         promise.then(function () {
           expect($scope.assignments).toEqual(assignmentFabricator.listResponse());
-        })
+        });
       });
 
-      it("hides spinner once the search is done", function () {
+      it('hides spinner once the search is done', function () {
         promise.then(function () {
           expect($rootScope.$broadcast).toHaveBeenCalledWith('ct-spinner-hide');
-        })
+        });
       });
     });
 

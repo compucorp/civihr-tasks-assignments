@@ -3,7 +3,7 @@
 
 define([
   'mocks/fabricators/document',
-  'mocks/contact',
+  'mocks/fabricators/contact',
   'mocks/data/assignment',
   'mocks/data/document',
   'common/angularMocks',
@@ -81,12 +81,12 @@ define([
     }));
 
     beforeEach(function () {
-      spyOn(ContactService, 'get').and.callFake(fakePromise(contactMock.contactList));
+      spyOn(ContactService, 'get').and.callFake(fakePromise(contactMock.list()));
       spyOn(AssignmentService, 'get').and.callFake(fakePromise(assignmentMock.assignmentList));
       spyOn(ContactService, 'updateCache').and.returnValue(deferred.promise);
       spyOn(AssignmentService, 'updateCache').and.returnValue(deferred.promise);
 
-      $httpBackend.whenGET(/action=get&entity=contact/).respond({});
+      $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({});
       $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
       $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
       $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
