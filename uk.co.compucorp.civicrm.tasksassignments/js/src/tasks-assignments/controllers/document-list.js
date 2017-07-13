@@ -230,12 +230,11 @@ define([
         Array.prototype.push.apply($scope.list, output.documentList);
       });
 
-      $scope.$on('documentFormSuccess', function (e, output, input) {
-        if (angular.equals({}, input)) {
-          addRemoveDocument($scope.list, output, input);
+      $scope.$on('documentFormSuccess', function (e, newData, ondData) {
+        if (angular.equals({}, ondData)) {
+          addRemoveDocument($scope.list, newData, ondData);
         } else {
-          addRemoveDocument($scope.list, output, input);
-          angular.extend(input, output);
+          angular.extend(ondData, newData);
         }
       });
 
