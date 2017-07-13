@@ -1,14 +1,14 @@
-/* globals angular */
 /* eslint-env amd, no-mixed-operators:false */
 
 define([
+  'common/angular',
   'common/moment',
   'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
   'tasks-assignments/services/file',
   'tasks-assignments/services/assignment'
-], function (moment, controllers) {
+], function (angular, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
@@ -162,7 +162,6 @@ define([
         }).then(function (results) {
           document.id = results.id;
           document.status_id = results.status_id;
-          $rootScope.$broadcast('documentFormSuccess', results, document);
           $scope.$broadcast('ct-spinner-hide', 'documentList');
           AssignmentService.updateTab();
         });
@@ -230,11 +229,11 @@ define([
         Array.prototype.push.apply($scope.list, output.documentList);
       });
 
-      $scope.$on('documentFormSuccess', function (e, newData, ondData) {
-        if (angular.equals({}, ondData)) {
-          addRemoveDocument($scope.list, newData, ondData);
+      $scope.$on('documentFormSuccess', function (e, newData, oldData) {
+        if (angular.equals({}, oldData)) {
+          addRemoveDocument($scope.list, newData, oldData);
         } else {
-          angular.extend(ondData, newData);
+          angular.extend(oldData, newData);
         }
       });
 
