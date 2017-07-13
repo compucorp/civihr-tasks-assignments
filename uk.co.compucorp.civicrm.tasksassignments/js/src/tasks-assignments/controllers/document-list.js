@@ -241,10 +241,7 @@ define([
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
 
-          if (pattern.test(data.title) ||
-               (data.crmMessages && data.crmMessages.length) &&
-               (pattern.test(data.crmMessages[0].title) ||
-               pattern.test(data.crmMessages[0].text))) {
+          if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
             $rootScope.cache.assignment = {
               obj: {},
               arr: []
@@ -255,6 +252,17 @@ define([
       });
 
       this.init();
+
+      /**
+       * Check the CRM message title to match the given pattern
+       *
+       * @param  {string} pattern
+       * @param  {object} data
+       * @return {boolean}
+       */
+      function matchMessageTitle (pattern, data) {
+        return (data.crmMessages && data.crmMessages.length) && pattern.test(data.crmMessages[0].title);
+      }
 
       /**
        * Adds or Removes Document fom the document list

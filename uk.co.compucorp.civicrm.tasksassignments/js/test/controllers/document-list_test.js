@@ -46,7 +46,7 @@ define([
       });
     });
 
-    describe('$scope.changeStatus()', function () {
+    describe('changeStatus()', function () {
       beforeEach(function () {
         initController();
         $scope.document = mockDocument;
@@ -56,26 +56,23 @@ define([
         $rootScope.$apply();
       });
 
-      describe('status is empty', function () {
+      describe('when the status is empty', function () {
         beforeEach(function () {
           $scope.changeStatus($scope.document, null);
         });
 
-        it('does not call Document service to save the status of the document', function () {
+        it('does not update the document status', function () {
           expect(DocumentService.save).not.toHaveBeenCalled();
         });
       });
 
-      describe('status is not empty', function () {
+      describe('when the status is not empty', function () {
         beforeEach(function () {
           $scope.changeStatus($scope.document, '4');
         });
 
-        it('calls Document service to update status of the document', function () {
+        it('updates the document status', function () {
           expect(DocumentService.save).toHaveBeenCalledWith({ id: $scope.document.id, status_id: '4' });
-        });
-
-        it('sets new status id for the document', function () {
           expect($scope.document.status_id).toBe('4');
         });
       });
