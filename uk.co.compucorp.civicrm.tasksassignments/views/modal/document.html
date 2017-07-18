@@ -14,7 +14,8 @@
       <!-- Search and select by name and email -->
       <div class="row" ng-hide="isRole('staff')">
         <div class="col-xs-12">
-          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="onContactChanged($item)" ng-required="true" ng-disabled="isRole('manager')">
+          <p class="target-contact" ng-if="isRole('manager')">{{contacts.target[0].label}}</p>
+          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="onContactChanged($item)" ng-required="true" ng-if="!isRole('manager')">
             <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
               {{$select.selected.label}}
             </ui-select-match>
