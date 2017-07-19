@@ -9,15 +9,16 @@ define([
   'tasks-assignments/services/contact',
   'tasks-assignments/services/file',
   'tasks-assignments/services/dialog',
-  'tasks-assignments/services/document'
+  'tasks-assignments/services/document',
+  'common/services/notification'
 ], function (angular, moment, _, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
-    'files', 'config', 'HR_settings', 'modalMode',
+    'files', 'config', 'HR_settings', 'modalMode', 'notification',
     function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
-      DocumentService, ContactService, FileService, data, files, config, HR_settings, modalMode) {
+      DocumentService, ContactService, FileService, data, files, config, HR_settings, modalMode, notification) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       // Init call
@@ -379,24 +380,14 @@ define([
         }
 
         if (missingRequiredFields.length) {
-          var notification;
           var notificationTitle = missingRequiredFields.length === 1 ? 'Required field' : 'Required fields';
           var missingFields = missingRequiredFields.join(', ');
+          var alert = notification.alert(notificationTitle, missingFields);
 
-          if ($scope.isRole('manager')) {
-            $rootScope.$broadcast('ssp:notify', {
-              type: 'error',
-              title: notificationTitle,
-              body: missingFields
-            });
-          } else {
-            notification = CRM.alert(missingFields, notificationTitle);
-
-            notification && $timeout(function () {
-              notification.close();
-              notification = null;
-            }, 5000);
-          }
+          alert && $timeout(function () {
+            alert.close();
+            alert = null;
+          }, 5000);
 
           return false;
         }
