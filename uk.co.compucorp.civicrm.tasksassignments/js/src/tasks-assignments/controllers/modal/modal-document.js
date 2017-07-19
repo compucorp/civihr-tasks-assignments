@@ -379,13 +379,24 @@ define([
         }
 
         if (missingRequiredFields.length) {
-          var notification = CRM.alert(missingRequiredFields.join(', '),
-            missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
+          var notification;
+          var notificationTitle = missingRequiredFields.length === 1 ? 'Required field' : 'Required fields';
+          var missingFields = missingRequiredFields.join(', ');
 
-          notification && $timeout(function () {
-            notification.close();
-            notification = null;
-          }, 5000);
+          if ($scope.isRole('manager')) {
+            $rootScope.$broadcast('ssp:notify', {
+              type: 'error',
+              title: notificationTitle,
+              body: missingFields
+            });
+          } else {
+            notification = CRM.alert(missingFields, notificationTitle);
+
+            notification && $timeout(function () {
+              notification.close();
+              notification = null;
+            }, 5000);
+          }
 
           return false;
         }
