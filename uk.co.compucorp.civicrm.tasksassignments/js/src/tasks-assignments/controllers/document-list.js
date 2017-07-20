@@ -19,21 +19,16 @@ define([
 
       var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
-      this.init = function () {
-        DocumentService.cacheContactsAndAssignments(documentList).then(function () {
-          watchDateFilters();
+      $scope.dueToday = 0;
+      $scope.dueThisWeek = 0;
+      $scope.overdue = 0;
+      $scope.list = documentList;
+      $scope.listResolvedLoaded = false;
 
-          $scope.applySidebarFilters();
-          $rootScope.$broadcast('ct-spinner-hide');
-          $log.debug($rootScope.cache);
-        });
-      };
-
-      $scope.pagination = {
-        currentPage: 1,
-        itemsPerPage: 10,
-        maxSize: 5
-      };
+      $scope.listFiltered = [];
+      $scope.listOngoing = [];
+      $scope.listPaginated = [];
+      $scope.listResolved = [];
 
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
@@ -41,15 +36,11 @@ define([
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
       ];
 
-      $scope.dueToday = 0;
-      $scope.dueThisWeek = 0;
-      $scope.overdue = 0;
-      $scope.list = documentList;
-      $scope.listFiltered = [];
-      $scope.listOngoing = [];
-      $scope.listPaginated = [];
-      $scope.listResolved = [];
-      $scope.listResolvedLoaded = false;
+      $scope.pagination = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        maxSize: 5
+      };
 
       $scope.dpOpened = {
         filterDates: {}
@@ -251,7 +242,15 @@ define([
         }
       });
 
-      this.init();
+      (function init () {
+        watchDateFilters();
+        $scope.applySidebarFilters();
+
+        DocumentService.cacheContactsAndAssignments(documentList).then(function () {
+          $rootScope.$broadcast('ct-spinner-hide');
+          $log.debug($rootScope.cache);
+        });
+      })();
 
       /**
        * Check the CRM message title to match the given pattern
