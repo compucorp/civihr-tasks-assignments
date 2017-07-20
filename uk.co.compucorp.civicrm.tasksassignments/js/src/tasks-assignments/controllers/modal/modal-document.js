@@ -382,12 +382,8 @@ define([
         if (missingRequiredFields.length) {
           var notificationTitle = missingRequiredFields.length === 1 ? 'Required field' : 'Required fields';
           var missingFields = missingRequiredFields.join(', ');
-          var alert = notification.alert(notificationTitle, missingFields);
 
-          alert && $timeout(function () {
-            alert.close();
-            alert = null;
-          }, 5000);
+          notification.alert(notificationTitle, missingFields, { expires: 5000 });
 
           return false;
         }
