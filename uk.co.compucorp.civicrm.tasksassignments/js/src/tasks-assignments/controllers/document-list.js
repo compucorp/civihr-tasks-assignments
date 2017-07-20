@@ -1,4 +1,4 @@
-/* eslint-env amd, no-mixed-operators:false */
+/* eslint-env amd */
 
 define([
   'common/angular',
@@ -19,39 +19,28 @@ define([
 
       var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
-      $scope.dueToday = 0;
       $scope.dueThisWeek = 0;
-      $scope.overdue = 0;
+      $scope.dueToday = 0;
       $scope.list = documentList;
-      $scope.listResolvedLoaded = false;
-
       $scope.listFiltered = [];
       $scope.listOngoing = [];
       $scope.listPaginated = [];
       $scope.listResolved = [];
-
+      $scope.listResolvedLoaded = false;
+      $scope.overdue = 0;
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
       ];
-
-      $scope.pagination = {
-        currentPage: 1,
-        itemsPerPage: 10,
-        maxSize: 5
-      };
-
       $scope.dpOpened = {
         filterDates: {}
       };
-
       $scope.isCollapsed = {
         filterAdvanced: true,
         filterDates: false,
         documentListResolved: true
       };
-
       $scope.filterParams = {
         contactId: null,
         documentStatus: [],
@@ -63,7 +52,6 @@ define([
         due: null,
         assignmentType: []
       };
-
       $scope.filterParamsHolder = {
         documentStatus: defaultDocumentStatus,
         dateRange: {
@@ -71,18 +59,21 @@ define([
           until: moment().add(1, 'month').startOf('day').toDate()
         }
       };
-
       $scope.datepickerOptions = {
         from: { maxDate: $scope.filterParamsHolder.dateRange.until },
         until: { minDate: $scope.filterParamsHolder.dateRange.from }
       };
-
       $scope.label = {
         addNew: 'Add Document',
         overdue: 'Overdue',
         dueInNextFortnight: 'Due in next fortnight',
         dueInNinetyDays: 'Due in 90 days',
         dateRange: ''
+      };
+      $scope.pagination = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        maxSize: 5
       };
 
       $scope.apply = function (action, documentList) {
