@@ -44,6 +44,14 @@ define([
       it('calls document service to cache contacts and assigments', function () {
         expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
       });
+
+      it('checks if default document status are defined for filter in T&A dashboard', function () {
+        expect($scope.filterParamsHolder.documentStatus).toEqual(['1', '2']);
+      });
+
+      it('checks if default document status are not defined for filter in contact page', function () {
+        expect($scope.filterParams.documentStatus).toEqual([]);
+      });
     });
 
     describe('changeStatus()', function () {

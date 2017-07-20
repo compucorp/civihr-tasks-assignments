@@ -54,7 +54,7 @@ define([
 
       $scope.filterParams = {
         contactId: null,
-        documentStatus: defaultDocumentStatus,
+        documentStatus: [],
         ownership: $state.params.ownership || null,
         dateRange: {
           from: null,
@@ -134,7 +134,6 @@ define([
       $scope.applySidebarFilters = function () {
         $scope.filterParams.dateRange.from = $scope.filterParamsHolder.dateRange.from;
         $scope.filterParams.dateRange.until = $scope.filterParamsHolder.dateRange.until;
-        $scope.filterParams.documentStatus = $scope.filterParamsHolder.documentStatus;
         $scope.filterParams.due = 'dateRange';
 
         $scope.labelDateRange();
@@ -242,7 +241,7 @@ define([
         }
       });
 
-      (function init () {
+      (function init() {
         watchDateFilters();
         $scope.applySidebarFilters();
 
