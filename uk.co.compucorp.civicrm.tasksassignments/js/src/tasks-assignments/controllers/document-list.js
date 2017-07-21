@@ -14,7 +14,7 @@ define([
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
     '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings',
     function ($scope, $modal, $dialog, $rootElement, $rootScope, $state, $filter, $log, $q, $timeout, documentList,
-                 config, ContactService, AssignmentService, DocumentService, FileService, settings) {
+      config, ContactService, AssignmentService, DocumentService, FileService, settings) {
       $log.debug('Controller: DocumentListCtrl');
 
       var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
@@ -76,6 +76,12 @@ define([
         maxSize: 5
       };
 
+      /**
+       * Apply action to delete the given list of documents
+       *
+       * @param {string} action
+       * @param {array} documentList
+       */
       $scope.apply = function (action, documentList) {
         var documentListLen = documentList.length;
         var documentListPromise = [];
@@ -130,6 +136,12 @@ define([
         $scope.labelDateRange();
       };
 
+      /**
+       * Updates the given document with new document's statusId
+       *
+       * @param {object} document
+       * @param {string} statusId
+       */
       $scope.changeStatus = function (document, statusId) {
         if (!statusId || typeof +statusId !== 'number') {
           return null;
@@ -148,9 +160,16 @@ define([
         });
       };
 
+      /**
+       * Creates the date range label using from and until dates in
+       * format 'dd/MM/yyyy'
+       *
+       * @param {string} from
+       * @param {string} until
+       */
       $scope.labelDateRange = function (from, until) {
-        var filterDateTimeFrom = $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
-        var filterDateTimeUntil = $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
+        var filterDateTimeFrom = $filter('date')(from || $scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
+        var filterDateTimeUntil = $filter('date')(until || $scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
 
         if (filterDateTimeUntil) {
           filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
@@ -163,6 +182,12 @@ define([
         $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
       };
 
+      /**
+       * Gets and caches the list of resolved documents with a specific target contact
+       * and updates the loadDocumentsResolved status to true indicating loaded.
+       *
+       * @return {object}
+       */
       $scope.loadDocumentsResolved = function () {
         if ($scope.listResolvedLoaded) {
           return;
@@ -185,6 +210,11 @@ define([
         });
       };
 
+      /**
+       * Deletes the given document
+       *
+       * @param {object} document
+       */
       $scope.deleteDocument = function (document) {
         $dialog.open({
           msg: 'Are you sure you want to delete this document?'
@@ -202,22 +232,41 @@ define([
         });
       };
 
+      /**
+       * Navigates to calander view
+       *
+       * @param {string} view
+       */
       $scope.viewInCalendar = function (view) {
         $state.go('calendar.mwl.' + view);
       };
 
+      /**
+       * Subscribes for 'assignmentFormSuccess' event and when triggered,
+       * updates document with given list of documents
+       */
       $scope.$on('assignmentFormSuccess', function (e, output) {
         Array.prototype.push.apply($scope.list, output.documentList);
       });
 
-      $scope.$on('documentFormSuccess', function (e, newData, oldData) {
-        if (angular.equals({}, oldData)) {
-          addRemoveDocument($scope.list, newData, oldData);
+      /**
+       * Subscribes for 'documentFormSuccess' event and when triggered,
+       * and calls addRemoveDocument function to add or remove the document
+       * in or from the list
+       */
+      $scope.$on('documentFormSuccess', function (e, output, input) {
+        if (angular.equals({}, input)) {
+          addRemoveDocument($scope.list, output, input);
         } else {
           angular.extend(oldData, newData);
         }
       });
 
+      /**
+       * Subscribes for 'crmFormSuccess' event and when triggered,
+       * for data with success status, if the pattern of messages matchses
+       * assignment cache is cleared and the current state is reloaded.
+       */
       $scope.$on('crmFormSuccess', function (e, data) {
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
@@ -232,6 +281,7 @@ define([
         }
       });
 
+      // Init call
       (function init() {
         watchDateFilters();
         $scope.applySidebarFilters();
