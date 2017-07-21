@@ -9,7 +9,7 @@ define([
   'use strict';
 
   describe('DocumentListCtrl', function () {
-    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config;
+    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_) {
@@ -20,6 +20,7 @@ define([
       config = _config_;
       DocumentService = _DocumentService_;
       $httpBackend = _$httpBackend_;
+      mockDocument = documentFabricator.single();
 
       // Avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
@@ -28,6 +29,11 @@ define([
     beforeEach(function () {
       spyOn(DocumentService, 'get').and.returnValue($q.resolve([]));
       spyOn(DocumentService, 'cacheContactsAndAssignments').and.returnValue($q.resolve([]));
+      spyOn(DocumentService, 'save').and.callFake(function () {
+        mockDocument.status_id = '4';
+
+        return $q.resolve(mockDocument);
+      });
     });
 
     describe('init()', function () {
@@ -37,6 +43,38 @@ define([
 
       it('calls document service to cache contacts and assigments', function () {
         expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+      });
+    });
+
+    describe('changeStatus()', function () {
+      beforeEach(function () {
+        initController();
+        $scope.document = mockDocument;
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      describe('when the status is empty', function () {
+        beforeEach(function () {
+          $scope.changeStatus($scope.document, null);
+        });
+
+        it('does not update the document status', function () {
+          expect(DocumentService.save).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('when the status is not empty', function () {
+        beforeEach(function () {
+          $scope.changeStatus($scope.document, '4');
+        });
+
+        it('updates the document status', function () {
+          expect(DocumentService.save).toHaveBeenCalledWith({ id: $scope.document.id, status_id: '4' });
+          expect($scope.document.status_id).toBe('4');
+        });
       });
     });
 
