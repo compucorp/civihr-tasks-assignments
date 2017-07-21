@@ -167,9 +167,9 @@ define([
        * @param {string} from
        * @param {string} until
        */
-      $scope.labelDateRange = function (from, until) {
-        var filterDateTimeFrom = $filter('date')(from || $scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
-        var filterDateTimeUntil = $filter('date')(until || $scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
+      $scope.labelDateRange = function () {
+        var filterDateTimeFrom = $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
+        var filterDateTimeUntil = $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
 
         if (filterDateTimeUntil) {
           filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
@@ -281,7 +281,6 @@ define([
         }
       });
 
-      // Init call
       (function init() {
         watchDateFilters();
         $scope.applySidebarFilters();
