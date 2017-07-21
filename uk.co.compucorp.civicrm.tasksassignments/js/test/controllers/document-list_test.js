@@ -2,10 +2,11 @@
 /* eslint-env amd, jasmine */
 
 define([
+  'common/moment',
   'common/angular',
   'mocks/fabricators/document',
   'tasks-assignments/app'
-], function (angular, documentFabricator) {
+], function (moment, angular, documentFabricator) {
   'use strict';
 
   describe('DocumentListCtrl', function () {
@@ -117,6 +118,62 @@ define([
       it('marks relolved section as loaded', function () {
         promise.then(function () {
           expect($scope.listResolvedLoaded).toBe(true);
+        });
+      });
+    });
+
+    describe('labelDateRange()', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      it('formats and creates date range label', function () {
+        expect($scope.label.dateRange).toBe('21/07/2017 - 21/08/2017');
+      });
+
+      describe('when both form and until date are available', function () {
+        beforeEach(function () {
+          $scope.filterParams.dateRange = {
+            from: moment().startOf('day').toDate(),
+            until: moment().add(2, 'month').startOf('day').toDate()
+          };
+          $scope.labelDateRange();
+        });
+
+        it('formats and creates date range label', function () {
+          expect($scope.label.dateRange).toBe('21/07/2017 - 21/09/2017');
+        });
+      });
+
+      describe('when only form date is available', function () {
+        beforeEach(function () {
+          $scope.filterParams.dateRange = {
+            from: moment().startOf('day').toDate(),
+            until: ''
+          };
+          $scope.labelDateRange();
+        });
+
+        it('formats and creates date range label containing form date only', function () {
+          expect($scope.label.dateRange).toBe('From: 21/07/2017');
+        });
+      });
+
+      describe('when only until date is available', function () {
+        beforeEach(function () {
+          $scope.filterParams.dateRange = {
+            from: '',
+            until: moment().add(2, 'month').startOf('day').toDate()
+          };
+          $scope.labelDateRange();
+        });
+
+        it('formats and creates date range label containing until date only', function () {
+          expect($scope.label.dateRange).toBe('Until: 21/09/2017');
         });
       });
     });
