@@ -1,125 +1,126 @@
 <div class="{{prefix}}dashboard-key-dates">
-    <div class="{{prefix}}sidebar {{prefix}}sidebar-inner">
-        <div class="panel panel-light  panel-secondary">
-            <div class="panel-heading">
-                <h3 class="panel-title">View Dates By:</h3>
+  <div class="{{prefix}}sidebar {{prefix}}sidebar-inner">
+    <div class="panel panel-light  panel-secondary">
+      <div class="panel-heading">
+        <h3 class="panel-title">View Dates By:</h3>
+      </div>
+      <div class="panel-body">
+        <div class="{{prefix}}filter-date">
+          <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'isoWeek'">{{label.isoWeek}} <span class="badge badge-primary" ng-bind="(dateList | filterByDate:'isoWeek').length"></span></a></li>
+            <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'month'">{{label.month}} <span class="badge badge-primary" ng-bind="(dateList | filterByDate:'month').length"></span></a></li>
+            <li role="presentation"><a href ng-model="filterParams.date"  uib-btn-radio="'year'">{{label.year}} <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterByDate:'year').length"></span></a></li>
+          </ul>
+          <hr>
+          <a href
+            ng-click="isCollapsed.filterDates = !isCollapsed.filterDates"
+            class="btn btn-block {{prefix}}select-dates"><i
+            class="fa"
+            ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-right': isCollapsed.filterDates }"></i>
+            <em>OR</em> Select Dates
+          </a>
+          <div class="form-horizontal" uib-collapse="isCollapsed.filterDates">
+            <div class="form-group">
+              <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
+              <div class="input-group col-xs-12 col-sm-9 col-lg-8">
+                <input
+                  is-open="dpOpened.filterDates.from"
+                  uib-datepicker-popup="dd/MM/yyyy"
+                  ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
+                  ng-model="filterParams.dateRange.from"
+                  datepicker-options="datepickerOptions.from"
+                  id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+                  <span class="input-group-addon fa fa-calendar"></span>
+              </div>
             </div>
-            <div class="panel-body">
-                <div class="{{prefix}}filter-date">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'isoWeek'">{{label.isoWeek}} <span class="badge badge-primary" ng-bind="(dateList | filterByDate:'isoWeek').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date" uib-btn-radio="'month'">{{label.month}} <span class="badge badge-primary" ng-bind="(dateList | filterByDate:'month').length"></span></a></li>
-                        <li role="presentation"><a href ng-model="filterParams.date"  uib-btn-radio="'year'">{{label.year}} <span class="badge badge-primary" ng-bind="dataLoading ? 'loading' : (dateList | filterByDate:'year').length"></span></a></li>
-                    </ul>
-                    <hr>
-                    <a href
-                       ng-click="isCollapsed.filterDates = !isCollapsed.filterDates"
-                       class="btn btn-block {{prefix}}select-dates"><i
-                            class="fa"
-                            ng-class="{fa: true, 'fa-chevron-down': !isCollapsed.filterDates, 'fa-chevron-right': isCollapsed.filterDates }"></i>
-                        <em>OR</em> Select Dates
-                    </a>
-                    <div class="form-horizontal" uib-collapse="isCollapsed.filterDates">
-                        <div class="form-group">
-                            <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">From</label>
-                            <div class="input-group col-xs-12 col-sm-9 col-lg-8">
-                                <input
-                                        is-open="dpOpened.filterDates.from"
-                                        uib-datepicker-popup="dd/MM/yyyy"
-                                        ng-click="dpOpened.filterDates.from = !dpOpened.filterDates.from"
-                                        ng-model="filterParams.dateRange.from"
-                                        datepicker-options="datepickerOptions.from"
-                                        id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
-                                <span class="input-group-addon fa fa-calendar"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">Until</label>
-                            <div class="input-group col-xs-12 col-sm-9  col-lg-8">
-                                <input
-                                        is-open="dpOpened.filterDates.until"
-                                        uib-datepicker-popup="dd/MM/yyyy"
-                                        datepicker-options="datepickerOptions.until"
-                                        ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
-                                        ng-model="filterParams.dateRange.until"
-                                        id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
-                                <span class="input-group-addon fa fa-calendar"></span>
-                            </div>
-                        </div>
-                        <button class="btn btn-default btn-primary btn-block"
-                                ng-click="labelDatZXCeRange(filterParams.dateRange.from, filterParams.dateRange.until);
-                                  showDateRange(filterParams.dateRange.from, filterParams.dateRange.until);">
-                            Show Date Range</button>
+            <div class="form-group">
+              <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">Until</label>
+              <div class="input-group col-xs-12 col-sm-9  col-lg-8">
+                <input
+                  is-open="dpOpened.filterDates.until"
+                  uib-datepicker-popup="dd/MM/yyyy"
+                  datepicker-options="datepickerOptions.until"
+                  ng-click="dpOpened.filterDates.until = !dpOpened.filterDates.until"
+                  ng-model="filterParams.dateRange.until"
+                  id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+                  <span class="input-group-addon fa fa-calendar"></span>
+              </div>
+            </div>
+            <button class="btn btn-default btn-primary btn-block"
+              ng-click="labelDateRange();
+                showDateRange(filterParams.dateRange.from, filterParams.dateRange.until);">
+              Show Date Range
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="{{prefix}}content-wrapper">
+    <div class="{{prefix}}content">
+      <div class="panel panel-light panel-secondary panel-filter">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-xs-12 col-sm-5">
+              <h3 class="panel-title pull-left" ng-bind="(filterParams.date && filterParams.date != 'dateRange' ? 'This ' : '') + label[filterParams.date]"></h3>
+              <a href ng-click="csvExport();" class="{{prefix}}csv-export">Export to CSV</a>
+            </div>
+            <div class="col-xs-12 col-sm-7">
+              <div class="{{prefix}}filter-date-type">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 control-label">Date Type:</label>
+                    <div class="col-xs-12 col-sm-10">
+                      <ui-select
+                        prevent-animations
+                        multiple
+                        ng-model="filterParams.dateType">
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select date type...">{{$item.value}}</ui-select-match>
+                        <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.dateType.arr">
+                          <div ng-bind-html="type.value | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+      <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
+        <li
+          ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
+          ng-include
+          src="'key-date.html'"
+          class="panel panel-light panel-secondary">
+        </li>
+      </ul>
+      <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
+        <li
+          ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
+          ng-include
+          src="'key-date.html'"
+          class="panel panel-light panel-secondary">
+        </li>
+      </ul>
     </div>
-    <div class="{{prefix}}content-wrapper">
-        <div class="{{prefix}}content">
-            <div class="panel panel-light panel-secondary panel-filter">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-5">
-                            <h3 class="panel-title pull-left" ng-bind="(filterParams.date && filterParams.date != 'dateRange' ? 'This ' : '') + label[filterParams.date]"></h3>
-                            <a href ng-click="csvExport();" class="{{prefix}}csv-export">Export to CSV</a>
-                        </div>
-                        <div class="col-xs-12 col-sm-7">
-                            <div class="{{prefix}}filter-date-type">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="col-xs-12 col-sm-2 control-label">Date Type:</label>
-                                        <div class="col-xs-12 col-sm-10">
-                                            <ui-select
-                                                    prevent-animations
-                                                    multiple
-                                                    ng-model="filterParams.dateType">
-                                                <ui-select-match prevent-animations class="ui-select-match" placeholder="Select date type...">{{$item.value}}</ui-select-match>
-                                                <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.dateType.arr">
-                                                    <div ng-bind-html="type.value | highlight: $select.search"></div>
-                                                </ui-select-choices>
-                                            </ui-select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
-                <li
-                        ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
-                        ng-include
-                        src="'key-date.html'"
-                        class="panel panel-light panel-secondary">
-                </li>
-            </ul>
-            <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
-                <li
-                        ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
-                        ng-include
-                        src="'key-date.html'"
-                        class="panel panel-light panel-secondary">
-                </li>
-            </ul>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a href
+        class="btn clearfix {{prefix}}btn-list-expand btn-block"
+        ng-show="dateListUnlimited.length > dateListFiltered.length || dateListSelectedUnlimited.length > dateListSelectedFiltered.length"
+        ng-click="dateListLimit = dateListLimit+5">Show More</a>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <a href
-               class="btn clearfix {{prefix}}btn-list-expand btn-block"
-               ng-show="dateListUnlimited.length > dateListFiltered.length || dateListSelectedUnlimited.length > dateListSelectedFiltered.length"
-               ng-click="dateListLimit = dateListLimit+5">Show More</a>
-        </div>
-    </div>
+  </div>
 </div>
 
 <script type="text/ng-template" id="key-date.html">
-    <header class="panel-heading">
-        <time>{{dateObj.date | date: 'EEE d MMMM'}} <span>{{dateObj.date | date: 'yyyy'}}</span></time>
-    </header>
-    <ul class="list-group">
-        <li class="list-group-item" ng-repeat="dateContact in dateObj.dateContactList"><strong class="{{dateContact.type}}" ng-bind="cache.dateType.obj[dateContact.type]"></strong> <a href ng-href="{{url.CONTACT+'?reset=1&cid='+dateContact.contact_id}}" ng-bind="dateContact.contact_name"></a></li>
-    </ul>
+  <header class="panel-heading">
+    <time>{{dateObj.date | date: 'EEE d MMMM'}} <span>{{dateObj.date | date: 'yyyy'}}</span></time>
+  </header>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="dateContact in dateObj.dateContactList"><strong class="{{dateContact.type}}" ng-bind="cache.dateType.obj[dateContact.type]"></strong> <a href ng-href="{{url.CONTACT+'?reset=1&cid='+dateContact.contact_id}}" ng-bind="dateContact.contact_name"></a></li>
+  </ul>
 </script>
