@@ -1,4 +1,6 @@
 <?php
+use CRM_Tasksassignments_Test_Fabricator_Assignment as AssignmentFabricator;
+use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
 
 /**
  * Class Api_DocumentTest
@@ -17,7 +19,12 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     parent::setUp();
     $this->quickCleanup(['civicrm_activity'], TRUE);
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
+    $upgrader->uninstall();
     $upgrader->install();
+
+    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
+    $hrCaseUpgrader->uninstall();
+    $hrCaseUpgrader->install();
 
     // Pick one of Document types.
     $documentTypes = civicrm_api3('Document', 'getoptions', array(
@@ -257,4 +264,88 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     $this->assertEquals(0, $clonedCount['values']);
   }
 
+  /**
+   * Documents related to an assignment were generating a revision every time
+   * they were updated. This caused the cloning functionality to copy each
+   * document multiple times, one for each revision the document had. This test
+   * verifies that even if a document has multiple revisions that meet cloning
+   * criteria, only the latest revision is cloned.
+   */
+  public function testDocumentCloningDoesNotCreateExtras() {
+    $this->setDaysBeforeExpiryToClone(1);
+
+    // Create assignment
+    $assignment = AssignmentFabricator::fabricate();
+
+    // Create document - we need to use the API so new revisions are created.
+    $document = DocumentFabricator::fabricateWithAPI([
+      'case_id' => $assignment->id,
+    ]);
+    $this->assertClonableRevisionCount(0);
+
+    // Approve and set expiry date for document, should generate a new revision for each update
+    DocumentFabricator::fabricateWithAPI([
+      'id' => $document['id'],
+      'case_id' => $assignment->id,
+      'expire_date' => date('Y-m-d'),
+      'remind_me' => 1,
+      'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+    ]);
+    $this->assertClonableRevisionCount(1);
+
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    $this->assertEquals(1, $clonedCount['values']);
+
+    // Cloning should have created a new revision for the document also,
+    // when updating cloned date. Thus original clonable revision should still
+    // exist and be clonable (even if it's not current revision).
+    $this->assertClonableRevisionCount(1);
+
+    // Running clone documents again should not create new documents
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    $this->assertEquals(0, $clonedCount['values']);
+  }
+
+  /**
+   * Asserts number of documents that could be cloned, not taking into account
+   * if the document is aa current revision or not.
+   *
+   * @param int $expectedCount
+   *   Number of expected clonable revisions.
+   */
+  private function assertClonableRevisionCount($expectedCount) {
+    $daysBeforeExpiryToClone = $this->getDaysBeforeExpiryToClone();
+    $interval = new DateInterval('P' . $daysBeforeExpiryToClone . 'D');
+    $cutOffDate = (new DateTime())->add($interval);
+
+    $expiryField = DocumentFabricator::getCustomFieldName('expire_date');
+    $clonedField = DocumentFabricator::getCustomFieldName('clone_date');
+    $remindMeField = DocumentFabricator::getCustomFieldName('remind_me');
+
+    $params = [
+      $expiryField => ['<=' => $cutOffDate->format('Y-m-d')],
+      $clonedField => ['IS NULL' => 1],
+      $remindMeField => 1,
+      'is_deleted' => 0,
+      'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      'options' => ['limit' => 0],
+    ];
+
+    $result = civicrm_api3('Document', 'get', $params);
+    $this->assertEquals($expectedCount, $result['count']);
+  }
+
+  private function getDaysBeforeExpiryToClone() {
+    $setting = civicrm_api3('TASettings', 'getsingle', [
+      'fields' => 'days_to_create_a_document_clone',
+    ]);
+
+    return CRM_Utils_Array::value('value', $setting, 0);
+  }
+
+  private function setDaysBeforeExpiryToClone($days) {
+    civicrm_api3('TASettings', 'set', [
+      'fields' => ['days_to_create_a_document_clone' => $days],
+    ]);
+  }
 }
