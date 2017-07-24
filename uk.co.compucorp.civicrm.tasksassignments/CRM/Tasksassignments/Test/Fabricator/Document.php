@@ -7,20 +7,6 @@ use CRM_HRCore_Test_Fabricator_Contact as ContactFabricator;
 class CRM_Tasksassignments_Test_Fabricator_Document {
   private static $defaultParams = [];
 
-  private static function setDefaultParameters() {
-    $contact = ContactFabricator::fabricate();
-
-    self::$defaultParams = [
-      'activity_type_id' => self::getTypeID(),
-      'activity_date_time' => date('Y-m-d'),
-      'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
-      'priority_id' => self::getPriorityID(),
-      'source_contact_id' => $contact['id'],
-      'target_contact_id' => [$contact['id']],
-      'assignee_contact_id' => [$contact['id']],
-    ];
-  }
-
   /**
    * Fabricates Document using the BAO.
    *
@@ -54,24 +40,20 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
   }
 
   /**
-   * Returns column name for the given custom field name.
-   *
-   * @param $fieldName
-   *
-   * @return string
-   *   Column name of custom field
+   * Sets default minimum parametrs to create a document.
    */
-  public static function getCustomFieldName($fieldName) {
-    static $fieldNames;
+  private static function setDefaultParameters() {
+    $contact = ContactFabricator::fabricate();
 
-    if (empty($fieldNames)) {
-      $result = civicrm_api3('Document', 'getcustomfields');
-      foreach ($result as $customFieldName => $data) {
-        $fieldNames[$data['name']] = $customFieldName;
-      }
-    }
-
-    return CRM_Utils_Array::value($fieldName, $fieldNames);
+    self::$defaultParams = [
+      'activity_type_id' => self::getTestDocumentTypeID(),
+      'activity_date_time' => date('Y-m-d'),
+      'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
+      'priority_id' => self::getTestPriorityID(),
+      'source_contact_id' => $contact['id'],
+      'target_contact_id' => [$contact['id']],
+      'assignee_contact_id' => [$contact['id']],
+    ];
   }
 
   /**
@@ -80,7 +62,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    * @return int
    *   ID of the first valid document type found on the database
    */
-  private function getTypeID() {
+  private function getTestDocumentTypeID() {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => 'activity_type',
@@ -97,7 +79,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    * @return int
    *   ID of the first valid priority found on the database
    */
-  private function getPriorityID() {
+  private function getTestPriorityID() {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => 'priority',

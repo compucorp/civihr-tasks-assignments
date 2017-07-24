@@ -19,11 +19,9 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     parent::setUp();
     $this->quickCleanup(['civicrm_activity'], TRUE);
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
-    $upgrader->uninstall();
     $upgrader->install();
 
     $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
-    $hrCaseUpgrader->uninstall();
     $hrCaseUpgrader->install();
 
     // Pick one of Document types.
@@ -271,7 +269,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
    * verifies that even if a document has multiple revisions that meet cloning
    * criteria, only the latest revision is cloned.
    */
-  public function testDocumentCloningDoesNotCreateExtras() {
+  public function testDocumentCloningOnlyClonesCurrentRevision() {
     $this->setDaysBeforeExpiryToClone(1);
 
     // Create assignment
@@ -308,7 +306,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
 
   /**
    * Asserts number of documents that could be cloned, not taking into account
-   * if the document is aa current revision or not.
+   * if the document is a current revision or not.
    *
    * @param int $expectedCount
    *   Number of expected clonable revisions.
@@ -318,9 +316,9 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     $interval = new DateInterval('P' . $daysBeforeExpiryToClone . 'D');
     $cutOffDate = (new DateTime())->add($interval);
 
-    $expiryField = DocumentFabricator::getCustomFieldName('expire_date');
-    $clonedField = DocumentFabricator::getCustomFieldName('clone_date');
-    $remindMeField = DocumentFabricator::getCustomFieldName('remind_me');
+    $expiryField = $this->getCustomFieldColumnName('expire_date');
+    $clonedField = $this->getCustomFieldColumnName('clone_date');
+    $remindMeField = $this->getCustomFieldColumnName('remind_me');
 
     $params = [
       $expiryField => ['<=' => $cutOffDate->format('Y-m-d')],
@@ -359,5 +357,36 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     civicrm_api3('TASettings', 'set', [
       'fields' => ['days_to_create_a_document_clone' => $days],
     ]);
+  }
+
+  /**
+   * Returns column name for the given custom field name.
+   *
+   * @param $fieldName
+   *
+   * @return string
+   *   Column name of custom field
+   */
+  private function getCustomFieldColumnName($fieldName) {
+    static $fieldNames;
+
+    if (empty($fieldNames)) {
+      $result = civicrm_api3('Document', 'getcustomfields');
+      foreach ($result as $customFieldName => $data) {
+        $fieldNames[$data['name']] = $customFieldName;
+      }
+    }
+
+    return CRM_Utils_Array::value($fieldName, $fieldNames);
+  }
+
+  public function tearDown() {
+    parent::tearDown();
+
+    $upgrader = CRM_Tasksassignments_Upgrader::instance();
+    $upgrader->uninstall();
+
+    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
+    $hrCaseUpgrader->uninstall();
   }
 }
