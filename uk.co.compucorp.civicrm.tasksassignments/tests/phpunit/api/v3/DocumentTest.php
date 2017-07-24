@@ -335,6 +335,12 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     $this->assertEquals($expectedCount, $result['count']);
   }
 
+  /**
+   * Obtain number of days before document expiring date configured in system.
+   *
+   * @return int
+   *   Number of days before expiring date
+   */
   private function getDaysBeforeExpiryToClone() {
     $setting = civicrm_api3('TASettings', 'getsingle', [
       'fields' => 'days_to_create_a_document_clone',
@@ -343,6 +349,12 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     return CRM_Utils_Array::value('value', $setting, 0);
   }
 
+  /**
+   * Set number of days before document expiring date configured in system.
+   *
+   * @param int $days
+   *   Number of days before document expiring date
+   */
   private function setDaysBeforeExpiryToClone($days) {
     civicrm_api3('TASettings', 'set', [
       'fields' => ['days_to_create_a_document_clone' => $days],

@@ -1,5 +1,5 @@
 <?php
-use CRM_HRCore_Test_Fabricator_Contact as ContactFbricator;
+use CRM_HRCore_Test_Fabricator_Contact as ContactFabricator;
 
 /**
  * Documents Fabricator class
@@ -8,7 +8,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
   private static $defaultParams = [];
 
   private static function setDefaultParameters() {
-    $contact = ContactFbricator::fabricate();
+    $contact = ContactFabricator::fabricate();
 
     self::$defaultParams = [
       'activity_type_id' => self::getTypeID(),
@@ -21,11 +21,27 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
     ];
   }
 
+  /**
+   * Fabricates Document using the BAO.
+   *
+   * @param array $params
+   *   List of parameters to be passed to the BAO call.
+   *
+   * @return CRM_Tasksassignments_DAO_Document|NULL|object
+   */
   public static function fabricate($params) {
     self::setDefaultParameters();
     return CRM_Tasksassignments_BAO_Document::create(array_merge(self::$defaultParams, $params));
   }
 
+  /**
+   * Fabricates Document using an API call.
+   *
+   * @param $params
+   *   List of parameters to be passed to the API call.
+   *
+   * @return array
+   */
   public static function fabricateWithAPI($params) {
     self::setDefaultParameters();
     $result = civicrm_api3(
@@ -37,6 +53,14 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
     return array_shift($result['values']);
   }
 
+  /**
+   * Returns column name for the given custom field name.
+   *
+   * @param $fieldName
+   *
+   * @return string
+   *   Column name of custom field
+   */
   public static function getCustomFieldName($fieldName) {
     static $fieldNames;
 
@@ -50,6 +74,12 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
     return CRM_Utils_Array::value($fieldName, $fieldNames);
   }
 
+  /**
+   * Obtains the ID for the first document type it finds.
+   *
+   * @return int
+   *   ID of the first valid document type found on the database
+   */
   private function getTypeID() {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
@@ -61,15 +91,19 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
     return $result['values'][0]['value'];
   }
 
+  /**
+   * Obtains the ID for the first priority it finds.
+   *
+   * @return int
+   *   ID of the first valid priority found on the database
+   */
   private function getPriorityID() {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => 'priority',
       'options' => ['limit' => 1],
-      'component_id' => 'CiviDocument',
     ]);
 
     return $result['values'][0]['value'];
   }
-
 }
