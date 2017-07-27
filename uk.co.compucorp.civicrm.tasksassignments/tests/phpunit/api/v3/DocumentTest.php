@@ -321,17 +321,22 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       ]);
     }
 
-    $activityCount = civicrm_api3('Activity', 'getcount');
-    $this->assertEquals(3, $activityCount);
-
-    $this->assertDocumentRevisionCount($documents['standAloneDocument']['id'], 1);
-    $this->assertDocumentRevisionCount($documents['caseDocument']['id'], 2);
+    $this->assertEquals(3, civicrm_api3('Activity', 'getcount'));
+    $this->assertEquals(1, $this->getDocumentRevisionCount($documents['standAloneDocument']['id']));
+    $this->assertEquals(2, $this->getDocumentRevisionCount($documents['caseDocument']['id']));
   }
 
-  private function assertDocumentRevisionCount($documentID, $expectedCount) {
+  /**
+   * Counts total number of revisions for the given document ID.
+   *
+   * @param int $documentID
+   *
+   * @return int
+   *   Number of revisions found for the given document ID
+   */
+  private function getDocumentRevisionCount($documentID) {
     $result = civicrm_api3('Activity', 'get', [
       'sequential' => 1,
-      'activity_type_id' => "VISA",
       'id' => $documentID,
       'original_id' => $documentID,
       'options' => [
@@ -341,7 +346,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       ],
     ]);
 
-    $this->assertEquals($expectedCount, $result['count']);
+    return $result['count'];
   }
 
   /**
