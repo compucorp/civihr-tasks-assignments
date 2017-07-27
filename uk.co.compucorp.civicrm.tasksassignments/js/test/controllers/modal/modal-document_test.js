@@ -13,7 +13,7 @@ define([
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, DocumentService,
+    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, DocumentService, notification,
       sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise, document;
 
     beforeEach(module('civitasks.appDashboard'));
@@ -40,6 +40,7 @@ define([
       files = {};
       role = '';
       modalMode = '';
+      notification = ''
 
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
@@ -329,7 +330,8 @@ define([
         files: files,
         role: role,
         modalMode: modalMode,
-        HR_settings: HRSettings
+        HR_settings: HRSettings,
+        notification: notification
       });
     }
   });
