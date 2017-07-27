@@ -17,7 +17,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
    */
   public function setUp() {
     parent::setUp();
-    $this->quickCleanup(['civicrm_activity'], TRUE);
+    $this->quickCleanup(['civicrm_activity', 'civicrm_case', 'civicrm_case_activity'], TRUE);
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
 
@@ -302,6 +302,46 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     // Running clone documents again should not create new documents
     $clonedCount = civicrm_api3('Document', 'clonedocuments');
     $this->assertEquals(0, $clonedCount['values']);
+  }
+
+  public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
+    $assignment = AssignmentFabricator::fabricate();
+
+    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
+    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
+    $activityCount = civicrm_api3('Activity', 'getcount');
+    $this->assertEquals(2, $activityCount);
+
+    foreach ($documents as $currentDocument) {
+      DocumentFabricator::fabricateWithAPI([
+        'id' => $currentDocument['id'],
+        'expire_date' => date('Y-m-d'),
+        'remind_me' => 1,
+        'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      ]);
+    }
+
+    $activityCount = civicrm_api3('Activity', 'getcount');
+    $this->assertEquals(3, $activityCount);
+
+    $this->assertDocumentRevisionCount($documents['standAloneDocument']['id'], 1);
+    $this->assertDocumentRevisionCount($documents['caseDocument']['id'], 2);
+  }
+
+  private function assertDocumentRevisionCount($documentID, $expectedCount) {
+    $result = civicrm_api3('Activity', 'get', [
+      'sequential' => 1,
+      'activity_type_id' => "VISA",
+      'id' => $documentID,
+      'original_id' => $documentID,
+      'options' => [
+        'or' => [
+          ["id", "original_id"]
+        ]
+      ],
+    ]);
+
+    $this->assertEquals($expectedCount, $result['count']);
   }
 
   /**

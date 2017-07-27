@@ -60,6 +60,7 @@ function civicrm_api3_document_create($params) {
   if (!isset($params['case_id']) && !empty($params['id'])) {
     $params['case_id'] = CRM_Core_DAO::singleValueQuery("SELECT case_id FROM civicrm_case_activity WHERE activity_id = " . (int) $params['id']);
   }
+
   if (!empty($params['case_id'])) {
     $case_id = $params['case_id'];
     if (!empty($params['id'])) {
