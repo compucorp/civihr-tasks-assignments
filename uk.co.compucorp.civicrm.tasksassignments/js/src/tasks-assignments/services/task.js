@@ -231,6 +231,7 @@ define([
 
           Task.save({ action: 'sendreminder' }, {
             json: {
+              activity_id: taskId,
               notes: notes
             } || {}
           }, function (data) {
