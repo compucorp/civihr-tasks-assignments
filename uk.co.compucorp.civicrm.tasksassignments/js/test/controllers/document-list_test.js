@@ -10,12 +10,14 @@ define([
   'use strict';
 
   describe('DocumentListCtrl', function () {
-    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument;
+
+    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $filter = _$filter_;
       $scope = $rootScope.$new();
       $q = _$q_;
       config = _config_;
@@ -87,42 +89,10 @@ define([
       });
     });
 
-    describe('$scope.loadDocumentsResolved', function () {
-      var promise;
-
-      beforeEach(function () {
-        config.CONTACT_ID = 204;
-        config.status.resolve.DOCUMENT = [1, 2];
-
-        initController();
-        promise = $scope.loadDocumentsResolved();
-      });
-
-      afterEach(function () {
-        $rootScope.$apply();
-      });
-
-      it('calls document service to document list', function () {
-        expect(DocumentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
-          target_contact_id: config.CONTACT_ID,
-          status_id: { IN: config.status.resolve.DOCUMENT }
-        }));
-      });
-
-      it('calls document service to cache contacts and assignments', function () {
-        promise.then(function () {
-          expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
-        });
-      });
-
-      it('marks relolved section as loaded', function () {
-        promise.then(function () {
-          expect($scope.listResolvedLoaded).toBe(true);
-        });
-      });
-    });
-
     describe('labelDateRange()', function () {
+      var fromDate = moment().startOf('day').toDate();
+      var untilDate = moment().add(1, 'month').startOf('day').toDate();
+
       beforeEach(function () {
         initController();
       });
@@ -132,7 +102,7 @@ define([
       });
 
       it('formats and creates date range label', function () {
-        expect($scope.label.dateRange).toBe('21/07/2017 - 21/08/2017');
+        expect($scope.label.dateRange).toBe($filter('date')(fromDate, 'dd/MM/yyyy') + ' - ' + $filter('date')(untilDate, 'dd/MM/yyyy'));
       });
 
       describe('when both form and until date are available', function () {
@@ -145,7 +115,7 @@ define([
         });
 
         it('formats and creates date range label', function () {
-          expect($scope.label.dateRange).toBe('21/07/2017 - 21/09/2017');
+          expect($scope.label.dateRange).toBe($filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') + ' - ' + $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
         });
       });
 
@@ -159,7 +129,7 @@ define([
         });
 
         it('formats and creates date range label containing form date only', function () {
-          expect($scope.label.dateRange).toBe('From: 21/07/2017');
+          expect($scope.label.dateRange).toBe('From: ' + $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy'));
         });
       });
 
@@ -173,7 +143,7 @@ define([
         });
 
         it('formats and creates date range label containing until date only', function () {
-          expect($scope.label.dateRange).toBe('Until: 21/09/2017');
+          expect($scope.label.dateRange).toBe('Until: ' +  $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
         });
       });
     });

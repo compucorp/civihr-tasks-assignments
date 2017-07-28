@@ -25,8 +25,6 @@ define([
       $scope.listFiltered = [];
       $scope.listOngoing = [];
       $scope.listPaginated = [];
-      $scope.listResolved = [];
-      $scope.listResolvedLoaded = false;
       $scope.overdue = 0;
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
@@ -38,8 +36,7 @@ define([
       };
       $scope.isCollapsed = {
         filterAdvanced: true,
-        filterDates: false,
-        documentListResolved: true
+        filterDates: false
       };
       $scope.filterParams = {
         contactId: null,
@@ -180,34 +177,6 @@ define([
         }
 
         $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
-      };
-
-      /**
-       * Gets and caches the list of resolved documents with a specific target contact
-       * and updates the loadDocumentsResolved status to true indicating loaded.
-       *
-       * @return {object}
-       */
-      $scope.loadDocumentsResolved = function () {
-        if ($scope.listResolvedLoaded) {
-          return;
-        }
-
-        // Remove resolved documents from the document list
-        $scope.list = $filter('filterByStatus')($scope.list, $rootScope.cache.documentStatusResolve, false);
-
-        return DocumentService.get({
-          'target_contact_id': config.CONTACT_ID,
-          'status_id': {
-            'IN': config.status.resolve.DOCUMENT
-          }
-        }).then(function (documentListResolved) {
-          DocumentService.cacheContactsAndAssignments(documentListResolved).then(function () {
-            $scope.listResolvedLoaded = true;
-          });
-
-          Array.prototype.push.apply($scope.list, documentListResolved);
-        });
       };
 
       /**
