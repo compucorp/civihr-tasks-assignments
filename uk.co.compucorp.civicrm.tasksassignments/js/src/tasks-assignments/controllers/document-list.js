@@ -1,14 +1,14 @@
-/* globals angular */
 /* eslint-env amd, no-mixed-operators:false */
 
 define([
+  'common/angular',
   'common/moment',
   'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
   'tasks-assignments/services/file',
   'tasks-assignments/services/assignment'
-], function (moment, controllers) {
+], function (angular, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
@@ -162,7 +162,6 @@ define([
         }).then(function (results) {
           document.id = results.id;
           document.status_id = results.status_id;
-          $rootScope.$broadcast('documentFormSuccess', results, document);
           $scope.$broadcast('ct-spinner-hide', 'documentList');
           AssignmentService.updateTab();
         });
@@ -230,12 +229,11 @@ define([
         Array.prototype.push.apply($scope.list, output.documentList);
       });
 
-      $scope.$on('documentFormSuccess', function (e, output, input) {
-        if (angular.equals({}, input)) {
-          addRemoveDocument($scope.list, output, input);
+      $scope.$on('documentFormSuccess', function (e, newData, oldData) {
+        if (angular.equals({}, oldData)) {
+          addRemoveDocument($scope.list, newData, oldData);
         } else {
-          addRemoveDocument($scope.list, output, input);
-          angular.extend(input, output);
+          angular.extend(oldData, newData);
         }
       });
 
@@ -243,10 +241,7 @@ define([
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
 
-          if (pattern.test(data.title) ||
-               (data.crmMessages && data.crmMessages.length) &&
-               (pattern.test(data.crmMessages[0].title) ||
-               pattern.test(data.crmMessages[0].text))) {
+          if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
             $rootScope.cache.assignment = {
               obj: {},
               arr: []
@@ -257,6 +252,17 @@ define([
       });
 
       this.init();
+
+      /**
+       * Check the CRM message title to match the given pattern
+       *
+       * @param  {string} pattern
+       * @param  {object} data
+       * @return {boolean}
+       */
+      function matchMessageTitle (pattern, data) {
+        return (data.crmMessages && data.crmMessages.length) && pattern.test(data.crmMessages[0].title);
+      }
 
       /**
        * Adds or Removes Document fom the document list

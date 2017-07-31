@@ -92,6 +92,7 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
       $remindMeField => 1,
       'is_deleted' => 0,
       'status_id' => self::STATUS_APPROVED,
+      'is_current_revision' => 1,
       'options' => ['limit' => 0],
       'return' => $fieldsRequiredForClone
     ];
