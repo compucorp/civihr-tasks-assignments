@@ -5,13 +5,13 @@ define([
   'common/angular',
   'common/moment',
   'common/lodash',
-  'tasks-assignments/controllers/controllers',
+  'common/services/notification.service',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/file',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document',
-  'common/services/notification.service'
-], function (angular, moment, _, controllers) {
+  'tasks-assignments/controllers/controllers'
+], function (angular, moment, _, notification, contact, file, dialog, document, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',

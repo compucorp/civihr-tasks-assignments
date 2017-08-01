@@ -1,9 +1,4 @@
-/* globals Drupal:true */
-
-// Create  a global Drupal object only for testing purpose
-Drupal = {};
-
-(function (CRM, Drupal) {
+(function (CRM) {
   'use strict';
 
   CRM._.assign(CRM, {
@@ -28,7 +23,9 @@ Drupal = {};
     front: '/index.php?q=*path*&*query*'
   });
 
-  Drupal.settings = {
-    currentCiviCRMUserId: 202
+  window.Drupal = {
+    settings: {
+      currentCiviCRMUserId: 123
+    }
   };
-})(CRM, Drupal);
+})(CRM);
