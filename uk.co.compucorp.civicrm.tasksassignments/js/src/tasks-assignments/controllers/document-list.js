@@ -227,7 +227,7 @@ define([
         if (angular.equals({}, input)) {
           addRemoveDocument($scope.list, output, input);
         } else {
-          angular.extend(oldData, newData);
+          angular.extend(input, output);
         }
       });
 
@@ -250,7 +250,7 @@ define([
         }
       });
 
-      (function init() {
+      (function init () {
         watchDateFilters();
         $scope.applySidebarFilters();
 
