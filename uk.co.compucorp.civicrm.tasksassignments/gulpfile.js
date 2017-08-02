@@ -82,7 +82,7 @@ var test = (function () {
             var srcFileNoExt = path.basename(srcFile, path.extname(srcFile));
             var testFile = srcFile
                 .replace('src/tasks-assignments/', 'test/')
-                .replace(srcFileNoExt + '.js', srcFileNoExt + '_test.js');
+                .replace(srcFileNoExt + '.js', srcFileNoExt + '.spec.js');
 
             try {
                 var stats = fs.statSync(testFile);
@@ -105,7 +105,7 @@ var test = (function () {
             var configFile = 'karma.' + path.basename(testFile, path.extname(testFile))  + '.conf.temp.js';
 
             gulp.src(__dirname + '/js/karma.conf.js')
-                .pipe(replace('*_test.js', path.basename(testFile)))
+                .pipe(replace('*.spec.js', path.basename(testFile)))
                 .pipe(rename(configFile))
                 .pipe(gulp.dest(__dirname + '/js'))
                 .on('end', function () {
