@@ -1,25 +1,25 @@
-<form novalidate name="documentForm" class="form-document modal-inverted" role="form" ng-submit="confirm()" ct-spinner>
+<form novalidate name="documentModal.documentForm" class="form-document modal-inverted" role="form" ng-submit="documentModal.confirm()" ct-spinner>
   <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()">
+    <button type="button" class="close" ng-click="documentModal.cancel()">
       <span aria-hidden="true">&times;</span>
       <span class="sr-only">Close</span>
     </button>
-    <h4 class="modal-title" ng-switch="isRole('admin')">
-      <span ng-switch-when="true">{{modalTitle}}</span>
-      <span ng-switch-when="false">{{getDocumentType(document.activity_type_id) || 'Select Document Type'}}</span>
+    <h4 class="modal-title" ng-switch="documentModal.isRole('admin')">
+      <span ng-switch-when="true">{{ documentModal.modalTitle }}</span>
+      <span ng-switch-when="false">{{ documentModal.getDocumentType(documentModal.document.activity_type_id) || 'Select Document Type' }}</span>
     </h4>
   </div>
-  <div class="modal-body" nv-file-drop uploader="uploader">
+  <div class="modal-body" nv-file-drop uploader="documentModal.uploader">
     <div class="container">
       <!-- Search and select by name and email -->
-      <div class="row" ng-hide="isRole('staff')">
+      <div class="row" ng-hide="documentModal.isRole('staff')">
         <div class="col-xs-12">
-          <p class="target-contact" ng-if="isRole('manager')">{{contacts.target[0].label}}</p>
-          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="document.target_contact_id[0]" on-select="onContactChanged($item)" ng-required="true" ng-if="!isRole('manager')">
+          <p class="target-contact" ng-if="documentModal.isRole('manager')">{{documentModal.contacts.target[0].label}}</p>
+          <ui-select prevent-animations name="target" theme="civihr-ui-select" allow-clear class="required-field-indicator" ng-model="documentModal.document.target_contact_id[0]" on-select="documentModal.onContactChanged($item)" ng-required="true" ng-if="!documentModal.isRole('manager')">
             <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
               {{$select.selected.label}}
             </ui-select-match>
-            <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
+            <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in documentModal.contacts.target | filter: $select.search" refresh="documentModal.refreshContacts($select.search, 'target')" refresh-delay="0">
               <div ng-bind="contact.label"></div>
               <small ng-bind="contact.description[0]"></small>
             </ui-select-choices>
@@ -27,10 +27,10 @@
         </div>
       </div>
       <!-- Document Type -->
-      <div class="row" ng-hide="isRole('staff') && !isRole('manager')">
+      <div class="row" ng-hide="documentModal.isRole('staff') && !documentModal.isRole('manager')">
         <div class="col-xs-12">
           <div class="crm_custom-select crm_custom-select--full">
-            <ui-select prevent-animations theme="civihr-ui-select" ng-model="document.activity_type_id" class="required-field-indicator" ng-required="true">
+            <ui-select prevent-animations theme="civihr-ui-select" ng-model="documentModal.document.activity_type_id" class="required-field-indicator" ng-required="true">
               <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Select document type">
                 {{$select.selected.value}}
               </ui-select-match>
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="container">
-      <ul class="nav nav-tabs" ng-hide="isRole('staff') || isRole('manager')">
+      <ul class="nav nav-tabs" ng-hide="documentModal.isRole('staff') || documentModal.isRole('manager')">
         <li class="active"><a href data-target="#detailsTab" data-toggle="tab">Details</a></li>
         <li><a href data-target="#assignmentsTab" data-toggle="tab">Assignments</a></li>
       </ul>
@@ -53,36 +53,36 @@
           <br>
           <div class="row">
             <div class="col-xs-12">
-              <div class="well drop-zone" ng-click="dropzoneClick()">
+              <div class="well drop-zone" ng-click="documentModal.dropzoneClick()">
                 <i class="fa fa-cloud-upload"></i><br/>
                 <strong>Drop file here</strong><br/> or click to browse
               </div>
-              <input type="file" class="form-control-file file-input pull-right" id="{{prefix}}document-files" multiple nv-file-select uploader="uploader" />
+              <input type="file" class="form-control-file file-input pull-right" id="{{prefix}}document-files" multiple nv-file-select uploader="documentModal.uploader" />
             </div>
             <div class="col-xs-12 table-responsive">
-              <table class="table table-condensed {{prefix}}table-upload" ng-show="uploader.queue.length || files.length">
+              <table class="table table-condensed {{prefix}}table-upload" ng-show="documentModal.uploader.queue.length || documentModal.files.length">
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th ng-show="uploader.isHTML5">Size</th>
+                    <th ng-show="documentModal.uploader.isHTML5">Size</th>
                     <th class="pull-right"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="file in files">
+                  <tr ng-repeat="file in documentModal.files">
                     <td><a ng-href="{{file.url}}">{{file.name}}</a></td>
-                    <td ng-show="uploader.isHTML5" nowrap>
+                    <td ng-show="documentModal.uploader.isHTML5" nowrap>
                       <span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span>
                     </td>
                     <td class="text-right" nowrap>
-                      <button type="button" class="btn btn-danger btn-xs" ng-click="fileMoveToTrash($index)">
+                      <button type="button" class="btn btn-danger btn-xs" ng-click="documentModal.fileMoveToTrash($index)">
                         <span class="glyphicon glyphicon-trash"></span> Remove
                       </button>
                     </td>
                   </tr>
-                  <tr ng-repeat="item in uploader.queue">
+                  <tr ng-repeat="item in documentModal.uploader.queue">
                     <td>{{item.file.name}}</td>
-                    <td ng-show="uploader.isHTML5" nowrap>
+                    <td ng-show="documentModal.uploader.isHTML5" nowrap>
                       <span>{{ item.file.size/1024/1024|number:2 }} MB</span>
                     </td>
                     <td class="text-right" nowrap>
@@ -98,7 +98,7 @@
             <div class="col-xs-12">
               <div class="form-group">
                 <label for="{{prefix}}document-number" class="text-nowrap control-label"> Document Number: </label>
-                <input name="documentNumber" type="text" id="{{prefix}}document-number" class="form-control" placeholder="e.g 59327437539" ng-model="document.document_number">
+                <input name="documentNumber" type="text" id="{{prefix}}document-number" class="form-control" placeholder="e.g 59327437539" ng-model="documentModal.document.document_number">
               </div>
             </div>
             <!-- Valid From Date -->
@@ -106,7 +106,7 @@
               <div class="form-group">
                 <label for="{{prefix}}document-from" class="text-nowrap control-label"> Valid From: </label>
                 <div class="input-group">
-                  <input type="text" id="{{prefix}}document-from" class="form-control" name="documentFrom" ng-model="document.valid_from" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="dpOpened.from" ng-click="dpOpen($event, 'from')">
+                  <input type="text" id="{{prefix}}document-from" class="form-control" name="documentFrom" ng-model="documentModal.document.valid_from" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="documentModal.dpOpened.from" ng-click="documentModal.dpOpen($event, 'from')">
                   <div class="input-group-addon"><span class="fa fa-calendar"></span></div>
                 </div>
               </div>
@@ -116,16 +116,16 @@
               <div class="form-group">
                 <label for="{{prefix}}document-exp" class="text-nowrap control-label"> Expiry Date: </label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="{{prefix}}document-exp" name="documentExpireDate" ng-model="document.expire_date" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="dpOpened.exp" ng-click="dpOpen($event, 'exp')">
+                  <input type="text" class="form-control" id="{{prefix}}document-exp" name="documentExpireDate" ng-model="documentModal.document.expire_date" placeholder="dd/mm/yyyy" uib-datepicker-popup is-open="documentModal.dpOpened.exp" ng-click="documentModal.dpOpen($event, 'exp')">
                   <div class="input-group-addon"><span class="fa fa-calendar"></span></div>
                 </div>
               </div>
             </div>
             <!-- Document Status -->
-            <div class="col-xs-12 col-sm-6" ng-hide="isRole('staff') && !isRole('manager')">
+            <div class="col-xs-12 col-sm-6" ng-hide="documentModal.isRole('staff') && !documentModal.isRole('manager')">
               <div class="form-group">
                 <label class="text-nowrap control-label"> Status: </label>
-                <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="document.status_id" ng-required="true">
+                <ui-select prevent-animations theme="civihr-ui-select" name="documentStatus" allow-clear class="required-field-indicator" ng-model="documentModal.document.status_id" ng-required="true">
                   <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Set Status">
                     {{$select.selected.value}}
                   </ui-select-match>
@@ -136,77 +136,77 @@
               </div>
             </div>
             <!-- Remind Me checkbox -->
-            <div class="col-xs-12 col-sm-6" ng-hide="isRole('staff') || isRole('manager')">
+            <div class="col-xs-12 col-sm-6" ng-hide="documentModal.isRole('staff') || documentModal.isRole('manager')">
               <div class="form-group">
                 <label class="col-xs-12 text-nowrap control-label"> &nbsp; </label>
                 <div class="col-xs-12 text-right">
-                  <input type="checkbox" ng-model="document.remind_me" ng-click="!document.remind_me"> Remind me
-                  <a class="helpicon" title="Remind Me info" href ng-click="remindMeInfo()"></a>
+                  <input type="checkbox" ng-model="documentModal.document.remind_me" ng-click="!documentModal.document.remind_me"> Remind me
+                  <a class="helpicon" title="Remind Me info" href ng-click="documentModal.remindMeInfo()"></a>
                 </div>
               </div>
             </div>
             <!-- Display only for manager role and removed from DOM for other users -->
-            <div class="col-xs-6" ng-if="isRole('manager')">
+            <div class="col-xs-6" ng-if="documentModal.isRole('manager')">
               <div class="form-group">
                 <label for="{{prefix}}document-due" class="text-nowrap control-label"> Due Date: </label>
-                <div class="input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
+                <div class="input-group" ng-class="{'has-error': documentModal.documentForm.dueDate.$invalid}">
                   <input
                     name="dueDate" type="text" id="{{prefix}}document-due"
-                    class="form-control" ng-model="document.activity_date_time"
+                    class="form-control" ng-model="documentModal.document.activity_date_time"
                     placeholder="dd/mm/yyyy" uib-datepicker-popup
-                    is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
+                    is-open="documentModal.dpOpened.due" ng-click="documentModal.dpOpen($event, 'due')">
                   <span class="input-group-addon fa fa-calendar"></span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="tab-pane" id="assignmentsTab" ng-if="!isRole('staff') && !isRole('manager')">
+        <div class="tab-pane" id="assignmentsTab" ng-if="!documentModal.isRole('staff') && !documentModal.isRole('manager')">
           <div class="row">
             <!-- Due Date -->
             </br>
             <div class="col-xs-10 col-sm-12">
               <div class="form-group">
                 <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label"> Due Date: </label>
-                <div class="col-xs-6 input-group" ng-class="{'has-error': documentForm.dueDate.$invalid}">
+                <div class="col-xs-6 input-group" ng-class="{'has-error': documentModal.documentForm.dueDate.$invalid}">
                   <input
                     name="dueDate" type="text" id="{{prefix}}document-due"
-                    class="form-control" ng-model="document.activity_date_time"
+                    class="form-control" ng-model="documentModal.document.activity_date_time"
                     placeholder="dd/mm/yyyy" uib-datepicker-popup
-                    is-open="dpOpened.due" ng-click="dpOpen($event, 'due')">
+                    is-open="documentModal.dpOpened.due" ng-click="documentModal.dpOpen($event, 'due')">
                   <span class="input-group-addon fa fa-calendar"></span>
                 </div>
               </div>
             </div>
           </div>
           <!-- Assignee & Assignment -->
-          <div class="col-xs-12 col-sm-7" ng-show="!document.assignee_contact_id.length && !showAssigneeField">
+          <div class="col-xs-12 col-sm-7" ng-show="!documentModal.document.assignee_contact_id.length && !documentModal.showAssigneeField">
             <span class="form-control-static pull-left">
-              <a href ng-click="showAssigneeField = true;"> Add Assignee </a>
+              <a href ng-click="documentModal.showAssigneeField = true;"> Add Assignee </a>
             </span>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-sm-12" ng-show="document.assignee_contact_id.length || showAssigneeField">
+            <div class="col-xs-12 col-sm-12" ng-show="documentModal.document.assignee_contact_id.length || documentModal.showAssigneeField">
               <div class="form-group">
                 <label class="col-xs-4 text-nowrap control-label"> Assignees: </label>
                 <div class="col-xs-8 no-left-margin">
-                  <ui-select prevent-animations name="assignee" theme="civihr-ui-select" ng-model="document.assignee_contact" on-select="addAssignee($item);">
+                  <ui-select prevent-animations name="assignee" theme="civihr-ui-select" ng-model="documentModal.document.assignee_contact" on-select="documentModal.addAssignee($item);">
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
                       {{$select.placeholder}}
                     </ui-select-match>
-                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.assignee | filter: $select.search" refresh="refreshContacts($select.search, 'assignee')" refresh-delay="0">
+                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in documentModal.contacts.assignee | filter: $select.search" refresh="documentModal.refreshContacts($select.search, 'assignee')" refresh-delay="0">
                       <div ng-bind="contact.label"></div>
                       <small ng-bind="contact.description[0]"></small>
                     </ui-select-choices>
                   </ui-select>
                 </div>
               </div>
-              <div class="col-xs-12" ng-show="document.assignee_contact_id.length">
+              <div class="col-xs-12" ng-show="documentModal.document.assignee_contact_id.length">
                 <ul class="list-unstyled">
-                  <li ng-repeat="(key,assigneeId) in document.assignee_contact_id" >
+                  <li ng-repeat="(key,assigneeId) in documentModal.document.assignee_contact_id" >
                     <span ng-repeat="contact in cache.contact.arrSearch">
                       <p ng-if="contact.id == assigneeId">{{ contact.label }}
-                        <a href="javascript:void(0)" ng-click="removeAssignee(key)"> &nbsp; <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" ng-click="documentModal.removeAssignee(key)"> &nbsp; <i class="fa fa-times" aria-hidden="true"></i></a>
                       </p>
                     </span>
                   </li>
@@ -215,26 +215,26 @@
             </div>
           </div>
           <!-- Assignment -->
-          <div class="col-xs-12 col-sm-12" ng-show="(!showFieldAssignment || !assignments.length) && !document.case_id">
+          <div class="col-xs-12 col-sm-12" ng-show="(!documentModal.showFieldAssignment || !documentModal.assignments.length) && !documentModal.document.case_id">
             <div class="row">
               <span class="form-control-static">
-                <a href class="btn" ng-click="showFieldAssignment = true;" ng-class="{ disabled: !assignments.length }">
+                <a href class="btn" ng-click="documentModal.showFieldAssignment = true;" ng-class="{ disabled: !documentModal.assignments.length }">
                   Add to Assignment
                 </a>
               </span>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-sm-12" ng-show="(document.case_id || showFieldAssignment) && assignments.length">
+            <div class="col-xs-12 col-sm-12" ng-show="(documentModal.document.case_id || documentModal.showFieldAssignment) && documentModal.assignments.length">
               <div class="form-group">
                 <label class="col-xs-4 text-nowrap control-label"> Link to Assignment: </label>
                 <div class="col-xs-8 no-left-margin">
-                  <ui-select prevent-animations theme="civihr-ui-select" ng-model="document.case_id" on-select="cacheAssignment($item);">
+                  <ui-select prevent-animations theme="civihr-ui-select" ng-model="documentModal.document.case_id" on-select="documentModal.cacheAssignment($item);">
                     <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
                     </ui-select-match>
-                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="assignment.id as assignment in assignments" refresh="refreshAssignments($select.search)" refresh-delay="0">
+                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="assignment.id as assignment in documentModal.assignments" refresh="documentModal.refreshAssignments($select.search)" refresh-delay="0">
                       <div>
-                        <div ng-class="assignment.label_class">#{{document.case_id}} | {{assignment.label}}</div>
+                        <div ng-class="assignment.label_class">#{{documentModal.document.case_id}} | {{assignment.label}}</div>
                         <small>
                           #{{assignment.id}}: {{assignment.extra.case_status}} (opened: {{assignment.extra.start_date | date:'MMM d, yyyy'}})
                           <br>
@@ -252,7 +252,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">
+    <button type="button" class="btn btn-default" ng-click="documentModal.cancel()">
       Cancel
     </button>
     <button type="submit" class="btn btn-default btn-primary">
