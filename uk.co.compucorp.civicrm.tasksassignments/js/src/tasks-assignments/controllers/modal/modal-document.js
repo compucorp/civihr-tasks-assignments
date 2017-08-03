@@ -1,4 +1,3 @@
-/* global CRM */
 /* eslint-env amd */
 
 define([
@@ -7,61 +6,35 @@ define([
   'common/lodash',
   'common/services/notification.service',
   'tasks-assignments/services/contact',
-  'tasks-assignments/services/file',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document',
+  'tasks-assignments/services/file',
   'tasks-assignments/controllers/controllers'
-], function (angular, moment, _, notification, contact, file, dialog, document, controllers) {
+], function (angular, moment, _, notificationService, contact, dialog, document, file, controllers) {
   'use strict';
 
-  controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
+  controllers.controller('ModalDocumentCtrl', ['$window', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
     'files', 'config', 'HR_settings', 'modalMode', 'notificationService',
-    function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
+    function ($window, $scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
       DocumentService, ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService) {
       $log.debug('Controller: ModalDocumentCtrl');
 
-      // Init call
-      (function init () {
-        $scope.files = [];
-        $scope.document = {};
+      var vm = this;
 
-        angular.copy(data, $scope.document);
-        angular.copy(files, $scope.files);
-
-        $scope.data = data;
-        $scope.role = role || 'admin';
-        $scope.modalTitle = modalMode === 'edit' ? 'Edit Document' : 'New Document';
-
-        $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
-        $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
-        $scope.document.valid_from = $scope.document.valid_from ? moment($scope.document.valid_from).toDate() : null;
-        $scope.document.assignee_contact_id = $scope.document.assignee_contact_id || [];
-        $scope.document.source_contact_id = $scope.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
-        $scope.document.target_contact_id = $scope.document.target_contact_id || [config.CONTACT_ID];
-        $scope.document.status_id = $scope.document.status_id || '1';
-
-        $scope.filesTrash = [];
-        $scope.uploader = FileService.uploader('civicrm_activity');
-        $scope.showCId = !config.CONTACT_ID;
-
-        $scope.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
-          return +val.extra.contact_id === +$scope.document.target_contact_id;
-        });
-
-        $scope.contacts = {
-          target: initialContacts('target'),
-          assignee: initialContacts('assignee')
-        };
-
-        $scope.dpOpened = {
-          due: false,
-          exp: false,
-          form: false
-        };
-
-        $scope.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
-      })();
+      vm.document = {};
+      vm.files = [];
+      vm.filesTrash = [];
+      vm.modalTitle = modalMode === 'edit' ? 'Edit Document' : 'New Document';
+      vm.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
+      vm.role = role || 'admin';
+      vm.showCId = !config.CONTACT_ID;
+      vm.uploader = FileService.uploader('civicrm_activity');
+      vm.dpOpened = {
+        due: false,
+        exp: false,
+        form: false
+      };
 
       /**
        * Checks if the role is matched
@@ -69,8 +42,8 @@ define([
        * @param  {string}  role
        * @return {boolean}
        */
-      $scope.isRole = function (role) {
-        return $scope.role === role;
+      vm.isRole = function (role) {
+        return vm.role === role;
       };
 
       /**
@@ -79,7 +52,7 @@ define([
        * @param  {int} documentTypeId
        * @return {string}
        */
-      $scope.getDocumentType = function (documentTypeId) {
+      vm.getDocumentType = function (documentTypeId) {
         var documentType = _.find($rootScope.cache.documentType.arr, function (documentType) {
           return documentType.key === documentTypeId;
         });
@@ -87,15 +60,15 @@ define([
         return documentType && documentType.value;
       };
 
-      $scope.statusFieldVisible = function () {
-        return !!$scope.document.status_id;
+      vm.statusFieldVisible = function () {
+        return !!vm.document.status_id;
       };
 
-      $scope.showStatusField = function () {
-        $scope.document.status_id = 1;
+      vm.showStatusField = function () {
+        vm.document.status_id = 1;
       };
 
-      $scope.cacheAssignment = function ($item) {
+      vm.cacheAssignment = function ($item) {
         var obj = {};
 
         if (!$item || $rootScope.cache.assignment.obj[$item.id]) {
@@ -125,10 +98,10 @@ define([
        *
        * @param  {string | integer} targetContactId
        */
-      $scope.searchContactAssignments = function (targetContactId) {
+      vm.searchContactAssignments = function (targetContactId) {
         return AssignmentService.search(null, null, targetContactId)
         .then(function (assignments) {
-          $scope.assignments = assignments;
+          vm.assignments = assignments;
           $rootScope.$broadcast('ct-spinner-hide');
         });
       };
@@ -138,14 +111,14 @@ define([
        *
        * @param  {object} selectedContact
        */
-      $scope.onContactChanged = function (selectedContact) {
+      vm.onContactChanged = function (selectedContact) {
         $rootScope.$broadcast('ct-spinner-show');
-        $scope.document.case_id = '';
-        $scope.cacheContact(selectedContact);
-        $scope.searchContactAssignments(selectedContact.id);
+        vm.document.case_id = '';
+        vm.cacheContact(selectedContact);
+        vm.searchContactAssignments(selectedContact.id);
       };
 
-      $scope.cacheContact = function ($item) {
+      vm.cacheContact = function ($item) {
         var obj = {};
 
         obj[$item.id] = {
@@ -159,38 +132,38 @@ define([
         ContactService.updateCache(obj);
       };
 
-      $scope.addAssignee = function ($item) {
-        if ($scope.document.assignee_contact_id.indexOf($item.id) === -1) {
-          $scope.document.assignee_contact_id.push($item.id);
+      vm.addAssignee = function ($item) {
+        if (vm.document.assignee_contact_id.indexOf($item.id) === -1) {
+          vm.document.assignee_contact_id.push($item.id);
         }
 
-        $scope.cacheContact($item);
+        vm.cacheContact($item);
       };
 
-      $scope.removeAssignee = function (index) {
-        $scope.document.assignee_contact_id.splice(index, 1);
+      vm.removeAssignee = function (index) {
+        vm.document.assignee_contact_id.splice(index, 1);
       };
 
-      $scope.fileMoveToTrash = function (index) {
-        $scope.filesTrash.push($scope.files[index]);
-        $scope.files.splice(index, 1);
+      vm.fileMoveToTrash = function (index) {
+        vm.filesTrash.push(vm.files[index]);
+        vm.files.splice(index, 1);
       };
 
-      $scope.refreshAssignments = function (input) {
+      vm.refreshAssignments = function (input) {
         if (!input) {
           return;
         }
 
-        var targetContactId = $scope.document.target_contact_id;
+        var targetContactId = vm.document.target_contact_id;
 
-        AssignmentService.search(input, $scope.document.case_id).then(function (results) {
-          $scope.assignments = $filter('filter')(results, function (val) {
+        AssignmentService.search(input, vm.document.case_id).then(function (results) {
+          vm.assignments = $filter('filter')(results, function (val) {
             return +val.extra.contact_id === +targetContactId;
           });
         });
       };
 
-      $scope.refreshContacts = function (input, type) {
+      vm.refreshContacts = function (input, type) {
         if (!input) {
           return;
         }
@@ -198,12 +171,12 @@ define([
         ContactService.search(input, {
           contact_type: 'Individual'
         }).then(function (results) {
-          $scope.contacts[type] = results;
+          vm.contacts[type] = results;
         });
       };
 
-      $scope.cancel = function () {
-        if ($scope.documentForm.$pristine && angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
+      vm.cancel = function () {
+        if (vm.documentForm.$pristine && angular.equals(files, vm.files) && !vm.uploader.queue.length) {
           $modalInstance.dismiss('cancel');
           return;
         }
@@ -221,21 +194,21 @@ define([
         });
       };
 
-      $scope.confirm = function () {
-        var doc = angular.copy($scope.document);
+      vm.confirm = function () {
+        var doc = angular.copy(vm.document);
 
         if (!validateRequiredFields(doc)) {
           return;
         }
 
         if (angular.equals(data, doc) &&
-          angular.equals(files, $scope.files) && !$scope.uploader.queue.length) {
+          angular.equals(files, vm.files) && !vm.uploader.queue.length) {
           $modalInstance.dismiss('cancel');
           return;
         }
 
-        var uploader = $scope.uploader;
-        var filesTrash = $scope.filesTrash;
+        var uploader = vm.uploader;
+        var filesTrash = vm.filesTrash;
         var promiseFilesDelete = [];
         var file;
 
@@ -243,9 +216,9 @@ define([
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
-        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || '';
-        doc.expire_date = $scope.parseDate(doc.expire_date);
-        doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
+        doc.activity_date_time = vm.parseDate(doc.activity_date_time) || '';
+        doc.expire_date = vm.parseDate(doc.expire_date);
+        doc.status_id = !vm.isRole('admin') ? '2' : vm.document.status_id; // 2 => 'Awaiting Approval'
 
         if (filesTrash.length) {
           for (var i = 0; i < filesTrash.length; i++) {
@@ -285,24 +258,24 @@ define([
               id: result.document.id,
               status_id: '1' // 1 => 'awaiting upload'
             }).then(function (results) {
-              $scope.document.status_id = results.status_id;
-              $modalInstance.close($scope.document);
+              vm.document.status_id = results.status_id;
+              $modalInstance.close(vm.document);
             });
           } else if (result.files.length && !!result.files[0].values[0].result) {
             DocumentService.save({
               id: result.document.id,
-              status_id: $scope.isRole('admin') ? '3' : '1' // 3 => 'approved', 1 => 'awaiting upload'
+              status_id: vm.isRole('admin') ? '3' : '1' // 3 => 'approved', 1 => 'awaiting upload'
             }).then(function (results) {
-              $scope.document.status_id = results.status_id;
-              $modalInstance.close($scope.document);
+              vm.document.status_id = results.status_id;
+              $modalInstance.close(vm.document);
             });
           } else {
-            $modalInstance.close($scope.document);
+            $modalInstance.close(vm.document);
           }
 
-          $scope.document.id = result.document.id;
-          $scope.document.case_id = result.document.case_id;
-          $scope.document.file_count = $scope.files.length + uploader.queue.length;
+          vm.document.id = result.document.id;
+          vm.document.case_id = result.document.case_id;
+          vm.document.file_count = vm.files.length + uploader.queue.length;
 
           AssignmentService.updateTab();
 
@@ -323,7 +296,7 @@ define([
        * @param {string|Date} date
        * @returns {string|null}
        */
-      $scope.parseDate = function (date) {
+      vm.parseDate = function (date) {
         if (date instanceof Date) {
           date = date.getTime();
         }
@@ -338,22 +311,44 @@ define([
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
       };
 
-      $scope.dpOpen = function ($event, name) {
+      vm.dpOpen = function ($event, name) {
         $event.preventDefault();
         $event.stopPropagation();
-        $scope.dpOpened[name] = true;
+        vm.dpOpened[name] = true;
       };
 
-      $scope.dropzoneClick = function () {
+      vm.dropzoneClick = function () {
         $timeout(function () {
           document.getElementById($rootScope.prefix + 'document-files').click();
         });
       };
 
       // Display help message
-      $scope.remindMeInfo = function () {
-        CRM.help('Remind me?', $scope.remindMeMessage, 'error');
+      vm.remindMeInfo = function () {
+        CRM.help('Remind me?', vm.remindMeMessage, 'error');
       };
+
+      (function init () {
+        angular.copy(data, vm.document);
+        angular.copy(files, vm.files);
+        vm.data = data;
+        vm.document.activity_date_time = vm.document.activity_date_time ? moment(vm.document.activity_date_time).toDate() : null;
+        vm.document.expire_date = vm.document.expire_date ? moment(vm.document.expire_date).toDate() : null;
+        vm.document.assignee_contact_id = vm.document.assignee_contact_id || [];
+        vm.document.source_contact_id = vm.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
+        vm.document.status_id = vm.document.status_id || '1';
+        vm.document.target_contact_id = vm.document.target_contact_id || [config.CONTACT_ID];
+        vm.document.valid_from = vm.document.valid_from ? moment(vm.document.valid_from).toDate() : null;
+
+        vm.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
+          return +val.extra.contact_id === +vm.document.target_contact_id;
+        });
+
+        vm.contacts = {
+          target: initialContacts('target'),
+          assignee: initialContacts('assignee')
+        };
+      })();
 
       /**
        * Validates if the required fields values are present, and shows a notification if needed
@@ -398,13 +393,13 @@ define([
        * If the modal is for a brand new document, then the contacts list is empty
        *
        * @param {string} type - Either 'assignee' or 'target'
-       * @return {Array}
+       * @return {array}
        */
       function initialContacts (type) {
         var cachedContacts = $rootScope.cache.contact.arrSearch;
 
-        return !$scope.document.id ? [] : cachedContacts.filter(function (contact) {
-          var currContactId = $scope.document[type + '_contact_id'][0];
+        return !vm.document.id ? [] : cachedContacts.filter(function (contact) {
+          var currContactId = vm.document[type + '_contact_id'][0];
 
           return +currContactId === +contact.id;
         });
