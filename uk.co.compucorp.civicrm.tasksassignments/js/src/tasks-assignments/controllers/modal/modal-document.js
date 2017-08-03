@@ -37,6 +37,27 @@ define([
         form: false
       };
 
+      vm.addAssignee = addAssignee;
+      vm.cacheAssignment = cacheAssignment;
+      vm.cacheContact = cacheContact;
+      vm.cancel = cancel;
+      vm.confirm = confirm;
+      vm.dpOpen = dpOpen;
+      vm.dropzoneClick = dropzoneClick;
+      vm.fileMoveToTrash = fileMoveToTrash;
+      vm.getDocumentType = getDocumentType;
+      vm.isRole = isRole;
+      vm.onContactChanged = onContactChanged;
+      vm.parseDate = parseDate;
+      vm.removeAssignee = removeAssignee;
+      vm.refreshAssignments = refreshAssignments;
+      vm.refreshContacts = refreshContacts;
+      vm.remindMeInfo = remindMeInfo;
+      vm.statusFieldVisible = statusFieldVisible;
+      vm.showStatusField = showStatusField;
+      vm.searchContactAssignments = searchContactAssignments;
+      vm.viewFile = viewFile;
+
       (function init () {
         angular.copy(data, vm.document);
         angular.copy(files, vm.files);
@@ -58,38 +79,25 @@ define([
       })();
 
       /**
-       * Checks if the role is matched
-       *
-       * @param  {string}  role
-       * @return {boolean}
-       */
-      vm.isRole = function (role) {
-        return vm.role === role;
-      };
+      * Adds the given contact in the list of assignees
+      * then cache it for later use
+      *
+      * @param {object} $item contact
+      */
+      function addAssignee ($item) {
+        if (vm.document.assignee_contact_id.indexOf($item.id) === -1) {
+          vm.document.assignee_contact_id.push($item.id);
+        }
+
+        vm.cacheContact($item);
+      }
 
       /**
-       * Gets Document Type name for id
-       *
-       * @param  {int} documentTypeId
-       * @return {string}
-       */
-      vm.getDocumentType = function (documentTypeId) {
-        var documentType = _.find($rootScope.cache.documentType.arr, function (documentType) {
-          return documentType.key === documentTypeId;
-        });
-
-        return documentType && documentType.value;
-      };
-
-      vm.statusFieldVisible = function () {
-        return !!vm.document.status_id;
-      };
-
-      vm.showStatusField = function () {
-        vm.document.status_id = 1;
-      };
-
-      vm.cacheAssignment = function ($item) {
+      * Caches the given assignment for later use
+      *
+      * @param  {object} $item Assignment
+      */
+      function cacheAssignment ($item) {
         var obj = {};
 
         if (!$item || $rootScope.cache.assignment.obj[$item.id]) {
@@ -112,34 +120,14 @@ define([
         };
 
         AssignmentService.updateCache(obj);
-      };
+      }
 
       /**
-       * Searches the list of assignments for the given target contact
+       * Caches the given contact for later use
        *
-       * @param  {string | integer} targetContactId
+       * @param  {object} $item contact
        */
-      vm.searchContactAssignments = function (targetContactId) {
-        return AssignmentService.search(null, null, targetContactId)
-        .then(function (assignments) {
-          vm.assignments = assignments;
-          $rootScope.$broadcast('ct-spinner-hide');
-        });
-      };
-
-      /**
-       * Handler for target contact's change event
-       *
-       * @param  {object} selectedContact
-       */
-      vm.onContactChanged = function (selectedContact) {
-        $rootScope.$broadcast('ct-spinner-show');
-        vm.document.case_id = '';
-        vm.cacheContact(selectedContact);
-        vm.searchContactAssignments(selectedContact.id);
-      };
-
-      vm.cacheContact = function ($item) {
+      function cacheContact ($item) {
         var obj = {};
 
         obj[$item.id] = {
@@ -151,52 +139,14 @@ define([
         };
 
         ContactService.updateCache(obj);
-      };
+      }
 
-      vm.addAssignee = function ($item) {
-        if (vm.document.assignee_contact_id.indexOf($item.id) === -1) {
-          vm.document.assignee_contact_id.push($item.id);
-        }
-
-        vm.cacheContact($item);
-      };
-
-      vm.removeAssignee = function (index) {
-        vm.document.assignee_contact_id.splice(index, 1);
-      };
-
-      vm.fileMoveToTrash = function (index) {
-        vm.filesTrash.push(vm.files[index]);
-        vm.files.splice(index, 1);
-      };
-
-      vm.refreshAssignments = function (input) {
-        if (!input) {
-          return;
-        }
-
-        var targetContactId = vm.document.target_contact_id;
-
-        AssignmentService.search(input, vm.document.case_id).then(function (results) {
-          vm.assignments = $filter('filter')(results, function (val) {
-            return +val.extra.contact_id === +targetContactId;
-          });
-        });
-      };
-
-      vm.refreshContacts = function (input, type) {
-        if (!input) {
-          return;
-        }
-
-        ContactService.search(input, {
-          contact_type: 'Individual'
-        }).then(function (results) {
-          vm.contacts[type] = results;
-        });
-      };
-
-      vm.cancel = function () {
+      /**
+       * Checks if the form is modified and
+       * displays confirmation popup if form is changed
+       * else dismisses the document modal
+       */
+      function cancel () {
         if (vm.documentForm.$pristine && angular.equals(files, vm.files) && !vm.uploader.queue.length) {
           $modalInstance.dismiss('cancel');
           return;
@@ -213,9 +163,12 @@ define([
           $scope.$broadcast('ct-spinner-hide');
           $modalInstance.dismiss('cancel');
         });
-      };
+      }
 
-      vm.confirm = function () {
+      /**
+       * Saves/ Updates the document data
+       */
+      function confirm () {
         var doc = angular.copy(vm.document);
 
         if (!validateRequiredFields(doc)) {
@@ -309,56 +262,193 @@ define([
 
           return $q.reject();
         });
-      };
+      }
 
       /**
-       * Parse dates so they can be correctly read by server.
+       * Prevents the default browser behaviourson the given element
        *
-       * @param {string|Date} date
-       * @returns {string|null}
+       * @param {object} $event
+       * @param {string} name
        */
-      vm.parseDate = function (date) {
+      function dpOpen ($event, name) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        vm.dpOpened[name] = true;
+      }
+
+      /**
+       * Handler for when user clicks onthe dropzone field.
+       */
+      function dropzoneClick () {
+        $timeout(function () {
+          document.getElementById($rootScope.prefix + 'document-files').click();
+        });
+      }
+
+      /**
+       * Moves file to a trash array removing it form the files array
+       *
+       * @param  {integer} index
+       */
+      function fileMoveToTrash (index) {
+        vm.filesTrash.push(vm.files[index]);
+        vm.files.splice(index, 1);
+      }
+
+      /**
+      * Gets Document Type name for id
+      *
+      * @param  {int} documentTypeId
+      * @return {string}
+      */
+      function getDocumentType (documentTypeId) {
+        var documentType = _.find($rootScope.cache.documentType.arr, function (documentType) {
+          return documentType.key === documentTypeId;
+        });
+
+        return documentType && documentType.value;
+      }
+
+      /**
+       * The initial contacts that needs to be immediately available
+       * in the lookup directive for the given type
+       *
+       * If the modal is for a brand new document, then the contacts list is empty
+       *
+       * @param {string} type - Either 'assignee' or 'target'
+       * @return {array}
+       */
+      function initialContacts (type) {
+        var cachedContacts = $rootScope.cache.contact.arrSearch;
+
+        return !vm.document.id ? [] : cachedContacts.filter(function (contact) {
+          var currContactId = vm.document[type + '_contact_id'][0];
+
+          return +currContactId === +contact.id;
+        });
+      }
+
+      /**
+       * Checks if the role is matched
+       *
+       * @param  {string}  role
+       * @return {boolean}
+       */
+      function isRole (role) {
+        return vm.role === role;
+      }
+
+      /**
+      * Handler for target contact's change event
+      *
+      * @param  {object} selectedContact
+      */
+      function onContactChanged (selectedContact) {
+        $rootScope.$broadcast('ct-spinner-show');
+        vm.document.case_id = '';
+        vm.cacheContact(selectedContact);
+        vm.searchContactAssignments(selectedContact.id);
+      }
+
+      /**
+      * Parse dates so they can be correctly read by server.
+      *
+      * @param {string|Date} date
+      * @returns {string|null}
+      */
+      function parseDate (date) {
         if (date instanceof Date) {
           date = date.getTime();
         }
 
         /**
-         * Apart from date format fetched from CiviCRM settings we want to parse:
-         *  - timestamps (Date object is used by some 3rd party directives)
-         *  - date format we get from server
-         */
+        * Apart from date format fetched from CiviCRM settings we want to parse:
+        *  - timestamps (Date object is used by some 3rd party directives)
+        *  - date format we get from server
+        */
         var formatted = moment(date, [HRSettings.DATE_FORMAT.toUpperCase(), 'x', 'YYYY-MM-DD']);
 
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
-      };
-
-      vm.dpOpen = function ($event, name) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        vm.dpOpened[name] = true;
-      };
-
-      vm.dropzoneClick = function () {
-        $timeout(function () {
-          document.getElementById($rootScope.prefix + 'document-files').click();
-        });
-      };
-
-      // Display help message
-      vm.remindMeInfo = function () {
-        CRM.help('Remind me?', vm.remindMeMessage, 'error');
-      };
+      }
 
       /**
-       * Open the given file and display the file in new tab
-       * @param {object} file
-       */
-      vm.viewFile = function (file) {
-        $rootScope.$broadcast('ct-spinner-show');
-        fileService.openFile(file).then(function (blobFile) {
+      * Removes contact from the list of assignees ina document
+      *
+      * @param {integer}
+      */
+      function removeAssignee (index) {
+        vm.document.assignee_contact_id.splice(index, 1);
+      }
+
+      /**
+      * Searches the list of assignments based on the fiven input
+      *
+      * @param  {string} input
+      */
+      function refreshAssignments (input) {
+        if (!input) {
+          return;
+        }
+
+        var targetContactId = vm.document.target_contact_id;
+
+        AssignmentService.search(input, vm.document.case_id).then(function (results) {
+          vm.assignments = $filter('filter')(results, function (val) {
+            return +val.extra.contact_id === +targetContactId;
+          });
+        });
+      }
+
+      /**
+      * Searches list of contacts based on the contact name and contact type
+      *
+      * @param  {string} input
+      * @param  {string} type
+      */
+      function refreshContacts (input, type) {
+        if (!input) {
+          return;
+        }
+
+        ContactService.search(input, {
+          contact_type: 'Individual'
+        }).then(function (results) {
+          vm.contacts[type] = results;
+        });
+      }
+
+      // Display help message
+      function remindMeInfo () {
+        CRM.help('Remind me?', vm.remindMeMessage, 'error');
+      }
+
+      /**
+      * Searches the list of assignments for the given target contact
+      *
+      * @param  {string | integer} targetContactId
+      * @return {promise}
+      */
+      function searchContactAssignments (targetContactId) {
+        return AssignmentService.search(null, null, targetContactId)
+        .then(function (assignments) {
+          vm.assignments = assignments;
           $rootScope.$broadcast('ct-spinner-hide');
         });
-      };
+      }
+
+      /**
+      * Assigns the status_id of a document
+      */
+      function showStatusField () {
+        vm.document.status_id = 1;
+      }
+
+      /**
+       * Toggles between the status of status field
+       */
+      function statusFieldVisible () {
+        return !!vm.document.status_id;
+      }
 
       /**
        * Validates if the required fields values are present, and shows a notification if needed
@@ -397,21 +487,13 @@ define([
       }
 
       /**
-       * The initial contacts that needs to be immediately available
-       * in the lookup directive for the given type
-       *
-       * If the modal is for a brand new document, then the contacts list is empty
-       *
-       * @param {string} type - Either 'assignee' or 'target'
-       * @return {array}
-       */
-      function initialContacts (type) {
-        var cachedContacts = $rootScope.cache.contact.arrSearch;
-
-        return !vm.document.id ? [] : cachedContacts.filter(function (contact) {
-          var currContactId = vm.document[type + '_contact_id'][0];
-
-          return +currContactId === +contact.id;
+      * Open the given file and display the file in new tab
+      * @param {object} file
+      */
+      function viewFile (file) {
+        $rootScope.$broadcast('ct-spinner-show');
+        fileService.openFile(file).then(function (blobFile) {
+          $rootScope.$broadcast('ct-spinner-hide');
         });
       }
     }
