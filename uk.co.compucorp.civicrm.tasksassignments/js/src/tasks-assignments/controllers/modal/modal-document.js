@@ -37,6 +37,26 @@ define([
         form: false
       };
 
+      (function init () {
+        angular.copy(data, vm.document);
+        angular.copy(files, vm.files);
+        vm.data = data;
+        vm.document.activity_date_time = vm.document.activity_date_time ? moment(vm.document.activity_date_time).toDate() : null;
+        vm.document.expire_date = vm.document.expire_date ? moment(vm.document.expire_date).toDate() : null;
+        vm.document.assignee_contact_id = vm.document.assignee_contact_id || [];
+        vm.document.source_contact_id = vm.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
+        vm.document.status_id = vm.document.status_id || '1';
+        vm.document.target_contact_id = vm.document.target_contact_id || [config.CONTACT_ID];
+        vm.document.valid_from = vm.document.valid_from ? moment(vm.document.valid_from).toDate() : null;
+        vm.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
+          return +val.extra.contact_id === +vm.document.target_contact_id;
+        });
+        vm.contacts = {
+          target: initialContacts('target'),
+          assignee: initialContacts('assignee')
+        };
+      })();
+
       /**
        * Checks if the role is matched
        *
@@ -331,7 +351,7 @@ define([
 
       /**
        * Open the given file and display the file in new tab
-       * @param  {object} file
+       * @param {object} file
        */
       vm.viewFile = function (file) {
         $rootScope.$broadcast('ct-spinner-show');
@@ -339,28 +359,6 @@ define([
           $rootScope.$broadcast('ct-spinner-hide');
         });
       };
-
-      (function init () {
-        angular.copy(data, vm.document);
-        angular.copy(files, vm.files);
-        vm.data = data;
-        vm.document.activity_date_time = vm.document.activity_date_time ? moment(vm.document.activity_date_time).toDate() : null;
-        vm.document.expire_date = vm.document.expire_date ? moment(vm.document.expire_date).toDate() : null;
-        vm.document.assignee_contact_id = vm.document.assignee_contact_id || [];
-        vm.document.source_contact_id = vm.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
-        vm.document.status_id = vm.document.status_id || '1';
-        vm.document.target_contact_id = vm.document.target_contact_id || [config.CONTACT_ID];
-        vm.document.valid_from = vm.document.valid_from ? moment(vm.document.valid_from).toDate() : null;
-
-        vm.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
-          return +val.extra.contact_id === +vm.document.target_contact_id;
-        });
-
-        vm.contacts = {
-          target: initialContacts('target'),
-          assignee: initialContacts('assignee')
-        };
-      })();
 
       /**
        * Validates if the required fields values are present, and shows a notification if needed

@@ -48,9 +48,9 @@ define([
         spyOn(TaskService, 'saveMultiple');
         spyOn(DocumentService, 'saveMultiple');
         spyOn(AssignmentService, 'save').and.returnValue({
-          then: function (cb) {
+          then: function (callback) {
             // fakes the db permanence, attaching an id to the assignment on the scope
-            cb(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
+            callback(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
           }
         });
       });
@@ -236,10 +236,10 @@ define([
     });
 
     /**
-     * Fills up with random placeholder data the contacts collection of the
-     * given list
+     * Fills up the contacts collection of the given list
+     * with random placeholder data
      *
-     * @param {Array} list
+     * @param {array} list
      * @param {string} type - task or document
      */
     function fillContactsCollectionOf (list, type) {
@@ -251,7 +251,7 @@ define([
     }
 
     /**
-     * initialize ModalAssignmentCtrl controller
+     * Initializes ModalAssignmentCtrl controller
      */
     function initController () {
       $controller('ModalAssignmentCtrl', {
@@ -286,7 +286,6 @@ define([
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, $httpBackend, $rootScope) {
-      // A workaround to avoid actual API calls
       $httpBackend.whenPOST(/action=/).respond({});
       $httpBackend.whenGET(/action=/).respond({});
 
