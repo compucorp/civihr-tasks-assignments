@@ -4,20 +4,21 @@ define([
   'common/angular',
   'common/moment',
   'common/lodash',
+  'tasks-assignments/controllers/controllers',
+  'common/services/file.service',
   'common/services/notification.service',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document',
-  'tasks-assignments/services/file',
-  'tasks-assignments/controllers/controllers'
-], function (angular, moment, _, notificationService, contact, dialog, document, file, controllers) {
+  'tasks-assignments/services/file'
+], function (angular, moment, _, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$window', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
-    'files', 'config', 'HR_settings', 'modalMode', 'notificationService',
+    'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService',
     function ($window, $scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
-      DocumentService, ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService) {
+      DocumentService, ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService, fileService) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       var vm = this;
@@ -326,6 +327,17 @@ define([
       // Display help message
       vm.remindMeInfo = function () {
         CRM.help('Remind me?', vm.remindMeMessage, 'error');
+      };
+
+      /**
+       * Open the given file and display the file in new tab
+       * @param  {object} file
+       */
+      vm.viewFile = function (file) {
+        $rootScope.$broadcast('ct-spinner-show');
+        fileService.openFile(file).then(function (blobFile) {
+          $rootScope.$broadcast('ct-spinner-hide');
+        });
       };
 
       (function init () {

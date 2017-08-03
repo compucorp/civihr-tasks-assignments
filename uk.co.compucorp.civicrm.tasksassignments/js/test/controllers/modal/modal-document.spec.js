@@ -14,12 +14,12 @@ define([
 
   describe('ModalDocumentCtrl', function () {
     var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService,
-      AssignmentService, DocumentService, notification, data, role, files, sampleAssignee,
+      AssignmentService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, ctrl;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_,
-      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_) {
+      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_) {
       data = {};
       files = {};
       modalMode = '';
@@ -41,7 +41,7 @@ define([
       ContactService = _ContactService_;
       DocumentService = _DocumentService_;
       AssignmentService = _AssignmentService_;
-
+      fileService = _fileService_;
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
     }));
@@ -304,6 +304,27 @@ define([
         it('sets document with empty due date to empty', function () {
           expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
         });
+      });
+    });
+
+    describe('viewFile()', function () {
+      var file = {
+        'name': 'sampleName',
+        'url': 'test/file',
+        'fileType': 'image/png'
+      };
+
+      beforeEach(function () {
+        spyOn(fileService, 'openFile').and.returnValue($q.resolve('fileObject'));
+      });
+
+      beforeEach(function () {
+        initController();
+        ctrl.viewFile(file);
+      });
+
+      it('gets the blob file url for given file', function () {
+        expect(fileService.openFile).toHaveBeenCalledWith(file);
       });
     });
 
