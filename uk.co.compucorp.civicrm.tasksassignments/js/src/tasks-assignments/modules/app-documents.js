@@ -1,9 +1,9 @@
-/* globals angular */
 /* eslint-env amd */
 
 define([
+  'common/angular',
   'tasks-assignments/modules/run'
-], function () {
+], function (angular) {
   'use strict';
 
   angular.module('civitasks.appDocuments', ['civitasks.run'])
