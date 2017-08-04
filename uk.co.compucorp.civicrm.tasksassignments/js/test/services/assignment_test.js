@@ -1,3 +1,5 @@
+/* eslint-env amd, jasmine */
+
 define([
   'common/angularMocks',
   'tasks-assignments/app'
@@ -5,12 +7,13 @@ define([
   'use strict';
 
   describe('AssignmentService', function () {
-    var AssignmentSearch, AssignmentService;
+    var Assignment, AssignmentSearch, AssignmentService, param;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_AssignmentSearch_, _AssignmentService_) {
+    beforeEach(inject(function (_Assignment_, _AssignmentSearch_, _AssignmentService_) {
       AssignmentSearch = _AssignmentSearch_;
       AssignmentService = _AssignmentService_;
+      Assignment = _Assignment_;
     }));
 
     describe('search()', function () {
@@ -34,6 +37,30 @@ define([
         expect(AssignmentSearch.query).toHaveBeenCalledWith(jasmine.objectContaining({
           includeContactIds: '2,3,4'
         }));
+      });
+    });
+
+    describe('get()', function () {
+      beforeEach(function () {
+        param = {
+          json: {
+            options: {
+              limit: 0
+            },
+            id: {
+              IN: [ 1, 2 ]
+            },
+            return: [ 'case_type_id', 'contacts', 'client_id', 'contact_id', 'id', 'is_deleted', 'start_date', 'status_id', 'subject' ],
+            debug: true
+          }
+        };
+
+        spyOn(Assignment, 'get').and.callThrough();
+        AssignmentService.get({ 'IN': [1, 2] });
+      });
+
+      it('calls Assignment.get with correct list of fields to be returned', function () {
+        expect(Assignment.get).toHaveBeenCalledWith(param, jasmine.any(Function), jasmine.any(Function));
       });
     });
   });

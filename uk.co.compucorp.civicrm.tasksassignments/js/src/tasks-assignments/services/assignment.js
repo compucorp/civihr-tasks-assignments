@@ -1,10 +1,12 @@
-/* globals angular, CRM */
-/* eslint-env amd */
+/* eslint-env amd, jasmine */
 
 define([
+  'common/angular',
+  'common/lodash',
+  'tasks-assignments/services/contact',
   'tasks-assignments/services/services',
   'tasks-assignments/services/utils'
-], function (services) {
+], function (angular, _, contact, services) {
   'use strict';
 
   services.factory('Relationship', ['$resource', 'config', '$log', function ($resource, config, $log) {
@@ -45,9 +47,9 @@ define([
     });
   }]);
 
-  services.factory('AssignmentService', ['Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType', '$q', 'config', 'UtilsService',
+  services.factory('AssignmentService', ['Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType', 'ContactService', '$q', 'config', 'UtilsService',
     '$filter', '$location', '$state', '$rootScope', '$log', '$timeout',
-    function (Relationship, Assignment, AssignmentSearch, AssignmentType, $q, config, UtilsService, $filter, $location, $state,
+    function (Relationship, Assignment, AssignmentSearch, AssignmentType, ContactService, $q, config, UtilsService, $filter, $location, $state,
       $rootScope, $log, $timeout) {
       $log.debug('Service: AssignmentService');
 
@@ -65,6 +67,7 @@ define([
                 'limit': 0
               },
               'id': id,
+              'return': ['case_type_id', 'contacts', 'client_id', 'contact_id', 'id', 'is_deleted', 'start_date', 'status_id', 'subject'],
               'debug': config.DEBUG
             }
           }, function (data) {
@@ -177,7 +180,6 @@ define([
         },
         updateCache: function (data) {
           $log.debug('updateCache');
-          $log.debug(data);
 
           var assignment, assignmentId, assignmentType;
           var obj = $rootScope.cache.assignment.obj || {};
