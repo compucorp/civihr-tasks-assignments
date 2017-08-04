@@ -15,7 +15,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    *
    * @return CRM_Tasksassignments_DAO_Document|NULL|object
    */
-  public static function fabricate($params) {
+  public static function fabricate($params = []) {
     self::setDefaultParameters();
     return CRM_Tasksassignments_BAO_Document::create(array_merge(self::$defaultParams, $params));
   }
@@ -28,7 +28,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    *
    * @return array
    */
-  public static function fabricateWithAPI($params) {
+  public static function fabricateWithAPI($params = []) {
     self::setDefaultParameters();
     $result = civicrm_api3(
       'Document',

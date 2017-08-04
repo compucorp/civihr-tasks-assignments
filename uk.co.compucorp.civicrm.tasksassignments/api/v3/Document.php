@@ -34,8 +34,17 @@ function civicrm_api3_document_create($params) {
     return $errors;
   }
 
+  // Processing for custom data
+  $customFields = _civicrm_api3_document_getcustomfieldsflipped();
+  foreach ($customFields as $key => $value) {
+    if (isset($params[$key])) {
+      $params[$value] = $params[$key];
+    }
+  }
+
   $values = $activityArray = array();
   _civicrm_api3_custom_format_params($params, $values, 'Document');
+  _civicrm_api3_custom_format_params($params, $values, 'Activity');
 
   if (!empty($values['custom'])) {
     $params['custom'] = $values['custom'];
@@ -46,6 +55,12 @@ function civicrm_api3_document_create($params) {
   $case_id           = '';
   $createRevision    = FALSE;
   $oldActivityValues = array();
+
+  // Lookup case id if not supplied
+  if (!isset($params['case_id']) && !empty($params['id'])) {
+    $params['case_id'] = CRM_Core_DAO::singleValueQuery("SELECT case_id FROM civicrm_case_activity WHERE activity_id = " . (int) $params['id']);
+  }
+
   if (!empty($params['case_id'])) {
     $case_id = $params['case_id'];
     if (!empty($params['id'])) {
@@ -115,20 +130,6 @@ function civicrm_api3_document_create($params) {
   $activityBAO = CRM_Tasksassignments_BAO_Document::create($params);
 
   if (isset($activityBAO->id)) {
-
-    $activityCustomValues = array();
-    $customFields = _civicrm_api3_document_getcustomfieldsflipped();
-    foreach ($customFields as $key => $value) {
-        if (isset($params[$key])) {
-            $activityCustomValues[$value] = $params[$key];
-        }
-    }
-    if (!empty($activityCustomValues)) {
-        civicrm_api3('Activity', 'create', array_merge(
-            array('id' => $activityBAO->id),
-            $activityCustomValues
-        ));
-    }
 
     if ($case_id && !$createRevision) {
       // If this is a brand new case activity we need to add this
