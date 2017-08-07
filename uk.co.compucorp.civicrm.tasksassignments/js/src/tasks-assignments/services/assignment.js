@@ -1,12 +1,12 @@
-/* eslint-env amd, jasmine */
+/* eslint-env amd */
 
 define([
   'common/angular',
   'common/lodash',
-  'tasks-assignments/services/contact',
   'tasks-assignments/services/services',
+  'tasks-assignments/services/contact',
   'tasks-assignments/services/utils'
-], function (angular, _, contact, services) {
+], function (angular, _, services) {
   'use strict';
 
   services.factory('Relationship', ['$resource', 'config', '$log', function ($resource, config, $log) {
@@ -67,7 +67,17 @@ define([
                 'limit': 0
               },
               'id': id,
-              'return': ['case_type_id', 'contacts', 'client_id', 'contact_id', 'id', 'is_deleted', 'start_date', 'status_id', 'subject'],
+              'return': [
+                'case_type_id',
+                'contacts',
+                'client_id',
+                'contact_id',
+                'id',
+                'is_deleted',
+                'start_date',
+                'status_id',
+                'subject'
+              ],
               'debug': config.DEBUG
             }
           }, function (data) {
@@ -179,8 +189,6 @@ define([
           }
         },
         updateCache: function (data) {
-          $log.debug('updateCache');
-
           var assignment, assignmentId, assignmentType;
           var obj = $rootScope.cache.assignment.obj || {};
           var arr = [];

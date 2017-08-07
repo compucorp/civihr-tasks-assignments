@@ -7,7 +7,7 @@ define([
   'use strict';
 
   describe('AssignmentService', function () {
-    var Assignment, AssignmentSearch, AssignmentService, param;
+    var Assignment, AssignmentSearch, AssignmentService;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_Assignment_, _AssignmentSearch_, _AssignmentService_) {
@@ -42,25 +42,12 @@ define([
 
     describe('get()', function () {
       beforeEach(function () {
-        param = {
-          json: {
-            options: {
-              limit: 0
-            },
-            id: {
-              IN: [ 1, 2 ]
-            },
-            return: [ 'case_type_id', 'contacts', 'client_id', 'contact_id', 'id', 'is_deleted', 'start_date', 'status_id', 'subject' ],
-            debug: true
-          }
-        };
-
         spyOn(Assignment, 'get').and.callThrough();
         AssignmentService.get({ 'IN': [1, 2] });
       });
 
       it('calls Assignment.get with correct list of fields to be returned', function () {
-        expect(Assignment.get).toHaveBeenCalledWith(param, jasmine.any(Function), jasmine.any(Function));
+        expect(Assignment.get.calls.mostRecent().args[0].json.return).toEqual([ 'case_type_id', 'contacts', 'client_id', 'contact_id', 'id', 'is_deleted', 'start_date', 'status_id', 'subject' ]);
       });
     });
   });
