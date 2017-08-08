@@ -321,7 +321,7 @@ define([
       function initialContacts (type) {
         var cachedContacts = $rootScope.cache.contact.arrSearch;
 
-        return !vm.document.id ? [] : cachedContacts.filter(function (contact) {
+        return !vm.document.id && modalMode === 'edit' ? [] : cachedContacts.filter(function (contact) {
           var currContactId = vm.document[type + '_contact_id'][0];
 
           return +currContactId === +contact.id;
@@ -362,10 +362,10 @@ define([
         }
 
         /**
-        * Apart from date format fetched from CiviCRM settings we want to parse:
-        *  - timestamps (Date object is used by some 3rd party directives)
-        *  - date format we get from server
-        */
+         * Apart from date format fetched from CiviCRM settings we want to parse:
+         *  - timestamps (Date object is used by some 3rd party directives)
+         *  - date format we get from server
+         */
         var formatted = moment(date, [HRSettings.DATE_FORMAT.toUpperCase(), 'x', 'YYYY-MM-DD']);
 
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
