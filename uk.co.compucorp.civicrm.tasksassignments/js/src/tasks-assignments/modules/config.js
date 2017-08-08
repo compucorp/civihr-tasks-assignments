@@ -27,28 +27,28 @@ define([
     },
     status: {
       resolve: {
-                /**
-                 * For documents
-                 * 1: 'awaiting upload'
-                 * 2: 'awaiting approval'
-                 * 3: 'approved'
-                 * 4: 'rejected'
-                 */
+        /**
+         * For documents
+         * 1: 'awaiting upload'
+         * 2: 'awaiting approval'
+         * 3: 'approved'
+         * 4: 'rejected'
+         */
         DOCUMENT: ['3', '4'],
 
-                /**
-                 * For tasks
-                 * 1: "Scheduled"
-                 * 2: "Completed"
-                 * 3: "Cancelled"
-                 * 4: "Left Message"
-                 * 5: "Unreachable"
-                 * 6: "Not Required"
-                 * 7: "Available"
-                 * 8: "No-show"
-                 * 9: "Rejected"
-                 * 10: "Partially Approved"
-                 */
+        /**
+         * For tasks
+         * 1: "Scheduled"
+         * 2: "Completed"
+         * 3: "Cancelled"
+         * 4: "Left Message"
+         * 5: "Unreachable"
+         * 6: "Not Required"
+         * 7: "Available"
+         * 8: "No-show"
+         * 9: "Rejected"
+         * 10: "Partially Approved"
+         */
         TASK: ['2', '3', '6', '8']
       }
     }

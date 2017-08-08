@@ -16,12 +16,11 @@ define([
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
-            .state('settings', {
-              url: '/',
-              controller: 'SettingsCtrl',
-              templateUrl: config.path.TPL + 'settings.html?v=5'
-            }
-          );
+          .state('settings', {
+            url: '/',
+            controller: 'SettingsCtrl',
+            templateUrl: config.path.TPL + 'settings.html?v=5'
+          });
 
         $resourceProvider.defaults.stripTrailingSlashes = false;
 
