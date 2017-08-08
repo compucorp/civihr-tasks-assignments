@@ -1,4 +1,4 @@
-/* globals define */
+/* eslint-env amd */
 
 define([
   'common/angular',
@@ -36,18 +36,14 @@ define([
     'xeditable-civi',
     'common.angularDate',
     'common.directives'
-  ]).run(['config', 'settings', '$rootScope', '$rootElement', '$q', '$location', 'DocumentService',
-    'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions', '$log',
-    function (config, settings, $rootScope, $rootElement, $q, $location, DocumentService, TaskService,
-                 AssignmentService, KeyDateService, ContactService, editableOptions, $log) {
+  ]).run(['$rootScope', '$rootElement', '$q', '$location', '$log', 'config', 'settings', 'DocumentService',
+    'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions',
+    function ($rootScope, $rootElement, $q, $location, $log, config, settings, DocumentService, TaskService,
+      AssignmentService, KeyDateService, ContactService, editableOptions) {
       $log.debug('civitasks.run');
 
-      $rootScope.pathTpl = config.path.TPL;
-      $rootScope.permissions = config.permissions;
-      $rootScope.prefix = config.CLASS_NAME_PREFIX;
-      $rootScope.url = config.url;
-      $rootScope.location = $location;
-      $rootScope.settings = settings;
+      var contactsToCache = [config.LOGGED_IN_CONTACT_ID];
+
       $rootScope.cache = {
         contact: {
           obj: {},
@@ -63,7 +59,7 @@ define([
           obj: {},
           arr: []
         },
-                // TODO
+        // TODO
         dateType: {
           obj: {
             period_start_date: 'Contract Start Date',
@@ -92,6 +88,14 @@ define([
         },
         taskStatusResolve: config.status.resolve.TASK
       };
+      $rootScope.location = $location;
+      $rootScope.pathTpl = config.path.TPL;
+      $rootScope.permissions = config.permissions;
+      $rootScope.prefix = config.CLASS_NAME_PREFIX;
+      $rootScope.settings = settings;
+      $rootScope.url = config.url;
+
+      config.CONTACT_ID && contactsToCache.push(config.CONTACT_ID);
 
       TaskService.getOptions().then(function (options) {
         angular.extend($rootScope.cache, options);
@@ -108,7 +112,7 @@ define([
         }, $rootScope.cache.assignmentType.arr);
       });
 
-      ContactService.get({'IN': [config.LOGGED_IN_CONTACT_ID]}).then(function (data) {
+      ContactService.get({ 'IN': contactsToCache }).then(function (data) {
         ContactService.updateCache(data);
       });
 
