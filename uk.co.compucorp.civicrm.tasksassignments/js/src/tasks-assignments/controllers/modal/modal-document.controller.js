@@ -14,12 +14,12 @@ define([
 ], function (angular, moment, _, controllers) {
   'use strict';
 
-  controllers.controller('ModalDocumentCtroller', ['$window', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
+  controllers.controller('ModalDocumentController', ['$window', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
     'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService',
     function ($window, $scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
       DocumentService, ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService, fileService) {
-      $log.debug('Controller: ModalDocumentCtroller');
+      $log.debug('Controller: ModalDocumentController');
 
       var vm = this;
 

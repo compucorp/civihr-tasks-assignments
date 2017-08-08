@@ -1,30 +1,32 @@
-define([
-    'common/angular'
-], function (angular) {
-    'use strict';
+/* eslint-env amd */
 
-    angular.module('civitasks.config',[]).constant('config', {
-        DEBUG: !!+CRM.debug,
-        CLASS_NAME_PREFIX: 'ct-',
-        CONTACT_ID: CRM.contactId ||null,
-        LOGGED_IN_CONTACT_ID: CRM.adminId ||null,
-        path: {
-            EXT: CRM.tasksAssignments.extensionPath,
-            TPL: CRM.tasksAssignments.extensionPath + 'views/'
-        },
-        permissions: {
-            allowDelete: CRM.tasksAssignments.permissions.delete_tasks_and_documents
-        },
-        url: {
-            REST: CRM.url('civicrm/ajax/rest'),
-            ASSIGNMENTS: CRM.url('civicrm/case'),
-            CIVI_DASHBOARD: CRM.url('civicrm/'),
-            CONTACT: CRM.url('civicrm/contact/view'),
-            FILE: '/civicrm/tasksassignments/file',
-            CSV_EXPORT: CRM.url('civicrm/tasksassignments')
-        },
-        status: {
-            resolve: {
+define([
+  'common/angular'
+], function (angular) {
+  'use strict';
+
+  angular.module('civitasks.config', []).constant('config', {
+    DEBUG: !!+CRM.debug,
+    CLASS_NAME_PREFIX: 'ct-',
+    CONTACT_ID: CRM.contactId || null,
+    LOGGED_IN_CONTACT_ID: CRM.adminId || null,
+    path: {
+      EXT: CRM.tasksAssignments.extensionPath,
+      TPL: CRM.tasksAssignments.extensionPath + 'views/'
+    },
+    permissions: {
+      allowDelete: CRM.tasksAssignments.permissions.delete_tasks_and_documents
+    },
+    url: {
+      REST: CRM.url('civicrm/ajax/rest'),
+      ASSIGNMENTS: CRM.url('civicrm/case'),
+      CIVI_DASHBOARD: CRM.url('civicrm/'),
+      CONTACT: CRM.url('civicrm/contact/view'),
+      FILE: '/civicrm/tasksassignments/file',
+      CSV_EXPORT: CRM.url('civicrm/tasksassignments')
+    },
+    status: {
+      resolve: {
                 /**
                  * For documents
                  * 1: 'awaiting upload'
@@ -32,7 +34,7 @@ define([
                  * 3: 'approved'
                  * 4: 'rejected'
                  */
-                DOCUMENT: ['3','4'],
+        DOCUMENT: ['3', '4'],
 
                 /**
                  * For tasks
@@ -47,8 +49,8 @@ define([
                  * 9: "Rejected"
                  * 10: "Partially Approved"
                  */
-                TASK: ['2', '3', '6', '8']
-            }
-        }
-    });
+        TASK: ['2', '3', '6', '8']
+      }
+    }
+  });
 });

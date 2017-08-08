@@ -1,6 +1,9 @@
+/* eslint-env amd */
+
 define([
-  'tasks-assignments/modules/run'
-], function () {
+  'common/angular',
+  'tasks-assignments/modules/run.module'
+], function (angular) {
   'use strict';
 
   angular.module('civitasks.appTasks', ['civitasks.run'])

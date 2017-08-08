@@ -12,7 +12,7 @@ define([
 ], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator) {
   'use strict';
 
-  describe('ModalDocumentCtrl', function () {
+  describe('ModalDocumentController', function () {
     var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService, config,
       AssignmentService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
@@ -373,7 +373,7 @@ define([
     }
 
     function initController (scopeValues) {
-      controller = $controller('ModalDocumentCtrl', {
+      controller = $controller('ModalDocumentController', {
         $scope: _.assign($scope, scopeValues),
         $filter: $filter,
         $uibModalInstance: fakeModalInstance(),
