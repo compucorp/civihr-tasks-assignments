@@ -2,19 +2,22 @@
 /* eslint-env amd, jasmine */
 
 define([
+  'common/moment',
   'common/angular',
   'mocks/fabricators/document',
   'tasks-assignments/app'
-], function (angular, documentFabricator) {
+], function (moment, angular, documentFabricator) {
   'use strict';
 
   describe('DocumentListCtrl', function () {
-    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument;
+
+    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $filter = _$filter_;
       $scope = $rootScope.$new();
       $q = _$q_;
       config = _config_;
@@ -43,6 +46,14 @@ define([
 
       it('calls document service to cache contacts and assigments', function () {
         expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+      });
+
+      it('checks if default document status are defined for filter in T&A dashboard', function () {
+        expect($scope.filterParamsHolder.documentStatus).toEqual(['1', '2']);
+      });
+
+      it('checks if default document status are not defined for filter in contact page', function () {
+        expect($scope.filterParams.documentStatus).toEqual([]);
       });
     });
 
@@ -78,37 +89,61 @@ define([
       });
     });
 
-    describe('$scope.loadDocumentsResolved', function () {
-      var promise;
+    describe('labelDateRange()', function () {
+      var fromDate = moment().startOf('day').toDate();
+      var untilDate = moment().add(1, 'month').startOf('day').toDate();
 
       beforeEach(function () {
-        config.CONTACT_ID = 204;
-        config.status.resolve.DOCUMENT = [1, 2];
-
         initController();
-        promise = $scope.loadDocumentsResolved();
       });
 
       afterEach(function () {
         $rootScope.$apply();
       });
 
-      it('calls document service to document list', function () {
-        expect(DocumentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
-          target_contact_id: config.CONTACT_ID,
-          status_id: { IN: config.status.resolve.DOCUMENT }
-        }));
+      it('formats and creates date range label', function () {
+        expect($scope.label.dateRange).toBe($filter('date')(fromDate, 'dd/MM/yyyy') + ' - ' + $filter('date')(untilDate, 'dd/MM/yyyy'));
       });
 
-      it('calls document service to cache contacts and assignments', function () {
-        promise.then(function () {
-          expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+      describe('when both form and until date are available', function () {
+        beforeEach(function () {
+          $scope.filterParams.dateRange = {
+            from: moment().startOf('day').toDate(),
+            until: moment().add(2, 'month').startOf('day').toDate()
+          };
+          $scope.labelDateRange();
+        });
+
+        it('formats and creates date range label', function () {
+          expect($scope.label.dateRange).toBe($filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') + ' - ' + $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
         });
       });
 
-      it('marks relolved section as loaded', function () {
-        promise.then(function () {
-          expect($scope.listResolvedLoaded).toBe(true);
+      describe('when only form date is available', function () {
+        beforeEach(function () {
+          $scope.filterParams.dateRange = {
+            from: moment().startOf('day').toDate(),
+            until: ''
+          };
+          $scope.labelDateRange();
+        });
+
+        it('formats and creates date range label containing form date only', function () {
+          expect($scope.label.dateRange).toBe('From: ' + $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy'));
+        });
+      });
+
+      describe('when only until date is available', function () {
+        beforeEach(function () {
+          $scope.filterParams.dateRange = {
+            from: '',
+            until: moment().add(2, 'month').startOf('day').toDate()
+          };
+          $scope.labelDateRange();
+        });
+
+        it('formats and creates date range label containing until date only', function () {
+          expect($scope.label.dateRange).toBe('Until: ' +  $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
         });
       });
     });
