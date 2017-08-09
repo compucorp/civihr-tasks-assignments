@@ -17,7 +17,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
    */
   public function setUp() {
     parent::setUp();
-    $this->quickCleanup(['civicrm_activity'], TRUE);
+    $this->quickCleanup(['civicrm_activity', 'civicrm_case', 'civicrm_case_activity'], TRUE);
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
 
@@ -302,6 +302,51 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     // Running clone documents again should not create new documents
     $clonedCount = civicrm_api3('Document', 'clonedocuments');
     $this->assertEquals(0, $clonedCount['values']);
+  }
+
+  public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
+    $assignment = AssignmentFabricator::fabricate();
+
+    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
+    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
+    $activityCount = civicrm_api3('Activity', 'getcount');
+    $this->assertEquals(2, $activityCount);
+
+    foreach ($documents as $currentDocument) {
+      DocumentFabricator::fabricateWithAPI([
+        'id' => $currentDocument['id'],
+        'expire_date' => date('Y-m-d'),
+        'remind_me' => 1,
+        'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      ]);
+    }
+
+    $this->assertEquals(3, civicrm_api3('Activity', 'getcount'));
+    $this->assertEquals(1, $this->getDocumentRevisionCount($documents['standAloneDocument']['id']));
+    $this->assertEquals(2, $this->getDocumentRevisionCount($documents['caseDocument']['id']));
+  }
+
+  /**
+   * Counts total number of revisions for the given document ID.
+   *
+   * @param int $documentID
+   *
+   * @return int
+   *   Number of revisions found for the given document ID
+   */
+  private function getDocumentRevisionCount($documentID) {
+    $result = civicrm_api3('Activity', 'get', [
+      'sequential' => 1,
+      'id' => $documentID,
+      'original_id' => $documentID,
+      'options' => [
+        'or' => [
+          ["id", "original_id"]
+        ]
+      ],
+    ]);
+
+    return $result['count'];
   }
 
   /**

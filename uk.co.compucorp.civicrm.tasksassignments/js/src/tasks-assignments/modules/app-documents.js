@@ -1,6 +1,9 @@
+/* eslint-env amd */
+
 define([
+  'common/angular',
   'tasks-assignments/modules/run'
-], function () {
+], function (angular) {
   'use strict';
 
   angular.module('civitasks.appDocuments', ['civitasks.run'])
@@ -8,8 +11,7 @@ define([
       'uibDatepickerConfig', 'uiSelectConfig',
       '$logProvider',
       function (config, $urlRouterProvider, $stateProvider, $resourceProvider, $httpProvider, datepickerConfig,
-        uiSelectConfig,
-        $logProvider) {
+        uiSelectConfig, $logProvider) {
         $logProvider.debugEnabled(config.DEBUG);
 
         $urlRouterProvider.otherwise('/');
@@ -27,10 +29,7 @@ define([
             resolve: {
               documentList: ['DocumentService', function (DocumentService) {
                 return DocumentService.get({
-                  'target_contact_id': config.CONTACT_ID,
-                  'status_id': {
-                    'NOT IN': config.status.resolve.DOCUMENT
-                  }
+                  'target_contact_id': config.CONTACT_ID
                 });
               }]
             }

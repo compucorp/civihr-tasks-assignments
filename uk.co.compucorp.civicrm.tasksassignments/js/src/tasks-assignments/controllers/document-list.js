@@ -1,4 +1,4 @@
-/* eslint-env amd, no-mixed-operators:false */
+/* eslint-env amd */
 
 define([
   'common/angular',
@@ -14,56 +14,33 @@ define([
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
     '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings',
     function ($scope, $modal, $dialog, $rootElement, $rootScope, $state, $filter, $log, $q, $timeout, documentList,
-                 config, ContactService, AssignmentService, DocumentService, FileService, settings) {
+      config, ContactService, AssignmentService, DocumentService, FileService, settings) {
       $log.debug('Controller: DocumentListCtrl');
 
       var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
-      this.init = function () {
-        DocumentService.cacheContactsAndAssignments(documentList).then(function () {
-          watchDateFilters();
-
-          $scope.applySidebarFilters();
-          $rootScope.$broadcast('ct-spinner-hide');
-          $log.debug($rootScope.cache);
-        });
-      };
-
-      $scope.pagination = {
-        currentPage: 1,
-        itemsPerPage: 10,
-        maxSize: 5
-      };
-
+      $scope.dueThisWeek = 0;
+      $scope.dueToday = 0;
+      $scope.list = documentList;
+      $scope.listFiltered = [];
+      $scope.listOngoing = [];
+      $scope.listPaginated = [];
+      $scope.overdue = 0;
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
       ];
-
-      $scope.dueToday = 0;
-      $scope.dueThisWeek = 0;
-      $scope.overdue = 0;
-      $scope.list = documentList;
-      $scope.listFiltered = [];
-      $scope.listOngoing = [];
-      $scope.listPaginated = [];
-      $scope.listResolved = [];
-      $scope.listResolvedLoaded = false;
-
       $scope.dpOpened = {
         filterDates: {}
       };
-
       $scope.isCollapsed = {
         filterAdvanced: true,
-        filterDates: false,
-        documentListResolved: true
+        filterDates: false
       };
-
       $scope.filterParams = {
         contactId: null,
-        documentStatus: defaultDocumentStatus,
+        documentStatus: [],
         ownership: $state.params.ownership || null,
         dateRange: {
           from: null,
@@ -72,7 +49,6 @@ define([
         due: null,
         assignmentType: []
       };
-
       $scope.filterParamsHolder = {
         documentStatus: defaultDocumentStatus,
         dateRange: {
@@ -80,12 +56,10 @@ define([
           until: moment().add(1, 'month').startOf('day').toDate()
         }
       };
-
       $scope.datepickerOptions = {
         from: { maxDate: $scope.filterParamsHolder.dateRange.until },
         until: { minDate: $scope.filterParamsHolder.dateRange.from }
       };
-
       $scope.label = {
         addNew: 'Add Document',
         overdue: 'Overdue',
@@ -93,7 +67,18 @@ define([
         dueInNinetyDays: 'Due in 90 days',
         dateRange: ''
       };
+      $scope.pagination = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        maxSize: 5
+      };
 
+      /**
+       * Apply action to delete the given list of documents
+       *
+       * @param {string} action
+       * @param {array} documentList
+       */
       $scope.apply = function (action, documentList) {
         var documentListLen = documentList.length;
         var documentListPromise = [];
@@ -143,12 +128,17 @@ define([
       $scope.applySidebarFilters = function () {
         $scope.filterParams.dateRange.from = $scope.filterParamsHolder.dateRange.from;
         $scope.filterParams.dateRange.until = $scope.filterParamsHolder.dateRange.until;
-        $scope.filterParams.documentStatus = $scope.filterParamsHolder.documentStatus;
         $scope.filterParams.due = 'dateRange';
 
         $scope.labelDateRange();
       };
 
+      /**
+       * Updates the given document with new document's statusId
+       *
+       * @param {object} document
+       * @param {string} statusId
+       */
       $scope.changeStatus = function (document, statusId) {
         if (!statusId || typeof +statusId !== 'number') {
           return null;
@@ -167,7 +157,14 @@ define([
         });
       };
 
-      $scope.labelDateRange = function (from, until) {
+      /**
+       * Creates the date range label using from and until dates in
+       * format 'dd/MM/yyyy'
+       *
+       * @param {string} from
+       * @param {string} until
+       */
+      $scope.labelDateRange = function () {
         var filterDateTimeFrom = $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
         var filterDateTimeUntil = $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
 
@@ -182,28 +179,11 @@ define([
         $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
       };
 
-      $scope.loadDocumentsResolved = function () {
-        if ($scope.listResolvedLoaded) {
-          return;
-        }
-
-        // Remove resolved documents from the document list
-        $scope.list = $filter('filterByStatus')($scope.list, $rootScope.cache.documentStatusResolve, false);
-
-        return DocumentService.get({
-          'target_contact_id': config.CONTACT_ID,
-          'status_id': {
-            'IN': config.status.resolve.DOCUMENT
-          }
-        }).then(function (documentListResolved) {
-          DocumentService.cacheContactsAndAssignments(documentListResolved).then(function () {
-            $scope.listResolvedLoaded = true;
-          });
-
-          Array.prototype.push.apply($scope.list, documentListResolved);
-        });
-      };
-
+      /**
+       * Deletes the given document
+       *
+       * @param {object} document
+       */
       $scope.deleteDocument = function (document) {
         $dialog.open({
           msg: 'Are you sure you want to delete this document?'
@@ -221,22 +201,41 @@ define([
         });
       };
 
+      /**
+       * Navigates to calander view
+       *
+       * @param {string} view
+       */
       $scope.viewInCalendar = function (view) {
         $state.go('calendar.mwl.' + view);
       };
 
+      /**
+       * Subscribes for 'assignmentFormSuccess' event and when triggered,
+       * updates document with given list of documents
+       */
       $scope.$on('assignmentFormSuccess', function (e, output) {
         Array.prototype.push.apply($scope.list, output.documentList);
       });
 
-      $scope.$on('documentFormSuccess', function (e, newData, oldData) {
-        if (angular.equals({}, oldData)) {
-          addRemoveDocument($scope.list, newData, oldData);
+      /**
+       * Subscribes for 'documentFormSuccess' event and when triggered,
+       * and calls addRemoveDocument function to add or remove the document
+       * in or from the list
+       */
+      $scope.$on('documentFormSuccess', function (e, output, input) {
+        if (angular.equals({}, input)) {
+          addRemoveDocument($scope.list, output, input);
         } else {
-          angular.extend(oldData, newData);
+          angular.extend(input, output);
         }
       });
 
+      /**
+       * Subscribes for 'crmFormSuccess' event and when triggered,
+       * for data with success status, if the pattern of messages matchses
+       * assignment cache is cleared and the current state is reloaded.
+       */
       $scope.$on('crmFormSuccess', function (e, data) {
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
@@ -251,7 +250,15 @@ define([
         }
       });
 
-      this.init();
+      (function init () {
+        watchDateFilters();
+        $scope.applySidebarFilters();
+
+        DocumentService.cacheContactsAndAssignments(documentList).then(function () {
+          $rootScope.$broadcast('ct-spinner-hide');
+          $log.debug($rootScope.cache);
+        });
+      })();
 
       /**
        * Check the CRM message title to match the given pattern

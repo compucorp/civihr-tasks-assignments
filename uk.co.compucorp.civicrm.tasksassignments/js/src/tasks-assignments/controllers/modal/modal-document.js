@@ -5,20 +5,20 @@ define([
   'common/angular',
   'common/moment',
   'common/lodash',
-  'tasks-assignments/controllers/controllers',
+  'common/services/notification.service',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/file',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document',
-  'common/services/notification'
-], function (angular, moment, _, controllers) {
+  'tasks-assignments/controllers/controllers'
+], function (angular, moment, _, notification, contact, file, dialog, document, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentCtrl', ['$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
-    'files', 'config', 'HR_settings', 'modalMode', 'notification',
+    'files', 'config', 'HR_settings', 'modalMode', 'notificationService',
     function ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
-      DocumentService, ContactService, FileService, data, files, config, HR_settings, modalMode, notification) {
+      DocumentService, ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       // Init call
@@ -243,7 +243,7 @@ define([
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
-        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || "";
+        doc.activity_date_time = $scope.parseDate(doc.activity_date_time) || '';
         doc.expire_date = $scope.parseDate(doc.expire_date);
         doc.status_id = !$scope.isRole('admin') ? '2' : $scope.document.status_id; // 2 => 'Awaiting Approval'
 
@@ -333,7 +333,7 @@ define([
          *  - timestamps (Date object is used by some 3rd party directives)
          *  - date format we get from server
          */
-        var formatted = moment(date, [HR_settings.DATE_FORMAT.toUpperCase(), 'x', 'YYYY-MM-DD']);
+        var formatted = moment(date, [HRSettings.DATE_FORMAT.toUpperCase(), 'x', 'YYYY-MM-DD']);
 
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
       };
@@ -383,7 +383,7 @@ define([
           var notificationTitle = missingRequiredFields.length === 1 ? 'Required field' : 'Required fields';
           var missingFields = missingRequiredFields.join(', ');
 
-          notification.alert(notificationTitle, missingFields, { expires: 5000 });
+          notificationService.alert(notificationTitle, missingFields, { expires: 5000 });
 
           return false;
         }
