@@ -47,10 +47,12 @@ define([
         spyOn($q, 'all').and.returnValue({ then: _.noop });
         spyOn(TaskService, 'saveMultiple');
         spyOn(DocumentService, 'saveMultiple');
-        spyOn(AssignmentService, 'save').and.returnValue({ then: function (cb) {
-              // fakes the db permanence, attaching an id to the assignment on the scope
-          cb(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
-        }});
+        spyOn(AssignmentService, 'save').and.returnValue({
+          then: function (callback) {
+            // fakes the db permanence, attaching an id to the assignment on the scope
+            callback(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
+          }
+        });
       });
       beforeEach(function () {
         prepAssignment();
@@ -73,9 +75,9 @@ define([
         })).toBe(true);
       });
 
-          /**
-           * Prepares the assignment data to pass the confirm() validation
-           */
+      /**
+       * Prepares the assignment data to pass the confirm() validation
+       */
       function prepAssignment () {
         _.assign(scope.assignment, {
           contact_id: jasmine.any(Number),
@@ -233,13 +235,13 @@ define([
       });
     });
 
-        /**
-         * Fills up with random placeholder data the contacts collection of the
-         * given list
-         *
-         * @param {Array} list
-         * @param {string} type - task or document
-         */
+    /**
+     * Fills up the contacts collection of the given list
+     * with random placeholder data
+     *
+     * @param {array} list
+     * @param {string} type - task or document
+     */
     function fillContactsCollectionOf (list, type) {
       list.forEach(function (item, index) {
         scope.contacts[type][index] = _.range(_.random(5)).map(function () {
@@ -248,9 +250,9 @@ define([
       });
     }
 
-        /**
-         * initialize ModalAssignmentCtrl controller
-         */
+    /**
+     * Initializes ModalAssignmentCtrl controller
+     */
     function initController () {
       $controller('ModalAssignmentCtrl', {
         $scope: scope,
@@ -284,7 +286,6 @@ define([
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, $httpBackend, $rootScope) {
-        // A workaround to avoid actual API calls
       $httpBackend.whenPOST(/action=/).respond({});
       $httpBackend.whenGET(/action=/).respond({});
 
