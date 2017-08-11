@@ -145,7 +145,7 @@
                     | filterByOwnership:filterParams.ownership
                     | filterByAssignmentType:filterParams.assignmentType
                     | filterByContactId:filterParams.contactId
-                    | filterByStatus:filterParams.documentStatus
+                    | filterByStatus:filterParamsHolder.documentStatus
                     | orderBy: 'activity_date_time')
                     | offset: (pagination.currentPage-1)*pagination.itemsPerPage
                     | limitTo: pagination.itemsPerPage)"

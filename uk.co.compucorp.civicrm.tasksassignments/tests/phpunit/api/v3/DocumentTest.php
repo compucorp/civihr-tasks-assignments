@@ -1,4 +1,6 @@
 <?php
+use CRM_Tasksassignments_Test_Fabricator_Assignment as AssignmentFabricator;
+use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
 
 /**
  * Class Api_DocumentTest
@@ -15,9 +17,12 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
    */
   public function setUp() {
     parent::setUp();
-    $this->quickCleanup(['civicrm_activity'], TRUE);
+    $this->quickCleanup(['civicrm_activity', 'civicrm_case', 'civicrm_case_activity'], TRUE);
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
+
+    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
+    $hrCaseUpgrader->install();
 
     // Pick one of Document types.
     $documentTypes = civicrm_api3('Document', 'getoptions', array(
@@ -257,4 +262,176 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     $this->assertEquals(0, $clonedCount['values']);
   }
 
+  /**
+   * Documents related to an assignment were generating a revision every time
+   * they were updated. This caused the cloning functionality to copy each
+   * document multiple times, one for each revision the document had. This test
+   * verifies that even if a document has multiple revisions that meet cloning
+   * criteria, only the latest revision is cloned.
+   */
+  public function testDocumentCloningOnlyClonesCurrentRevision() {
+    $this->setDaysBeforeExpiryToClone(1);
+
+    // Create assignment
+    $assignment = AssignmentFabricator::fabricate();
+
+    // Create document - we need to use the API so new revisions are created.
+    $document = DocumentFabricator::fabricateWithAPI([
+      'case_id' => $assignment->id,
+    ]);
+    $this->assertClonableRevisionCount(0);
+
+    // Approve and set expiry date for document, should generate a new revision for each update
+    DocumentFabricator::fabricateWithAPI([
+      'id' => $document['id'],
+      'case_id' => $assignment->id,
+      'expire_date' => date('Y-m-d'),
+      'remind_me' => 1,
+      'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+    ]);
+    $this->assertClonableRevisionCount(1);
+
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    $this->assertEquals(1, $clonedCount['values']);
+
+    // Cloning should have created a new revision for the document also,
+    // when updating cloned date. Thus original clonable revision should still
+    // exist and be clonable (even if it's not current revision).
+    $this->assertClonableRevisionCount(1);
+
+    // Running clone documents again should not create new documents
+    $clonedCount = civicrm_api3('Document', 'clonedocuments');
+    $this->assertEquals(0, $clonedCount['values']);
+  }
+
+  public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
+    $assignment = AssignmentFabricator::fabricate();
+
+    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
+    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
+    $activityCount = civicrm_api3('Activity', 'getcount');
+    $this->assertEquals(2, $activityCount);
+
+    foreach ($documents as $currentDocument) {
+      DocumentFabricator::fabricateWithAPI([
+        'id' => $currentDocument['id'],
+        'expire_date' => date('Y-m-d'),
+        'remind_me' => 1,
+        'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      ]);
+    }
+
+    $this->assertEquals(3, civicrm_api3('Activity', 'getcount'));
+    $this->assertEquals(1, $this->getDocumentRevisionCount($documents['standAloneDocument']['id']));
+    $this->assertEquals(2, $this->getDocumentRevisionCount($documents['caseDocument']['id']));
+  }
+
+  /**
+   * Counts total number of revisions for the given document ID.
+   *
+   * @param int $documentID
+   *
+   * @return int
+   *   Number of revisions found for the given document ID
+   */
+  private function getDocumentRevisionCount($documentID) {
+    $result = civicrm_api3('Activity', 'get', [
+      'sequential' => 1,
+      'id' => $documentID,
+      'original_id' => $documentID,
+      'options' => [
+        'or' => [
+          ["id", "original_id"]
+        ]
+      ],
+    ]);
+
+    return $result['count'];
+  }
+
+  /**
+   * Asserts number of documents that could be cloned, not taking into account
+   * if the document is a current revision or not.
+   *
+   * @param int $expectedCount
+   *   Number of expected clonable revisions.
+   */
+  private function assertClonableRevisionCount($expectedCount) {
+    $daysBeforeExpiryToClone = $this->getDaysBeforeExpiryToClone();
+    $interval = new DateInterval('P' . $daysBeforeExpiryToClone . 'D');
+    $cutOffDate = (new DateTime())->add($interval);
+
+    $expiryField = $this->getCustomFieldColumnName('expire_date');
+    $clonedField = $this->getCustomFieldColumnName('clone_date');
+    $remindMeField = $this->getCustomFieldColumnName('remind_me');
+
+    $params = [
+      $expiryField => ['<=' => $cutOffDate->format('Y-m-d')],
+      $clonedField => ['IS NULL' => 1],
+      $remindMeField => 1,
+      'is_deleted' => 0,
+      'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      'options' => ['limit' => 0],
+    ];
+
+    $result = civicrm_api3('Document', 'get', $params);
+    $this->assertEquals($expectedCount, $result['count']);
+  }
+
+  /**
+   * Obtain number of days before document expiring date configured in system.
+   *
+   * @return int
+   *   Number of days before expiring date
+   */
+  private function getDaysBeforeExpiryToClone() {
+    $setting = civicrm_api3('TASettings', 'getsingle', [
+      'fields' => 'days_to_create_a_document_clone',
+    ]);
+
+    return CRM_Utils_Array::value('value', $setting, 0);
+  }
+
+  /**
+   * Set number of days before document expiring date configured in system.
+   *
+   * @param int $days
+   *   Number of days before document expiring date
+   */
+  private function setDaysBeforeExpiryToClone($days) {
+    civicrm_api3('TASettings', 'set', [
+      'fields' => ['days_to_create_a_document_clone' => $days],
+    ]);
+  }
+
+  /**
+   * Returns column name for the given custom field name.
+   *
+   * @param $fieldName
+   *
+   * @return string
+   *   Column name of custom field
+   */
+  private function getCustomFieldColumnName($fieldName) {
+    static $fieldNames;
+
+    if (empty($fieldNames)) {
+      $result = civicrm_api3('Document', 'getcustomfields');
+      foreach ($result as $customFieldName => $data) {
+        $fieldNames[$data['name']] = $customFieldName;
+      }
+    }
+
+    return CRM_Utils_Array::value($fieldName, $fieldNames);
+  }
+
+  public function tearDown() {
+    parent::tearDown();
+
+    $upgrader = CRM_Tasksassignments_Upgrader::instance();
+    $upgrader->uninstall();
+
+    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
+    $hrCaseUpgrader->uninstall();
+  }
 }
