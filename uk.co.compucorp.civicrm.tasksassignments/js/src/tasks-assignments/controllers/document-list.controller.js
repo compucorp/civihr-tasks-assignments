@@ -53,8 +53,8 @@ define([
     vm.filterParamsHolder = {
       documentStatus: defaultDocumentStatus,
       dateRange: {
-        from: moment().startOf('day').toDate(),
-        until: moment().add(1, 'month').startOf('day').toDate()
+        from: null,
+        until: null
       }
     };
     vm.datepickerOptions = {

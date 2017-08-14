@@ -89,9 +89,6 @@ define([
     });
 
     describe('labelDateRange()', function () {
-      var fromDate = moment().startOf('day').toDate();
-      var untilDate = moment().add(1, 'month').startOf('day').toDate();
-
       beforeEach(function () {
         initController();
       });
@@ -101,7 +98,7 @@ define([
       });
 
       it('formats and creates date range label', function () {
-        expect(controller.label.dateRange).toBe($filter('date')(fromDate, 'dd/MM/yyyy') + ' - ' + $filter('date')(untilDate, 'dd/MM/yyyy'));
+        expect(controller.label.dateRange).toBe('');
       });
 
       describe('when both form and until date are available', function () {
