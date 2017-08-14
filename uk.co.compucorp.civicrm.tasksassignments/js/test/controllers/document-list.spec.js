@@ -101,6 +101,11 @@ define([
         expect(controller.label.dateRange).toBe('');
       });
 
+      it('verifies the default date range are null', function () {
+        expect(controller.filterParams.dateRange.from).toBe(null);
+        expect(controller.filterParams.dateRange.until).toBe(null);
+      });
+
       describe('when both form and until date are available', function () {
         beforeEach(function () {
           controller.filterParams.dateRange = {

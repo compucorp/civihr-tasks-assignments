@@ -79,10 +79,13 @@
             </div>
           </div>
           <div class="col-xs-12 col-sm-3 text-right">
-            <a href ng-click="documentList.isCollapsed.filterAdvanced = !documentList.isCollapsed.filterAdvanced" class="btn btn-collapse"><span
-              class="fa"
-              ng-class="{fa: true, 'fa-chevron-down': !documentList.isCollapsed.filterAdvanced, 'fa-chevron-right': documentList.isCollapsed.filterAdvanced }"
-              aria-hidden="true"></span> Filter Documents</a>
+            <a href ng-click="documentList.isCollapsed.filterAdvanced = !documentList.isCollapsed.filterAdvanced" class="btn btn-collapse">
+              <span class="fa"
+                ng-class="{ fa: true, 'fa-chevron-down': !documentList.isCollapsed.filterAdvanced, 'fa-chevron-right': documentList.isCollapsed.filterAdvanced }"
+                aria-hidden="true">
+              </span>
+              Filter Documents
+            </a>
           </div>
         </div>
         <div class="{{prefix}}filter-advanced" uib-collapse="documentList.isCollapsed.filterAdvanced">
