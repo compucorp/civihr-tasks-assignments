@@ -14,12 +14,12 @@
     </thead>
     <tbody>
       <tr
-        ng-repeat="document in listPaginated = (listOngoing = (list
+        ng-repeat="document in listPaginated = (listOngoing = (documentList.list
         | filterByStatus:cache.documentStatusResolve:false
         | filterByDateField:'dateRange':'activity_date_time':{ from: calendarDay, until: calendarDay }
         | orderBy: 'activity_date_time')
-        | offset: (pagination.currentPage-1)*pagination.itemsPerPage
-        | limitTo: pagination.itemsPerPage)"
+        | offset: (documentList.pagination.currentPage-1)*documentList.pagination.itemsPerPage
+        | limitTo: documentList.pagination.itemsPerPage)"
         ng-controller="DocumentCtrl"
         ng-include
         src="'document.html'">
@@ -27,9 +27,9 @@
     </tbody>
   </table>
   <div class="clearfix"></div>
-  <nav class="row" ng-show="(listOngoing.length > pagination.itemsPerPage)">
+  <nav class="row" ng-show="(listOngoing.length > documentList.pagination.itemsPerPage)">
     <div class="col-xs-12 text-center">
-      <uib-pagination boundary-links="true" total-items="listOngoing.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+      <uib-pagination boundary-links="true" total-items="listOngoing.length" rotate="false" items-per-page="documentList.pagination.itemsPerPage" max-size="documentList.pagination.maxSize" ng-model="documentList.pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
     </div>
   </nav>
 </div>
@@ -49,7 +49,7 @@
           'text-warning-light': (document.status_id == 2)
         }" uib-dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i></a>
       <ul class="dropdown-menu" uib-dropdown-menu>
-        <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="changeStatus(document, status.key)"></a></li>
+        <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="documentList.changeStatus(document, status.key)"></a></li>
       </ul>
     </div>
   </td>
@@ -60,7 +60,7 @@
         <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
         <li><a href ng-click="modalDocument('edit', document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
         <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
-        <li ng-if="permissions.allowDelete"><a href ng-click="deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
+        <li ng-if="permissions.allowDelete"><a href ng-click="documentList.deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
       </ul>
     </div>
   </td>
