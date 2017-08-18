@@ -335,6 +335,122 @@ define([
           expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
         });
       });
+
+      describe('document contains files', function () {
+        beforeEach(function () {
+          angular.extend(controller.document, mockDocument);
+        });
+
+        describe('document already has attachments', function () {
+          beforeEach(function () {
+            controller.files.length = 2;
+          });
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets the document status to approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('sets the documet status to awaiting approval', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            });
+          });
+        });
+
+        describe('document has attachments in upload queue', function () {
+          beforeEach(function () {
+            controller.uploader.queue.length = 3;
+          });
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets document status to be approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('sets document status to be awaiting approval', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            });
+          });
+        });
+      });
+
+      describe("document doesn\'t contains files", function () {
+        beforeEach(function () {
+          angular.extend(controller.document, mockDocument);
+        });
+
+        describe('document does not have any attachment', function () {
+          beforeEach(function () {
+            controller.files.length = 0;
+          });
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets document status to be approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('sets document status to be awaiting upload', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
+            });
+          });
+        });
+
+        describe('document has attachments in upload queue', function () {
+          beforeEach(function () {
+            controller.uploader.queue.length = 0;
+          });
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets document status to be approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('sets document status to be awaiting upload', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
+            });
+          });
+        });
+      });
     });
 
     describe('viewFile()', function () {

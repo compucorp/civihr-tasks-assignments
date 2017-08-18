@@ -187,18 +187,25 @@ define([
           return;
         }
 
-        var uploader = vm.uploader;
+        var documentStatus= vm.document.status_id  ;
+        var file;
         var filesTrash = vm.filesTrash;
         var promiseFilesDelete = [];
-        var file;
+        var uploader = vm.uploader;
 
         $scope.$broadcast('ct-spinner-show');
+
+        if (vm.files.length || vm.uploader.queue.length) {
+           documentStatus = vm.isRole('admin')? '3' : '2';
+        } else {
+           documentStatus = vm.isRole('admin')? '3' : '1';
+        }
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
         doc.activity_date_time = vm.parseDate(doc.activity_date_time) || '';
         doc.expire_date = vm.parseDate(doc.expire_date);
-        doc.status_id = !vm.isRole('admin') ? '2' : vm.document.status_id; // 2 => 'Awaiting Approval'
+        doc.status_id = documentStatus;
 
         if (filesTrash.length) {
           for (var i = 0; i < filesTrash.length; i++) {
@@ -233,31 +240,13 @@ define([
 
           return result;
         }).then(function (result) {
-          if (result.files.length && !!result.files[0].result) {
-            DocumentService.save({
-              id: result.document.id,
-              status_id: '1' // 1 => 'awaiting upload'
-            }).then(function (results) {
-              vm.document.status_id = results.status_id;
-              $modalInstance.close(vm.document);
-            });
-          } else if (result.files.length && !!result.files[0].values[0].result) {
-            DocumentService.save({
-              id: result.document.id,
-              status_id: vm.isRole('admin') ? '3' : '1' // 3 => 'approved', 1 => 'awaiting upload'
-            }).then(function (results) {
-              vm.document.status_id = results.status_id;
-              $modalInstance.close(vm.document);
-            });
-          } else {
-            $modalInstance.close(vm.document);
-          }
-
-          vm.document.id = result.document.id;
           vm.document.case_id = result.document.case_id;
           vm.document.file_count = vm.files.length + uploader.queue.length;
+          vm.document.id = result.document.id;
+          vm.document.status_id = result.status_id;
 
           AssignmentService.updateTab();
+          $modalInstance.close(vm.document);
 
           $rootScope.$broadcast('document-saved');
           $scope.$broadcast('ta-spinner-hide');
