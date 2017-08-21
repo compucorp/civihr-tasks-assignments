@@ -231,8 +231,9 @@ define([
 
           Task.save({ action: 'sendreminder' }, {
             json: {
+              activity_id: taskId,
               notes: notes
-            } || {}
+            }
           }, function (data) {
 
             if (UtilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {

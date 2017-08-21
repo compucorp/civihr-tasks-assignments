@@ -1,33 +1,30 @@
-/* globals CRM, _, inject */
 /* eslint-env amd, jasmine */
 
 define([
   'common/angular',
   'common/moment',
-  'mocks/fabricators/document',
-  'mocks/fabricators/contact',
-  'mocks/fabricators/assignment',
+  'common/lodash',
   'common/angularMocks',
+  'mocks/fabricators/assignment',
+  'mocks/fabricators/contact',
+  'mocks/fabricators/document',
   'tasks-assignments/app'
-], function (angular, moment, documentFabricator, contactFabricator, assignmentFabricator) {
+], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator) {
   'use strict';
 
   describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, HRSettings, data, role, files, DocumentService, notification,
-      sampleAssignee, modalMode, ContactService, AssignmentService, $q, $httpBackend, promise, document;
+    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService,
+      AssignmentService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
+      modalMode, promise, mockDocument, controller;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$filter_, _$q_, _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_) {
-      $controller = _$controller_;
-      $rootScope = _$rootScope_;
-      $filter = _$filter_;
-      $httpBackend = _$httpBackend_;
-      $q = _$q_;
-      ContactService = _ContactService_;
-      DocumentService = _DocumentService_;
-      AssignmentService = _AssignmentService_;
-      $scope = $rootScope.$new();
-
+    beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_,
+      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_) {
+      data = {};
+      files = {};
+      modalMode = '';
+      notification = '';
+      role = '';
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
       sampleAssignee = {
         id: 5,
@@ -35,14 +32,17 @@ define([
         icon_class: 'fa fa-plus',
         description: 'this is sample desc'
       };
+      $controller = _$controller_;
+      $rootScope = _$rootScope_;
+      $scope = $rootScope.$new();
+      $filter = _$filter_;
+      $httpBackend = _$httpBackend_;
+      $q = _$q_;
+      ContactService = _ContactService_;
+      DocumentService = _DocumentService_;
+      AssignmentService = _AssignmentService_;
+      fileService = _fileService_;
 
-      data = {};
-      files = {};
-      role = '';
-      modalMode = '';
-      notification = ''
-
-      // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
     }));
 
@@ -53,13 +53,13 @@ define([
       });
 
       it('sets the role as admin by default', function () {
-        expect($scope.role).toBe('admin');
+        expect(controller.role).toBe('admin');
       });
 
       it('corectly formats date time in document', function () {
-        expect($scope.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
-        expect($scope.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
-        expect($scope.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
+        expect(controller.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
+        expect(controller.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
+        expect(controller.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
       });
     });
 
@@ -71,7 +71,7 @@ define([
       });
 
       it('due date default to null', function () {
-        expect($scope.document.activity_date_time).toBe(null);
+        expect(controller.document.activity_date_time).toBe(null);
       });
     });
 
@@ -82,8 +82,8 @@ define([
         });
 
         it('has the lists empty', function () {
-          expect($scope.contacts.assignee).toEqual([]);
-          expect($scope.contacts.target).toEqual([]);
+          expect(controller.contacts.assignee).toEqual([]);
+          expect(controller.contacts.target).toEqual([]);
         });
       });
 
@@ -96,8 +96,8 @@ define([
         });
 
         it('has the list filled with just the contacts linked to the task', function () {
-          expect($scope.contacts.assignee).toEqual([{ id: '3' }]);
-          expect($scope.contacts.target).toEqual([{ id: '1' }]);
+          expect(controller.contacts.assignee).toEqual([{ id: '3' }]);
+          expect(controller.contacts.target).toEqual([{ id: '1' }]);
         });
       });
 
@@ -110,26 +110,26 @@ define([
       }
     });
 
-    describe('$scope.parseDate()', function () {
+    describe('parseDate()', function () {
       beforeEach(function () {
         initController();
       });
 
       it('should correctly parse valid date', function () {
         // dd/mm/yyyy
-        expect($scope.parseDate('01/01/2005')).toBe('2005-01-01');
+        expect(controller.parseDate('01/01/2005')).toBe('2005-01-01');
         // yyyy-mm-dd
-        expect($scope.parseDate('2005-01-01')).toBe('2005-01-01');
+        expect(controller.parseDate('2005-01-01')).toBe('2005-01-01');
         // date object
-        expect($scope.parseDate(new Date(2005, 0, 1))).toBe('2005-01-01');
+        expect(controller.parseDate(new Date(2005, 0, 1))).toBe('2005-01-01');
         // timestamp
-        expect($scope.parseDate(new Date(2005, 0, 1).getTime())).toBe('2005-01-01');
+        expect(controller.parseDate(new Date(2005, 0, 1).getTime())).toBe('2005-01-01');
       });
 
       it('should not parse invalid date', function () {
-        expect($scope.parseDate(null)).toBe(null);
-        expect($scope.parseDate(undefined)).toBe(null);
-        expect($scope.parseDate(false)).toBe(null);
+        expect(controller.parseDate(null)).toBe(null);
+        expect(controller.parseDate(undefined)).toBe(null);
+        expect(controller.parseDate(false)).toBe(null);
       });
     });
 
@@ -140,7 +140,7 @@ define([
       });
 
       it('adds contacts to list of assignees', function () {
-        expect($scope.document.assignee_contact_id[0]).toBe(sampleAssignee.id);
+        expect(controller.document.assignee_contact_id[0]).toBe(sampleAssignee.id);
       });
 
       it('adds assignee to contact search list', function () {
@@ -152,13 +152,26 @@ define([
     describe('removeAssignee()', function () {
       beforeEach(function () {
         initController();
-        addAssignee(sampleAssignee);
       });
 
-      it('removes assignee form the list of assignees', function () {
-        expect($scope.document.assignee_contact_id.length).toEqual(1);
-        $scope.removeAssignee(0);
-        expect($scope.document.assignee_contact_id.length).toEqual(0);
+      describe('added a assignee', function () {
+        beforeEach(function () {
+          addAssignee(sampleAssignee);
+        });
+
+        it('adds assignee in the list of assignees', function () {
+          expect(controller.document.assignee_contact_id.length).toEqual(1);
+        });
+      });
+
+      describe('assignee is removed', function () {
+        beforeEach(function () {
+          controller.removeAssignee(0);
+        });
+
+        it('removes assignee form the list of assignees', function () {
+          expect(controller.document.assignee_contact_id.length).toEqual(0);
+        });
       });
     });
 
@@ -166,11 +179,11 @@ define([
       beforeEach(function () {
         initController();
         spyOn(CRM, 'help');
-        $scope.remindMeInfo();
+        controller.remindMeInfo();
       });
 
       it('makes calls to CRM.help() to display help message', function () {
-        expect(CRM.help).toHaveBeenCalledWith('Remind me?', $scope.remindMeMessage, 'error');
+        expect(CRM.help).toHaveBeenCalledWith('Remind me?', controller.remindMeMessage, 'error');
       });
     });
 
@@ -178,12 +191,12 @@ define([
       beforeEach(function () {
         initController();
 
-        $scope.role = 'staff';
+        controller.role = 'staff';
       });
 
       it('checks if the given role is the current one', function () {
-        expect($scope.isRole('staff')).toBe(true);
-        expect($scope.isRole('admin')).toBe(false);
+        expect(controller.isRole('staff')).toBe(true);
+        expect(controller.isRole('admin')).toBe(false);
       });
     });
 
@@ -194,20 +207,20 @@ define([
       });
 
       it('returns document type for document given id', function () {
-        expect($scope.getDocumentType(documentFabricator.documentTypes()[1].key)).toEqual(documentFabricator.documentTypes()[1].value);
-        expect($scope.getDocumentType(documentFabricator.documentTypes()[2].key)).toEqual(documentFabricator.documentTypes()[2].value);
-        expect($scope.getDocumentType(documentFabricator.documentTypes()[3].key)).toEqual(documentFabricator.documentTypes()[3].value);
+        expect(controller.getDocumentType(documentFabricator.documentTypes()[1].key)).toEqual(documentFabricator.documentTypes()[1].value);
+        expect(controller.getDocumentType(documentFabricator.documentTypes()[2].key)).toEqual(documentFabricator.documentTypes()[2].value);
+        expect(controller.getDocumentType(documentFabricator.documentTypes()[3].key)).toEqual(documentFabricator.documentTypes()[3].value);
       });
     });
 
-    describe('$scope.modalTitle()', function () {
+    describe('modalTitle()', function () {
       describe('when modalMode is not set', function () {
         beforeEach(function () {
           initController();
         });
 
         it('sets the modal title as "New Document" by default', function () {
-          expect($scope.modalTitle).toBe('New Document');
+          expect(controller.modalTitle).toBe('New Document');
         });
       });
 
@@ -218,21 +231,21 @@ define([
         });
 
         it('sets the document modal title to "Edit Document"', function () {
-          expect($scope.modalTitle).toBe('Edit Document');
+          expect(controller.modalTitle).toBe('Edit Document');
         });
       });
     });
 
-    describe('$scope.onContactChanged', function () {
+    describe('onContactChanged', function () {
       beforeEach(function () {
         spyOn(ContactService, 'updateCache').and.returnValue({});
 
         initController();
-        $scope.onContactChanged(contactFabricator.single());
+        controller.onContactChanged(contactFabricator.single());
       });
 
       it('resets the document case id to empty', function () {
-        expect($scope.document.case_id).toEqual('');
+        expect(controller.document.case_id).toEqual('');
       });
 
       it('calls contact service to cache selected Contact', function () {
@@ -240,7 +253,7 @@ define([
       });
     });
 
-    describe('$scope.searchContactAssignments', function () {
+    describe('searchContactAssignments', function () {
       beforeEach(function () {
         spyOn($rootScope, '$broadcast').and.callThrough();
         spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
@@ -248,7 +261,7 @@ define([
 
       beforeEach(function () {
         initController();
-        promise = $scope.searchContactAssignments('204');
+        promise = controller.searchContactAssignments('204');
       });
 
       afterEach(function () {
@@ -261,7 +274,7 @@ define([
 
       it('search for assignments for a target contact and stores in $scope.assignments', function () {
         promise.then(function () {
-          expect($scope.assignments).toEqual(assignmentFabricator.listResponse());
+          expect(controller.assignments).toEqual(assignmentFabricator.listResponse());
         });
       });
 
@@ -272,9 +285,9 @@ define([
       });
     });
 
-    describe('$scope.confirm', function () {
+    describe('confirm', function () {
       beforeEach(function () {
-        document = {
+        mockDocument = {
           target_contact_id: ['202'],
           activity_type_id: '1'
         };
@@ -284,9 +297,9 @@ define([
 
       describe('document due date is null', function () {
         beforeEach(function () {
-          document.activity_date_time = null;
-          angular.extend($scope.document, document);
-          $scope.confirm();
+          mockDocument.activity_date_time = null;
+          angular.extend(controller.document, mockDocument);
+          controller.confirm();
         });
 
         it('sets document with null due date to empty', function () {
@@ -296,9 +309,9 @@ define([
 
       describe('document due date is empty', function () {
         beforeEach(function () {
-          document.activity_date_time = '';
-          angular.extend($scope.document, document);
-          $scope.confirm();
+          mockDocument.activity_date_time = '';
+          angular.extend(controller.document, mockDocument);
+          controller.confirm();
         });
 
         it('sets document with empty due date to empty', function () {
@@ -307,8 +320,29 @@ define([
       });
     });
 
+    describe('viewFile()', function () {
+      var file = {
+        'name': 'sampleName',
+        'url': 'test/file',
+        'fileType': 'image/png'
+      };
+
+      beforeEach(function () {
+        spyOn(fileService, 'openFile').and.returnValue($q.resolve('fileObject'));
+      });
+
+      beforeEach(function () {
+        initController();
+        controller.viewFile(file);
+      });
+
+      it('gets the blob file url for given file', function () {
+        expect(fileService.openFile).toHaveBeenCalledWith(file);
+      });
+    });
+
     function addAssignee (assignee) {
-      $scope.addAssignee(assignee);
+      controller.addAssignee(assignee);
     }
 
     function fakeModalInstance () {
@@ -322,7 +356,7 @@ define([
     }
 
     function initController (scopeValues) {
-      $controller('ModalDocumentCtrl', {
+      controller = $controller('ModalDocumentCtrl', {
         $scope: _.assign($scope, scopeValues),
         $filter: $filter,
         $uibModalInstance: fakeModalInstance(),

@@ -113,7 +113,7 @@
         </div>
         <div class="col-xs-12 col-sm-5" ng-show="task.status_id || showFieldStatus">
           <div class="crm_custom-select crm_custom-select--full">
-            <select ng-required class="form-control" ng-model="task.status_id" ng-options="status.key as status.value for status in cache.taskStatus.arr">
+            <select ng-required class="form-control no-select2" ng-model="task.status_id" ng-options="status.key as status.value for status in cache.taskStatus.arr">
               <option value="">Status</option>
             </select>
             <span class="crm_custom-select__arrow"></span>

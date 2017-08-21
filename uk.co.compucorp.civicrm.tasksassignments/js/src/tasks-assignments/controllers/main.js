@@ -28,6 +28,7 @@ define([
           appendTo: $rootElement.find('div').eq(0),
           templateUrl: config.path.TPL + 'modal/document.html?v=3',
           controller: 'ModalDocumentCtrl',
+          controllerAs: 'documentModal',
           resolve: {
             modalMode: function () {
               return modalMode;
