@@ -31,7 +31,7 @@
           <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Assignment Type:</label>
           <div class="col-xs-12 col-sm-6">
             <div class="crm_custom-select crm_custom-select--full">
-              <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">
+              <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control no-select2" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">
                 <option value="">- select -</option>
               </select>
               <span class="crm_custom-select__arrow"></span>
