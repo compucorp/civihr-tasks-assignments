@@ -187,19 +187,13 @@ define([
           return;
         }
 
-        var documentStatus= vm.document.status_id  ;
+        var documentStatus = vm.document.status_id;
         var file;
-        var filesTrash = vm.filesTrash;
         var promiseFilesDelete = [];
-        var uploader = vm.uploader;
 
         $scope.$broadcast('ct-spinner-show');
 
-        if (vm.files.length || vm.uploader.queue.length) {
-           documentStatus = vm.isRole('admin')? '3' : '2';
-        } else {
-           documentStatus = vm.isRole('admin')? '3' : '1';
-        }
+        documentStatus = vm.isRole('admin') ? '3' : (vm.files.length || vm.uploader.queue.length ? '2' : '1');
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
@@ -207,9 +201,9 @@ define([
         doc.expire_date = vm.parseDate(doc.expire_date);
         doc.status_id = documentStatus;
 
-        if (filesTrash.length) {
-          for (var i = 0; i < filesTrash.length; i++) {
-            file = filesTrash[i];
+        if (vm.filesTrash.length) {
+          for (var i = 0; i < vm.filesTrash.length; i++) {
+            file = vm.filesTrash[i];
             promiseFilesDelete.push(FileService.delete(file.fileID, file.entityID, file.entityTable));
           }
         }
@@ -218,7 +212,7 @@ define([
           document: DocumentService.save(doc),
           files: promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
         }).then(function (result) {
-          if (uploader.queue.length) {
+          if (vm.uploader.queue.length) {
             var modalInstance = $modal.open({
               appendTo: $rootElement.find('div').eq(0),
               templateUrl: config.path.TPL + '/modal/progress.html?v=1',
@@ -226,7 +220,7 @@ define([
               controller: 'ModalProgressCtrl',
               resolve: {
                 uploader: function () {
-                  return uploader;
+                  return vm.uploader;
                 },
                 entityId: function () {
                   return result.document.id;
@@ -241,13 +235,12 @@ define([
           return result;
         }).then(function (result) {
           vm.document.case_id = result.document.case_id;
-          vm.document.file_count = vm.files.length + uploader.queue.length;
+          vm.document.file_count = vm.files.length + vm.uploader.queue.length;
           vm.document.id = result.document.id;
           vm.document.status_id = result.status_id;
 
           AssignmentService.updateTab();
           $modalInstance.close(vm.document);
-
           $rootScope.$broadcast('document-saved');
           $scope.$broadcast('ta-spinner-hide');
         }, function (reason) {
