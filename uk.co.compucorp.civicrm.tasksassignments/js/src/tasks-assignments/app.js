@@ -1,9 +1,11 @@
-/* global define, angular, CustomEvent */
+/* global CustomEvent */
+/* eslint-env amd */
 
 define([
+  'common/angular',
   'tasks-assignments/modules/config',
   'tasks-assignments/modules/settings',
-  'tasks-assignments/modules/run',
+  'tasks-assignments/modules/run.module',
   'tasks-assignments/modules/app-dashboard',
   'tasks-assignments/modules/app-documents',
   'tasks-assignments/modules/app-tasks',
@@ -20,7 +22,7 @@ define([
   'tasks-assignments/controllers/dashboard/nav-main',
   'tasks-assignments/controllers/dashboard/top-bar',
   'tasks-assignments/controllers/modal/modal-dialog',
-  'tasks-assignments/controllers/modal/modal-document',
+  'tasks-assignments/controllers/modal/modal-document.controller',
   'tasks-assignments/controllers/modal/modal-progress',
   'tasks-assignments/controllers/modal/modal-task',
   'tasks-assignments/controllers/modal/modal-task-migrate',
@@ -45,7 +47,7 @@ define([
   'tasks-assignments/filters/ownership',
   'tasks-assignments/filters/status',
   'tasks-assignments/services/services'
-], function () {
+], function (angular) {
   'use strict';
 
   document.addEventListener('taInit', function (e) {

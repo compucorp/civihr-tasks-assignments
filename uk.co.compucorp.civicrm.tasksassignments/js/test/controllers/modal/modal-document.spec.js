@@ -12,13 +12,13 @@ define([
 ], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator) {
   'use strict';
 
-  describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService,
+  describe('ModalDocumentController', function () {
+    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService, config,
       AssignmentService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_,
+    beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
       _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_) {
       data = {};
       files = {};
@@ -38,6 +38,7 @@ define([
       $filter = _$filter_;
       $httpBackend = _$httpBackend_;
       $q = _$q_;
+      config = _config_;
       ContactService = _ContactService_;
       DocumentService = _DocumentService_;
       AssignmentService = _AssignmentService_;
@@ -76,7 +77,23 @@ define([
     });
 
     describe('Lookup contacts lists', function () {
-      describe('when in "new task" mode', function () {
+      describe('when in "New Document mode" for other contact page', function () {
+        beforeEach(function () {
+          $rootScope.cache.contact.arrSearch = cachedContacts();
+          config.CONTACT_ID = '2';
+          data = {};
+          modalMode = 'new';
+
+          initController();
+        });
+
+        it('has the list filled with just the contacts tant match the config.CONTACT_ID', function () {
+          expect(controller.contacts.assignee).toEqual([]);
+          expect(controller.contacts.target).toEqual([{ id: '2' }]);
+        });
+      });
+
+      describe('when in "New Document" mode', function () {
         beforeEach(function () {
           initController();
         });
@@ -87,7 +104,7 @@ define([
         });
       });
 
-      describe('when in "edit task" mode', function () {
+      describe('when in "edit Document" mode', function () {
         beforeEach(function () {
           data = { id: '2', assignee_contact_id: '3', target_contact_id: '1' };
           $rootScope.cache.contact.arrSearch = cachedContacts();
@@ -356,13 +373,14 @@ define([
     }
 
     function initController (scopeValues) {
-      controller = $controller('ModalDocumentCtrl', {
+      controller = $controller('ModalDocumentController', {
         $scope: _.assign($scope, scopeValues),
         $filter: $filter,
         $uibModalInstance: fakeModalInstance(),
         data: data,
         files: files,
         role: role,
+        config: config,
         modalMode: modalMode,
         HR_settings: HRSettings,
         notification: notification
