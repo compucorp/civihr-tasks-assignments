@@ -69,7 +69,7 @@
               <label>Document File</label>
               <div class="well drop-zone"
                 ng-if="documentModal.isRole('admin') || (documentModal.isRole('staff') && documentModal.mode == 'edit')"
-                ng-class="{'no-file': !documentModal.uploader.queue.length && !documentModal.files.length && documentModal.isRole('staff') && !documentModal.containsFiles && documentModal.mode == 'edit'}"
+                ng-class="{'no-file': !documentModal.uploader.queue.length && !documentModal.containsFiles && documentModal.mode == 'edit'}"
                 ng-click="documentModal.dropzoneClick()">
                 <i class="fa fa-cloud-upload"></i><br/>
                 <strong>Drop file here</strong><br/> or click to browse
@@ -96,7 +96,7 @@
                       <span>{{file.fileSize ? (file.fileSize/1024/1024|number:2) : '0.00' }} MB</span>
                     </td>
                     <td class="text-right" nowrap>
-                      <button ng-if="documentModal.isRole('admin') || (!documentModal.isRole('staff') && !documentModal.mode == 'view')"
+                      <button ng-if="documentModal.isRole('admin') || (documentModal.isRole('staff') && documentModal.mode == 'edit')"
                         type="button" class="btn btn-danger btn-xs" ng-click="documentModal.fileMoveToTrash($index)">
                         <span class="glyphicon glyphicon-trash"></span> Remove
                       </button>
@@ -109,7 +109,7 @@
                       <span>{{ item.file.size/1024/1024|number:2 }} MB</span>
                     </td>
                     <td class="text-right" nowrap>
-                      <button ng-if="documentModal.isRole('admin') || (!documentModal.isRole('staff') && !documentModal.mode == 'view')" type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                      <button ng-if="documentModal.isRole('admin') || (documentModal.isRole('staff') && documentModal.mode == 'edit')" type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
                         <span class="glyphicon glyphicon-trash"></span> Remove
                       </button>
                       <a target="_blank" ng-if="documentModal.isRole('staff') && documentModal.mode == 'view'" ng-href="{{ file.url }}"> <span class="fa fa-download"></span></a>
