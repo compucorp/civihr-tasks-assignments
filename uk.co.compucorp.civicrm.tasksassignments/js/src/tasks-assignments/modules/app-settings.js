@@ -1,32 +1,34 @@
+/* eslint-env amd */
+
 define([
-    'tasks-assignments/modules/run'
-], function () {
-    'use strict';
+  'common/angular',
+  'tasks-assignments/modules/run.module'
+], function (angular) {
+  'use strict';
 
-    angular.module('civitasks.appSettings', ['civitasks.run'])
-        .config(['config','$stateProvider','$urlRouterProvider', '$resourceProvider', '$httpProvider',
-            'uibDatepickerConfig', 'uiSelectConfig','$logProvider',
-            function(config, $stateProvider, $urlRouterProvider, $resourceProvider, $httpProvider,
-                datepickerConfig, uiSelectConfig, $logProvider){
-                $logProvider.debugEnabled(config.DEBUG);
+  angular.module('civitasks.appSettings', ['civitasks.run'])
+    .config(['config', '$stateProvider', '$urlRouterProvider', '$resourceProvider', '$httpProvider',
+      'uibDatepickerConfig', 'uiSelectConfig', '$logProvider',
+      function (config, $stateProvider, $urlRouterProvider, $resourceProvider, $httpProvider,
+        datepickerConfig, uiSelectConfig, $logProvider) {
+        $logProvider.debugEnabled(config.DEBUG);
 
-                $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise('/');
 
-                $stateProvider.
-                    state('settings', {
-                        url: '/',
-                        controller: 'SettingsCtrl',
-                        templateUrl: config.path.TPL+'settings.html?v=5'
-                    }
-                );
+        $stateProvider
+          .state('settings', {
+            url: '/',
+            controller: 'SettingsCtrl',
+            templateUrl: config.path.TPL + 'settings.html?v=5'
+          });
 
-                $resourceProvider.defaults.stripTrailingSlashes = false;
+        $resourceProvider.defaults.stripTrailingSlashes = false;
 
-                $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-                datepickerConfig.showWeeks = false;
+        datepickerConfig.showWeeks = false;
 
-                uiSelectConfig.theme = 'bootstrap';
-            }
-        ]);
+        uiSelectConfig.theme = 'bootstrap';
+      }
+    ]);
 });

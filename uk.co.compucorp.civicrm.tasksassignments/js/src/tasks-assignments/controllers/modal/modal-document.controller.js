@@ -14,11 +14,17 @@ define([
 ], function (angular, moment, _, controllers) {
   'use strict';
 
-  controllers.controller('ModalDocumentCtrl', ['$window', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log', 'role',
-    '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
-    'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService',
-    function ($window, $scope, $modalInstance, $rootScope, $rootElement, $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService,
-      DocumentService, ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService, fileService) {
+  controllers.controller('ModalDocumentController', ModalDocumentCtrl);
+
+  ModalDocumentCtrl.$inject = ['$window', '$scope', '$uibModalInstance', '$rootScope',
+    '$rootElement', '$q', '$log', 'role', '$filter', '$uibModal', '$dialog', '$timeout',
+    'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
+    'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService'
+  ];
+
+  function ModalDocumentCtrl ($window, $scope, $modalInstance, $rootScope, $rootElement,
+    $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService, DocumentService,
+    ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService, fileService) {
       $log.debug('Controller: ModalDocumentCtrl');
 
       var vm = this;
@@ -321,7 +327,7 @@ define([
       function initialContacts (type) {
         var cachedContacts = $rootScope.cache.contact.arrSearch;
 
-        return !vm.document.id ? [] : cachedContacts.filter(function (contact) {
+        return !vm.document.id && modalMode === 'edit' ? [] : cachedContacts.filter(function (contact) {
           var currContactId = vm.document[type + '_contact_id'][0];
 
           return +currContactId === +contact.id;
@@ -362,10 +368,10 @@ define([
         }
 
         /**
-        * Apart from date format fetched from CiviCRM settings we want to parse:
-        *  - timestamps (Date object is used by some 3rd party directives)
-        *  - date format we get from server
-        */
+         * Apart from date format fetched from CiviCRM settings we want to parse:
+         *  - timestamps (Date object is used by some 3rd party directives)
+         *  - date format we get from server
+         */
         var formatted = moment(date, [HRSettings.DATE_FORMAT.toUpperCase(), 'x', 'YYYY-MM-DD']);
 
         return (formatted.isValid()) ? formatted.format('YYYY-MM-DD') : null;
@@ -496,6 +502,5 @@ define([
           $rootScope.$broadcast('ct-spinner-hide');
         });
       }
-    }
-  ]);
+    };
 });
