@@ -69,7 +69,7 @@
               <label>Document File</label>
               <div class="well drop-zone"
                 ng-if="documentModal.isRole('admin') || (documentModal.isRole('staff') && documentModal.mode == 'edit')"
-                ng-class="{'no-file': !documentModal.uploader.queue.length && !documentModal.containsFiles && documentModal.mode == 'edit'}"
+                ng-class="{'no-file': !documentModal.uploader.queue.length && !documentModal.containsFiles && documentModal.isRole('staff') && documentModal.mode == 'edit'}"
                 ng-click="documentModal.dropzoneClick()">
                 <i class="fa fa-cloud-upload"></i><br/>
                 <strong>Drop file here</strong><br/> or click to browse
