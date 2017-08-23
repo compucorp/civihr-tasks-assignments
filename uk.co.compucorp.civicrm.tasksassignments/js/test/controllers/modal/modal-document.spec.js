@@ -312,6 +312,36 @@ define([
         initController();
       });
 
+      describe("document doesn't contain attachments", function () {
+        beforeEach(function () {
+          controller.uploader.queue.length = 0;
+          controller.files.length = 0;
+          angular.extend(controller.document, mockDocument);
+        });
+
+        describe('when user is staff', function () {
+          beforeEach(function () {
+            controller.role = 'staff';
+            controller.confirm();
+          });
+
+          it('flags document does not contain files', function () {
+            expect(controller.containsFiles).toEqual(false);
+          });
+        });
+
+        describe('when user is admin', function () {
+          beforeEach(function () {
+            controller.role = 'admin';
+            controller.confirm();
+          });
+
+          it('flags document does not contain files', function () {
+            expect(controller.containsFiles).toEqual(true);
+          });
+        });
+      });
+
       describe('document due date is null', function () {
         beforeEach(function () {
           mockDocument.activity_date_time = null;
@@ -403,7 +433,7 @@ define([
           angular.extend(controller.document, mockDocument);
         });
 
-        describe('document does not have any attachments', function () {
+        describe('document does not have existing attachments', function () {
           beforeEach(function () {
             controller.files.length = 0;
           });
@@ -422,16 +452,17 @@ define([
           describe('user is staff', function () {
             beforeEach(function () {
               controller.role = 'staff';
+
               controller.confirm();
             });
 
-            it('sets document status to Awaiting Upload', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
+            it("doesn't call the documentServide to update the status", function () {
+              expect(DocumentService.save).not.toHaveBeenCalled();
             });
           });
         });
 
-        describe('document has attachments in upload queue', function () {
+        describe('document doesnot have attachments in upload queue', function () {
           beforeEach(function () {
             controller.uploader.queue.length = 0;
           });
@@ -453,8 +484,8 @@ define([
               controller.confirm();
             });
 
-            it('sets document status to Awaiting Upload', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
+            it("doesn't call DocumentService to update status", function () {
+              expect(DocumentService.save).not.toHaveBeenCalled();
             });
           });
         });

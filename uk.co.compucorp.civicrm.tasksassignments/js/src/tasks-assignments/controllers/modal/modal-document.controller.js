@@ -32,7 +32,9 @@ define([
       vm.document = {};
       vm.files = [];
       vm.filesTrash = [];
-      vm.modalTitle = modalMode === 'edit' ? 'Edit Document' : 'New Document';
+      vm.mode = modalMode;
+      vm.modalTitle = vm.mode === 'edit' ? 'Edit Document' : 'New Document';
+      vm.containsFiles = true;
       vm.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
       vm.role = role || 'admin';
       vm.showCId = !config.CONTACT_ID;
@@ -190,6 +192,11 @@ define([
         var documentStatus = vm.document.status_id;
         var file;
         var promiseFilesDelete = [];
+
+        if (vm.isRole('staff') && !vm.uploader.queue.length && !vm.files.length) {
+          vm.containsFiles = false;
+          return;
+        }
 
         $scope.$broadcast('ct-spinner-show');
 
