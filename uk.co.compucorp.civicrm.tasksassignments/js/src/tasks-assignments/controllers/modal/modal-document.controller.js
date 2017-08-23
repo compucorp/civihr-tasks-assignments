@@ -25,7 +25,7 @@ define([
   function ModalDocumentCtrl ($window, $scope, $modalInstance, $rootScope, $rootElement,
     $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService, DocumentService,
     ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService, fileService) {
-    $log.debug('Controller: ModalDocumentCtrl');
+    $log.debug('Controller: ModalDocumentController');
 
     var vm = this;
 
