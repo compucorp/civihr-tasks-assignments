@@ -319,6 +319,36 @@ define([
         initController();
       });
 
+      describe("document doesn't contain attachments", function () {
+        beforeEach(function () {
+          controller.uploader.queue.length = 0;
+          controller.files.length = 0;
+          angular.extend(controller.document, mockDocument);
+        });
+
+        describe('when user is staff', function () {
+          beforeEach(function () {
+            controller.role = 'staff';
+            controller.confirm();
+          });
+
+          it('flags document does not contain files', function () {
+            expect(controller.containsFiles).toEqual(false);
+          });
+        });
+
+        describe('when user is admin', function () {
+          beforeEach(function () {
+            controller.role = 'admin';
+            controller.confirm();
+          });
+
+          it('flags document does not contain files', function () {
+            expect(controller.containsFiles).toEqual(true);
+          });
+        });
+      });
+
       describe('document due date is null', function () {
         beforeEach(function () {
           mockDocument.activity_date_time = null;
@@ -468,6 +498,7 @@ define([
           describe('user is staff', function () {
             beforeEach(function () {
               controller.role = 'staff';
+
               controller.confirm();
             });
 
