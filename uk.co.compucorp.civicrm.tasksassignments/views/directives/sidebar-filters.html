@@ -5,13 +5,15 @@
         {{label[filter.value]}}
         <i class="fa fa-calendar" ng-click="viewInCalendar(filter.calendarView)"></i>
         <span class="badge badge-{{filter.badgeClass}}">
-          {{(list
+          {{(
+            (((list | filterByDueExpiry:filter.value:'activity_date_time':filterParams.dateRange)).length ?
+              (list | filterByDueExpiry:filter.value:'activity_date_time':filterParams.dateRange):
+              (list | filterByDueExpiry:filter.value:'expire_date':filterParams.dateRange))
             | filterByStatus:filterParams.documentStatus || ''
-            | filterByDue:filter.value
             | filterByOwnership:filterParams.ownership
             | filterByAssignmentType:filterParams.assignmentType
-            | filterByDue:filter.value:filterParams.dateRange
-            ).length}}
+            ).length
+          }}
         </span>
       </a>
     </li>
