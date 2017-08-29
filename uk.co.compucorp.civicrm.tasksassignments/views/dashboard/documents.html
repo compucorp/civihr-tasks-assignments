@@ -40,10 +40,14 @@
                 ng-model="filterParams.ownership"
                 uib-btn-radio="'assigned'">
                 My Docs
-              <span>({{(list |
-                filterByDue:filterParams.due:filterParams.dateRange |
-                filterByStatus:filterParams.documentStatus |
-                filterByOwnership:'assigned').length}})
+              <span>
+                ({{
+                  ((((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
+                    (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange):
+                    (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange)) |
+                  filterByStatus:filterParams.documentStatus |
+                  filterByOwnership:'assigned').length
+                }})
               </span>
               </a>
               <a
@@ -52,10 +56,14 @@
                 ng-model="filterParams.ownership"
                 uib-btn-radio="'delegated'">
                 Delegated Docs
-              <span>({{(list |
-                filterByDue:filterParams.due:filterParams.dateRange |
-                filterByStatus:filterParams.documentStatus |
-                filterByOwnership:'delegated').length}})
+              <span>
+                ({{
+                  ((((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
+                    (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange):
+                    (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange)) |
+                  filterByStatus:filterParams.documentStatus |
+                  filterByOwnership:'delegated').length
+                }})
               </span>
               </a>
               <a
@@ -64,9 +72,14 @@
                 ng-model="filterParams.ownership"
                 uib-btn-radio="null">
                 All
-              <span>({{(list |
-                filterByDue:filterParams.due:filterParams.dateRange |
-                filterByStatus:filterParams.documentStatus).length}})
+              <span>
+                ({{
+                  ((((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
+                    (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange):
+                    (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange)) |
+                  filterByDueExpiry:filterParams.due:filterParams.dateRange |
+                  filterByStatus:filterParams.documentStatus).length
+                }})
               </span>
               </a>
             </div>
@@ -140,8 +153,9 @@
               <tbody>
                 <tr
                   ng-repeat="document in
-                    listPaginated = (listFiltered = (listOngoing = (list)
-                    | filterByDue:filterParams.due:filterParams.dateRange
+                    listPaginated = (listFiltered = (listOngoing = (((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
+                      (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange) :
+                      (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange))
                     | filterByOwnership:filterParams.ownership
                     | filterByAssignmentType:filterParams.assignmentType
                     | filterByContactId:filterParams.contactId
@@ -158,7 +172,13 @@
             <div class="clearfix"></div>
             <nav class="row" ng-show="(listFiltered.length > pagination.itemsPerPage)">
               <div class="col-xs-12 text-center">
-                <uib-pagination boundary-links="true" total-items="listFiltered.length" rotate="false" items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize" ng-model="pagination.currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+                <uib-pagination boundary-links="true"
+                  total-items="listFiltered.length" rotate="false"
+                  items-per-page="pagination.itemsPerPage" max-size="pagination.maxSize"
+                  ng-model="pagination.currentPage" class="pagination-sm"
+                  previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                  last-text="&raquo;">
+                </uib-pagination>
               </div>
             </nav>
         </div>
