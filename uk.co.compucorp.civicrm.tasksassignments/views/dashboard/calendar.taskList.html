@@ -2,7 +2,7 @@
 <ul class="{{prefix}}list-task {{prefix}}list-task-small">
   <li ng-repeat="task in listOngoing = (list
     | filterByStatus:cache.taskStatusResolve:false
-    | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
+    | filterByDueExpiry:'dateRange':{ from: calendarDay, until: calendarDay }
     | orderBy: 'activity_date_time')"
     ng-controller="TaskCtrl"
     ng-class="{
