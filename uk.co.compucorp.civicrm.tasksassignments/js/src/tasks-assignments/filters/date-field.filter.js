@@ -19,6 +19,10 @@ define([
       var inputArrlen = inputArr.length;
       var today = date.setHours(0, 0, 0, 0);
 
+      if (!field) {
+        throw new Error('Field name to filter a list is required');
+      }
+
       if (!inputArrlen || !type) {
         return inputArr;
       }
