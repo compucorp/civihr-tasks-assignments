@@ -23,19 +23,19 @@
                   <a ui-sref="tasks.my" class="btn btn-gray active panel-filter__filter" ng-model="filterParams.ownership" uib-btn-radio="'assigned'">
                     My Tasks
                     <span>
-                      ({{(list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'assigned').length}})
+                      ({{(list | filterByDateField:filterParams.due:'activity_date_time':filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'assigned').length}})
                     </span>
                   </a>
                   <a ui-sref="tasks.delegated" class="btn btn-gray panel-filter__filter" ng-model="filterParams.ownership" uib-btn-radio="'delegated'">
                     Delegated Tasks
                     <span>
-                      ({{(list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'delegated').length}})
+                      ({{(list | filterByDateField:filterParams.due:'activity_date_time':filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'delegated').length}})
                     </span>
                   </a>
                   <a ui-sref="tasks.all" class="btn btn-gray panel-filter__filter" ng-model="filterParams.ownership" uib-btn-radio="null">
                     All
                     <span>
-                      ({{(list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false).length}})
+                      ({{(list | filterByDateField:filterParams.due:'activity_date_time':filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false).length}})
                     </span>
                   </a>
                 </div>
@@ -92,7 +92,7 @@
           </div>
         </div>
         <ul class="{{prefix}}list-task">
-          <li ng-repeat="task in listFiltered = (listUnlimited = (listOngoing = (list | filterByStatus:cache.taskStatusResolve:false) | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange | filterByOwnership:filterParams.ownership | filterByAssignmentType:filterParams.assignmentType | filterByContactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: listLimit)"
+          <li ng-repeat="task in listFiltered = (listUnlimited = (listOngoing = (list | filterByStatus:cache.taskStatusResolve:false) | filterByDateField:filterParams.due:'activity_date_time':filterParams.dateRange | filterByOwnership:filterParams.ownership | filterByAssignmentType:filterParams.assignmentType | filterByContactId:filterParams.contactId | orderBy: 'activity_date_time') | limitTo: listLimit)"
             ng-controller="TaskCtrl" ng-class="{ '{{prefix}}task-completed': task.completed, '{{prefix}}task-due': task.due }" ng-include src="'task.html'" ct-spinner ct-spinner-id="task{{task.id}}">
           </li>
         </ul>

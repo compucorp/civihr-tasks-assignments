@@ -42,9 +42,7 @@
                 My Docs
               <span>
                 ({{
-                  ((((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
-                    (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange):
-                    (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange)) |
+                  ((filterByDateField(filterParams.due)) |
                   filterByStatus:filterParams.documentStatus |
                   filterByOwnership:'assigned').length
                 }})
@@ -58,9 +56,7 @@
                 Delegated Docs
               <span>
                 ({{
-                  ((((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
-                    (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange):
-                    (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange)) |
+                  ((filterByDateField(filterParams.due)) |
                   filterByStatus:filterParams.documentStatus |
                   filterByOwnership:'delegated').length
                 }})
@@ -74,10 +70,8 @@
                 All
               <span>
                 ({{
-                  ((((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
-                    (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange):
-                    (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange)) |
-                  filterByDueExpiry:filterParams.due:filterParams.dateRange |
+                  (list |
+                  filterByDateField:filterParams.due:filterParams.dateRange |
                   filterByStatus:filterParams.documentStatus).length
                 }})
               </span>
@@ -153,9 +147,7 @@
               <tbody>
                 <tr
                   ng-repeat="document in
-                    listPaginated = (listFiltered = (listOngoing = (((list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange)).length ?
-                      (list | filterByDueExpiry:filterParams.due:'activity_date_time':filterParams.dateRange) :
-                      (list | filterByDueExpiry:filterParams.due:'expire_date':filterParams.dateRange))
+                    listPaginated = (listFiltered = (listOngoing = (filterByDateField(filterParams.due))
                     | filterByOwnership:filterParams.ownership
                     | filterByAssignmentType:filterParams.assignmentType
                     | filterByContactId:filterParams.contactId
