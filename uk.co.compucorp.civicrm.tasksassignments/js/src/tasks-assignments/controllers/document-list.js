@@ -211,6 +211,18 @@ define([
       };
 
       /**
+       * Filters the document list based on filter type and due or expiry date
+       * @param {string} type filter type
+       * @return {array} Document list
+       */
+      $scope.filterByDateField = function (type) {
+        var listByDueDate = $filter('filterByDateField')($scope.list, type, 'activity_date_time', $scope.filterParams.dateRange);
+        var listByExpiryDate = $filter('filterByDateField')($scope.list, type, 'expire_date', $scope.filterParams.dateRange);
+
+        return listByDueDate.length ? listByDueDate : listByExpiryDate;
+      };
+
+      /**
        * Subscribes for 'assignmentFormSuccess' event and when triggered,
        * updates document with given list of documents
        */
