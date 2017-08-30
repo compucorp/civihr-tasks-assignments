@@ -5,8 +5,8 @@ define([
 ], function (filters) {
   'use strict';
 
-  filters.filter('filterByDueExpiry', ['$filter', '$log', function ($filter, $log) {
-    $log.debug('Filter: filterByDueExpiry');
+  filters.filter('filterByDateField', ['$filter', '$log', function ($filter, $log) {
+    $log.debug('Filter: filterByDateField');
 
     return function (inputArr, type, field, dateRange) {
       if (!inputArr) {
@@ -18,8 +18,6 @@ define([
       var i = 0;
       var inputArrlen = inputArr.length;
       var today = date.setHours(0, 0, 0, 0);
-
-      field = field || 'activity_date_time';
 
       if (!inputArrlen || !type) {
         return inputArr;

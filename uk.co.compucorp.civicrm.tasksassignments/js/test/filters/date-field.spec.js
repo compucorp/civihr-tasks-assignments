@@ -83,75 +83,75 @@ define([
         });
 
         it('hides the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(0);
         });
 
         it('hides the result for "dueToday"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueToday').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueToday').length).toBe(0);
         });
 
         it('shows the result for "dueThisWeek"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueThisWeek').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueThisWeek').length).toBe(1);
         });
 
         it('shows the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('shows the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('shows the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(1);
         });
 
         it('hides the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the future but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusThreeDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockPlusThreeDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the future but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusTwoDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockPlusTwoDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the future but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusThreeDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockPlusThreeDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusTwoDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockPlusTwoDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(0);
         });
       });
 
@@ -171,75 +171,75 @@ define([
         });
 
         it('shows the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(1);
         });
 
         it('hides the result for "dueToday"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueToday').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueToday').length).toBe(0);
         });
 
         it('hides the result for "dueThisWeek"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueThisWeek').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueThisWeek').length).toBe(0);
         });
 
         it('shows the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
         });
 
         it('shows the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the past but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the past but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusTwoDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(1);
+          expect($filter('filterByDateField')(mockMinusTwoDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the past but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusThreeDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(1);
+          expect($filter('filterByDateField')(mockMinusThreeDays, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusTwoDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockMinusTwoDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusThreeDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(0);
+          expect($filter('filterByDateField')(mockMinusThreeDays, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(0);
         });
       });
 
@@ -251,59 +251,59 @@ define([
         });
 
         it('hides the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(0);
         });
 
         it('shows the result for "dueToday"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueToday').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueToday').length).toBe(1);
         });
 
         it('hides the result for "dueThisWeek"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueThisWeek').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueThisWeek').length).toBe(0);
         });
 
         it('shows the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('shows the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(0);
         });
       });
 
@@ -315,59 +315,59 @@ define([
         });
 
         it('hides the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(0);
         });
 
         it('hides the result for "dueToday"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueToday').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueToday').length).toBe(0);
         });
 
         it('hides the result for "dueThisWeek"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueThisWeek').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueThisWeek').length).toBe(0);
         });
 
         it('hides the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
         });
 
         it('hides the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', futureDateRange).length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyDateRange).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateIsToday).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from date is empty and until date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'activity_date_time', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
       });
 
@@ -376,21 +376,21 @@ define([
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 13))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('show the result if date is after 14 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 14))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('hide the result if date is after 15 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 15))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
         });
       });
 
@@ -399,21 +399,21 @@ define([
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 89))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('show the result if date is after 90 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 90))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('hide the result if date is after 91 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 91))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
         });
       });
     });
@@ -435,67 +435,67 @@ define([
         });
 
         it('hides the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(0);
         });
 
         it('shows the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('shows the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the future but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusThreeDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockPlusThreeDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the future but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusTwoDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockPlusTwoDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the future but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusThreeDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockPlusThreeDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockPlusTwoDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockPlusTwoDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
       });
 
@@ -515,67 +515,67 @@ define([
         });
 
         it('shows the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(1);
         });
 
         it('hides the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
         });
 
         it('hides the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the past but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the past but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusTwoDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockMinusTwoDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the past but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusThreeDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockMinusThreeDays, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past but less than due date', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past but equals due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusTwoDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockMinusTwoDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past but bigger than due date', function () {
-          expect($filter('filterByDueExpiry')(mockMinusThreeDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockMinusThreeDays, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
       });
 
@@ -587,51 +587,51 @@ define([
         });
 
         it('hides the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(0);
         });
 
         it('shows the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('shows the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
       });
 
@@ -643,51 +643,51 @@ define([
         });
 
         it('hides the result for "overdue"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'overdue').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'overdue').length).toBe(0);
         });
 
         it('hides the result for "dueInNextFortnight"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
         });
 
         it('hides the result for "dueInNinetyDays"', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', futureDateRange).length).toBe(0);
         });
 
         it('hides the result for "dateRange" in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', pastDateRange).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if from and until dates are empty', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyDateRange).length).toBe(1);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInPast).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateIsToday).length).toBe(0);
         });
 
         it('hides the result for "dateRange" if from date is empty and until date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyFromDateAndUntilDateInTheFuture).length).toBe(0);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the past', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInThePast).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is today', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateIsToday).length).toBe(1);
         });
 
         it('shows the result for "dateRange" if until date is empty and from date is in the future', function () {
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dateRange', 'expire_date', emptyUntilDateAndFromDateInTheFuture).length).toBe(1);
         });
       });
 
@@ -696,21 +696,21 @@ define([
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 13))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('show the result if date is after 14 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 14))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(1);
         });
 
         it('hide the result if date is after 15 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 15))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNextFortnight').length).toBe(0);
         });
       });
 
@@ -719,21 +719,21 @@ define([
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 89))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('show the result if date is after 90 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 90))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(1);
         });
 
         it('hide the result if date is after 91 days', function () {
           mockDueDate = [{
             activity_date_time: new Date(today.setDate(today.getDate() + 91))
           }];
-          expect($filter('filterByDueExpiry')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
+          expect($filter('filterByDateField')(mockDueDate, 'dueInNinetyDays').length).toBe(0);
         });
       });
     });
