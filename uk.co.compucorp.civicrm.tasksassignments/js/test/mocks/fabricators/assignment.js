@@ -1,6 +1,8 @@
-define(function() {
+/* eslint-env amd */
+
+define(function () {
   return {
-    listResponse: function() {
+    listResponse: function () {
       return [
         {
           id: '3',
@@ -32,7 +34,7 @@ define(function() {
             case_status: 'Ongoing'
           }
         }
-      ]
+      ];
     },
     assignmentTypes: function () {
       return {
@@ -445,7 +447,7 @@ define(function() {
           'is_forked': '',
           '$$hashKey': 'object:25'
         }
-      }
+      };
     },
     listAssignments: function () {
       return {
@@ -542,7 +544,7 @@ define(function() {
             }
           ]
         }
-      }
+      };
     }
-  }
+  };
 });
