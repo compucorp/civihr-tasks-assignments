@@ -210,7 +210,11 @@
       {{ (cache.contact.obj[document.target_contact_id[0]].sort_name | limitTo: 15) + (cache.contact.obj[document.target_contact_id[0]].sort_name.length > 15 ? '...' : '') }}
     </a>
   </td>
-  <td ng-if="document.assignee_contact_id">{{ concatAssignees(document.assignee_contact_id) }}</td>
+  <td ng-if="document.assignee_contact_id">
+    <a ng-repeat="(key, value) in listAssignees(document.assignee_contact_id)" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[key].contact_id}}">
+      {{value}} {{$last ? '' : ', '}}
+    </a>
+  </td>
   <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
   <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
   <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
