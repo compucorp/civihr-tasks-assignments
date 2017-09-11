@@ -10977,6 +10977,15 @@ fieldset[disabled]
 #civitasks .ct-documents-container, #cividocuments .ct-documents-container {
   background-color: #fff;
 }
+#civitasks .ct-documents-container table th, #cividocuments .ct-documents-container table th {
+  cursor: pointer;
+}
+#civitasks .ct-documents-container .sortorder:after, #cividocuments .ct-documents-container .sortorder:after {
+  content: '\25b2';
+}
+#civitasks .ct-documents-container .sortorder.reverse:after, #cividocuments .ct-documents-container .sortorder.reverse:after {
+  content: '\25bc';
+}
 #civitasks .ct-filter-date, #cividocuments .ct-filter-date {
   margin-top: -15px;
 }
