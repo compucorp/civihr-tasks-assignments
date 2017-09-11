@@ -292,8 +292,9 @@ define([
       });
     });
 
-    describe('concatAssignees', function () {
-      var assignees, concatedAssignees;
+    describe('listAssignees', function () {
+      var assignees;
+      var concatedAssignees = {};
 
       beforeEach(function () {
         initController();
@@ -302,10 +303,10 @@ define([
           $rootScope.cache.contact.obj[option.contact_id] = option;
         });
 
-        concatedAssignees = contactFabricator.list()[0].sort_name.replace(',', '') +
-        ',' + contactFabricator.list()[1].sort_name.replace(',', '') +
-        ',' + contactFabricator.list()[2].sort_name.replace(',', '');
-        assignees = controller.concatAssignees(['202', '203', '204']);
+        concatedAssignees[contactFabricator.list()[0].contact_id] = contactFabricator.list()[0].sort_name.replace(',', '');
+        concatedAssignees[contactFabricator.list()[1].contact_id] = contactFabricator.list()[1].sort_name.replace(',', '');
+        concatedAssignees[contactFabricator.list()[2].contact_id] = contactFabricator.list()[2].sort_name.replace(',', '');
+        assignees = controller.listAssignees(['202', '203', '204']);
       });
 
       afterEach(function () {
@@ -313,7 +314,7 @@ define([
       });
 
       it('concats the list of assignes by comma', function () {
-        expect(assignees).toBe(concatedAssignees);
+        expect(assignees).toEqual(concatedAssignees);
       });
     });
 

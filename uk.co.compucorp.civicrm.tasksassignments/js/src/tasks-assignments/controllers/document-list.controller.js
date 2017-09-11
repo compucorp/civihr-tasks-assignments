@@ -83,10 +83,10 @@ define([
     vm.apply = apply;
     vm.applySidebarFilters = applySidebarFilters;
     vm.changeStatus = changeStatus;
-    vm.concatAssignees = concatAssignees;
     vm.filterByDateField = filterByDateField;
     vm.deleteDocument = deleteDocument;
     vm.labelDateRange = labelDateRange;
+    vm.listAssignees = listAssignees;
     vm.viewInCalendar = viewInCalendar;
     vm.sortBy = sortBy;
 
@@ -186,26 +186,6 @@ define([
     }
 
     /**
-     * Creates the comma saperated list of assignees
-     * @param  {array} assigneesIds
-     * @return {string}
-     */
-    function concatAssignees (assigneesIds) {
-      var assigneeList = [];
-
-      if (assigneesIds.length) {
-        _.each(assigneesIds, function (assigneeId) {
-          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
-
-          assignee && assigneeList.push(assignee.sort_name.replace(',', ''));
-        });
-      }
-
-      return assigneeList.toString();
-    };
-
-
-    /**
      * Filters the documents list based on filter type and due date
      * @param {string} type filter type
      * @return {array} documents list
@@ -238,6 +218,27 @@ define([
 
       vm.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
     }
+
+    /**
+     * Creates the list of contact name as  object
+     * @param  {array} assigneesIds
+     * @return {object}
+     */
+    function listAssignees (assigneesIds) {
+      var assigneeList = {};
+
+      if (assigneesIds.length) {
+        _.each(assigneesIds, function (assigneeId) {
+          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+          if (assignee) {
+            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+          }
+        });
+      }
+
+      return assigneeList;
+    };
 
     /**
      * Deletes the given document

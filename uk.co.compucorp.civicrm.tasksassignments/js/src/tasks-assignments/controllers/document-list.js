@@ -122,22 +122,24 @@ define([
       };
 
       /**
-       * Creates the comma saperated list of assignees
+       * Creates the list of contact name as  object
        * @param  {array} assigneesIds
-       * @return {string}
+       * @return {object}
        */
-      $scope.concatAssignees = function (assigneesIds) {
-        var assigneeList = [];
+      $scope.listAssignees = function (assigneesIds) {
+        var assigneeList = {};
 
         if (assigneesIds.length) {
           _.each(assigneesIds, function (assigneeId) {
             var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
 
-            assignee && assigneeList.push(assignee.sort_name.replace(',', ''));
+            if (assignee) {
+              assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+            }
           });
         }
 
-        return assigneeList.toString();
+        return assigneeList;
       };
 
       /**
