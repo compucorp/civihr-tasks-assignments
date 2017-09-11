@@ -2,6 +2,7 @@
 
 define([
   'common/angular',
+<<<<<<< HEAD
   'common/lodash',
   'common/moment',
   'tasks-assignments/controllers/controllers',
@@ -10,6 +11,16 @@ define([
   'tasks-assignments/services/document',
   'tasks-assignments/services/file'
 ], function (angular, _, moment, controllers) {
+=======
+  'common/moment',
+  'common/lodash',
+  'tasks-assignments/controllers/controllers',
+  'tasks-assignments/services/contact',
+  'tasks-assignments/services/document',
+  'tasks-assignments/services/file',
+  'tasks-assignments/services/assignment'
+], function (angular, moment, _, controllers) {
+>>>>>>> PCHR-2456: Add sortBy and concatAssignees functions
   'use strict';
 
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
@@ -22,11 +33,19 @@ define([
 
       $scope.dueThisWeek = 0;
       $scope.dueToday = 0;
+<<<<<<< HEAD
+=======
+
+      $scope.propertyName = 'activity-date-time';
+      $scope.reverse = true;
+
+>>>>>>> PCHR-2456: Add sortBy and concatAssignees functions
       $scope.list = documentList;
       $scope.listFiltered = [];
       $scope.listOngoing = [];
       $scope.listPaginated = [];
       $scope.overdue = 0;
+<<<<<<< HEAD
       $scope.propertyName = 'activity-date-time';
       $scope.reverse = true;
       $scope.documentContactColumns = [
@@ -91,6 +110,8 @@ define([
           property: 'status_id'
         }
       ];
+=======
+>>>>>>> PCHR-2456: Add sortBy and concatAssignees functions
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
@@ -139,7 +160,11 @@ define([
       };
 
       /**
+<<<<<<< HEAD
        * Sort the document list based on the property name
+=======
+       * Sort the document list based on the property type
+>>>>>>> PCHR-2456: Add sortBy and concatAssignees functions
        * @param  {string} propertyName
        * @return {array}
        */
@@ -182,17 +207,27 @@ define([
       };
 
       /**
+<<<<<<< HEAD
        * Creates the list of contact name as  object
        * @param  {array} assigneesIds
        * @return {object}
        */
       $scope.listAssignees = function (assigneesIds) {
         var assigneeList = {};
+=======
+       * Creates the comma saperated list of assignees
+       * @param  {array} assigneesIds
+       * @return {string}
+       */
+      $scope.concatAssignees = function (assigneesIds) {
+        var assigneeList = [];
+>>>>>>> PCHR-2456: Add sortBy and concatAssignees functions
 
         if (assigneesIds.length) {
           _.each(assigneesIds, function (assigneeId) {
             var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
 
+<<<<<<< HEAD
             if (assignee) {
               assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
             }
@@ -200,6 +235,13 @@ define([
         }
 
         return assigneeList;
+=======
+            assignee && assigneeList.push(assignee.sort_name.replace(',', ''));
+          });
+        }
+
+        return assigneeList.toString();
+>>>>>>> PCHR-2456: Add sortBy and concatAssignees functions
       };
 
       /**

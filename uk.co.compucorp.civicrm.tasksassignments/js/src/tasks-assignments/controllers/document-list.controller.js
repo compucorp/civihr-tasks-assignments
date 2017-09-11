@@ -149,8 +149,8 @@ define([
     vm.deleteDocument = deleteDocument;
     vm.labelDateRange = labelDateRange;
     vm.listAssignees = listAssignees;
-    vm.viewInCalendar = viewInCalendar;
     vm.sortBy = sortBy;
+    vm.viewInCalendar = viewInCalendar;
 
     (function init () {
       subscribeForEvents();

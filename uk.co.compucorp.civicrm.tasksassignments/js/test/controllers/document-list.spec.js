@@ -235,6 +235,7 @@ define([
           sortedDocumentList = _.sortBy(controller.list, function (doc) {
             return $rootScope.cache.documentStatus.obj[doc.status_id];
           });
+
           controller.sortBy('status_id');
         });
 
