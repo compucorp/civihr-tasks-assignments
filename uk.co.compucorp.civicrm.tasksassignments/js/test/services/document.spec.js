@@ -117,7 +117,7 @@ define([
 
         it('calls contact service to get details using assignmentIds', function () {
           expect(AssignmentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
-            'IN': ['45', '46', '49']
+            'IN': ['5', '9', '10', '5']
           }));
         });
 
