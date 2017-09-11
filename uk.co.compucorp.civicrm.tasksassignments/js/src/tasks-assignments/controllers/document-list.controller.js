@@ -147,6 +147,7 @@ define([
     vm.changeStatus = changeStatus;
     vm.filterByDateField = filterByDateField;
     vm.deleteDocument = deleteDocument;
+    vm.filterByDateField = filterByDateField;
     vm.labelDateRange = labelDateRange;
     vm.listAssignees = listAssignees;
     vm.sortBy = sortBy;
@@ -246,6 +247,27 @@ define([
         AssignmentService.updateTab();
       });
     }
+
+    /**
+     * Creates the comma saperated list of assignees
+     * @param  {array} assigneesIds
+     * @return {object}
+     */
+    function listAssignees (assigneesIds) {
+       var assigneeList = {};
+
+       if (assigneesIds.length) {
+         _.each(assigneesIds, function (assigneeId) {
+           var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+           if (assignee) {
+             assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+           }
+         });
+       }
+
+       return assigneeList;
+     };
 
     /**
      * Filters the documents list based on filter type and due date
