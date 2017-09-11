@@ -47,10 +47,10 @@
         <table class="table table-striped {{prefix}}table-documents">
           <thead>
             <tr>
-              <th ng-repeat="column in documentContactColumns"
-                ng-click="sortBy(column.property)"
+              <th ng-repeat="column in list.documentContactColumns"
+                ng-click="list.sortBy(column.property)"
                 ng-if="column.condition != undefined ? column.condition : true">
-                  <span class="sortorder" ng-if="propertyName === column.property" ng-class="{reverse: reverse}"></span>
+                  <span class="sortorder" ng-if="list.propertyName === column.property" ng-class="{reverse: list.reverse}"></span>
                   {{ column.label }}
               </th>
               <th colspan="2"></th>
@@ -60,7 +60,7 @@
             <tr ng-repeat="document in listOngoing = (listFiltered = (list.list
                 | filterByStatus:list.filterParams.documentStatus
                 | filterByAssignmentType:list.filterParams.assignmentType
-                | orderBy: 'activity_date_time'))"
+                | orderBy: list.propertyName:list.reverse))"
               ng-controller="DocumentCtrl"
               ng-include src="'document.html'">
             </tr>

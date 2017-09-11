@@ -33,6 +33,68 @@ define([
     vm.overdue = 0;
     vm.propertyName = 'activity-date-time';
     vm.reverse = true;
+    vm.documentContactColumns = [
+      {
+        label: 'Type',
+        property: 'type'
+      },
+      {
+        label: 'Document Number',
+        property: 'document_number'
+      },
+      {
+        label: 'Assigned to',
+        property: 'assignee'
+      },
+      {
+        label: 'Assignment',
+        property: 'case_id',
+        condition: settings.extEnabled.assignments
+      },
+      {
+        label: 'Valid From',
+        property: 'valid_from'
+      },
+      {
+        label: 'Expiry Date',
+        property: 'expire_date'
+      },
+      {
+        label: 'Status',
+        property: 'status_id'
+      }
+    ];
+    vm.documentDashboardColumns = [
+      {
+        label: 'Type',
+        property: 'type'
+      },
+      {
+        label: 'Staff',
+        property: 'target_contact_id'
+      },
+      {
+        label: 'Assignee',
+        property: 'assignee'
+      },
+      {
+        label: 'Assignment',
+        property: 'case_id',
+        condition: settings.extEnabled.assignments
+      },
+      {
+        label: 'Due Date',
+        property: 'activity-date-time'
+      },
+      {
+        label: 'Expiry Date',
+        property: 'expire_date'
+      },
+      {
+        label: 'Status',
+        property: 'status_id'
+      }
+    ];
     vm.dpOpened = {
       filterDates: {}
     };

@@ -138,10 +138,10 @@
             <table class="table table-striped {{prefix}}table-documents">
               <thead>
                 <tr>
-                  <th ng-repeat="column in documentDashboardColumns"
-                    ng-click="sortBy(column.property)"
+                  <th ng-repeat="column in list.documentDashboardColumns"
+                    ng-click="list.sortBy(column.property)"
                     ng-if="column.condition != undefined ? column.condition : true">
-                    <span class="sortorder" ng-if="propertyName === column.property" ng-class="{reverse: reverse}"></span>
+                    <span class="sortorder" ng-if="list.propertyName === column.property" ng-class="{reverse: list.reverse}"></span>
                     {{ column.label }}
                   </th>
                   <th></th>
@@ -155,7 +155,7 @@
                     | filterByAssignmentType:list.filterParams.assignmentType
                     | filterByContactId:list.filterParams.contactId
                     | filterByStatus:list.filterParamsHolder.documentStatus
-                    | orderBy: 'activity_date_time')
+                    | orderBy: list.propertyName:list.reverse)
                     | offset: (list.pagination.currentPage-1)*list.pagination.itemsPerPage
                     | limitTo: list.pagination.itemsPerPage)"
                   ng-controller="DocumentCtrl"
