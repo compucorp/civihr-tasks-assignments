@@ -2,11 +2,14 @@
 /* eslint-env amd, jasmine */
 
 define([
-  'common/moment',
   'common/angular',
+  'common/moment',
+  'common/lodash',
   'mocks/fabricators/document',
+  'mocks/fabricators/contact',
+  'mocks/fabricators/assignment',
   'tasks-assignments/app'
-], function (moment, angular, documentFabricator) {
+], function (angular, moment, _, documentFabricator, contactFabricator, assignmentFabricator) {
   'use strict';
 
   describe('DocumentListController', function () {
@@ -184,6 +187,133 @@ define([
         it('returns filtered document by expiry date of the document', function () {
           expect(filteredDocumentList.length).toBe(3);
         });
+      });
+    });
+
+    describe('sortBy', function () {
+      beforeEach(function () {
+        initController();
+
+        _.each(documentFabricator.documentStatus(), function (option) {
+          $rootScope.cache.documentStatus.obj[option.key] = option.value;
+        });
+
+        _.each(documentFabricator.documentTypes(), function (option) {
+          $rootScope.cache.documentType.obj[option.key] = option.value;
+        });
+
+        _.each(contactFabricator.list(), function (option) {
+          $rootScope.cache.contact.obj[option.contact_id] = option;
+        });
+
+        $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
+        $rootScope.cache.assignment.obj = assignmentFabricator.listAssignments();
+      });
+
+      describe('documents are not sorted', function () {
+        it('lists unsorted document list', function () {
+          expect(controller.list[0].id).toBe('1200');
+          expect(controller.list[4].id).toBe('1213');
+        });
+      });
+
+      describe('document are sorted by docuument type', function () {
+        beforeEach(function () {
+          controller.sortBy('type');
+        });
+
+        afterEach(function () {
+          $rootScope.$apply();
+        });
+
+        it('lists documents by types', function () {
+          expect(controller.list[0].id).toBe('1213');
+          expect(controller.list[4].id).toBe('1200');
+        });
+      });
+
+      describe('documents are sorted by document status', function () {
+        afterEach(function () {
+          $rootScope.$apply();
+        });
+        beforeEach(function () {
+          controller.sortBy('status_id');
+        });
+
+        it('lists documents by document status', function () {
+          expect(controller.list[0].id).toBe('1210');
+          expect(controller.list[4].id).toBe('1200');
+        });
+      });
+
+      describe('document are sorted by document staff/target contact', function () {
+        afterEach(function () {
+          $rootScope.$apply();
+        });
+
+        beforeEach(function () {
+          controller.sortBy('target_contact');
+        });
+
+        it('lists documents by target contact/staff ', function () {
+          expect(controller.list[0].id).toBe('1200');
+          expect(controller.list[4].id).toBe('1205');
+        });
+      });
+
+      describe('documents are sorted by assignees', function () {
+        beforeEach(function () {
+          controller.sortBy('assignee');
+        });
+
+        afterEach(function () {
+          $rootScope.$apply();
+        });
+
+        it('lists documents by assignees', function () {
+          expect(controller.list[0].id).toBe('1200');
+          expect(controller.list[4].id).toBe('1213');
+        });
+      });
+
+      describe('documents are sorted by assignment type', function () {
+        beforeEach(function () {
+          controller.sortBy('case_id');
+        });
+
+        afterEach(function () {
+          $rootScope.$apply();
+        });
+
+        it('lists documents by assignment type', function () {
+          expect(controller.list[0].id).toBe('1205');
+          expect(controller.list[4].id).toBe('1210');
+        });
+      });
+    });
+
+    describe('concatAssignees', function () {
+      var assignees, concatedAssignees;
+
+      beforeEach(function () {
+        initController();
+
+        _.each(contactFabricator.list(), function (option) {
+          $rootScope.cache.contact.obj[option.contact_id] = option;
+        });
+
+        concatedAssignees = contactFabricator.list()[0].sort_name.replace(',', '') +
+        ',' + contactFabricator.list()[1].sort_name.replace(',', '') +
+        ',' + contactFabricator.list()[2].sort_name.replace(',', '');
+        assignees = controller.concatAssignees(['202', '203', '204']);
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      it('concats the list of assignes by comma', function () {
+        expect(assignees).toBe(concatedAssignees);
       });
     });
 

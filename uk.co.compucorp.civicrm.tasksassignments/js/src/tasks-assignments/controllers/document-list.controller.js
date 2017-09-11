@@ -31,6 +31,8 @@ define([
     vm.listOngoing = [];
     vm.listPaginated = [];
     vm.overdue = 0;
+    vm.propertyName = 'activity-date-time';
+    vm.reverse = true;
     vm.dpOpened = {
       filterDates: {}
     };
@@ -81,10 +83,12 @@ define([
     vm.apply = apply;
     vm.applySidebarFilters = applySidebarFilters;
     vm.changeStatus = changeStatus;
+    vm.concatAssignees = concatAssignees;
     vm.filterByDateField = filterByDateField;
     vm.deleteDocument = deleteDocument;
     vm.labelDateRange = labelDateRange;
     vm.viewInCalendar = viewInCalendar;
+    vm.sortBy = sortBy;
 
     (function init () {
       subscribeForEvents();
@@ -182,6 +186,26 @@ define([
     }
 
     /**
+     * Creates the comma saperated list of assignees
+     * @param  {array} assigneesIds
+     * @return {string}
+     */
+    function concatAssignees (assigneesIds) {
+      var assigneeList = [];
+
+      if (assigneesIds.length) {
+        _.each(assigneesIds, function (assigneeId) {
+          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+          assignee && assigneeList.push(assignee.sort_name.replace(',', ''));
+        });
+      }
+
+      return assigneeList.toString();
+    };
+
+
+    /**
      * Filters the documents list based on filter type and due date
      * @param {string} type filter type
      * @return {array} documents list
@@ -271,6 +295,49 @@ define([
           break;
       }
     }
+
+    /**
+     * Sort the document list based on the property type
+     * @param  {string} propertyName
+     * @return {array}
+     */
+    function sortBy (propertyName) {
+      vm.reverse = (vm.propertyName === propertyName) ? !vm.reverse : false;
+      vm.propertyName = propertyName;
+
+      switch (propertyName) {
+        case 'type':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            return $rootScope.cache.documentType.obj[doc.activity_type_id];
+          });
+          break;
+        case 'status_id':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            return $rootScope.cache.documentStatus.obj[doc.status_id];
+          });
+          break;
+        case 'target_contact':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name;
+          });
+          break;
+        case 'assignee':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            var assignee = doc.assignee_contact_id.length && _.find($rootScope.cache.contact.obj, {'id': doc.assignee_contact_id[0]});
+
+            return assignee && assignee.sort_name;
+          });
+          break;
+        case 'case_id':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            var assignment = $rootScope.cache.assignment.obj[doc.case_id];
+            var assignmentType = assignment && $rootScope.cache.assignmentType.obj[assignment.case_type_id];
+
+            return assignmentType && assignmentType.title;
+          });
+          break;
+      }
+    };
 
     // Subscribers for event listeners
     function subscribeForEvents () {
