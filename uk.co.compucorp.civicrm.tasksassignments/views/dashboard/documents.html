@@ -138,12 +138,34 @@
             <table class="table table-striped {{prefix}}table-documents">
               <thead>
                 <tr>
-                  <th>Type</th>
-                  <th>Target Contact</th>
-                  <th ng-if="settings.extEnabled.assignments">Assignment</th>
-                  <th>Due Date</th>
-                  <th>Expiry Date</th>
-                  <th>Status</th>
+                  <th ng-click="sortBy('type')">
+                    <span class="sortorder" ng-if="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
+                    Type
+                  </th>
+                  <th ng-click="sortBy('target_contact_id')">
+                    <span class="sortorder" ng-if="propertyName === 'target_contact_id'" ng-class="{reverse: reverse}"></span>
+                    Staff
+                  </th>
+                  <th ng-click="sortBy('assignee')">
+                    <span class="sortorder" ng-if="propertyName === 'assignee'" ng-class="{reverse: reverse}"></span>
+                    Assignee
+                  </th>
+                  <th ng-click="sortBy('case_id')" ng-if="settings.extEnabled.assignments">
+                    <span class="sortorder" ng-if="propertyName === 'case_id'" ng-class="{reverse: reverse}"></span>
+                    Assignment
+                  </th>
+                  <th ng-click="sortBy('activity-date-time')">
+                    <span class="sortorder" ng-if="propertyName === 'activity-date-time'" ng-class="{reverse: reverse}"></span>
+                    Due Date
+                  </th>
+                  <th ng-click="sortBy('expire_date')">
+                    <span class="sortorder" ng-if="propertyName === 'expire_date'" ng-class="{reverse: reverse}"></span>
+                    Expiry Date
+                  </th>
+                  <th ng-click="sortBy('status_id')">
+                    <span class="sortorder" ng-show="propertyName === 'status_id'" ng-class="{reverse: reverse}"></span>
+                    Status
+                  </th>
                   <th></th>
                 </tr>
               </thead>
@@ -183,7 +205,12 @@
 </div>
 <script type="text/ng-template" id="document.html">
   <td><a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
-  <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
+  <td>
+    <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}">
+      {{ (cache.contact.obj[document.target_contact_id[0]].sort_name | limitTo: 15) + (cache.contact.obj[document.target_contact_id[0]].sort_name.length > 15 ? '...' : '') }}
+    </a>
+  </td>
+  <td ng-if="document.assignee_contact_id">{{ concatAssignees(document.assignee_contact_id) }}</td>
   <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
   <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
   <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
