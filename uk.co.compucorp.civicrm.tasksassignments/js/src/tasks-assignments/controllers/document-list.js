@@ -2,14 +2,14 @@
 
 define([
   'common/angular',
-  'common/moment',
   'common/lodash',
+  'common/moment',
   'tasks-assignments/controllers/controllers',
+  'tasks-assignments/services/assignment',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
-  'tasks-assignments/services/file',
-  'tasks-assignments/services/assignment'
-], function (angular, moment, _, controllers) {
+  'tasks-assignments/services/file'
+], function (angular, _, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
@@ -22,15 +22,13 @@ define([
 
       $scope.dueThisWeek = 0;
       $scope.dueToday = 0;
-
-      $scope.propertyName = 'activity-date-time';
-      $scope.reverse = true;
-
       $scope.list = documentList;
       $scope.listFiltered = [];
       $scope.listOngoing = [];
       $scope.listPaginated = [];
       $scope.overdue = 0;
+      $scope.propertyName = 'activity-date-time';
+      $scope.reverse = true;
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
@@ -79,7 +77,7 @@ define([
       };
 
       /**
-       * Sort the document list based on the property type
+       * Sort the document list based on the property name
        * @param  {string} propertyName
        * @return {array}
        */

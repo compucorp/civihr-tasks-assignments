@@ -191,6 +191,8 @@ define([
     });
 
     describe('sortBy', function () {
+      var sortedDocumentList;
+
       beforeEach(function () {
         initController();
 
@@ -210,59 +212,58 @@ define([
         $rootScope.cache.assignment.obj = assignmentFabricator.listAssignments();
       });
 
-      describe('documents are not sorted', function () {
-        it('lists unsorted document list', function () {
-          expect(controller.list[0].id).toBe('1200');
-          expect(controller.list[4].id).toBe('1213');
-        });
+      afterEach(function () {
+        $rootScope.$apply();
       });
 
       describe('document are sorted by docuument type', function () {
         beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            return $rootScope.cache.documentType.obj[doc.activity_type_id];
+          });
+
           controller.sortBy('type');
         });
 
-        afterEach(function () {
-          $rootScope.$apply();
-        });
-
         it('lists documents by types', function () {
-          expect(controller.list[0].id).toBe('1213');
-          expect(controller.list[4].id).toBe('1200');
+          expect(controller.list).toEqual(sortedDocumentList);
         });
       });
 
       describe('documents are sorted by document status', function () {
-        afterEach(function () {
-          $rootScope.$apply();
-        });
         beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            return $rootScope.cache.documentStatus.obj[doc.status_id];
+          });
           controller.sortBy('status_id');
         });
 
         it('lists documents by document status', function () {
-          expect(controller.list[0].id).toBe('1210');
-          expect(controller.list[4].id).toBe('1200');
+          expect(controller.list).toEqual(sortedDocumentList);
         });
       });
 
       describe('document are sorted by document staff/target contact', function () {
-        afterEach(function () {
-          $rootScope.$apply();
-        });
-
         beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name;
+          });
+
           controller.sortBy('target_contact');
         });
 
         it('lists documents by target contact/staff ', function () {
-          expect(controller.list[0].id).toBe('1200');
-          expect(controller.list[4].id).toBe('1205');
+          expect(controller.list).toEqual(sortedDocumentList);
         });
       });
 
       describe('documents are sorted by assignees', function () {
         beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            var assignee = doc.assignee_contact_id.length && _.find($rootScope.cache.contact.obj, {'id': doc.assignee_contact_id[0]});
+
+            return assignee && assignee.sort_name;
+          });
           controller.sortBy('assignee');
         });
 
@@ -271,23 +272,24 @@ define([
         });
 
         it('lists documents by assignees', function () {
-          expect(controller.list[0].id).toBe('1200');
-          expect(controller.list[4].id).toBe('1213');
+          expect(controller.list).toEqual(sortedDocumentList);
         });
       });
 
       describe('documents are sorted by assignment type', function () {
         beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            var assignment = $rootScope.cache.assignment.obj[doc.case_id];
+            var assignmentType = assignment && $rootScope.cache.assignmentType.obj[assignment.case_type_id];
+
+            return assignmentType && assignmentType.title;
+          });
+
           controller.sortBy('case_id');
         });
 
-        afterEach(function () {
-          $rootScope.$apply();
-        });
-
         it('lists documents by assignment type', function () {
-          expect(controller.list[0].id).toBe('1205');
-          expect(controller.list[4].id).toBe('1210');
+          expect(controller.list).toEqual(sortedDocumentList);
         });
       });
     });

@@ -312,7 +312,7 @@ define([
           contactIds.push(document.source_contact_id);
 
           if (document.assignee_contact_id && document.assignee_contact_id.length) {
-            Array.prototype.push.apply(contactIds, document.assignee_contact_id);
+            contactIds = contactIds.concat(document.assignee_contact_id);
           }
 
           if (document.target_contact_id && document.target_contact_id.length) {
