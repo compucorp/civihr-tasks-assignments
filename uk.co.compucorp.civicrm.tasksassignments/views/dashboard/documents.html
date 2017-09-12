@@ -138,33 +138,11 @@
             <table class="table table-striped {{prefix}}table-documents">
               <thead>
                 <tr>
-                  <th ng-click="sortBy('type')">
-                    <span class="sortorder" ng-if="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
-                    Type
-                  </th>
-                  <th ng-click="sortBy('target_contact_id')">
-                    <span class="sortorder" ng-if="propertyName === 'target_contact_id'" ng-class="{reverse: reverse}"></span>
-                    Staff
-                  </th>
-                  <th ng-click="sortBy('assignee')">
-                    <span class="sortorder" ng-if="propertyName === 'assignee'" ng-class="{reverse: reverse}"></span>
-                    Assignee
-                  </th>
-                  <th ng-click="sortBy('case_id')" ng-if="settings.extEnabled.assignments">
-                    <span class="sortorder" ng-if="propertyName === 'case_id'" ng-class="{reverse: reverse}"></span>
-                    Assignment
-                  </th>
-                  <th ng-click="sortBy('activity-date-time')">
-                    <span class="sortorder" ng-if="propertyName === 'activity-date-time'" ng-class="{reverse: reverse}"></span>
-                    Due Date
-                  </th>
-                  <th ng-click="sortBy('expire_date')">
-                    <span class="sortorder" ng-if="propertyName === 'expire_date'" ng-class="{reverse: reverse}"></span>
-                    Expiry Date
-                  </th>
-                  <th ng-click="sortBy('status_id')">
-                    <span class="sortorder" ng-show="propertyName === 'status_id'" ng-class="{reverse: reverse}"></span>
-                    Status
+                  <th ng-repeat="column in documentDashboardColumns"
+                    ng-click="sortBy(column.property)"
+                    ng-if="column.condition != undefined ? column.condition : true">
+                    <span class="sortorder" ng-if="propertyName === column.property" ng-class="{reverse: reverse}"></span>
+                    {{ column.label }}
                   </th>
                   <th></th>
                 </tr>

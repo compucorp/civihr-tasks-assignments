@@ -29,6 +29,68 @@ define([
       $scope.overdue = 0;
       $scope.propertyName = 'activity-date-time';
       $scope.reverse = true;
+      $scope.documentContactColumns = [
+        {
+          label: 'Type',
+          property: 'type'
+        },
+        {
+          label: 'Document Number',
+          property: 'document_number'
+        },
+        {
+          label: 'Assigned to',
+          property: 'assignee'
+        },
+        {
+          label: 'Assignment',
+          property: 'case_id',
+          condition: settings.extEnabled.assignments
+        },
+        {
+          label: 'Valid From',
+          property: 'valid_from'
+        },
+        {
+          label: 'Expiry Date',
+          property: 'expire_date'
+        },
+        {
+          label: 'Status',
+          property: 'status_id'
+        }
+      ];
+      $scope.documentDashboardColumns = [
+        {
+          label: 'Type',
+          property: 'type'
+        },
+        {
+          label: 'Staff',
+          property: 'target_contact_id'
+        },
+        {
+          label: 'Assignee',
+          property: 'assignee'
+        },
+        {
+          label: 'Assignment',
+          property: 'case_id',
+          condition: settings.extEnabled.assignments
+        },
+        {
+          label: 'Due Date',
+          property: 'activity-date-time'
+        },
+        {
+          label: 'Expiry Date',
+          property: 'expire_date'
+        },
+        {
+          label: 'Status',
+          property: 'status_id'
+        }
+      ];
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },

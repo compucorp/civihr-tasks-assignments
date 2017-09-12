@@ -47,36 +47,13 @@
         <table class="table table-striped {{prefix}}table-documents">
           <thead>
             <tr>
-              <th ng-click="sortBy('type')">
-                <span class="sortorder" ng-if="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
-                Type
+              <th ng-repeat="column in documentContactColumns"
+                ng-click="sortBy(column.property)"
+                ng-if="column.condition != undefined ? column.condition : true">
+                  <span class="sortorder" ng-if="propertyName === column.property" ng-class="{reverse: reverse}"></span>
+                  {{ column.label }}
               </th>
-              <th ng-click="sortBy('document_number')">
-                <span class="sortorder" ng-if="propertyName === 'document_number'" ng-class="{reverse: reverse}"></span>
-                Document Number
-              </th>
-              <th ng-click="sortBy('assignee')">
-                <span class="sortorder" ng-if="propertyName === 'assignee'" ng-class="{reverse: reverse}"></span>
-                Assigned to
-              </th>
-              <th ng-click="sortBy('case_id')" ng-if="settings.extEnabled.assignments">
-                <span class="sortorder" ng-if="propertyName === 'case_id'" ng-class="{reverse: reverse}"></span>
-                Assignment
-              </th>
-              <th ng-click="sortBy('valid_from')">
-                <span class="sortorder" ng-if="propertyName === 'valid_from'" ng-class="{reverse: reverse}"></span>
-                Valid From
-              </th>
-              <th ng-click="sortBy('expire_date')">
-                <span class="sortorder" ng-if="propertyName === 'expire_date'" ng-class="{reverse: reverse}"></span>
-                Expiry Date
-              </th>
-              <th ng-click="sortBy('status_id')">
-                <span class="sortorder" ng-show="propertyName === 'status_id'" ng-class="{reverse: reverse}"></span>
-                Status
-              </th>
-              <th></th>
-              <th></th>
+              <th colspan="2"></th>
             </tr>
           </thead>
           <tbody>
