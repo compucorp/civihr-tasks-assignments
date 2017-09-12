@@ -47,12 +47,34 @@
         <table class="table table-striped {{prefix}}table-documents">
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Contact</th>
-              <th ng-if="settings.extEnabled.assignments">Assignment</th>
-              <th>Due Date</th>
-              <th>Expiry Date</th>
-              <th>Status</th>
+              <th ng-click="sortBy('type')">
+                <span class="sortorder" ng-if="propertyName === 'type'" ng-class="{reverse: reverse}"></span>
+                Type
+              </th>
+              <th ng-click="sortBy('document_number')">
+                <span class="sortorder" ng-if="propertyName === 'document_number'" ng-class="{reverse: reverse}"></span>
+                Document Number
+              </th>
+              <th ng-click="sortBy('assignee')">
+                <span class="sortorder" ng-if="propertyName === 'assignee'" ng-class="{reverse: reverse}"></span>
+                Assignees
+              </th>
+              <th ng-click="sortBy('case_id')" ng-if="settings.extEnabled.assignments">
+                <span class="sortorder" ng-if="propertyName === 'case_id'" ng-class="{reverse: reverse}"></span>
+                Assignment
+              </th>
+              <th ng-click="sortBy('valid_from')">
+                <span class="sortorder" ng-if="propertyName === 'valid_from'" ng-class="{reverse: reverse}"></span>
+                Valid From
+              </th>
+              <th ng-click="sortBy('expire_date')">
+                <span class="sortorder" ng-if="propertyName === 'expire_date'" ng-class="{reverse: reverse}"></span>
+                Expiry Date
+              </th>
+              <th ng-click="sortBy('status_id')">
+                <span class="sortorder" ng-show="propertyName === 'status_id'" ng-class="{reverse: reverse}"></span>
+                Status
+              </th>
               <th></th>
             </tr>
           </thead>
@@ -72,14 +94,20 @@
 </div>
 
 <script type="text/ng-template" id="document.html">
+  <!-- <td>
+    <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a>
+  </td> -->
   <td>
     <a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a>
   </td>
-  <td>
-    <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a>
+  <td ng-bind="(document.document_number) || '-'"></td>
+  <td ng-if="document.assignee_contact_id">
+    <a ng-repeat="(key, value) in listAssignees(document.assignee_contact_id)" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[key].contact_id}}">
+      {{value}} {{$last ? '' : ', '}}
+    </a>
   </td>
   <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
-  <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
+  <td ng-bind="(document.valid_from | date: 'dd/MM/yyyy') || '-'"></td>
   <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>
   <td>
     <div class="dropdown" uib-dropdown>
