@@ -22,10 +22,6 @@ define([
 
       $scope.dueThisWeek = 0;
       $scope.dueToday = 0;
-
-      $scope.propertyName = 'activity-date-time';
-      $scope.reverse = true;
-
       $scope.list = documentList;
       $scope.listFiltered = [];
       $scope.listOngoing = [];
