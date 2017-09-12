@@ -10980,12 +10980,6 @@ fieldset[disabled]
 #civitasks .ct-documents-container table th, #cividocuments .ct-documents-container table th {
   cursor: pointer;
 }
-#civitasks .ct-documents-container .sortorder:after, #cividocuments .ct-documents-container .sortorder:after {
-  content: '\25b2';
-}
-#civitasks .ct-documents-container .sortorder.reverse:after, #cividocuments .ct-documents-container .sortorder.reverse:after {
-  content: '\25bc';
-}
 #civitasks .ct-filter-date, #cividocuments .ct-filter-date {
   margin-top: -15px;
 }
@@ -11734,6 +11728,12 @@ fieldset[disabled]
 }
 #civitasks .ct-table-documents input[type="checkbox"], #cividocuments .ct-table-documents input[type="checkbox"] {
   margin-left: 7px;
+}
+#civitasks .ct-table-documents .sortorder:after, #cividocuments .ct-table-documents .sortorder:after {
+  content: '\25b2';
+}
+#civitasks .ct-table-documents .sortorder.reverse:after, #cividocuments .ct-table-documents .sortorder.reverse:after {
+  content: '\25bc';
 }
 #civitasks .ct-table-upload, #cividocuments .ct-table-upload {
   margin-bottom: 0;

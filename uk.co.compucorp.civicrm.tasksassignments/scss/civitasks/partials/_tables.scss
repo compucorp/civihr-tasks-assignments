@@ -15,6 +15,14 @@
   input[type="checkbox"] {
     margin-left: 7px;
   }
+
+  .sortorder:after {
+    content: '\25b2';
+  }
+
+  .sortorder.reverse:after {
+    content: '\25bc';
+  }
 }
 
 .#{$prefix}table-upload {
