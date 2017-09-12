@@ -57,7 +57,7 @@
               </th>
               <th ng-click="sortBy('assignee')">
                 <span class="sortorder" ng-if="propertyName === 'assignee'" ng-class="{reverse: reverse}"></span>
-                Assignees
+                Assigned to
               </th>
               <th ng-click="sortBy('case_id')" ng-if="settings.extEnabled.assignments">
                 <span class="sortorder" ng-if="propertyName === 'case_id'" ng-class="{reverse: reverse}"></span>
@@ -75,6 +75,7 @@
                 <span class="sortorder" ng-show="propertyName === 'status_id'" ng-class="{reverse: reverse}"></span>
                 Status
               </th>
+              <th></th>
               <th></th>
             </tr>
           </thead>
@@ -94,9 +95,6 @@
 </div>
 
 <script type="text/ng-template" id="document.html">
-  <!-- <td>
-    <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}" ng-bind="cache.contact.obj[document.assignee_contact_id[0]].sort_name"></a>
-  </td> -->
   <td>
     <a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a>
   </td>
@@ -125,6 +123,7 @@
       </ul>
     </div>
   </td>
+  <td><a ng-href="{{urlFile}}"><i class="fa fa-download"></i></a></td>
   <td>
     <div class="dropdown" uib-dropdown>
       <a href class="dropdown-toggle {{prefix}}context-menu-toggle" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
