@@ -2,8 +2,8 @@
 
 define([
   'common/angular',
-  'common/moment',
   'common/lodash',
+  'common/moment',
   'tasks-assignments/controllers/controllers',
   'common/services/file.service',
   'common/services/notification.service',
@@ -11,7 +11,7 @@ define([
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document',
   'tasks-assignments/services/file'
-], function (angular, moment, _, controllers) {
+], function (angular, _, moment, controllers) {
   'use strict';
 
   controllers.controller('ModalDocumentController', ModalDocumentCtrl);
@@ -54,6 +54,8 @@ define([
     vm.dropzoneClick = dropzoneClick;
     vm.fileMoveToTrash = fileMoveToTrash;
     vm.getDocumentType = getDocumentType;
+    vm.getDocumentStatus = getDocumentStatus;
+    vm.getStatusIdByName = getStatusIdByName;
     vm.isRole = isRole;
     vm.onContactChanged = onContactChanged;
     vm.parseDate = parseDate;
@@ -189,7 +191,6 @@ define([
         return;
       }
 
-      var documentStatus = vm.document.status_id;
       var file;
       var promiseFilesDelete = [];
 
@@ -200,15 +201,11 @@ define([
 
       $scope.$broadcast('ct-spinner-show');
 
-      documentStatus = vm.isRole('admin')
-        ? (vm.files.length || vm.uploader.queue.length ? '3' : '1')
-        : (vm.files.length || vm.uploader.queue.length ? '2' : '1');
-
       // temporary remove case_id
       +doc.case_id === +data.case_id && delete doc.case_id;
       doc.activity_date_time = vm.parseDate(doc.activity_date_time) || '';
       doc.expire_date = vm.parseDate(doc.expire_date);
-      doc.status_id = documentStatus;
+      doc.status_id = vm.getDocumentStatus() || vm.document.status_id;
 
       if (vm.filesTrash.length) {
         for (var i = 0; i < vm.filesTrash.length; i++) {
@@ -290,6 +287,29 @@ define([
     function fileMoveToTrash (index) {
       vm.filesTrash.push(vm.files[index]);
       vm.files.splice(index, 1);
+    }
+
+    /**
+     * Get status of the document based on the attachments count
+     *
+     * @return {string|int}
+     */
+    function getDocumentStatus () {
+      return vm.isRole('admin')
+        ? (vm.files.length || vm.uploader.queue.length ? vm.getStatusIdByName('approved') : vm.getStatusIdByName('awaiting upload'))
+        : (vm.files.length || vm.uploader.queue.length ? vm.getStatusIdByName('awaiting approval') : vm.getStatusIdByName('awaiting upload'));
+    }
+
+    /**
+     * Gets the status id of a documents status based on it name
+     *
+     * @param  {string} statusName
+     * @return {string|int}
+     */
+    function getStatusIdByName (statusName) {
+      return _.findKey($rootScope.cache.documentStatus.obj, function (status) {
+        return status === statusName;
+      });
     }
 
     /**
@@ -485,6 +505,7 @@ define([
 
     /**
      * Open the given file and display the file in new tab
+     *
      * @param {object} file
      */
     function viewFile (file) {

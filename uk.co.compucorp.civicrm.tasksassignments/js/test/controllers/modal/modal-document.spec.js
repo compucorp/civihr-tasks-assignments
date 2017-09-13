@@ -44,6 +44,13 @@ define([
       AssignmentService = _AssignmentService_;
       fileService = _fileService_;
 
+      $rootScope.cache.documentStatus.obj = {
+        1: 'awaiting upload',
+        2: 'awaiting approval',
+        3: 'approved',
+        4: 'rejected'
+      };
+
       $httpBackend.whenGET(/action=/).respond({});
     }));
 
@@ -497,6 +504,55 @@ define([
               expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
             });
           });
+        });
+      });
+    });
+
+    describe('getStatusIdByName', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('gets id for Awaiting Upload to be 1', function () {
+        expect(controller.getStatusIdByName('awaiting upload')).toEqual('1');
+      });
+
+      it('gets id for Awaiting Approval to be 2', function () {
+        expect(controller.getStatusIdByName('awaiting approval')).toEqual('2');
+      });
+
+      it('gets id for Approved to be 3', function () {
+        expect(controller.getStatusIdByName('approved')).toEqual('3');
+      });
+
+      it('gets id for Rejected to be 4', function () {
+        expect(controller.getStatusIdByName('rejected')).toEqual('4');
+      });
+    });
+
+    describe('getDocumentStatus', function () {
+      beforeEach(function () {
+        initController();
+        controller.files.length = 2;
+      });
+
+      describe('user is admin', function () {
+        beforeEach(function () {
+          controller.role = 'admin';
+        });
+
+        it('gets the document status id as 3 (approved)', function () {
+          expect(controller.getDocumentStatus()).toEqual('3');
+        });
+      });
+
+      describe('user is staff', function () {
+        beforeEach(function () {
+          controller.role = 'staff';
+        });
+
+        it('gets the document status id as 2 (awaiting approval)', function () {
+          expect(controller.getDocumentStatus()).toEqual('2');
         });
       });
     });
