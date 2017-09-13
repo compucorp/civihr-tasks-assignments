@@ -200,7 +200,9 @@ define([
 
         $scope.$broadcast('ct-spinner-show');
 
-        documentStatus = vm.isRole('admin') ? '3' : (vm.files.length || vm.uploader.queue.length ? '2' : '1');
+        documentStatus = vm.isRole('admin') ?
+          (vm.files.length || vm.uploader.queue.length ? '3' : '1') :
+          (vm.files.length || vm.uploader.queue.length ? '2' : '1');
 
         // temporary remove case_id
         +doc.case_id === +data.case_id && delete doc.case_id;
