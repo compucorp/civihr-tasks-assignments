@@ -135,6 +135,15 @@ define([
             };
 
             /**
+             * Filters the tasks list based on filter type and due or expiry date
+             * @param {string} type filter type
+             * @return {array} task list
+             */
+            $scope.filterByDateField = function (type) {
+              return $filter('filterByDateField')($scope.list, type, 'activity_date_time', $scope.filterParams.dateRange);
+            };
+
+            /**
              * Applies the filters on the sidebar
              */
             $scope.applySidebarFilters = function () {

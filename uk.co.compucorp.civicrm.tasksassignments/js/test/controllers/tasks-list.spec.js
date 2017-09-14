@@ -1,7 +1,8 @@
 define([
-    'common/angularMocks',
-    'tasks-assignments/app'
-], function () {
+  'mocks/fabricators/task',
+  'common/angularMocks',
+  'tasks-assignments/app'
+], function (taskFabricator) {
     'use strict';
 
     describe('TaskListCtrl', function () {
@@ -9,14 +10,14 @@ define([
 
         beforeEach(module('civitasks.appDashboard'));
         beforeEach(inject(function ($controller, $rootScope, _ContactService_, _TaskService_) {
-            $scope = $rootScope.$new();
-            ContactService = _ContactService_;
-            TaskService = _TaskService_;
+          $scope = $rootScope.$new();
+          ContactService = _ContactService_;
+          TaskService = _TaskService_;
 
-            $controller('TaskListCtrl', {
-                $scope: $scope,
-                taskList: []
-            });
+          $controller('TaskListCtrl', {
+            $scope: $scope,
+            taskList: taskFabricator.list()
+          });
         }));
 
         describe('cacheContact()', function () {
@@ -79,6 +80,40 @@ define([
 
           it('calls TaskService with the correct object', function () {
             expect(TaskService.save).toHaveBeenCalledWith(saveObj);
+          });
+        });
+
+        describe('filterByDateField()', function () {
+          var filteredTaskList;
+
+          describe('filtering tasks in between 2017-04-10 and 2017-04-20', function () {
+            beforeEach(function () {
+              $scope.filterParams.dateRange = {
+                from: '2017-04-10 00:00:00',
+                until: '2017-04-20 00:00:00'
+              };
+
+              filteredTaskList = $scope.filterByDateField('dateRange');
+            });
+
+            it('returns filtered tasks by due date', function () {
+              expect(filteredTaskList.length).toBe(3);
+            });
+          });
+
+          describe("filtering tasks in between 2017-04-23 and 2017-04-25", function () {
+            beforeEach(function () {
+              $scope.filterParams.dateRange = {
+                from: '2017-04-23 00:00:00',
+                until: '2017-04-25 00:00:00'
+              };
+
+              filteredTaskList = $scope.filterByDateField('dateRange');
+            });
+
+            it('returns filtered tasks by due date', function () {
+              expect(filteredTaskList.length).toBe(0);
+            });
           });
         });
 
