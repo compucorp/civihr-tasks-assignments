@@ -180,7 +180,7 @@ define([
         });
 
         it('returns filtered document by expiry date of the document', function () {
-          expect(filteredDocumentList.length).toBe(2);
+          expect(filteredDocumentList.length).toBe(3);
         });
       });
     });
