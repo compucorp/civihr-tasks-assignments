@@ -89,7 +89,7 @@ define([
     describe('filterByDateField()', function () {
       var filteredTaskList;
 
-      describe('filtering tasks in between 2017-04-10 and 2017-04-20', function () {
+      describe('filtering tasks by due date in between the date range', function () {
         beforeEach(function () {
           $scope.filterParams.dateRange = {
             from: '2017-04-10 00:00:00',
@@ -104,7 +104,7 @@ define([
         });
       });
 
-      describe('filtering tasks in between 2017-04-23 and 2017-04-25', function () {
+      describe('filtering tasks by due date not in between the date range', function () {
         beforeEach(function () {
           $scope.filterParams.dateRange = {
             from: '2017-04-23 00:00:00',
@@ -114,7 +114,7 @@ define([
           filteredTaskList = $scope.filterByDateField('dateRange');
         });
 
-        it('returns filtered tasks by due date', function () {
+        it('does not return filtered tasks', function () {
           expect(filteredTaskList.length).toBe(0);
         });
       });

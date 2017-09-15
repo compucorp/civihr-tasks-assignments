@@ -139,6 +139,7 @@ define([
 
       /**
        * Filters the tasks list based on filter type and due or expiry date
+       *
        * @param {string} type filter type
        * @return {array} task list
        */
