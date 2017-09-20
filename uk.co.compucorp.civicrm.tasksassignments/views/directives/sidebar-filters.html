@@ -1,15 +1,15 @@
 <div class="{{prefix}}filter-date">
   <ul class="nav nav-pills nav-stacked">
-    <li role="presentation" ng-repeat="filter in documentList.dueFilters">
-      <a href ng-model="documentList.filterParams.due" uib-btn-radio="filter.value" uncheckable>
-        {{documentList.label[filter.value]}}
-        <i class="fa fa-calendar" ng-click="documentList.viewInCalendar(filter.calendarView)"></i>
+    <li role="presentation" ng-repeat="filter in List.dueFilters">
+      <a href ng-model="List.filterParams.due" uib-btn-radio="filter.value" uncheckable>
+        {{List.label[filter.value]}}
+        <i class="fa fa-calendar" ng-click="List.viewInCalendar(filter.calendarView)"></i>
         <span class="badge badge-{{filter.badgeClass}}">
           {{(
-            (documentList.filterByDateField(filter.value))
-            | filterByStatus:documentList.filterParams.documentStatus || ''
-            | filterByOwnership:documentList.filterParams.ownership
-            | filterByAssignmentType:filterParams.assignmentType
+            (List.filterByDateField(filter.value))
+            | filterByStatus:List.filterParams.documentStatus || ''
+            | filterByOwnership:List.filterParams.ownership
+            | filterByAssignmentType:List.filterParams.assignmentType
             ).length
           }}
         </span>
@@ -17,22 +17,22 @@
     </li>
   </ul>
   <hr>
-  <a href ng-click="documentList.isCollapsed.filterDates = !documentList.isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
-    <i class="fa" ng-class="{ fa: true, 'fa-chevron-down': !documentList.isCollapsed.filterDates, 'fa-chevron-right': documentList.isCollapsed.filterDates }"></i>
+  <a href ng-click="List.isCollapsed.filterDates = !List.isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
+    <i class="fa" ng-class="{ fa: true, 'fa-chevron-down': !List.isCollapsed.filterDates, 'fa-chevron-right': List.isCollapsed.filterDates }"></i>
     <em>OR</em> Select Dates
   </a>
-  <div class="form-horizontal" uib-collapse="documentList.isCollapsed.filterDates">
+  <div class="form-horizontal" uib-collapse="List.isCollapsed.filterDates">
     <div class="form-group">
       <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">
         From
       </label>
       <div class="input-group col-xs-12 col-sm-9 col-lg-8">
         <input
-          is-open="documentList.dpOpened.filterDates.from"
+          is-open="List.dpOpened.filterDates.from"
           uib-datepicker-popup="dd/MM/yyyy"
-          datepicker-options="documentList.datepickerOptions.from"
-          ng-click="documentList.dpOpened.filterDates.from = !documentList.dpOpened.filterDates.from"
-          ng-model="documentList.filterParamsHolder.dateRange.from"
+          datepicker-options="List.datepickerOptions.from"
+          ng-click="List.dpOpened.filterDates.from = !List.dpOpened.filterDates.from"
+          ng-model="List.filterParamsHolder.dateRange.from"
           id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
       </div>
     </div>
@@ -42,16 +42,16 @@
       </label>
       <div class="input-group col-xs-12 col-sm-9  col-lg-8">
         <input
-          is-open="documentList.dpOpened.filterDates.until"
+          is-open="List.dpOpened.filterDates.until"
           uib-datepicker-popup="dd/MM/yyyy"
-          datepicker-options="documentList.datepickerOptions.until"
-          ng-click="documentList.dpOpened.filterDates.until = !documentList.dpOpened.filterDates.until"
-          ng-model="documentList.filterParamsHolder.dateRange.until"
+          datepicker-options="List.datepickerOptions.until"
+          ng-click="List.dpOpened.filterDates.until = !List.dpOpened.filterDates.until"
+          ng-model="List.filterParamsHolder.dateRange.until"
           id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
       </div>
     </div>
     <div ng-transclude></div>
-    <button class="btn btn-default btn-primary btn-block" ng-click="documentList.applySidebarFilters()">
+    <button class="btn btn-default btn-primary btn-block" ng-click="List.applySidebarFilters()">
       Apply Filter
     </button>
   </div>

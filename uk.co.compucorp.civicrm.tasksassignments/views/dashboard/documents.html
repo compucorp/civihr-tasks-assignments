@@ -10,7 +10,7 @@
             Status
           </label>
           <div class="col-xs-12 col-sm-9">
-            <ui-select prevent-animations multiple ng-model="documentList.filterParamsHolder.documentStatus" no-dropdown>
+            <ui-select prevent-animations multiple ng-model="List.filterParamsHolder.documentStatus" no-dropdown>
               <ui-select-match prevent-animations class="ui-select-match" placeholder="Select status...">
                 {{$item.value}}
               </ui-select-match>
@@ -30,20 +30,20 @@
       <div class="panel-heading">
         <div class="row">
           <div class="col-xs-12 col-sm-3">
-            <h3 class="panel-title">{{documentList.label[documentList.filterParams.due]}}</h3>
+            <h3 class="panel-title">{{List.label[List.filterParams.due]}}</h3>
           </div>
           <div class="col-xs-12 col-sm-6 text-center">
             <div class="btn-group btn-group-sm">
               <a
                 ui-sref="documents.my"
                 class="btn btn-gray active panel-filter__filter"
-                ng-model="documentList.filterParams.ownership"
+                ng-model="List.filterParams.ownership"
                 uib-btn-radio="'assigned'">
                 My Docs
               <span>
                 ({{
-                  ((documentList.filterByDateField(documentList.filterParams.due)) |
-                  filterByStatus:documentList.filterParams.documentStatus |
+                  ((List.filterByDateField(List.filterParams.due)) |
+                  filterByStatus:List.filterParams.documentStatus |
                   filterByOwnership:'assigned').length
                 }})
               </span>
@@ -51,13 +51,13 @@
               <a
                 ui-sref="documents.delegated"
                 class="btn btn-gray panel-filter__filter"
-                ng-model="documentList.filterParams.ownership"
+                ng-model="List.filterParams.ownership"
                 uib-btn-radio="'delegated'">
                 Delegated Docs
               <span>
                 ({{
-                  ((documentList.filterByDateField(documentList.filterParams.due)) |
-                  filterByStatus:documentList.filterParams.documentStatus |
+                  ((List.filterByDateField(List.filterParams.due)) |
+                  filterByStatus:List.filterParams.documentStatus |
                   filterByOwnership:'delegated').length
                 }})
               </span>
@@ -65,30 +65,30 @@
               <a
                 ui-sref="documents.all"
                 class="btn btn-gray panel-filter__filter"
-                ng-model="documentList.filterParams.ownership"
+                ng-model="List.filterParams.ownership"
                 uib-btn-radio="null">
                 All
               <span>
                 ({{
-                  (documentList.list |
-                  filterByDateField:documentList.filterParams.due:documentList.filterParams.dateRange |
-                  filterByStatus:documentList.filterParams.documentStatus).length
+                  (List.list |
+                  filterByDateField:List.filterParams.due:List.filterParams.dateRange |
+                  filterByStatus:List.filterParams.documentStatus).length
                 }})
               </span>
               </a>
             </div>
           </div>
           <div class="col-xs-12 col-sm-3 text-right">
-            <a href ng-click="documentList.isCollapsed.filterAdvanced = !documentList.isCollapsed.filterAdvanced" class="btn btn-collapse">
+            <a href ng-click="List.isCollapsed.filterAdvanced = !List.isCollapsed.filterAdvanced" class="btn btn-collapse">
               <span class="fa"
-                ng-class="{ fa: true, 'fa-chevron-down': !documentList.isCollapsed.filterAdvanced, 'fa-chevron-right': documentList.isCollapsed.filterAdvanced }"
+                ng-class="{ fa: true, 'fa-chevron-down': !List.isCollapsed.filterAdvanced, 'fa-chevron-right': List.isCollapsed.filterAdvanced }"
                 aria-hidden="true">
               </span>
               Filter Documents
             </a>
           </div>
         </div>
-        <div class="{{prefix}}filter-advanced" uib-collapse="documentList.isCollapsed.filterAdvanced">
+        <div class="{{prefix}}filter-advanced" uib-collapse="List.isCollapsed.filterAdvanced">
           <div class="row form-horizontal">
             <div class="col-xs-6">
               <div class="form-group">
@@ -98,7 +98,7 @@
                     <ui-select
                       prevent-animations
                       allow-clear
-                      ng-model="documentList.filterParams.contactId">
+                      ng-model="List.filterParams.contactId">
                       <ui-select-match prevent-animations class="ui-select-match"
                         placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
                       <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
@@ -123,7 +123,7 @@
                   <ui-select
                     prevent-animations
                     multiple
-                    ng-model="documentList.filterParams.assignmentType">
+                    ng-model="List.filterParams.assignmentType">
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
                     <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                       <div ng-bind-html="type.title | highlight: $select.search"></div>
@@ -150,14 +150,14 @@
               <tbody>
                 <tr
                   ng-repeat="document in
-                    listPaginated = (listFiltered = (listOngoing = (documentList.filterByDateField(documentList.filterParams.due))
-                    | filterByOwnership:documentList.filterParams.ownership
-                    | filterByAssignmentType:documentList.filterParams.assignmentType
-                    | filterByContactId:documentList.filterParams.contactId
-                    | filterByStatus:documentList.filterParamsHolder.documentStatus
+                    listPaginated = (listFiltered = (listOngoing = (List.filterByDateField(List.filterParams.due))
+                    | filterByOwnership:List.filterParams.ownership
+                    | filterByAssignmentType:List.filterParams.assignmentType
+                    | filterByContactId:List.filterParams.contactId
+                    | filterByStatus:List.filterParamsHolder.documentStatus
                     | orderBy: 'activity_date_time')
-                    | offset: (documentList.pagination.currentPage-1)*documentList.pagination.itemsPerPage
-                    | limitTo: documentList.pagination.itemsPerPage)"
+                    | offset: (List.pagination.currentPage-1)*List.pagination.itemsPerPage
+                    | limitTo: List.pagination.itemsPerPage)"
                   ng-controller="DocumentCtrl"
                   ng-include
                   src="'document.html'">
@@ -165,12 +165,12 @@
               </tbody>
             </table>
             <div class="clearfix"></div>
-            <nav class="row" ng-show="(listFiltered.length > documentList.pagination.itemsPerPage)">
+            <nav class="row" ng-show="(listFiltered.length > List.pagination.itemsPerPage)">
               <div class="col-xs-12 text-center">
                 <uib-pagination boundary-links="true"
                   total-items="listFiltered.length" rotate="false"
-                  items-per-page="documentList.pagination.itemsPerPage" max-size="documentList.pagination.maxSize"
-                  ng-model="documentList.pagination.currentPage" class="pagination-sm"
+                  items-per-page="List.pagination.itemsPerPage" max-size="List.pagination.maxSize"
+                  ng-model="List.pagination.currentPage" class="pagination-sm"
                   previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
                   last-text="&raquo;">
                 </uib-pagination>
@@ -197,7 +197,7 @@
         }" uib-dropdown-toggle>{{cache.documentStatus.obj[document.status_id]}} <i class="caret"></i>
       </a>
       <ul class="dropdown-menu" uib-dropdown-menu>
-        <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="documentList.changeStatus(document, status.key)"></a></li>
+        <li ng-repeat="status in cache.documentStatus.arr"><a href ng-bind="status.value" ng-click="List.changeStatus(document, status.key)"></a></li>
       </ul>
     </div>
   </td>
@@ -208,7 +208,7 @@
         <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{urlFile}}"><i class="fa fa-download"></i> Download</a></li>
         <li><a href ng-click="modalDocument('edit', document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
         <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
-        <li ng-if="permissions.allowDelete"><a href ng-click="documentList.deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
+        <li ng-if="permissions.allowDelete"><a href ng-click="List.deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
       </ul>
     </div>
   </td>

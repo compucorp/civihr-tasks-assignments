@@ -110,7 +110,7 @@ define([
             until: '2017-04-25 00:00:00'
           };
 
-          filteredTaskList = $scope.filterByDateField('dateRange');
+          filteredTaskList = controller.filterByDateField('dateRange');
         });
 
         it('does not return filtered tasks', function () {
