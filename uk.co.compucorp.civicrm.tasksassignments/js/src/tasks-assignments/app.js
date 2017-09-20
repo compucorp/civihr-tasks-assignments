@@ -17,7 +17,7 @@ define([
   'tasks-assignments/controllers/document',
   'tasks-assignments/controllers/assignments',
   'tasks-assignments/controllers/main',
-  'tasks-assignments/controllers/task-list',
+  'tasks-assignments/controllers/task-list.controller',
   'tasks-assignments/controllers/task',
   'tasks-assignments/controllers/dashboard/nav-main',
   'tasks-assignments/controllers/dashboard/top-bar',
