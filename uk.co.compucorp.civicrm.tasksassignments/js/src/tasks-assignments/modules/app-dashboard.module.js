@@ -27,8 +27,8 @@ define([
               .state('tasks', {
                 url: '/tasks',
                 controller: 'TaskListController',
+                controllerAs: 'list',
                 templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
-                controllerAs: 'List',
                 resolve: {
                   taskList: ['TaskService', function (TaskService) {
                     return TaskService.get({
@@ -52,7 +52,7 @@ define([
               .state('documents', {
                 url: '/documents',
                 controller: 'DocumentListController',
-                controllerAs: 'List',
+                controllerAs: 'list',
                 templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
                 resolve: {
                   documentList: ['DocumentService', function (DocumentService) {
@@ -147,12 +147,12 @@ define([
                 views: {
                   'documentList': {
                     controller: 'DocumentListController',
-                    controllerAs: 'List',
+                    controllerAs: 'list',
                     templateUrl: config.path.TPL + 'dashboard/calendar.documentList.html?v=6'
                   },
                   'taskList': {
                     controller: 'TaskListController',
-                    controllerAs: 'List',
+                    controllerAs: 'list',
                     templateUrl: config.path.TPL + 'dashboard/calendar.taskList.html?v=5'
                   }
                 }

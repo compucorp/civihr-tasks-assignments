@@ -25,7 +25,7 @@ define([
           .state('main', {
             url: '/',
             controller: 'DocumentListController',
-            controllerAs: 'documentList',
+            controllerAs: 'list',
             templateUrl: config.path.TPL + 'contact/documents.html?v=4',
             resolve: {
               documentList: ['DocumentService', function (DocumentService) {
