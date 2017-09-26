@@ -42,7 +42,7 @@ define([
   'tasks-assignments/filters/date',
   'tasks-assignments/filters/date-parse',
   'tasks-assignments/filters/date-type',
-  'tasks-assignments/filters/due',
+  'tasks-assignments/filters/date-field.filter',
   'tasks-assignments/filters/offset',
   'tasks-assignments/filters/ownership',
   'tasks-assignments/filters/status',

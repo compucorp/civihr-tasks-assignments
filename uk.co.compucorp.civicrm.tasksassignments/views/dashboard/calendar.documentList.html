@@ -16,7 +16,7 @@
       <tr
         ng-repeat="document in listPaginated = (listOngoing = (list
         | filterByStatus:cache.documentStatusResolve:false
-        | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
+        | filterByDateField:'dateRange':'activity_date_time':{ from: calendarDay, until: calendarDay }
         | orderBy: 'activity_date_time')
         | offset: (pagination.currentPage-1)*pagination.itemsPerPage
         | limitTo: pagination.itemsPerPage)"

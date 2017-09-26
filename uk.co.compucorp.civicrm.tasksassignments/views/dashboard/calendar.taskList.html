@@ -2,7 +2,7 @@
 <ul class="{{prefix}}list-task {{prefix}}list-task-small">
   <li ng-repeat="task in listOngoing = (list
     | filterByStatus:cache.taskStatusResolve:false
-    | filterByDue:'dateRange':{ from: calendarDay, until: calendarDay }
+    | filterByDateField:'dateRange':'activity_date_time':{ from: calendarDay, until: calendarDay }
     | orderBy: 'activity_date_time')"
     ng-controller="TaskCtrl"
     ng-class="{
@@ -56,7 +56,7 @@
     <div class="col-xs-7">
       <p class="{{prefix}}task-subject">
         Due:
-        <time editable-bsdate="task.activity_date_time" onbeforesave="updateTask(task, { activity_date_time: $data });" onshow="dpOpen()" class="editable-small" e-ng-click="dpOpen()" e-is-open="picker.opened" e-show-calendar-button="false" e-datepicker-popup>
+        <time editable-bsdate="task.activity_date_time" onbeforesave="updateTask(task, { activity_date_time: $data });" onshow="dpOpen()" class="editable-small" e-is-open="picker.opened" e-show-calendar-button="false" e-datepicker-popup>
           <i class="fa fa-pencil"></i>
           {{task.activity_date_time | date: 'MMM d'}}
         </time>

@@ -10,7 +10,6 @@ define([
   'use strict';
 
   describe('DocumentListCtrl', function () {
-
     var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter;
 
     beforeEach(module('civitasks.appDashboard'));
@@ -143,7 +142,45 @@ define([
         });
 
         it('formats and creates date range label containing until date only', function () {
-          expect($scope.label.dateRange).toBe('Until: ' +  $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
+          expect($scope.label.dateRange).toBe('Until: ' + $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
+        });
+      });
+    });
+
+    describe('filterByDateField()', function () {
+      var filteredDocumentList;
+
+      describe('filtering by due date', function () {
+        beforeEach(function () {
+          initController();
+          $scope.list = documentFabricator.list();
+          $scope.filterParams.dateRange = {
+            from: '2017-05-01 00:00:00',
+            until: '2017-05-10 00:00:00'
+          };
+
+          filteredDocumentList = $scope.filterByDateField('dateRange');
+        });
+
+        it('returns filtered document by due date of the document', function () {
+          expect(filteredDocumentList.length).toBe(1);
+        });
+      });
+
+      describe('filtering by expiry date', function () {
+        beforeEach(function () {
+          initController();
+          $scope.list = documentFabricator.list();
+          $scope.filterParams.dateRange = {
+            from: '2017-05-10 00:00:00',
+            until: '2017-05-20 00:00:00'
+          };
+
+          filteredDocumentList = $scope.filterByDateField('dateRange');
+        });
+
+        it('returns filtered document by expiry date of the document', function () {
+          expect(filteredDocumentList.length).toBe(3);
         });
       });
     });

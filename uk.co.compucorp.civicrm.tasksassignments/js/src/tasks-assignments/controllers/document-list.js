@@ -2,13 +2,14 @@
 
 define([
   'common/angular',
+  'common/lodash',
   'common/moment',
   'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
   'tasks-assignments/services/file',
   'tasks-assignments/services/assignment'
-], function (angular, moment, controllers) {
+], function (angular, _, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
@@ -209,6 +210,18 @@ define([
       $scope.viewInCalendar = function (view) {
         $state.go('calendar.mwl.' + view);
       };
+
+      /**
+       * Filters the documents list based on filter type and due date
+       * @param {string} type filter type
+       * @return {array} documents list
+       */
+       $scope.filterByDateField = function (type) {
+         var listByDueDate = $filter('filterByDateField')($scope.list, type, 'activity_date_time', $scope.filterParams.dateRange);
+         var listByExpiryDate = $filter('filterByDateField')($scope.list, type, 'expire_date', $scope.filterParams.dateRange);
+
+         return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
+       };
 
       /**
        * Subscribes for 'assignmentFormSuccess' event and when triggered,
