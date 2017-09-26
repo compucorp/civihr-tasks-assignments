@@ -10,6 +10,7 @@ define([
   'tasks-assignments/services/contact',
   'tasks-assignments/services/dialog',
   'tasks-assignments/services/document',
+  'tasks-assignments/services/settings',
   'tasks-assignments/services/file'
 ], function (angular, _, moment, controllers) {
   'use strict';
@@ -18,19 +19,20 @@ define([
 
   ModalDocumentCtrl.$inject = ['$window', '$scope', '$uibModalInstance', '$rootScope',
     '$rootElement', '$q', '$log', 'role', '$filter', '$uibModal', '$dialog', '$timeout',
-    'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data',
+    'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'AppSettingsService',
     'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService'
   ];
 
   function ModalDocumentCtrl ($window, $scope, $modalInstance, $rootScope, $rootElement,
     $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService, DocumentService,
-    ContactService, FileService, data, files, config, HRSettings, modalMode, notificationService, fileService) {
+    ContactService, FileService, data, AppSettingsService, files, config, HRSettings, modalMode, notificationService, fileService) {
     $log.debug('Controller: ModalDocumentController');
 
     var vm = this;
 
     vm.document = {};
     vm.files = [];
+    vm.fileSizeLimit = 0;
     vm.filesTrash = [];
     vm.mode = modalMode;
     vm.modalTitle = vm.mode === 'edit' ? 'Edit Document' : 'New Document';
@@ -66,6 +68,7 @@ define([
     vm.statusFieldVisible = statusFieldVisible;
     vm.showStatusField = showStatusField;
     vm.searchContactAssignments = searchContactAssignments;
+    vm.validateFileSize = validateFileSize;
     vm.viewFile = viewFile;
 
     (function init () {
@@ -86,6 +89,9 @@ define([
         target: initialContacts('target'),
         assignee: initialContacts('assignee')
       };
+      AppSettingsService.get(['maxFileSize']).then(function (result) {
+        vm.fileSizeLimit = +result[0].maxFileSize * 1000000;
+      });
     })();
 
     /**
@@ -196,6 +202,10 @@ define([
 
       if (vm.isRole('staff') && !vm.uploader.queue.length && !vm.files.length) {
         vm.containsFiles = false;
+        return;
+      }
+
+      if (!vm.validateFileSize(vm.uploader.queue)) {
         return;
       }
 
@@ -465,6 +475,31 @@ define([
      */
     function statusFieldVisible () {
       return !!vm.document.status_id;
+    }
+
+    /**
+     * Validates the uploaded file size and
+     * displays error mesage for large files
+     *
+     * @param  {object} uploader
+     * @return {boolean}
+     */
+    function validateFileSize (uploadedFiles) {
+      var errorMsg = 'File larger than ' + (vm.fileSizeLimit / 1000000) + 'MB are not allowed.';
+      var isValid = true;
+
+      if (uploadedFiles.length) {
+        _.each(uploadedFiles, function (file) {
+          var fileSize = +file._file.size;
+
+          if (fileSize >= vm.fileSizeLimit) {
+            isValid = false;
+          }
+        });
+      }
+
+      !isValid && notificationService.alert('Large files', errorMsg, { expires: 5000 });
+      return isValid;
     }
 
     /**

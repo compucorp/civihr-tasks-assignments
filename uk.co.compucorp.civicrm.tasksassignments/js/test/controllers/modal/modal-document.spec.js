@@ -8,18 +8,19 @@ define([
   'mocks/fabricators/assignment',
   'mocks/fabricators/contact',
   'mocks/fabricators/document',
+  'mocks/fabricators/file',
   'tasks-assignments/app'
-], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator) {
+], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator, fileFabricator) {
   'use strict';
 
   describe('ModalDocumentController', function () {
     var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService, config,
-      AssignmentService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
+      AssignmentService, AppSettingsService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
-      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_) {
+      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_, _AppSettingsService_) {
       data = {};
       files = {};
       modalMode = '';
@@ -42,6 +43,7 @@ define([
       ContactService = _ContactService_;
       DocumentService = _DocumentService_;
       AssignmentService = _AssignmentService_;
+      AppSettingsService = _AppSettingsService_;
       fileService = _fileService_;
 
       $rootScope.cache.documentStatus.obj = {
@@ -57,6 +59,8 @@ define([
     describe('init()', function () {
       beforeEach(function () {
         data = documentFabricator.single();
+        spyOn(AppSettingsService, 'get').and.returnValue($q.resolve([]));
+
         initController();
       });
 
@@ -68,6 +72,10 @@ define([
         expect(controller.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
         expect(controller.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
         expect(controller.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
+      });
+
+      it('calls AppSettingsService to get maxFileSize value', function () {
+        expect(AppSettingsService.get).toHaveBeenCalledWith([ 'maxFileSize' ]);
       });
     });
 
@@ -260,7 +268,7 @@ define([
       });
     });
 
-    describe('onContactChanged', function () {
+    describe('onContactChanged()', function () {
       beforeEach(function () {
         spyOn(ContactService, 'updateCache').and.returnValue({});
 
@@ -277,7 +285,7 @@ define([
       });
     });
 
-    describe('searchContactAssignments', function () {
+    describe('searchContactAssignments()', function () {
       beforeEach(function () {
         spyOn($rootScope, '$broadcast').and.callThrough();
         spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
@@ -309,7 +317,7 @@ define([
       });
     });
 
-    describe('confirm', function () {
+    describe('confirm()', function () {
       beforeEach(function () {
         mockDocument = {
           target_contact_id: ['202'],
@@ -317,36 +325,6 @@ define([
         };
         spyOn(DocumentService, 'save').and.returnValue($q.resolve([]));
         initController();
-      });
-
-      describe("document doesn't contain attachments", function () {
-        beforeEach(function () {
-          controller.uploader.queue.length = 0;
-          controller.files.length = 0;
-          angular.extend(controller.document, mockDocument);
-        });
-
-        describe('when user is staff', function () {
-          beforeEach(function () {
-            controller.role = 'staff';
-            controller.confirm();
-          });
-
-          it('flags document does not contain files', function () {
-            expect(controller.containsFiles).toEqual(false);
-          });
-        });
-
-        describe('when user is admin', function () {
-          beforeEach(function () {
-            controller.role = 'admin';
-            controller.confirm();
-          });
-
-          it('flags document does not contain files', function () {
-            expect(controller.containsFiles).toEqual(true);
-          });
-        });
       });
 
       describe('document due date is null', function () {
@@ -408,7 +386,8 @@ define([
 
         describe('document has new attachments in upload queue', function () {
           beforeEach(function () {
-            controller.uploader.queue.length = 3;
+            getFileLimitSize(controller);
+            controller.uploader.queue = fileFabricator.list();
           });
 
           describe('user is admin', function () {
@@ -480,8 +459,9 @@ define([
 
         describe("document doesn't have existing attachments", function () {
           beforeEach(function () {
+            getFileLimitSize(controller);
             controller.files.length = 0;
-            controller.uploader.queue.length = 2;
+            controller.uploader.queue = fileFabricator.list();
           });
 
           describe('user is admin', function () {
@@ -510,6 +490,7 @@ define([
 
         describe("document doesn't have attachments in upload queue", function () {
           beforeEach(function () {
+            getFileLimitSize(controller);
             controller.files.length = 3;
             controller.uploader.queue.length = 0;
           });
@@ -539,7 +520,7 @@ define([
       });
     });
 
-    describe('getStatusIdByName', function () {
+    describe('getStatusIdByName()', function () {
       beforeEach(function () {
         initController();
       });
@@ -561,7 +542,7 @@ define([
       });
     });
 
-    describe('getDocumentStatus', function () {
+    describe('getDocumentStatus()', function () {
       beforeEach(function () {
         initController();
         controller.files.length = 2;
@@ -609,8 +590,56 @@ define([
       });
     });
 
+    describe('validateFileSize()', function () {
+      var isValid;
+
+      beforeEach(function () {
+        initController();
+        getFileLimitSize(controller);
+      });
+
+      describe('no files are in upload queue', function () {
+        beforeEach(function () {
+          controller.uploader.queue = [];
+          isValid = controller.validateFileSize(controller.uploader.queue);
+        });
+
+        it('returs true as not files are in upload queue', function () {
+          expect(isValid).toEqual(true);
+        });
+      });
+
+      describe('uploaded files sizes are smaller than max file limit', function () {
+        beforeEach(function () {
+          controller.uploader.queue = fileFabricator.list();
+          isValid = controller.validateFileSize(controller.uploader.queue);
+        });
+
+        it('validates as all files are smaller than max file limit', function () {
+          expect(isValid).toEqual(true);
+        });
+      });
+
+      describe('uploaded files sizes are larger than max file limit', function () {
+        beforeEach(function () {
+          controller.uploader.queue = fileFabricator.list();
+          controller.uploader.queue[0]._file.size = '78000000';
+          controller.uploader.queue[1]._file.size = '108000000';
+          isValid = controller.validateFileSize(controller.uploader.queue);
+        });
+
+        it('validates as the files are larger than max file limit', function () {
+          expect(isValid).toEqual(false);
+        });
+      });
+    });
+
     function addAssignee (assignee) {
       controller.addAssignee(assignee);
+    }
+
+    function getFileLimitSize (controller) {
+      controller.fileSizeLimit = 32000000;
     }
 
     function fakeModalInstance () {
