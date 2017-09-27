@@ -68,7 +68,6 @@ define([
     vm.statusFieldVisible = statusFieldVisible;
     vm.showStatusField = showStatusField;
     vm.searchContactAssignments = searchContactAssignments;
-    vm.validateFileSize = validateFileSize;
     vm.viewFile = viewFile;
 
     (function init () {
@@ -205,7 +204,7 @@ define([
         return;
       }
 
-      if (!vm.validateFileSize(vm.uploader.queue)) {
+      if (!validateFileSizes(vm.uploader.queue)) {
         return;
       }
 
@@ -478,28 +477,29 @@ define([
     }
 
     /**
-     * Validates the uploaded file size and
+     * Validates the uploaded file(s) size and
      * displays error mesage for large files
      *
-     * @param  {object} uploader
+     * @param  {object} files
      * @return {boolean}
      */
-    function validateFileSize (uploadedFiles) {
-      var errorMsg = 'File larger than ' + (vm.fileSizeLimit / 1000000) + 'MB are not allowed.';
-      var isValid = true;
+    function validateFileSizes (files) {
+      var errorMsg = 'Files larger than ' + (vm.fileSizeLimit / 1000000) + 'MB are not allowed.';
+      var allSizesValid = true;
 
-      if (uploadedFiles.length) {
-        _.each(uploadedFiles, function (file) {
+      if (files.length) {
+        _.each(files, function (file) {
           var fileSize = +file._file.size;
 
           if (fileSize >= vm.fileSizeLimit) {
-            isValid = false;
+            allSizesValid = false;
           }
         });
       }
 
-      !isValid && notificationService.alert('Large files', errorMsg, { expires: 5000 });
-      return isValid;
+      !allSizesValid && notificationService.alert('Large files', errorMsg, { expires: 5000 });
+
+      return allSizesValid;
     }
 
     /**

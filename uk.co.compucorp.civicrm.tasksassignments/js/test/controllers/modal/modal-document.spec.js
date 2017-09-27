@@ -393,11 +393,28 @@ define([
           describe('user is admin', function () {
             beforeEach(function () {
               controller.role = 'admin';
-              controller.confirm();
             });
 
-            it('sets document status to Approved', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            describe('when uploaded files sizes are smaller than max file limit', function () {
+              beforeEach(function () {
+                controller.confirm();
+              });
+
+              it('saves the document with status to Approved', function () {
+                expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+              });
+            });
+
+            describe('when uploaded files sizes are larger than max file limit', function () {
+              beforeEach(function () {
+                controller.uploader.queue[0]._file.size = '78000000';
+                controller.uploader.queue[1]._file.size = '108000000';
+                controller.confirm();
+              });
+
+              it('does not save the document', function () {
+                expect(DocumentService.save).not.toHaveBeenCalled();
+              });
             });
           });
 
@@ -445,6 +462,10 @@ define([
             beforeEach(function () {
               controller.role = 'admin';
               controller.confirm();
+            });
+
+            it('skips size validation and returns true and saves the document', function () {
+              expect(DocumentService.save).toHaveBeenCalled();
             });
 
             it("flags document doesn't contain files", function () {
@@ -587,50 +608,6 @@ define([
 
       it('gets the blob file url for given file', function () {
         expect(fileService.openFile).toHaveBeenCalledWith(file);
-      });
-    });
-
-    describe('validateFileSize()', function () {
-      var isValid;
-
-      beforeEach(function () {
-        initController();
-        getFileLimitSize(controller);
-      });
-
-      describe('no files are in upload queue', function () {
-        beforeEach(function () {
-          controller.uploader.queue = [];
-          isValid = controller.validateFileSize(controller.uploader.queue);
-        });
-
-        it('returs true as not files are in upload queue', function () {
-          expect(isValid).toEqual(true);
-        });
-      });
-
-      describe('uploaded files sizes are smaller than max file limit', function () {
-        beforeEach(function () {
-          controller.uploader.queue = fileFabricator.list();
-          isValid = controller.validateFileSize(controller.uploader.queue);
-        });
-
-        it('validates as all files are smaller than max file limit', function () {
-          expect(isValid).toEqual(true);
-        });
-      });
-
-      describe('uploaded files sizes are larger than max file limit', function () {
-        beforeEach(function () {
-          controller.uploader.queue = fileFabricator.list();
-          controller.uploader.queue[0]._file.size = '78000000';
-          controller.uploader.queue[1]._file.size = '108000000';
-          isValid = controller.validateFileSize(controller.uploader.queue);
-        });
-
-        it('validates as the files are larger than max file limit', function () {
-          expect(isValid).toEqual(false);
-        });
       });
     });
 

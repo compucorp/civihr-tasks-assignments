@@ -92,6 +92,13 @@ define([
       $log.debug('Service: SettingsService');
 
       return {
+
+        /**
+         * Get app setting form backend using Setting Entity
+         *
+         * @param  {array} fields
+         * @return {promise}
+         */
         get: function (fields) {
           var deferred = $q.defer();
 

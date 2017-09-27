@@ -9,15 +9,11 @@ define([
 
   var mockBackendCalls = function ($httpBackend) {
     $httpBackend.whenGET(/views.*/).respond({});
-    $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
-    $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
-    $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
-    $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({});
-    $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
+    $httpBackend.whenGET(/action=*/).respond({});
   };
 
   describe('AppSettingsService', function () {
-    var AppSettings, AppSettingsService, $httpBackend, promise;
+    var AppSettings, AppSettingsService, $httpBackend, promiseResult;
 
     beforeEach(module('civitasks.appDashboard'));
 
@@ -28,11 +24,13 @@ define([
     }));
 
     beforeEach(function () {
-      mockBackendCalls($httpBackend);
       $httpBackend.whenGET(/action=get&debug=true&entity=Setting/).respond(settingsMock.onGet);
+      mockBackendCalls($httpBackend);
       spyOn(AppSettings, 'get').and.callThrough();
 
-      promise = AppSettingsService.get(['maxFileSize']);
+      AppSettingsService.get(['maxFileSize']).then(function (maxFileSize) {
+        promiseResult = maxFileSize;
+      });
     });
 
     afterEach(function () {
@@ -45,9 +43,7 @@ define([
       });
 
       it('returns the maxFileSize value', function () {
-        promise.then(function (maxFileSize) {
-          expect(maxFileSize).toEqual(settingsMock.onGet.values);
-        });
+        expect(promiseResult).toEqual(settingsMock.onGet.values);
       });
     });
   });

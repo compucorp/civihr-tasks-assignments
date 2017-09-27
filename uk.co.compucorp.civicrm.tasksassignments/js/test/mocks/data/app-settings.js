@@ -4,11 +4,7 @@ define([], function () {
   return {
     onGet: {
       is_error: 0,
-      values: [
-        {
-          'maxFileSize': '32'
-        }
-      ]
+      values: [{ 'maxFileSize': '32' }]
     }
   };
 });
