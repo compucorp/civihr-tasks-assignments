@@ -66,7 +66,7 @@
           <br ng-if="!documentModal.isRole('staff')">
           <div class="row">
             <div class="col-xs-12">
-              <label>Document File</label>
+              <label class="control-label" ng-class="{'required-field-indicator': documentModal.isRole('staff')}">Document File:</label>
               <div class="well drop-zone"
                 ng-if="documentModal.isRole('admin') || (documentModal.isRole('staff') && documentModal.mode == 'edit')"
                 ng-class="{'no-file': !documentModal.uploader.queue.length && !documentModal.containsFiles && documentModal.isRole('staff') && documentModal.mode == 'edit'}"
@@ -219,14 +219,11 @@
                 <label for="{{prefix}}document-due" class="col-xs-4 text-nowrap control-label"> Due Date: </label>
                 <div class="col-xs-6 input-group" ng-class="{'has-error': documentModal.documentForm.dueDate.$invalid}">
                   <input
-                    name="dueDate"
-                    type="text"
-                    id="{{prefix}}document-due"
-                    class="form-control"
-                    ng-model="documentModal.document.activity_date_time"
-                    placeholder="dd/mm/yyyy"
-                    uib-datepicker-popup
-                    is-open="documentModal.dpOpened.due">
+                    name="dueDate" type="text" id="{{prefix}}document-due"
+                    class="form-control" ng-model="documentModal.document.activity_date_time"
+                    placeholder="dd/mm/yyyy" uib-datepicker-popup
+                    is-open="documentModal.dpOpened.due" ng-click="documentModal.dpOpen($event, 'due')">
+                  <span class="input-group-addon fa fa-calendar"></span>
                 </div>
               </div>
             </div>

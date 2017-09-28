@@ -2,13 +2,14 @@
 
 define([
   'common/angular',
+  'common/lodash',
   'common/moment',
   'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
   'tasks-assignments/services/file',
   'tasks-assignments/services/assignment'
-], function (angular, moment, controllers) {
+], function (angular, _, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListController', DocumentListController);
@@ -254,32 +255,32 @@ define([
      * @return {object}
      */
     function listAssignees (assigneesIds) {
-       var assigneeList = {};
+      var assigneeList = {};
 
-       if (assigneesIds.length) {
-         _.each(assigneesIds, function (assigneeId) {
-           var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+      if (assigneesIds.length) {
+        _.each(assigneesIds, function (assigneeId) {
+          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
 
-           if (assignee) {
-             assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
-           }
-         });
-       }
+          if (assignee) {
+            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+          }
+        });
+      }
 
-       return assigneeList;
-     };
+      return assigneeList;
+    }
 
     /**
      * Filters the documents list based on filter type and due date
      * @param {string} type filter type
      * @return {array} documents list
      */
-     function filterByDateField (type) {
-       var listByDueDate = $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
-       var listByExpiryDate = $filter('filterByDateField')(vm.list, type, 'expire_date', vm.filterParams.dateRange);
+    function filterByDateField (type) {
+      var listByDueDate = $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
+      var listByExpiryDate = $filter('filterByDateField')(vm.list, type, 'expire_date', vm.filterParams.dateRange);
 
-       return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
-     };
+      return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
+    }
 
     /**
      * Creates the date range label using from and until dates in
@@ -422,7 +423,7 @@ define([
           });
           break;
       }
-    };
+    }
 
     // Subscribers for event listeners
     function subscribeForEvents () {
