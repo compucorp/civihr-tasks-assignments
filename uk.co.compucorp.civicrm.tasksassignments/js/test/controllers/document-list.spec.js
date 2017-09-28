@@ -9,8 +9,8 @@ define([
 ], function (moment, angular, documentFabricator) {
   'use strict';
 
-  describe('DocumentListCtrl', function () {
-    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter;
+  describe('DocumentListController', function () {
+    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter, controller;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
@@ -48,18 +48,18 @@ define([
       });
 
       it('checks if default document status are defined for filter in T&A dashboard', function () {
-        expect($scope.filterParamsHolder.documentStatus).toEqual(['1', '2']);
+        expect(controller.filterParamsHolder.documentStatus).toEqual(['1', '2']);
       });
 
       it('checks if default document status are not defined for filter in contact page', function () {
-        expect($scope.filterParams.documentStatus).toEqual([]);
+        expect(controller.filterParams.documentStatus).toEqual([]);
       });
     });
 
     describe('changeStatus()', function () {
       beforeEach(function () {
         initController();
-        $scope.document = mockDocument;
+        controller.document = mockDocument;
       });
 
       afterEach(function () {
@@ -68,7 +68,7 @@ define([
 
       describe('when the status is empty', function () {
         beforeEach(function () {
-          $scope.changeStatus($scope.document, null);
+          controller.changeStatus(controller.document, null);
         });
 
         it('does not update the document status', function () {
@@ -78,20 +78,17 @@ define([
 
       describe('when the status is not empty', function () {
         beforeEach(function () {
-          $scope.changeStatus($scope.document, '4');
+          controller.changeStatus(controller.document, '4');
         });
 
         it('updates the document status', function () {
-          expect(DocumentService.save).toHaveBeenCalledWith({ id: $scope.document.id, status_id: '4' });
-          expect($scope.document.status_id).toBe('4');
+          expect(DocumentService.save).toHaveBeenCalledWith({ id: controller.document.id, status_id: '4' });
+          expect(controller.document.status_id).toBe('4');
         });
       });
     });
 
     describe('labelDateRange()', function () {
-      var fromDate = moment().startOf('day').toDate();
-      var untilDate = moment().add(1, 'month').startOf('day').toDate();
-
       beforeEach(function () {
         initController();
       });
@@ -101,48 +98,53 @@ define([
       });
 
       it('formats and creates date range label', function () {
-        expect($scope.label.dateRange).toBe($filter('date')(fromDate, 'dd/MM/yyyy') + ' - ' + $filter('date')(untilDate, 'dd/MM/yyyy'));
+        expect(controller.label.dateRange).toBe('');
+      });
+
+      it('verifies the default date range are null', function () {
+        expect(controller.filterParams.dateRange.from).toBe(null);
+        expect(controller.filterParams.dateRange.until).toBe(null);
       });
 
       describe('when both form and until date are available', function () {
         beforeEach(function () {
-          $scope.filterParams.dateRange = {
+          controller.filterParams.dateRange = {
             from: moment().startOf('day').toDate(),
             until: moment().add(2, 'month').startOf('day').toDate()
           };
-          $scope.labelDateRange();
+          controller.labelDateRange();
         });
 
         it('formats and creates date range label', function () {
-          expect($scope.label.dateRange).toBe($filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy') + ' - ' + $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
+          expect(controller.label.dateRange).toBe($filter('date')(controller.filterParams.dateRange.from, 'dd/MM/yyyy') + ' - ' + $filter('date')(controller.filterParams.dateRange.until, 'dd/MM/yyyy'));
         });
       });
 
       describe('when only form date is available', function () {
         beforeEach(function () {
-          $scope.filterParams.dateRange = {
+          controller.filterParams.dateRange = {
             from: moment().startOf('day').toDate(),
             until: ''
           };
-          $scope.labelDateRange();
+          controller.labelDateRange();
         });
 
         it('formats and creates date range label containing form date only', function () {
-          expect($scope.label.dateRange).toBe('From: ' + $filter('date')($scope.filterParams.dateRange.from, 'dd/MM/yyyy'));
+          expect(controller.label.dateRange).toBe('From: ' + $filter('date')(controller.filterParams.dateRange.from, 'dd/MM/yyyy'));
         });
       });
 
       describe('when only until date is available', function () {
         beforeEach(function () {
-          $scope.filterParams.dateRange = {
+          controller.filterParams.dateRange = {
             from: '',
             until: moment().add(2, 'month').startOf('day').toDate()
           };
-          $scope.labelDateRange();
+          controller.labelDateRange();
         });
 
         it('formats and creates date range label containing until date only', function () {
-          expect($scope.label.dateRange).toBe('Until: ' + $filter('date')($scope.filterParams.dateRange.until, 'dd/MM/yyyy'));
+          expect(controller.label.dateRange).toBe('Until: ' + $filter('date')(controller.filterParams.dateRange.until, 'dd/MM/yyyy'));
         });
       });
     });
@@ -153,13 +155,13 @@ define([
       describe('filtering by due date', function () {
         beforeEach(function () {
           initController();
-          $scope.list = documentFabricator.list();
-          $scope.filterParams.dateRange = {
+          controller.list = documentFabricator.list();
+          controller.filterParams.dateRange = {
             from: '2017-05-01 00:00:00',
             until: '2017-05-10 00:00:00'
           };
 
-          filteredDocumentList = $scope.filterByDateField('dateRange');
+          filteredDocumentList = controller.filterByDateField('dateRange');
         });
 
         it('returns filtered document by due date of the document', function () {
@@ -170,13 +172,13 @@ define([
       describe('filtering by expiry date', function () {
         beforeEach(function () {
           initController();
-          $scope.list = documentFabricator.list();
-          $scope.filterParams.dateRange = {
+          controller.list = documentFabricator.list();
+          controller.filterParams.dateRange = {
             from: '2017-05-10 00:00:00',
             until: '2017-05-20 00:00:00'
           };
 
-          filteredDocumentList = $scope.filterByDateField('dateRange');
+          filteredDocumentList = controller.filterByDateField('dateRange');
         });
 
         it('returns filtered document by expiry date of the document', function () {
@@ -186,7 +188,7 @@ define([
     });
 
     function initController (scopeValues) {
-      $controller('DocumentListCtrl', {
+      controller = $controller('DocumentListController', {
         $scope: $scope,
         config: config,
         documentList: documentFabricator.list()

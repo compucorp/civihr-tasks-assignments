@@ -8,8 +8,8 @@ define([
 ], function (angular, taskFabricator) {
   'use strict';
 
-  describe('TaskListCtrl', function () {
-    var $scope, ContactService, TaskService;
+  describe('TaskListController', function () {
+    var $scope, ContactService, TaskService, controller;
 
     beforeEach(module('civitasks.appDashboard'));
     beforeEach(inject(function ($controller, $rootScope, _ContactService_, _TaskService_) {
@@ -17,7 +17,7 @@ define([
       ContactService = _ContactService_;
       TaskService = _TaskService_;
 
-      $controller('TaskListCtrl', {
+      controller = $controller('TaskListController', {
         $scope: $scope,
         taskList: taskFabricator.list()
       });
@@ -28,9 +28,8 @@ define([
 
       beforeEach(function () {
         spyOn(ContactService, 'updateCache');
-        $scope.contacts = mockedTempCachedContacts();
-
-        $scope.cacheContact(contactToCacheId);
+        controller.contacts = mockedTempCachedContacts();
+        controller.cacheContact(contactToCacheId);
       });
 
       it('calls the ContactService', function () {
@@ -78,7 +77,7 @@ define([
 
         saveObj = angular.extend({}, task, updateObj);
 
-        $scope.updateTask(task, updateObj);
+        controller.updateTask(task, updateObj);
       });
 
       it('calls TaskService with the correct object', function () {
@@ -91,12 +90,12 @@ define([
 
       describe('filtering tasks by due date in between the date range', function () {
         beforeEach(function () {
-          $scope.filterParams.dateRange = {
+          controller.filterParams.dateRange = {
             from: '2017-04-10 00:00:00',
             until: '2017-04-20 00:00:00'
           };
 
-          filteredTaskList = $scope.filterByDateField('dateRange');
+          filteredTaskList = controller.filterByDateField('dateRange');
         });
 
         it('returns filtered tasks by due date', function () {
@@ -106,12 +105,12 @@ define([
 
       describe('filtering tasks by due date not in between the date range', function () {
         beforeEach(function () {
-          $scope.filterParams.dateRange = {
+          controller.filterParams.dateRange = {
             from: '2017-04-23 00:00:00',
             until: '2017-04-25 00:00:00'
           };
 
-          filteredTaskList = $scope.filterByDateField('dateRange');
+          filteredTaskList = controller.filterByDateField('dateRange');
         });
 
         it('does not return filtered tasks', function () {
