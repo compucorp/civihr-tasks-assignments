@@ -25,7 +25,8 @@ define([
           })
           .state('main', {
             url: '/',
-            controller: 'TaskListCtrl',
+            controller: 'TaskListController',
+            controllerAs: 'list',
             templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
             resolve: {
               taskList: ['TaskService', function (TaskService) {
