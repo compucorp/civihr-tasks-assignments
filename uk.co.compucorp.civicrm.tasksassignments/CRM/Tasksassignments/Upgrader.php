@@ -597,7 +597,11 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   public function upgrade_1027() {
     $taDashboard = new CRM_Core_DAO_Navigation();
     $taDashboard->name = 'ta_dashboard';
-    $taDashboard->find(true);
+    $taDashboard->find(TRUE);
+
+    if (!$taDashboard->id) {
+      return TRUE;
+    }
     
     CRM_Core_BAO_Navigation::processDelete($taDashboard->id);
     CRM_Core_BAO_Navigation::resetNavigation();
@@ -611,34 +615,34 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   public function upgrade_1028() {
     $taNavigation = new CRM_Core_DAO_Navigation();
     $taNavigation->name = 'tasksassignments';
-    $taNavigation->find(true);
+    $taNavigation->find(TRUE);
     
     if (!$taNavigation->id) {
       return TRUE;
     }
 
-    $submenu = array(
-      array(
+    $submenu = [
+      [
         'label' => ts('Tasks'),
         'name' => 'ta_dashboard_tasks',
         'url' => 'civicrm/tasksassignments/dashboard#/tasks',
-      ),
-      array(
+      ],
+      [
         'label' => ts('Documents'),
         'name' => 'ta_dashboard_documents',
         'url' => 'civicrm/tasksassignments/dashboard#/documents',
-      ),
-      array(
+      ],
+      [
         'label' => ts('Calendar'),
         'name' => 'ta_dashboard_calendar',
         'url' => 'civicrm/tasksassignments/dashboard#/calendar',
-      ),
-      array(
+      ],
+      [
         'label' => ts('Key Dates'),
         'name' => 'ta_dashboard_keydates',
         'url' => 'civicrm/tasksassignments/dashboard#/key-dates',
-      )
-    );
+      ]
+    ];
 
     foreach ($submenu as $key => $item) {
       $item['parent_id'] = $taNavigation->id;
@@ -673,7 +677,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
     CRM_Core_BAO_Navigation::resetNavigation();
 
-    return true;
+    return TRUE;
   }
 
     public function uninstall() {
