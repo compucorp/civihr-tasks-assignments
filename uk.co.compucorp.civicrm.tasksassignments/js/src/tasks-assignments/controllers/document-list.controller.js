@@ -32,7 +32,7 @@ define([
     vm.listOngoing = [];
     vm.listPaginated = [];
     vm.overdue = 0;
-    vm.propertyName = 'activity-date-time';
+    vm.propertyName = 'activity_date_time';
     vm.reverse = true;
     vm.documentContactColumns = [
       {
@@ -72,7 +72,7 @@ define([
       },
       {
         label: 'Staff',
-        property: 'target_contact_id'
+        property: 'target_contact'
       },
       {
         label: 'Assignee',
@@ -85,7 +85,7 @@ define([
       },
       {
         label: 'Due Date',
-        property: 'activity-date-time'
+        property: 'activity_date_time'
       },
       {
         label: 'Expiry Date',
@@ -250,27 +250,6 @@ define([
     }
 
     /**
-     * Creates the comma saperated list of assignees
-     * @param  {array} assigneesIds
-     * @return {object}
-     */
-    function listAssignees (assigneesIds) {
-      var assigneeList = {};
-
-      if (assigneesIds.length) {
-        _.each(assigneesIds, function (assigneeId) {
-          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
-
-          if (assignee) {
-            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
-          }
-        });
-      }
-
-      return assigneeList;
-    }
-
-    /**
      * Filters the documents list based on filter type and due date
      * @param {string} type filter type
      * @return {array} documents list
@@ -323,7 +302,7 @@ define([
       }
 
       return assigneeList;
-    };
+    }
 
     /**
      * Deletes the given document
