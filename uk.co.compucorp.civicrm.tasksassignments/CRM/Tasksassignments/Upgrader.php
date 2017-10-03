@@ -591,12 +591,100 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return $this->upgrade_1020();
   }
 
-    public function uninstall()
-    {
-        CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')");
-        CRM_Core_BAO_Navigation::resetNavigation();
+  /**
+   * Remove the old Dashboard submenu item
+   */
+  public function upgrade_1027() {
+    $taDashboard = new CRM_Core_DAO_Navigation();
+    $taDashboard->name = 'ta_dashboard';
+    $taDashboard->find(TRUE);
 
-        return TRUE;
+    if (!$taDashboard->id) {
+      return TRUE;
+    }
+    
+    CRM_Core_BAO_Navigation::processDelete($taDashboard->id);
+    CRM_Core_BAO_Navigation::resetNavigation();
+
+    return TRUE;
+  }
+
+  /**
+   * Add new submenu links
+   */
+  public function upgrade_1028() {
+    $taNavigation = new CRM_Core_DAO_Navigation();
+    $taNavigation->name = 'tasksassignments';
+    $taNavigation->find(TRUE);
+    
+    if (!$taNavigation->id) {
+      return TRUE;
+    }
+
+    $submenu = [
+      [
+        'label' => ts('Tasks'),
+        'name' => 'ta_dashboard_tasks',
+        'url' => 'civicrm/tasksassignments/dashboard#/tasks',
+      ],
+      [
+        'label' => ts('Documents'),
+        'name' => 'ta_dashboard_documents',
+        'url' => 'civicrm/tasksassignments/dashboard#/documents',
+      ],
+      [
+        'label' => ts('Calendar'),
+        'name' => 'ta_dashboard_calendar',
+        'url' => 'civicrm/tasksassignments/dashboard#/calendar',
+      ],
+      [
+        'label' => ts('Key Dates'),
+        'name' => 'ta_dashboard_keydates',
+        'url' => 'civicrm/tasksassignments/dashboard#/key-dates',
+      ]
+    ];
+
+    foreach ($submenu as $key => $item) {
+      $item['parent_id'] = $taNavigation->id;
+      $item['weight'] = $key;
+      $item['is_active'] = 1;
+      
+      CRM_Core_BAO_Navigation::add($item);
+    }
+    
+    CRM_Core_BAO_Navigation::resetNavigation();
+    
+    return TRUE;
+  }
+
+  /**
+   * Rename "Tasks and Assignments" menu items to just "Task"
+   */
+  public function upgrade_1029() {
+    $default = [];
+    $paramsDashboard = ['name' => 'tasksassignments'];
+    $paramsAdmin = ['name' => 'tasksassignments_administer'];
+
+    $menuItems = [
+      'dashboard' => CRM_Core_BAO_Navigation::retrieve($paramsDashboard, $default),
+      'admin' => CRM_Core_BAO_Navigation::retrieve($paramsAdmin, $default)
+    ];
+    
+    foreach ($menuItems as $menuItem) {
+      $menuItem->label = 'Tasks';
+      $menuItem->save();
+    }
+
+    CRM_Core_BAO_Navigation::resetNavigation();
+
+    return TRUE;
+  }
+
+    public function uninstall() {
+      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
+      CRM_Core_BAO_Navigation::resetNavigation();
+
+      return TRUE;
     }
 
     /**
