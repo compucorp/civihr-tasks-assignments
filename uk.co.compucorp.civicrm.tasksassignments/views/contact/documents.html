@@ -77,7 +77,7 @@
   </td>
   <td ng-bind="(document.document_number) || '-'"></td>
   <td ng-if="document.assignee_contact_id">
-    <a ng-repeat="(key, value) in listAssignees(document.assignee_contact_id)" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[key].contact_id}}">
+    <a ng-repeat="(key, value) in list.listAssignees(document.assignee_contact_id)" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[key].contact_id}}">
       {{value}} {{$last ? '' : ', '}}
     </a>
   </td>
