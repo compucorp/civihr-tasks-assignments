@@ -658,7 +658,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   }
 
   /**
-   * Rename "Tasks and Assignments" menu items to just "Task"
+   * Rename "Tasks and Assignments" menu items to just "Tasks"
    */
   public function upgrade_1029() {
     $default = [];
@@ -675,6 +675,22 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       $menuItem->save();
     }
 
+    CRM_Core_BAO_Navigation::resetNavigation();
+
+    return TRUE;
+  }
+
+  /**
+   * Rename "Settings" menu item to "Tasks Settings"
+   */
+  public function upgrade_1030() {
+    $default = [];
+    $params = ['name' => 'ta_settings'];
+    
+    $menuItem = CRM_Core_BAO_Navigation::retrieve($params, $default);
+    $menuItem->label = 'Tasks Settings';
+    $menuItem->save();
+    
     CRM_Core_BAO_Navigation::resetNavigation();
 
     return TRUE;
