@@ -75,7 +75,7 @@ define([
         property: 'target_contact'
       },
       {
-        label: 'Assignee',
+        label: 'Assigned to',
         property: 'assignee'
       },
       {
@@ -373,24 +373,24 @@ define([
       switch (propertyName) {
         case 'type':
           vm.list = _.sortBy(vm.list, function (doc) {
-            return $rootScope.cache.documentType.obj[doc.activity_type_id];
+            return $rootScope.cache.documentType.obj[doc.activity_type_id].toLowerCase();
           });
           break;
         case 'status_id':
           vm.list = _.sortBy(vm.list, function (doc) {
-            return $rootScope.cache.documentStatus.obj[doc.status_id];
+            return $rootScope.cache.documentStatus.obj[doc.status_id].toLowerCase();
           });
           break;
         case 'target_contact':
           vm.list = _.sortBy(vm.list, function (doc) {
-            return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name;
+            return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name.toLowerCase();
           });
           break;
         case 'assignee':
           vm.list = _.sortBy(vm.list, function (doc) {
             var assignee = doc.assignee_contact_id.length && _.find($rootScope.cache.contact.obj, {'id': doc.assignee_contact_id[0]});
 
-            return assignee && assignee.sort_name;
+            return assignee ? assignee.sort_name.toLowerCase() : '';
           });
           break;
         case 'case_id':
@@ -398,7 +398,7 @@ define([
             var assignment = $rootScope.cache.assignment.obj[doc.case_id];
             var assignmentType = assignment && $rootScope.cache.assignmentType.obj[assignment.case_type_id];
 
-            return assignmentType && assignmentType.title;
+            return assignmentType && assignmentType.title.toLowerCase();
           });
           break;
       }
