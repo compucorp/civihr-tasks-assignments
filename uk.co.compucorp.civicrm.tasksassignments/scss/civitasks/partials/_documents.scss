@@ -1,10 +1,6 @@
 .#{$prefix}documents-container {
   background-color: $table-bg;
 
-  table th {
-    cursor: pointer;
-  }
-
   .sortorder:after {
     content: '\25b2';
   }

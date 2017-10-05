@@ -1,5 +1,9 @@
 .#{$prefix}table-documents {
 
+  thead th {
+    cursor: pointer;
+  }
+
   .dropdown {
     text-transform: capitalize;
   }
