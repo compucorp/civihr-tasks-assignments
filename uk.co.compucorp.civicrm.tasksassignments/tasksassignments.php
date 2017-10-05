@@ -275,7 +275,7 @@ function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$
   $administerMenuItems = &_tasksassignments_getAdministerMenuItems($params);
   $menuItemsToClone = _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuItems, 'CiviCase', ['Case Types', 'Case Statuses']);
 
-  _tasksassignments_cloneMenuItemsInAdministerSubMenu($administerMenuItems, $menuItemsToClone, 'tasksassignments_administer', [
+  _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels($administerMenuItems, $menuItemsToClone, 'tasksassignments_administer', [
     'Case Types' => 'Workflows',
     'Case Statuses' => 'Workflows Status'
   ]);
@@ -284,15 +284,35 @@ function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$
 }
 
 /**
- * Deletes a sub menu of the given name from the Administer main menu
+ * Gets the items of the Administer main menu
  *
- * @param array $administerMenuItems 
- * @param string $subMenuName
+ * @param array $params
+ *
+ * @return array
  */
-function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMenuName) {
+function &_tasksassignments_getAdministerMenuItems(&$params) {
+  $administerID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+
+  return $params[$administerID]['child'];
+}
+
+/**
+ * Filters the items (by name) of the Administer's sub menu of the given name
+ *
+ * @param array $administerMenuItems
+ * @param string $subMenuName
+ * @param array $namesFilter
+ *
+ * @return array
+ */
+function _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuItems, $subMenuName, $namesFilter) {
   $subMenuID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $subMenuName, 'id', 'name');
 
-  unset($administerMenuItems[$subMenuID]);
+  return array_filter($administerMenuItems[$subMenuID]['child'], function ($child) use ($namesFilter) {
+    $childName = $child['attributes']['name'];
+
+    return in_array($childName, $namesFilter);
+  });
 }
 
 /**
@@ -304,7 +324,7 @@ function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMe
  * @param array $subMenuName
  * @param array $labelsMapping
  */
-function _tasksassignments_cloneMenuItemsInAdministerSubMenu(&$administerMenuItems, $menuItems, $subMenuName, $labelsMapping) {
+function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$administerMenuItems, $menuItems, $subMenuName, $labelsMapping) {
   $subMenuTargetID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $subMenuName, 'id', 'name');
 
   foreach ($menuItems as $item) {
@@ -320,33 +340,15 @@ function _tasksassignments_cloneMenuItemsInAdministerSubMenu(&$administerMenuIte
 }
 
 /**
- * Filters the items (by name) of the Administer's sub menu of the given name
+ * Deletes a sub menu of the given name from the Administer main menu
  *
- * @param array $administerMenuItems
+ * @param array $administerMenuItems 
  * @param string $subMenuName
- * @param array $namesFilter
- * @return array
  */
-function _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuItems, $subMenuName, $namesFilter) {
+function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMenuName) {
   $subMenuID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $subMenuName, 'id', 'name');
 
-  return array_filter($administerMenuItems[$subMenuID]['child'], function ($child) use ($namesFilter) {
-    $childName = $child['attributes']['name'];
-
-    return in_array($childName, $namesFilter);
-  });
-}
-
-/**
- * Gets the items of the Administer main menu
- *
- * @param array $params
- * @return array
- */
-function &_tasksassignments_getAdministerMenuItems(&$params) {
-  $administerID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
-
-  return $params[$administerID]['child'];
+  unset($administerMenuItems[$subMenuID]);
 }
 
 /**
