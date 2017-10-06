@@ -31,7 +31,7 @@
           <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Assignment Type:</label>
           <div class="col-xs-12 col-sm-6">
             <div class="crm_custom-select crm_custom-select--full">
-              <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">
+              <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control no-select2" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">
                 <option value="">- select -</option>
               </select>
               <span class="crm_custom-select__arrow"></span>
@@ -44,9 +44,18 @@
           </label>
           <div class="col-xs-12 col-sm-3">
             <div class="input-group input-group-unstyled date-input-group form-group" ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
-              <input type="text" id="{{prefix}}assignment-due" ng-model="assignment.dueDate" name="dueDate" class="form-control" placeholder="{{ format }}" name="assignmentDue" ng-required="true" uib-datepicker-popup ng-model="assignment.dueDate" is-open="dpOpened.assignmentDue"
-                  ng-click="dpOpen($event, 'assignmentDue');">
-                <span class="input-group-addon fa fa-calendar"></span>
+              <input
+                type="text"
+                id="{{prefix}}assignment-due"
+                ng-model="assignment.dueDate"
+                name="dueDate"
+                class="form-control"
+                placeholder="{{ format }}"
+                name="assignmentDue"
+                ng-required="true"
+                uib-datepicker-popup
+                ng-model="assignment.dueDate"
+                is-open="dpOpened.assignmentDue">
             </div>
           </div>
         </div>
@@ -126,9 +135,17 @@
                   </td>
                   <td>
                     <div class="input-group input-group-unstyled date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
-                      <input type="text" id="{{prefix}}assignment-task-due-{{$index}}" name="assignmentDue-{{$index}}" class="form-control" placeholder="{{ format }}" ng-model="activity.activity_date_time" uib-datepicker-popup is-open="dpOpened['task' + $index]" ng-required="!isDisabled && activity.create"
-                          ng-click="!isDisabled && activity.create ? dpOpen($event, 'task'+$index) : return;" ng-disabled="isDisabled || !activity.create">
-                        <span class="input-group-addon fa fa-calendar"></span>
+                      <input
+                        type="text"
+                        id="{{prefix}}assignment-task-due-{{$index}}"
+                        name="assignmentDue-{{$index}}"
+                        class="form-control"
+                        placeholder="{{ format }}"
+                        ng-model="activity.activity_date_time"
+                        uib-datepicker-popup
+                        is-open="dpOpened['task' + $index]"
+                        ng-required="!isDisabled && activity.create"
+                        ng-disabled="isDisabled || !activity.create">
                     </div>
                   </td>
                   <td class="text-center">
@@ -208,9 +225,17 @@
                   </td>
                   <td>
                     <div class="input-group input-group-unstyled date-input-group">
-                      <input type="text" id="{{prefix}}assignment-doc-due-{{$index}}" class="form-control" name="assignmentDue" placeholder="{{ format }}" uib-datepicker-popup ng-model="activity.activity_date_time" ng-disabled="isDisabled" ng-required="true" is-open="dpOpened['doc'+$index]"
-                          ng-click="!isDisabled && activity.create ? dpOpen($event, 'doc'+$index) : return;" ng-disabled="isDisabled || !activity.create">
-                        <span class="input-group-addon fa fa-calendar"></span>
+                      <input
+                        type="text"
+                        id="{{prefix}}assignment-doc-due-{{$index}}"
+                        class="form-control"
+                        name="assignmentDue"
+                        placeholder="{{ format }}"
+                        uib-datepicker-popup
+                        ng-model="activity.activity_date_time"
+                        ng-required="true"
+                        is-open="dpOpened['doc'+$index]"
+                        ng-disabled="isDisabled || !activity.create">
                     </div>
                   </td>
                   <td class="text-center">

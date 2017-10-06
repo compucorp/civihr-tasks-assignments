@@ -2,7 +2,7 @@
 
 define([
   'common/angular',
-  'tasks-assignments/modules/run'
+  'tasks-assignments/modules/run.module'
 ], function (angular) {
   'use strict';
 
@@ -24,7 +24,8 @@ define([
           })
           .state('main', {
             url: '/',
-            controller: 'DocumentListCtrl',
+            controller: 'DocumentListController',
+            controllerAs: 'list',
             templateUrl: config.path.TPL + 'contact/documents.html?v=4',
             resolve: {
               documentList: ['DocumentService', function (DocumentService) {

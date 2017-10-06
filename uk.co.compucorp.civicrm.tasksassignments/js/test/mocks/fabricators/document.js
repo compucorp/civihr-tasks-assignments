@@ -6,7 +6,7 @@ define(function () {
       return {
         id: '1216',
         activity_date_time: '2017-06-09T18:15:00.000Z',
-        activity_type_id: '121',
+        activity_type_id: '66',
         status_id: '3',
         assignee_contact_id: ['203'],
         source_contact_id: '205',
@@ -29,16 +29,16 @@ define(function () {
         {
           id: '1200',
           activity_date_time: '2017-05-03 00:00:00',
-          activity_type_id: '66',
-          status_id: '3',
-          assignee_contact_id: ['4', '10'],
+          activity_type_id: '67',
+          status_id: '4',
+          assignee_contact_id: ['202', '204'],
           source_contact_id: '204',
           target_contact_id: ['205'],
           custom_83_32: '2017-05-11 00:00:00',
           custom_100013_32: '2017-04-30 00:00:00',
           custom_100014_32: '1',
           custom_100015_32: '3423424',
-          case_id: '45',
+          case_id: '5',
           file_count: '1',
           expire_date: '2017-05-11',
           valid_from: '2017-04-30',
@@ -48,8 +48,8 @@ define(function () {
         {
           id: '1205',
           activity_date_time: '2017-05-16 00:00:00',
-          activity_type_id: '66',
-          status_id: '',
+          activity_type_id: '68',
+          status_id: '2',
           assignee_contact_id: ['204'],
           source_contact_id: '205',
           target_contact_id: ['204'],
@@ -57,7 +57,7 @@ define(function () {
           custom_100013_37: '2017-05-15 00:00:00',
           custom_100014_37: '0',
           custom_100015_37: 'asdfasdf',
-          case_id: '46',
+          case_id: '9',
           file_count: '1',
           expire_date: '2017-05-19',
           valid_from: '2017-05-15',
@@ -67,7 +67,7 @@ define(function () {
         {
           id: '1209',
           activity_date_time: '2017-05-29 00:00:00',
-          activity_type_id: '66',
+          activity_type_id: '69',
           details: '\n',
           status_id: '2',
           assignee_contact_id: ['202'],
@@ -75,7 +75,7 @@ define(function () {
           target_contact_id: ['202'],
           custom_83_39: '2017-05-31 00:00:00',
           custom_100014_39: '0',
-          case_id: '49',
+          case_id: '10',
           file_count: '1',
           expire_date: '2017-05-31',
           remind_me: '0'
@@ -83,9 +83,9 @@ define(function () {
         {
           id: '1210',
           activity_date_time: '2017-05-16 00:00:00',
-          activity_type_id: '66',
+          activity_type_id: '70',
           status_id: '3',
-          assignee_contact_id: ['3'],
+          assignee_contact_id: ['203'],
           source_contact_id: '205',
           target_contact_id: ['203'],
           custom_83_40: '2017-06-09 00:00:00',
@@ -102,16 +102,16 @@ define(function () {
         {
           id: '1213',
           activity_date_time: '2017-06-21 00:00:00',
-          activity_type_id: '66',
+          activity_type_id: '71',
           status_id: '2',
-          assignee_contact_id: ['203'],
+          assignee_contact_id: ['204'],
           source_contact_id: '205',
           target_contact_id: ['203'],
           custom_83_43: '2017-06-10 00:00:00',
           custom_100013_43: '2017-05-11 00:00:00',
           custom_100014_43: '1',
           custom_100015_43: '123121123412',
-          case_id: '',
+          case_id: '5',
           file_count: '1',
           expire_date: '2017-06-10',
           valid_from: '2017-05-11',
@@ -120,7 +120,7 @@ define(function () {
         }
       ];
     },
-    documentStatus: function () {
+    documentTypes: function () {
       return [
         {
           key: '66',
@@ -152,22 +152,22 @@ define(function () {
         }
       ];
     },
-    documentTypes: function () {
+    documentStatus: function () {
       return [
         {
-          key: 1,
+          key: '1',
           value: 'awaiting upload'
         },
         {
-          key: 2,
+          key: '2',
           value: 'awaiting approval'
         },
         {
-          key: 3,
+          key: '3',
           value: 'approved'
         },
         {
-          key: 4,
+          key: '4',
           value: 'rejected'
         }
       ];

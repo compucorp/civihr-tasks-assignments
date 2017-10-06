@@ -51,8 +51,16 @@
               <span class="pull-right required-field-indicator">Due:</span>
             </label>
             <div class="col-xs-9 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
-              <input type="text" name="assignmentDue" id="{{prefix}}task-due" class="form-control" ng-model="task.activity_date_time" placeholder="{{ format }}" ng-required="true" uib-datepicker-popup is-open="dpOpened" ng-click="dpOpen($event);">
-              <span class="input-group-addon fa fa-calendar"></span>
+              <input
+                type="text"
+                name="assignmentDue"
+                id="{{prefix}}task-due"
+                class="form-control"
+                ng-model="task.activity_date_time"
+                placeholder="{{ format }}"
+                ng-required="true"
+                uib-datepicker-popup
+                is-open="dpOpened">
             </div>
           </div>
         </div>
@@ -113,7 +121,7 @@
         </div>
         <div class="col-xs-12 col-sm-5" ng-show="task.status_id || showFieldStatus">
           <div class="crm_custom-select crm_custom-select--full">
-            <select ng-required class="form-control" ng-model="task.status_id" ng-options="status.key as status.value for status in cache.taskStatus.arr">
+            <select ng-required class="form-control no-select2" ng-model="task.status_id" ng-options="status.key as status.value for status in cache.taskStatus.arr">
               <option value="">Status</option>
             </select>
             <span class="crm_custom-select__arrow"></span>

@@ -2,13 +2,14 @@
 
 define([
   'common/angular',
+  'common/lodash',
   'common/moment',
   'tasks-assignments/controllers/controllers',
+  'tasks-assignments/services/assignment',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
-  'tasks-assignments/services/file',
-  'tasks-assignments/services/assignment'
-], function (angular, moment, controllers) {
+  'tasks-assignments/services/file'
+], function (angular, _, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListCtrl', ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
@@ -26,6 +27,8 @@ define([
       $scope.listOngoing = [];
       $scope.listPaginated = [];
       $scope.overdue = 0;
+      $scope.propertyName = 'activity-date-time';
+      $scope.reverse = true;
       $scope.dueFilters = [
         { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
         { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
@@ -71,6 +74,70 @@ define([
         currentPage: 1,
         itemsPerPage: 10,
         maxSize: 5
+      };
+
+      /**
+       * Sort the document list based on the property name
+       * @param  {string} propertyName
+       * @return {array}
+       */
+      $scope.sortBy = function (propertyName) {
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+
+        switch (propertyName) {
+          case 'type':
+            $scope.list = _.sortBy($scope.list, function (doc) {
+              return $rootScope.cache.documentType.obj[doc.activity_type_id];
+            });
+            break;
+          case 'status_id':
+            $scope.list = _.sortBy($scope.list, function (doc) {
+              return $rootScope.cache.documentStatus.obj[doc.status_id];
+            });
+            break;
+          case 'target_contact':
+            $scope.list = _.sortBy($scope.list, function (doc) {
+              return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name;
+            });
+            break;
+          case 'assignee':
+            $scope.list = _.sortBy($scope.list, function (doc) {
+              var assignee = doc.assignee_contact_id.length && _.find($rootScope.cache.contact.obj, {'id': doc.assignee_contact_id[0]});
+
+              return assignee && assignee.sort_name;
+            });
+            break;
+          case 'case_id':
+            $scope.list = _.sortBy($scope.list, function (doc) {
+              var assignment = $rootScope.cache.assignment.obj[doc.case_id];
+              var assignmentType = assignment && $rootScope.cache.assignmentType.obj[assignment.case_type_id];
+
+              return assignmentType && assignmentType.title;
+            });
+            break;
+        }
+      };
+
+      /**
+       * Creates the list of contact name as  object
+       * @param  {array} assigneesIds
+       * @return {object}
+       */
+      $scope.listAssignees = function (assigneesIds) {
+        var assigneeList = {};
+
+        if (assigneesIds.length) {
+          _.each(assigneesIds, function (assigneeId) {
+            var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+            if (assignee) {
+              assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+            }
+          });
+        }
+
+        return assigneeList;
       };
 
       /**

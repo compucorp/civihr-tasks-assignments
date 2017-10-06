@@ -8,18 +8,19 @@ define([
   'mocks/fabricators/assignment',
   'mocks/fabricators/contact',
   'mocks/fabricators/document',
+  'mocks/fabricators/file',
   'tasks-assignments/app'
-], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator) {
+], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator, fileFabricator) {
   'use strict';
 
-  describe('ModalDocumentCtrl', function () {
-    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService,
-      AssignmentService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
+  describe('ModalDocumentController', function () {
+    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService, config,
+      AssignmentService, AppSettingsService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
     beforeEach(module('civitasks.appDashboard'));
-    beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_,
-      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_) {
+    beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
+      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_, _AppSettingsService_) {
       data = {};
       files = {};
       modalMode = '';
@@ -38,10 +39,19 @@ define([
       $filter = _$filter_;
       $httpBackend = _$httpBackend_;
       $q = _$q_;
+      config = _config_;
       ContactService = _ContactService_;
       DocumentService = _DocumentService_;
       AssignmentService = _AssignmentService_;
+      AppSettingsService = _AppSettingsService_;
       fileService = _fileService_;
+
+      $rootScope.cache.documentStatus.obj = {
+        1: 'awaiting upload',
+        2: 'awaiting approval',
+        3: 'approved',
+        4: 'rejected'
+      };
 
       $httpBackend.whenGET(/action=/).respond({});
     }));
@@ -49,6 +59,8 @@ define([
     describe('init()', function () {
       beforeEach(function () {
         data = documentFabricator.single();
+        spyOn(AppSettingsService, 'get').and.returnValue($q.resolve([]));
+
         initController();
       });
 
@@ -60,6 +72,10 @@ define([
         expect(controller.document.activity_date_time).toEqual(new Date(documentFabricator.single().activity_date_time));
         expect(controller.document.expire_date).toEqual(new Date(documentFabricator.single().expire_date));
         expect(controller.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
+      });
+
+      it('calls AppSettingsService to get maxFileSize value', function () {
+        expect(AppSettingsService.get).toHaveBeenCalledWith([ 'maxFileSize' ]);
       });
     });
 
@@ -76,7 +92,23 @@ define([
     });
 
     describe('Lookup contacts lists', function () {
-      describe('when in "new task" mode', function () {
+      describe('when in "New Document mode" for other contact page', function () {
+        beforeEach(function () {
+          $rootScope.cache.contact.arrSearch = cachedContacts();
+          config.CONTACT_ID = '2';
+          data = {};
+          modalMode = 'new';
+
+          initController();
+        });
+
+        it('has the list filled with just the contacts tant match the config.CONTACT_ID', function () {
+          expect(controller.contacts.assignee).toEqual([]);
+          expect(controller.contacts.target).toEqual([{ id: '2' }]);
+        });
+      });
+
+      describe('when in "New Document" mode', function () {
         beforeEach(function () {
           initController();
         });
@@ -87,7 +119,7 @@ define([
         });
       });
 
-      describe('when in "edit task" mode', function () {
+      describe('when in "edit Document" mode', function () {
         beforeEach(function () {
           data = { id: '2', assignee_contact_id: '3', target_contact_id: '1' };
           $rootScope.cache.contact.arrSearch = cachedContacts();
@@ -236,7 +268,7 @@ define([
       });
     });
 
-    describe('onContactChanged', function () {
+    describe('onContactChanged()', function () {
       beforeEach(function () {
         spyOn(ContactService, 'updateCache').and.returnValue({});
 
@@ -253,7 +285,7 @@ define([
       });
     });
 
-    describe('searchContactAssignments', function () {
+    describe('searchContactAssignments()', function () {
       beforeEach(function () {
         spyOn($rootScope, '$broadcast').and.callThrough();
         spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
@@ -285,7 +317,7 @@ define([
       });
     });
 
-    describe('confirm', function () {
+    describe('confirm()', function () {
       beforeEach(function () {
         mockDocument = {
           target_contact_id: ['202'],
@@ -318,6 +350,244 @@ define([
           expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
         });
       });
+
+      describe('document has attachments', function () {
+        beforeEach(function () {
+          angular.extend(controller.document, mockDocument);
+        });
+
+        describe('document has attachments attached previously', function () {
+          beforeEach(function () {
+            controller.files.length = 2;
+          });
+
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets the document status to Approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('sets the documet status to Awaiting Approval', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            });
+          });
+        });
+
+        describe('document has new attachments in upload queue', function () {
+          beforeEach(function () {
+            getFileLimitSize(controller);
+            controller.uploader.queue = fileFabricator.list();
+          });
+
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+            });
+
+            describe('when uploaded files sizes are smaller than max file limit', function () {
+              beforeEach(function () {
+                controller.confirm();
+              });
+
+              it('saves the document with status to Approved', function () {
+                expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+              });
+            });
+
+            describe('when uploaded files sizes are larger than max file limit', function () {
+              beforeEach(function () {
+                controller.uploader.queue[0]._file.size = '78000000';
+                controller.uploader.queue[1]._file.size = '108000000';
+                controller.confirm();
+              });
+
+              it('does not save the document', function () {
+                expect(DocumentService.save).not.toHaveBeenCalled();
+              });
+            });
+          });
+
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('sets document status to Awaiting Approval', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            });
+          });
+        });
+      });
+
+      describe("document doesn't contains attachments", function () {
+        beforeEach(function () {
+          angular.extend(controller.document, mockDocument);
+        });
+
+        describe("document doesn't contain attachments at all", function () {
+          beforeEach(function () {
+            controller.uploader.queue.length = 0;
+            controller.files.length = 0;
+            angular.extend(controller.document, mockDocument);
+          });
+
+          describe('when user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it("flags document doesn't contain files", function () {
+              expect(controller.containsFiles).toEqual(false);
+            });
+
+            it("doesn't call DocumentService to update status", function () {
+              expect(DocumentService.save).not.toHaveBeenCalled();
+            });
+          });
+
+          describe('when user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('skips size validation and returns true and saves the document', function () {
+              expect(DocumentService.save).toHaveBeenCalled();
+            });
+
+            it("flags document doesn't contain files", function () {
+              expect(controller.containsFiles).toEqual(true);
+            });
+
+            it('sets document status to Awaiting Upload', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
+            });
+          });
+        });
+
+        describe("document doesn't have existing attachments", function () {
+          beforeEach(function () {
+            getFileLimitSize(controller);
+            controller.files.length = 0;
+            controller.uploader.queue = fileFabricator.list();
+          });
+
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets document status to Approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+
+              controller.confirm();
+            });
+
+            it('calls DocumentService to update status to awaiting approval', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            });
+          });
+        });
+
+        describe("document doesn't have attachments in upload queue", function () {
+          beforeEach(function () {
+            getFileLimitSize(controller);
+            controller.files.length = 3;
+            controller.uploader.queue.length = 0;
+          });
+
+          describe('user is admin', function () {
+            beforeEach(function () {
+              controller.role = 'admin';
+              controller.confirm();
+            });
+
+            it('sets document status to Approved', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+            });
+          });
+
+          describe('user is staff', function () {
+            beforeEach(function () {
+              controller.role = 'staff';
+              controller.confirm();
+            });
+
+            it('calls DocumentService to update status to awaiting approval', function () {
+              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            });
+          });
+        });
+      });
+    });
+
+    describe('getStatusIdByName()', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      it('gets id for Awaiting Upload to be 1', function () {
+        expect(controller.getStatusIdByName('awaiting upload')).toEqual('1');
+      });
+
+      it('gets id for Awaiting Approval to be 2', function () {
+        expect(controller.getStatusIdByName('awaiting approval')).toEqual('2');
+      });
+
+      it('gets id for Approved to be 3', function () {
+        expect(controller.getStatusIdByName('approved')).toEqual('3');
+      });
+
+      it('gets id for Rejected to be 4', function () {
+        expect(controller.getStatusIdByName('rejected')).toEqual('4');
+      });
+    });
+
+    describe('getDocumentStatus()', function () {
+      beforeEach(function () {
+        initController();
+        controller.files.length = 2;
+      });
+
+      describe('user is admin', function () {
+        beforeEach(function () {
+          controller.role = 'admin';
+        });
+
+        it('gets the document status id as 3 (approved)', function () {
+          expect(controller.getDocumentStatus()).toEqual('3');
+        });
+      });
+
+      describe('user is staff', function () {
+        beforeEach(function () {
+          controller.role = 'staff';
+        });
+
+        it('gets the document status id as 2 (awaiting approval)', function () {
+          expect(controller.getDocumentStatus()).toEqual('2');
+        });
+      });
     });
 
     describe('viewFile()', function () {
@@ -345,6 +615,10 @@ define([
       controller.addAssignee(assignee);
     }
 
+    function getFileLimitSize (controller) {
+      controller.fileSizeLimit = 32000000;
+    }
+
     function fakeModalInstance () {
       return {
         close: jasmine.createSpy('modalInstance.close'),
@@ -356,13 +630,14 @@ define([
     }
 
     function initController (scopeValues) {
-      controller = $controller('ModalDocumentCtrl', {
+      controller = $controller('ModalDocumentController', {
         $scope: _.assign($scope, scopeValues),
         $filter: $filter,
         $uibModalInstance: fakeModalInstance(),
         data: data,
         files: files,
         role: role,
+        config: config,
         modalMode: modalMode,
         HR_settings: HRSettings,
         notification: notification

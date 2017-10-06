@@ -1,6 +1,9 @@
+/* eslint-env amd */
+
 define([
-  'tasks-assignments/modules/run'
-], function () {
+  'common/angular',
+  'tasks-assignments/modules/run.module'
+], function (angular) {
   'use strict';
 
   angular.module('civitasks.appTasks', ['civitasks.run'])
@@ -22,7 +25,8 @@ define([
           })
           .state('main', {
             url: '/',
-            controller: 'TaskListCtrl',
+            controller: 'TaskListController',
+            controllerAs: 'list',
             templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
             resolve: {
               taskList: ['TaskService', function (TaskService) {
