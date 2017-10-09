@@ -1,4 +1,5 @@
-<form novalidate name="documentModal.documentForm" class="form-document modal-inverted" role="form" ng-submit="documentModal.confirm()" ct-spinner>
+<form novalidate name="documentModal.documentForm" class="form-document modal-inverted"
+  role="form" ng-submit="documentModal.confirm()" ct-spinner>
   <div class="modal-header">
     <button type="button" class="close" ng-click="documentModal.cancel()">
       <span aria-hidden="true">&times;</span>
@@ -9,7 +10,8 @@
       <span ng-switch-when="false">{{ documentModal.getDocumentType(documentModal.document.activity_type_id) || 'Select Document Type' }}</span>
     </h4>
   </div>
-  <div class="modal-body" nv-file-drop uploader="documentModal.uploader">
+  <crm-loading ng-if="isLoading"></crm-loading>
+  <div ng-if="!isLoading" class="modal-body" nv-file-drop uploader="documentModal.uploader">
     <div class="container">
       <!-- Search and select by name and email -->
       <div class="row">
@@ -303,7 +305,7 @@
       </div>
     </div>
   </div>
-  <div class="modal-footer">
+  <div ng-if="!isLoading" class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="documentModal.cancel()">
       {{ (documentModal.mode === 'view') ? 'Close' : 'Cancel' }}
     </button>
