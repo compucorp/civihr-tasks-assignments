@@ -31,7 +31,7 @@
   </item>
   <item>
     <path>civicrm/tasksassignments/settings</path>
-    <title>Settings</title>
+    <title>Tasks Settings</title>
     <page_callback>CRM_Tasksassignments_Page_Settings</page_callback>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
