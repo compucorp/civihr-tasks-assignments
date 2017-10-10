@@ -111,13 +111,13 @@ define([
 
         it('calls contact service to get details using contactIds', function () {
           expect(ContactService.get).toHaveBeenCalledWith(jasmine.objectContaining({
-            'IN': ['204', '4', '205', '205', '204', '204', '205', '202', '202', '205', '3', '203', '205', '203', '203', '210']
+            'IN': ['204', '202', '204', '205', '205', '204', '204', '205', '202', '202', '205', '203', '203', '205', '204', '203', '210']
           }));
         });
 
         it('calls contact service to get details using assignmentIds', function () {
           expect(AssignmentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
-            'IN': ['45', '46', '49']
+            'IN': ['5', '9', '10', '5']
           }));
         });
 
