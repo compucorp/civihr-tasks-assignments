@@ -138,12 +138,12 @@
             <table class="table table-striped {{prefix}}table-documents">
               <thead>
                 <tr>
-                  <th>Type</th>
-                  <th>Target Contact</th>
-                  <th ng-if="settings.extEnabled.assignments">Assignment</th>
-                  <th>Due Date</th>
-                  <th>Expiry Date</th>
-                  <th>Status</th>
+                  <th ng-repeat="column in list.documentDashboardColumns"
+                    ng-click="list.sortBy(column.property)"
+                    ng-if="column.condition != undefined ? column.condition : true">
+                    <span class="sortorder" ng-if="list.propertyName === column.property" ng-class="{reverse: list.reverse}"></span>
+                    {{ column.label }}
+                  </th>
                   <th></th>
                 </tr>
               </thead>
@@ -155,7 +155,7 @@
                     | filterByAssignmentType:list.filterParams.assignmentType
                     | filterByContactId:list.filterParams.contactId
                     | filterByStatus:list.filterParamsHolder.documentStatus
-                    | orderBy: 'activity_date_time')
+                    | orderBy:list.propertyName:list.reverse)
                     | offset: (list.pagination.currentPage-1)*list.pagination.itemsPerPage
                     | limitTo: list.pagination.itemsPerPage)"
                   ng-controller="DocumentCtrl"
@@ -183,7 +183,16 @@
 </div>
 <script type="text/ng-template" id="document.html">
   <td><a ng-href="{{urlFile}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
-  <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}" ng-bind="cache.contact.obj[document.target_contact_id[0]].sort_name"></a></td>
+  <td>
+    <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}">
+      {{ (cache.contact.obj[document.target_contact_id[0]].sort_name | limitTo: 15) + (cache.contact.obj[document.target_contact_id[0]].sort_name.length > 15 ? '...' : '') }}
+    </a>
+  </td>
+  <td ng-if="document.assignee_contact_id">
+    <a ng-repeat="(key, value) in list.listAssignees(document.assignee_contact_id)" ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[key].contact_id}}">
+      {{value}} {{$last ? '' : ', '}}
+    </a>
+  </td>
   <td ng-if="settings.extEnabled.assignments" ng-bind="(cache.assignmentType.obj[cache.assignment.obj[document.case_id].case_type_id].title || '-')"></td>
   <td ng-bind="(document.activity_date_time | date: 'dd/MM/yyyy') || '-'"></td>
   <td ng-bind="(document.expire_date | date: 'dd/MM/yyyy') || '-'"></td>

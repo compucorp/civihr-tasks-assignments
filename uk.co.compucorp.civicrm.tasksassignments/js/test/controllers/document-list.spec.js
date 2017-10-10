@@ -2,11 +2,14 @@
 /* eslint-env amd, jasmine */
 
 define([
-  'common/moment',
   'common/angular',
+  'common/moment',
+  'common/lodash',
   'mocks/fabricators/document',
+  'mocks/fabricators/contact',
+  'mocks/fabricators/assignment',
   'tasks-assignments/app'
-], function (moment, angular, documentFabricator) {
+], function (angular, moment, _, documentFabricator, contactFabricator, assignmentFabricator) {
   'use strict';
 
   describe('DocumentListController', function () {
@@ -184,6 +187,137 @@ define([
         it('returns filtered document by expiry date of the document', function () {
           expect(filteredDocumentList.length).toBe(3);
         });
+      });
+    });
+
+    describe('sortBy', function () {
+      var sortedDocumentList;
+
+      beforeEach(function () {
+        initController();
+
+        _.each(documentFabricator.documentStatus(), function (option) {
+          $rootScope.cache.documentStatus.obj[option.key] = option.value;
+        });
+
+        _.each(documentFabricator.documentTypes(), function (option) {
+          $rootScope.cache.documentType.obj[option.key] = option.value;
+        });
+
+        _.each(contactFabricator.list(), function (option) {
+          $rootScope.cache.contact.obj[option.contact_id] = option;
+        });
+
+        $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
+        $rootScope.cache.assignment.obj = assignmentFabricator.listAssignments();
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      describe('document are sorted by docuument type', function () {
+        beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            return $rootScope.cache.documentType.obj[doc.activity_type_id];
+          });
+
+          controller.sortBy('type');
+        });
+
+        it('lists documents by types', function () {
+          expect(controller.list).toEqual(sortedDocumentList);
+        });
+      });
+
+      describe('documents are sorted by document status', function () {
+        beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            return $rootScope.cache.documentStatus.obj[doc.status_id];
+          });
+
+          controller.sortBy('status_id');
+        });
+
+        it('lists documents by document status', function () {
+          expect(controller.list).toEqual(sortedDocumentList);
+        });
+      });
+
+      describe('document are sorted by document staff/target contact', function () {
+        beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name;
+          });
+
+          controller.sortBy('target_contact');
+        });
+
+        it('lists documents by target contact/staff ', function () {
+          expect(controller.list).toEqual(sortedDocumentList);
+        });
+      });
+
+      describe('documents are sorted by assignees', function () {
+        beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            var assignee = doc.assignee_contact_id.length && _.find($rootScope.cache.contact.obj, {'id': doc.assignee_contact_id[0]});
+
+            return assignee && assignee.sort_name;
+          });
+          controller.sortBy('assignee');
+        });
+
+        afterEach(function () {
+          $rootScope.$apply();
+        });
+
+        it('lists documents by assignees', function () {
+          expect(controller.list).toEqual(sortedDocumentList);
+        });
+      });
+
+      describe('documents are sorted by assignment type', function () {
+        beforeEach(function () {
+          sortedDocumentList = _.sortBy(controller.list, function (doc) {
+            var assignment = $rootScope.cache.assignment.obj[doc.case_id];
+            var assignmentType = assignment && $rootScope.cache.assignmentType.obj[assignment.case_type_id];
+
+            return assignmentType && assignmentType.title;
+          });
+
+          controller.sortBy('case_id');
+        });
+
+        it('lists documents by assignment type', function () {
+          expect(controller.list).toEqual(sortedDocumentList);
+        });
+      });
+    });
+
+    describe('listAssignees', function () {
+      var assignees;
+      var concatedAssignees = {};
+
+      beforeEach(function () {
+        initController();
+
+        _.each(contactFabricator.list(), function (option) {
+          $rootScope.cache.contact.obj[option.contact_id] = option;
+        });
+
+        concatedAssignees[contactFabricator.list()[0].contact_id] = contactFabricator.list()[0].sort_name.replace(',', '');
+        concatedAssignees[contactFabricator.list()[1].contact_id] = contactFabricator.list()[1].sort_name.replace(',', '');
+        concatedAssignees[contactFabricator.list()[2].contact_id] = contactFabricator.list()[2].sort_name.replace(',', '');
+        assignees = controller.listAssignees(['202', '203', '204']);
+      });
+
+      afterEach(function () {
+        $rootScope.$apply();
+      });
+
+      it('concats the list of assignes by comma', function () {
+        expect(assignees).toEqual(concatedAssignees);
       });
     });
 
