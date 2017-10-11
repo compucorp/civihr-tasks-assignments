@@ -69,7 +69,6 @@
                           </a>
                         </span>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -92,8 +91,15 @@
           </div>
         </div>
         <ul class="{{prefix}}list-task">
-          <li ng-repeat="task in listFiltered = (listUnlimited = (listOngoing = (list.list | filterByStatus:cache.taskStatusResolve:false) | filterByDateField:list.filterParams.due:list.filterParams.dateRange | filterByOwnership:list.filterParams.ownership | filterByAssignmentType:list.filterParams.assignmentType | filterByContactId:list.filterParams.contactId | orderBy: 'activity_date_time') | limitTo: listLimit)"
-            ng-controller="TaskCtrl" ng-class="{ '{{prefix}}task-completed': task.completed, '{{prefix}}task-due': task.due }" ng-include src="'task.html'" ct-spinner ct-spinner-id="task{{task.id}}">
+          <li ng-repeat="task in listFiltered = (listUnlimited = (listOngoing = (list.filterByDateField(list.filterParams.due)
+            | filterByStatus:cache.taskStatusResolve:false)
+            | filterByOwnership:list.filterParams.ownership
+            | filterByAssignmentType:list.filterParams.assignmentType
+            | filterByContactId:list.filterParams.contactId
+            | orderBy: 'activity_date_time')
+            | limitTo: listLimit)"
+            ng-controller="TaskCtrl" ng-class="{ '{{prefix}}task-completed': task.completed, '{{prefix}}task-due': task.due }"
+            ng-include src="'task.html'" ct-spinner ct-spinner-id="task{{task.id}}">
           </li>
         </ul>
       </div>
