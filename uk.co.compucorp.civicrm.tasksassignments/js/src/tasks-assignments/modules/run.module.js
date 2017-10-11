@@ -12,7 +12,8 @@ define([
   'common/modules/routers/compu-ui-router',
   'common/filters/angular-date/format-date',
   'common/directives/angular-date/date-input',
-  'common/directives/prevent-animations'
+  'common/directives/prevent-animations',
+  'common/directives/loading'
 ], function (angular) {
   'use strict';
 

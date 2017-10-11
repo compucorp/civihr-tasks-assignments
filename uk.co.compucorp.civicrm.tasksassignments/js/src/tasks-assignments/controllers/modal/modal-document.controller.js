@@ -73,24 +73,12 @@ define([
     (function init () {
       angular.copy(data, vm.document);
       angular.copy(files, vm.files);
-      vm.data = data;
-      vm.document.activity_date_time = vm.document.activity_date_time ? moment(vm.document.activity_date_time).toDate() : null;
-      vm.document.expire_date = vm.document.expire_date ? moment(vm.document.expire_date).toDate() : null;
-      vm.document.assignee_contact_id = vm.document.assignee_contact_id || [];
-      vm.document.source_contact_id = vm.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
-      vm.document.status_id = vm.document.status_id || '1';
-      vm.document.target_contact_id = vm.document.target_contact_id || [config.CONTACT_ID];
-      vm.document.valid_from = vm.document.valid_from ? moment(vm.document.valid_from).toDate() : null;
-      vm.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
-        return +val.extra.contact_id === +vm.document.target_contact_id;
-      });
-      vm.contacts = {
-        target: initialContacts('target'),
-        assignee: initialContacts('assignee')
-      };
-      AppSettingsService.get(['maxFileSize']).then(function (result) {
-        vm.fileSizeLimit = +result[0].maxFileSize * 1000000;
-      });
+
+      collectAssignments();
+      initDocument();
+      collectContacts();
+      initWatchers();
+      initFileSize();
     })();
 
     /**
@@ -181,7 +169,26 @@ define([
     }
 
     /**
-     * Saves/ Updates the document data
+     * Collects target and assignees contacts in saperate arrays
+     */
+    function collectContacts () {
+      vm.contacts = {
+        target: initialContacts('target'),
+        assignee: initialContacts('assignee')
+      };
+    }
+
+    /**
+     * Collect assignments
+     */
+    function collectAssignments () {
+      vm.assignments = $filter('filter')($rootScope.cache.assignment.arrSearch, function (val) {
+        return +val.extra.contact_id === +vm.document.target_contact_id;
+      });
+    }
+
+    /**
+     * Saves Updates the document data
      */
     function confirm () {
       var doc = angular.copy(vm.document);
@@ -296,6 +303,28 @@ define([
     function fileMoveToTrash (index) {
       vm.filesTrash.push(vm.files[index]);
       vm.files.splice(index, 1);
+    }
+
+    /**
+     * Initialize the document
+     */
+    function initDocument () {
+      vm.document.activity_date_time = vm.document.activity_date_time ? moment(vm.document.activity_date_time).toDate() : null;
+      vm.document.expire_date = vm.document.expire_date ? moment(vm.document.expire_date).toDate() : null;
+      vm.document.assignee_contact_id = vm.document.assignee_contact_id || [];
+      vm.document.source_contact_id = vm.document.source_contact_id || config.LOGGED_IN_CONTACT_ID;
+      vm.document.status_id = vm.document.status_id || '1';
+      vm.document.target_contact_id = vm.document.target_contact_id || [config.CONTACT_ID];
+      vm.document.valid_from = vm.document.valid_from ? moment(vm.document.valid_from).toDate() : null;
+    }
+
+    /**
+     * Get and initialize max value file Size to be uploaded
+     */
+    function initFileSize () {
+      AppSettingsService.get(['maxFileSize']).then(function (result) {
+        vm.fileSizeLimit = +result[0].maxFileSize * 1000000;
+      });
     }
 
     /**
@@ -548,6 +577,13 @@ define([
       fileService.openFile(file).then(function (blobFile) {
         $rootScope.$broadcast('ct-spinner-hide');
       });
+    }
+
+    /**
+     * Executes watchers for changes
+     */
+    function initWatchers () {
+      $rootScope.$watch('cache.contact.arrSearch', collectContacts);
     }
   }
 });
