@@ -23,19 +23,19 @@
                   <a ui-sref="tasks.my" class="btn btn-gray active panel-filter__filter" ng-model="list.filterParams.ownership" uib-btn-radio="'assigned'">
                     My Tasks
                     <span>
-                      ({{(list.list | filterByDateField:list.filterParams.due:list.filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'assigned').length}})
+                      ({{(list.filterByDateField(list.filterParams.due) | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'assigned').length}})
                     </span>
                   </a>
                   <a ui-sref="tasks.delegated" class="btn btn-gray panel-filter__filter" ng-model="list.filterParams.ownership" uib-btn-radio="'delegated'">
                     Delegated Tasks
                     <span>
-                      ({{(list.list | filterByDateField:list.filterParams.due:list.filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'delegated').length}})
+                      ({{(list.filterByDateField(list.filterParams.due) | filterByStatus:cache.taskStatusResolve:false | filterByOwnership:'delegated').length}})
                     </span>
                   </a>
                   <a ui-sref="tasks.all" class="btn btn-gray panel-filter__filter" ng-model="list.filterParams.ownership" uib-btn-radio="null">
                     All
                     <span>
-                      ({{(list.list | filterByDateField:list.filterParams.due:list.filterParams.dateRange | filterByStatus:cache.taskStatusResolve:false).length}})
+                      ({{(list.filterByDateField(list.filterParams.due) | filterByStatus:cache.taskStatusResolve:false).length}})
                     </span>
                   </a>
                 </div>

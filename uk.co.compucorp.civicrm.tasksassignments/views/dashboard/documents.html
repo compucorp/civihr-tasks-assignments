@@ -70,8 +70,7 @@
                 All
               <span>
                 ({{
-                  (list.list |
-                  filterByDateField:list.filterParams.due:list.filterParams.dateRange |
+                  ((list.filterByDateField(list.filterParams.due)) |
                   filterByStatus:list.filterParams.documentStatus).length
                 }})
               </span>
