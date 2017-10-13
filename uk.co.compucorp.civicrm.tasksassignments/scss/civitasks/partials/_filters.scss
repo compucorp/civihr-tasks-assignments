@@ -101,6 +101,10 @@
       margin-top: 20px;
     }
   }
+
+  .ui-select-match-item.btn {
+    text-transform: capitalize;
+  }
 }
 
 .#{$prefix}filter-date-type {
