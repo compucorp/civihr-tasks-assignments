@@ -4,23 +4,7 @@
       <h3 class="panel-title">View Documents By:</h3>
     </div>
     <div class="panel-body">
-      <sidebar-filters>
-        <div class="form-group">
-          <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">
-            Status
-          </label>
-          <div class="col-xs-12 col-sm-9">
-            <ui-select prevent-animations multiple ng-model="list.filterParamsHolder.documentStatus" no-dropdown>
-              <ui-select-match prevent-animations class="ui-select-match" placeholder="Select status...">
-                {{$item.value}}
-              </ui-select-match>
-              <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr">
-                <div ng-bind-html="status.value | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-          </div>
-        </div>
-      </sidebar-filters>
+      <sidebar-filters></sidebar-filters>
     </div>
   </div>
 </div>
@@ -40,13 +24,13 @@
                 ng-model="list.filterParams.ownership"
                 uib-btn-radio="'assigned'">
                 My Docs
-              <span>
-                ({{
-                  (list.filterByDateField(list.filterParams.due) |
-                  filterByStatus:list.filterParams.documentStatus |
-                  filterByOwnership:'assigned').length
-                }})
-              </span>
+                <span>
+                  ({{
+                    (list.filterByDateField(list.filterParams.due) |
+                    filterByStatus:list.filterParams.documentStatus |
+                    filterByOwnership:'assigned').length
+                  }})
+                </span>
               </a>
               <a
                 ui-sref="documents.delegated"
@@ -54,13 +38,13 @@
                 ng-model="list.filterParams.ownership"
                 uib-btn-radio="'delegated'">
                 Delegated Docs
-              <span>
-                ({{
-                  (list.filterByDateField(list.filterParams.due) |
-                  filterByStatus:list.filterParams.documentStatus |
-                  filterByOwnership:'delegated').length
-                }})
-              </span>
+                <span>
+                  ({{
+                    (list.filterByDateField(list.filterParams.due) |
+                    filterByStatus:list.filterParams.documentStatus |
+                    filterByOwnership:'delegated').length
+                  }})
+                </span>
               </a>
               <a
                 ui-sref="documents.all"
@@ -68,12 +52,12 @@
                 ng-model="list.filterParams.ownership"
                 uib-btn-radio="null">
                 All
-              <span>
-                ({{
-                  (list.filterByDateField(list.filterParams.due) |
-                  filterByStatus:list.filterParams.documentStatus).length
-                }})
-              </span>
+                <span>
+                  ({{
+                    (list.filterByDateField(list.filterParams.due) |
+                    filterByStatus:list.filterParams.documentStatus).length
+                  }})
+                </span>
               </a>
             </div>
           </div>
@@ -89,17 +73,18 @@
         </div>
         <div class="{{prefix}}filter-advanced" uib-collapse="list.isCollapsed.filterAdvanced">
           <div class="row form-horizontal">
-            <div class="col-xs-6">
+            <div class="col-xs-4">
               <div class="form-group">
-                <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
-                <div class="col-xs-12 col-sm-10">
+                <div class="col-xs-12 col-sm-8">
                   <div class="input-group">
                     <ui-select
                       prevent-animations
                       allow-clear
                       ng-model="list.filterParams.contactId">
                       <ui-select-match prevent-animations class="ui-select-match"
-                        placeholder="Search / Filter">{{$select.selected.label}}</ui-select-match>
+                        placeholder="Search for staff member or assignee">
+                        {{$select.selected.label}}
+                      </ui-select-match>
                       <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search"
                         refresh-delay="0">
                         <div ng-bind="contact.label"></div>
@@ -107,25 +92,43 @@
                       </ui-select-choices>
                     </ui-select>
                     <span class="input-group-btn">
-                    <a ng-click="list.filterParams.contactId = ''" class="btn btn-default">
-                    <span class="fa fa-remove"></span>
-                    </a>
+                      <a ng-click="list.filterParams.contactId = ''" class="btn btn-default">
+                        <span class="fa fa-remove"></span>
+                      </a>
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-4">
               <div class="form-group">
-                <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
-                <div class="col-xs-12 col-sm-8">
+                <label class="col-xs-12 col-sm-5 control-label">Assignment Type:</label>
+                <div class="col-xs-12 col-sm-7">
                   <ui-select
                     prevent-animations
                     multiple
+                    no-dropdown
                     ng-model="list.filterParams.assignmentType">
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
                     <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                       <div ng-bind-html="type.title | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-4">
+              <div class="form-group">
+                <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">
+                  Status
+                </label>
+                <div class="col-xs-12 col-sm-9">
+                  <ui-select prevent-animations multiple ng-model="list.filterParamsHolder.documentStatus" no-dropdown>
+                    <ui-select-match prevent-animations class="ui-select-match" placeholder="Select status...">
+                      {{$item.value}}
+                    </ui-select-match>
+                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr">
+                      <div ng-bind-html="status.value | highlight: $select.search"></div>
                     </ui-select-choices>
                   </ui-select>
                 </div>
