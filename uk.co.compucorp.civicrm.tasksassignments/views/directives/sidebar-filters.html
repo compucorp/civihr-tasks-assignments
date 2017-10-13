@@ -1,10 +1,10 @@
 <div class="{{prefix}}filter-date">
   <ul class="nav nav-pills nav-stacked">
     <li role="presentation" ng-repeat="filter in list.dueFilters">
-      <a href ng-model="list.filterParams.due" uib-btn-radio="(filter.value == 'all') ? '' : filter.value" uncheckable>
+      <a href ng-model="list.filterParams.due" uib-btn-radio="(filter.value === 'all') ? '' : filter.value" uncheckable>
         {{list.label[filter.value]}}
         <i class="fa fa-calendar" ng-click="list.viewInCalendar(filter.calendarView)"></i>
-        <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value != 'all'">
+        <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value !== 'all'">
           {{(
             (list.filterByDateField(filter.value))
             | filterByStatus:list.filterParams.documentStatus || ''
@@ -13,14 +13,15 @@
             ).length
           }}
         </span>
-        <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value == 'all'">
+        <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value === 'all'">
           {{list.list.length}}
         </span>
       </a>
     </li>
   </ul>
   <hr>
-  <div ng-class="{'nav date-range__selected': list.calledFormDocuments && (list.filterParamsHolder.dateRange.from || list.filterParamsHolder.dateRange.until)}">
+  <!-- vm.isDocumentSection checks if the sidebar-dic=rective is loaded in documents list page -->
+  <div ng-class="{'nav date-range__selected': list.isDocumentSection && (list.filterParamsHolder.dateRange.from || list.filterParamsHolder.dateRange.until)}">
     <a href ng-click="list.isCollapsed.filterDates = !list.isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
       <i class="fa" ng-class="{ fa: true, 'fa-chevron-down': !list.isCollapsed.filterDates, 'fa-chevron-right': list.isCollapsed.filterDates }"></i>
       <em>OR</em> Select Dates

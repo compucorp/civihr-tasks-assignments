@@ -25,7 +25,7 @@ define([
     var vm = this;
     var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
-    vm.calledFormDocuments = true;
+    vm.isDocumentSection = true;
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
     vm.list = documentList;
