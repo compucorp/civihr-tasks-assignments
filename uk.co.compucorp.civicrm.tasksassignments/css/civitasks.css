@@ -230,6 +230,9 @@
   -webkit-padding-start: 40px;
   list-style: initial;
 }
+#civitasks ol, #cividocuments ol {
+  list-style: decimal;
+}
 #civitasks blockquote, #cividocuments blockquote,
 #civitasks q,
 #cividocuments q {
