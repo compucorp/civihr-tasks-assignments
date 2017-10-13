@@ -1,10 +1,10 @@
 <div class="{{prefix}}filter-date">
   <ul class="nav nav-pills nav-stacked">
     <li role="presentation" ng-repeat="filter in list.dueFilters">
-      <a href ng-model="list.filterParams.due" uib-btn-radio="filter.value" uncheckable>
+      <a href ng-model="list.filterParams.due" uib-btn-radio="(filter.value == 'all') ? '' : filter.value" uncheckable>
         {{list.label[filter.value]}}
         <i class="fa fa-calendar" ng-click="list.viewInCalendar(filter.calendarView)"></i>
-        <span class="badge badge-{{filter.badgeClass}}">
+        <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value != 'all'">
           {{(
             (list.filterByDateField(filter.value))
             | filterByStatus:list.filterParams.documentStatus || ''
@@ -13,44 +13,50 @@
             ).length
           }}
         </span>
+        <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value == 'all'">
+          {{list.list.length}}
+        </span>
       </a>
     </li>
   </ul>
   <hr>
-  <a href ng-click="list.isCollapsed.filterDates = !list.isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
-    <i class="fa" ng-class="{ fa: true, 'fa-chevron-down': !list.isCollapsed.filterDates, 'fa-chevron-right': list.isCollapsed.filterDates }"></i>
-    <em>OR</em> Select Dates
-  </a>
-  <div class="form-horizontal" uib-collapse="list.isCollapsed.filterDates">
-    <div class="form-group">
-      <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">
-        From
-      </label>
-      <div class="input-group col-xs-12 col-sm-9 col-lg-8">
-        <input
-          is-open="list.dpOpened.filterDates.from"
-          uib-datepicker-popup="dd/MM/yyyy"
-          datepicker-options="list.datepickerOptions.from"
-          ng-model="list.filterParamsHolder.dateRange.from"
-          id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+  <div ng-class="{'nav date-range__selected': list.calledFormDocuments && (list.filterParamsHolder.dateRange.from || list.filterParamsHolder.dateRange.until)}">
+    <a href ng-click="list.isCollapsed.filterDates = !list.isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
+      <i class="fa" ng-class="{ fa: true, 'fa-chevron-down': !list.isCollapsed.filterDates, 'fa-chevron-right': list.isCollapsed.filterDates }"></i>
+      <em>OR</em> Select Dates
+    </a>
+    <div class="form-horizontal" uib-collapse="list.isCollapsed.filterDates">
+      <div class="form-group">
+        <label for="{{prefix}}filter-date-from" class="col-xs-12 col-sm-3 control-label">
+          From
+        </label>
+        <div class="input-group col-xs-12 col-sm-9 col-lg-8">
+          <input
+            is-open="list.dpOpened.filterDates.from"
+            uib-datepicker-popup="dd/MM/yyyy"
+            datepicker-options="list.datepickerOptions.from"
+            ng-model="list.filterParamsHolder.dateRange.from"
+            id="{{prefix}}filter-date-from" class="form-control" name="filterDateFrom">
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">
-        Until
-      </label>
-      <div class="input-group col-xs-12 col-sm-9  col-lg-8">
-        <input
-          is-open="list.dpOpened.filterDates.until"
-          uib-datepicker-popup="dd/MM/yyyy"
-          datepicker-options="list.datepickerOptions.until"
-          ng-model="list.filterParamsHolder.dateRange.until"
-          id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+      <div class="form-group">
+        <label for="{{prefix}}filter-date-until" class="col-xs-12 col-sm-3 control-label">
+          Until
+        </label>
+        <div class="input-group col-xs-12 col-sm-9  col-lg-8">
+          <input
+            is-open="list.dpOpened.filterDates.until"
+            uib-datepicker-popup="dd/MM/yyyy"
+            datepicker-options="list.datepickerOptions.until"
+            ng-model="list.filterParamsHolder.dateRange.until"
+            id="{{prefix}}filter-date-until" class="form-control" name="filterDateUntil">
+        </div>
       </div>
+      <div ng-transclude></div>
     </div>
-    <div ng-transclude></div>
-    <button class="btn btn-default btn-primary btn-block" ng-click="list.applySidebarFilters()">
-      Apply Filter
-    </button>
   </div>
+  </br>
+  <button uib-collapse="list.isCollapsed.filterDates" class="btn btn-default btn-primary btn-block" ng-click="list.applySidebarFilters()">
+    Apply Filter
+  </button>
 </div>
