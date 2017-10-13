@@ -1,3 +1,6 @@
+// Variables
+$light-gray : #D2D2D2;
+
 .#{$prefix}sidebar {
   float: left;
   margin-right: -100%;
@@ -48,6 +51,18 @@
       border-left: 1px solid $body-bg;
       margin-left: 225px;
       min-height: $content-min-height - 20px;
+    }
+  }
+
+  .date-range__selected {
+    background-color: $light-gray;
+
+    .#{$prefix}select-dates{
+      padding: 5px 42px 0 38px;
+    }
+
+    .form-horizontal {
+      padding: 0 20px;
     }
   }
 }
