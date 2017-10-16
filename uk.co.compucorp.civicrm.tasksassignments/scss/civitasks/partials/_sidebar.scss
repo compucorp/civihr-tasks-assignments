@@ -52,10 +52,16 @@
   }
 
   .date-range__selected {
-    background-color: $light-gray;
+    background-color: $light-blue;
 
-    .#{$prefix}select-dates{
-      padding: 5px 42px 0 38px;
+    .#{$prefix}select-dates {
+      padding: 10px 42px 5px 38px;
+    }
+
+    label,
+    .input-group-addon,
+    .#{$prefix}select-dates {
+      color: $white;
     }
 
     .form-horizontal {

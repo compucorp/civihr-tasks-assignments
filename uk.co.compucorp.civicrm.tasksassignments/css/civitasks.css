@@ -11678,10 +11678,19 @@ fieldset[disabled]
   min-height: 530px;
 }
 #civitasks .ct-sidebar-inner .date-range__selected, #cividocuments .ct-sidebar-inner .date-range__selected {
-  background-color: #D2D2D2;
+  background-color: #41AFCB;
 }
 #civitasks .ct-sidebar-inner .date-range__selected .ct-select-dates, #cividocuments .ct-sidebar-inner .date-range__selected .ct-select-dates {
-  padding: 5px 42px 0 38px;
+  padding: 10px 42px 5px 38px;
+}
+#civitasks .ct-sidebar-inner .date-range__selected label, #cividocuments .ct-sidebar-inner .date-range__selected label, #civitasks .ct-sidebar-inner .date-range__selected .checkbox-label, #cividocuments .ct-sidebar-inner .date-range__selected .checkbox-label,
+#civitasks .ct-sidebar-inner .date-range__selected .radio-label,
+#cividocuments .ct-sidebar-inner .date-range__selected .radio-label,
+#civitasks .ct-sidebar-inner .date-range__selected .input-group-addon,
+#cividocuments .ct-sidebar-inner .date-range__selected .input-group-addon,
+#civitasks .ct-sidebar-inner .date-range__selected .ct-select-dates,
+#cividocuments .ct-sidebar-inner .date-range__selected .ct-select-dates {
+  color: #FFFFFF;
 }
 #civitasks .ct-sidebar-inner .date-range__selected .form-horizontal, #cividocuments .ct-sidebar-inner .date-range__selected .form-horizontal {
   padding: 0 20px;
