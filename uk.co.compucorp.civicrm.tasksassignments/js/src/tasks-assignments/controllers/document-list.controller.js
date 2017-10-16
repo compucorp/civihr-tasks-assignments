@@ -25,7 +25,7 @@ define([
     var vm = this;
     var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
-    vm.isDocumentSection = true;
+    vm.isDocumentSection = false;
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
     vm.list = documentList;
@@ -224,6 +224,7 @@ define([
       vm.filterParams.dateRange.from = vm.filterParamsHolder.dateRange.from;
       vm.filterParams.dateRange.until = vm.filterParamsHolder.dateRange.until;
       vm.filterParams.due = 'dateRange';
+      vm.isDocumentSection = (vm.filterParamsHolder.dateRange.from !== null || vm.filterParamsHolder.dateRange.until !== null);
 
       vm.labelDateRange();
     }
