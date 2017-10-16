@@ -326,11 +326,13 @@ define([
         initController();
       });
 
-      it('does not highlight the select dates filter section', function () {
-        expect(controller.isDocumentSection).toBe(false);
+      describe('before applySidebarFilters() is called', function () {
+        it('does not highlight the select dates filter section', function () {
+          expect(controller.isDocumentSection).toBe(false);
+        });
       });
 
-      describe('called applySidebarFilters()', function () {
+      describe('after applySidebarFilters() is called', function () {
         beforeEach(function () {
           controller.filterParamsHolder.dateRange.from = moment().startOf('day').toDate();
           controller.filterParamsHolder.dateRange.until = moment().add(2, 'month').startOf('day').toDate();

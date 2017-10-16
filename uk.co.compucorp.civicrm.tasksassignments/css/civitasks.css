@@ -10843,7 +10843,7 @@ fieldset[disabled]
 }
 #civitasks #ct-dashboard .ct-container-main, #cividocuments #ct-dashboard .ct-container-main {
   position: relative;
-  background-color: #fff;
+  background-color: #FFFFFF;
 }
 #civitasks #ct-dashboard .ct-container-main:before, #cividocuments #ct-dashboard .ct-container-main:before, #civitasks #ct-dashboard .ct-container-main:after, #cividocuments #ct-dashboard .ct-container-main:after {
   content: " ";
