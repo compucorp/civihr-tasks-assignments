@@ -25,6 +25,7 @@ define([
     var vm = this;
     var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
+    vm.isDocumentSection = false;
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
     vm.list = documentList;
@@ -102,7 +103,8 @@ define([
     vm.dueFilters = [
       { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
       { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
-      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
+      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' },
+      { badgeClass: 'primary', calendarView: 'month', value: 'all' }
     ];
     vm.filterParams = {
       contactId: null,
@@ -128,13 +130,14 @@ define([
     };
     vm.isCollapsed = {
       filterAdvanced: true,
-      filterDates: false
+      filterDates: true
     };
     vm.label = {
       addNew: 'Add Document',
       overdue: 'Overdue',
-      dueInNextFortnight: 'Due in next fortnight',
-      dueInNinetyDays: 'Due in 90 days',
+      dueInNextFortnight: 'Next fortnight',
+      dueInNinetyDays: '90 days',
+      all: 'All',
       dateRange: ''
     };
     vm.pagination = {
@@ -221,6 +224,7 @@ define([
       vm.filterParams.dateRange.from = vm.filterParamsHolder.dateRange.from;
       vm.filterParams.dateRange.until = vm.filterParamsHolder.dateRange.until;
       vm.filterParams.due = 'dateRange';
+      vm.isDocumentSection = (vm.filterParamsHolder.dateRange.from !== null || vm.filterParamsHolder.dateRange.until !== null);
 
       vm.labelDateRange();
     }

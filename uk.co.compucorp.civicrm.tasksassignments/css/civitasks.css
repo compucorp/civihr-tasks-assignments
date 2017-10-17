@@ -10846,7 +10846,7 @@ fieldset[disabled]
 }
 #civitasks #ct-dashboard .ct-container-main, #cividocuments #ct-dashboard .ct-container-main {
   position: relative;
-  background-color: #fff;
+  background-color: #FFFFFF;
 }
 #civitasks #ct-dashboard .ct-container-main:before, #cividocuments #ct-dashboard .ct-container-main:before, #civitasks #ct-dashboard .ct-container-main:after, #cividocuments #ct-dashboard .ct-container-main:after {
   content: " ";
@@ -11058,9 +11058,6 @@ fieldset[disabled]
 #civitasks .ct-filter-date .ui-select-container .btn, #cividocuments .ct-filter-date .ui-select-container .btn {
   white-space: normal;
 }
-#civitasks .ct-filter-advanced, #cividocuments .ct-filter-advanced {
-  max-width: 817px;
-}
 #civitasks .ct-filter-advanced .row, #cividocuments .ct-filter-advanced .row,
 #civitasks .ct-filter-advanced .form-horizontal .form-group,
 #cividocuments .ct-filter-advanced .form-horizontal .form-group {
@@ -11079,6 +11076,9 @@ fieldset[disabled]
 #civitasks .ct-filter-advanced .form-horizontal .form-group, #cividocuments .ct-filter-advanced .form-horizontal .form-group {
   margin-bottom: 0;
   margin-top: 20px;
+}
+#civitasks .ct-filter-advanced .ui-select-match-item.btn, #cividocuments .ct-filter-advanced .ui-select-match-item.btn {
+  text-transform: capitalize;
 }
 #civitasks .ct-filter-date-type, #cividocuments .ct-filter-date-type {
   margin-top: -6px;
@@ -11679,6 +11679,24 @@ fieldset[disabled]
   border-left: 1px solid #e8eef0;
   margin-left: 225px;
   min-height: 530px;
+}
+#civitasks .ct-sidebar-inner .date-range__selected, #cividocuments .ct-sidebar-inner .date-range__selected {
+  background-color: #41AFCB;
+}
+#civitasks .ct-sidebar-inner .date-range__selected .ct-select-dates, #cividocuments .ct-sidebar-inner .date-range__selected .ct-select-dates {
+  padding: 10px 42px 5px 38px;
+}
+#civitasks .ct-sidebar-inner .date-range__selected label, #cividocuments .ct-sidebar-inner .date-range__selected label, #civitasks .ct-sidebar-inner .date-range__selected .checkbox-label, #cividocuments .ct-sidebar-inner .date-range__selected .checkbox-label,
+#civitasks .ct-sidebar-inner .date-range__selected .radio-label,
+#cividocuments .ct-sidebar-inner .date-range__selected .radio-label,
+#civitasks .ct-sidebar-inner .date-range__selected .input-group-addon,
+#cividocuments .ct-sidebar-inner .date-range__selected .input-group-addon,
+#civitasks .ct-sidebar-inner .date-range__selected .ct-select-dates,
+#cividocuments .ct-sidebar-inner .date-range__selected .ct-select-dates {
+  color: #FFFFFF;
+}
+#civitasks .ct-sidebar-inner .date-range__selected .form-horizontal, #cividocuments .ct-sidebar-inner .date-range__selected .form-horizontal {
+  padding: 0 20px;
 }
 .ct-spinner-container {
   position: relative;
