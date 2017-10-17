@@ -82,7 +82,7 @@
                       no-dropdown
                       ng-model="list.filterParams.contactId">
                       <ui-select-match prevent-animations class="ui-select-match" placeholder="Search for staff member or assignee">
-                        {{$select.selected.label}}
+                        {{ ($select.selected.label | limitTo: 32) + ($select.selected.label.length > 32 ? '...' : '') }}
                       </ui-select-match>
                       <ui-select-choices prevent-animations class="ui-select-choices"
                         repeat="contact.id as contact in cache.contact.arrSearch | filter: $select.search" refresh-delay="0">
