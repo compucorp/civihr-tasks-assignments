@@ -696,6 +696,22 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  /**
+   * Sets icon for top-level 'Tasks and Assignments' menu item
+   *
+   * @return bool
+   */
+  public function upgrade_1031() {
+    $params = [
+      'name' => 'tasksassignments',
+      'api.Navigation.create' => ['id' => '$value.id', 'icon' => 'fa fa-list-ul'],
+      'parent_id' => ['IS NULL' => true],
+    ];
+    civicrm_api3('Navigation', 'get', $params);
+
+    return TRUE;
+  }
+
     public function uninstall() {
       CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
       CRM_Core_BAO_Navigation::resetNavigation();
