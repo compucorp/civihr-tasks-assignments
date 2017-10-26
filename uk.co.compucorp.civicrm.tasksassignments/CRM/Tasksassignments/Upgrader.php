@@ -2,24 +2,24 @@
 
 class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 {
-    public function install() {
+  public function install() {
 
-      // $this->executeCustomDataFile('xml/customdata.xml');
-      $this->executeSqlFile('sql/install.sql');
+    // $this->executeCustomDataFile('xml/customdata.xml');
+    $this->executeSqlFile('sql/install.sql');
 
-      $revisions = $this->getRevisions();
-      foreach ($revisions as $revision) {
-          $methodName = 'upgrade_' . $revision;
-          if (is_callable(array($this, $methodName))) {
-            $this->{$methodName}();
-          }
+    $revisions = $this->getRevisions();
+    foreach ($revisions as $revision) {
+      $methodName = 'upgrade_' . $revision;
+      if (is_callable(array($this, $methodName))) {
+        $this->{$methodName}();
       }
+    }
 
     $this->setComponentStatuses(array(
       'CiviTask' => true,
       'CiviDocument' => true,
     ));
-    }
+  }
 
   public function enable() {
     $this->setComponentStatuses(array(
@@ -69,322 +69,322 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     CRM_Core_Component::flushEnabledComponents();
   }
 
-    public function upgrade_0001() {
+  public function upgrade_0001() {
 
-          $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'task_status', 'id', 'name');
-          if (!$optionGroupID) {
-              $params = array(
-                'name' => 'task_status',
-                'title' => 'CiviTask Status',
-                'is_active' => 1,
-                'is_reserved' => 1,
-              );
-              civicrm_api3('OptionGroup', 'create', $params);
-              $optionsValue = array(
-                  1 => 'Task sample status 1',
-                  2 => 'Task sample status 2',
-                  3 => 'Task sample status 3',
-              );
-              foreach ($optionsValue as $key => $value) {
-                $opValueParams = array(
-                  'option_group_id' => 'task_status',
-                  'name' => $value,
-                  'label' => $value,
-                  'value' => $key,
-                );
-                civicrm_api3('OptionValue', 'create', $opValueParams);
-              }
-          }
-
-        return TRUE;
+    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'task_status', 'id', 'name');
+    if (!$optionGroupID) {
+      $params = array(
+        'name' => 'task_status',
+        'title' => 'CiviTask Status',
+        'is_active' => 1,
+        'is_reserved' => 1,
+      );
+      civicrm_api3('OptionGroup', 'create', $params);
+      $optionsValue = array(
+        1 => 'Task sample status 1',
+        2 => 'Task sample status 2',
+        3 => 'Task sample status 3',
+      );
+      foreach ($optionsValue as $key => $value) {
+        $opValueParams = array(
+          'option_group_id' => 'task_status',
+          'name' => $value,
+          'label' => $value,
+          'value' => $key,
+        );
+        civicrm_api3('OptionValue', 'create', $opValueParams);
+      }
     }
 
-    public function upgrade_0002() {
-      // Add Tasks and Assignments to the Top Navigation menu
-      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments' and parent_id IS NULL");
+    return TRUE;
+  }
 
-      $weight = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'weight', 'name');
-      //$contactNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'id', 'name');
-      $importJobNavigation = new CRM_Core_DAO_Navigation();
+  public function upgrade_0002() {
+    // Add Tasks and Assignments to the Top Navigation menu
+    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments' and parent_id IS NULL");
+
+    $weight = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'weight', 'name');
+    //$contactNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Contacts', 'id', 'name');
+    $importJobNavigation = new CRM_Core_DAO_Navigation();
+    $params = array (
+      'domain_id'  => CRM_Core_Config::domainID(),
+      'label'      => ts('Tasks and Assignments'),
+      'name'       => 'tasksassignments',
+      'url'        => 'civicrm/tasksassignments/dashboard#/tasks',
+      'parent_id'  => null,
+      'weight'     => $weight+1,
+      'permission' => 'access Tasks and Assignments',
+      'separator'  => 1,
+      'is_active'  => 1
+    );
+    $importJobNavigation->copyValues($params);
+    $importJobNavigation->save();
+
+    CRM_Core_BAO_Navigation::resetNavigation();
+
+    return TRUE;
+  }
+
+  public function upgrade_0003() {
+    // Remove custom 'task_status' option group / values and group four of default 'activity_status' values as 'resolved'.
+    $taskStatuses = array('Completed', 'Cancelled', 'Not Required', 'No_show');
+
+    $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'task_status', 'id', 'name');
+    if ($optionGroupID) {
+      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_option_value` WHERE option_group_id = {$optionGroupID}");
+      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_option_group` WHERE id = {$optionGroupID}");
+    }
+
+    $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
+    if ($optionGroupID) {
+      $result = civicrm_api3('OptionValue', 'get', array(
+        'sequential' => 1,
+        'option_group_id' => $optionGroupID,
+      ));
+      foreach ($result['values'] as $value) {
+        if (in_array($value['name'], $taskStatuses)) {
+          civicrm_api3('OptionValue', 'create', array(
+            'sequential' => 1,
+            'id' => $value['id'],
+            'grouping' => 'resolved',
+          ));
+        }
+      }
+    }
+
+    return TRUE;
+  }
+
+  /*
+   * Install Documents statuses
+   */
+  public function upgrade_0006() {
+
+    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'document_status', 'id', 'name');
+    if (!$optionGroupID) {
+      $params = array(
+        'name' => 'document_status',
+        'title' => 'CiviDocument Status',
+        'is_active' => 1,
+        'is_reserved' => 1,
+      );
+      civicrm_api3('OptionGroup', 'create', $params);
+      $optionsValue = array(
+        1 => 'awaiting upload',
+        2 => 'awaiting approval',
+        3 => 'approved',
+        4 => 'rejected',
+      );
+      foreach ($optionsValue as $key => $value) {
+        $opValueParams = array(
+          'option_group_id' => 'document_status',
+          'name' => $value,
+          'label' => $value,
+          'value' => $key,
+        );
+        civicrm_api3('OptionValue', 'create', $opValueParams);
+      }
+    }
+
+    return TRUE;
+  }
+
+  /*
+   * Install Tasks Assignments custom settings.
+   */
+  public function upgrade_0007() {
+
+    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'ta_settings', 'id', 'name');
+    if (!$optionGroupID) {
+      $params = array(
+        'name' => 'ta_settings',
+        'title' => 'Tasks and Assignments settings',
+        'is_active' => 1,
+        'is_reserved' => 1,
+      );
+      civicrm_api3('OptionGroup', 'create', $params);
+      $optionsValue = array(
+        'documents_tab' => array(
+          'label' => 'Show or hide the Documents tab',
+          'value' => 1,
+        ),
+        'keydates_tab' => array(
+          'label' => 'Show or hide the Key Dates tab',
+          'value' => 1,
+        ),
+        'add_assignment_button_title' => array(
+          'label' => 'Configure \'Add Assignment\' button title',
+          'value' => '',
+        ),
+        'number_of_days' => array(
+          'label' => 'No of days prior to Key Date to create task',
+          'value' => 30,
+        ),
+        'auto_tasks_assigned_to' => array(
+          'label' => 'Auto generated Tasks assigned to',
+          'value' => '',
+        ),
+      );
+      foreach ($optionsValue as $key => $value) {
+        $opValueParams = array(
+          'option_group_id' => 'ta_settings',
+          'name' => $key,
+          'label' => $value['label'],
+          'value' => $value['value'],
+        );
+        civicrm_api3('OptionValue', 'create', $opValueParams);
+      }
+    }
+
+    return TRUE;
+  }
+
+  public function upgrade_0008()
+  {
+    $this->executeCustomDataFile('xml/activity_custom_fields.xml');
+
+    return TRUE;
+  }
+
+  public function upgrade_0009()
+  {
+    $this->executeCustomDataFile('xml/probation.xml');
+
+    return TRUE;
+  }
+
+  /*
+   * Enable CiviTask and CiviDocument components.
+   */
+  /*public function upgrade_0010()
+  {
+      CRM_Core_BAO_ConfigSetting::enableComponent('CiviTask');
+      CRM_Core_BAO_ConfigSetting::enableComponent('CiviDocument');
+
+      return TRUE;
+  }*/
+
+  /*
+   * Install Dummy Document Types (Activity Types)
+   */
+  public function upgrade_1011()
+  {
+    $this->_installActivityTypes('CiviDocument', array(
+      'Joining Document 1',
+      'Exiting document 1',
+    ));
+
+    return TRUE;
+  }
+
+  /*
+   * Set up Daily Reminder job
+   */
+  public function upgrade_1012()
+  {
+    $dao = new CRM_Core_DAO_Job();
+    $dao->api_entity = 'task';
+    $dao->api_action = 'senddailyreminder';
+    $dao->find(TRUE);
+    if (!$dao->id)
+    {
+      $dao = new CRM_Core_DAO_Job();
+      $dao->domain_id = CRM_Core_Config::domainID();
+      $dao->run_frequency = 'Daily';
+      $dao->parameters = null;
+      $dao->name = 'Tasks and Assignments Daily Reminder';
+      $dao->description = 'Tasks and Assignments Daily Reminder';
+      $dao->api_entity = 'task';
+      $dao->api_action = 'senddailyreminder';
+      $dao->is_active = 1;
+      $dao->save();
+    }
+
+    return TRUE;
+  }
+
+  /*
+   * Add Settings page to Tasks and Assignments top menu
+   */
+  public function upgrade_1013()
+  {
+    $taNavigation = new CRM_Core_DAO_Navigation();
+    $taNavigation->name = 'tasksassignments';
+    $taNavigation->find(true);
+    if ($taNavigation->id)
+    {
+      $taNavigation->url = '';
+      $taNavigation->save();
+
+      $submenu = array(
+        array(
+          'label' => ts('Dashboard'),
+          'name' => 'ta_dashboard',
+          'url' => 'civicrm/tasksassignments/dashboard#/tasks',
+        ),
+        array(
+          'label' => ts('Settings'),
+          'name' => 'ta_settings',
+          'url' => 'civicrm/tasksassignments/settings',
+        )
+      );
+
+      foreach ($submenu as $key => $item)
+      {
+        $item['parent_id'] = $taNavigation->id;
+        $item['weight'] = $key;
+        $item['is_active'] = 1;
+        CRM_Core_BAO_Navigation::add($item);
+      }
+
+      CRM_Core_BAO_Navigation::resetNavigation();
+    }
+
+    return TRUE;
+  }
+
+  /*
+   * Add Settings page to Administer top menu
+   */
+  public function upgrade_1014()
+  {
+    // Add Tasks and Assignments to the Administer menu
+    $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
+    if ($administerNavId)
+    {
+      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments_administer' and parent_id = %1",
+        array(
+          1 => array($administerNavId, 'Integer'),
+        )
+      );
+
+      $taAdminNavigation = new CRM_Core_DAO_Navigation();
       $params = array (
         'domain_id'  => CRM_Core_Config::domainID(),
         'label'      => ts('Tasks and Assignments'),
-        'name'       => 'tasksassignments',
-        'url'        => 'civicrm/tasksassignments/dashboard#/tasks',
-        'parent_id'  => null,
-        'weight'     => $weight+1,
-        'permission' => 'access Tasks and Assignments',
+        'name'       => 'tasksassignments_administer',
+        'url'        => null,
+        'parent_id'  => $administerNavId,
         'separator'  => 1,
         'is_active'  => 1
       );
-      $importJobNavigation->copyValues($params);
-      $importJobNavigation->save();
+      $taAdminNavigation->copyValues($params);
+      $taAdminNavigation->save();
+
+      $taSettings = new CRM_Core_DAO_Navigation();
+      $taSettings->name = 'ta_settings';
+      $taSettings->find(true);
+      if ($taSettings->id)
+      {
+        $taSettings->parent_id = $taAdminNavigation->id;
+        $taSettings->save();
+      }
 
       CRM_Core_BAO_Navigation::resetNavigation();
-
-      return TRUE;
     }
 
-    public function upgrade_0003() {
-        // Remove custom 'task_status' option group / values and group four of default 'activity_status' values as 'resolved'.
-        $taskStatuses = array('Completed', 'Cancelled', 'Not Required', 'No_show');
-
-        $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'task_status', 'id', 'name');
-        if ($optionGroupID) {
-            CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_option_value` WHERE option_group_id = {$optionGroupID}");
-            CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_option_group` WHERE id = {$optionGroupID}");
-        }
-
-        $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
-        if ($optionGroupID) {
-            $result = civicrm_api3('OptionValue', 'get', array(
-                'sequential' => 1,
-                'option_group_id' => $optionGroupID,
-            ));
-            foreach ($result['values'] as $value) {
-                if (in_array($value['name'], $taskStatuses)) {
-                    civicrm_api3('OptionValue', 'create', array(
-                        'sequential' => 1,
-                        'id' => $value['id'],
-                        'grouping' => 'resolved',
-                    ));
-                }
-            }
-        }
-
-        return TRUE;
-    }
-
-    /*
-     * Install Documents statuses
-     */
-    public function upgrade_0006() {
-
-          $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'document_status', 'id', 'name');
-          if (!$optionGroupID) {
-              $params = array(
-                'name' => 'document_status',
-                'title' => 'CiviDocument Status',
-                'is_active' => 1,
-                'is_reserved' => 1,
-              );
-              civicrm_api3('OptionGroup', 'create', $params);
-              $optionsValue = array(
-                  1 => 'awaiting upload',
-                  2 => 'awaiting approval',
-                  3 => 'approved',
-                  4 => 'rejected',
-              );
-              foreach ($optionsValue as $key => $value) {
-                $opValueParams = array(
-                  'option_group_id' => 'document_status',
-                  'name' => $value,
-                  'label' => $value,
-                  'value' => $key,
-                );
-                civicrm_api3('OptionValue', 'create', $opValueParams);
-              }
-          }
-
-        return TRUE;
-    }
-
-    /*
-     * Install Tasks Assignments custom settings.
-     */
-    public function upgrade_0007() {
-
-          $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'ta_settings', 'id', 'name');
-          if (!$optionGroupID) {
-              $params = array(
-                'name' => 'ta_settings',
-                'title' => 'Tasks and Assignments settings',
-                'is_active' => 1,
-                'is_reserved' => 1,
-              );
-              civicrm_api3('OptionGroup', 'create', $params);
-              $optionsValue = array(
-                  'documents_tab' => array(
-                      'label' => 'Show or hide the Documents tab',
-                      'value' => 1,
-                  ),
-                  'keydates_tab' => array(
-                      'label' => 'Show or hide the Key Dates tab',
-                      'value' => 1,
-                  ),
-                  'add_assignment_button_title' => array(
-                      'label' => 'Configure \'Add Assignment\' button title',
-                      'value' => '',
-                  ),
-                  'number_of_days' => array(
-                      'label' => 'No of days prior to Key Date to create task',
-                      'value' => 30,
-                  ),
-                  'auto_tasks_assigned_to' => array(
-                      'label' => 'Auto generated Tasks assigned to',
-                      'value' => '',
-                  ),
-              );
-              foreach ($optionsValue as $key => $value) {
-                $opValueParams = array(
-                  'option_group_id' => 'ta_settings',
-                  'name' => $key,
-                  'label' => $value['label'],
-                  'value' => $value['value'],
-                );
-                civicrm_api3('OptionValue', 'create', $opValueParams);
-              }
-          }
-
-        return TRUE;
-    }
-
-    public function upgrade_0008()
-    {
-        $this->executeCustomDataFile('xml/activity_custom_fields.xml');
-
-        return TRUE;
-    }
-
-    public function upgrade_0009()
-    {
-        $this->executeCustomDataFile('xml/probation.xml');
-
-        return TRUE;
-    }
-
-    /*
-     * Enable CiviTask and CiviDocument components.
-     */
-    /*public function upgrade_0010()
-    {
-        CRM_Core_BAO_ConfigSetting::enableComponent('CiviTask');
-        CRM_Core_BAO_ConfigSetting::enableComponent('CiviDocument');
-
-        return TRUE;
-    }*/
-
-    /*
-     * Install Dummy Document Types (Activity Types)
-     */
-    public function upgrade_1011()
-    {
-      $this->_installActivityTypes('CiviDocument', array(
-        'Joining Document 1',
-        'Exiting document 1',
-      ));
-
-      return TRUE;
-    }
-
-    /*
-     * Set up Daily Reminder job
-     */
-    public function upgrade_1012()
-    {
-        $dao = new CRM_Core_DAO_Job();
-        $dao->api_entity = 'task';
-        $dao->api_action = 'senddailyreminder';
-        $dao->find(TRUE);
-        if (!$dao->id)
-        {
-            $dao = new CRM_Core_DAO_Job();
-            $dao->domain_id = CRM_Core_Config::domainID();
-            $dao->run_frequency = 'Daily';
-            $dao->parameters = null;
-            $dao->name = 'Tasks and Assignments Daily Reminder';
-            $dao->description = 'Tasks and Assignments Daily Reminder';
-            $dao->api_entity = 'task';
-            $dao->api_action = 'senddailyreminder';
-            $dao->is_active = 1;
-            $dao->save();
-        }
-
-        return TRUE;
-    }
-
-    /*
-     * Add Settings page to Tasks and Assignments top menu
-     */
-    public function upgrade_1013()
-    {
-        $taNavigation = new CRM_Core_DAO_Navigation();
-        $taNavigation->name = 'tasksassignments';
-        $taNavigation->find(true);
-        if ($taNavigation->id)
-        {
-            $taNavigation->url = '';
-            $taNavigation->save();
-
-            $submenu = array(
-                array(
-                    'label' => ts('Dashboard'),
-                    'name' => 'ta_dashboard',
-                    'url' => 'civicrm/tasksassignments/dashboard#/tasks',
-                ),
-                array(
-                    'label' => ts('Settings'),
-                    'name' => 'ta_settings',
-                    'url' => 'civicrm/tasksassignments/settings',
-                )
-            );
-
-            foreach ($submenu as $key => $item)
-            {
-                $item['parent_id'] = $taNavigation->id;
-                $item['weight'] = $key;
-                $item['is_active'] = 1;
-                CRM_Core_BAO_Navigation::add($item);
-            }
-
-            CRM_Core_BAO_Navigation::resetNavigation();
-        }
-
-        return TRUE;
-    }
-
-    /*
-     * Add Settings page to Administer top menu
-     */
-    public function upgrade_1014()
-    {
-        // Add Tasks and Assignments to the Administer menu
-        $administerNavId = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
-        if ($administerNavId)
-        {
-            CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name = 'tasksassignments_administer' and parent_id = %1",
-                array(
-                    1 => array($administerNavId, 'Integer'),
-                )
-            );
-
-            $taAdminNavigation = new CRM_Core_DAO_Navigation();
-            $params = array (
-                'domain_id'  => CRM_Core_Config::domainID(),
-                'label'      => ts('Tasks and Assignments'),
-                'name'       => 'tasksassignments_administer',
-                'url'        => null,
-                'parent_id'  => $administerNavId,
-                'separator'  => 1,
-                'is_active'  => 1
-            );
-            $taAdminNavigation->copyValues($params);
-            $taAdminNavigation->save();
-
-            $taSettings = new CRM_Core_DAO_Navigation();
-            $taSettings->name = 'ta_settings';
-            $taSettings->find(true);
-            if ($taSettings->id)
-            {
-                $taSettings->parent_id = $taAdminNavigation->id;
-                $taSettings->save();
-            }
-
-            CRM_Core_BAO_Navigation::resetNavigation();
-        }
-
-        return TRUE;
-    }
+    return TRUE;
+  }
 
   public function upgrade_1015()
   {
@@ -602,7 +602,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     if (!$taDashboard->id) {
       return TRUE;
     }
-    
+
     CRM_Core_BAO_Navigation::processDelete($taDashboard->id);
     CRM_Core_BAO_Navigation::resetNavigation();
 
@@ -616,7 +616,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     $taNavigation = new CRM_Core_DAO_Navigation();
     $taNavigation->name = 'tasksassignments';
     $taNavigation->find(TRUE);
-    
+
     if (!$taNavigation->id) {
       return TRUE;
     }
@@ -648,12 +648,12 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       $item['parent_id'] = $taNavigation->id;
       $item['weight'] = $key;
       $item['is_active'] = 1;
-      
+
       CRM_Core_BAO_Navigation::add($item);
     }
-    
+
     CRM_Core_BAO_Navigation::resetNavigation();
-    
+
     return TRUE;
   }
 
@@ -669,7 +669,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       'dashboard' => CRM_Core_BAO_Navigation::retrieve($paramsDashboard, $default),
       'admin' => CRM_Core_BAO_Navigation::retrieve($paramsAdmin, $default)
     ];
-    
+
     foreach ($menuItems as $menuItem) {
       $menuItem->label = 'Tasks';
       $menuItem->save();
@@ -686,95 +686,111 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   public function upgrade_1030() {
     $default = [];
     $params = ['name' => 'ta_settings'];
-    
+
     $menuItem = CRM_Core_BAO_Navigation::retrieve($params, $default);
     $menuItem->label = 'Tasks Settings';
     $menuItem->save();
-    
+
     CRM_Core_BAO_Navigation::resetNavigation();
 
     return TRUE;
   }
 
-    public function uninstall() {
-      CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
-      CRM_Core_BAO_Navigation::resetNavigation();
+  /**
+   * Sets icon for top-level 'Tasks and Assignments' menu item
+   *
+   * @return bool
+   */
+  public function upgrade_1031() {
+    $params = [
+      'name' => 'tasksassignments',
+      'api.Navigation.create' => ['id' => '$value.id', 'icon' => 'fa fa-list-ul'],
+      'parent_id' => ['IS NULL' => true],
+    ];
+    civicrm_api3('Navigation', 'get', $params);
 
-      return TRUE;
+    return TRUE;
+  }
+
+  public function uninstall() {
+    CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
+    CRM_Core_BAO_Navigation::resetNavigation();
+
+    return TRUE;
+  }
+
+  /**
+   * Returns the activity type params starting with a component name,
+   * specifically it returns the option group and component id
+   *
+   * @param  string $component
+   * @return array
+   */
+  private function _fetchActivityTypeParams($component) {
+    $componentId = null;
+    $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
+    $componentParams = array(1 => array($component, 'String'));
+    $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
+
+    if ($componentResult->fetch()) {
+      $componentId = $componentResult->id;
     }
 
-    /**
-     * Returns the activity type params starting with a component name,
-     * specifically it returns the option group and component id
-     *
-     * @param  string $component
-     * @return array
-     */
-    private function _fetchActivityTypeParams($component) {
-      $componentId = null;
-      $componentQuery = 'SELECT id FROM civicrm_component WHERE name = %1';
-      $componentParams = array(1 => array($component, 'String'));
-      $componentResult = CRM_Core_DAO::executeQuery($componentQuery, $componentParams);
+    if (!$componentId) {
+      throw new Exception($component . ' Component not found.');
+    }
 
-      if ($componentResult->fetch()) {
-        $componentId = $componentResult->id;
-      }
+    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
 
-      if (!$componentId) {
-        throw new Exception($component . ' Component not found.');
-      }
+    if (!$optionGroupID) {
+      civicrm_api3('OptionGroup', 'create', array(
+        'name' => 'activity_type',
+        'title' => 'Activity Type',
+        'is_active' => 1,
+      ));
 
       $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
-
-      if (!$optionGroupID) {
-        civicrm_api3('OptionGroup', 'create', array(
-          'name' => 'activity_type',
-          'title' => 'Activity Type',
-          'is_active' => 1,
-        ));
-
-        $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_type', 'id', 'name');
-      }
-
-      return array(
-        'component_id' => $componentId,
-        'option_group_id' => $optionGroupID
-      );
     }
 
-    private function _installActivityTypes($component, array $types) {
-      $params = $this->_fetchActivityTypeParams($component);
+    return array(
+      'component_id' => $componentId,
+      'option_group_id' => $optionGroupID
+    );
+  }
 
-      foreach ($types as $type) {
-        civicrm_api3('OptionValue', 'create', array(
-          'sequential' => 1,
-          'option_group_id' => $params['option_group_id'],
-          'component_id' => $params['component_id'],
-          'label' => $type,
-          'name' => $type,
-        ));
-      }
-    }
+  private function _installActivityTypes($component, array $types) {
+    $params = $this->_fetchActivityTypeParams($component);
 
-    /**
-     * Uninstall (if they exist) the given activity types for the given component
-     *
-     * @param  string $component
-     * @param  array  $types
-     */
-    private function _uninstallActivityTypes($component, array $types) {
-      $params = $this->_fetchActivityTypeParams('CiviDocument');
-      $typeIds = array_map(function ($type) {
-        return $type['id'];
-      }, civicrm_api3('OptionValue', 'get', array(
-        'component_id' => $params['component_id'],
+    foreach ($types as $type) {
+      civicrm_api3('OptionValue', 'create', array(
+        'sequential' => 1,
         'option_group_id' => $params['option_group_id'],
-        'name' => array('IN' => $types),
-        'return' => 'id'
-      ))['values']);
-
-      foreach ($typeIds as $id) {
-        civicrm_api3('OptionValue', 'delete', array('id' => $id));
-      }
+        'component_id' => $params['component_id'],
+        'label' => $type,
+        'name' => $type,
+      ));
     }
+  }
+
+  /**
+   * Uninstall (if they exist) the given activity types for the given component
+   *
+   * @param  string $component
+   * @param  array  $types
+   */
+  private function _uninstallActivityTypes($component, array $types) {
+    $params = $this->_fetchActivityTypeParams('CiviDocument');
+    $typeIds = array_map(function ($type) {
+      return $type['id'];
+    }, civicrm_api3('OptionValue', 'get', array(
+      'component_id' => $params['component_id'],
+      'option_group_id' => $params['option_group_id'],
+      'name' => array('IN' => $types),
+      'return' => 'id'
+    ))['values']);
+
+    foreach ($typeIds as $id) {
+      civicrm_api3('OptionValue', 'delete', array('id' => $id));
+    }
+  }
 }
