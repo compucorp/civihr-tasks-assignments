@@ -16,7 +16,7 @@
                     </td>
                     <td align="left" valign="top" style="margin: 0px;padding: 0px;border: 0;vertical-align: top;">
 {if $row.caseType}
-                            Assignment Type: {$row.caseType}
+                            Workflow Type: {$row.caseType}
 {/if}
                         &nbsp;
                     </td>

@@ -20,7 +20,7 @@
               </a>
               <a class="btn" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
                 <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
-                {literal}{{settings.copy.button.assignmentAdd || 'Add Assignment'}}{/literal}
+                {literal}{{settings.copy.button.assignmentAdd || 'Add Workflow'}}{/literal}
               </a>
             </div>
           </div>

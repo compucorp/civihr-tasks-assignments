@@ -75,10 +75,10 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="form-group">
-                    <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
+                    <label class="col-xs-12 col-sm-4 control-label">Workflow Type:</label>
                     <div class="col-xs-12 col-sm-8">
                       <ui-select prevent-animations multiple ng-model="list.filterParams.assignmentType">
-                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select workflow...">{{$item.title}}
                         </ui-select-match>
                         <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                           <div ng-bind-html="type.title | highlight: $select.search"></div>
