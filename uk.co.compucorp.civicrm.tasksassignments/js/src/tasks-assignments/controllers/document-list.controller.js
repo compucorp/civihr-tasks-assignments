@@ -2,13 +2,14 @@
 
 define([
   'common/angular',
+  'common/lodash',
   'common/moment',
   'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact',
   'tasks-assignments/services/document',
   'tasks-assignments/services/file',
   'tasks-assignments/services/assignment'
-], function (angular, moment, controllers) {
+], function (angular, _, moment, controllers) {
   'use strict';
 
   controllers.controller('DocumentListController', DocumentListController);
@@ -24,6 +25,7 @@ define([
     var vm = this;
     var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
 
+    vm.isDocumentSection = false;
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
     vm.list = documentList;
@@ -31,13 +33,78 @@ define([
     vm.listOngoing = [];
     vm.listPaginated = [];
     vm.overdue = 0;
+    vm.propertyName = 'activity_date_time';
+    vm.reverse = true;
+    vm.documentContactColumns = [
+      {
+        label: 'Type',
+        property: 'type'
+      },
+      {
+        label: 'Document Number',
+        property: 'document_number'
+      },
+      {
+        label: 'Assigned to',
+        property: 'assignee'
+      },
+      {
+        label: 'Workflow',
+        property: 'case_id',
+        condition: settings.extEnabled.assignments
+      },
+      {
+        label: 'Valid From',
+        property: 'valid_from'
+      },
+      {
+        label: 'Expiry Date',
+        property: 'expire_date'
+      },
+      {
+        label: 'Status',
+        property: 'status_id'
+      }
+    ];
+    vm.documentDashboardColumns = [
+      {
+        label: 'Type',
+        property: 'type'
+      },
+      {
+        label: 'Staff',
+        property: 'target_contact'
+      },
+      {
+        label: 'Assigned to',
+        property: 'assignee'
+      },
+      {
+        label: 'Workflow',
+        property: 'case_id',
+        condition: settings.extEnabled.assignments
+      },
+      {
+        label: 'Due Date',
+        property: 'activity_date_time'
+      },
+      {
+        label: 'Expiry Date',
+        property: 'expire_date'
+      },
+      {
+        label: 'Status',
+        property: 'status_id'
+      }
+    ];
     vm.dpOpened = {
       filterDates: {}
     };
     vm.dueFilters = [
       { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
       { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
-      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' }
+      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' },
+      { badgeClass: 'primary', calendarView: 'month', value: 'all' }
     ];
     vm.filterParams = {
       contactId: null,
@@ -63,13 +130,14 @@ define([
     };
     vm.isCollapsed = {
       filterAdvanced: true,
-      filterDates: false
+      filterDates: true
     };
     vm.label = {
       addNew: 'Add Document',
       overdue: 'Overdue',
-      dueInNextFortnight: 'Due in next fortnight',
-      dueInNinetyDays: 'Due in 90 days',
+      dueInNextFortnight: 'Next fortnight',
+      dueInNinetyDays: '90 days',
+      all: 'All',
       dateRange: ''
     };
     vm.pagination = {
@@ -83,7 +151,10 @@ define([
     vm.changeStatus = changeStatus;
     vm.filterByDateField = filterByDateField;
     vm.deleteDocument = deleteDocument;
+    vm.filterByDateField = filterByDateField;
     vm.labelDateRange = labelDateRange;
+    vm.listAssignees = listAssignees;
+    vm.sortBy = sortBy;
     vm.viewInCalendar = viewInCalendar;
 
     (function init () {
@@ -153,6 +224,7 @@ define([
       vm.filterParams.dateRange.from = vm.filterParamsHolder.dateRange.from;
       vm.filterParams.dateRange.until = vm.filterParamsHolder.dateRange.until;
       vm.filterParams.due = 'dateRange';
+      vm.isDocumentSection = (vm.filterParamsHolder.dateRange.from !== null || vm.filterParamsHolder.dateRange.until !== null);
 
       vm.labelDateRange();
     }
@@ -186,12 +258,12 @@ define([
      * @param {string} type filter type
      * @return {array} documents list
      */
-     function filterByDateField (type) {
-       var listByDueDate = $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
-       var listByExpiryDate = $filter('filterByDateField')(vm.list, type, 'expire_date', vm.filterParams.dateRange);
+    function filterByDateField (type) {
+      var listByDueDate = $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
+      var listByExpiryDate = $filter('filterByDateField')(vm.list, type, 'expire_date', vm.filterParams.dateRange);
 
-       return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
-     };
+      return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
+    }
 
     /**
      * Creates the date range label using from and until dates in
@@ -213,6 +285,27 @@ define([
       }
 
       vm.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
+    }
+
+    /**
+     * Creates the list of contact name as  object
+     * @param  {array} assigneesIds
+     * @return {object}
+     */
+    function listAssignees (assigneesIds) {
+      var assigneeList = {};
+
+      if (assigneesIds.length) {
+        _.each(assigneesIds, function (assigneeId) {
+          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+          if (assignee) {
+            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+          }
+        });
+      }
+
+      return assigneeList;
     }
 
     /**
@@ -268,6 +361,49 @@ define([
       switch (true) {
         case (output.status_id !== '3') && (output.status_id !== '4') && (!input.status_id):
           list.push(output);
+          break;
+      }
+    }
+
+    /**
+     * Sort the document list based on the property type
+     * @param  {string} propertyName
+     * @return {array}
+     */
+    function sortBy (propertyName) {
+      vm.reverse = (vm.propertyName === propertyName) ? !vm.reverse : false;
+      vm.propertyName = propertyName;
+
+      switch (propertyName) {
+        case 'type':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            return $rootScope.cache.documentType.obj[doc.activity_type_id].toLowerCase();
+          });
+          break;
+        case 'status_id':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            return $rootScope.cache.documentStatus.obj[doc.status_id].toLowerCase();
+          });
+          break;
+        case 'target_contact':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            return $rootScope.cache.contact.obj[doc.target_contact_id[0]].sort_name.toLowerCase();
+          });
+          break;
+        case 'assignee':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            var assignee = doc.assignee_contact_id.length && _.find($rootScope.cache.contact.obj, {'id': doc.assignee_contact_id[0]});
+
+            return assignee ? assignee.sort_name.toLowerCase() : '';
+          });
+          break;
+        case 'case_id':
+          vm.list = _.sortBy(vm.list, function (doc) {
+            var assignment = $rootScope.cache.assignment.obj[doc.case_id];
+            var assignmentType = assignment && $rootScope.cache.assignmentType.obj[assignment.case_type_id];
+
+            return assignmentType && assignmentType.title.toLowerCase();
+          });
           break;
       }
     }

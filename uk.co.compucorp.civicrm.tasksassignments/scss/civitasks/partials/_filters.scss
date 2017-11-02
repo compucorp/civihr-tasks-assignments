@@ -89,8 +89,6 @@
 }
 
 .#{$prefix}filter-advanced {
-  max-width: 817px;
-
   @include grid-condensed(5px);
 
   .form-horizontal {
@@ -102,6 +100,10 @@
       margin-bottom: 0;
       margin-top: 20px;
     }
+  }
+
+  .ui-select-match-item.btn {
+    text-transform: capitalize;
   }
 }
 
