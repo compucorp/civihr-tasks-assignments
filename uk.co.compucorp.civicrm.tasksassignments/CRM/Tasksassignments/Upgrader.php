@@ -704,7 +704,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   public function upgrade_1031() {
     $params = [
       'name' => 'tasksassignments',
-      'api.Navigation.create' => ['id' => '$value.id', 'icon' => 'fa fa-list-ul'],
+      'api.Navigation.create' => ['id' => '$value.id', 'icon' => 'crm-i fa-list-ul'],
       'parent_id' => ['IS NULL' => true],
     ];
     civicrm_api3('Navigation', 'get', $params);
