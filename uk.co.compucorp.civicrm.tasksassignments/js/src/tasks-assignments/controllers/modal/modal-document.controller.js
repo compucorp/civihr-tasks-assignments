@@ -48,6 +48,7 @@ define([
     };
 
     vm.addAssignee = addAssignee;
+    vm.addQueryParam = addQueryParam;
     vm.cacheAssignment = cacheAssignment;
     vm.cacheContact = cacheContact;
     vm.cancel = cancel;
@@ -69,7 +70,6 @@ define([
     vm.showStatusField = showStatusField;
     vm.searchContactAssignments = searchContactAssignments;
     vm.viewFile = viewFile;
-    vm.addQueryParam = addQueryParam;
 
     (function init () {
       angular.copy(data, vm.document);
@@ -94,6 +94,21 @@ define([
       }
 
       vm.cacheContact($item);
+    }
+
+    /**
+     * Appends a query parameter to a path. Does not check if parameter is
+     * already set.
+     *
+     * @param {string} path
+     * @param {string} name
+     * @param {string} value
+     * @returns {string}
+     */
+    function addQueryParam(path, name, value) {
+      path += (path.split('?')[1] ? '&':'?') + name + '=' + value;
+
+      return path;
     }
 
     /**
@@ -585,21 +600,6 @@ define([
      */
     function initWatchers () {
       $rootScope.$watch('cache.contact.arrSearch', collectContacts);
-    }
-
-    /**
-     * Appends a query parameter to a path. Does not check if parameter is
-     * already set.
-     *
-     * @param {string} path
-     * @param {string} name
-     * @param {string} value
-     * @returns {string}
-     */
-    function addQueryParam(path, name, value) {
-      path += (path.split('?')[1] ? '&':'?') + name + '=' + value;
-
-      return path;
     }
   }
 });
