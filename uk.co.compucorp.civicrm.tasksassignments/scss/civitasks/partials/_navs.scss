@@ -13,8 +13,7 @@
 
       &:hover,
       &:focus {
-//        background-color: darken($sidebar-main-bg, 10%);
-        background-color: $brand-secondary;
+        color: $brand-primary;
       }
 
       .#{$prefix}sidebar-main-title {
@@ -48,11 +47,11 @@
 
       > a {
         background-color: transparent;
-        color: $link-color;
+        color: $brand-primary;
 
 
         &:hover {
-          color: $headings-color;
+          color: darken($brand-primary, $crm-darken-percentage);
         }
       }
     }

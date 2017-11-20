@@ -10,7 +10,7 @@
 
     .editable-link {
       @include transition(all ease-in-out .15s);
-      background-color: #fff;
+      background-color: $crm-white;
       border: 1px solid $gray-light;
       color: $gray;
       font-weight: normal;
@@ -45,8 +45,8 @@
   }
 
   &:hover {
-    background-color: #fff;
-    border-color: $gray-light;
+    background-color: $crm-white;
+    border-color: $crm-grayblue-dark;
 
     .fa-pencil,
     &.editable-with-link .editable-link {
@@ -87,8 +87,8 @@
     z-index: 1100;
 
     .btn {
-      background-color: #f4f7f8;
-      border-color: $gray-light;
+      background-color: $gray-lighter;
+      border-color: $crm-grayblue-dark;
       font-size: 11px;
       font-weight: normal;
       margin-left: -1px;
@@ -97,7 +97,7 @@
 
       &:active,
       &:focus {
-        background-color: #f4f7f8;
+        background-color: $gray-light;
         outline: none;
       }
     }

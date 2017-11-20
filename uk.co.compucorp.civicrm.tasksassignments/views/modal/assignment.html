@@ -43,7 +43,7 @@
             Key Date:
           </label>
           <div class="col-xs-12 col-sm-3">
-            <div class="input-group input-group-unstyled date-input-group form-group" ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
+            <div class="input-group date-input-group form-group" ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
               <input
                 type="text"
                 id="{{prefix}}assignment-due"
@@ -134,7 +134,7 @@
                     </ui-select>
                   </td>
                   <td>
-                    <div class="input-group input-group-unstyled date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
+                    <div class="input-group date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
                       <input
                         type="text"
                         id="{{prefix}}assignment-task-due-{{$index}}"
@@ -149,7 +149,7 @@
                     </div>
                   </td>
                   <td class="text-center">
-                      <a class="btn btn-default btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(taskList, $index)">
+                      <a class="btn btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(taskList, $index)">
                         <span class="fa fa-remove" aria-hidden="true"></span>
                       </a>
                   </td>
@@ -224,7 +224,7 @@
                     </ui-select>
                   </td>
                   <td>
-                    <div class="input-group input-group-unstyled date-input-group">
+                    <div class="input-group date-input-group">
                       <input
                         type="text"
                         id="{{prefix}}assignment-doc-due-{{$index}}"
@@ -239,7 +239,7 @@
                     </div>
                   </td>
                   <td class="text-center">
-                    <a class="btn btn-default btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(documentList, $index)">
+                    <a class="btn btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(documentList, $index)">
                       <span class="fa fa-remove" aria-hidden="true"></span>
                     </a>
                   </td>
@@ -261,10 +261,10 @@
     </section>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">
+    <button type="button" class="btn btn-secondary-outline" ng-click="cancel()">
       <span class="fa fa-remove" aria-hidden="true"></span> Cancel
     </button>
-    <button type="submit" class="btn btn-default btn-primary">
+    <button type="submit" class="btn btn-primary">
       <span class="fa fa-check" aria-hidden="true"></span> Save
     </button>
   </div>

@@ -1,7 +1,7 @@
 <div class="{{prefix}}sidebar {{prefix}}sidebar-inner">
   <div class="panel panel-light  panel-secondary">
     <div class="panel-heading">
-      <h3 class="panel-title">View Documents By:</h3>
+      <h3 class="panel-title">&nbsp;</h3>
     </div>
     <div class="panel-body">
       <sidebar-filters></sidebar-filters>
@@ -13,10 +13,7 @@
     <div class="panel panel-light panel-secondary panel-filter">
       <div class="panel-heading">
         <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <h3 class="panel-title">{{list.label[list.filterParams.due]}}</h3>
-          </div>
-          <div class="col-xs-12 col-sm-6 text-center">
+          <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
             <div class="btn-group btn-group-sm">
               <a
                 ui-sref="documents.my"
@@ -135,6 +132,8 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="panel-body">
         <div class="{{prefix}}documents-container" ct-spinner ct-spinner-id="list">
             <table class="table table-striped {{prefix}}table-documents">
               <thead>

@@ -7,3 +7,93 @@
   margin: 28px auto 13px;
   padding: 9px 12px;
 }
+
+.btn {
+  @include border-radius($border-radius-alt);
+  font-weight: normal;
+  text-transform: uppercase;
+
+  &.btn-primary {
+
+    &:hover {
+      background-color: darken($btn-primary-bg, $crm-darken-percentage);
+      border-color:  darken($btn-primary-bg, $crm-darken-percentage);
+    }
+  }
+
+  &.btn-success {
+    color: $gray-darker;
+
+    &:hover {
+      background-color: darken($btn-success-bg, $crm-darken-percentage);
+      border-color: darken($btn-success-bg, $crm-darken-percentage);
+      color: $crm-black;
+    }
+  }
+
+  &.btn-info {
+
+    &:hover {
+      background-color: darken($btn-info-bg, $crm-darken-percentage);
+      border-color: darken($btn-info-bg, $crm-darken-percentage);
+    }
+  }
+
+  &.btn-warning {
+    color: $gray-darker;
+
+    &:hover {
+      background-color: darken($btn-warning-bg, $crm-darken-percentage);
+      border-color: darken($btn-warning-bg, $crm-darken-percentage);
+      color: $crm-black;
+    }
+  }
+
+  &.btn-danger {
+
+    &:hover {
+      background-color: darken($btn-danger-bg, $crm-darken-percentage);
+      border-color: darken($btn-danger-bg, $crm-darken-percentage);
+    }
+  }
+
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    cursor: $cursor-disabled;
+    @include opacity(1);
+  }
+}
+
+$buttons-w-colors: (
+  danger: ($brand-danger,$crm-white),
+  primary: ($brand-primary,$crm-white),
+  secondary: ($gray-darker,$crm-white),
+  success: ($btn-success-bg,$crm-black),
+  warning: ($btn-warning-bg,$crm-black)
+);
+
+@each $button-type, $button-color in $buttons-w-colors {
+
+  .btn-#{$button-type}-outline {
+    background-color: transparent;
+    border-color: nth($button-color,1);
+    color: $gray-darker;
+
+    &:hover:not(.disabled):not([disabled]),
+    &:focus:not(.disabled):not([disabled]) {
+      background-color: darken(nth($button-color,1), 7%);
+      border-color: darken(nth($button-color,1), 7%);
+      color: nth($button-color,2);
+    }
+
+    &.disabled,
+    &[disabled],
+    fieldset[disabled] & {
+      border-color: lighten(nth($button-color,1), 30%);
+      color: lighten($gray-darker, 30%);
+      cursor: $cursor-disabled;
+      @include opacity(1);
+    }
+  }
+}

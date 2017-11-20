@@ -1,13 +1,19 @@
 .modal-header {
-  border-bottom: 0 none;
+  background-color: $gray-lighter;
 
   .close {
-    margin-top: 0;
+    opacity: 1;
+    margin-top: 3px;
+    color: $gray-darker;
+
+    &:hover {
+      color: $crm-black;
+    }
   }
 }
 
 .modal-body {
-  background-color: $brand-secondary;
+  background-color: $crm-white;
 }
 
 .modal-progress {
@@ -60,7 +66,7 @@
 
   .modal-header,
   .modal-footer {
-    background-color: $brand-secondary;
+    background-color: $gray-lighter;
   }
 
   .modal-body {

@@ -50,7 +50,7 @@
             <label class="control-label no-gutter col-sm-3" for="{{prefix}}task-due">
               <span class="pull-right required-field-indicator">Due:</span>
             </label>
-            <div class="col-xs-9 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
+            <div class="col-xs-9 input-group" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
               <input
                 type="text"
                 name="assignmentDue"
@@ -164,13 +164,13 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">
+    <button type="button" class="btn btn-secondary-outline" ng-click="cancel()">
       Cancel
     </button>
-    <button type="submit" ng-click="openNew = true;" class="btn btn-default">
+    <button type="submit" ng-click="openNew = true;" class="btn btn-secondary-outline">
       Save And New
     </button>
-    <button type="submit" class="btn btn-default btn-primary">
+    <button type="submit" class="btn btn-primary">
       Save
     </button>
   </div>

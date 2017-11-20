@@ -4,10 +4,11 @@
   padding: 0;
 
   > li {
-    @include box-shadow($box-shadow-global);
+    @include box-shadow($box-shadow-list);
     background-color: $panel-bg;
     border-left: 5px solid $brand-success;
-    color: $gray;
+    border-radius: $border-radius-base;
+    color: $text-color;
     margin: {
       bottom: 10px;
       top: 10px;
@@ -93,11 +94,7 @@
 
   .#{$prefix}assignment-type,
   .#{$prefix}task-title {
-    color: $gray-dark;
-
-    &:hover {
-      color: darken($gray-dark, 15%);
-    }
+    color: $brand-secondary-text;
   }
 
   .#{$prefix}task-checkbox {
@@ -123,8 +120,8 @@
   }
 
   .#{$prefix}task-more {
-    background-color: #f4f7f8;
-    border: 1px solid #eef2f3;
+    background-color: $gray-lighter;
+    border: 1px solid $crm-grayblue-dark;
     border-radius: 2px;
     padding: 9px 8px;
     margin-bottom: 12px;
@@ -199,7 +196,7 @@
   }
 
   strong {
-    color: #5b6779;
+    color: $gray-darker;
     padding-right: 5px;
   }
 
@@ -219,15 +216,20 @@
   }
 
   .period_start_date {
-    color: #eca67f;
+    color: $brand-success;
   }
 
   .period_end_date {
-    color: #c096aa;
+    color: $brand-warning;
   }
 
   .panel {
     @include box-shadow($box-shadow-global);
+
+    .panel-heading {
+      background-color: $gray-lighter;
+      border-bottom: 1px solid $hr-border;
+    }
 
     > .list-group {
       .list-group-item {
@@ -245,5 +247,4 @@
   .panel-heading {
     padding: 11px 15px 12px;
   }
-
 }

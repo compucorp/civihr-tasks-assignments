@@ -307,10 +307,10 @@
 </div>
 </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" ng-click="documentModal.cancel()">
+      <button type="button" class="btn btn-secondary-outline" ng-click="documentModal.cancel()">
         {{ (documentModal.mode === 'view') ? 'Close' : 'Cancel' }}
       </button>
-      <button ng-if="documentModal.mode !== 'view'" type="submit" class="btn btn-default btn-primary">
+      <button ng-if="documentModal.mode !== 'view'" type="submit" class="btn btn-primary">
         {{ (documentModal.isRole('staff') && documentModal.mode === 'edit') ? 'Save and send for approval' : 'Save' }}
       </button>
     </div>
