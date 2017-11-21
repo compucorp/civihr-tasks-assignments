@@ -268,17 +268,17 @@
 </div>
 </div>
 <!-- Assignment -->
-<div class="col-xs-12 col-sm-12" ng-show="(!documentModal.showFieldAssignment || !documentModal.assignments.length) && !documentModal.document.case_id">
+<div class="col-xs-12 col-sm-12" ng-show="(!documentModal.showAssignmentField || !documentModal.assignments.length) && !documentModal.document.case_id">
   <div class="row">
     <span class="form-control-static">
-      <a href class="btn" ng-click="documentModal.showFieldAssignment = true;" ng-class="{ disabled: !documentModal.assignments.length }">
+      <a href class="btn" ng-click="documentModal.showAssignmentField = true;" ng-class="{ disabled: !documentModal.assignments.length }">
         Add to Assignment
       </a>
     </span>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12 col-sm-12" ng-show="(documentModal.document.case_id || documentModal.showFieldAssignment) && documentModal.assignments.length">
+  <div class="col-xs-12 col-sm-12" ng-show="(documentModal.document.case_id || documentModal.showAssignmentField) && documentModal.assignments.length">
     <div class="form-group">
       <label class="col-xs-4 text-nowrap control-label"> Link to Assignment: </label>
       <div class="col-xs-8 no-left-margin">
