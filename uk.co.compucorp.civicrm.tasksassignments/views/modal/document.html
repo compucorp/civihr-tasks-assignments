@@ -91,7 +91,7 @@
           <tbody>
             <tr ng-repeat="file in documentModal.files">
               <td>
-                <a href="javascript:void(0)" ng-click="documentModal.viewFile(file)">
+                <a target="_blank" href="{{ documentModal.addQueryParam(file.url, 'download', 0) }}">
                   {{ (file.name | limitTo: 25) + (file.name.length > 25 ? '...' : '') }}
                 </a>
               </td>
