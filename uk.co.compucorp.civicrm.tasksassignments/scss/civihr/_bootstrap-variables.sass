@@ -44,14 +44,15 @@ $crm-success-dark:      darken(desaturate(adjust-hue($brand-success, -26), 23.44
 $crm-warning-dark:      darken(saturate(adjust-hue($brand-warning, -6), 26.88), 26.08)
 
 
-$crm-primary-light:     lighten($brand-primary, 30%)
-$crm-success-light:     lighten($brand-success, 30%)
-$crm-warning-light:     lighten($brand-warning, 30%)
-$crm-danger-light:      lighten($brand-danger, 30%)
-
 
 $crm-darken-percentage:     7%
 $crm-lighten-percentage:    30%
+
+
+$crm-primary-light:     lighten($brand-primary, $crm-lighten-percentage)
+$crm-success-light:     lighten($brand-success, $crm-lighten-percentage)
+$crm-warning-light:     lighten($brand-warning, $crm-lighten-percentage)
+$crm-danger-light:      lighten($brand-danger, $crm-lighten-percentage)
 
 //== Scaffolding
 //
@@ -60,7 +61,7 @@ $crm-lighten-percentage:    30%
 //** Background color for `<body>`.
 $body-bg:               $gray-light
 $text-color:            $gray-dark
-$link-hover-color:      darken($brand-primary, 7%)
+$link-hover-color:      darken($brand-primary, $crm-darken-percentage)
 
 $link-hover-decoration: none
 
@@ -121,11 +122,12 @@ $btn-font-weight:                600
 //
 //##
 
+$input-color:                    $gray-dark
 $input-border:                   $crm-grayblue-darker
 $input-color-placeholder:        $crm-gray-matte
 $input-bg-disabled:              $gray-lighter
 $input-border-radius:            $border-radius-base
-
+$dropdown-border:                $crm-grayblue-darker
 
 //== Grid system
 //
@@ -157,7 +159,7 @@ $state-warning-text:             $crm-warning-dark
 $modal-lg:                    800px
 $modal-md:                    500px
 $modal-sm:                    300px
-
+$modal-header-border-color:   $crm-grayblue-dark
 
 //== Alerts
 //
