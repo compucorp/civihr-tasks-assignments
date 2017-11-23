@@ -49,7 +49,7 @@ define([
         property: 'assignee'
       },
       {
-        label: 'Assignment',
+        label: 'Workflow',
         property: 'case_id',
         condition: settings.extEnabled.assignments
       },
@@ -80,7 +80,7 @@ define([
         property: 'assignee'
       },
       {
-        label: 'Assignment',
+        label: 'Workflow',
         property: 'case_id',
         condition: settings.extEnabled.assignments
       },
