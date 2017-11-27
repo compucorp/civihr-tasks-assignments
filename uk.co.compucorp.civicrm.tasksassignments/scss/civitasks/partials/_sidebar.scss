@@ -41,13 +41,32 @@
 }
 
 .#{$prefix}sidebar-inner {
-  width: 225px;
+  width: $dashboard-sidebar-width;
 
   + .#{$prefix}content-wrapper {
     > .#{$prefix}content {
       border-left: 1px solid $body-bg;
-      margin-left: 225px;
+      margin-left: $dashboard-sidebar-width;
       min-height: $content-min-height - 20px;
+    }
+  }
+
+  .date-range__selected {
+    background-color: $brand-primary;
+    border-radius: $border-radius-base;
+
+    .#{$prefix}select-dates {
+      padding: 10px 42px 5px 38px;
+    }
+
+    label,
+    .input-group-addon,
+    .#{$prefix}select-dates {
+      color: $crm-white;
+    }
+
+    .form-horizontal {
+      padding: 0 20px;
     }
   }
 }

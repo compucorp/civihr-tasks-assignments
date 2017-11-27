@@ -1,6 +1,10 @@
 .btn {
   text-transform: uppercase;
   @include border-radius($border-radius-alt);
+
+  &.active {
+    box-shadow: none;
+  }
 }
 
 .btn-link {
@@ -8,34 +12,27 @@
 }
 
 .btn-gray {
-  color: #767e8f;
-  background-color: #fff;
-  border-color: #767e8f;
+  color: $gray-dark;
+  background-color: $btn-default-bg;
+  border-color: $gray-dark;
 
   &:hover,
   &:focus,
-  &.btn-focus {
-    color: darken(#767e8f, 15%);
-    border-color: darken(#767e8f, 15%);
-  }
-
+  &.btn-focus,
+  &.btn-active,
   &.active {
-    background-color: #767e8f;
-    color: #fff;
-
-    &:hover,
-    &:focus,
-    &.btn-focus {
-      background-color: darken(#767e8f, 10%);
-      color: #fff;
-    }
+    color: $btn-default-bg;
+    background-color: darken($gray-dark, $crm-darken-percentage);
+    border-color: darken($gray-dark, $crm-darken-percentage);
+    box-shadow: none;
   }
+
 }
 
 .btn-collapse {
   background: none;
   border: 0 none;
-  color: $gray;
+  color: $brand-secondary-text;
   font-weight: normal;
   padding: 0;
   cursor: pointer;
@@ -43,7 +40,7 @@
   vertical-align: baseline;
 
   &:hover {
-    color: darken($gray, 15%);
+    color: darken($gray-dark, $crm-darken-percentage);
   }
 
   &:active {

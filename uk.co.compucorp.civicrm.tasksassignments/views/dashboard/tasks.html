@@ -2,7 +2,7 @@
   <aside>
     <div class="panel panel-light panel-secondary">
       <div class="panel-heading">
-        <h3 class="panel-title">View Tasks By:</h3>
+        <h3 class="panel-title">&nbsp;</h3>
       </div>
       <div class="panel-body">
         <sidebar-filters></sidebar-filters>
@@ -15,10 +15,7 @@
         <div class="panel panel-light panel-secondary panel-filter">
           <div class="panel-heading">
             <div class="row">
-              <div class="col-xs-12 col-sm-3">
-                <h3 class="panel-title">{{list.label[list.filterParams.due]}}</h3>
-              </div>
-              <div class="col-xs-12 col-sm-6 text-center">
+              <div class="col-xs-12 col-sm-6 col-sm-offset-3 text-center">
                 <div class="btn-group btn-group-sm">
                   <a ui-sref="tasks.my" class="btn btn-gray active panel-filter__filter" ng-model="list.filterParams.ownership" uib-btn-radio="'assigned'">
                     My Tasks
@@ -74,10 +71,10 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="form-group">
-                    <label class="col-xs-12 col-sm-4 control-label">Assignment Type:</label>
+                    <label class="col-xs-12 col-sm-4 control-label">Workflow Type:</label>
                     <div class="col-xs-12 col-sm-8">
                       <ui-select prevent-animations multiple ng-model="list.filterParams.assignmentType">
-                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select workflow...">{{$item.title}}
                         </ui-select-match>
                         <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
                           <div ng-bind-html="type.title | highlight: $select.search"></div>

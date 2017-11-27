@@ -3,17 +3,17 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-xs-12 col-sm-6 col-lg-8">
-          <button class="btn btn-default btn-primary" ng-click="modalTask()">
+          <button class="btn btn-primary" ng-click="modalTask()">
             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
           </button> &nbsp;
-          <button class="btn btn-default btn-primary" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
+          <button class="btn btn-primary" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
-            {{settings.copy.button.assignmentAdd || 'Add Assignment'}}
+            {{settings.copy.button.assignmentAdd || 'Add Workflow'}}
           </button>
         </div>
         <div class="col-xs-12 col-sm-6 col-lg-4" ng-if="settings.extEnabled.assignments">
           <ui-select prevent-animations multiple ng-model="list.filterParams.assignmentType">
-            <ui-select-match prevent-animations class="ui-select-match" placeholder="Select assignment...">{{$item.title}}</ui-select-match>
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Select workflow...">{{$item.title}}</ui-select-match>
             <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
               <div ng-bind-html="type.title | highlight: $select.search"></div>
             </ui-select-choices>

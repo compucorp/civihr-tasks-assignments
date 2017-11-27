@@ -4,7 +4,7 @@
       <span aria-hidden="true">&times;</span>
       <span class="sr-only">Close</span>
     </button>
-    <h4 class="modal-title">New Assignment</h4>
+    <h4 class="modal-title">New Workflow</h4>
   </div>
   <div class="modal-body">
     <alert type="{{alert.type}}" close="alert.show = false;" ng-show="alert.show">{{alert.msg}}</alert>
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="row separately">
-          <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Assignment Type:</label>
+          <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Workflow Type:</label>
           <div class="col-xs-12 col-sm-6">
             <div class="crm_custom-select crm_custom-select--full">
               <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control no-select2" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">
@@ -43,7 +43,7 @@
             Key Date:
           </label>
           <div class="col-xs-12 col-sm-3">
-            <div class="input-group input-group-unstyled date-input-group form-group" ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
+            <div class="input-group date-input-group form-group" ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
               <input
                 type="text"
                 id="{{prefix}}assignment-due"
@@ -134,7 +134,7 @@
                     </ui-select>
                   </td>
                   <td>
-                    <div class="input-group input-group-unstyled date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
+                    <div class="input-group date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
                       <input
                         type="text"
                         id="{{prefix}}assignment-task-due-{{$index}}"
@@ -149,7 +149,7 @@
                     </div>
                   </td>
                   <td class="text-center">
-                      <a class="btn btn-default btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(taskList, $index)">
+                      <a class="btn btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(taskList, $index)">
                         <span class="fa fa-remove" aria-hidden="true"></span>
                       </a>
                   </td>
@@ -224,7 +224,7 @@
                     </ui-select>
                   </td>
                   <td>
-                    <div class="input-group input-group-unstyled date-input-group">
+                    <div class="input-group date-input-group">
                       <input
                         type="text"
                         id="{{prefix}}assignment-doc-due-{{$index}}"
@@ -239,7 +239,7 @@
                     </div>
                   </td>
                   <td class="text-center">
-                    <a class="btn btn-default btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(documentList, $index)">
+                    <a class="btn btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(documentList, $index)">
                       <span class="fa fa-remove" aria-hidden="true"></span>
                     </a>
                   </td>
@@ -261,10 +261,10 @@
     </section>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">
+    <button type="button" class="btn btn-secondary-outline" ng-click="cancel()">
       <span class="fa fa-remove" aria-hidden="true"></span> Cancel
     </button>
-    <button type="submit" class="btn btn-default btn-primary">
+    <button type="submit" class="btn btn-primary">
       <span class="fa fa-check" aria-hidden="true"></span> Save
     </button>
   </div>

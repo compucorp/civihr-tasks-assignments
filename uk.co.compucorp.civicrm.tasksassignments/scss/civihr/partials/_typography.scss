@@ -17,55 +17,55 @@
 
   &.header-bar-primary {
     background-color: $brand-primary;
-    color: #fff;
+    color: $crm-white;
 
     a {
-      color: #fff;
+      color: $crm-white;
 
       &:hover,
       &:active {
-        color: darken(#fff, 10%);
+        color: darken($crm-white, 10%);
       }
     }
   }
 
   &.header-bar-success {
     background-color: $brand-success;
-    color: #fff;
+    color: $crm-white;
   }
 
   &.header-bar-info {
     background-color: $brand-info;
-    color: #fff;
+    color: $crm-white;
   }
 
   &.header-bar-warning {
     background-color: $brand-danger;
-    color: #fff;
+    color: $crm-white;
   }
 
   &.header-bar-danger {
     background-color: $brand-danger;
-    color: #fff;
+    color: $crm-white;
 
     a {
-      color: #fff;
+      color: $crm-white;
 
       &:hover,
       &:active {
-        color: darken(#fff, 10%);
+        color: darken($crm-white, 10%);
       }
     }
   }
 
   &.header-bar-danger-light {
-    background-color: $brand-danger-light;
-    color: #fff;
+    background-color: $crm-danger-light;
+    color: $crm-white;
   }
 
   &.header-bar-dark {
-    background-color: #5d6779;
-    color: #fff;
+    background-color: $gray-dark;
+    color: $crm-white;
   }
 }
 

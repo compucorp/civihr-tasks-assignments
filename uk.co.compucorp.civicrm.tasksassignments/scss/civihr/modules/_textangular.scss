@@ -22,11 +22,8 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
 
 /* add generic styling for the editor */
 .ta-root.focussed > .ta-scroll-window.form-control {
-  border-color: #66afe9;
+  border-color: $brand-primary;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
 .ta-editor.ta-html, .ta-scroll-window.form-control {
@@ -63,8 +60,8 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   position: absolute;
   bottom: 16px;
   right: 16px;
-  border: 1px solid black;
-  background-color: #FFF;
+  border: 1px solid $crm-black;
+  background-color: $crm-white;
   padding: 0 4px;
   opacity: 0.7;
 }
@@ -75,7 +72,7 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   right: 5px;
   left: 5px;
   top: 5px;
-  border: 1px solid black;
+  border: 1px solid $crm-black;
   background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -88,28 +85,28 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tl{
   top: 0;
   left: 0;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border-left: 1px solid $crm-black;
+  border-top: 1px solid $crm-black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tr{
   top: 0;
   right: 0;
-  border-right: 1px solid black;
-  border-top: 1px solid black;
+  border-right: 1px solid $crm-black;
+  border-top: 1px solid $crm-black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-bl{
   bottom: 0;
   left: 0;
-  border-left: 1px solid black;
-  border-bottom: 1px solid black;
+  border-left: 1px solid $crm-black;
+  border-bottom: 1px solid $crm-black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-br{
   bottom: 0;
   right: 0;
-  border: 1px solid black;
+  border: 1px solid $crm-black;
   cursor: se-resize;
   background-color: white;
 }
@@ -128,10 +125,10 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   line-height: 1.42857143;
   text-align: left;
   white-space: normal;
-  background-color: #fff;
+  background-color: $crm-white;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  border: 1px solid #ccc;
+  border: 1px solid $crm-grayblue-dark;
   border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 6px;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
@@ -147,8 +144,8 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   padding: 8px 14px;
   margin: 0;
   font-size: 14px;
-  background-color: #f7f7f7;
-  border-bottom: 1px solid #ebebeb;
+  background-color: $gray-lighter;
+  border-bottom: 1px solid $crm-grayblue-dark;
   border-radius: 5px 5px 0 0;
 }
 .popover-content {
@@ -174,7 +171,6 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   bottom: -11px;
   left: 50%;
   margin-left: -11px;
-  border-top-color: #999;
   border-top-color: rgba(0, 0, 0, .25);
   border-bottom-width: 0;
 }
@@ -182,7 +178,7 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   bottom: 1px;
   margin-left: -10px;
   content: " ";
-  border-top-color: #fff;
+  border-top-color: $crm-white;
   border-bottom-width: 0;
 }
 .popover.bottom > .arrow {
@@ -190,7 +186,6 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   left: 50%;
   margin-left: -11px;
   border-top-width: 0;
-  border-bottom-color: #999;
   border-bottom-color: rgba(0, 0, 0, .25);
 }
 .popover.bottom > .arrow:after {
@@ -198,5 +193,5 @@ See README.md or https://github.com/fraywing/textAngular/wiki for requirements a
   margin-left: -10px;
   content: " ";
   border-top-width: 0;
-  border-bottom-color: #fff;
+  border-bottom-color: $crm-white;
 }

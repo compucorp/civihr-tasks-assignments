@@ -13,7 +13,6 @@ form {
       &,
       div.input-group-unstyled {
         span.input-group-addon {
-          border: solid 1px $gray-dark !important;
           background: none !important;
           border-left: 0 !important;
           color: $brand-primary;
@@ -21,7 +20,7 @@ form {
           width: 0;
 
           a {
-            color: #333333;
+            color: $gray-dark;
           }
         }
       }
@@ -91,12 +90,7 @@ form {
           box-shadow: none !important;
         }
 
-        .ui-select-choices {
-          border: 1px solid #333333 !important;
-        }
-
         .ui-select-toggle {
-          border-bottom: 1px solid #E8EEF0 !important;
           padding: 0;
 
           .caret:before {
@@ -150,7 +144,7 @@ form {
 
         .btn-danger {
           background: transparent;
-          color: #f08290;
+          color: $brand-danger;
         }
       }
 
@@ -231,7 +225,6 @@ form {
     .modal-table {
       margin-top: 10px;
       border: 1px solid $table-border-color;
-      background-color: $table-striped-bg;
 
       &.table-striped {
 
@@ -355,5 +348,49 @@ form {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+  }
+}
+
+.form-control {
+  @include box-shadow($crm-form-control-shadow);
+
+  &:focus {
+    @include box-shadow($crm-form-control-shadow);
+    border-color: $brand-primary;
+  }
+
+  .input-group-addon,
+  .input-group-btn,
+  .input-group .form-control {
+    display: table-cell;
+    border-radius: $input-border;
+  }
+}
+
+.ui-select-multiple.ui-select-bootstrap {
+  input.ui-select-search {
+    font-weight: normal;
+  }
+}
+
+.ui-select-match,
+.ui-select-container + .input-group-btn {
+
+  input {
+    font-weight: normal;
+  }
+  .btn-default {
+    border-color: $input-border;
+    border-radius: $input-border 0 0 $input-border;
+
+    &:hover,
+    &:focus {
+      background-color: $panel-bg;
+
+      i,
+      .fa {
+        color: $btn-default-color;
+      }
+    }
   }
 }

@@ -50,7 +50,7 @@
             <label class="control-label no-gutter col-sm-3" for="{{prefix}}task-due">
               <span class="pull-right required-field-indicator">Due:</span>
             </label>
-            <div class="col-xs-9 input-group input-group-unstyled" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
+            <div class="col-xs-9 input-group" ng-class="{'has-error': taskForm.assignmentDue.$invalid}">
               <input
                 type="text"
                 name="assignmentDue"
@@ -109,7 +109,7 @@
           </ui-select>
         </div>
       </div>
-      <!-- Status & Assignment-->
+      <!-- Status & Workflow-->
       <div class="row">
         <!-- Status -->
         <div class="col-xs-12 col-sm-5" ng-show="!task.status_id && !showFieldStatus">
@@ -127,11 +127,11 @@
             <span class="crm_custom-select__arrow"></span>
           </div>
         </div>
-        <!-- Assignment -->
+        <!-- Workflow -->
         <div class="col-xs-12 col-sm-7" ng-show="!task.case_id && !showFieldAssignment">
           <span class="form-control-static">
             <a href class="btn btn-indent" ng-click="showFieldAssignment = true;" ng-class="{ disabled: !assignments.length }">
-              Add to assignment
+              Add to workflow
             </a>
           </span>
         </div>
@@ -142,7 +142,7 @@
             ng-model="task.case_id"
             on-select="cacheAssignment($item);"
             search-enabled="false">
-            <ui-select-match prevent-animations class="ui-select-match" placeholder="Assignment">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Workflow">
               {{$select.selected.label}}
             </ui-select-match>
             <ui-select-choices
@@ -164,13 +164,13 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">
+    <button type="button" class="btn btn-secondary-outline" ng-click="cancel()">
       Cancel
     </button>
-    <button type="submit" ng-click="openNew = true;" class="btn btn-default">
+    <button type="submit" ng-click="openNew = true;" class="btn btn-secondary-outline">
       Save And New
     </button>
-    <button type="submit" class="btn btn-default btn-primary">
+    <button type="submit" class="btn btn-primary">
       Save
     </button>
   </div>

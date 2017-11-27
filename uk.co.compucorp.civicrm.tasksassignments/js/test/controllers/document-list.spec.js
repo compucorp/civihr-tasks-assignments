@@ -190,7 +190,7 @@ define([
       });
     });
 
-    describe('sortBy', function () {
+    describe('sortBy()', function () {
       var sortedDocumentList;
 
       beforeEach(function () {
@@ -295,7 +295,7 @@ define([
       });
     });
 
-    describe('listAssignees', function () {
+    describe('listAssignees()', function () {
       var assignees;
       var concatedAssignees = {};
 
@@ -318,6 +318,30 @@ define([
 
       it('concats the list of assignes by comma', function () {
         expect(assignees).toEqual(concatedAssignees);
+      });
+    });
+
+    describe('applySidebarFilters()', function () {
+      beforeEach(function () {
+        initController();
+      });
+
+      describe('before applySidebarFilters() is called', function () {
+        it('does not highlight the select dates filter section', function () {
+          expect(controller.isDocumentSection).toBe(false);
+        });
+      });
+
+      describe('after applySidebarFilters() is called', function () {
+        beforeEach(function () {
+          controller.filterParamsHolder.dateRange.from = moment().startOf('day').toDate();
+          controller.filterParamsHolder.dateRange.until = moment().add(2, 'month').startOf('day').toDate();
+          controller.applySidebarFilters();
+        });
+
+        it('highlights the select dates filter section', function () {
+          expect(controller.isDocumentSection).toBe(true);
+        });
       });
     });
 

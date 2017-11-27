@@ -21,12 +21,13 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
         }
     }
 
-    CRM_Utils_Hook::pre($hook, $entityName, CRM_Utils_Array::value('id', $params), $params);
+    $id = CRM_Utils_Array::value('id', $params);
+    CRM_Utils_Hook::pre($hook, $entityName, $id, $params);
 
     $currentInstance = new static();
-    $currentInstance->get('id', $params['id']);
+    $currentInstance->get('id', $id);
 
-    $previousAssigneeId = self::getPreviousAssigneeId($params['id']);
+    $previousAssigneeId = self::getPreviousAssigneeId($id);
 
     $instance = parent::create($params);
     CRM_Tasksassignments_Reminder::sendReminder((int) $instance->id, NULL, FALSE, $previousAssigneeId);
