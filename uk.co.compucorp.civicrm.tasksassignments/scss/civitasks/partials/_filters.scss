@@ -76,7 +76,7 @@
     }
 
     &:hover {
-      color: darken($headings-color, 15%);
+      color: darken($headings-color,$crm-darken-percentage);
     }
   }
 

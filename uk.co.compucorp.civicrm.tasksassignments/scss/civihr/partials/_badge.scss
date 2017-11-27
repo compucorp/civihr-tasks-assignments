@@ -7,7 +7,7 @@
   }
 
   &.badge-secondary {
-    background-color: $brand-secondary !important;
+    background-color: $gray-dark !important;
   }
 
   &.badge-success {
@@ -23,7 +23,7 @@
   }
 
   &.badge-dark {
-    background-color: $brand-dark !important;
+    background-color: $gray-dark !important;
   }
 
   &.badge-danger {
@@ -31,6 +31,6 @@
   }
 
   &.badge-danger-light {
-    background-color: $brand-danger-light !important;
+    background-color: $crm-danger-light !important;
   }
 }

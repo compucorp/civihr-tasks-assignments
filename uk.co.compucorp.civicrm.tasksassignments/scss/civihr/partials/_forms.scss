@@ -62,20 +62,20 @@ input[type="checkbox"],
 }
 
 .text-required {
-  color: $brand-danger-light;
+  color: $brand-danger;
 }
 
 .form-group.required {
   .control-label:after {
     content: '*';
-    color: $brand-danger-light;
+    color: $brand-danger;
   }
 }
 
 select.required-field-indicator[required] + .crm_custom-select__arrow {
   &::after {
     content: '*';
-    color: $brand-danger-light;
+    color: $brand-danger;
     position: absolute;
     right: -10px;
     top: 0;
@@ -89,7 +89,7 @@ select.required-field-indicator[required] + .crm_custom-select__arrow::after {
 .required-field-indicator {
   &:not(.ui-select-container)::after {
     content: '*';
-    color: $brand-danger-light;
+    color: $brand-danger;
     padding-left: 5px;
     display: inline-block;
   }
@@ -97,7 +97,7 @@ select.required-field-indicator[required] + .crm_custom-select__arrow::after {
   &.ui-select-container {
     .ui-select-placeholder::after {
       content: '*';
-      color: $brand-danger-light;
+      color: $brand-danger;
       font-size: 13px;
       position: absolute;
       top: 2px;
@@ -106,7 +106,7 @@ select.required-field-indicator[required] + .crm_custom-select__arrow::after {
 
     .select2-chosen.empty::after {
       content: '*';
-      color: $brand-danger-light;
+      color: $brand-danger;
       font-size: 13px;
       position: absolute;
       top: -1px;
@@ -186,10 +186,6 @@ select[required] + .crm_custom-select__arrow::after {
 }
 
 .form-control {
-  &:not(.ui-select-container) {
-    border-color: #727E8A !important;
-  }
-
   ~ .input-group-addon {
     color: $gray;
   }

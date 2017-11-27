@@ -19,7 +19,7 @@
       </a>
     </li>
   </ul>
-  <hr>
+
   <!-- vm.isDocumentSection checks if the sidebar-dic=rective is loaded in documents list page -->
   <div ng-class="{'nav date-range__selected': list.isDocumentSection}">
     <a href ng-click="list.isCollapsed.filterDates = !list.isCollapsed.filterDates" class="btn btn-block {{prefix}}select-dates">
@@ -56,10 +56,11 @@
       <div ng-transclude></div>
     </div>
   </div>
-  </br>
+
   <button uib-collapse="list.isCollapsed.filterDates"
-    class="btn btn-default btn-primary btn-block"
+    class="btn btn-primary btn-block"
     ng-click="list.applySidebarFilters();">
     Apply Filter
   </button>
+  <hr>
 </div>

@@ -1,5 +1,4 @@
 .#{$prefix}top-bar {
-  @include box-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.50));
   background-color: $breadcrumb-bg;
   position: relative;
   z-index: 99;

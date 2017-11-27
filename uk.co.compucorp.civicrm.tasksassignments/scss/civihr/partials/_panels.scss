@@ -56,19 +56,11 @@
 
   > .panel-heading {
     border-bottom: 0 none;
-    padding: 12px 20px 13px;
+    padding: 5px 20px 8px;
   }
 
   > .panel-footer {
     border-top: 1px solid $body-bg;
     padding: 16px 20px;
-  }
-}
-
-.panel-secondary {
-  > .panel-body,
-  .list-group,
-  .list-group-item {
-    background-color: $brand-secondary;
   }
 }

@@ -1,13 +1,5 @@
 // This is all temporary until the Bootstrap consolidation happens!
 
-// Override variables so they match the values of the old theme
-$brand-danger:           #E6807F;
-$brand-primary:          #42AFCB;
-$dropdown-border:        #727E8A;
-$gray-dark:              #727E8A;
-$gray-lighter:           #F3F6F7;
-$text-color-light-black: #586277;
-$input-border-radius:    0;
 
 // Include the original ui-select css + the civihr-ui-select dropdown theme
 @import "../../../../../org.civicrm.shoreditch/scss/bootstrap/vendor/ui-select/ui-select";
@@ -42,8 +34,13 @@ $input-border-radius:    0;
   }
 
   .select2-chosen {
+
+    &.empty {
+      color: $crm-gray-matte !important;
+    }
+
     span {
-      color: $text-color-light-black;
+      color: $gray-dark;
     }
   }
 

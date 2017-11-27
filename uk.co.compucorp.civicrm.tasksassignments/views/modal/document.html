@@ -268,17 +268,17 @@
 </div>
 </div>
 <!-- Assignment -->
-<div class="col-xs-12 col-sm-12" ng-show="(!documentModal.showFieldAssignment || !documentModal.assignments.length) && !documentModal.document.case_id">
+<div class="col-xs-12 col-sm-12" ng-show="(!documentModal.showAssignmentField || !documentModal.assignments.length) && !documentModal.document.case_id">
   <div class="row">
     <span class="form-control-static">
-      <a href class="btn" ng-click="documentModal.showFieldAssignment = true;" ng-class="{ disabled: !documentModal.assignments.length }">
+      <a href class="btn" ng-click="documentModal.showAssignmentField = true;" ng-class="{ disabled: !documentModal.assignments.length }">
         Add to Workflow
       </a>
     </span>
   </div>
 </div>
 <div class="row">
-  <div class="col-xs-12 col-sm-12" ng-show="(documentModal.document.case_id || documentModal.showFieldAssignment) && documentModal.assignments.length">
+  <div class="col-xs-12 col-sm-12" ng-show="(documentModal.document.case_id || documentModal.showAssignmentField) && documentModal.assignments.length">
     <div class="form-group">
       <label class="col-xs-4 text-nowrap control-label"> Link to Workflow: </label>
       <div class="col-xs-8 no-left-margin">
@@ -307,10 +307,10 @@
 </div>
 </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" ng-click="documentModal.cancel()">
+      <button type="button" class="btn btn-secondary-outline" ng-click="documentModal.cancel()">
         {{ (documentModal.mode === 'view') ? 'Close' : 'Cancel' }}
       </button>
-      <button ng-if="documentModal.mode !== 'view'" type="submit" class="btn btn-default btn-primary">
+      <button ng-if="documentModal.mode !== 'view'" type="submit" class="btn btn-primary">
         {{ (documentModal.isRole('staff') && documentModal.mode === 'edit') ? 'Save and send for approval' : 'Save' }}
       </button>
     </div>

@@ -3,10 +3,10 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-xs-12 col-sm-6 col-lg-8">
-          <button class="btn btn-default btn-primary" ng-click="modalTask()">
+          <button class="btn btn-primary" ng-click="modalTask()">
             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;Add Task
           </button> &nbsp;
-          <button class="btn btn-default btn-primary" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
+          <button class="btn btn-primary" ng-click="modalAssignment()" ng-if="settings.extEnabled.assignments">
             <span class="fa fa-plus-circle" aria-hidden="true"></span> &nbsp;
             {{settings.copy.button.assignmentAdd || 'Add Workflow'}}
           </button>

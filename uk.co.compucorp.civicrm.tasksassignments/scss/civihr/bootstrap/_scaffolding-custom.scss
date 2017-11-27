@@ -58,6 +58,10 @@
     &:focus {
       @include tab-focus;
     }
+
+    &.disabled {
+      color: $crm-gray-matte !important;
+    }
   }
 
 

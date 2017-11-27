@@ -1,36 +1,27 @@
-// Variables
-$light-gray:        #F4F7F8;
-$white:             #FFFFFF;
-
-$light-black-blue:  #586277;
-$light-blue:        #41AFCB;
-
-// Tabs
 .nav-tabs {
+  background-color: $gray-lighter;
+
   li,
   a {
-    background-color: $light-gray;
+    color: $gray-darker;
   }
 
   li a {
     &:hover,
     &:focus {
-      background-color: $light-gray;
-      border-color: $light-gray;
-      color: $light-black-blue;
-      margin-right: 0;
+      color: darken($gray-darker, $crm-darken-percentage);
     }
   }
 
   li.active a {
-    background-color: $white;
+    background-color: $crm-white;
     border-bottom-color: transparent;
-    color: $light-blue;
+    color: $brand-primary;
 
     &:hover,
     &:focus {
-      background-color: $white;
-      color: $light-blue;
+      background-color: $crm-white;
+      color: darken($brand-primary, $crm-darken-percentage);
       cursor: default;
     }
   }

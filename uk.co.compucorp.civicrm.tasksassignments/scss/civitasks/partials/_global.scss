@@ -2,7 +2,7 @@
   min-height: 184px;
 
   &.#{$prefix}page-loading {
-    background-color: #fff;
+    background-color: $crm-white;
     z-index: 0;
     min-height: 640px;
 
