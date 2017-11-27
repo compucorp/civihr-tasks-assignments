@@ -4,7 +4,7 @@
       <span aria-hidden="true">&times;</span>
       <span class="sr-only">Close</span>
     </button>
-    <h4 class="modal-title">New Assignment</h4>
+    <h4 class="modal-title">New Workflow</h4>
   </div>
   <div class="modal-body">
     <alert type="{{alert.type}}" close="alert.show = false;" ng-show="alert.show">{{alert.msg}}</alert>
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="row separately">
-          <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Assignment Type:</label>
+          <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Workflow Type:</label>
           <div class="col-xs-12 col-sm-6">
             <div class="crm_custom-select crm_custom-select--full">
               <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control no-select2" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">

@@ -109,7 +109,7 @@
           </ui-select>
         </div>
       </div>
-      <!-- Status & Assignment-->
+      <!-- Status & Workflow-->
       <div class="row">
         <!-- Status -->
         <div class="col-xs-12 col-sm-5" ng-show="!task.status_id && !showFieldStatus">
@@ -127,11 +127,11 @@
             <span class="crm_custom-select__arrow"></span>
           </div>
         </div>
-        <!-- Assignment -->
+        <!-- Workflow -->
         <div class="col-xs-12 col-sm-7" ng-show="!task.case_id && !showFieldAssignment">
           <span class="form-control-static">
             <a href class="btn btn-indent" ng-click="showFieldAssignment = true;" ng-class="{ disabled: !assignments.length }">
-              Add to assignment
+              Add to workflow
             </a>
           </span>
         </div>
@@ -142,7 +142,7 @@
             ng-model="task.case_id"
             on-select="cacheAssignment($item);"
             search-enabled="false">
-            <ui-select-match prevent-animations class="ui-select-match" placeholder="Assignment">
+            <ui-select-match prevent-animations class="ui-select-match" placeholder="Workflow">
               {{$select.selected.label}}
             </ui-select-match>
             <ui-select-choices

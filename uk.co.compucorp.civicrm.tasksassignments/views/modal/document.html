@@ -91,7 +91,7 @@
           <tbody>
             <tr ng-repeat="file in documentModal.files">
               <td>
-                <a href="javascript:void(0)" ng-click="documentModal.viewFile(file)">
+                <a target="_blank" href="{{ documentModal.addQueryParam(file.url, 'download', 0) }}">
                   {{ (file.name | limitTo: 25) + (file.name.length > 25 ? '...' : '') }}
                 </a>
               </td>
@@ -272,7 +272,7 @@
   <div class="row">
     <span class="form-control-static">
       <a href class="btn" ng-click="documentModal.showAssignmentField = true;" ng-class="{ disabled: !documentModal.assignments.length }">
-        Add to Assignment
+        Add to Workflow
       </a>
     </span>
   </div>
@@ -280,7 +280,7 @@
 <div class="row">
   <div class="col-xs-12 col-sm-12" ng-show="(documentModal.document.case_id || documentModal.showAssignmentField) && documentModal.assignments.length">
     <div class="form-group">
-      <label class="col-xs-4 text-nowrap control-label"> Link to Assignment: </label>
+      <label class="col-xs-4 text-nowrap control-label"> Link to Workflow: </label>
       <div class="col-xs-8 no-left-margin">
         <ui-select prevent-animations theme="civihr-ui-select" ng-model="documentModal.document.case_id" on-select="documentModal.cacheAssignment($item);">
           <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Enter search term...">{{$select.selected.label}}
