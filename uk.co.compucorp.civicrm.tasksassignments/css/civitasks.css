@@ -11857,18 +11857,12 @@ fieldset[disabled]
   position: relative;
 }
 
-.ct-spinner-cover {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1039;
-}
-
+.ct-spinner-cover,
 .ct-spinner {
+  left: 50%;
   position: absolute;
   top: 50%;
-  left: 50%;
-  z-index: 1040;
+  z-index: 999;
 }
 #civitasks .ct-table-documents thead th, #cividocuments .ct-table-documents thead th {
   cursor: pointer;

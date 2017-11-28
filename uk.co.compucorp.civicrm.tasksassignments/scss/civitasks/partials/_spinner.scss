@@ -3,17 +3,11 @@
     position: relative;
   }
 
-  .#{$prefix}spinner-cover {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1039;
-  }
-
+  .#{$prefix}spinner-cover,
   .#{$prefix}spinner {
+    left: 50%;
     position: absolute;
     top: 50%;
-    left: 50%;
-    z-index: 1040;
+    z-index: 999;
   }
 }
