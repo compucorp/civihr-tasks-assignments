@@ -1,6 +1,8 @@
 /* eslint-env amd */
 
-define(function () {
+define([
+  'common/lodash',
+], function (_) {
   'use strict';
 
   filterByDateType.__name = 'filterByDateType';
