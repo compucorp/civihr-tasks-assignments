@@ -9,34 +9,29 @@ define(function () {
   function filterByDateType ($filter, $rootScope, $log) {
     $log.debug('Filter: filterBy.dateType');
 
-    return function (inputArr, dateTypeArr) {
-      var filteredArr = [];
-      var i = 0;
-      var ii;
-      var inputArrLen = inputArr.length;
-      var dateTypeArrLen = dateTypeArr.length;
-      var dateContactList;
-      var dateContactListLen;
+    return function(dateContactList, dateTypeList) {
+      var filteredDateContactList = [];
 
-      if (!inputArrLen || !dateTypeArrLen) {
-        return inputArr;
+      if (!dateContactList.length || !dateTypeList.length) {
+        return dateContactList;
       }
 
-      for (i; i < inputArrLen; i++) {
-        ii = 0;
-        dateContactList = inputArr[i].dateContactList;
-        dateContactListLen = dateContactList.length;
+      _.forEach(dateContactList, function (dateContact) {
+        var dateContactList = dateContact.dateContactList;
 
-        for (ii; ii < dateContactListLen; ii++) {
-          if (dateTypeArr.indexOf(dateContactList[ii].type) !== -1) {
-            filteredArr.push(inputArr[i]);
-            break;
+        dateContactList && _.forEach(dateContactList, function (singleDateContact) {
+          if (dateTypeList.indexOf(singleDateContact.type) !== -1) {
+            return filteredDateContactList.push(dateContact);
           }
-        }
-      }
+        });
 
-      return filteredArr;
-    };
+        if (dateTypeList.indexOf(dateContact.type) !== -1) {
+          return filteredDateContactList.push(dateContact);
+        }
+      });
+
+      return filteredDateContactList;
+    }
   }
 
   return filterByDateType;
