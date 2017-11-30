@@ -84,6 +84,7 @@
           </div>
         </div>
       </div>
+      <br/>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
         <li
           ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
@@ -117,6 +118,6 @@
     <time>{{dateObj.date | date: 'EEE d MMMM'}} <span>{{dateObj.date | date: 'yyyy'}}</span></time>
   </header>
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="dateContact in dateObj.dateContactList"><strong class="{{dateContact.type}}" ng-bind="cache.dateType.obj[dateContact.type]"></strong> <a href ng-href="{{url.CONTACT+'?reset=1&cid='+dateContact.contact_id}}" ng-bind="dateContact.contact_name"></a></li>
+    <li class="list-group-item" ng-repeat="dateContact in dateObj.dateContactList | filterByDateType:filterParams.dateType"><strong class="{{dateContact.type}}" ng-bind="cache.dateType.obj[dateContact.type]"></strong> <a href ng-href="{{url.CONTACT+'?reset=1&cid='+dateContact.contact_id}}" ng-bind="dateContact.contact_name"></a></li>
   </ul>
 </script>
