@@ -11,24 +11,35 @@ define([
   function filterByDateType ($filter, $rootScope, $log) {
     $log.debug('Filter: filterBy.dateType');
 
-    return function(dateContactList, dateTypeList) {
+    /**
+     * Filters the array of key dates in both cases
+     * case 1: when the input array contains key dates in dateContactList propery
+     * case 2: when the input array is itself is a list of key dates list.
+     *
+     * @param  {Array} dateContactList List of contact key dates
+     * @param  {Array} dateTypeList list of date types
+     * @return {Array}
+     */
+    return function (dateContactList, dateTypeList) {
       var filteredDateContactList = [];
 
       if (!dateContactList.length || !dateTypeList.length) {
         return dateContactList;
       }
 
-      _.forEach(dateContactList, function (dateContact) {
-        var dateContactList = dateContact.dateContactList;
+      _.forEach(dateContactList, function (contactKeyDate) {
+        var nestedKeyDates = contactKeyDate.dateContactList;
 
-        dateContactList && _.forEach(dateContactList, function (singleDateContact) {
-          if (dateTypeList.indexOf(singleDateContact.type) !== -1) {
-            return filteredDateContactList.push(dateContact);
+        if (nestedKeyDates) {
+          _.forEach(nestedKeyDates, function (singleKeyDate) {
+            if (dateTypeList.indexOf(singleKeyDate.type) !== -1) {
+              return filteredDateContactList.push(contactKeyDate);
+            }
+          });
+        } else {
+          if (dateTypeList.indexOf(contactKeyDate.type) !== -1) {
+            return filteredDateContactList.push(contactKeyDate);
           }
-        });
-
-        if (dateTypeList.indexOf(dateContact.type) !== -1) {
-          return filteredDateContactList.push(dateContact);
         }
       });
 

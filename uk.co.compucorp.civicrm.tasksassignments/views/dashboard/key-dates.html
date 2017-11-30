@@ -84,7 +84,6 @@
           </div>
         </div>
       </div>
-      <br/>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
         <li
           ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
