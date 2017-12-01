@@ -2,7 +2,7 @@
 
 define([
   'common/angular',
-  'mocks/fabricators/task',
+  'mocks/fabricators/task.fabricator',
   'common/angularMocks',
   'tasks-assignments/app'
 ], function (angular, taskFabricator) {

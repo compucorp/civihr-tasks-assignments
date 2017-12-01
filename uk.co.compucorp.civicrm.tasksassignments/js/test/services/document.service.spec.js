@@ -2,10 +2,10 @@
 /* eslint-env amd, jasmine */
 
 define([
-  'mocks/fabricators/document',
-  'mocks/fabricators/contact',
-  'mocks/data/assignment',
-  'mocks/data/document',
+  'mocks/fabricators/document.fabricator',
+  'mocks/fabricators/contact.fabricator',
+  'mocks/data/assignment.data',
+  'mocks/data/document.data',
   'common/angularMocks',
   'tasks-assignments/app'
 ], function (documentMock, contactMock, assignmentMock, documentFabricator) {

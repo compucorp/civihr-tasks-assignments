@@ -1,7 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'mocks/fabricators/contact'
+  'mocks/fabricators/contact.fabricator'
 ], function (contactFabricator) {
   return {
     onGetContacts: {

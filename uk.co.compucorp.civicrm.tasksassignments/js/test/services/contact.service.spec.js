@@ -3,7 +3,7 @@
 
 define([
   'common/lodash',
-  'mocks/data/contact',
+  'mocks/data/contact.data',
   'tasks-assignments/app'
 ], function (_, contactMock) {
   'use strict';

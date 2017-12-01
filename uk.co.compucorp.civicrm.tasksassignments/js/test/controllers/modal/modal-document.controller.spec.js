@@ -5,10 +5,10 @@ define([
   'common/moment',
   'common/lodash',
   'common/angularMocks',
-  'mocks/fabricators/assignment',
-  'mocks/fabricators/contact',
-  'mocks/fabricators/document',
-  'mocks/fabricators/file',
+  'mocks/fabricators/assignment.fabricator',
+  'mocks/fabricators/contact.fabricator',
+  'mocks/fabricators/document.fabricator',
+  'mocks/fabricators/file.fabricator',
   'tasks-assignments/app'
 ], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator, fileFabricator) {
   'use strict';

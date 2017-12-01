@@ -1,7 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'mocks/fabricators/document'
+  'mocks/fabricators/document.fabricator'
 ], function (documentFabricator) {
   return {
     onAssign: {

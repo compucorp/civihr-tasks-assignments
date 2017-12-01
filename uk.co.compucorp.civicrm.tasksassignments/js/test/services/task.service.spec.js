@@ -1,6 +1,6 @@
 define([
-  'mocks/fabricators/task',
-  'mocks/data/task',
+  'mocks/fabricators/task.fabricator',
+  'mocks/data/task.data',
   'tasks-assignments/app'
 ], function (taskFabricator, taskMock) {
   'use strict';

@@ -1,5 +1,5 @@
 define([
-  'mocks/fabricators/task'
+  'mocks/fabricators/task.fabricator'
 ], function(taskFabricator) {
   return {
     onAssign: {

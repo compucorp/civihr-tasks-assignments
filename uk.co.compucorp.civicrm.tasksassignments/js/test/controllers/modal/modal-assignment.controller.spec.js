@@ -4,7 +4,7 @@
 define([
   'common/lodash',
   'common/angular',
-  'mocks/data/assignment',
+  'mocks/data/assignment.data',
   'common/angularMocks',
   'tasks-assignments/app'
 ], function (_, angular, Mock) {

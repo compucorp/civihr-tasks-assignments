@@ -2,7 +2,7 @@
 
 define([
   'common/lodash',
-  'mocks/data/app-settings',
+  'mocks/data/app-settings.data',
   'tasks-assignments/app'
 ], function (_, settingsMock) {
   'use strict';
