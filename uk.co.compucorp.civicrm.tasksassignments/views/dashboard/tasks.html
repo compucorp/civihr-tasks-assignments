@@ -195,14 +195,14 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <a href ng-click="list.isCollapsed = !list.isCollapsed" class="btn btn-collapse">
-        <span class="fa" ng-class="{fa: true, 'fa-chevron-down': !list.isCollapsed, 'fa-chevron-right': list.isCollapsed }" aria-hidden="true">
+      <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse">
+        <span class="fa" ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }" aria-hidden="true">
         </span>
         Show More
       </a>
     </div>
   </div>
-  <article class="row" uib-collapse="list.isCollapsed">
+  <article class="row" uib-collapse="isCollapsed">
     <div class="col-xs-12">
       <div class="{{prefix}}task-more">
         <div editable-ta="task.details" onbeforesave="list.updateTask(task, { details: ta.$data });">
