@@ -45,6 +45,7 @@ define([
       AssignmentService = _AssignmentService_;
       AppSettingsService = _AppSettingsService_;
       fileService = _fileService_;
+      window.alert = function () {}; // prevent alert from being logged in console
 
       $rootScope.cache.documentStatus.obj = {
         1: 'awaiting upload',
