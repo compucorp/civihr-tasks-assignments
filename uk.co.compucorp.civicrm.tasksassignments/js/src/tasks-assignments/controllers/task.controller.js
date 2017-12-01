@@ -1,7 +1,7 @@
 define([
   'common/moment',
   'tasks-assignments/controllers/controllers',
-  'tasks-assignments/services/task'
+  'tasks-assignments/services/task.service'
 ], function (moment, controllers) {
   'use strict';
 

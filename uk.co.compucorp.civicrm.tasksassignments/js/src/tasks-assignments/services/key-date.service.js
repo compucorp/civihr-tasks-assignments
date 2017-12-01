@@ -1,7 +1,7 @@
 +define([
     'common/moment',
     'tasks-assignments/services/services',
-    'tasks-assignments/services/utils'
+    'tasks-assignments/services/utils.service'
 ], function (moment, services) {
     'use strict';
 

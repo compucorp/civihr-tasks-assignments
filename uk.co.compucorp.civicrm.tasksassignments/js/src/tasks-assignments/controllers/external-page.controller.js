@@ -1,6 +1,6 @@
 define([
     'tasks-assignments/controllers/controllers',
-    'tasks-assignments/services/contact'
+    'tasks-assignments/services/contact.service'
 ], function (controllers) {
     'use strict';
 

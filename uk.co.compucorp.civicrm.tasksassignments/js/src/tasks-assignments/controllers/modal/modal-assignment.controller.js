@@ -6,10 +6,10 @@ define([
   'common/angular',
   'common/moment',
   'tasks-assignments/controllers/controllers',
-  'tasks-assignments/services/contact',
-  'tasks-assignments/services/document',
-  'tasks-assignments/services/task',
-  'tasks-assignments/services/assignment'
+  'tasks-assignments/services/contact.service',
+  'tasks-assignments/services/document.service',
+  'tasks-assignments/services/task.service',
+  'tasks-assignments/services/assignment.service'
 ], function (_, angular, moment, controllers) {
     'use strict';
 

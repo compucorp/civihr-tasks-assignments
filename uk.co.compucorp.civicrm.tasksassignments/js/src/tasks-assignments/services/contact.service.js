@@ -4,7 +4,7 @@ define([
   'common/angular',
   'common/lodash',
   'tasks-assignments/services/services',
-  'tasks-assignments/services/utils'
+  'tasks-assignments/services/utils.service'
 ], function (angular, _, services) {
   'use strict';
 

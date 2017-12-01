@@ -1,8 +1,8 @@
 define([
     'tasks-assignments/controllers/controllers',
-    'tasks-assignments/services/contact',
-    'tasks-assignments/services/dialog',
-    'tasks-assignments/services/task'
+    'tasks-assignments/services/contact.service',
+    'tasks-assignments/services/dialog.service',
+    'tasks-assignments/services/task.service'
 ], function (controllers) {
     'use strict';
 

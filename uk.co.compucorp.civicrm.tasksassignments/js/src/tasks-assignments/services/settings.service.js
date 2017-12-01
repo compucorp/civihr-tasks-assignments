@@ -2,7 +2,7 @@
 
 define([
   'tasks-assignments/services/services',
-  'tasks-assignments/services/utils'
+  'tasks-assignments/services/utils.service'
 ], function (services) {
   'use strict';
 

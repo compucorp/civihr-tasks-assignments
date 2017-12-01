@@ -7,11 +7,11 @@ define([
   'tasks-assignments/controllers/controllers',
   'common/services/file.service',
   'common/services/notification.service',
-  'tasks-assignments/services/contact',
-  'tasks-assignments/services/dialog',
-  'tasks-assignments/services/document',
-  'tasks-assignments/services/settings',
-  'tasks-assignments/services/file'
+  'tasks-assignments/services/contact.service',
+  'tasks-assignments/services/dialog.service',
+  'tasks-assignments/services/document.service',
+  'tasks-assignments/services/settings.service',
+  'tasks-assignments/services/file.service'
 ], function (angular, _, moment, controllers) {
   'use strict';
 
