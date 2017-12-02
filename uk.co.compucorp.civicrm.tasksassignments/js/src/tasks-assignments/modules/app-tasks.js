@@ -18,27 +18,27 @@ define([
         $urlRouterProvider.otherwise('/');
 
         $stateProvider
-          .resolveForAll({
-            format: ['DateFormat', function (DateFormat) {
-              return DateFormat.getDateFormat();
+        .resolveForAll({
+          format: ['DateFormat', function (DateFormat) {
+            return DateFormat.getDateFormat();
+          }]
+        })
+        .state('main', {
+          url: '/',
+          controller: 'TaskListController',
+          controllerAs: 'list',
+          templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
+          resolve: {
+            taskList: ['TaskService', function (TaskService) {
+              return TaskService.get({
+                'target_contact_id': config.CONTACT_ID,
+                'status_id': {
+                  'NOT IN': config.status.resolve.TASK
+                }
+              });
             }]
-          })
-          .state('main', {
-            url: '/',
-            controller: 'TaskListController',
-            controllerAs: 'list',
-            templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
-            resolve: {
-              taskList: ['TaskService', function (TaskService) {
-                return TaskService.get({
-                  'target_contact_id': config.CONTACT_ID,
-                  'status_id': {
-                    'NOT IN': config.status.resolve.TASK
-                  }
-                });
-              }]
-            }
-          });
+          }
+        });
 
         $resourceProvider.defaults.stripTrailingSlashes = false;
 
