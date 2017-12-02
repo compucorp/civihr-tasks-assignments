@@ -1,14 +1,16 @@
+/* eslint-env amd */
+
 define([
-    'tasks-assignments/filters/filters'
+  'tasks-assignments/filters/filters'
 ], function (filters) {
-    'use strict';
+  'use strict';
 
-    filters.filter('offset',['$log', function ($log) {
-        $log.debug('Filter: offset');
+  filters.filter('offset', ['$log', function ($log) {
+    $log.debug('Filter: offset');
 
-        return function(inputArr, start) {
-            start = start || 0;
-            return inputArr.slice(parseInt(start, 10));
-        }
-    }]);
+    return function (inputArr, start) {
+      start = start || 0;
+      return inputArr.slice(parseInt(start, 10));
+    };
+  }]);
 });

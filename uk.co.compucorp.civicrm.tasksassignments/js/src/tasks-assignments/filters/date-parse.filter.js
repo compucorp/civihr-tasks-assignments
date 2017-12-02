@@ -1,14 +1,16 @@
+/* eslint-env amd */
+
 define([
-    'common/moment',
-    'tasks-assignments/filters/filters'
+  'common/moment',
+  'tasks-assignments/filters/filters'
 ], function (moment, filters) {
-    'use strict';
+  'use strict';
 
-    filters.filter('dateParse',['$filter','$log', function ($filter, $log) {
-        $log.debug('Filter: dateParse');
+  filters.filter('dateParse', ['$filter', '$log', function ($filter, $log) {
+    $log.debug('Filter: dateParse');
 
-        return function(input) {
-            return moment(input).toDate();
-        }
-    }]);
+    return function (input) {
+      return moment(input).toDate();
+    };
+  }]);
 });

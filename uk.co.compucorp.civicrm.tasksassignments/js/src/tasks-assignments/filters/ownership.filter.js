@@ -1,3 +1,5 @@
+/* eslint-env amd */
+
 define([
   'tasks-assignments/filters/filters'
 ], function (filters) {
@@ -12,16 +14,16 @@ define([
       },
       delegated: function (item) {
         return item.source_contact_id === config.LOGGED_IN_CONTACT_ID &&
-          !~item.assignee_contact_id.indexOf(config.LOGGED_IN_CONTACT_ID);
+        !~item.assignee_contact_id.indexOf(config.LOGGED_IN_CONTACT_ID);
       }
-    }
+    };
 
     return function (list, ownershipType) {
       try {
         return list.filter(filters[ownershipType]);
-      } catch(e) {
+      } catch (e) {
         return list;
       }
-    }
+    };
   }]);
 });
