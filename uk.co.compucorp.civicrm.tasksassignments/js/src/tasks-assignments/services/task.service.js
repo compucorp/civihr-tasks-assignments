@@ -1,3 +1,4 @@
+
 /* eslint-env amd */
 
 define([
@@ -6,10 +7,10 @@ define([
   'common/moment',
   'tasks-assignments/services/services',
   'tasks-assignments/services/utils.service'
-], function(angular, _, moment, services) {
+], function (angular, _, moment, services) {
   'use strict';
 
-  services.factory('Task', ['$resource', '$httpParamSerializer', 'config', '$log', function($resource, $httpParamSerializer, config, $log) {
+  services.factory('Task', ['$resource', '$httpParamSerializer', 'config', '$log', function ($resource, $httpParamSerializer, config, $log) {
     $log.debug('Service: Task');
 
     return $resource(config.url.REST, {
@@ -19,7 +20,7 @@ define([
       debug: config.DEBUG
     }, {
       save: {
-        method: "POST",
+        method: 'POST',
         isArray: false,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -30,14 +31,13 @@ define([
   }]);
 
   services.factory('TaskService', ['Task', '$q', 'config', 'UtilsService', '$log',
-    function(Task, $q, config, UtilsService, $log) {
+    function (Task, $q, config, UtilsService, $log) {
       $log.debug('Service: TaskService');
 
       return {
-        assign: function(taskArr, assignmentId) {
-
+        assign: function (taskArr, assignmentId) {
           if ((!taskArr || !angular.isArray(taskArr)) ||
-            (!assignmentId || typeof + assignmentId !== 'number')) {
+            (!assignmentId || typeof +assignmentId !== 'number')) {
             return null;
           }
 
@@ -53,19 +53,18 @@ define([
               case_id: assignmentId
             } || {}
           }, function (data) {
-
             if (UtilsService.errorHandler(data, 'Unable to assign tasks', deferred)) {
-              return
+              return;
             }
 
             deferred.resolve(data.values);
-          }, function() {
+          }, function () {
             deferred.reject('Unable to assign tasks');
           });
 
           return deferred.promise;
         },
-        get: function(params) {
+        get: function (params) {
           var deferred = $q.defer();
 
           params = params && typeof params === 'object' ? params : {};
@@ -83,34 +82,34 @@ define([
 
           Task.get({
             json: params
-          }, function(data) {
+          }, function (data) {
             deferred.resolve(data.values);
-          }, function() {
+          }, function () {
             deferred.reject('Unable to fetch tasks list');
           });
 
           return deferred.promise;
         },
-        getOptions: function() {
+        getOptions: function () {
           return $q.all({
             taskType: this.getActivityTypes(),
             taskStatus: this.getTaskStatus()
           });
         },
-        getTaskStatus: function() {
-          var deferredTaskStatus = $q.defer(),
-            taskStatus = {
-              arr: [],
-              obj: {}
-            };
+        getTaskStatus: function () {
+          var deferredTaskStatus = $q.defer();
+          var taskStatus = {
+            arr: [],
+            obj: {}
+          };
 
           Task.get({
             action: 'getoptions',
             json: {
               'field': 'status_id'
             }
-          }, function(data) {
-            _.each(data.values, function(option) {
+          }, function (data) {
+            _.each(data.values, function (option) {
               taskStatus.arr.push({
                 key: option.key,
                 value: option.value
@@ -124,12 +123,12 @@ define([
 
           return deferredTaskStatus.promise;
         },
-        getActivityTypes: function() {
-          var deferredTaskType = $q.defer(),
-            taskType = {
-              arr: [],
-              obj: {}
-            };
+        getActivityTypes: function () {
+          var deferredTaskType = $q.defer();
+          var taskType = {
+            arr: [],
+            obj: {}
+          };
 
           Task.get({
             action: 'getoptions',
@@ -139,8 +138,8 @@ define([
                 'limit': 0
               }
             }
-          }, function(data) {
-            _.each(data.values, function(option) {
+          }, function (data) {
+            _.each(data.values, function (option) {
               taskType.arr.push({
                 key: option.key,
                 value: option.value
@@ -154,8 +153,7 @@ define([
 
           return deferredTaskType.promise;
         },
-        save: function(task) {
-
+        save: function (task) {
           if (!task || typeof task !== 'object') {
             return null;
           }
@@ -165,28 +163,26 @@ define([
             task.activity_date_time = moment(task.activity_date_time.getTime()).format('YYYY-MM-DD');
           }
 
-          var deferred = $q.defer(),
-            params = angular.extend({}, task),
-            val;
+          var deferred = $q.defer();
+          var params = angular.extend({}, task);
+          var val;
 
           Task.save({ action: 'create' }, {
             json: params || {}
           }, function (data) {
-
             if (UtilsService.errorHandler(data, 'Unable to save task', deferred)) {
-              return
+              return;
             }
 
             val = data.values;
-            deferred.resolve(val.length == 1 ? val[0] : null);
-          }, function() {
+            deferred.resolve(val.length === 1 ? val[0] : null);
+          }, function () {
             deferred.reject('Unable to save task');
           });
 
           return deferred.promise;
         },
-        saveMultiple: function(taskArr) {
-
+        saveMultiple: function (taskArr) {
           if (!taskArr || !angular.isArray(taskArr)) {
             return null;
           }
@@ -195,7 +191,7 @@ define([
             return taskArr;
           }
 
-          taskArr.forEach(function(task) {
+          taskArr.forEach(function (task) {
             if (task.activity_date_time instanceof Date) {
               // convert to format readable by backend
               task.activity_date_time = moment(task.activity_date_time.getTime()).format('YYYY-MM-DD');
@@ -209,21 +205,19 @@ define([
               task: taskArr
             } || {}
           }, function (data) {
-
             if (UtilsService.errorHandler(data, 'Unable to save tasks', deferred)) {
-              return
+              return;
             }
 
             deferred.resolve(data.values);
-          }, function() {
+          }, function () {
             deferred.reject('Unable to save tasks');
           });
 
           return deferred.promise;
         },
-        sendReminder: function(taskId, notes) {
-
-          if (!taskId || typeof + taskId !== 'number') {
+        sendReminder: function (taskId, notes) {
+          if (!taskId || typeof +taskId !== 'number') {
             return null;
           }
 
@@ -235,21 +229,19 @@ define([
               notes: notes
             }
           }, function (data) {
-
             if (UtilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
               return;
             }
 
             deferred.resolve(data);
-          }, function() {
+          }, function () {
             deferred.reject('Unable to send a reminder');
           });
 
           return deferred.promise;
         },
-        delete: function(taskId) {
-
-          if (!taskId || typeof + taskId !== 'number') {
+        delete: function (taskId) {
+          if (!taskId || typeof +taskId !== 'number') {
             return null;
           }
 
@@ -260,15 +252,15 @@ define([
             json: {
               id: taskId
             }
-          }, function(data) {
+          }, function (data) {
             deferred.resolve(data);
-          }, function() {
+          }, function () {
             deferred.reject('Could not delete task ID: ' + taskId);
           });
 
           return deferred.promise;
         }
-      }
+      };
     }
   ]);
 });

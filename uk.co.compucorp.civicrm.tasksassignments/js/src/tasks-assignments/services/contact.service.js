@@ -1,3 +1,4 @@
+
 /* eslint-env amd */
 
 define([
@@ -8,7 +9,7 @@ define([
 ], function (angular, _, services) {
   'use strict';
 
-  services.factory('Contact', ['$resource', '$httpParamSerializer', 'config', '$log', function($resource, $httpParamSerializer, config, $log) {
+  services.factory('Contact', ['$resource', '$httpParamSerializer', 'config', '$log', function ($resource, $httpParamSerializer, config, $log) {
     $log.debug('Service: Contact');
 
     return $resource(config.url.REST, {
@@ -17,7 +18,6 @@ define([
       debug: config.DEBUG
     });
   }]);
-
 
   services.factory('ContactService', ['Contact', '$resource', 'config', '$q', '$filter', '$rootScope', 'UtilsService', '$log',
     function (Contact, $resource, config, $q, $filter, $rootScope, UtilsService, $log) {

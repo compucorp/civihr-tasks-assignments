@@ -1,3 +1,4 @@
+
 /* eslint-env amd */
 
 define([
