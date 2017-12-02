@@ -1,3 +1,5 @@
+/* eslint-env amd */
+
 define([
   'tasks-assignments/directives/directives'
 ], function (directives) {
