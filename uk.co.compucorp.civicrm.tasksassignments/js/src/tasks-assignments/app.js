@@ -1,4 +1,3 @@
-/* global CustomEvent */
 /* eslint-env amd */
 
 define([
@@ -54,7 +53,7 @@ define([
     angular.bootstrap(document.getElementById(e.detail.module), ['civitasks.' + e.detail.app]);
   });
 
-  document.dispatchEvent(typeof window.CustomEvent === 'function' ? new CustomEvent('taReady') : (function () {
+  document.dispatchEvent(typeof window.CustomEvent === 'function' ? new window.CustomEvent('taReady') : (function () {
     var e = document.createEvent('Event');
 
     e.initEvent('taReady', true, true);
