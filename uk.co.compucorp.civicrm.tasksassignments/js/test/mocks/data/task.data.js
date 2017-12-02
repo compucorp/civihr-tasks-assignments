@@ -1,6 +1,8 @@
+/* eslint-env amd */
+
 define([
   'mocks/fabricators/task.fabricator'
-], function(taskFabricator) {
+], function (taskFabricator) {
   return {
     onAssign: {
       is_error: 0,
@@ -20,17 +22,17 @@ define([
     },
     onGetOptions: {
       activityTypes: {
-        "is_error": 0,
-        "version": 3,
-        "count": 5,
-        "values": taskFabricator.activityTypes()
+        'is_error': 0,
+        'version': 3,
+        'count': 5,
+        'values': taskFabricator.activityTypes()
       },
       taskStatus: {
-        "is_error": 0,
-        "version": 3,
-        "count": 5,
-        "values": taskFabricator.taskStatus()
+        'is_error': 0,
+        'version': 3,
+        'count': 5,
+        'values': taskFabricator.taskStatus()
       }
     }
-  }
+  };
 });

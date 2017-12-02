@@ -1,19 +1,19 @@
+/* eslint-env amd, jasmine */
+
 define([
-    'common/angularMocks',
-    'tasks-assignments/app'
+  'common/angularMocks',
+  'tasks-assignments/app'
 ], function () {
-    'use strict';
+  'use strict';
 
-    describe('AssignmentsCtrl', function () {
-        var ctrl;
+  describe('AssignmentsCtrl', function () {
+    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(inject(function ($controller, $rootScope) {
+      $controller('AssignmentsCtrl', { $scope: $rootScope.$new() });
+    }));
 
-        beforeEach(module('civitasks.appDashboard'));
-        beforeEach(inject(function ($controller, $rootScope) {
-            ctrl = $controller('AssignmentsCtrl', { $scope: $rootScope.$new() });
-        }));
-
-        it('is a simple test', function () {
-            expect(true).toBe(true);
-        });
+    it('is a simple test', function () {
+      expect(true).toBe(true);
     });
+  });
 });

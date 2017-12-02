@@ -1,4 +1,3 @@
-/* globals inject */
 /* eslint-env amd, jasmine */
 
 define([
@@ -28,7 +27,7 @@ define([
 
       jsonData = {
         json: {
-          id: { IN: [1,2,3,5,6,7] },
+          id: { IN: [1, 2, 3, 5, 6, 7] },
           return: 'display_name, sort_name, id, contact_id, contact_type, email'
         }
       };
@@ -39,7 +38,7 @@ define([
       $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond(contactMock.onGetContacts);
       spyOn(Contact, 'get').and.callThrough();
 
-      promise = ContactService.get({ IN: [1,2,3,5,6,7,2,3,6] });
+      promise = ContactService.get({ IN: [1, 2, 3, 5, 6, 7, 2, 3, 6] });
     });
 
     afterEach(function () {

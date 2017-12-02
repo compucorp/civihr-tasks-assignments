@@ -1,3 +1,5 @@
+/* eslint-env amd, jasmine */
+
 define([
   'mocks/fabricators/task.fabricator',
   'mocks/data/task.data',
@@ -5,7 +7,6 @@ define([
 ], function (taskFabricator, taskMock) {
   'use strict';
 
-  var taskMock = taskMock;
   var fakeTask = taskFabricator.single();
   var fakeTaskList = taskFabricator.list();
   var fakeActivityTypes = taskFabricator.activityTypes();
@@ -19,10 +20,11 @@ define([
     $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
     $httpBackend.whenGET(/views.*/).respond({});
-  }
+  };
 
   describe('Task', function () {
-    var Task, $httpBackend, $httpParamSerializer, requestBody, request = {};
+    var Task, $httpBackend, $httpParamSerializer, requestBody;
+    var request = {};
 
     beforeEach(module('civitasks.appDashboard'));
 
@@ -92,7 +94,7 @@ define([
       $httpBackend.flush();
     });
 
-    describe("save()", function () {
+    describe('save()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
         $httpBackend.whenPOST(/action=create&debug=true&entity=Task/).respond(taskMock.onSave);
@@ -102,10 +104,10 @@ define([
         TaskService.save(fakeTask).then(function (data) {
           expect(data).toEqual(fakeTask);
         });
-      })
+      });
     });
 
-    describe("assign()", function () {
+    describe('assign()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
         $httpBackend.whenPOST(/action=copy_to_assignment&debug=true&entity=Task/).respond(taskMock.onAssign);
@@ -118,7 +120,7 @@ define([
       });
     });
 
-    describe("saveMultiple()", function () {
+    describe('saveMultiple()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
         $httpBackend.whenPOST(/action=create_multiple&debug=true&entity=Task/).respond(taskMock.onSaveMultiple);
@@ -131,7 +133,7 @@ define([
       });
     });
 
-    describe("sendReminder()", function () {
+    describe('sendReminder()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
         $httpBackend.whenPOST(/action=sendreminder&debug=true&entity=Task/).respond(taskMock.onSendReminder);
@@ -144,7 +146,7 @@ define([
       });
     });
 
-    describe("getActivityTypes()", function () {
+    describe('getActivityTypes()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond(taskMock.onGetOptions.activityTypes);
         promise = $q.all({
@@ -152,7 +154,7 @@ define([
         });
       });
 
-      it("returns promise with array of list of activity types", function () {
+      it('returns promise with array of list of activity types', function () {
         promise.then(function (options) {
           expect(options.taskType.obj).toBeDefined();
           expect(options.taskType.arr).toEqual(fakeActivityTypes);
@@ -160,7 +162,7 @@ define([
       });
     });
 
-    describe("getTaskStatus()", function () {
+    describe('getTaskStatus()', function () {
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond(taskMock.onGetOptions.taskStatus);
         promise = $q.all({
@@ -168,7 +170,7 @@ define([
         });
       });
 
-      it("returns promise with array of list of task status", function () {
+      it('returns promise with array of list of task status', function () {
         promise.then(function (options) {
           expect(options.taskStatus.obj).toBeDefined();
           expect(options.taskStatus.arr).toEqual(fakeTaskStatus);
@@ -176,14 +178,14 @@ define([
       });
     });
 
-    describe("getOptions()", function () {
-      beforeEach(function() {
+    describe('getOptions()', function () {
+      beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task&json=%7B%22field%22:%22activity_type_id/).respond(taskMock.onGetOptions.activityTypes);
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task&json=%7B%22field%22:%22status_id/).respond(taskMock.onGetOptions.taskStatus);
         promise = $q.resolve(TaskService.getOptions());
       });
 
-      it("returns promise with array of list of activity types and task status", function () {
+      it('returns promise with array of list of activity types and task status', function () {
         promise.then(function (options) {
           expect(options.taskType.arr).toEqual(fakeActivityTypes);
           expect(options.taskStatus.arr).toEqual(fakeTaskStatus);

@@ -1,4 +1,3 @@
-/* eslint angular/di: 0, jasmine/no-spec-dupes:0 */
 /* eslint-env amd, jasmine */
 
 define([
