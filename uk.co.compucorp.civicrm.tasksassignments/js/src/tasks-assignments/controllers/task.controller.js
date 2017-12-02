@@ -1,3 +1,5 @@
+/* eslint-env amd */
+
 define([
   'common/moment',
   'tasks-assignments/controllers/controllers',
@@ -11,7 +13,7 @@ define([
 
       $scope.isCollapsed = true;
       $scope.picker = { opened: false };
-      $scope.task.activity_date_time = !!$scope.task.activity_date_time ? moment($scope.task.activity_date_time).toDate() : null;
+      $scope.task.activity_date_time = $scope.task.activity_date_time ? moment($scope.task.activity_date_time).toDate() : null;
 
       $scope.dpOpen = function ($event) {
         $scope.picker.opened = true;
