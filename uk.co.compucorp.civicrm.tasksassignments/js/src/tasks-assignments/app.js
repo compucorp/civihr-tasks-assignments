@@ -10,7 +10,7 @@ define([
   'tasks-assignments/modules/app-tasks',
   'tasks-assignments/modules/app-settings',
   'tasks-assignments/modules/controllers',
-  'tasks-assignments/directives/directives',
+  'tasks-assignments/modules/directives',
   'tasks-assignments/filters/filters',
   'tasks-assignments/filters/assignment-type.filter',
   'tasks-assignments/filters/contact-id.filter',
