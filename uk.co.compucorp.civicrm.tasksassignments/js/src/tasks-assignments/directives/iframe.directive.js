@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/directives/directives'
-], function (directives) {
+define(function () {
   'use strict';
 
-  directives.directive('taIframe', ['$rootScope', '$log', function ($rootScope, $log) {
+  taIframe.__name = 'taIframe';
+  taIframe.$inject = ['$rootScope', '$log'];
+
+  function taIframe ($rootScope, $log) {
     $log.debug('Directive: taIframe');
 
     return {
@@ -40,5 +41,7 @@ define([
         });
       }
     };
-  }]);
+  }
+
+  return taIframe;
 });

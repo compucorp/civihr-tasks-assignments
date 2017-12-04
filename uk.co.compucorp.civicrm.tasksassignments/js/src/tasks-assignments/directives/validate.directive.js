@@ -1,12 +1,14 @@
 /* eslint-env amd */
 
 define([
-  'common/angular',
-  'tasks-assignments/directives/directives'
-], function (angular, directives) {
+  'common/angular'
+], function (angular) {
   'use strict';
 
-  directives.directive('taValidate', ['$log', function ($log) {
+  taValidate.__name = 'taValidate';
+  taValidate.$inject = ['$log'];
+
+  function taValidate ($log) {
     $log.debug('Directive: taValidate');
 
     return {
@@ -69,5 +71,7 @@ define([
         });
       }
     };
-  }]);
+  }
+
+  return taValidate;
 });

@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/directives/directives'
-], function (directives) {
+define(function () {
   'use strict';
 
-  directives.directive('ctSpinner', ['$rootScope', '$log', function ($rootScope, $log) {
+  ctSpinner.__name = 'ctSpinner';
+  ctSpinner.$inject = ['$rootScope', '$log'];
+
+  function ctSpinner ($rootScope, $log) {
     $log.debug('Directive: ctSpinner');
 
     return {
@@ -80,5 +81,7 @@ define([
         });
       }
     };
-  }]);
+  }
+
+  return ctSpinner;
 });

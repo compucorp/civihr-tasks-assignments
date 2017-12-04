@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/directives/directives'
-], function (directives) {
+define(function () {
   'use strict';
 
-  directives.directive('sidebarFilters', ['$log', 'config', function ($log, config) {
+  sidebarFilters.__name = 'sidebarFilters';
+  sidebarFilters.$inject = ['$log', 'config'];
+
+  function sidebarFilters ($log, config) {
     $log.debug('Directive: sidebarFilters');
 
     return {
@@ -14,5 +15,7 @@ define([
       transclude: true,
       templateUrl: config.path.TPL + 'directives/sidebar-filters.html'
     };
-  }]);
+  }
+
+  return sidebarFilters;
 });

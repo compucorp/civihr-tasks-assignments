@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/directives/directives'
-], function (directives) {
+define(function () {
   'use strict';
 
-  directives.directive('ctCiviEvents', ['$rootScope', '$log', function ($rootScope, $log) {
+  ctCiviEvents.__name = 'ctCiviEvents';
+  ctCiviEvents.$inject = ['$rootScope', '$log'];
+
+  function ctCiviEvents ($rootScope, $log) {
     $log.debug('Directive: ctCiviEvents');
 
     return {
@@ -32,5 +33,7 @@ define([
         });
       }
     };
-  }]);
+  }
+
+  return ctCiviEvents;
 });
