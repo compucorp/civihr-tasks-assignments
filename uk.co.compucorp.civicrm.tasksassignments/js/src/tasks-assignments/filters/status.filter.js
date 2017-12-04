@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/filters/filters'
-], function (filters) {
+define(function () {
   'use strict';
 
-  filters.filter('filterByStatus', ['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
+  filterByStatus.__name = 'filterByStatus';
+  filterByStatus.$inject = ['$filter', '$rootScope', '$log'];
+
+  function filterByStatus ($filter, $rootScope, $log) {
     $log.debug('Filter: filterByStatus');
 
     return function (inputArr, statusArr, equal) {
@@ -28,5 +29,7 @@ define([
 
       return filteredArr;
     };
-  }]);
+  }
+
+  return filterByStatus;
 });

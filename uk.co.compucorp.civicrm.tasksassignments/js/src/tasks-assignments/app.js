@@ -12,15 +12,6 @@ define([
   'tasks-assignments/modules/controllers',
   'tasks-assignments/modules/directives',
   'tasks-assignments/filters/filters',
-  'tasks-assignments/filters/assignment-type.filter',
-  'tasks-assignments/filters/contact-id.filter',
-  'tasks-assignments/filters/date.filter',
-  'tasks-assignments/filters/date-parse.filter',
-  'tasks-assignments/filters/date-type.filter',
-  'tasks-assignments/filters/date-field.filter',
-  'tasks-assignments/filters/offset.filter',
-  'tasks-assignments/filters/ownership.filter',
-  'tasks-assignments/filters/status.filter',
   'tasks-assignments/services/services'
 ], function (angular) {
   'use strict';

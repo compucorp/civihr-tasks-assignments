@@ -1,12 +1,14 @@
 /* eslint-env amd */
 
 define([
-  'common/moment',
-  'tasks-assignments/filters/filters'
-], function (moment, filters) {
+  'common/moment'
+], function (moment) {
   'use strict';
 
-  filters.filter('filterByDate', ['$filter', '$log', function ($filter, $log) {
+  filterByDate.__name = 'filterByDate';
+  filterByDate.$inject = ['$filter', '$log'];
+
+  function filterByDate ($filter, $log) {
     $log.debug('Filter: filterBy.date');
 
     return function (inputArr, type) {
@@ -33,5 +35,7 @@ define([
 
       return filteredArr;
     };
-  }]);
+  }
+
+  return filterByDate;
 });

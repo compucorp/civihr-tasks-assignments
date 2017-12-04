@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/filters/filters'
-], function (filters) {
+define(function () {
   'use strict';
 
-  filters.filter('filterByOwnership', ['$log', 'config', function ($log, config) {
+  filterByOwnership.__name = 'filterByOwnership';
+  filterByOwnership.$inject = ['$log', 'config'];
+
+  function filterByOwnership ($log, config) {
     $log.debug('Filter: filterByOwnership');
 
     var filters = {
@@ -25,5 +26,7 @@ define([
         return list;
       }
     };
-  }]);
+  }
+
+  return filterByOwnership;
 });

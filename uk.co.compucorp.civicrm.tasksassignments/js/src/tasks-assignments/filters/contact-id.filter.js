@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/filters/filters'
-], function (filters) {
+define(function () {
   'use strict';
 
-  filters.filter('filterByContactId', ['$filter', 'config', '$log', function ($filter, config, $log) {
+  filterByContactId.__name = 'filterByContactId';
+  filterByContactId.$inject = ['$filter', 'config', '$log'];
+
+  function filterByContactId ($filter, config, $log) {
     $log.debug('Filter: filterByContactId');
 
     return function (inputArr, contactId) {
@@ -26,5 +27,7 @@ define([
       }
       return filteredArr;
     };
-  }]);
+  }
+
+  return filterByContactId;
 });

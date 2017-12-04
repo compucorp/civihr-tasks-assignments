@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/filters/filters'
-], function (filters) {
+define(function () {
   'use strict';
 
-  filters.filter('filterByDateType', ['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
+  filterByDateType.__name = 'filterByDateType';
+  filterByDateType.$inject = ['$filter', '$rootScope', '$log'];
+
+  function filterByDateType ($filter, $rootScope, $log) {
     $log.debug('Filter: filterBy.dateType');
 
     return function (inputArr, dateTypeArr) {
@@ -36,5 +37,7 @@ define([
 
       return filteredArr;
     };
-  }]);
+  }
+
+  return filterByDateType;
 });

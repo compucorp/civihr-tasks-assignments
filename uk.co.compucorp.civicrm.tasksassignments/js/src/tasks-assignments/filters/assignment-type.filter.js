@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/filters/filters'
-], function (filters) {
+define(function () {
   'use strict';
 
-  filters.filter('filterByAssignmentType', ['$filter', '$rootScope', '$log', function ($filter, $rootScope, $log) {
+  filterByAssignmentType.__name = 'filterByAssignmentType';
+  filterByAssignmentType.$inject = ['$filter', '$rootScope', '$log'];
+
+  function filterByAssignmentType ($filter, $rootScope, $log) {
     $log.debug('Filter: filterByAssignmentType');
 
     return function (inputArr, assignmentTypeArr) {
@@ -30,5 +31,7 @@ define([
 
       return filteredArr;
     };
-  }]);
+  }
+
+  return filterByAssignmentType;
 });

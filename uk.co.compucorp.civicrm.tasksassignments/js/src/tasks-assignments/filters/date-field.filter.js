@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/filters/filters'
-], function (filters) {
+define(function () {
   'use strict';
 
-  filters.filter('filterByDateField', ['$filter', '$log', function ($filter, $log) {
+  filterByDateField.__name = 'filterByDateField';
+  filterByDateField.$inject = ['$filter', '$log'];
+
+  function filterByDateField ($filter, $log) {
     $log.debug('Filter: filterByDateField');
 
     return function (inputArr, type, field, dateRange) {
@@ -127,5 +128,7 @@ define([
         toDate === null
       );
     }
-  }]);
+  }
+
+  return filterByDateField;
 });
