@@ -9,7 +9,7 @@ define([
   'tasks-assignments/modules/app-documents.module',
   'tasks-assignments/modules/app-tasks',
   'tasks-assignments/modules/app-settings',
-  'tasks-assignments/controllers/controllers',
+  'tasks-assignments/modules/controllers',
   'tasks-assignments/directives/directives',
   'tasks-assignments/directives/civi-events.directive',
   'tasks-assignments/directives/iframe.directive',
