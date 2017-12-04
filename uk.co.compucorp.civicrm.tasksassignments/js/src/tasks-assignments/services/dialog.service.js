@@ -1,8 +1,6 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/services/services'
-], function (services) {
+define(function () {
   'use strict';
 
   $dialog.__name = '$dialog';
