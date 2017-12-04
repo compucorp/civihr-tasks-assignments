@@ -4,23 +4,23 @@ define([
   'common/angular',
   'common/lodash',
   'common/moment',
-  'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact.service',
   'tasks-assignments/services/dialog.service',
   'tasks-assignments/services/task.service',
   'tasks-assignments/services/assignment.service'
-], function (angular, _, moment, controllers) {
+], function (angular, _, moment) {
   'use strict';
 
-  controllers.controller('TaskListController', TaskListController);
-
-  TaskListController.$inject = ['$scope', '$uibModal', '$dialog', '$rootElement',
+  TaskListController.__name = 'TaskListController';
+  TaskListController.$inject = [
+    '$scope', '$uibModal', '$dialog', '$rootElement',
     '$rootScope', '$filter', '$timeout', '$state', '$log', 'taskList', 'config',
     'ContactService', 'AssignmentService', 'TaskService', 'settings', 'HR_settings'
   ];
 
-  function TaskListController ($scope, $modal, $dialog, $rootElement, $rootScope, $filter, $timeout, $state, $log, taskList,
-    config, ContactService, AssignmentService, TaskService, settings, HRSettings) {
+  function TaskListController ($scope, $modal, $dialog, $rootElement, $rootScope,
+    $filter, $timeout, $state, $log, taskList, config, ContactService, AssignmentService,
+    TaskService, settings, HRSettings) {
     $log.debug('Controller: TaskListController');
 
     var vm = this;
@@ -232,7 +232,7 @@ define([
      */
     function filterByDateField (type) {
       return $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
-    };
+    }
 
     function updateTask (task, updateObj) {
       vm.cacheContact(task.assignee_contact_id[0]);
@@ -401,4 +401,6 @@ define([
       });
     }
   }
+
+  return TaskListController;
 });

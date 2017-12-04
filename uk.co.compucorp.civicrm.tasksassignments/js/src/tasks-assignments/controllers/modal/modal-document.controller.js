@@ -4,7 +4,6 @@ define([
   'common/angular',
   'common/lodash',
   'common/moment',
-  'tasks-assignments/controllers/controllers',
   'common/services/file.service',
   'common/services/notification.service',
   'tasks-assignments/services/contact.service',
@@ -12,18 +11,17 @@ define([
   'tasks-assignments/services/document.service',
   'tasks-assignments/services/settings.service',
   'tasks-assignments/services/file.service'
-], function (angular, _, moment, controllers) {
+], function (angular, _, moment) {
   'use strict';
 
-  controllers.controller('ModalDocumentController', ModalDocumentCtrl);
-
-  ModalDocumentCtrl.$inject = ['$window', '$scope', '$uibModalInstance', '$rootScope',
+  ModalDocumentController.__name = 'ModalDocumentController';
+  ModalDocumentController.$inject = ['$window', '$scope', '$uibModalInstance', '$rootScope',
     '$rootElement', '$q', '$log', 'role', '$filter', '$uibModal', '$dialog', '$timeout',
     'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'AppSettingsService',
     'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService'
   ];
 
-  function ModalDocumentCtrl ($window, $scope, $modalInstance, $rootScope, $rootElement,
+  function ModalDocumentController ($window, $scope, $modalInstance, $rootScope, $rootElement,
     $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService, DocumentService,
     ContactService, FileService, data, AppSettingsService, files, config, HRSettings, modalMode, notificationService, fileService) {
     $log.debug('Controller: ModalDocumentController');
@@ -105,8 +103,8 @@ define([
      * @param {string} value
      * @returns {string}
      */
-    function addQueryParam(path, name, value) {
-      path += (path.split('?')[1] ? '&':'?') + name + '=' + value;
+    function addQueryParam (path, name, value) {
+      path += (path.split('?')[1] ? '&' : '?') + name + '=' + value;
 
       return path;
     }
@@ -602,4 +600,6 @@ define([
       $rootScope.$watch('cache.contact.arrSearch', collectContacts);
     }
   }
+
+  return ModalDocumentController;
 });

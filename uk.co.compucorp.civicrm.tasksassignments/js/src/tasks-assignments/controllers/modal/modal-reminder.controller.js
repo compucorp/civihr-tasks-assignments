@@ -2,49 +2,54 @@
 
 define([
   'common/angular',
-  'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact.service',
   'tasks-assignments/services/dialog.service',
   'tasks-assignments/services/document.service',
   'tasks-assignments/services/task.service'
-], function (angular, controllers) {
+], function (angular) {
   'use strict';
 
-  controllers.controller('ModalReminderCtrl', ['$scope', '$uibModalInstance', '$dialog', '$rootScope', '$q', '$log', '$filter',
-    'TaskService', 'DocumentService', 'data', 'type', 'config',
-    function ($scope, $modalInstance, $dialog, $rootScope, $q, $log, $filter, TaskService, DocumentService,
-     data, type, config) {
-      $log.debug('Controller: ModalReminderCtrl');
+  ModalReminderCtrl.__name = 'ModalReminderCtrl';
+  ModalReminderCtrl.$inject = [
+    '$scope', '$uibModalInstance', '$dialog', '$rootScope', '$q', '$log', '$filter',
+    'TaskService', 'DocumentService', 'data', 'type', 'config'
+  ];
 
-      $scope.data = {};
-      $scope.type = type;
+  function ModalReminderCtrl ($scope, $modalInstance, $dialog, $rootScope, $q,
+    $log, $filter, TaskService, DocumentService, data, type, config) {
+    $log.debug('Controller: ModalReminderCtrl');
 
-      angular.copy(data, $scope.data);
+    $scope.data = {};
+    $scope.type = type;
 
-      $scope.reminder = {};
-      $scope.data.assignee_contact_id = $scope.data.assignee_contact_id || [];
-      $scope.data.target_contact_id = $scope.data.target_contact_id || [config.CONTACT_ID];
-      $scope.contacts = $rootScope.cache.contact.arrSearch;
-      $scope.showCId = !config.CONTACT_ID;
+    angular.copy(data, $scope.data);
 
-      $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-      };
+    $scope.reminder = {};
+    $scope.data.assignee_contact_id = $scope.data.assignee_contact_id || [];
+    $scope.data.target_contact_id = $scope.data.target_contact_id || [config.CONTACT_ID];
+    $scope.contacts = $rootScope.cache.contact.arrSearch;
+    $scope.showCId = !config.CONTACT_ID;
 
-      $scope.confirm = function () {
-        $scope.$broadcast('ct-spinner-show');
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
 
-        (type === 'task' ? TaskService : DocumentService).sendReminder($scope.data.id, $scope.reminder.notes).then(function () {
-          CRM.alert('Message sent to: ' + $rootScope.cache.contact.obj[$scope.data.assignee_contact_id[0]].sort_name,
-            'Reminder sent', 'success');
-          $modalInstance.close();
-          $scope.$broadcast('ta-spinner-hide');
-        }, function (reason) {
-          CRM.alert(reason, 'Error', 'error');
-          $modalInstance.dismiss();
-          $scope.$broadcast('ta-spinner-hide');
-          return $q.reject();
-        });
-      };
-    }]);
+    $scope.confirm = function () {
+      $scope.$broadcast('ct-spinner-show');
+
+      (type === 'task' ? TaskService : DocumentService).sendReminder($scope.data.id, $scope.reminder.notes).then(function () {
+        CRM.alert('Message sent to: ' + $rootScope.cache.contact.obj[$scope.data.assignee_contact_id[0]].sort_name,
+          'Reminder sent', 'success');
+        $modalInstance.close();
+        $scope.$broadcast('ta-spinner-hide');
+      }, function (reason) {
+        CRM.alert(reason, 'Error', 'error');
+        $modalInstance.dismiss();
+        $scope.$broadcast('ta-spinner-hide');
+        return $q.reject();
+      });
+    };
+  }
+
+  return ModalReminderCtrl;
 });

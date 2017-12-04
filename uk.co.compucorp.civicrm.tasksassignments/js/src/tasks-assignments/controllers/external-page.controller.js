@@ -1,24 +1,30 @@
 /* eslint-env amd */
 
 define([
-  'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact.service'
-], function (controllers) {
+], function () {
   'use strict';
 
-  controllers.controller('ExternalPageCtrl', ['$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config',
-    function ($scope, $log, $modal, $rootElement, $rootScope, $state, config) {
-      $log.debug('Controller: ExternalPageCtrl');
+  ExternalPageCtrl.__name = 'ExternalPageCtrl';
+  ExternalPageCtrl.$inject = [
+    '$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config'
+  ];
 
-      $scope.assignmentsUrl = config.url.ASSIGNMENTS + '?reset=1';
-      $scope.reportsUrl = config.url.CIVI_DASHBOARD + '?reset=1';
+  function ExternalPageCtrl ($scope, $log, $modal, $rootElement, $rootScope,
+    $state, config) {
+    $log.debug('Controller: ExternalPageCtrl');
 
-      $scope.$on('assignmentFormSuccess', function () {
-        $state.go($state.current, {}, {reload: true});
-      });
+    $scope.assignmentsUrl = config.url.ASSIGNMENTS + '?reset=1';
+    $scope.reportsUrl = config.url.CIVI_DASHBOARD + '?reset=1';
 
-      $scope.$on('iframe-ready', function () {
-        $rootScope.$broadcast('ct-spinner-hide');
-      });
-    }]);
+    $scope.$on('assignmentFormSuccess', function () {
+      $state.go($state.current, {}, {reload: true});
+    });
+
+    $scope.$on('iframe-ready', function () {
+      $rootScope.$broadcast('ct-spinner-hide');
+    });
+  }
+
+  return ExternalPageCtrl;
 });

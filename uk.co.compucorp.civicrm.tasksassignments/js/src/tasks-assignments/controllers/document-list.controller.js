@@ -4,22 +4,23 @@ define([
   'common/angular',
   'common/lodash',
   'common/moment',
-  'tasks-assignments/controllers/controllers',
   'tasks-assignments/services/contact.service',
   'tasks-assignments/services/document.service',
   'tasks-assignments/services/file.service',
   'tasks-assignments/services/assignment.service'
-], function (angular, _, moment, controllers) {
+], function (angular, _, moment) {
   'use strict';
 
-  controllers.controller('DocumentListController', DocumentListController);
-
-  DocumentListController.$inject = ['$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state', '$filter',
-    '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService', 'AssignmentService', 'DocumentService', 'FileService', 'settings'
+  DocumentListController.__name = 'DocumentListController';
+  DocumentListController.$inject = [
+    '$scope', '$uibModal', '$dialog', '$rootElement', '$rootScope', '$state',
+    '$filter', '$log', '$q', '$timeout', 'documentList', 'config', 'ContactService',
+    'AssignmentService', 'DocumentService', 'FileService', 'settings'
   ];
 
-  function DocumentListController ($scope, $modal, $dialog, $rootElement, $rootScope, $state, $filter, $log, $q, $timeout, documentList,
-      config, ContactService, AssignmentService, DocumentService, FileService, settings) {
+  function DocumentListController ($scope, $modal, $dialog, $rootElement, $rootScope,
+    $state, $filter, $log, $q, $timeout, documentList, config, ContactService,
+    AssignmentService, DocumentService, FileService, settings) {
     $log.debug('Controller: DocumentListController');
 
     var vm = this;
@@ -455,4 +456,6 @@ define([
       });
     }
   }
+
+  return DocumentListController;
 });
