@@ -11,7 +11,7 @@ define([
   'tasks-assignments/modules/app-settings',
   'tasks-assignments/modules/controllers',
   'tasks-assignments/modules/directives',
-  'tasks-assignments/filters/filters',
+  'tasks-assignments/modules/filters',
   'tasks-assignments/services/services'
 ], function (angular) {
   'use strict';
