@@ -31,6 +31,7 @@ define([
     'civitasks.controllers',
     'civitasks.directives',
     'civitasks.filters',
+    'civitasks.resources',
     'civitasks.services',
     'civitasks.settings',
     'xeditable',

@@ -12,6 +12,7 @@ define([
   'tasks-assignments/modules/controllers',
   'tasks-assignments/modules/directives',
   'tasks-assignments/modules/filters',
+  'tasks-assignments/modules/resources',
   'tasks-assignments/services/services'
 ], function (angular) {
   'use strict';
