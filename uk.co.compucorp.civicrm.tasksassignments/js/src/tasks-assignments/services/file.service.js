@@ -1,4 +1,5 @@
 /* eslint-env amd */
+
 define(function () {
   'use strict';
 

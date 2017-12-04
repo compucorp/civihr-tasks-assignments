@@ -1,4 +1,4 @@
-/* global define */
+/* eslint-env amd */
 
 define(function () {
   'use strict';
