@@ -1,8 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'common/moment',
-  'tasks-assignments/services/document.service'
+  'common/moment'
 ], function (moment) {
   'use strict';
 

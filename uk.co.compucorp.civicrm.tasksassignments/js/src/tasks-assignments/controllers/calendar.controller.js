@@ -2,8 +2,7 @@
 
 define([
   'common/angular',
-  'common/moment',
-  'tasks-assignments/services/task.service'
+  'common/moment'
 ], function (angular, moment) {
   'use strict';
 

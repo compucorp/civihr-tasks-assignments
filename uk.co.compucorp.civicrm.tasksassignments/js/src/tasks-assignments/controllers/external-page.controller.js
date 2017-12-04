@@ -1,8 +1,6 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/services/contact.service'
-], function () {
+define(function () {
   'use strict';
 
   ExternalPageCtrl.__name = 'ExternalPageCtrl';

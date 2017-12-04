@@ -1,11 +1,12 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/services/services'
-], function (services) {
+define(function () {
   'use strict';
 
-  services.factory('UtilsService', ['config', '$q', '$log', '$rootScope', function (config, $q, $log) {
+  UtilsService.__name = 'UtilsService';
+  UtilsService.$inject = ['config', '$q', '$log', '$rootScope'];
+
+  function UtilsService (config, $q, $log) {
     $log.debug('Service: UtilsService');
     return {
       errorHandler: function (data, msg, deferred) {
@@ -38,5 +39,7 @@ define([
         }
       }
     };
-  }]);
+  }
+
+  return UtilsService;
 });

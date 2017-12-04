@@ -1,8 +1,6 @@
 /* global define */
 
-define([
-  'tasks-assignments/services/file.service'
-], function () {
+define(function () {
   'use strict';
 
   MainCtrl.__name = 'MainCtrl';

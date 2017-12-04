@@ -1,8 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'common/angular',
-  'tasks-assignments/services/settings.service'
+  'common/angular'
 ], function (angular) {
   'use strict';
 

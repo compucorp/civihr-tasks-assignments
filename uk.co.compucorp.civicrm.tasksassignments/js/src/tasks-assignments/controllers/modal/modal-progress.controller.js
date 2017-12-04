@@ -1,8 +1,6 @@
 /* eslint-env amd */
 
-define([
-  'tasks-assignments/services/file.service'
-], function () {
+define(function () {
   'use strict';
 
   ModalProgressCtrl.__name = 'ModalProgressCtrl';

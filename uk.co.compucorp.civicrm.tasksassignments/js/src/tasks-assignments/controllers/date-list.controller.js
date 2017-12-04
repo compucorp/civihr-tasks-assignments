@@ -1,9 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'common/moment',
-  'tasks-assignments/services/key-date.service',
-  'tasks-assignments/services/contact.service'
+  'common/moment'
 ], function (moment) {
   'use strict';
 

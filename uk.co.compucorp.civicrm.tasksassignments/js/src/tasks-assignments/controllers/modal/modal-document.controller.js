@@ -5,12 +5,7 @@ define([
   'common/lodash',
   'common/moment',
   'common/services/file.service',
-  'common/services/notification.service',
-  'tasks-assignments/services/contact.service',
-  'tasks-assignments/services/dialog.service',
-  'tasks-assignments/services/document.service',
-  'tasks-assignments/services/settings.service',
-  'tasks-assignments/services/file.service'
+  'common/services/notification.service'
 ], function (angular, _, moment) {
   'use strict';
 

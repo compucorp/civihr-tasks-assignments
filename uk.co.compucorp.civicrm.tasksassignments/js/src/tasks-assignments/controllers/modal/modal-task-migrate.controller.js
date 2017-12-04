@@ -1,10 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'common/angular',
-  'tasks-assignments/services/contact.service',
-  'tasks-assignments/services/dialog.service',
-  'tasks-assignments/services/task.service'
+  'common/angular'
 ], function (angular) {
   'use strict';
 
