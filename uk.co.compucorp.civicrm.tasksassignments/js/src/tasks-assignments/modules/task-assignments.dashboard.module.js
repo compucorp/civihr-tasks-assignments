@@ -5,200 +5,217 @@ define([
   'common/moment',
   'common/lodash',
   'common/services/angular-date/date-format',
-  'tasks-assignments/modules/task-assignments.run'
+  'tasks-assignments/modules/task-assignments.constants',
+  'tasks-assignments/modules/task-assignments.dashboard.module',
+  'tasks-assignments/modules/task-assignments.controllers',
+  'tasks-assignments/modules/task-assignments.directives',
+  'tasks-assignments/modules/task-assignments.filters',
+  'tasks-assignments/modules/task-assignments.resources',
+  'tasks-assignments/modules/task-assignments.run',
+  'tasks-assignments/modules/task-assignments.services',
+  'tasks-assignments/modules/task-assignments.values'
 ], function (angular, moment, _) {
   'use strict';
 
-  angular.module('task-assignments.dashboard', ['task-assignments.run'])
-    .config(['config', '$resourceProvider', '$httpProvider', '$logProvider',
-      '$urlRouterProvider', '$stateProvider', 'calendarConfigProvider', 'uibDatepickerConfig', 'uiSelectConfig',
-      function (config, $resourceProvider, $httpProvider, $logProvider,
-        $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig, uiSelectConfig) {
-        $logProvider.debugEnabled(config.DEBUG);
+  angular.module('task-assignments.dashboard', [
+    'task-assignments.constants',
+    'task-assignments.controllers',
+    'task-assignments.directives',
+    'task-assignments.filters',
+    'task-assignments.resources',
+    'task-assignments.run',
+    'task-assignments.services',
+    'task-assignments.values'
+  ])
+  .config(['config', '$resourceProvider', '$httpProvider', '$logProvider',
+    '$urlRouterProvider', '$stateProvider', 'calendarConfigProvider', 'uibDatepickerConfig', 'uiSelectConfig',
+    function (config, $resourceProvider, $httpProvider, $logProvider,
+      $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig, uiSelectConfig) {
+      $logProvider.debugEnabled(config.DEBUG);
 
-        $urlRouterProvider.otherwise('/tasks');
+      $urlRouterProvider.otherwise('/tasks');
 
-        $stateProvider
-        .resolveForAll({
-          format: ['DateFormat', function (DateFormat) {
-            return DateFormat.getDateFormat();
+      $stateProvider
+      .resolveForAll({
+        format: ['DateFormat', function (DateFormat) {
+          return DateFormat.getDateFormat();
+        }]
+      })
+      .state('tasks', {
+        url: '/tasks',
+        controller: 'TaskListController',
+        controllerAs: 'list',
+        templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
+        resolve: {
+          taskList: ['TaskService', function (TaskService) {
+            return TaskService.get({
+              'status_id': { 'NOT IN': config.status.resolve.TASK }
+            });
           }]
-        })
-        .state('tasks', {
-          url: '/tasks',
-          controller: 'TaskListController',
-          controllerAs: 'list',
-          templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
-          resolve: {
-            taskList: ['TaskService', function (TaskService) {
-              return TaskService.get({
-                'status_id': { 'NOT IN': config.status.resolve.TASK }
-              });
-            }]
-          }
-        })
-        .state('tasks.my', {
-          url: '/my',
-          params: { ownership: 'assigned' }
-        })
-        .state('tasks.delegated', {
-          url: '/delegated',
-          params: { ownership: 'delegated' }
-        })
-        .state('tasks.all', {
-          url: '/all',
-          params: { ownership: null }
-        })
-        .state('documents', {
-          url: '/documents',
-          controller: 'DocumentListController',
-          controllerAs: 'list',
-          templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
-          resolve: {
-            documentList: ['DocumentService', function (DocumentService) {
-              return DocumentService.get({});
-            }]
-          }
-        })
-        .state('documents.my', {
-          url: '/my',
-          params: { ownership: 'assigned' }
-        })
-        .state('documents.delegated', {
-          url: '/delegated',
-          params: { ownership: 'delegated' }
-        })
-        .state('documents.all', {
-          url: '/all',
-          params: { ownership: null }
-        })
-        .state('assignments', {
-          url: '/assignments',
-          controller: 'ExternalPageCtrl',
-          templateUrl: config.path.TPL + 'dashboard/assignments.html?v=5'
-        })
-        .state('calendar', {
-          abstract: true,
-          controller: 'CalendarCtrl',
-          templateUrl: config.path.TPL + 'dashboard/calendar.html?v=3',
-          resolve: {
-            documentList: ['$q', 'DocumentService', 'settings', function ($q, DocumentService, settings) {
-              var deferred = $q.defer();
+        }
+      })
+      .state('tasks.my', {
+        url: '/my',
+        params: { ownership: 'assigned' }
+      })
+      .state('tasks.delegated', {
+        url: '/delegated',
+        params: { ownership: 'delegated' }
+      })
+      .state('tasks.all', {
+        url: '/all',
+        params: { ownership: null }
+      })
+      .state('documents', {
+        url: '/documents',
+        controller: 'DocumentListController',
+        controllerAs: 'list',
+        templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
+        resolve: {
+          documentList: ['DocumentService', function (DocumentService) {
+            return DocumentService.get({});
+          }]
+        }
+      })
+      .state('documents.my', {
+        url: '/my',
+        params: { ownership: 'assigned' }
+      })
+      .state('documents.delegated', {
+        url: '/delegated',
+        params: { ownership: 'delegated' }
+      })
+      .state('documents.all', {
+        url: '/all',
+        params: { ownership: null }
+      })
+      .state('assignments', {
+        url: '/assignments',
+        controller: 'ExternalPageCtrl',
+        templateUrl: config.path.TPL + 'dashboard/assignments.html?v=5'
+      })
+      .state('calendar', {
+        abstract: true,
+        controller: 'CalendarCtrl',
+        templateUrl: config.path.TPL + 'dashboard/calendar.html?v=3',
+        resolve: {
+          documentList: ['$q', 'DocumentService', 'settings', function ($q, DocumentService, settings) {
+            var deferred = $q.defer();
 
-              if (!+settings.tabEnabled.documents) {
-                deferred.resolve([]);
+            if (!+settings.tabEnabled.documents) {
+              deferred.resolve([]);
+            }
+
+            $q.all([
+              DocumentService.get({
+                'sequential': 0,
+                'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                'status_id': {
+                  'NOT IN': config.status.resolve.DOCUMENT
+                }
+              }),
+              DocumentService.get({
+                'sequential': 0,
+                'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                'status_id': {
+                  'NOT IN': config.status.resolve.DOCUMENT
+                }
+              })
+            ]).then(function (results) {
+              var documentId;
+              var documentList = [];
+
+              angular.extend(results[0], results[1]);
+
+              for (documentId in results[0]) {
+                documentList.push(results[0][documentId]);
               }
 
-              $q.all([
-                DocumentService.get({
-                  'sequential': 0,
-                  'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
-                  'status_id': {
-                    'NOT IN': config.status.resolve.DOCUMENT
-                  }
-                }),
-                DocumentService.get({
-                  'sequential': 0,
-                  'source_contact_id': config.LOGGED_IN_CONTACT_ID,
-                  'status_id': {
-                    'NOT IN': config.status.resolve.DOCUMENT
-                  }
-                })
-              ]).then(function (results) {
-                var documentId;
-                var documentList = [];
+              deferred.resolve(documentList);
+            });
 
-                angular.extend(results[0], results[1]);
+            return deferred.promise;
+          }],
+          taskList: ['$q', 'TaskService', function ($q, TaskService) {
+            var deferred = $q.defer();
 
-                for (documentId in results[0]) {
-                  documentList.push(results[0][documentId]);
-                }
+            $q.all([
+              TaskService.get({
+                'sequential': 1,
+                'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
+                'status_id': { 'NOT IN': config.status.resolve.TASK }
+              }),
+              TaskService.get({
+                'sequential': 1,
+                'source_contact_id': config.LOGGED_IN_CONTACT_ID,
+                'status_id': { 'NOT IN': config.status.resolve.TASK }
+              })
+            ]).then(function (results) {
+              var mergedResults = _(results[0]).assign(results[1]);
+              deferred.resolve(mergedResults.values().value());
+            });
 
-                deferred.resolve(documentList);
-              });
-
-              return deferred.promise;
-            }],
-            taskList: ['$q', 'TaskService', function ($q, TaskService) {
-              var deferred = $q.defer();
-
-              $q.all([
-                TaskService.get({
-                  'sequential': 1,
-                  'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
-                  'status_id': { 'NOT IN': config.status.resolve.TASK }
-                }),
-                TaskService.get({
-                  'sequential': 1,
-                  'source_contact_id': config.LOGGED_IN_CONTACT_ID,
-                  'status_id': { 'NOT IN': config.status.resolve.TASK }
-                })
-              ]).then(function (results) {
-                var mergedResults = _(results[0]).assign(results[1]);
-                deferred.resolve(mergedResults.values().value());
-              });
-
-              return deferred.promise;
-            }]
+            return deferred.promise;
+          }]
+        }
+      })
+      .state('calendar.mwl', {
+        url: '/calendar',
+        views: {
+          'documentList': {
+            controller: 'DocumentListController',
+            controllerAs: 'list',
+            templateUrl: config.path.TPL + 'dashboard/calendar.documentList.html?v=6'
+          },
+          'taskList': {
+            controller: 'TaskListController',
+            controllerAs: 'list',
+            templateUrl: config.path.TPL + 'dashboard/calendar.taskList.html?v=5'
           }
-        })
-        .state('calendar.mwl', {
-          url: '/calendar',
-          views: {
-            'documentList': {
-              controller: 'DocumentListController',
-              controllerAs: 'list',
-              templateUrl: config.path.TPL + 'dashboard/calendar.documentList.html?v=6'
-            },
-            'taskList': {
-              controller: 'TaskListController',
-              controllerAs: 'list',
-              templateUrl: config.path.TPL + 'dashboard/calendar.taskList.html?v=5'
-            }
-          }
-        })
-        .state('calendar.mwl.day', {
-          params: {
-            calendarView: 'day'
-          }
-        })
-        .state('calendar.mwl.month', {
-          params: {
-            calendarView: 'month'
-          }
-        })
-        .state('calendar.mwl.week', {
-          params: {
-            calendarView: 'week'
-          }
-        })
-        .state('reports', {
-          url: '/reports',
-          controller: 'ExternalPageCtrl',
-          templateUrl: config.path.TPL + 'dashboard/reports.html?v=4'
-        })
-        .state('keyDates', {
-          url: '/key-dates',
-          controller: 'DateListCtrl',
-          templateUrl: config.path.TPL + 'dashboard/key-dates.html?v=4',
-          resolve: {
-            contactList: ['KeyDateService', function (KeyDateService) {
-              return KeyDateService.get(moment().startOf('month'), moment().endOf('month'));
-            }]
-          }
-        });
+        }
+      })
+      .state('calendar.mwl.day', {
+        params: {
+          calendarView: 'day'
+        }
+      })
+      .state('calendar.mwl.month', {
+        params: {
+          calendarView: 'month'
+        }
+      })
+      .state('calendar.mwl.week', {
+        params: {
+          calendarView: 'week'
+        }
+      })
+      .state('reports', {
+        url: '/reports',
+        controller: 'ExternalPageCtrl',
+        templateUrl: config.path.TPL + 'dashboard/reports.html?v=4'
+      })
+      .state('keyDates', {
+        url: '/key-dates',
+        controller: 'DateListCtrl',
+        templateUrl: config.path.TPL + 'dashboard/key-dates.html?v=4',
+        resolve: {
+          contactList: ['KeyDateService', function (KeyDateService) {
+            return KeyDateService.get(moment().startOf('month'), moment().endOf('month'));
+          }]
+        }
+      });
 
-        $resourceProvider.defaults.stripTrailingSlashes = false;
+      $resourceProvider.defaults.stripTrailingSlashes = false;
 
-        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-        calendarConfigProvider.setDateFormats({
-          weekDay: 'ddd'
-        });
+      calendarConfigProvider.setDateFormats({
+        weekDay: 'ddd'
+      });
 
-        datepickerConfig.showWeeks = false;
+      datepickerConfig.showWeeks = false;
 
-        uiSelectConfig.theme = 'bootstrap';
-      }
-    ]);
+      uiSelectConfig.theme = 'bootstrap';
+    }
+  ]);
 });

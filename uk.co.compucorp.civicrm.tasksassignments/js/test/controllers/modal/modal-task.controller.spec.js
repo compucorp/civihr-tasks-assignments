@@ -5,7 +5,7 @@ define([
   'common/angular',
   'common/moment',
   'common/angularMocks',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function (_, angular, moment) {
   'use strict';
 

@@ -5,7 +5,7 @@ define([
   'common/angular',
   'mocks/data/assignment.data',
   'common/angularMocks',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function (_, angular, Mock) {
   'use strict';
 

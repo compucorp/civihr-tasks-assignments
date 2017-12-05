@@ -7,7 +7,7 @@ define([
   'mocks/fabricators/document.fabricator',
   'mocks/fabricators/contact.fabricator',
   'mocks/fabricators/assignment.fabricator',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function (angular, moment, _, documentFabricator, contactFabricator, assignmentFabricator) {
   'use strict';
 

@@ -2,7 +2,7 @@
 
 define([
   'common/angularMocks',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function () {
   'use strict';
 

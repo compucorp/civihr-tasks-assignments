@@ -6,7 +6,7 @@ define([
   'mocks/data/assignment.data',
   'mocks/data/document.data',
   'common/angularMocks',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function (documentMock, contactMock, assignmentMock, documentFabricator) {
   'use strict';
 

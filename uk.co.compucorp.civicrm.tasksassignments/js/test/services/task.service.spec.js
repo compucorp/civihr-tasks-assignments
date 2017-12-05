@@ -3,7 +3,7 @@
 define([
   'mocks/fabricators/task.fabricator',
   'mocks/data/task.data',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function (taskFabricator, taskMock) {
   'use strict';
 

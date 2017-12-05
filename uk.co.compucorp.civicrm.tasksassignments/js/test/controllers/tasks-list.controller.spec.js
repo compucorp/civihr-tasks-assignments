@@ -4,7 +4,7 @@ define([
   'common/angular',
   'mocks/fabricators/task.fabricator',
   'common/angularMocks',
-  'tasks-assignments/app'
+  'tasks-assignments/modules/task-assignments.dashboard.module'
 ], function (angular, taskFabricator) {
   'use strict';
 

@@ -2,51 +2,68 @@
 
 define([
   'common/angular',
-  'tasks-assignments/modules/task-assignments.run'
+  'tasks-assignments/modules/task-assignments.constants',
+  'tasks-assignments/modules/task-assignments.tasks.module',
+  'tasks-assignments/modules/task-assignments.controllers',
+  'tasks-assignments/modules/task-assignments.directives',
+  'tasks-assignments/modules/task-assignments.filters',
+  'tasks-assignments/modules/task-assignments.resources',
+  'tasks-assignments/modules/task-assignments.run',
+  'tasks-assignments/modules/task-assignments.services',
+  'tasks-assignments/modules/task-assignments.values'
 ], function (angular) {
   'use strict';
 
-  angular.module('task-assignments.tasks', ['task-assignments.run'])
-    .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider',
-      'uibDatepickerConfig', 'uiSelectConfig',
-      '$logProvider',
-      function (config, $urlRouterProvider, $stateProvider, $resourceProvider, $httpProvider, datepickerConfig,
-        uiSelectConfig,
-        $logProvider) {
-        $logProvider.debugEnabled(config.DEBUG);
+  angular.module('task-assignments.tasks', [
+    'task-assignments.constants',
+    'task-assignments.controllers',
+    'task-assignments.directives',
+    'task-assignments.filters',
+    'task-assignments.resources',
+    'task-assignments.run',
+    'task-assignments.services',
+    'task-assignments.values'
+  ])
+  .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider',
+    'uibDatepickerConfig', 'uiSelectConfig',
+    '$logProvider',
+    function (config, $urlRouterProvider, $stateProvider, $resourceProvider, $httpProvider, datepickerConfig,
+      uiSelectConfig,
+      $logProvider) {
+      $logProvider.debugEnabled(config.DEBUG);
 
-        $urlRouterProvider.otherwise('/');
+      $urlRouterProvider.otherwise('/');
 
-        $stateProvider
-        .resolveForAll({
-          format: ['DateFormat', function (DateFormat) {
-            return DateFormat.getDateFormat();
+      $stateProvider
+      .resolveForAll({
+        format: ['DateFormat', function (DateFormat) {
+          return DateFormat.getDateFormat();
+        }]
+      })
+      .state('main', {
+        url: '/',
+        controller: 'TaskListController',
+        controllerAs: 'list',
+        templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
+        resolve: {
+          taskList: ['TaskService', function (TaskService) {
+            return TaskService.get({
+              'target_contact_id': config.CONTACT_ID,
+              'status_id': {
+                'NOT IN': config.status.resolve.TASK
+              }
+            });
           }]
-        })
-        .state('main', {
-          url: '/',
-          controller: 'TaskListController',
-          controllerAs: 'list',
-          templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
-          resolve: {
-            taskList: ['TaskService', function (TaskService) {
-              return TaskService.get({
-                'target_contact_id': config.CONTACT_ID,
-                'status_id': {
-                  'NOT IN': config.status.resolve.TASK
-                }
-              });
-            }]
-          }
-        });
+        }
+      });
 
-        $resourceProvider.defaults.stripTrailingSlashes = false;
+      $resourceProvider.defaults.stripTrailingSlashes = false;
 
-        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-        datepickerConfig.showWeeks = false;
+      datepickerConfig.showWeeks = false;
 
-        uiSelectConfig.theme = 'bootstrap';
-      }
-    ]);
+      uiSelectConfig.theme = 'bootstrap';
+    }
+  ]);
 });
