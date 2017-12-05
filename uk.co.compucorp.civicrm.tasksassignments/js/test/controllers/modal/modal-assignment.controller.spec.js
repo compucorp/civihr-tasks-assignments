@@ -13,7 +13,7 @@ define([
     var $q, $controller, scope, AssignmentService,
       TaskService, DocumentService, ContactService, HRSettings, $rootScope;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _AssignmentService_, _DocumentService_, _TaskService_) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
@@ -283,7 +283,7 @@ define([
   describe('ModalAssignmentActivityCtrl', function () {
     var $controller, scope;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
     beforeEach(inject(function (_$controller_, $httpBackend, $rootScope) {
       $httpBackend.whenPOST(/action=/).respond({});
       $httpBackend.whenGET(/action=/).respond({});

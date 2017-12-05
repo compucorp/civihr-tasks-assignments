@@ -68,7 +68,7 @@
   <script type="text/javascript">
     (function(){
       var detail = {
-        'app': 'appDashboard',
+        'app': 'app-dashboard',
         'module': 'civitasks'
       };
 

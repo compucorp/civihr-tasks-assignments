@@ -6,7 +6,7 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('civitasks.appDocuments', ['civitasks.run'])
+  angular.module('civitasks.app-documents', ['civitasks.run'])
     .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider',
       'uibDatepickerConfig', 'uiSelectConfig', '$logProvider',
       function (config, $urlRouterProvider, $stateProvider, $resourceProvider, $httpProvider, datepickerConfig,

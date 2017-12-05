@@ -10,7 +10,7 @@
         (function(){
             function taInit(){
                 var detail = {
-                    'app': 'appDocuments',
+                    'app': 'app-documents',
                     'module': 'cividocuments'
                 };
 

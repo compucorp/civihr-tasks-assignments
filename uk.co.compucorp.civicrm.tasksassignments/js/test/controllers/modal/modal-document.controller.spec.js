@@ -18,7 +18,7 @@ define([
       AssignmentService, AppSettingsService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
       _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_, _AppSettingsService_) {
       data = {};

@@ -17,7 +17,7 @@
         (function(){
 
             var detail = {
-                'app': 'appSettings',
+                'app': 'app-settings',
                 'module': 'civitasks'
             };
 

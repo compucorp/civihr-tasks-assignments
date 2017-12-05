@@ -9,7 +9,7 @@ define([
   describe('AssignmentService', function () {
     var Assignment, AssignmentSearch, AssignmentService;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
     beforeEach(inject(function (_Assignment_, _AssignmentSearch_, _AssignmentService_) {
       AssignmentSearch = _AssignmentSearch_;
       AssignmentService = _AssignmentService_;

@@ -18,7 +18,7 @@ define([
   describe('ContactService', function () {
     var Contact, ContactService, $httpBackend, promise, jsonData;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
 
     beforeEach(inject(function (_Contact_, _ContactService_, _$httpBackend_) {
       ContactService = _ContactService_;

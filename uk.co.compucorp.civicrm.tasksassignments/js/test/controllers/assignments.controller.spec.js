@@ -7,7 +7,7 @@ define([
   'use strict';
 
   describe('AssignmentsCtrl', function () {
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
     beforeEach(inject(function ($controller, $rootScope) {
       $controller('AssignmentsCtrl', { $scope: $rootScope.$new() });
     }));

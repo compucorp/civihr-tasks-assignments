@@ -15,7 +15,7 @@ define([
   describe('AppSettingsService', function () {
     var AppSettings, AppSettingsService, $httpBackend, promiseResult;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
 
     beforeEach(inject(function (_AppSettingsService_, _AppSettings_, _$httpBackend_) {
       AppSettingsService = _AppSettingsService_;

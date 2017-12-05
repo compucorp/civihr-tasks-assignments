@@ -13,7 +13,7 @@ define([
     var $controller, $q, $rootScope, $scope, HRSettings,
       data, AssignmentService;
 
-    beforeEach(module('civitasks.appDashboard'));
+    beforeEach(module('civitasks.app-dashboard'));
     beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _AssignmentService_, $httpBackend) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
