@@ -2,18 +2,18 @@
 
 define([
   'common/angular',
-  'tasks-assignments/modules/config',
-  'tasks-assignments/modules/settings',
-  'tasks-assignments/modules/run.module',
-  'tasks-assignments/modules/app-dashboard.module',
-  'tasks-assignments/modules/app-documents.module',
-  'tasks-assignments/modules/app-tasks',
-  'tasks-assignments/modules/app-settings',
-  'tasks-assignments/modules/controllers',
-  'tasks-assignments/modules/directives',
-  'tasks-assignments/modules/filters',
-  'tasks-assignments/modules/resources',
-  'tasks-assignments/modules/services'
+  'tasks-assignments/modules/task-assignments.constants',
+  'tasks-assignments/modules/task-assignments.values',
+  'tasks-assignments/modules/task-assignments.run',
+  'tasks-assignments/modules/task-assignments.dashboard.module',
+  'tasks-assignments/modules/task-assignments.documents.module',
+  'tasks-assignments/modules/task-assignments.tasks.module',
+  'tasks-assignments/modules/task-assignments.settings.module',
+  'tasks-assignments/modules/task-assignments.controllers',
+  'tasks-assignments/modules/task-assignments.directives',
+  'tasks-assignments/modules/task-assignments.filters',
+  'tasks-assignments/modules/task-assignments.resources',
+  'tasks-assignments/modules/task-assignments.services'
 ], function (angular) {
   'use strict';
 

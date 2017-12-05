@@ -2,7 +2,7 @@
 
 define([
   'common/angular',
-  'tasks-assignments/modules/run.module'
+  'tasks-assignments/modules/task-assignments.run'
 ], function (angular) {
   'use strict';
 

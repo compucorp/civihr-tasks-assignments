@@ -5,7 +5,7 @@ define([
   'common/moment',
   'common/lodash',
   'common/services/angular-date/date-format',
-  'tasks-assignments/modules/run.module'
+  'tasks-assignments/modules/task-assignments.run'
 ], function (angular, moment, _) {
   'use strict';
 
