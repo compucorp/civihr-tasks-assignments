@@ -10,7 +10,7 @@
         (function(){
             function taInit(){
                 var detail = {
-                    'app': 'app-tasks',
+                    'app': 'tasks',
                     'module': 'civitasks'
                 };
 

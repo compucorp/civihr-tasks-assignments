@@ -26,7 +26,7 @@ define([
     var Task, $httpBackend, $httpParamSerializer, requestBody;
     var request = {};
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
 
     beforeEach(inject(function (_Task_, _$httpParamSerializer_, _$httpBackend_) {
       Task = _Task_;
@@ -78,7 +78,7 @@ define([
   describe('TaskService', function () {
     var TaskService, $httpBackend, $q, promise;
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
 
     beforeEach(inject(function (_TaskService_, _$httpBackend_, _$q_) {
       TaskService = _TaskService_;

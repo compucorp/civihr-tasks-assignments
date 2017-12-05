@@ -14,7 +14,7 @@ define([
   describe('DocumentListController', function () {
     var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter, controller;
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;

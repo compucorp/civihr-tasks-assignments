@@ -6,7 +6,7 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('civitasks.app-tasks', ['civitasks.run'])
+  angular.module('task-assignments.tasks', ['task-assignments.run'])
     .config(['config', '$urlRouterProvider', '$stateProvider', '$resourceProvider', '$httpProvider',
       'uibDatepickerConfig', 'uiSelectConfig',
       '$logProvider',

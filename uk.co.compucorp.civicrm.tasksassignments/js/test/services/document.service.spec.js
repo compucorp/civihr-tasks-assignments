@@ -14,7 +14,7 @@ define([
     var Document, requestBody, $httpBackend, $httpParamSerializer;
     var request = {};
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
     beforeEach(inject(function (_Document_, _$httpBackend_, _$httpParamSerializer_) {
       $httpParamSerializer = _$httpParamSerializer_;
       Document = _Document_;
@@ -67,7 +67,7 @@ define([
     var AssignmentService, ContactService, DocumentService, $q,
       deferred, config, promise, $httpBackend;
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
     beforeEach(inject(function (_AssignmentService_, _ContactService_,
       _DocumentService_, _config_, _$q_, _$httpBackend_) {
       AssignmentService = _AssignmentService_;

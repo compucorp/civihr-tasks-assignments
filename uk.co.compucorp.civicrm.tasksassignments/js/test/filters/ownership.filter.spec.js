@@ -9,7 +9,7 @@ define([
   describe('filterByOwnership', function () {
     var config, filter, mockedTasks;
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
     beforeEach(inject(function (_config_, $filter) {
       (config = _config_) && (config.LOGGED_IN_CONTACT_ID = '205');
       mockedTasks = mockData();

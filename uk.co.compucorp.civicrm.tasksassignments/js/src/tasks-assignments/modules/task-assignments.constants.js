@@ -5,7 +5,7 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('civitasks.config', []).constant('config', {
+  angular.module('task-assignments.constants', []).constant('config', {
     DEBUG: !!+CRM.debug,
     CLASS_NAME_PREFIX: 'ct-',
     CONTACT_ID: CRM.contactId || null,

@@ -17,7 +17,7 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('civitasks.run', [
+  angular.module('task-assignments.run', [
     'angularFileUpload',
     'ngResource',
     'ngAnimate',
@@ -27,13 +27,13 @@ define([
     'mwl.calendar',
     'textAngular',
     'checklist-model',
-    'civitasks.config',
-    'civitasks.controllers',
-    'civitasks.directives',
-    'civitasks.filters',
-    'civitasks.resources',
-    'civitasks.services',
-    'civitasks.settings',
+    'task-assignments.constants',
+    'task-assignments.controllers',
+    'task-assignments.directives',
+    'task-assignments.filters',
+    'task-assignments.resources',
+    'task-assignments.services',
+    'task-assignments.values',
     'xeditable',
     'xeditable-civi',
     'common.angularDate',
@@ -42,7 +42,7 @@ define([
     'TaskService', 'AssignmentService', 'KeyDateService', 'ContactService', 'editableOptions',
     function ($rootScope, $rootElement, $q, $location, $log, config, settings, DocumentService, TaskService,
       AssignmentService, KeyDateService, ContactService, editableOptions) {
-      $log.debug('civitasks.run');
+      $log.debug('task-assignments.run');
 
       var contactsToCache = [config.LOGGED_IN_CONTACT_ID];
 

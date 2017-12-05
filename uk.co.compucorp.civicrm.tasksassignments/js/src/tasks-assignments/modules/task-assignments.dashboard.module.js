@@ -9,7 +9,7 @@ define([
 ], function (angular, moment, _) {
   'use strict';
 
-  angular.module('civitasks.app-dashboard', ['civitasks.run'])
+  angular.module('task-assignments.dashboard', ['task-assignments.run'])
     .config(['config', '$resourceProvider', '$httpProvider', '$logProvider',
       '$urlRouterProvider', '$stateProvider', 'calendarConfigProvider', 'uibDatepickerConfig', 'uiSelectConfig',
       function (config, $resourceProvider, $httpProvider, $logProvider,

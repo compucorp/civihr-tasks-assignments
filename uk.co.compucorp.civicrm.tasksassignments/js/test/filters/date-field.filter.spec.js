@@ -14,7 +14,7 @@ define([
 
     var oneDay = 86400000;
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
     beforeEach(inject(function (_$filter_) {
       $filter = _$filter_;
       today = new Date();

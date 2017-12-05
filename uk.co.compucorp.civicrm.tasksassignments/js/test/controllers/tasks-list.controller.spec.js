@@ -11,7 +11,7 @@ define([
   describe('TaskListController', function () {
     var $scope, ContactService, TaskService, controller;
 
-    beforeEach(module('civitasks.app-dashboard'));
+    beforeEach(module('task-assignments.dashboard'));
     beforeEach(inject(function ($controller, $rootScope, _ContactService_, _TaskService_) {
       $scope = $rootScope.$new();
       ContactService = _ContactService_;

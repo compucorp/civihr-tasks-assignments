@@ -15,7 +15,7 @@ define([
   dateParse, filterByDateType, filterByDate, offset, filterByOwnership, filterByStatus) {
   'use strict';
 
-  return angular.module('civitasks.filters', [])
+  return angular.module('task-assignments.filters', [])
     .filter(filterByAssignmentType.__name, filterByAssignmentType)
     .filter(filterByContactId.__name, filterByContactId)
     .filter(filterByDateField.__name, filterByDateField)

@@ -17,7 +17,7 @@ define([
   Settings, Task) {
   'use strict';
 
-  return angular.module('civitasks.resources', [])
+  return angular.module('task-assignments.resources', [])
     .factory(AppSettings.__name, AppSettings)
     .factory(AssignmentSearch.__name, AssignmentSearch)
     .factory(AssignmentType.__name, AssignmentType)

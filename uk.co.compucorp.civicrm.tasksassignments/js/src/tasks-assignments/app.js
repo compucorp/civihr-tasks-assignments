@@ -18,7 +18,7 @@ define([
   'use strict';
 
   document.addEventListener('taInit', function (e) {
-    angular.bootstrap(document.getElementById(e.detail.module), ['civitasks.' + e.detail.app]);
+    angular.bootstrap(document.getElementById(e.detail.module), ['task-assignments.' + e.detail.app]);
   });
 
   document.dispatchEvent(typeof window.CustomEvent === 'function' ? new window.CustomEvent('taReady') : (function () {
