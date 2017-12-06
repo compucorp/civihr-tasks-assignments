@@ -3,15 +3,15 @@
 define(function () {
   'use strict';
 
-  AssignmentsCtrl.__name = 'AssignmentsCtrl';
-  AssignmentsCtrl.$inject = [
+  AssignmentsController.__name = 'AssignmentsController';
+  AssignmentsController.$inject = [
     '$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config'
   ];
 
-  function AssignmentsCtrl ($scope, $log, $modal, $rootElement, $rootScope, $state,
+  function AssignmentsController ($scope, $log, $modal, $rootElement, $rootScope, $state,
     config) {
-    $log.info('Controller: AssignmentsCtrl');
+    $log.info('Controller: AssignmentsController');
   }
 
-  return AssignmentsCtrl;
+  return AssignmentsController;
 });

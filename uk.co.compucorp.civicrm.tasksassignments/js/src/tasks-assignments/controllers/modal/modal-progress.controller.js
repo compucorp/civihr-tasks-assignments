@@ -3,15 +3,15 @@
 define(function () {
   'use strict';
 
-  ModalProgressCtrl.__name = 'ModalProgressCtrl';
-  ModalProgressCtrl.$inject = [
+  ModalProgressController.__name = 'ModalProgressController';
+  ModalProgressController.$inject = [
     '$scope', '$uibModalInstance', '$q', '$timeout', 'uploader', 'entityId',
     'FileService', '$log'
   ];
 
-  function ModalProgressCtrl ($scope, $modalInstance, $q, $timeout, uploader,
+  function ModalProgressController ($scope, $modalInstance, $q, $timeout, uploader,
     entityId, FileService, $log) {
-    $log.debug('Controller: ModalProgressCtrl');
+    $log.debug('Controller: ModalProgressController');
 
     $scope.uploader = uploader;
 
@@ -34,5 +34,5 @@ define(function () {
     };
   }
 
-  return ModalProgressCtrl;
+  return ModalProgressController;
 });

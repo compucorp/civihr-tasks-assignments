@@ -6,17 +6,17 @@ define([
 ], function (angular, moment) {
   'use strict';
 
-  ModalTaskCtrl.__name = 'ModalTaskCtrl';
-  ModalTaskCtrl.$inject = [
+  ModalTaskController.__name = 'ModalTaskController';
+  ModalTaskController.$inject = [
     '$timeout', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q',
     '$log', '$filter', '$uibModal', '$dialog', 'AssignmentService', 'TaskService',
     'ContactService', 'data', 'config', 'HR_settings'
   ];
 
-  function ModalTaskCtrl ($timeout, $scope, $modalInstance, $rootScope, $rootElement, $q, $log,
+  function ModalTaskController ($timeout, $scope, $modalInstance, $rootScope, $rootElement, $q, $log,
     $filter, $modal, $dialog, AssignmentService, TaskService, ContactService, data,
     config, hrSettings) {
-    $log.debug('Controller: ModalTaskCtrl');
+    $log.debug('Controller: ModalTaskController');
 
     $scope.format = hrSettings.DATE_FORMAT.toLowerCase();
     $scope.data = data;
@@ -256,5 +256,5 @@ define([
     }
   }
 
-  return ModalTaskCtrl;
+  return ModalTaskController;
 });

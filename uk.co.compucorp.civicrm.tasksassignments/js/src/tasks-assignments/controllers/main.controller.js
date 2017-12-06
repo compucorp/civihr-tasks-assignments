@@ -3,15 +3,15 @@
 define(function () {
   'use strict';
 
-  MainCtrl.__name = 'MainCtrl';
-  MainCtrl.$inject = [
+  MainController.__name = 'MainController';
+  MainController.$inject = [
     '$scope', '$rootScope', '$rootElement', '$log', '$uibModal', '$q', 'FileService',
     'config'
   ];
 
-  function MainCtrl ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService,
+  function MainController ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService,
     config) {
-    $log.debug('Controller: MainCtrl');
+    $log.debug('Controller: MainController');
 
     /**
      * Opens Document Modal based on passed modal mode, role and
@@ -64,7 +64,7 @@ define(function () {
       var modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/task.html?v=5',
-        controller: 'ModalTaskCtrl',
+        controller: 'ModalTaskController',
         resolve: {
           data: function () {
             return data;
@@ -88,7 +88,7 @@ define(function () {
       var modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
-        controller: 'ModalAssignmentCtrl',
+        controller: 'ModalAssignmentController',
         size: 'lg',
         resolve: {
           data: function () {
@@ -112,7 +112,7 @@ define(function () {
       $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
-        controller: 'ModalReminderCtrl',
+        controller: 'ModalReminderController',
         resolve: {
           data: function () {
             return data;
@@ -125,5 +125,5 @@ define(function () {
     };
   }
 
-  return MainCtrl;
+  return MainController;
 });

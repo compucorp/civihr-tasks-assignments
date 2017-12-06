@@ -5,15 +5,15 @@ define([
 ], function (angular) {
   'use strict';
 
-  ModalReminderCtrl.__name = 'ModalReminderCtrl';
-  ModalReminderCtrl.$inject = [
+  ModalReminderController.__name = 'ModalReminderController';
+  ModalReminderController.$inject = [
     '$scope', '$uibModalInstance', '$dialog', '$rootScope', '$q', '$log', '$filter',
     'TaskService', 'DocumentService', 'data', 'type', 'config'
   ];
 
-  function ModalReminderCtrl ($scope, $modalInstance, $dialog, $rootScope, $q,
+  function ModalReminderController ($scope, $modalInstance, $dialog, $rootScope, $q,
     $log, $filter, TaskService, DocumentService, data, type, config) {
-    $log.debug('Controller: ModalReminderCtrl');
+    $log.debug('Controller: ModalReminderController');
 
     $scope.data = {};
     $scope.type = type;
@@ -47,5 +47,5 @@ define([
     };
   }
 
-  return ModalReminderCtrl;
+  return ModalReminderController;
 });

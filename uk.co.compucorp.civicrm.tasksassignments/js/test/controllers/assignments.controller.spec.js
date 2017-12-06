@@ -6,10 +6,10 @@ define([
 ], function () {
   'use strict';
 
-  describe('AssignmentsCtrl', function () {
+  describe('AssignmentsController', function () {
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function ($controller, $rootScope) {
-      $controller('AssignmentsCtrl', { $scope: $rootScope.$new() });
+      $controller('AssignmentsController', { $scope: $rootScope.$new() });
     }));
 
     it('is a simple test', function () {

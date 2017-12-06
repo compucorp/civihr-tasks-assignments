@@ -4,7 +4,7 @@
     | filterByStatus:cache.taskStatusResolve:false
     | filterByDateField:'dateRange':'activity_date_time':{ from: calendarDay, until: calendarDay }
     | orderBy: 'activity_date_time')"
-    ng-controller="TaskCtrl"
+    ng-controller="TaskController"
     ng-class="{
       '{{prefix}}task-completed': task.completed,
       '{{prefix}}task-due': task.due

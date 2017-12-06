@@ -77,12 +77,12 @@ define([
       })
       .state('assignments', {
         url: '/assignments',
-        controller: 'ExternalPageCtrl',
+        controller: 'ExternalPageController',
         templateUrl: config.path.TPL + 'dashboard/assignments.html?v=5'
       })
       .state('calendar', {
         abstract: true,
-        controller: 'CalendarCtrl',
+        controller: 'CalendarController',
         templateUrl: config.path.TPL + 'dashboard/calendar.html?v=3',
         resolve: {
           documentList: ['$q', 'DocumentService', 'settings', function ($q, DocumentService, settings) {
@@ -177,12 +177,12 @@ define([
       })
       .state('reports', {
         url: '/reports',
-        controller: 'ExternalPageCtrl',
+        controller: 'ExternalPageController',
         templateUrl: config.path.TPL + 'dashboard/reports.html?v=4'
       })
       .state('keyDates', {
         url: '/key-dates',
-        controller: 'DateListCtrl',
+        controller: 'DateListController',
         templateUrl: config.path.TPL + 'dashboard/key-dates.html?v=4',
         resolve: {
           contactList: ['KeyDateService', function (KeyDateService) {

@@ -98,7 +98,7 @@
                 | filterByContactId:list.filterParams.contactId
                 | orderBy: 'activity_date_time'
               ) | limitTo: listLimit)"
-            ng-controller="TaskCtrl" ng-class="{ '{{prefix}}task-completed': task.completed, '{{prefix}}task-due': task.due }"
+            ng-controller="TaskController" ng-class="{ '{{prefix}}task-completed': task.completed, '{{prefix}}task-due': task.due }"
             ng-include src="'task.html'" ct-spinner ct-spinner-id="task{{task.id}}">
           </li>
         </ul>

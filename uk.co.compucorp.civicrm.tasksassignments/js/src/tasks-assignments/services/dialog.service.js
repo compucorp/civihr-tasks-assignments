@@ -19,7 +19,7 @@ define(function () {
           appendTo: $rootElement.find('div').eq(0),
           templateUrl: config.path.TPL + 'modal/dialog.html',
           size: 'sm',
-          controller: 'ModalDialogCtrl',
+          controller: 'ModalDialogController',
           resolve: {
             content: function () {
               return {

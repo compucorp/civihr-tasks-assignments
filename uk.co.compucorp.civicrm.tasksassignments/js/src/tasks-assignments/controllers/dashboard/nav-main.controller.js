@@ -3,16 +3,16 @@
 define(function () {
   'use strict';
 
-  NavMainCtrl.__name = 'NavMainCtrl';
-  NavMainCtrl.$inject = ['$scope', '$state', '$log'];
+  NavMainController.__name = 'NavMainController';
+  NavMainController.$inject = ['$scope', '$state', '$log'];
 
-  function NavMainCtrl ($scope, $state, $log) {
-    $log.debug('Controller: NavMainCtrl');
+  function NavMainController ($scope, $state, $log) {
+    $log.debug('Controller: NavMainController');
 
     $scope.isActive = function (viewLocation) {
       return $state.includes(viewLocation);
     };
   }
 
-  return NavMainCtrl;
+  return NavMainController;
 });

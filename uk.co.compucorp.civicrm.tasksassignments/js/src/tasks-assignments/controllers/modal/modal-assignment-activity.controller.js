@@ -11,11 +11,11 @@ define([
 ], function (_, angular, moment) {
   'use strict';
 
-  ModalAssignmentActivityCtrl.__name = 'ModalAssignmentActivityCtrl';
-  ModalAssignmentActivityCtrl.$inject = ['$scope', '$log'];
+  ModalAssignmentActivityController.__name = 'ModalAssignmentActivityController';
+  ModalAssignmentActivityController.$inject = ['$scope', '$log'];
 
-  function ModalAssignmentActivityCtrl ($scope, $log) {
-    $log.debug('Controller: ModalAssignmentTaskCtrl');
+  function ModalAssignmentActivityController ($scope, $log) {
+    $log.debug('Controller: ModalAssignmentTaskController');
 
     $scope.isDisabled = !$scope.activity.activity_type_id && !$scope.activity.isAdded;
     $scope.activity.create = !$scope.isDisabled;
@@ -33,5 +33,5 @@ define([
     });
   }
 
-  return ModalAssignmentActivityCtrl;
+  return ModalAssignmentActivityController;
 });

@@ -1,10 +1,10 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" class="{$prefix}page-loading" ng-controller="MainCtrl">
+<div id="{$module}" class="{$prefix}page-loading" ng-controller="MainController">
   <div class="container-fluid">
     <div id="{$prefix}dashboard">
-      <div class="{$prefix}top-bar" ng-controller="TopBarCtrl">
+      <div class="{$prefix}top-bar" ng-controller="TopBarController">
         <div class="row">
           <div class="col-xs-12 col-sm-8">
             <ol class="breadcrumb">
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="{$prefix}container-main">
-        <ul class="nav {$prefix}sidebar {$prefix}sidebar-main" ng-controller="NavMainCtrl">
+        <ul class="nav {$prefix}sidebar {$prefix}sidebar-main" ng-controller="NavMainController">
           <li ng-class="{literal}{ active: isActive('tasks')}{/literal}">
             <a href="#/tasks">
               <i class="fa fa-list"></i>

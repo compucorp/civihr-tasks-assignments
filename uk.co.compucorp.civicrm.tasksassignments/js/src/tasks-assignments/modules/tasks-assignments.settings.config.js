@@ -21,7 +21,7 @@ define([
     $stateProvider
       .state('settings', {
         url: '/',
-        controller: 'SettingsCtrl',
+        controller: 'SettingsController',
         templateUrl: config.path.TPL + 'settings.html?v=5'
       });
 

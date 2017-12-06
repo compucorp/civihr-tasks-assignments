@@ -5,15 +5,15 @@ define([
 ], function (moment) {
   'use strict';
 
-  DateListCtrl.__name = 'DateListCtrl';
-  DateListCtrl.$inject = [
+  DateListController.__name = 'DateListController';
+  DateListController.$inject = [
     '$scope', '$uibModal', '$rootElement', '$rootScope', '$filter', '$log',
     '$timeout', 'contactList', 'KeyDateService', 'config'
   ];
 
-  function DateListCtrl ($scope, $modal, $rootElement, $rootScope, $filter, $log,
+  function DateListController ($scope, $modal, $rootElement, $rootScope, $filter, $log,
     $timeout, contactList, KeyDateService, config) {
-    $log.debug('Controller: DateListCtrl');
+    $log.debug('Controller: DateListController');
 
     this.init = function () {
       $scope.dateList = this.createDateList(contactList);
@@ -147,5 +147,5 @@ define([
     }
   }
 
-  return DateListCtrl;
+  return DateListController;
 });

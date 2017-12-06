@@ -5,11 +5,11 @@ define([
 ], function (moment, controllers) {
   'use strict';
 
-  TaskCtrl.__name = 'TaskCtrl';
-  TaskCtrl.$inject = ['$scope', '$log', '$rootScope'];
+  TaskController.__name = 'TaskController';
+  TaskController.$inject = ['$scope', '$log', '$rootScope'];
 
-  function TaskCtrl ($scope, $log, $rootScope) {
-    $log.debug('Controller: TaskCtrl');
+  function TaskController ($scope, $log, $rootScope) {
+    $log.debug('Controller: TaskController');
 
     $scope.isCollapsed = true;
     $scope.picker = { opened: false };
@@ -30,5 +30,5 @@ define([
     });
   }
 
-  return TaskCtrl;
+  return TaskController;
 });

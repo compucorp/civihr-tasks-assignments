@@ -9,7 +9,7 @@ define([
 ], function (_, angular, Mock) {
   'use strict';
 
-  describe('ModalAssignmentCtrl', function () {
+  describe('ModalAssignmentController', function () {
     var $q, $controller, scope, AssignmentService,
       TaskService, DocumentService, ContactService, HRSettings, $rootScope;
 
@@ -250,10 +250,10 @@ define([
     }
 
     /**
-     * Initializes ModalAssignmentCtrl controller
+     * Initializes ModalAssignmentController controller
      */
     function initController () {
-      $controller('ModalAssignmentCtrl', {
+      $controller('ModalAssignmentController', {
         $scope: scope,
         $rootScope: $rootScope,
         AssignmentService: AssignmentService,
@@ -280,7 +280,7 @@ define([
     }
   });
 
-  describe('ModalAssignmentActivityCtrl', function () {
+  describe('ModalAssignmentActivityController', function () {
     var $controller, scope;
 
     beforeEach(module('tasks-assignments.dashboard'));
@@ -366,7 +366,7 @@ define([
     });
 
     function initController () {
-      $controller('ModalAssignmentActivityCtrl', {
+      $controller('ModalAssignmentActivityController', {
         $scope: scope
       });
     }

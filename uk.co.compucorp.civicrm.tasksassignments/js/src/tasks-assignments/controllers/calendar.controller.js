@@ -6,13 +6,13 @@ define([
 ], function (angular, moment) {
   'use strict';
 
-  CalendarCtrl.__name = 'CalendarCtrl';
-  CalendarCtrl.$inject = [
+  CalendarController.__name = 'CalendarController';
+  CalendarController.$inject = [
     '$scope', '$log', '$rootScope', '$filter', '$timeout', '$state', '$stateParams',
     'taskList', 'documentList', 'settings'
   ];
 
-  function CalendarCtrl ($scope, $log, $rootScope, $filter, $timeout, $state,
+  function CalendarController ($scope, $log, $rootScope, $filter, $timeout, $state,
     $stateParams, taskList, documentList, settings) {
     this.init = function () {
       $scope.calTaskList = this.createCalEventList('task', taskList, $rootScope.cache.taskType.obj);
@@ -163,5 +163,5 @@ define([
     this.init();
   }
 
-  return CalendarCtrl;
+  return CalendarController;
 });

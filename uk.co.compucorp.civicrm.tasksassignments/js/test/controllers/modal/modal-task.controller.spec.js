@@ -9,7 +9,7 @@ define([
 ], function (_, angular, moment) {
   'use strict';
 
-  describe('ModalTaskCtrl', function () {
+  describe('ModalTaskController', function () {
     var $controller, $q, $rootScope, $scope, HRSettings,
       data, AssignmentService;
 
@@ -165,7 +165,7 @@ define([
     });
 
     function initController () {
-      $controller('ModalTaskCtrl', {
+      $controller('ModalTaskController', {
         $rootScope: $rootScope,
         $scope: $scope,
         $uibModalInstance: {

@@ -248,7 +248,7 @@ define([
             appendTo: $rootElement.find('div').eq(0),
             templateUrl: config.path.TPL + '/modal/progress.html?v=1',
             size: 'sm',
-            controller: 'ModalProgressCtrl',
+            controller: 'ModalProgressController',
             resolve: {
               uploader: function () {
                 return vm.uploader;

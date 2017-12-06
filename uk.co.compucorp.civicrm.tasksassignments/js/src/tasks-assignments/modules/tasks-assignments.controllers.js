@@ -22,32 +22,32 @@ define([
   'tasks-assignments/controllers/modal/modal-reminder.controller',
   'tasks-assignments/controllers/modal/modal-task-migrate.controller',
   'tasks-assignments/controllers/modal/modal-task.controller'
-], function (angular, AssignmentsCtrl, CalendarCtrl, DateListCtrl, DocumentListController,
-  DocumentCtrl, ExternalPageCtrl, MainCtrl, SettingsCtrl, TaskListController,
-  TaskCtrl, NavMainCtrl, TopBarCtrl, ModalAssignmentActivityCtrl, ModalAssignmentCtrl,
-  ModalDialogCtrl, ModalDocumentController, ModalProgressCtrl, ModalReminderCtrl,
-  ModalTaskMigrateCtrl, ModalTaskCtrl) {
+], function (angular, AssignmentsController, CalendarController, DateListController, DocumentListController,
+  DocumentController, ExternalPageController, MainController, SettingsController, TaskListController,
+  TaskController, NavMainController, TopBarController, ModalAssignmentActivityController, ModalAssignmentController,
+  ModalDialogController, ModalDocumentController, ModalProgressController, ModalReminderController,
+  ModalTaskMigrateController, ModalTaskController) {
   'use strict';
 
   return angular.module('tasks-assignments.controllers', [])
-    .controller(AssignmentsCtrl.__name, AssignmentsCtrl)
-    .controller(CalendarCtrl.__name, CalendarCtrl)
-    .controller(DateListCtrl.__name, DateListCtrl)
+    .controller(AssignmentsController.__name, AssignmentsController)
+    .controller(CalendarController.__name, CalendarController)
+    .controller(DateListController.__name, DateListController)
     .controller(DocumentListController.__name, DocumentListController)
-    .controller(DocumentCtrl.__name, DocumentCtrl)
-    .controller(ExternalPageCtrl.__name, ExternalPageCtrl)
-    .controller(MainCtrl.__name, MainCtrl)
-    .controller(SettingsCtrl.__name, SettingsCtrl)
+    .controller(DocumentController.__name, DocumentController)
+    .controller(ExternalPageController.__name, ExternalPageController)
+    .controller(MainController.__name, MainController)
+    .controller(SettingsController.__name, SettingsController)
     .controller(TaskListController.__name, TaskListController)
-    .controller(TaskCtrl.__name, TaskCtrl)
-    .controller(NavMainCtrl.__name, NavMainCtrl)
-    .controller(TopBarCtrl.__name, TopBarCtrl)
-    .controller(ModalAssignmentActivityCtrl.__name, ModalAssignmentActivityCtrl)
-    .controller(ModalAssignmentCtrl.__name, ModalAssignmentCtrl)
-    .controller(ModalDialogCtrl.__name, ModalDialogCtrl)
+    .controller(TaskController.__name, TaskController)
+    .controller(NavMainController.__name, NavMainController)
+    .controller(TopBarController.__name, TopBarController)
+    .controller(ModalAssignmentActivityController.__name, ModalAssignmentActivityController)
+    .controller(ModalAssignmentController.__name, ModalAssignmentController)
+    .controller(ModalDialogController.__name, ModalDialogController)
     .controller(ModalDocumentController.__name, ModalDocumentController)
-    .controller(ModalProgressCtrl.__name, ModalProgressCtrl)
-    .controller(ModalReminderCtrl.__name, ModalReminderCtrl)
-    .controller(ModalTaskMigrateCtrl.__name, ModalTaskMigrateCtrl)
-    .controller(ModalTaskCtrl.__name, ModalTaskCtrl);
+    .controller(ModalProgressController.__name, ModalProgressController)
+    .controller(ModalReminderController.__name, ModalReminderController)
+    .controller(ModalTaskMigrateController.__name, ModalTaskMigrateController)
+    .controller(ModalTaskController.__name, ModalTaskController);
 });

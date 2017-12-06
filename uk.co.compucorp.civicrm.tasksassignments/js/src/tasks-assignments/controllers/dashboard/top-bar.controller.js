@@ -3,11 +3,11 @@
 define(function () {
   'use strict';
 
-  TopBarCtrl.__name = 'TopBarCtrl';
-  TopBarCtrl.$inject = ['$scope', '$rootScope', '$state', '$log'];
+  TopBarController.__name = 'TopBarController';
+  TopBarController.$inject = ['$scope', '$rootScope', '$state', '$log'];
 
-  function TopBarCtrl ($scope, $rootScope, $state, $log) {
-    $log.debug('Controller: TopBarCtrl');
+  function TopBarController ($scope, $rootScope, $state, $log) {
+    $log.debug('Controller: TopBarController');
 
     $rootScope.itemAdd = {};
     $rootScope.itemAdd.fn = function () {
@@ -18,5 +18,5 @@ define(function () {
     };
   }
 
-  return TopBarCtrl;
+  return TopBarController;
 });

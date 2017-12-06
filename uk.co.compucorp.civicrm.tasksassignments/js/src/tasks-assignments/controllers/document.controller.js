@@ -5,11 +5,11 @@ define([
 ], function (moment) {
   'use strict';
 
-  DocumentCtrl.__name = 'DocumentCtrl';
-  DocumentCtrl.$inject = ['$scope', '$rootScope', 'config', '$log'];
+  DocumentController.__name = 'DocumentController';
+  DocumentController.$inject = ['$scope', '$rootScope', 'config', '$log'];
 
-  function DocumentCtrl ($scope, $rootScope, config, $log) {
-    $log.debug('Controller: DocumentCtrl');
+  function DocumentController ($scope, $rootScope, config, $log) {
+    $log.debug('Controller: DocumentController');
 
     $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
     $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
@@ -22,5 +22,5 @@ define([
     });
   }
 
-  return DocumentCtrl;
+  return DocumentController;
 });

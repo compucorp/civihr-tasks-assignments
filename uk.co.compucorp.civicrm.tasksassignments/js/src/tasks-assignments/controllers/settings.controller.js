@@ -5,15 +5,15 @@ define([
 ], function (angular) {
   'use strict';
 
-  SettingsCtrl.__name = 'SettingsCtrl';
-  SettingsCtrl.$inject = [
+  SettingsController.__name = 'SettingsController';
+  SettingsController.$inject = [
     '$scope', '$rootScope', '$rootElement', '$location', '$dialog', '$q',
     '$log', '$state', '$uibModal', 'SettingsService', 'Task', 'config', 'settings'
   ];
 
-  function SettingsCtrl ($scope, $rootScope, $rootElement, $location, $dialog, $q,
+  function SettingsController ($scope, $rootScope, $rootElement, $location, $dialog, $q,
     $log, $state, $modal, SettingsService, Task, config, settings) {
-    $log.debug('Controller: SettingsCtrl');
+    $log.debug('Controller: SettingsController');
 
     $scope.settings = angular.copy(settings);
     $scope.configureAddAssignmentBtn = !!$scope.settings.copy.button.assignmentAdd;
@@ -40,7 +40,7 @@ define([
       $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/taskMigrate.html?v=1',
-        controller: 'ModalTaskMigrateCtrl',
+        controller: 'ModalTaskMigrateController',
         resolve: {
           activityType: function () {
             return promiseActivityTypes;
@@ -94,5 +94,5 @@ define([
     $rootScope.$broadcast('ct-spinner-hide');
   }
 
-  return SettingsCtrl;
+  return SettingsController;
 });

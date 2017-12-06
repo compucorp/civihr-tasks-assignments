@@ -5,17 +5,17 @@ define([
 ], function (angular) {
   'use strict';
 
-  ModalTaskMigrateCtrl.__name = 'ModalTaskMigrateCtrl';
-  ModalTaskMigrateCtrl.$inject = [
+  ModalTaskMigrateController.__name = 'ModalTaskMigrateController';
+  ModalTaskMigrateController.$inject = [
     '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log',
     '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'TaskService',
     'Task', 'activityType', 'ContactService', 'UtilsService', 'settings'
   ];
 
-  function ModalTaskMigrateCtrl ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter,
+  function ModalTaskMigrateController ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter,
     $modal, $dialog, $timeout, AssignmentService, TaskService, Task, activityType,
     ContactService, UtilsService, settings) {
-    $log.debug('Controller: ModalTaskMigrateCtrl');
+    $log.debug('Controller: ModalTaskMigrateController');
 
     $scope.migrate = {};
     $scope.migrate.dataLoaded = false;
@@ -251,5 +251,5 @@ define([
     };
   }
 
-  return ModalTaskMigrateCtrl;
+  return ModalTaskMigrateController;
 });

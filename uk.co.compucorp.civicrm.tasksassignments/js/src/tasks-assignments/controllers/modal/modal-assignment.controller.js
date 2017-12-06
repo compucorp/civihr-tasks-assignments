@@ -7,17 +7,17 @@ define([
 ], function (_, angular, moment) {
   'use strict';
 
-  ModalAssignmentCtrl.__name = 'ModalAssignmentCtrl';
-  ModalAssignmentCtrl.$inject = [
+  ModalAssignmentController.__name = 'ModalAssignmentController';
+  ModalAssignmentController.$inject = [
     '$timeout', '$scope', '$uibModalInstance', '$rootScope', '$q', '$log', '$filter',
     'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data',
     'config', 'settings', 'HR_settings'
   ];
 
-  function ModalAssignmentCtrl ($timeout, $scope, $modalInstance, $rootScope, $q,
+  function ModalAssignmentController ($timeout, $scope, $modalInstance, $rootScope, $q,
     $log, $filter, AssignmentService, TaskService, DocumentService, ContactService,
     data, config, settings, hrSettings) {
-    $log.debug('Controller: ModalAssignmentCtrl');
+    $log.debug('Controller: ModalAssignmentController');
 
     var activityModel = {
       activity_type_id: null,
@@ -397,5 +397,5 @@ define([
     }
   }
 
-  return ModalAssignmentCtrl;
+  return ModalAssignmentController;
 });

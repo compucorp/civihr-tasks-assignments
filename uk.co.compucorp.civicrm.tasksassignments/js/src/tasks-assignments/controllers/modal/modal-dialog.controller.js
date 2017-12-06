@@ -3,13 +3,13 @@
 define(function () {
   'use strict';
 
-  ModalDialogCtrl.__name = 'ModalDialogCtrl';
-  ModalDialogCtrl.$inject = [
+  ModalDialogController.__name = 'ModalDialogController';
+  ModalDialogController.$inject = [
     '$scope', '$uibModalInstance', '$timeout', 'content', '$log'
   ];
 
-  function ModalDialogCtrl ($scope, $modalInstance, $timeout, content, $log) {
-    $log.debug('Controller: ModalDialogCtrl');
+  function ModalDialogController ($scope, $modalInstance, $timeout, content, $log) {
+    $log.debug('Controller: ModalDialogController');
 
     $scope.title = content.title || 'CiviHR Tasks & Assignments';
     $scope.msg = content.msg || '';
@@ -25,5 +25,5 @@ define(function () {
     };
   }
 
-  return ModalDialogCtrl;
+  return ModalDialogController;
 });

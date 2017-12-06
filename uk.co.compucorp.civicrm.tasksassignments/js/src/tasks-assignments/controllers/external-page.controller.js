@@ -3,14 +3,14 @@
 define(function () {
   'use strict';
 
-  ExternalPageCtrl.__name = 'ExternalPageCtrl';
-  ExternalPageCtrl.$inject = [
+  ExternalPageController.__name = 'ExternalPageController';
+  ExternalPageController.$inject = [
     '$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config'
   ];
 
-  function ExternalPageCtrl ($scope, $log, $modal, $rootElement, $rootScope,
+  function ExternalPageController ($scope, $log, $modal, $rootElement, $rootScope,
     $state, config) {
-    $log.debug('Controller: ExternalPageCtrl');
+    $log.debug('Controller: ExternalPageController');
 
     $scope.assignmentsUrl = config.url.ASSIGNMENTS + '?reset=1';
     $scope.reportsUrl = config.url.CIVI_DASHBOARD + '?reset=1';
@@ -24,5 +24,5 @@ define(function () {
     });
   }
 
-  return ExternalPageCtrl;
+  return ExternalPageController;
 });
