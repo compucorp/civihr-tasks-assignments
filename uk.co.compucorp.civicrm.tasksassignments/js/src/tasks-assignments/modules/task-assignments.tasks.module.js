@@ -4,6 +4,7 @@ define([
   'common/angular',
   'tasks-assignments/modules/task-assignments.constants',
   'tasks-assignments/modules/task-assignments.controllers',
+  'tasks-assignments/modules/task-assignments.core',
   'tasks-assignments/modules/task-assignments.directives',
   'tasks-assignments/modules/task-assignments.filters',
   'tasks-assignments/modules/task-assignments.resources',
@@ -15,14 +16,15 @@ define([
   'use strict';
 
   angular.module('task-assignments.tasks', [
+    'task-assignments.core',
+    'task-assignments.run',
+    'task-assignments.values',
     'task-assignments.constants',
     'task-assignments.controllers',
     'task-assignments.directives',
     'task-assignments.filters',
     'task-assignments.resources',
-    'task-assignments.run',
     'task-assignments.services',
-    'task-assignments.values',
     'task-assignments.tasks.config'
   ]);
 });
