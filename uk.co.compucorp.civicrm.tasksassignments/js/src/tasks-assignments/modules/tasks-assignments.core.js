@@ -13,12 +13,12 @@ define([
   'tasks-assignments/vendor/angular-bootstrap-calendar',
   'tasks-assignments/vendor/angular-checklist-model',
   'tasks-assignments/vendor/angular-router',
-  'tasks-assignments/modules/task-assignments.constants',
-  'tasks-assignments/modules/task-assignments.values'
+  'tasks-assignments/modules/tasks-assignments.constants',
+  'tasks-assignments/modules/tasks-assignments.values'
 ], function (angular) {
   'use strict';
 
-  angular.module('task-assignments.core', [
+  angular.module('tasks-assignments.core', [
     'ngAnimate',
     'ngResource',
     'ngSanitize',

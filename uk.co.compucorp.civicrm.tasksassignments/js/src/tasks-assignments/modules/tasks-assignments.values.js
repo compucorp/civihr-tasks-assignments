@@ -5,7 +5,7 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('task-assignments.values', []).value('settings', {
+  angular.module('tasks-assignments.values', []).value('settings', {
     tabEnabled: {
       documents: CRM.tasksAssignments.settings.documents_tab,
       keyDates: CRM.tasksAssignments.settings.keydates_tab

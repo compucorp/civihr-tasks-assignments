@@ -6,7 +6,7 @@ define([
   'mocks/data/assignment.data',
   'mocks/data/document.data',
   'common/angularMocks',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (documentMock, contactMock, assignmentMock, documentFabricator) {
   'use strict';
 
@@ -14,7 +14,7 @@ define([
     var Document, requestBody, $httpBackend, $httpParamSerializer;
     var request = {};
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_Document_, _$httpBackend_, _$httpParamSerializer_) {
       $httpParamSerializer = _$httpParamSerializer_;
       Document = _Document_;
@@ -67,7 +67,7 @@ define([
     var AssignmentService, ContactService, DocumentService, $q,
       deferred, config, promise, $httpBackend;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_AssignmentService_, _ContactService_,
       _DocumentService_, _config_, _$q_, _$httpBackend_) {
       AssignmentService = _AssignmentService_;

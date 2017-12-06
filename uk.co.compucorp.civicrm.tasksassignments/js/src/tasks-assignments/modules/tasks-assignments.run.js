@@ -5,9 +5,9 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('task-assignments.run', [
-    'task-assignments.constants',
-    'task-assignments.values'
+  angular.module('tasks-assignments.run', [
+    'tasks-assignments.constants',
+    'tasks-assignments.values'
   ]).run(run);
 
   run.$inject = [
@@ -19,7 +19,7 @@ define([
   function run ($rootScope, $rootElement, $q, $location, $log, config, settings,
     DocumentService, TaskService, AssignmentService, KeyDateService, ContactService,
     editableOptions) {
-    $log.debug('task-assignments.run');
+    $log.debug('tasks-assignments.run');
 
     var contactsToCache = [config.LOGGED_IN_CONTACT_ID];
 

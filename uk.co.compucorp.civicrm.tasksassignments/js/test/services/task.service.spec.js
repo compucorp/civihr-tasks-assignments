@@ -3,7 +3,7 @@
 define([
   'mocks/fabricators/task.fabricator',
   'mocks/data/task.data',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (taskFabricator, taskMock) {
   'use strict';
 
@@ -26,7 +26,7 @@ define([
     var Task, $httpBackend, $httpParamSerializer, requestBody;
     var request = {};
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
 
     beforeEach(inject(function (_Task_, _$httpParamSerializer_, _$httpBackend_) {
       Task = _Task_;
@@ -78,7 +78,7 @@ define([
   describe('TaskService', function () {
     var TaskService, $httpBackend, $q, promise;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
 
     beforeEach(inject(function (_TaskService_, _$httpBackend_, _$q_) {
       TaskService = _TaskService_;

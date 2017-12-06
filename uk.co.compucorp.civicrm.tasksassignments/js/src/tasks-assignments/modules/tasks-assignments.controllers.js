@@ -29,7 +29,7 @@ define([
   ModalTaskMigrateCtrl, ModalTaskCtrl) {
   'use strict';
 
-  return angular.module('task-assignments.controllers', [])
+  return angular.module('tasks-assignments.controllers', [])
     .controller(AssignmentsCtrl.__name, AssignmentsCtrl)
     .controller(CalendarCtrl.__name, CalendarCtrl)
     .controller(DateListCtrl.__name, DateListCtrl)

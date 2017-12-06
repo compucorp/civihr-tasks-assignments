@@ -15,15 +15,15 @@
 
   require([
     'common/angular',
-    'tasks-assignments/modules/task-assignments.dashboard.module',
-    'tasks-assignments/modules/task-assignments.documents.module',
-    'tasks-assignments/modules/task-assignments.settings.module',
-    'tasks-assignments/modules/task-assignments.tasks.module'
+    'tasks-assignments/modules/tasks-assignments.dashboard.module',
+    'tasks-assignments/modules/tasks-assignments.documents.module',
+    'tasks-assignments/modules/tasks-assignments.settings.module',
+    'tasks-assignments/modules/tasks-assignments.tasks.module'
   ], function (angular) {
     'use strict';
 
     document.addEventListener('taInit', function (e) {
-      angular.bootstrap(document.getElementById(e.detail.module), ['task-assignments.' + e.detail.app]);
+      angular.bootstrap(document.getElementById(e.detail.module), ['tasks-assignments.' + e.detail.app]);
     });
 
     document.dispatchEvent(typeof window.CustomEvent === 'function' ? new window.CustomEvent('taReady') : (function () {

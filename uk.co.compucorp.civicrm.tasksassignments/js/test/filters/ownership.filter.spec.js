@@ -2,14 +2,14 @@
 
 define([
   'common/angularMocks',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function () {
   'use strict';
 
   describe('filterByOwnership', function () {
     var config, filter, mockedTasks;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_config_, $filter) {
       (config = _config_) && (config.LOGGED_IN_CONTACT_ID = '205');
       mockedTasks = mockData();

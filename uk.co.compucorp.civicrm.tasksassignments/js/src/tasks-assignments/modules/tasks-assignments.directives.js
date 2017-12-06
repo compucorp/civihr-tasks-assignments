@@ -10,7 +10,7 @@ define([
 ], function (angular, ctCiviEvents, taIframe, sidebarFilters, ctSpinner, taValidate) {
   'use strict';
 
-  return angular.module('task-assignments.directives', [])
+  return angular.module('tasks-assignments.directives', [])
     .directive(ctCiviEvents.__name, ctCiviEvents)
     .directive(taIframe.__name, taIframe)
     .directive(sidebarFilters.__name, sidebarFilters)

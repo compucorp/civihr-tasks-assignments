@@ -3,7 +3,7 @@
 define([
   'common/lodash',
   'mocks/data/contact.data',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (_, contactMock) {
   'use strict';
 
@@ -18,7 +18,7 @@ define([
   describe('ContactService', function () {
     var Contact, ContactService, $httpBackend, promise, jsonData;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
 
     beforeEach(inject(function (_Contact_, _ContactService_, _$httpBackend_) {
       ContactService = _ContactService_;

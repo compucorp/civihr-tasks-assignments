@@ -5,14 +5,14 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('task-assignments.documents.config', ['task-assignments.constants']).config(documentsConfig);
+  angular.module('tasks-assignments.tasks.config', ['tasks-assignments.constants']).config(tasksConfig);
 
-  documentsConfig.$inject = [
+  tasksConfig.$inject = [
     'config', '$urlRouterProvider', '$stateProvider', '$resourceProvider',
     '$httpProvider', 'uibDatepickerConfig', 'uiSelectConfig', '$logProvider'
   ];
 
-  function documentsConfig (config, $urlRouterProvider, $stateProvider, $resourceProvider,
+  function tasksConfig (config, $urlRouterProvider, $stateProvider, $resourceProvider,
     $httpProvider, datepickerConfig, uiSelectConfig, $logProvider) {
     $logProvider.debugEnabled(config.DEBUG);
 
@@ -26,13 +26,16 @@ define([
       })
       .state('main', {
         url: '/',
-        controller: 'DocumentListController',
+        controller: 'TaskListController',
         controllerAs: 'list',
-        templateUrl: config.path.TPL + 'contact/documents.html?v=4',
+        templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
         resolve: {
-          documentList: ['DocumentService', function (DocumentService) {
-            return DocumentService.get({
-              'target_contact_id': config.CONTACT_ID
+          taskList: ['TaskService', function (TaskService) {
+            return TaskService.get({
+              'target_contact_id': config.CONTACT_ID,
+              'status_id': {
+                'NOT IN': config.status.resolve.TASK
+              }
             });
           }]
         }

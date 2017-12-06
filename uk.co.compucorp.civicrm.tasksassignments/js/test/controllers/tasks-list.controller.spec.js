@@ -4,14 +4,14 @@ define([
   'common/angular',
   'mocks/fabricators/task.fabricator',
   'common/angularMocks',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (angular, taskFabricator) {
   'use strict';
 
   describe('TaskListController', function () {
     var $scope, ContactService, TaskService, controller;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function ($controller, $rootScope, _ContactService_, _TaskService_) {
       $scope = $rootScope.$new();
       ContactService = _ContactService_;

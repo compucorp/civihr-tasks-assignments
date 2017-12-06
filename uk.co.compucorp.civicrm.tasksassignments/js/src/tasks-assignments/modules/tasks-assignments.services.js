@@ -17,7 +17,7 @@ define([
   TaskService, UtilsService) {
   'use strict';
 
-  return angular.module('task-assignments.services', [])
+  return angular.module('tasks-assignments.services', [])
     .factory(AppSettingsService.__name, AppSettingsService)
     .factory(AssignmentService.__name, AssignmentService)
     .factory(ContactService.__name, ContactService)

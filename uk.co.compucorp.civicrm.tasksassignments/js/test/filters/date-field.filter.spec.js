@@ -2,7 +2,7 @@
 
 define([
   'common/angularMocks',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function () {
   'use strict';
 
@@ -14,7 +14,7 @@ define([
 
     var oneDay = 86400000;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$filter_) {
       $filter = _$filter_;
       today = new Date();

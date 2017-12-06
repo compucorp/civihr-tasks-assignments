@@ -5,7 +5,7 @@ define([
   'common/angular',
   'mocks/data/assignment.data',
   'common/angularMocks',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (_, angular, Mock) {
   'use strict';
 
@@ -13,7 +13,7 @@ define([
     var $q, $controller, scope, AssignmentService,
       TaskService, DocumentService, ContactService, HRSettings, $rootScope;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _AssignmentService_, _DocumentService_, _TaskService_) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
@@ -283,7 +283,7 @@ define([
   describe('ModalAssignmentActivityCtrl', function () {
     var $controller, scope;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$controller_, $httpBackend, $rootScope) {
       $httpBackend.whenPOST(/action=/).respond({});
       $httpBackend.whenGET(/action=/).respond({});

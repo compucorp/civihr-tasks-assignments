@@ -9,7 +9,7 @@ define([
   'mocks/fabricators/contact.fabricator',
   'mocks/fabricators/document.fabricator',
   'mocks/fabricators/file.fabricator',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator, fileFabricator) {
   'use strict';
 
@@ -18,7 +18,7 @@ define([
       AssignmentService, AppSettingsService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
       _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_, _AppSettingsService_) {
       data = {};

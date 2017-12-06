@@ -5,7 +5,7 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('task-assignments.settings.config', ['task-assignments.constants']).config(settingsConfig);
+  angular.module('tasks-assignments.settings.config', ['tasks-assignments.constants']).config(settingsConfig);
 
   settingsConfig.$inject = [
     'config', '$stateProvider', '$urlRouterProvider', '$resourceProvider',

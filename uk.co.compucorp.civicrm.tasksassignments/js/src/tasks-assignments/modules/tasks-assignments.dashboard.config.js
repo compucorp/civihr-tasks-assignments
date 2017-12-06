@@ -7,7 +7,7 @@ define([
 ], function (angular, moment, _) {
   'use strict';
 
-  angular.module('task-assignments.dashboard.config', ['task-assignments.constants']).config(dashboardConfig);
+  angular.module('tasks-assignments.dashboard.config', ['tasks-assignments.constants']).config(dashboardConfig);
 
   dashboardConfig.$inject = [
     'config', '$resourceProvider', '$httpProvider', '$logProvider', '$urlRouterProvider',

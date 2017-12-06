@@ -2,14 +2,14 @@
 
 define([
   'common/angularMocks',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function () {
   'use strict';
 
   describe('AssignmentService', function () {
     var Assignment, AssignmentSearch, AssignmentService;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_Assignment_, _AssignmentSearch_, _AssignmentService_) {
       AssignmentSearch = _AssignmentSearch_;
       AssignmentService = _AssignmentService_;

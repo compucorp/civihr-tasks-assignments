@@ -7,14 +7,14 @@ define([
   'mocks/fabricators/document.fabricator',
   'mocks/fabricators/contact.fabricator',
   'mocks/fabricators/assignment.fabricator',
-  'tasks-assignments/modules/task-assignments.dashboard.module'
+  'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (angular, moment, _, documentFabricator, contactFabricator, assignmentFabricator) {
   'use strict';
 
   describe('DocumentListController', function () {
     var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter, controller;
 
-    beforeEach(module('task-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
