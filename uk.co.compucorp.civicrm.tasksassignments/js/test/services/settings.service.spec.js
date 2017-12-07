@@ -12,13 +12,13 @@ define([
     $httpBackend.whenGET(/action=*/).respond({});
   };
 
-  describe('AppSettingsService', function () {
-    var AppSettings, AppSettingsService, $httpBackend, promiseResult;
+  describe('appsettingsService', function () {
+    var AppSettings, appsettingsService, $httpBackend, promiseResult;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_AppSettingsService_, _AppSettings_, _$httpBackend_) {
-      AppSettingsService = _AppSettingsService_;
+    beforeEach(inject(function (_appsettingsService_, _AppSettings_, _$httpBackend_) {
+      appsettingsService = _appsettingsService_;
       AppSettings = _AppSettings_;
       $httpBackend = _$httpBackend_;
     }));
@@ -28,7 +28,7 @@ define([
       mockBackendCalls($httpBackend);
       spyOn(AppSettings, 'get').and.callThrough();
 
-      AppSettingsService.get(['maxFileSize']).then(function (maxFileSize) {
+      appsettingsService.get(['maxFileSize']).then(function (maxFileSize) {
         promiseResult = maxFileSize;
       });
     });

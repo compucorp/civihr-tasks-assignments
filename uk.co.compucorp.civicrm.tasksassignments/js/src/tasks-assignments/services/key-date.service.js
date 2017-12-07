@@ -5,11 +5,11 @@ define([
 ], function (moment) {
   'use strict';
 
-  KeyDateService.__name = 'KeyDateService';
-  KeyDateService.$inject = ['KeyDate', '$q', 'config', 'UtilsService', '$log'];
+  keyDateService.__name = 'keyDateService';
+  keyDateService.$inject = ['KeyDate', '$q', 'config', 'utilsService', '$log'];
 
-  function KeyDateService (KeyDate, $q, config, UtilsService, $log) {
-    $log.debug('Service: KeyDateService');
+  function keyDateService (KeyDate, $q, config, utilsService, $log) {
+    $log.debug('Service: keyDateService');
 
     return {
       get: function (dateStart, dateEnd) {
@@ -36,5 +36,5 @@ define([
     };
   }
 
-  return KeyDateService;
+  return keyDateService;
 });

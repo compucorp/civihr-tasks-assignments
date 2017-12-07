@@ -10,13 +10,13 @@ define([
   TaskListController.__name = 'TaskListController';
   TaskListController.$inject = [
     '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$dialog', '$state', '$uibModal', 'AssignmentService', 'ContactService',
-    'TaskService', 'HR_settings', 'config', 'settings', 'taskList'
+    '$dialog', '$state', '$uibModal', 'assignmentService', 'contactService',
+    'taskService', 'HR_settings', 'config', 'settings', 'taskList'
   ];
 
   function TaskListController ($filter, $log, $rootElement, $rootScope, $scope,
-    $timeout, $dialog, $state, $modal, AssignmentService, ContactService,
-    TaskService, HRSettings, config, settings, taskList) {
+    $timeout, $dialog, $state, $modal, assignmentService, contactService,
+    taskService, HRSettings, config, settings, taskList) {
     $log.debug('Controller: TaskListController');
 
     var vm = this;
@@ -95,14 +95,14 @@ define([
 
       vm.collectId(taskList);
       if (contactIds && contactIds.length) {
-        ContactService.get({'IN': contactIds}).then(function (data) {
-          ContactService.updateCache(data);
+        contactService.get({'IN': contactIds}).then(function (data) {
+          contactService.updateCache(data);
         });
       }
 
       if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-        AssignmentService.get({'IN': assignmentIds}).then(function (data) {
-          AssignmentService.updateCache(data);
+        assignmentService.get({'IN': assignmentIds}).then(function (data) {
+          assignmentService.updateCache(data);
         });
       }
 
@@ -154,7 +154,7 @@ define([
         subject: $item.extra.case_subject
       };
 
-      AssignmentService.updateCache(obj);
+      assignmentService.updateCache(obj);
     }
 
     /**
@@ -185,7 +185,7 @@ define([
         email: contact.description.length ? contact.description[0] : ''
       };
 
-      ContactService.updateCache(obj);
+      contactService.updateCache(obj);
 
       return true;
     }
@@ -193,13 +193,13 @@ define([
     function changeStatus (task, statusId) {
       $scope.$broadcast('ct-spinner-show', 'task' + task.id);
 
-      TaskService.save({
+      taskService.save({
         id: task.id,
         status_id: statusId || '2'
       }).then(function (results) {
         $rootScope.$broadcast('taskFormSuccess', results, task);
         $scope.$broadcast('ct-spinner-hide', 'task' + task.id);
-        AssignmentService.updateTab();
+        assignmentService.updateTab();
       });
     }
 
@@ -250,11 +250,11 @@ define([
           return;
         }
 
-        TaskService.delete(task.id).then(function (results) {
+        taskService.delete(task.id).then(function (results) {
           vm.list.splice(vm.list.indexOf(task), 1);
 
           $rootScope.$broadcast('taskDelete', task.id);
-          AssignmentService.updateTab();
+          assignmentService.updateTab();
         });
       });
     }
@@ -316,7 +316,7 @@ define([
       // Remove resolved tasks from the task list
       $filter('filterByStatus')(vm.list, $rootScope.cache.taskStatusResolve, false);
 
-      TaskService.get({
+      taskService.get({
         'target_contact_id': config.CONTACT_ID,
         'status_id': {
           'IN': config.status.resolve.TASK
@@ -328,14 +328,14 @@ define([
         vm.collectId(taskListResolved);
 
         if (contactIds && contactIds.length) {
-          ContactService.get({'IN': contactIds}).then(function (data) {
-            ContactService.updateCache(data);
+          contactService.get({'IN': contactIds}).then(function (data) {
+            contactService.updateCache(data);
           });
         }
 
         if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-          AssignmentService.get({'IN': assignmentIds}).then(function (data) {
-            AssignmentService.updateCache(data);
+          assignmentService.get({'IN': assignmentIds}).then(function (data) {
+            assignmentService.updateCache(data);
           });
         }
 
@@ -361,7 +361,7 @@ define([
         return;
       }
 
-      AssignmentService.search(input, caseId).then(function (results) {
+      assignmentService.search(input, caseId).then(function (results) {
         vm.assignments = $filter('filter')(results, function (val) {
           return +val.extra.contact_id === +targetContactId;
         });
@@ -373,7 +373,7 @@ define([
         return;
       }
 
-      ContactService.search(input, {
+      contactService.search(input, {
         contact_type: 'Individual'
       }).then(function (results) {
         vm.contacts = results;
@@ -387,7 +387,7 @@ define([
     function updateTask (task, updateObj) {
       vm.cacheContact(task.assignee_contact_id[0]);
 
-      return TaskService
+      return taskService
         .save(angular.extend({}, task, updateObj))
         .catch(function (reason) {
           CRM.alert(reason, 'Error', 'error');

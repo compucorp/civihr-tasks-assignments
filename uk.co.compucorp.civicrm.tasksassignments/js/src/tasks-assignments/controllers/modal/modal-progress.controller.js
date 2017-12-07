@@ -5,12 +5,12 @@ define(function () {
 
   ModalProgressController.__name = 'ModalProgressController';
   ModalProgressController.$inject = [
-    '$log', '$q', '$scope', '$timeout', '$uibModalInstance', 'FileService',
+    '$log', '$q', '$scope', '$timeout', '$uibModalInstance', 'fileServiceTA',
     'uploader', 'entityId'
   ];
 
   function ModalProgressController ($log, $q, $scope, $timeout, $modalInstance,
-    FileService, uploader, entityId) {
+    fileServiceTA, uploader, entityId) {
     $log.debug('Controller: ModalProgressController');
 
     $scope.uploader = uploader;
@@ -26,7 +26,7 @@ define(function () {
         this.item = item.file.name;
       };
 
-      FileService.upload(uploader, entityId).then(function (results) {
+      fileServiceTA.upload(uploader, entityId).then(function (results) {
         $timeout(function () {
           $modalInstance.close(results);
         }, 500);

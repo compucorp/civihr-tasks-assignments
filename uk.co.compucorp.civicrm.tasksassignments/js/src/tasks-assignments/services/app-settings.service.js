@@ -3,13 +3,13 @@
 define(function () {
   'use strict';
 
-  AppSettingsService.__name = 'AppSettingsService';
-  AppSettingsService.$inject = [
-    'AppSettings', '$q', 'config', 'UtilsService', '$log'
+  appsettingsService.__name = 'appsettingsService';
+  appsettingsService.$inject = [
+    'AppSettings', '$q', 'config', 'utilsService', '$log'
   ];
 
-  function AppSettingsService (AppSettings, $q, config, UtilsService, $log) {
-    $log.debug('Service: AppSettingsService');
+  function appsettingsService (AppSettings, $q, config, utilsService, $log) {
+    $log.debug('Service: appsettingsService');
 
     return {
 
@@ -39,5 +39,5 @@ define(function () {
     };
   }
 
-  return AppSettingsService;
+  return appsettingsService;
 });

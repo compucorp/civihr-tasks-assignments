@@ -3,11 +3,11 @@
 define(function () {
   'use strict';
 
-  UtilsService.__name = 'UtilsService';
-  UtilsService.$inject = ['config', '$q', '$log', '$rootScope'];
+  utilsService.__name = 'utilsService';
+  utilsService.$inject = ['config', '$q', '$log', '$rootScope'];
 
-  function UtilsService (config, $q, $log) {
-    $log.debug('Service: UtilsService');
+  function utilsService (config, $q, $log) {
+    $log.debug('Service: utilsService');
     return {
       errorHandler: function (data, msg, deferred) {
         var errorCode = '';
@@ -41,5 +41,5 @@ define(function () {
     };
   }
 
-  return UtilsService;
+  return utilsService;
 });

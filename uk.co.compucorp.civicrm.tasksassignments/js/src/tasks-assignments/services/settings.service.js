@@ -3,13 +3,13 @@
 define(function () {
   'use strict';
 
-  SettingsService.__name = 'SettingsService';
-  SettingsService.$inject = [
-    'Settings', '$q', 'config', 'UtilsService', '$log', 'settings'
+  settingsService.__name = 'settingsService';
+  settingsService.$inject = [
+    'Settings', '$q', 'config', 'utilsService', '$log', 'settings'
   ];
 
-  function SettingsService (Settings, $q, config, UtilsService, $log, settings) {
-    $log.debug('Service: SettingsService');
+  function settingsService (Settings, $q, config, utilsService, $log, settings) {
+    $log.debug('Service: settingsService');
 
     return {
       get: function (fields) {
@@ -47,7 +47,7 @@ define(function () {
             'fields': fields
           }
         }, null, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to save', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to save', deferred)) {
             return;
           }
 
@@ -68,5 +68,5 @@ define(function () {
     };
   }
 
-  return SettingsService;
+  return settingsService;
 });

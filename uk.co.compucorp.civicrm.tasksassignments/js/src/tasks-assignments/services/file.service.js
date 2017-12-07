@@ -3,13 +3,13 @@
 define(function () {
   'use strict';
 
-  FileService.__name = 'FileService';
-  FileService.$inject = [
-    '$resource', 'config', '$q', 'UtilsService', 'FileUploader', '$log'
+  fileServiceTA.__name = 'fileServiceTA';
+  fileServiceTA.$inject = [
+    '$resource', 'config', '$q', 'utilsService', 'FileUploader', '$log'
   ];
 
-  function FileService ($resource, config, $q, UtilsService, FileUploader, $log) {
-    $log.debug('Service: FileService');
+  function fileServiceTA ($resource, config, $q, utilsService, FileUploader, $log) {
+    $log.debug('Service: fileServiceTA');
 
     var File = $resource(config.url.FILE + '/:action');
     FileUploader.prototype.queueDelete = [];
@@ -34,7 +34,7 @@ define(function () {
             data.is_error = 1;
           }
 
-          if (UtilsService.errorHandler(data, 'Unable to delete file', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to delete file', deferred)) {
             return;
           }
 
@@ -58,7 +58,7 @@ define(function () {
           entityTable: entityTable,
           entityID: entityId
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to fetch files', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to fetch files', deferred)) {
             return;
           }
 
@@ -128,5 +128,5 @@ define(function () {
     };
   }
 
-  return FileService;
+  return fileServiceTA;
 });

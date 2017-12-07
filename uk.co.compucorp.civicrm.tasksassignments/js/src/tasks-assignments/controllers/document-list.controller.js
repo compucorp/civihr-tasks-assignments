@@ -10,13 +10,13 @@ define([
   DocumentListController.__name = 'DocumentListController';
   DocumentListController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$dialog', '$uibModal', '$state', 'AssignmentService', 'ContactService',
-    'DocumentService', 'FileService', 'config', 'settings', 'documentList'
+    '$dialog', '$uibModal', '$state', 'assignmentService', 'contactService',
+    'documentService', 'fileServiceTA', 'config', 'settings', 'documentList'
   ];
 
   function DocumentListController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $dialog, $modal, $state, AssignmentService, ContactService,
-    DocumentService, FileService, config, settings, documentList) {
+    $scope, $timeout, $dialog, $modal, $state, assignmentService, contactService,
+    documentService, fileServiceTA, config, settings, documentList) {
     $log.debug('Controller: DocumentListController');
 
     var vm = this;
@@ -158,7 +158,7 @@ define([
       initWatchers();
       vm.applySidebarFilters();
 
-      DocumentService.cacheContactsAndAssignments(documentList).then(function () {
+      documentService.cacheContactsAndAssignments(documentList).then(function () {
         $rootScope.$broadcast('ct-spinner-hide');
         $log.debug($rootScope.cache);
       });
@@ -208,7 +208,7 @@ define([
 
             i = 0;
             for (; i < documentListLen; i++) {
-              documentListPromise.push(DocumentService.delete(documentList[i].id));
+              documentListPromise.push(documentService.delete(documentList[i].id));
             }
 
             $q.all(documentListPromise).then(function (results) {
@@ -220,7 +220,7 @@ define([
               }
 
               $scope.$broadcast('ct-spinner-hide', 'documentList');
-              AssignmentService.updateTab();
+              assignmentService.updateTab();
             });
           });
 
@@ -253,14 +253,14 @@ define([
 
       $scope.$broadcast('ct-spinner-show', 'documentList');
 
-      DocumentService.save({
+      documentService.save({
         id: document.id,
         status_id: statusId
       }).then(function (results) {
         document.id = results.id;
         document.status_id = results.status_id;
         $scope.$broadcast('ct-spinner-hide', 'documentList');
-        AssignmentService.updateTab();
+        assignmentService.updateTab();
       });
     }
 
@@ -277,11 +277,11 @@ define([
           return;
         }
 
-        DocumentService.delete(document.id).then(function (results) {
+        documentService.delete(document.id).then(function (results) {
           vm.list.splice(vm.list.indexOf(document), 1);
 
           $rootScope.$broadcast('documentDelete', document.id);
-          AssignmentService.updateTab();
+          assignmentService.updateTab();
         });
       });
     }

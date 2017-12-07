@@ -30,8 +30,8 @@ define([
         controllerAs: 'list',
         templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
         resolve: {
-          taskList: ['TaskService', function (TaskService) {
-            return TaskService.get({
+          taskList: ['taskService', function (taskService) {
+            return taskService.get({
               'target_contact_id': config.CONTACT_ID,
               'status_id': {
                 'NOT IN': config.status.resolve.TASK

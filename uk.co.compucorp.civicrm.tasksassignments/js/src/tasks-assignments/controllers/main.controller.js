@@ -5,12 +5,12 @@ define(function () {
 
   MainController.__name = 'MainController';
   MainController.$inject = [
-    '$log', '$q', '$rootScope', '$rootElement', '$scope', '$uibModal', 'FileService',
+    '$log', '$q', '$rootScope', '$rootElement', '$scope', '$uibModal', 'fileServiceTA',
     'config'
   ];
 
   function MainController ($log, $q, $rootScope, $rootElement, $scope, $modal,
-    FileService, config) {
+    fileServiceTA, config) {
     $log.debug('Controller: MainController');
 
     $rootScope.modalAssignment = modalAssignment;
@@ -73,7 +73,7 @@ define(function () {
               return [];
             }
 
-            return FileService.get(data.id, 'civicrm_activity');
+            return fileServiceTA.get(data.id, 'civicrm_activity');
           }
         }
       });

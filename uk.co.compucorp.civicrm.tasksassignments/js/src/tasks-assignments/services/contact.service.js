@@ -6,15 +6,15 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  ContactService.__name = 'ContactService';
-  ContactService.$inject = [
-    'Contact', '$resource', 'config', '$q', '$filter', '$rootScope', 'UtilsService',
+  contactService.__name = 'contactService';
+  contactService.$inject = [
+    'Contact', '$resource', 'config', '$q', '$filter', '$rootScope', 'utilsService',
     '$log'
   ];
 
-  function ContactService (Contact, $resource, config, $q, $filter, $rootScope,
-    UtilsService, $log) {
-    $log.debug('Service: ContactService');
+  function contactService (Contact, $resource, config, $q, $filter, $rootScope,
+    utilsService, $log) {
+    $log.debug('Service: contactService');
 
     return {
       get: function (id) {
@@ -33,7 +33,7 @@ define([
             'return': 'display_name, sort_name, id, contact_id, contact_type, email'
           }
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to fetch contacts', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to fetch contacts', deferred)) {
             return;
           }
 
@@ -62,7 +62,7 @@ define([
           action: 'get',
           json: params
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to fetch contact list', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to fetch contact list', deferred)) {
             return;
           }
 
@@ -117,5 +117,5 @@ define([
     };
   }
 
-  return ContactService;
+  return contactService;
 });

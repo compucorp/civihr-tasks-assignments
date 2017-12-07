@@ -75,13 +75,13 @@ define([
     });
   });
 
-  describe('TaskService', function () {
-    var TaskService, $httpBackend, $q, promise;
+  describe('taskService', function () {
+    var taskService, $httpBackend, $q, promise;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_TaskService_, _$httpBackend_, _$q_) {
-      TaskService = _TaskService_;
+    beforeEach(inject(function (_taskService_, _$httpBackend_, _$q_) {
+      taskService = _taskService_;
       $httpBackend = _$httpBackend_;
       $q = _$q_;
     }));
@@ -101,7 +101,7 @@ define([
       });
 
       it('returns saved Task on saving task', function () {
-        TaskService.save(fakeTask).then(function (data) {
+        taskService.save(fakeTask).then(function (data) {
           expect(data).toEqual(fakeTask);
         });
       });
@@ -114,7 +114,7 @@ define([
       });
 
       it('returns list of assigned tasks on task assign', function () {
-        TaskService.assign(fakeTaskList, 1).then(function (data) {
+        taskService.assign(fakeTaskList, 1).then(function (data) {
           expect(data).toEqual(fakeTaskList);
         });
       });
@@ -127,7 +127,7 @@ define([
       });
 
       it('returns saved task list on saving multiple tasks', function () {
-        TaskService.saveMultiple(fakeTaskList).then(function (data) {
+        taskService.saveMultiple(fakeTaskList).then(function (data) {
           expect(data).toEqual(fakeTaskList);
         });
       });
@@ -140,7 +140,7 @@ define([
       });
 
       it('returns reminder sent status on sending reminder for a task', function () {
-        TaskService.sendReminder(1, fakeReminderNote).then(function (data) {
+        taskService.sendReminder(1, fakeReminderNote).then(function (data) {
           expect(data.values).toEqual(true);
         });
       });
@@ -150,7 +150,7 @@ define([
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond(taskMock.onGetOptions.activityTypes);
         promise = $q.all({
-          taskType: TaskService.getActivityTypes()
+          taskType: taskService.getActivityTypes()
         });
       });
 
@@ -166,7 +166,7 @@ define([
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond(taskMock.onGetOptions.taskStatus);
         promise = $q.all({
-          taskStatus: TaskService.getTaskStatus()
+          taskStatus: taskService.getTaskStatus()
         });
       });
 
@@ -182,7 +182,7 @@ define([
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task&json=%7B%22field%22:%22activity_type_id/).respond(taskMock.onGetOptions.activityTypes);
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task&json=%7B%22field%22:%22status_id/).respond(taskMock.onGetOptions.taskStatus);
-        promise = $q.resolve(TaskService.getOptions());
+        promise = $q.resolve(taskService.getOptions());
       });
 
       it('returns promise with array of list of activity types and task status', function () {

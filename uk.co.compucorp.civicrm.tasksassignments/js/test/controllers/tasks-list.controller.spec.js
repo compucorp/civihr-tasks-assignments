@@ -9,13 +9,13 @@ define([
   'use strict';
 
   describe('TaskListController', function () {
-    var $scope, ContactService, TaskService, controller;
+    var $scope, contactService, taskService, controller;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function ($controller, $rootScope, _ContactService_, _TaskService_) {
+    beforeEach(inject(function ($controller, $rootScope, _contactService_, _taskService_) {
       $scope = $rootScope.$new();
-      ContactService = _ContactService_;
-      TaskService = _TaskService_;
+      contactService = _contactService_;
+      taskService = _taskService_;
 
       controller = $controller('TaskListController', {
         $scope: $scope,
@@ -27,17 +27,17 @@ define([
       var contactToCacheId = '3';
 
       beforeEach(function () {
-        spyOn(ContactService, 'updateCache');
+        spyOn(contactService, 'updateCache');
         controller.contacts = mockedTempCachedContacts();
         controller.cacheContact(contactToCacheId);
       });
 
-      it('calls the ContactService', function () {
-        expect(ContactService.updateCache).toHaveBeenCalled();
+      it('calls the contactService', function () {
+        expect(contactService.updateCache).toHaveBeenCalled();
       });
 
       it('passes to the cache the expected object', function () {
-        expect(ContactService.updateCache).toHaveBeenCalledWith({
+        expect(contactService.updateCache).toHaveBeenCalledWith({
           '3': {
             contact_id: '3',
             contact_type: 'type 1',
@@ -53,7 +53,7 @@ define([
       var task, updateObj, saveObj;
 
       beforeEach(function () {
-        spyOn(TaskService, 'save').and.callThrough();
+        spyOn(taskService, 'save').and.callThrough();
 
         task = {
           'id': '625',
@@ -80,8 +80,8 @@ define([
         controller.updateTask(task, updateObj);
       });
 
-      it('calls TaskService with the correct object', function () {
-        expect(TaskService.save).toHaveBeenCalledWith(saveObj);
+      it('calls taskService with the correct object', function () {
+        expect(taskService.save).toHaveBeenCalledWith(saveObj);
       });
     });
 

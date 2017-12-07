@@ -8,13 +8,13 @@ define([
   ModalTaskMigrateController.__name = 'ModalTaskMigrateController';
   ModalTaskMigrateController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', '$uibModalInstance', '$dialog', 'AssignmentService', 'ContactService',
-    'TaskService', 'UtilsService', 'Task', 'activityType', 'settings'
+    '$uibModal', '$uibModalInstance', '$dialog', 'assignmentService', 'contactService',
+    'taskService', 'utilsService', 'Task', 'activityType', 'settings'
   ];
 
   function ModalTaskMigrateController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $modal, $modalInstance, $dialog, AssignmentService, ContactService,
-    TaskService, UtilsService, Task, activityType, settings) {
+    $scope, $timeout, $modal, $modalInstance, $dialog, assignmentService, contactService,
+    taskService, utilsService, Task, activityType, settings) {
     $log.debug('Controller: ModalTaskMigrateController');
 
     $scope.contacts = $rootScope.cache.contact.arrSearch;
@@ -50,7 +50,7 @@ define([
         email: $item.description.length ? $item.description[0] : ''
       };
 
-      ContactService.updateCache(obj);
+      contactService.updateCache(obj);
     }
 
     function cancel () {
@@ -117,7 +117,7 @@ define([
                 'component': ''
               }, activity)
             }, null, function (data) {
-              if (UtilsService.errorHandler(data, 'Unable to save task', deferred)) {
+              if (utilsService.errorHandler(data, 'Unable to save task', deferred)) {
                 return;
               }
 
@@ -246,7 +246,7 @@ define([
         return;
       }
 
-      ContactService.search(input, {
+      contactService.search(input, {
         contact_type: 'Individual'
       }).then(function (results) {
         $scope.contacts = results;

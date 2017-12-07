@@ -10,20 +10,20 @@ define([
   'use strict';
 
   describe('ModalAssignmentController', function () {
-    var $q, $controller, scope, AssignmentService,
-      TaskService, DocumentService, ContactService, HRSettings, $rootScope;
+    var $q, $controller, scope, assignmentService,
+      taskService, documentService, contactService, HRSettings, $rootScope;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _AssignmentService_, _DocumentService_, _TaskService_) {
+    beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _assignmentService_, _documentService_, _taskService_) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
 
       $q = _$q_;
       $controller = _$controller_;
-      AssignmentService = _AssignmentService_;
-      DocumentService = _DocumentService_;
-      TaskService = _TaskService_;
-      ContactService = {};
+      assignmentService = _assignmentService_;
+      documentService = _documentService_;
+      taskService = _taskService_;
+      contactService = {};
       $rootScope = _$rootScope_;
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
 
@@ -44,9 +44,9 @@ define([
     describe('confirm()', function () {
       beforeEach(function () {
         spyOn($q, 'all').and.returnValue({ then: _.noop });
-        spyOn(TaskService, 'saveMultiple');
-        spyOn(DocumentService, 'saveMultiple');
-        spyOn(AssignmentService, 'save').and.returnValue({
+        spyOn(taskService, 'saveMultiple');
+        spyOn(documentService, 'saveMultiple');
+        spyOn(assignmentService, 'save').and.returnValue({
           then: function (callback) {
             // fakes the db permanence, attaching an id to the assignment on the scope
             callback(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
@@ -58,16 +58,16 @@ define([
         scope.confirm() && scope.$digest();
       });
 
-      it('does not pass the original documents objects to the DocumentService', function () {
-        var documents = DocumentService.saveMultiple.calls.mostRecent().args[0];
+      it('does not pass the original documents objects to the documentService', function () {
+        var documents = documentService.saveMultiple.calls.mostRecent().args[0];
 
         expect(documents.every(function (doc, index) {
           return doc !== scope.taskList[index];
         })).toBe(true);
       });
 
-      it('does not pass the original tasks objects to the TaskService', function () {
-        var tasks = TaskService.saveMultiple.calls.mostRecent().args[0];
+      it('does not pass the original tasks objects to the taskService', function () {
+        var tasks = taskService.saveMultiple.calls.mostRecent().args[0];
 
         expect(tasks.every(function (task, index) {
           return task !== scope.taskList[index];
@@ -256,10 +256,10 @@ define([
       $controller('ModalAssignmentController', {
         $scope: scope,
         $rootScope: $rootScope,
-        AssignmentService: AssignmentService,
-        TaskService: TaskService,
-        DocumentService: DocumentService,
-        ContactService: ContactService,
+        assignmentService: assignmentService,
+        taskService: taskService,
+        documentService: documentService,
+        contactService: contactService,
         data: {},
         config: {},
         settings: {

@@ -9,13 +9,13 @@ define([
   ModalTaskController.__name = 'ModalTaskController';
   ModalTaskController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', '$uibModalInstance', '$dialog', 'AssignmentService', 'ContactService',
-    'TaskService', 'HR_settings', 'data', 'config'
+    '$uibModal', '$uibModalInstance', '$dialog', 'assignmentService', 'contactService',
+    'taskService', 'HR_settings', 'data', 'config'
   ];
 
   function ModalTaskController ($filter, $log, $q, $rootElement, $rootScope, $scope,
-    $timeout, $modal, $modalInstance, $dialog, AssignmentService, ContactService,
-    TaskService, hrSettings, data, config) {
+    $timeout, $modal, $modalInstance, $dialog, assignmentService, contactService,
+    taskService, hrSettings, data, config) {
     $log.debug('Controller: ModalTaskController');
 
     $scope.assignments = [];
@@ -77,7 +77,7 @@ define([
         subject: $item.extra.case_subject
       };
 
-      AssignmentService.updateCache(obj);
+      assignmentService.updateCache(obj);
     }
 
     function cacheContact ($item) {
@@ -91,7 +91,7 @@ define([
         email: $item.description.length ? $item.description[0] : ''
       };
 
-      ContactService.updateCache(obj);
+      contactService.updateCache(obj);
     }
 
     function cancel () {
@@ -131,11 +131,11 @@ define([
       +task.case_id === +data.case_id && delete task.case_id;
       task.activity_date_time = task.activity_date_time || new Date();
 
-      TaskService.save(task).then(function (results) {
+      taskService.save(task).then(function (results) {
         $scope.task.id = results.id;
         $scope.task.case_id = results.case_id;
 
-        AssignmentService.updateTab();
+        assignmentService.updateTab();
 
         if ($scope.openNew) {
           $scope.task.open = true;
@@ -207,7 +207,7 @@ define([
 
       $timeout(function () { $scope.$broadcast('ct-spinner-show'); }, 0);
 
-      AssignmentService.search(null, null, contactId)
+      assignmentService.search(null, null, contactId)
           .then(function (results) {
             $scope.assignments = results;
             $scope.$broadcast('ct-spinner-hide');
@@ -219,7 +219,7 @@ define([
         return;
       }
 
-      ContactService.search(input, {
+      contactService.search(input, {
         contact_type: 'Individual'
       }).then(function (results) {
         $scope.contacts[type] = results;

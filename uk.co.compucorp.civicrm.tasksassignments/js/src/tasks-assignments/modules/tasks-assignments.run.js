@@ -12,12 +12,12 @@ define([
 
   run.$inject = [
     '$rootScope', '$rootElement', '$q', '$location', '$log', 'config', 'settings',
-    'DocumentService', 'TaskService', 'AssignmentService', 'KeyDateService',
-    'ContactService', 'editableOptions'
+    'documentService', 'taskService', 'assignmentService', 'keyDateService',
+    'contactService', 'editableOptions'
   ];
 
   function run ($rootScope, $rootElement, $q, $location, $log, config, settings,
-    DocumentService, TaskService, AssignmentService, KeyDateService, ContactService,
+    documentService, taskService, assignmentService, keyDateService, contactService,
     editableOptions) {
     $log.debug('tasks-assignments.run');
 
@@ -76,23 +76,23 @@ define([
 
     config.CONTACT_ID && contactsToCache.push(config.CONTACT_ID);
 
-    TaskService.getOptions().then(function (options) {
+    taskService.getOptions().then(function (options) {
       angular.extend($rootScope.cache, options);
     });
 
-    DocumentService.getOptions().then(function (options) {
+    documentService.getOptions().then(function (options) {
       angular.extend($rootScope.cache, options);
     });
 
-    AssignmentService.getTypes().then(function (types) {
+    assignmentService.getTypes().then(function (types) {
       angular.extend($rootScope.cache.assignmentType.obj, types);
       angular.forEach(types, function (type) {
         this.push(type);
       }, $rootScope.cache.assignmentType.arr);
     });
 
-    ContactService.get({ 'IN': contactsToCache }).then(function (data) {
-      ContactService.updateCache(data);
+    contactService.get({ 'IN': contactsToCache }).then(function (data) {
+      contactService.updateCache(data);
     });
 
     angular.forEach($rootScope.cache.dateType.obj, function (value, key) {

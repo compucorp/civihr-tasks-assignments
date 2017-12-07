@@ -12,20 +12,20 @@ define([
   'tasks-assignments/services/settings.service',
   'tasks-assignments/services/task.service',
   'tasks-assignments/services/utils.service'
-], function (angular, AppSettingsService, AssignmentService, ContactService,
-  $dialog, DocumentService, FileService, KeyDateService, SettingsService,
-  TaskService, UtilsService) {
+], function (angular, appsettingsService, assignmentService, contactService,
+  $dialog, documentService, fileServiceTA, keyDateService, settingsService,
+  taskService, utilsService) {
   'use strict';
 
   return angular.module('tasks-assignments.services', [])
-    .factory(AppSettingsService.__name, AppSettingsService)
-    .factory(AssignmentService.__name, AssignmentService)
-    .factory(ContactService.__name, ContactService)
+    .factory(appsettingsService.__name, appsettingsService)
+    .factory(assignmentService.__name, assignmentService)
+    .factory(contactService.__name, contactService)
     .factory($dialog.__name, $dialog)
-    .factory(DocumentService.__name, DocumentService)
-    .factory(FileService.__name, FileService)
-    .factory(KeyDateService.__name, KeyDateService)
-    .factory(SettingsService.__name, SettingsService)
-    .factory(TaskService.__name, TaskService)
-    .factory(UtilsService.__name, UtilsService);
+    .factory(documentService.__name, documentService)
+    .factory(fileServiceTA.__name, fileServiceTA)
+    .factory(keyDateService.__name, keyDateService)
+    .factory(settingsService.__name, settingsService)
+    .factory(taskService.__name, taskService)
+    .factory(utilsService.__name, utilsService);
 });

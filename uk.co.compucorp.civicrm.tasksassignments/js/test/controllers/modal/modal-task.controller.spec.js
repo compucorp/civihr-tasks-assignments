@@ -11,10 +11,10 @@ define([
 
   describe('ModalTaskController', function () {
     var $controller, $q, $rootScope, $scope, HRSettings,
-      data, AssignmentService;
+      data, assignmentService;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _AssignmentService_, $httpBackend) {
+    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _assignmentService_, $httpBackend) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
 
@@ -22,14 +22,14 @@ define([
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
-      AssignmentService = _AssignmentService_;
+      assignmentService = _assignmentService_;
 
       data = {};
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
 
       initializeCaches();
 
-      spyOn(AssignmentService, 'search').and.returnValue($q.resolve([{}, {}]));
+      spyOn(assignmentService, 'search').and.returnValue($q.resolve([{}, {}]));
     }));
 
     describe('Default due date', function () {
@@ -119,12 +119,12 @@ define([
       describe("contact's assignment", function () {
         describe('when the contact has been selected', function () {
           beforeEach(function () {
-            AssignmentService.search.calls.reset();
+            assignmentService.search.calls.reset();
             $scope.$digest();
           });
 
           it('queries the assignment via the contact id', function () {
-            expect(AssignmentService.search).toHaveBeenCalledWith(null, null, $scope.task.target_contact_id);
+            expect(assignmentService.search).toHaveBeenCalledWith(null, null, $scope.task.target_contact_id);
           });
 
           it('stores the assignments', function () {
@@ -139,7 +139,7 @@ define([
           });
 
           it('does not query the assignments', function () {
-            expect(AssignmentService.search).not.toHaveBeenCalled();
+            expect(assignmentService.search).not.toHaveBeenCalled();
           });
 
           it('empties the stored assignments', function () {
@@ -160,7 +160,7 @@ define([
       });
 
       it("loads the target contact's assignments", function () {
-        expect(AssignmentService.search).toHaveBeenCalledWith(null, null, targetContactId);
+        expect(assignmentService.search).toHaveBeenCalledWith(null, null, targetContactId);
       });
     });
 

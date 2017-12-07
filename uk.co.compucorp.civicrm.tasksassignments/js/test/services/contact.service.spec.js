@@ -15,13 +15,13 @@ define([
     $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
   };
 
-  describe('ContactService', function () {
-    var Contact, ContactService, $httpBackend, promise, jsonData;
+  describe('contactService', function () {
+    var Contact, contactService, $httpBackend, promise, jsonData;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_Contact_, _ContactService_, _$httpBackend_) {
-      ContactService = _ContactService_;
+    beforeEach(inject(function (_Contact_, _contactService_, _$httpBackend_) {
+      contactService = _contactService_;
       Contact = _Contact_;
       $httpBackend = _$httpBackend_;
 
@@ -38,7 +38,7 @@ define([
       $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond(contactMock.onGetContacts);
       spyOn(Contact, 'get').and.callThrough();
 
-      promise = ContactService.get({ IN: [1, 2, 3, 5, 6, 7, 2, 3, 6] });
+      promise = contactService.get({ IN: [1, 2, 3, 5, 6, 7, 2, 3, 6] });
     });
 
     afterEach(function () {

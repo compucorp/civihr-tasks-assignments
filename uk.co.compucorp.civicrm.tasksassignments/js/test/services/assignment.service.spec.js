@@ -6,20 +6,20 @@ define([
 ], function () {
   'use strict';
 
-  describe('AssignmentService', function () {
-    var Assignment, AssignmentSearch, AssignmentService;
+  describe('assignmentService', function () {
+    var Assignment, AssignmentSearch, assignmentService;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_Assignment_, _AssignmentSearch_, _AssignmentService_) {
+    beforeEach(inject(function (_Assignment_, _AssignmentSearch_, _assignmentService_) {
       AssignmentSearch = _AssignmentSearch_;
-      AssignmentService = _AssignmentService_;
+      assignmentService = _assignmentService_;
       Assignment = _Assignment_;
     }));
 
     describe('search()', function () {
       beforeEach(function () {
         spyOn(AssignmentSearch, 'query').and.returnValue({ '$promise': jasmine.any(Object) });
-        AssignmentService.search('firstArg', 'secondArg', [2, 3, 4]);
+        assignmentService.search('firstArg', 'secondArg', [2, 3, 4]);
       });
 
       it('relies internally on the AssignmentSearch', function () {
@@ -43,7 +43,7 @@ define([
     describe('get()', function () {
       beforeEach(function () {
         spyOn(Assignment, 'get').and.callThrough();
-        AssignmentService.get({ 'IN': [1, 2] });
+        assignmentService.get({ 'IN': [1, 2] });
       });
 
       it('calls Assignment.get with correct list of fields to be returned', function () {

@@ -8,11 +8,11 @@ define([
   ModalReminderController.__name = 'ModalReminderController';
   ModalReminderController.$inject = [
     '$filter', '$log', '$q', '$rootScope', '$scope', '$dialog', '$uibModalInstance',
-    'DocumentService', 'TaskService', 'config', 'data', 'type'
+    'documentService', 'taskService', 'config', 'data', 'type'
   ];
 
   function ModalReminderController ($filter, $log, $q, $rootScope, $scope, $dialog,
-    $modalInstance, DocumentService, TaskService, config, data, type) {
+    $modalInstance, documentService, taskService, config, data, type) {
     $log.debug('Controller: ModalReminderController');
 
     $scope.data = {};
@@ -36,7 +36,7 @@ define([
     function confirm () {
       $scope.$broadcast('ct-spinner-show');
 
-      (type === 'task' ? TaskService : DocumentService).sendReminder($scope.data.id, $scope.reminder.notes).then(function () {
+      (type === 'task' ? taskService : documentService).sendReminder($scope.data.id, $scope.reminder.notes).then(function () {
         CRM.alert('Message sent to: ' + $rootScope.cache.contact.obj[$scope.data.assignee_contact_id[0]].sort_name,
           'Reminder sent', 'success');
         $modalInstance.close();

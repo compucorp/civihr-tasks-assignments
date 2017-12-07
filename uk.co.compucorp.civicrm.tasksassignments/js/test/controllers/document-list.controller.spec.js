@@ -12,17 +12,17 @@ define([
   'use strict';
 
   describe('DocumentListController', function () {
-    var $controller, $rootScope, DocumentService, $scope, $q, $httpBackend, config, mockDocument, $filter, controller;
+    var $controller, $rootScope, documentService, $scope, $q, $httpBackend, config, mockDocument, $filter, controller;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_$controller_, _$rootScope_, _DocumentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _documentService_, _$httpBackend_, _$q_, _config_, _$filter_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $filter = _$filter_;
       $scope = $rootScope.$new();
       $q = _$q_;
       config = _config_;
-      DocumentService = _DocumentService_;
+      documentService = _documentService_;
       $httpBackend = _$httpBackend_;
       mockDocument = documentFabricator.single();
 
@@ -31,9 +31,9 @@ define([
     }));
 
     beforeEach(function () {
-      spyOn(DocumentService, 'get').and.returnValue($q.resolve([]));
-      spyOn(DocumentService, 'cacheContactsAndAssignments').and.returnValue($q.resolve([]));
-      spyOn(DocumentService, 'save').and.callFake(function () {
+      spyOn(documentService, 'get').and.returnValue($q.resolve([]));
+      spyOn(documentService, 'cacheContactsAndAssignments').and.returnValue($q.resolve([]));
+      spyOn(documentService, 'save').and.callFake(function () {
         mockDocument.status_id = '4';
 
         return $q.resolve(mockDocument);
@@ -46,7 +46,7 @@ define([
       });
 
       it('calls document service to cache contacts and assigments', function () {
-        expect(DocumentService.cacheContactsAndAssignments).toHaveBeenCalled();
+        expect(documentService.cacheContactsAndAssignments).toHaveBeenCalled();
       });
 
       it('checks if default document status are defined for filter in T&A dashboard', function () {
@@ -74,7 +74,7 @@ define([
         });
 
         it('does not update the document status', function () {
-          expect(DocumentService.save).not.toHaveBeenCalled();
+          expect(documentService.save).not.toHaveBeenCalled();
         });
       });
 
@@ -84,7 +84,7 @@ define([
         });
 
         it('updates the document status', function () {
-          expect(DocumentService.save).toHaveBeenCalledWith({ id: controller.document.id, status_id: '4' });
+          expect(documentService.save).toHaveBeenCalledWith({ id: controller.document.id, status_id: '4' });
           expect(controller.document.status_id).toBe('4');
         });
       });

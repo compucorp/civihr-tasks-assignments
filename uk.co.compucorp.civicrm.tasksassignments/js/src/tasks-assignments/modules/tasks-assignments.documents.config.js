@@ -30,8 +30,8 @@ define([
         controllerAs: 'list',
         templateUrl: config.path.TPL + 'contact/documents.html?v=4',
         resolve: {
-          documentList: ['DocumentService', function (DocumentService) {
-            return DocumentService.get({
+          documentList: ['documentService', function (documentService) {
+            return documentService.get({
               'target_contact_id': config.CONTACT_ID
             });
           }]

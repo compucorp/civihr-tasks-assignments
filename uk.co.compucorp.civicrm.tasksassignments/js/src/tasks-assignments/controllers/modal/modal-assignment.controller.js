@@ -10,13 +10,13 @@ define([
   ModalAssignmentController.__name = 'ModalAssignmentController';
   ModalAssignmentController.$inject = [
     '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
-    'HR_settings', 'config', 'settings', 'AssignmentService', 'TaskService',
-    'DocumentService', 'ContactService', 'data'
+    'HR_settings', 'config', 'settings', 'assignmentService', 'taskService',
+    'documentService', 'contactService', 'data'
   ];
 
   function ModalAssignmentController ($filter, $log, $q, $rootScope, $scope,
-    $timeout, $modalInstance, hrSettings, config, settings, AssignmentService,
-    TaskService, DocumentService, ContactService, data) {
+    $timeout, $modalInstance, hrSettings, config, settings, assignmentService,
+    taskService, documentService, contactService, data) {
     $log.debug('Controller: ModalAssignmentController');
 
     var activityModel = {
@@ -93,7 +93,7 @@ define([
         email: $item.description.length ? $item.description[0] : ''
       };
 
-      ContactService.updateCache(obj);
+      contactService.updateCache(obj);
     }
 
     function cancel () {
@@ -117,7 +117,7 @@ define([
       $scope.$broadcast('ct-spinner-show');
       $scope.assignment.start_date = new Date();
 
-      AssignmentService.save($scope.assignment).then(function (resultAssignment) {
+      assignmentService.save($scope.assignment).then(function (resultAssignment) {
         var documentListAssignment = $scope.documentList.filter(function (doc) {
           return doc.create;
         })
@@ -135,11 +135,11 @@ define([
         });
 
         $q.all({
-          relationship: AssignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
-          document: DocumentService.saveMultiple(documentListAssignment.map(function (doc) {
+          relationship: assignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
+          document: documentService.saveMultiple(documentListAssignment.map(function (doc) {
             return angular.copy(doc);
           })),
-          task: TaskService.saveMultiple(taskListAssignment.map(function (task) {
+          task: taskService.saveMultiple(taskListAssignment.map(function (task) {
             return angular.copy(task);
           }))
         })
@@ -184,8 +184,8 @@ define([
             activities: taskArr.concat(documentArr)
           });
 
-          AssignmentService.updateCache(cacheAssignmentObj);
-          AssignmentService.updateTab(1);
+          assignmentService.updateCache(cacheAssignmentObj);
+          assignmentService.updateTab(1);
 
           $modalInstance.close({
             documentList: documentListAssignment,
@@ -322,7 +322,7 @@ define([
         return;
       }
 
-      ContactService.search(input, {
+      contactService.search(input, {
         contact_type: 'Individual'
       })
       .then(function (results) {

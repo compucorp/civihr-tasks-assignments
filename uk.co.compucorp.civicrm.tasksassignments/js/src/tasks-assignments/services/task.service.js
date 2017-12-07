@@ -7,11 +7,11 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  TaskService.__name = 'TaskService';
-  TaskService.$inject = ['Task', '$q', 'config', 'UtilsService', '$log'];
+  taskService.__name = 'taskService';
+  taskService.$inject = ['Task', '$q', 'config', 'utilsService', '$log'];
 
-  function TaskService (Task, $q, config, UtilsService, $log) {
-    $log.debug('Service: TaskService');
+  function taskService (Task, $q, config, utilsService, $log) {
+    $log.debug('Service: taskService');
 
     return {
       assign: function (taskArr, assignmentId) {
@@ -32,7 +32,7 @@ define([
             case_id: assignmentId
           } || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to assign tasks', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to assign tasks', deferred)) {
             return;
           }
 
@@ -149,7 +149,7 @@ define([
         Task.save({ action: 'create' }, {
           json: params || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to save task', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to save task', deferred)) {
             return;
           }
 
@@ -184,7 +184,7 @@ define([
             task: taskArr
           } || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to save tasks', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to save tasks', deferred)) {
             return;
           }
 
@@ -208,7 +208,7 @@ define([
             notes: notes
           }
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
             return;
           }
 
@@ -242,5 +242,5 @@ define([
     };
   }
 
-  return TaskService;
+  return taskService;
 });

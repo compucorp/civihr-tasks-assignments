@@ -8,11 +8,11 @@ define([
   SettingsController.__name = 'SettingsController';
   SettingsController.$inject = [
     '$location', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$dialog',
-    '$state', '$uibModal', 'SettingsService', 'Task', 'config', 'settings'
+    '$state', '$uibModal', 'settingsService', 'Task', 'config', 'settings'
   ];
 
   function SettingsController ($location, $log, $q, $rootElement, $rootScope,
-    $scope, $dialog, $state, $modal, SettingsService, Task, config, settings) {
+    $scope, $dialog, $state, $modal, settingsService, Task, config, settings) {
     $log.debug('Controller: SettingsController');
 
     var promiseActivityTypes;
@@ -48,7 +48,7 @@ define([
 
     function confirm () {
       $scope.$broadcast('ct-spinner-show');
-      SettingsService.set({
+      settingsService.set({
         documents_tab: $scope.settings.tabEnabled.documents,
         keydates_tab: $scope.settings.tabEnabled.keyDates,
         add_assignment_button_title: $scope.settings.copy.button.assignmentAdd,

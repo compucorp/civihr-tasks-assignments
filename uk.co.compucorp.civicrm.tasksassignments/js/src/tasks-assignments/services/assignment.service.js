@@ -6,17 +6,17 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  AssignmentService.__name = 'AssignmentService';
-  AssignmentService.$inject = [
+  assignmentService.__name = 'assignmentService';
+  assignmentService.$inject = [
     'Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType',
-    'ContactService', '$q', 'config', 'UtilsService', '$filter', '$location',
+    'contactService', '$q', 'config', 'utilsService', '$filter', '$location',
     '$state', '$rootScope', '$log', '$timeout'
   ];
 
-  function AssignmentService (Relationship, Assignment, AssignmentSearch, AssignmentType,
-    ContactService, $q, config, UtilsService, $filter, $location, $state, $rootScope,
+  function assignmentService (Relationship, Assignment, AssignmentSearch, AssignmentType,
+    contactService, $q, config, utilsService, $filter, $location, $state, $rootScope,
     $log, $timeout) {
-    $log.debug('Service: AssignmentService');
+    $log.debug('Service: assignmentService');
 
     return {
       get: function (id) {
@@ -46,7 +46,7 @@ define([
             'debug': config.DEBUG
           }
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to fetch assignments', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to fetch assignments', deferred)) {
             return;
           }
 
@@ -75,7 +75,7 @@ define([
             case_id: assignmentId
           }
         }, null, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to assign coordinator', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to assign coordinator', deferred)) {
             return;
           }
 
@@ -90,7 +90,7 @@ define([
         var deferred = $q.defer();
 
         AssignmentType.get({}, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to fetch assignment types', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to fetch assignment types', deferred)) {
             return;
           }
 
@@ -117,7 +117,7 @@ define([
           action: 'create',
           json: params
         }, null, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to save an assignment', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to save an assignment', deferred)) {
             return;
           }
 
@@ -193,5 +193,5 @@ define([
     };
   }
 
-  return AssignmentService;
+  return assignmentService;
 });

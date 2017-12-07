@@ -6,15 +6,15 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  DocumentService.__name = 'DocumentService';
-  DocumentService.$inject = [
-    'Document', '$q', 'config', 'settings', 'UtilsService', 'ContactService',
-    'AssignmentService', '$log'
+  documentService.__name = 'documentService';
+  documentService.$inject = [
+    'Document', '$q', 'config', 'settings', 'utilsService', 'contactService',
+    'assignmentService', '$log'
   ];
 
-  function DocumentService (Document, $q, config, settings, UtilsService,
-    ContactService, AssignmentService, $log) {
-    $log.debug('Service: DocumentService');
+  function documentService (Document, $q, config, settings, utilsService,
+    contactService, assignmentService, $log) {
+    $log.debug('Service: documentService');
 
     return {
       assign: function (documentArr, assignmentId) {
@@ -35,7 +35,7 @@ define([
             case_id: assignmentId
           } || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to assign documents', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to assign documents', deferred)) {
             return;
           }
 
@@ -148,7 +148,7 @@ define([
         Document.save({ action: 'create' }, {
           json: params || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to save document', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to save document', deferred)) {
             return;
           }
 
@@ -176,7 +176,7 @@ define([
             document: documentArr
           } || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to save documents', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to save documents', deferred)) {
             return;
           }
 
@@ -200,7 +200,7 @@ define([
             notes: notes || ''
           } || {}
         }, function (data) {
-          if (UtilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
+          if (utilsService.errorHandler(data, 'Unable to send a reminder', deferred)) {
             return;
           }
 
@@ -254,10 +254,10 @@ define([
           contactIds = collectContactIds(documents);
           config.CONTACT_ID && contactIds.push(config.CONTACT_ID);
           if (contactIds && contactIds.length) {
-            contactPromise = ContactService.get({
+            contactPromise = contactService.get({
               'IN': contactIds
             }).then(function (data) {
-              ContactService.updateCache(data);
+              contactService.updateCache(data);
             });
           } else {
             contactPromise = $q.resolve();
@@ -267,10 +267,10 @@ define([
         if (_.contains(options, 'assignments')) {
           assignmentIds = collectAssignmentIds(documents);
           if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-            assignmentsPromise = AssignmentService.get({
+            assignmentsPromise = assignmentService.get({
               'IN': assignmentIds
             }).then(function (data) {
-              AssignmentService.updateCache(data);
+              assignmentService.updateCache(data);
             });
           } else {
             assignmentsPromise = $q.resolve();
@@ -322,5 +322,5 @@ define([
     }
   }
 
-  return DocumentService;
+  return documentService;
 });

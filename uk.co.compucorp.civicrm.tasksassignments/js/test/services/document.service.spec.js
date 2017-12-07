@@ -63,16 +63,16 @@ define([
     });
   });
 
-  describe('DocumentService', function () {
-    var AssignmentService, ContactService, DocumentService, $q,
+  describe('documentService', function () {
+    var assignmentService, contactService, documentService, $q,
       deferred, config, promise, $httpBackend;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_AssignmentService_, _ContactService_,
-      _DocumentService_, _config_, _$q_, _$httpBackend_) {
-      AssignmentService = _AssignmentService_;
-      ContactService = _ContactService_;
-      DocumentService = _DocumentService_;
+    beforeEach(inject(function (_assignmentService_, _contactService_,
+      _documentService_, _config_, _$q_, _$httpBackend_) {
+      assignmentService = _assignmentService_;
+      contactService = _contactService_;
+      documentService = _documentService_;
       config = _config_;
       $q = _$q_;
       $httpBackend = _$httpBackend_;
@@ -80,10 +80,10 @@ define([
     }));
 
     beforeEach(function () {
-      spyOn(ContactService, 'get').and.callFake(fakePromise(contactMock.list()));
-      spyOn(AssignmentService, 'get').and.callFake(fakePromise(assignmentMock.assignmentList));
-      spyOn(ContactService, 'updateCache').and.returnValue(deferred.promise);
-      spyOn(AssignmentService, 'updateCache').and.returnValue(deferred.promise);
+      spyOn(contactService, 'get').and.callFake(fakePromise(contactMock.list()));
+      spyOn(assignmentService, 'get').and.callFake(fakePromise(assignmentMock.assignmentList));
+      spyOn(contactService, 'updateCache').and.returnValue(deferred.promise);
+      spyOn(assignmentService, 'updateCache').and.returnValue(deferred.promise);
 
       $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({});
       $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
@@ -105,27 +105,27 @@ define([
       describe('needs to cache the contacts and assignments of the given documents', function () {
         beforeEach(function () {
           config.CONTACT_ID = '210';
-          promise = DocumentService.cacheContactsAndAssignments(documentMock.list());
+          promise = documentService.cacheContactsAndAssignments(documentMock.list());
         });
 
         it('calls contact service to get details using contactIds', function () {
-          expect(ContactService.get).toHaveBeenCalledWith(jasmine.objectContaining({
+          expect(contactService.get).toHaveBeenCalledWith(jasmine.objectContaining({
             'IN': ['204', '202', '204', '205', '205', '204', '204', '205', '202', '202', '205', '203', '203', '205', '204', '203', '210']
           }));
         });
 
         it('calls contact service to get details using assignmentIds', function () {
-          expect(AssignmentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
+          expect(assignmentService.get).toHaveBeenCalledWith(jasmine.objectContaining({
             'IN': ['5', '9', '10', '5']
           }));
         });
 
         it('calls contact service to cache contacts', function () {
-          expect(ContactService.updateCache).toHaveBeenCalled();
+          expect(contactService.updateCache).toHaveBeenCalled();
         });
 
         it('calls contact service to cache assignments', function () {
-          expect(AssignmentService.updateCache).toHaveBeenCalled();
+          expect(assignmentService.updateCache).toHaveBeenCalled();
         });
 
         it('returns a promise', function () {
@@ -136,29 +136,29 @@ define([
       describe('needs to cache either contacts or assignments exclusively', function () {
         describe('needs to cache only contacts', function () {
           beforeEach(function () {
-            DocumentService.cacheContactsAndAssignments(documentMock.list(), 'contacts');
+            documentService.cacheContactsAndAssignments(documentMock.list(), 'contacts');
           });
 
           it('calls contact service to cache contacts', function () {
-            expect(ContactService.updateCache).toHaveBeenCalled();
+            expect(contactService.updateCache).toHaveBeenCalled();
           });
 
           it('does not call assignment service to cache contacts', function () {
-            expect(AssignmentService.updateCache).not.toHaveBeenCalled();
+            expect(assignmentService.updateCache).not.toHaveBeenCalled();
           });
         });
 
         describe('needs to cache only assignments', function () {
           beforeEach(function () {
-            DocumentService.cacheContactsAndAssignments(documentMock.list(), 'assignments');
+            documentService.cacheContactsAndAssignments(documentMock.list(), 'assignments');
           });
 
           it('calls assignment service to cache assignments', function () {
-            expect(AssignmentService.updateCache).toHaveBeenCalled();
+            expect(assignmentService.updateCache).toHaveBeenCalled();
           });
 
           it('does not calls contact service to cache assignments', function () {
-            expect(ContactService.updateCache).not.toHaveBeenCalled();
+            expect(contactService.updateCache).not.toHaveBeenCalled();
           });
         });
       });
@@ -171,7 +171,7 @@ define([
       });
 
       it('returns saved Document on saving Document', function () {
-        DocumentService.save(documentMock.single()).then(function (data) {
+        documentService.save(documentMock.single()).then(function (data) {
           expect(data).toEqual(documentMock.single());
         });
       });
@@ -184,7 +184,7 @@ define([
       });
 
       it('returns list of assigned documents on assigning documents', function () {
-        DocumentService.assign(documentMock.list(), 1).then(function (data) {
+        documentService.assign(documentMock.list(), 1).then(function (data) {
           expect(data).toEqual(documentMock.list());
         });
       });
@@ -197,7 +197,7 @@ define([
       });
 
       it('returns saved task list on saving multiple documents', function () {
-        DocumentService.saveMultiple(documentMock.list()).then(function (data) {
+        documentService.saveMultiple(documentMock.list()).then(function (data) {
           expect(data).toEqual(documentMock.list());
         });
       });
@@ -210,7 +210,7 @@ define([
       });
 
       it('returns reminder sent status on sending reminder for a Document', function () {
-        DocumentService.sendReminder(1, documentMock.reminderNote).then(function (data) {
+        documentService.sendReminder(1, documentMock.reminderNote).then(function (data) {
           expect(data.values).toEqual(true);
         });
       });
@@ -220,7 +220,7 @@ define([
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond(documentFabricator.onGetOptions.documentTypes);
         promise = $q.all({
-          documentType: DocumentService.getDocumentTypes()
+          documentType: documentService.getDocumentTypes()
         });
       });
 
@@ -236,7 +236,7 @@ define([
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond(documentFabricator.onGetOptions.documentStatus);
         promise = $q.all({
-          documentStatus: DocumentService.getDocumentStatus()
+          documentStatus: documentService.getDocumentStatus()
         });
       });
 
@@ -252,7 +252,7 @@ define([
       beforeEach(function () {
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document&json=%7B%22field%22:%22activity_type_id/).respond(documentFabricator.onGetOptions.documentTypes);
         $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document&json=%7B%22field%22:%22status_id/).respond(documentFabricator.onGetOptions.documentStatus);
-        promise = $q.resolve(DocumentService.getOptions());
+        promise = $q.resolve(documentService.getOptions());
       });
 
       it('returns promise with array of list of document types and document status', function () {

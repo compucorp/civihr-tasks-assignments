@@ -33,8 +33,8 @@ define([
         controllerAs: 'list',
         templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
         resolve: {
-          taskList: ['TaskService', function (TaskService) {
-            return TaskService.get({
+          taskList: ['taskService', function (taskService) {
+            return taskService.get({
               'status_id': { 'NOT IN': config.status.resolve.TASK }
             });
           }]
@@ -58,8 +58,8 @@ define([
         controllerAs: 'list',
         templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
         resolve: {
-          documentList: ['DocumentService', function (DocumentService) {
-            return DocumentService.get({});
+          documentList: ['documentService', function (documentService) {
+            return documentService.get({});
           }]
         }
       })
@@ -85,7 +85,7 @@ define([
         controller: 'CalendarController',
         templateUrl: config.path.TPL + 'dashboard/calendar.html?v=3',
         resolve: {
-          documentList: ['$q', 'DocumentService', 'settings', function ($q, DocumentService, settings) {
+          documentList: ['$q', 'documentService', 'settings', function ($q, documentService, settings) {
             var deferred = $q.defer();
 
             if (!+settings.tabEnabled.documents) {
@@ -93,14 +93,14 @@ define([
             }
 
             $q.all([
-              DocumentService.get({
+              documentService.get({
                 'sequential': 0,
                 'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
                 'status_id': {
                   'NOT IN': config.status.resolve.DOCUMENT
                 }
               }),
-              DocumentService.get({
+              documentService.get({
                 'sequential': 0,
                 'source_contact_id': config.LOGGED_IN_CONTACT_ID,
                 'status_id': {
@@ -122,16 +122,16 @@ define([
 
             return deferred.promise;
           }],
-          taskList: ['$q', 'TaskService', function ($q, TaskService) {
+          taskList: ['$q', 'taskService', function ($q, taskService) {
             var deferred = $q.defer();
 
             $q.all([
-              TaskService.get({
+              taskService.get({
                 'sequential': 1,
                 'assignee_contact_id': config.LOGGED_IN_CONTACT_ID,
                 'status_id': { 'NOT IN': config.status.resolve.TASK }
               }),
-              TaskService.get({
+              taskService.get({
                 'sequential': 1,
                 'source_contact_id': config.LOGGED_IN_CONTACT_ID,
                 'status_id': { 'NOT IN': config.status.resolve.TASK }
@@ -185,8 +185,8 @@ define([
         controller: 'DateListController',
         templateUrl: config.path.TPL + 'dashboard/key-dates.html?v=4',
         resolve: {
-          contactList: ['KeyDateService', function (KeyDateService) {
-            return KeyDateService.get(moment().startOf('month'), moment().endOf('month'));
+          contactList: ['keyDateService', function (keyDateService) {
+            return keyDateService.get(moment().startOf('month'), moment().endOf('month'));
           }]
         }
       });

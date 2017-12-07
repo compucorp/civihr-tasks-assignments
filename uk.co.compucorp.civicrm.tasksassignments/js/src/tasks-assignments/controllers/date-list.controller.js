@@ -8,11 +8,11 @@ define([
   DateListController.__name = 'DateListController';
   DateListController.$inject = [
     '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', 'KeyDateService', 'config', 'contactList'
+    '$uibModal', 'keyDateService', 'config', 'contactList'
   ];
 
   function DateListController ($filter, $log, $rootElement, $rootScope, $scope, $timeout,
-    $modal, KeyDateService, config, contactList) {
+    $modal, keyDateService, config, contactList) {
     $log.debug('Controller: DateListController');
 
     $scope.dataLoading = true;
@@ -55,7 +55,7 @@ define([
       $rootScope.$broadcast('ct-spinner-hide');
 
       // Load year range in background
-      KeyDateService.get(moment().startOf('year'), moment().endOf('year')).then(function (contactList) {
+      keyDateService.get(moment().startOf('year'), moment().endOf('year')).then(function (contactList) {
         $scope.dateList = this.createDateList(contactList);
         $scope.dataLoading = false;
       }.bind(this));
@@ -137,7 +137,7 @@ define([
     function showDateRange (from, until) {
       $scope.$broadcast('ct-spinner-show', 'dateList');
 
-      KeyDateService.get(moment(from), moment(until)).then(function (contactList) {
+      keyDateService.get(moment(from), moment(until)).then(function (contactList) {
         $scope.dateListSelected = this.createDateList(contactList);
         $scope.filterParams.date = 'dateRange';
         $scope.$broadcast('ct-spinner-hide', 'dateList');

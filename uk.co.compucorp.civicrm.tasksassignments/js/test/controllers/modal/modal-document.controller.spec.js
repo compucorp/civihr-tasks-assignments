@@ -14,13 +14,13 @@ define([
   'use strict';
 
   describe('ModalDocumentController', function () {
-    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, ContactService, config,
-      AssignmentService, AppSettingsService, DocumentService, notification, fileService, data, role, files, sampleAssignee,
+    var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, contactService, config,
+      assignmentService, appsettingsService, documentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
-      _ContactService_, _DocumentService_, _AssignmentService_, _$httpBackend_, _fileService_, _AppSettingsService_) {
+      _contactService_, _documentService_, _assignmentService_, _$httpBackend_, _fileService_, _appsettingsService_) {
       data = {};
       files = {};
       modalMode = '';
@@ -40,10 +40,10 @@ define([
       $httpBackend = _$httpBackend_;
       $q = _$q_;
       config = _config_;
-      ContactService = _ContactService_;
-      DocumentService = _DocumentService_;
-      AssignmentService = _AssignmentService_;
-      AppSettingsService = _AppSettingsService_;
+      contactService = _contactService_;
+      documentService = _documentService_;
+      assignmentService = _assignmentService_;
+      appsettingsService = _appsettingsService_;
       fileService = _fileService_;
       window.alert = function () {}; // prevent alert from being logged in console
 
@@ -60,7 +60,7 @@ define([
     describe('init()', function () {
       beforeEach(function () {
         data = documentFabricator.single();
-        spyOn(AppSettingsService, 'get').and.returnValue($q.resolve([]));
+        spyOn(appsettingsService, 'get').and.returnValue($q.resolve([]));
 
         initController();
       });
@@ -75,8 +75,8 @@ define([
         expect(controller.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
       });
 
-      it('calls AppSettingsService to get maxFileSize value', function () {
-        expect(AppSettingsService.get).toHaveBeenCalledWith([ 'maxFileSize' ]);
+      it('calls appsettingsService to get maxFileSize value', function () {
+        expect(appsettingsService.get).toHaveBeenCalledWith([ 'maxFileSize' ]);
       });
     });
 
@@ -271,7 +271,7 @@ define([
 
     describe('onContactChanged()', function () {
       beforeEach(function () {
-        spyOn(ContactService, 'updateCache').and.returnValue({});
+        spyOn(contactService, 'updateCache').and.returnValue({});
 
         initController();
         controller.onContactChanged(contactFabricator.single());
@@ -282,14 +282,14 @@ define([
       });
 
       it('calls contact service to cache selected Contact', function () {
-        expect(ContactService.updateCache).toHaveBeenCalled();
+        expect(contactService.updateCache).toHaveBeenCalled();
       });
     });
 
     describe('searchContactAssignments()', function () {
       beforeEach(function () {
         spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(AssignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
+        spyOn(assignmentService, 'search').and.returnValue($q.resolve(assignmentFabricator.listResponse()));
       });
 
       beforeEach(function () {
@@ -302,7 +302,7 @@ define([
       });
 
       it('calls assignment service to search assignments of target contact', function () {
-        expect(AssignmentService.search).toHaveBeenCalledWith(null, null, '204');
+        expect(assignmentService.search).toHaveBeenCalledWith(null, null, '204');
       });
 
       it('search for assignments for a target contact and stores in $scope.assignments', function () {
@@ -324,7 +324,7 @@ define([
           target_contact_id: ['202'],
           activity_type_id: '1'
         };
-        spyOn(DocumentService, 'save').and.returnValue($q.resolve([]));
+        spyOn(documentService, 'save').and.returnValue($q.resolve([]));
         initController();
       });
 
@@ -336,7 +336,7 @@ define([
         });
 
         it('sets document with null due date to empty', function () {
-          expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
+          expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
         });
       });
 
@@ -348,7 +348,7 @@ define([
         });
 
         it('sets document with empty due date to empty', function () {
-          expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
+          expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ activity_date_time: '' }));
         });
       });
 
@@ -369,7 +369,7 @@ define([
             });
 
             it('sets the document status to Approved', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
             });
           });
 
@@ -380,7 +380,7 @@ define([
             });
 
             it('sets the documet status to Awaiting Approval', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
             });
           });
         });
@@ -402,7 +402,7 @@ define([
               });
 
               it('saves the document with status to Approved', function () {
-                expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+                expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
               });
             });
 
@@ -414,7 +414,7 @@ define([
               });
 
               it('does not save the document', function () {
-                expect(DocumentService.save).not.toHaveBeenCalled();
+                expect(documentService.save).not.toHaveBeenCalled();
               });
             });
           });
@@ -426,7 +426,7 @@ define([
             });
 
             it('sets document status to Awaiting Approval', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
             });
           });
         });
@@ -454,8 +454,8 @@ define([
               expect(controller.containsFiles).toEqual(false);
             });
 
-            it("doesn't call DocumentService to update status", function () {
-              expect(DocumentService.save).not.toHaveBeenCalled();
+            it("doesn't call documentService to update status", function () {
+              expect(documentService.save).not.toHaveBeenCalled();
             });
           });
 
@@ -466,7 +466,7 @@ define([
             });
 
             it('skips size validation and returns true and saves the document', function () {
-              expect(DocumentService.save).toHaveBeenCalled();
+              expect(documentService.save).toHaveBeenCalled();
             });
 
             it("flags document doesn't contain files", function () {
@@ -474,7 +474,7 @@ define([
             });
 
             it('sets document status to Awaiting Upload', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '1' }));
             });
           });
         });
@@ -493,7 +493,7 @@ define([
             });
 
             it('sets document status to Approved', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
             });
           });
 
@@ -504,8 +504,8 @@ define([
               controller.confirm();
             });
 
-            it('calls DocumentService to update status to awaiting approval', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            it('calls documentService to update status to awaiting approval', function () {
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
             });
           });
         });
@@ -524,7 +524,7 @@ define([
             });
 
             it('sets document status to Approved', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '3' }));
             });
           });
 
@@ -534,8 +534,8 @@ define([
               controller.confirm();
             });
 
-            it('calls DocumentService to update status to awaiting approval', function () {
-              expect(DocumentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
+            it('calls documentService to update status to awaiting approval', function () {
+              expect(documentService.save).toHaveBeenCalledWith(jasmine.objectContaining({ status_id: '2' }));
             });
           });
         });
