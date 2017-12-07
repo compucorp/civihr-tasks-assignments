@@ -13,14 +13,14 @@ define([
   ModalDocumentController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
     '$window', '$dialog', '$uibModal', '$uibModalInstance', 'HR_settings', 'config',
-    'appsettingsService', 'assignmentService', 'contactService', 'documentService',
+    'appSettingsService', 'assignmentService', 'contactService', 'documentService',
     'fileServiceTA', 'fileService', 'notificationService', 'modalMode', 'role',
     'data', 'files'
   ];
 
   function ModalDocumentController ($filter, $log, $q, $rootElement, $rootScope,
     $scope, $timeout, $window, $dialog, $modal, $modalInstance, HRSettings, config,
-    appsettingsService, assignmentService, contactService, documentService,
+    appSettingsService, assignmentService, contactService, documentService,
     fileServiceTA, fileService, notificationService, modalMode, role, data, files) {
     $log.debug('Controller: ModalDocumentController');
 
@@ -334,7 +334,7 @@ define([
      * Get and initialize max value file Size to be uploaded
      */
     function initFileSize () {
-      appsettingsService.get(['maxFileSize']).then(function (result) {
+      appSettingsService.get(['maxFileSize']).then(function (result) {
         vm.fileSizeLimit = +result[0].maxFileSize * 1000000;
       });
     }

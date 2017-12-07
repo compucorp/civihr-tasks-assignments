@@ -15,12 +15,12 @@ define([
 
   describe('ModalDocumentController', function () {
     var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, contactService, config,
-      assignmentService, appsettingsService, documentService, notification, fileService, data, role, files, sampleAssignee,
+      assignmentService, appSettingsService, documentService, notification, fileService, data, role, files, sampleAssignee,
       modalMode, promise, mockDocument, controller;
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
-      _contactService_, _documentService_, _assignmentService_, _$httpBackend_, _fileService_, _appsettingsService_) {
+      _contactService_, _documentService_, _assignmentService_, _$httpBackend_, _fileService_, _appSettingsService_) {
       data = {};
       files = {};
       modalMode = '';
@@ -43,7 +43,7 @@ define([
       contactService = _contactService_;
       documentService = _documentService_;
       assignmentService = _assignmentService_;
-      appsettingsService = _appsettingsService_;
+      appSettingsService = _appSettingsService_;
       fileService = _fileService_;
       window.alert = function () {}; // prevent alert from being logged in console
 
@@ -60,7 +60,7 @@ define([
     describe('init()', function () {
       beforeEach(function () {
         data = documentFabricator.single();
-        spyOn(appsettingsService, 'get').and.returnValue($q.resolve([]));
+        spyOn(appSettingsService, 'get').and.returnValue($q.resolve([]));
 
         initController();
       });
@@ -75,8 +75,8 @@ define([
         expect(controller.document.valid_from).toEqual(new Date(documentFabricator.single().valid_from));
       });
 
-      it('calls appsettingsService to get maxFileSize value', function () {
-        expect(appsettingsService.get).toHaveBeenCalledWith([ 'maxFileSize' ]);
+      it('calls appSettingsService to get maxFileSize value', function () {
+        expect(appSettingsService.get).toHaveBeenCalledWith([ 'maxFileSize' ]);
       });
     });
 
