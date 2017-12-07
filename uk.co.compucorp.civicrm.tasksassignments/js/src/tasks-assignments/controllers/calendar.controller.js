@@ -8,13 +8,24 @@ define([
 
   CalendarController.__name = 'CalendarController';
   CalendarController.$inject = [
-    '$scope', '$log', '$rootScope', '$filter', '$timeout', '$state', '$stateParams',
-    'taskList', 'documentList', 'settings'
+    '$filter', '$log', '$rootScope', '$scope', '$timeout', '$state', '$stateParams',
+    'settings', 'documentList', 'taskList'
   ];
 
-  function CalendarController ($scope, $log, $rootScope, $filter, $timeout, $state,
-    $stateParams, taskList, documentList, settings) {
-    this.init = function () {
+  function CalendarController ($filter, $log, $rootScope, $scope, $timeout, $state,
+    $stateParams, settings, documentList, taskList) {
+    $scope.calendarDay = new Date();
+    $scope.calendarTitle = '';
+    $scope.calendarView = $state.params.calendarView || 'month';
+    $scope.calTaskList = [];
+    $scope.calDocList = [];
+
+    this.createCalEventList = createCalEventList.bind(this);
+    $scope.displayDayView = displayDayView;
+
+    (function init () {
+      initListeners.call(this);
+
       $scope.calTaskList = this.createCalEventList('task', taskList, $rootScope.cache.taskType.obj);
 
       if (!+settings.tabEnabled.documents) {
@@ -22,9 +33,9 @@ define([
       }
 
       $scope.calDocList = this.createCalEventList('document', documentList, $rootScope.cache.documentType.obj);
-    };
+    }.bind(this)());
 
-    this.createCalEventList = function (type, actvList, actvTypeObj) {
+    function createCalEventList (type, actvList, actvTypeObj) {
       var calActvList = [];
 
       angular.forEach(actvList, function (actv) {
@@ -60,18 +71,12 @@ define([
       }, calActvList);
 
       return calActvList;
-    };
+    }
 
-    $scope.calendarDay = new Date();
-    $scope.calendarTitle = '';
-    $scope.calendarView = $state.params.calendarView || 'month';
-    $scope.calTaskList = [];
-    $scope.calDocList = [];
-
-    $scope.displayDayView = function (calendarDate) {
+    function displayDayView (calendarDate) {
       $scope.calendarDay = moment(calendarDate).toDate();
       $scope.calendarView = 'day';
-    };
+    }
 
     function eventUpdateCb (output, input, calActvList, activityTypeObj, type) {
       var actvOutDue;
@@ -126,41 +131,41 @@ define([
       }
     }
 
-    $scope.$on('taskDelete', function (e, taskId) {
-      eventUpdateCb({}, { id: taskId }, $scope.calTaskList);
-    });
+    function initListeners () {
+      $scope.$on('taskDelete', function (e, taskId) {
+        eventUpdateCb({}, { id: taskId }, $scope.calTaskList);
+      });
 
-    $scope.$on('taskFormSuccess', function (e, output, input) {
-      var isResolved = $rootScope.cache.taskStatusResolve.indexOf(output.status_id) > -1;
-      eventUpdateCb(!isResolved ? output : {}, input, $scope.calTaskList, $rootScope.cache.taskType.obj, 'task');
-    });
+      $scope.$on('taskFormSuccess', function (e, output, input) {
+        var isResolved = $rootScope.cache.taskStatusResolve.indexOf(output.status_id) > -1;
+        eventUpdateCb(!isResolved ? output : {}, input, $scope.calTaskList, $rootScope.cache.taskType.obj, 'task');
+      });
 
-    $scope.$on('documentDelete', function (e, documentId) {
-      eventUpdateCb({}, { id: documentId }, $scope.calDocList);
-    });
+      $scope.$on('documentDelete', function (e, documentId) {
+        eventUpdateCb({}, { id: documentId }, $scope.calDocList);
+      });
 
-    $scope.$on('documentFormSuccess', function (e, output, input) {
-      var isResolved = $rootScope.cache.documentStatusResolve.indexOf(output.status_id) > -1;
-      eventUpdateCb(!isResolved ? output : {}, input, $scope.calDocList, $rootScope.cache.documentType.obj, 'document');
-    });
+      $scope.$on('documentFormSuccess', function (e, output, input) {
+        var isResolved = $rootScope.cache.documentStatusResolve.indexOf(output.status_id) > -1;
+        eventUpdateCb(!isResolved ? output : {}, input, $scope.calDocList, $rootScope.cache.documentType.obj, 'document');
+      });
 
-    $scope.$on('assignmentFormSuccess', function (e, output) {
-      Array.prototype.push.apply(
-        $scope.calTaskList,
-        this.createCalEventList('task', output.taskList, $rootScope.cache.taskType.obj)
+      $scope.$on('assignmentFormSuccess', function (e, output) {
+        Array.prototype.push.apply(
+          $scope.calTaskList,
+          this.createCalEventList('task', output.taskList, $rootScope.cache.taskType.obj)
         );
 
-      if (!+settings.tabEnabled.documents) {
-        return;
-      }
+        if (!+settings.tabEnabled.documents) {
+          return;
+        }
 
-      Array.prototype.push.apply(
-        $scope.calDocList,
-        this.createCalEventList('document', output.documentList, $rootScope.cache.documentType.obj)
+        Array.prototype.push.apply(
+          $scope.calDocList,
+          this.createCalEventList('document', output.documentList, $rootScope.cache.documentType.obj)
         );
-    }.bind(this));
-
-    this.init();
+      }.bind(this));
+    }
   }
 
   return CalendarController;

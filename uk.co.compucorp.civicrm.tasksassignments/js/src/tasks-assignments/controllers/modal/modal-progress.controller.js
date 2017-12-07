@@ -5,33 +5,37 @@ define(function () {
 
   ModalProgressController.__name = 'ModalProgressController';
   ModalProgressController.$inject = [
-    '$scope', '$uibModalInstance', '$q', '$timeout', 'uploader', 'entityId',
-    'FileService', '$log'
+    '$log', '$q', '$scope', '$timeout', '$uibModalInstance', 'FileService',
+    'uploader', 'entityId'
   ];
 
-  function ModalProgressController ($scope, $modalInstance, $q, $timeout, uploader,
-    entityId, FileService, $log) {
+  function ModalProgressController ($log, $q, $scope, $timeout, $modalInstance,
+    FileService, uploader, entityId) {
     $log.debug('Controller: ModalProgressController');
 
     $scope.uploader = uploader;
 
-    if (uploader.queue.length) {
-      uploader.item = uploader.queue[0].file.name;
-    }
+    $scope.cancel = cancel;
 
-    uploader.onProgressItem = function (item) {
-      this.item = item.file.name;
-    };
+    (function init () {
+      if (uploader.queue.length) {
+        uploader.item = uploader.queue[0].file.name;
+      }
 
-    FileService.upload(uploader, entityId).then(function (results) {
-      $timeout(function () {
-        $modalInstance.close(results);
-      }, 500);
-    });
+      uploader.onProgressItem = function (item) {
+        this.item = item.file.name;
+      };
 
-    $scope.cancel = function () {
+      FileService.upload(uploader, entityId).then(function (results) {
+        $timeout(function () {
+          $modalInstance.close(results);
+        }, 500);
+      });
+    }());
+
+    function cancel () {
       $modalInstance.dismiss('File upload canceled');
-    };
+    }
   }
 
   return ModalProgressController;

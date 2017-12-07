@@ -8,18 +8,21 @@ define([
 
   ModalTaskController.__name = 'ModalTaskController';
   ModalTaskController.$inject = [
-    '$timeout', '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q',
-    '$log', '$filter', '$uibModal', '$dialog', 'AssignmentService', 'TaskService',
-    'ContactService', 'data', 'config', 'HR_settings'
+    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$uibModal', '$uibModalInstance', '$dialog', 'AssignmentService', 'ContactService',
+    'TaskService', 'HR_settings', 'data', 'config'
   ];
 
-  function ModalTaskController ($timeout, $scope, $modalInstance, $rootScope, $rootElement, $q, $log,
-    $filter, $modal, $dialog, AssignmentService, TaskService, ContactService, data,
-    config, hrSettings) {
+  function ModalTaskController ($filter, $log, $q, $rootElement, $rootScope, $scope,
+    $timeout, $modal, $modalInstance, $dialog, AssignmentService, ContactService,
+    TaskService, hrSettings, data, config) {
     $log.debug('Controller: ModalTaskController');
 
+    $scope.assignments = [];
     $scope.format = hrSettings.DATE_FORMAT.toLowerCase();
     $scope.data = data;
+    $scope.showCId = !config.CONTACT_ID;
+    $scope.showFieldAssignment = false;
     $scope.task = {};
 
     angular.copy(data, $scope.task);
@@ -28,17 +31,25 @@ define([
     $scope.task.assignee_contact_id = $scope.task.assignee_contact_id || [];
     $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
     $scope.task.target_contact_id = $scope.task.target_contact_id || [config.CONTACT_ID];
-    $scope.showCId = !config.CONTACT_ID;
-
-    $scope.showFieldAssignment = false;
-
-    $scope.assignments = [];
     $scope.contacts = {
       target: initialContacts('target'),
       assignee: initialContacts('assignee')
     };
 
-    $scope.cacheAssignment = function ($item) {
+    $scope.cacheAssignment = cacheAssignment;
+    $scope.cacheContact = cacheContact;
+    $scope.cancel = cancel;
+    $scope.confirm = confirm;
+    $scope.dpOpen = dpOpen;
+    $scope.refreshContacts = refreshContacts;
+
+    (function init () {
+      initWatchers();
+
+      $scope.task.id && loadContactAssignments($scope.task.target_contact_id);
+    })();
+
+    function cacheAssignment ($item) {
       if ($rootScope.cache.assignment.obj[$item.id]) {
         return;
       }
@@ -67,9 +78,9 @@ define([
       };
 
       AssignmentService.updateCache(obj);
-    };
+    }
 
-    $scope.cacheContact = function ($item) {
+    function cacheContact ($item) {
       var obj = {};
 
       obj[$item.id] = {
@@ -81,28 +92,9 @@ define([
       };
 
       ContactService.updateCache(obj);
-    };
+    }
 
-    $scope.refreshContacts = function (input, type) {
-      if (!input) {
-        return;
-      }
-
-      ContactService.search(input, {
-        contact_type: 'Individual'
-      }).then(function (results) {
-        $scope.contacts[type] = results;
-      });
-    };
-
-    $scope.dpOpen = function ($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      $scope.dpOpened = true;
-    };
-
-    $scope.cancel = function () {
+    function cancel () {
       if ($scope.taskForm.$pristine) {
         $modalInstance.dismiss('cancel');
         return;
@@ -119,9 +111,9 @@ define([
         $scope.$broadcast('ct-spinner-hide');
         $modalInstance.dismiss('cancel');
       });
-    };
+    }
 
-    $scope.confirm = function () {
+    function confirm () {
       var task = angular.copy($scope.task);
 
       if (!validateRequiredFields(task)) {
@@ -157,20 +149,55 @@ define([
         $scope.$broadcast('ct-spinner-hide');
         return $q.reject();
       });
-    };
+    }
 
-      // Init code
-    (function init () {
-      initWatchers();
+    function dpOpen ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
 
-      $scope.task.id && loadContactAssignments($scope.task.target_contact_id);
-    })();
+      $scope.dpOpened = true;
+    }
 
-      /**
-       * Fetches the assignments assigned to the contact with the given id
-       *
-       * @param  {string} contactId
-       */
+    /**
+     * The initial contacts that needs to be immediately available
+     * in the lookup directive for the given type
+     *
+     * If the modal is for a branch new task, then the contacts list is empty
+     *
+     * @param {string} type - Either 'assignee' or 'target'
+     * @return {Array}
+     */
+    function initialContacts (type) {
+      var cachedContacts = $rootScope.cache.contact.arrSearch;
+
+      return !$scope.task.id ? [] : cachedContacts.filter(function (contact) {
+        var currContactId = $scope.task[type + '_contact_id'][0];
+
+        return +currContactId === +contact.id;
+      });
+    }
+
+    /**
+     * Initializes the watchers on scope's properties
+     */
+    function initWatchers () {
+      $scope.$watch('task.target_contact_id', function (contactId, old) {
+        if (contactId === old) {
+          return;
+        }
+
+        $scope.task.case_id = null;
+        $scope.showFieldAssignment = false;
+
+        loadContactAssignments(contactId);
+      }, true);
+    }
+
+    /**
+     * Fetches the assignments assigned to the contact with the given id
+     *
+     * @param  {string} contactId
+     */
     function loadContactAssignments (contactId) {
       $scope.assignments = [];
 
@@ -187,11 +214,23 @@ define([
           });
     }
 
-      /**
-       * Validates if the required fields values are present, and shows a notification if needed
-       * @param  {Object} task The task to validate
-       * @return {boolean}     Whether the required field values are present
-       */
+    function refreshContacts (input, type) {
+      if (!input) {
+        return;
+      }
+
+      ContactService.search(input, {
+        contact_type: 'Individual'
+      }).then(function (results) {
+        $scope.contacts[type] = results;
+      });
+    }
+
+    /**
+     * Validates if the required fields values are present, and shows a notification if needed
+     * @param  {Object} task The task to validate
+     * @return {boolean}     Whether the required field values are present
+     */
     function validateRequiredFields (task) {
       var missingRequiredFields = [];
 
@@ -218,41 +257,6 @@ define([
       }
 
       return true;
-    }
-
-      /**
-       * The initial contacts that needs to be immediately available
-       * in the lookup directive for the given type
-       *
-       * If the modal is for a branch new task, then the contacts list is empty
-       *
-       * @param {string} type - Either 'assignee' or 'target'
-       * @return {Array}
-       */
-    function initialContacts (type) {
-      var cachedContacts = $rootScope.cache.contact.arrSearch;
-
-      return !$scope.task.id ? [] : cachedContacts.filter(function (contact) {
-        var currContactId = $scope.task[type + '_contact_id'][0];
-
-        return +currContactId === +contact.id;
-      });
-    }
-
-      /**
-       * Initializes the watchers on scope's properties
-       */
-    function initWatchers () {
-      $scope.$watch('task.target_contact_id', function (contactId, old) {
-        if (contactId === old) {
-          return;
-        }
-
-        $scope.task.case_id = null;
-        $scope.showFieldAssignment = false;
-
-        loadContactAssignments(contactId);
-      }, true);
     }
   }
 

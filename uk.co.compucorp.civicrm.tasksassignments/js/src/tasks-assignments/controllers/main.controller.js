@@ -5,13 +5,39 @@ define(function () {
 
   MainController.__name = 'MainController';
   MainController.$inject = [
-    '$scope', '$rootScope', '$rootElement', '$log', '$uibModal', '$q', 'FileService',
+    '$log', '$q', '$rootScope', '$rootElement', '$scope', '$uibModal', 'FileService',
     'config'
   ];
 
-  function MainController ($scope, $rootScope, $rootElement, $log, $modal, $q, FileService,
-    config) {
+  function MainController ($log, $q, $rootScope, $rootElement, $scope, $modal,
+    FileService, config) {
     $log.debug('Controller: MainController');
+
+    $rootScope.modalAssignment = modalAssignment;
+    $rootScope.modalDocument = modalDocument;
+    $rootScope.modalReminder = modalReminder;
+    $rootScope.modalTask = modalTask;
+
+    function modalAssignment (data) {
+      data = data || {};
+      var modalInstance = $modal.open({
+        appendTo: $rootElement.find('div').eq(0),
+        templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
+        controller: 'ModalAssignmentController',
+        size: 'lg',
+        resolve: {
+          data: function () {
+            return data;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (results) {
+        $scope.$broadcast('assignmentFormSuccess', results, data);
+      }, function () {
+        $log.info('Modal dismissed');
+      });
+    }
 
     /**
      * Opens Document Modal based on passed modal mode, role and
@@ -21,7 +47,7 @@ define(function () {
      * @param {object} data - Document data
      * @param {object} e - Triggered event
      */
-    $rootScope.modalDocument = function (modalMode, data, e) {
+    function modalDocument (modalMode, data, e) {
       e && e.preventDefault();
 
       modalMode = modalMode || 'new';
@@ -57,9 +83,29 @@ define(function () {
       }, function () {
         $log.info('Modal dismissed');
       });
-    };
+    }
 
-    $rootScope.modalTask = function (data) {
+    function modalReminder (data, type) {
+      if (!data || typeof data !== 'object' || !type || typeof type !== 'string') {
+        return null;
+      }
+
+      $modal.open({
+        appendTo: $rootElement.find('div').eq(0),
+        templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
+        controller: 'ModalReminderController',
+        resolve: {
+          data: function () {
+            return data;
+          },
+          type: function () {
+            return type;
+          }
+        }
+      });
+    }
+
+    function modalTask (data) {
       data = data || {};
       var modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
@@ -81,48 +127,7 @@ define(function () {
       }, function () {
         $log.info('Modal dismissed');
       });
-    };
-
-    $rootScope.modalAssignment = function (data) {
-      data = data || {};
-      var modalInstance = $modal.open({
-        appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
-        controller: 'ModalAssignmentController',
-        size: 'lg',
-        resolve: {
-          data: function () {
-            return data;
-          }
-        }
-      });
-
-      modalInstance.result.then(function (results) {
-        $scope.$broadcast('assignmentFormSuccess', results, data);
-      }, function () {
-        $log.info('Modal dismissed');
-      });
-    };
-
-    $rootScope.modalReminder = function (data, type) {
-      if (!data || typeof data !== 'object' || !type || typeof type !== 'string') {
-        return null;
-      }
-
-      $modal.open({
-        appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
-        controller: 'ModalReminderController',
-        resolve: {
-          data: function () {
-            return data;
-          },
-          type: function () {
-            return type;
-          }
-        }
-      });
-    };
+    }
   }
 
   return MainController;

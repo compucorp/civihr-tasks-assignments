@@ -9,14 +9,14 @@ define([
 
   ModalAssignmentController.__name = 'ModalAssignmentController';
   ModalAssignmentController.$inject = [
-    '$timeout', '$scope', '$uibModalInstance', '$rootScope', '$q', '$log', '$filter',
-    'AssignmentService', 'TaskService', 'DocumentService', 'ContactService', 'data',
-    'config', 'settings', 'HR_settings'
+    '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
+    'HR_settings', 'config', 'settings', 'AssignmentService', 'TaskService',
+    'DocumentService', 'ContactService', 'data'
   ];
 
-  function ModalAssignmentController ($timeout, $scope, $modalInstance, $rootScope, $q,
-    $log, $filter, AssignmentService, TaskService, DocumentService, ContactService,
-    data, config, settings, hrSettings) {
+  function ModalAssignmentController ($filter, $log, $q, $rootScope, $scope,
+    $timeout, $modalInstance, hrSettings, config, settings, AssignmentService,
+    TaskService, DocumentService, ContactService, data) {
     $log.debug('Controller: ModalAssignmentController');
 
     var activityModel = {
@@ -31,102 +31,58 @@ define([
       offset: 0
     };
 
-    $scope.format = hrSettings.DATE_FORMAT.toLowerCase();
-    $scope.copyMessage = 'Click here to copy the value in row one to all rows.';
-
-    $scope.alert = {
-      show: false,
-      msg: '',
-      type: 'danger'
-    };
-
     $scope.assignment = {};
     $scope.assignment.status_id = '1';
     $scope.assignment.contact_id = config.CONTACT_ID;
     $scope.assignment.client_id = $scope.assignment.contact_id;
     $scope.assignment.subject = '';
     $scope.assignment.dueDate = null;
-
+    $scope.copyMessage = 'Click here to copy the value in row one to all rows.';
+    $scope.documentList = [];
     $scope.dpOpened = {};
+    $scope.format = hrSettings.DATE_FORMAT.toLowerCase();
     $scope.showCId = !config.CONTACT_ID;
+    $scope.taskList = [];
     $scope.activity = {
       activitySet: {}
     };
-    $scope.taskList = [];
-    $scope.documentList = [];
-
-    // The contacts collections used by the lookup directives
-    // divided by type
+    $scope.alert = {
+      show: false,
+      msg: '',
+      type: 'danger'
+    };
+    // The contacts collections used by the lookup directives divided by type
     $scope.contacts = {
       target: [],
       document: [],
       task: []
     };
 
-    /**
-     * Update activitySet with the current timeline
-     *
-     * @param  {object} item Timeline item
-     */
-    $scope.updateTimeline = function (item) {
-      $scope.activity.activitySet = item;
-    };
+    $scope.addActivity = addActivity;
+    $scope.cacheContact = cacheContact;
+    $scope.cancel = cancel;
+    $scope.confirm = confirm;
+    $scope.copyAssignee = copyAssignee;
+    $scope.copyDate = copyDate;
+    $scope.dpOpen = dpOpen;
+    $scope.refreshContacts = refreshContacts;
+    $scope.removeActivity = removeActivity;
+    $scope.setData = setData;
+    $scope.updateTimeline = updateTimeline;
 
-    $scope.addActivity = function (activityArr) {
+    (function init () {
+      initWatchers();
+    }());
+
+    function addActivity (activityArr) {
       if (!activityArr) {
         return;
       }
 
       activityArr.push(angular.extend(angular.copy(activityModel), { isAdded: true }));
-    };
+    }
 
-    $scope.removeActivity = function (activityArr, index) {
-      if (!activityArr) {
-        return;
-      }
-
-      activityArr.splice(index, 1);
-    };
-
-    $scope.dpOpen = function ($event, key) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      $scope.dpOpened[key] = true;
-    };
-
-    /**
-     * Fetches and stores a list of contacts based on the given
-     * query string
-     *
-     * @param {string} input
-     *   The search query the user typed
-     * @param {string} type
-     *   The type of contacts collection that the contacts will be stored
-     *   into (target, task, or document)
-     * @param {int} index
-     *   When fetching contacts for either the task or documents collection
-     *   the list will be stored as a sub-collection (at the given index)
-     *   so that each task or document has a separate contacts list
-     */
-    $scope.refreshContacts = function (input, type, index) {
-      if (!input) {
-        return;
-      }
-
-      ContactService.search(input, {
-        contact_type: 'Individual'
-      })
-      .then(function (results) {
-        if (type === 'target') {
-          $scope.contacts[type] = results;
-        } else {
-          $scope.contacts[type][index] = results;
-        }
-      });
-    };
-
-    $scope.cacheContact = function ($item) {
+    function cacheContact ($item) {
       var obj = {};
 
       obj[$item.id] = {
@@ -138,29 +94,13 @@ define([
       };
 
       ContactService.updateCache(obj);
-    };
+    }
 
-    $scope.setData = function () {
-      var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
-
-      if (!assignmentType) {
-        $scope.activity.activitySet = {};
-        $scope.assignment.subject = '';
-
-        return;
-      }
-
-      $scope.activity.activitySet = assignmentType.definition.activitySets[0];
-      $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
-
-      $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
-    };
-
-    $scope.cancel = function () {
+    function cancel () {
       $modalInstance.dismiss('cancel');
-    };
+    }
 
-    $scope.confirm = function () {
+    function confirm () {
       if (
         !($filter('filter')($scope.taskList, { create: true })).length &&
         !($filter('filter')($scope.documentList, { create: true })).length
@@ -263,7 +203,7 @@ define([
         $scope.$broadcast('ct-spinner-hide');
         return $q.reject();
       });
-    };
+    }
 
     /**
      * Copy assignee id and contacts collection from the first
@@ -272,7 +212,7 @@ define([
      * @param {Array} list
      * @param {string} type (document, task)
      */
-    $scope.copyAssignee = function copyAssignee (list, type) {
+    function copyAssignee (list, type) {
       var firstEnabled = firstEnabledItem(list);
 
       list.forEach(function (item, index) {
@@ -284,7 +224,7 @@ define([
           item.assignee_contact_id = firstEnabledAssignee;
         }
       });
-    };
+    }
 
     /**
      * Copy date from the first enabled item of the list
@@ -292,55 +232,20 @@ define([
      *
      * @param {Array} list
      */
-    $scope.copyDate = function copyDate (list) {
+    function copyDate (list) {
       list.forEach(function (item) {
         if (item.create) {
           item.activity_date_time = firstEnabledItem(list).activity_date_time;
         }
       });
-    };
+    }
 
-    $scope.$watch('activity.activitySet', function (activitySet) {
-      if (!activitySet || !activitySet.activityTypes) {
-        $scope.taskList = [];
-        return;
-      }
+    function dpOpen ($event, key) {
+      $event.preventDefault();
+      $event.stopPropagation();
 
-      var activity;
-      var activityTypes = activitySet.activityTypes;
-      var activityTypesLen = activityTypes.length;
-      var documentList = [];
-      var documentType;
-      var taskList = [];
-      var taskType;
-      var i = 0;
-
-      for (; i < activityTypesLen; i++) {
-        activity = angular.copy(activityModel);
-        activity.name = activityTypes[i].name;
-        activity.offset = activityTypes[i].reference_offset;
-
-        documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
-
-        if (documentType) {
-          activity.activity_type_id = documentType.key;
-          documentList.push(activity);
-          continue;
-        }
-
-        taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
-        activity.activity_type_id = taskType ? taskType.key : null;
-        taskList.push(activity);
-      }
-
-      angular.copy(taskList, $scope.taskList);
-
-      if (!+settings.tabEnabled.documents) {
-        return;
-      }
-
-      angular.copy(documentList, $scope.documentList);
-    });
+      $scope.dpOpened[key] = true;
+    }
 
     /**
      * Returns the first enable item in the given collection
@@ -352,6 +257,114 @@ define([
       return _.find(collection, function (item) {
         return item.create;
       });
+    }
+
+    function initWatchers () {
+      $scope.$watch('activity.activitySet', function (activitySet) {
+        if (!activitySet || !activitySet.activityTypes) {
+          $scope.taskList = [];
+          return;
+        }
+
+        var activity;
+        var activityTypes = activitySet.activityTypes;
+        var activityTypesLen = activityTypes.length;
+        var documentList = [];
+        var documentType;
+        var taskList = [];
+        var taskType;
+        var i = 0;
+
+        for (; i < activityTypesLen; i++) {
+          activity = angular.copy(activityModel);
+          activity.name = activityTypes[i].name;
+          activity.offset = activityTypes[i].reference_offset;
+
+          documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
+
+          if (documentType) {
+            activity.activity_type_id = documentType.key;
+            documentList.push(activity);
+            continue;
+          }
+
+          taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
+          activity.activity_type_id = taskType ? taskType.key : null;
+          taskList.push(activity);
+        }
+
+        angular.copy(taskList, $scope.taskList);
+
+        if (!+settings.tabEnabled.documents) {
+          return;
+        }
+
+        angular.copy(documentList, $scope.documentList);
+      });
+    }
+
+    /**
+     * Fetches and stores a list of contacts based on the given
+     * query string
+     *
+     * @param {string} input
+     *   The search query the user typed
+     * @param {string} type
+     *   The type of contacts collection that the contacts will be stored
+     *   into (target, task, or document)
+     * @param {int} index
+     *   When fetching contacts for either the task or documents collection
+     *   the list will be stored as a sub-collection (at the given index)
+     *   so that each task or document has a separate contacts list
+     */
+    function refreshContacts (input, type, index) {
+      if (!input) {
+        return;
+      }
+
+      ContactService.search(input, {
+        contact_type: 'Individual'
+      })
+      .then(function (results) {
+        if (type === 'target') {
+          $scope.contacts[type] = results;
+        } else {
+          $scope.contacts[type][index] = results;
+        }
+      });
+    }
+
+    function removeActivity (activityArr, index) {
+      if (!activityArr) {
+        return;
+      }
+
+      activityArr.splice(index, 1);
+    }
+
+    function setData () {
+      var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
+
+      if (!assignmentType) {
+        $scope.activity.activitySet = {};
+        $scope.assignment.subject = '';
+
+        return;
+      }
+
+      $scope.activity.activitySet = assignmentType.definition.activitySets[0];
+      $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
+
+      $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    /**
+     * Update activitySet with the current timeline
+     *
+     * @param  {object} item Timeline item
+     */
+    function updateTimeline (item) {
+      $scope.activity.activitySet = item;
     }
 
     /**

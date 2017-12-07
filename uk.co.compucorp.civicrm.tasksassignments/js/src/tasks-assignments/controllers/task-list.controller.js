@@ -9,14 +9,14 @@ define([
 
   TaskListController.__name = 'TaskListController';
   TaskListController.$inject = [
-    '$scope', '$uibModal', '$dialog', '$rootElement',
-    '$rootScope', '$filter', '$timeout', '$state', '$log', 'taskList', 'config',
-    'ContactService', 'AssignmentService', 'TaskService', 'settings', 'HR_settings'
+    '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$dialog', '$state', '$uibModal', 'AssignmentService', 'ContactService',
+    'TaskService', 'HR_settings', 'config', 'settings', 'taskList'
   ];
 
-  function TaskListController ($scope, $modal, $dialog, $rootElement, $rootScope,
-    $filter, $timeout, $state, $log, taskList, config, ContactService, AssignmentService,
-    TaskService, settings, HRSettings) {
+  function TaskListController ($filter, $log, $rootElement, $rootScope, $scope,
+    $timeout, $dialog, $state, $modal, AssignmentService, ContactService,
+    TaskService, HRSettings, config, settings, taskList) {
     $log.debug('Controller: TaskListController');
 
     var vm = this;
@@ -35,19 +35,14 @@ define([
     vm.listResolved = [];
     vm.listResolvedLoaded = false;
     vm.overdue = 0;
+    vm.dpOpened = {
+      filterDates: {}
+    };
     vm.dueFilters = [
       { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
       { badgeClass: 'primary', calendarView: 'day', value: 'dueToday' },
       { badgeClass: 'primary', calendarView: 'week', value: 'dueThisWeek' }
     ];
-    vm.dpOpened = {
-      filterDates: {}
-    };
-    vm.isCollapsed = {
-      filterAdvanced: true,
-      filterDates: true,
-      taskListResolved: true
-    };
     vm.filterParams = {
       contactId: null,
       ownership: $state.params.ownership || null,
@@ -68,7 +63,11 @@ define([
       from: { maxDate: vm.filterParamsHolder.dateRange.until },
       until: { minDate: vm.filterParamsHolder.dateRange.from }
     };
-
+    vm.isCollapsed = {
+      filterAdvanced: true,
+      filterDates: true,
+      taskListResolved: true
+    };
     vm.label = {
       overdue: 'Overdue',
       dueToday: 'Due Today',
@@ -89,46 +88,30 @@ define([
     vm.updateContacts = updateContacts;
     vm.updateTask = updateTask;
     vm.viewInCalendar = viewInCalendar;
-    vm.watchDateFilters = watchDateFilters;
 
-    /**
-     * Collects contact and assignment Ids for the given task
-     *
-     * @param  {object} taskList
-     */
-    function collectId (taskList) {
+    (function init () {
       var contactIds = vm.contactIds;
       var assignmentIds = vm.assignmentIds;
 
-      contactIds.push(config.LOGGED_IN_CONTACT_ID);
-
-      if (config.CONTACT_ID) {
-        contactIds.push(config.CONTACT_ID);
+      vm.collectId(taskList);
+      if (contactIds && contactIds.length) {
+        ContactService.get({'IN': contactIds}).then(function (data) {
+          ContactService.updateCache(data);
+        });
       }
 
-      function collectCId (task) {
-        contactIds.push(task.source_contact_id);
-
-        if (task.assignee_contact_id && task.assignee_contact_id.length) {
-          contactIds.push(task.assignee_contact_id[0]);
-        }
-
-        if (task.target_contact_id && task.target_contact_id.length) {
-          contactIds.push(task.target_contact_id[0]);
-        }
+      if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+        AssignmentService.get({'IN': assignmentIds}).then(function (data) {
+          AssignmentService.updateCache(data);
+        });
       }
 
-      function collectAId (task) {
-        if (task.case_id) {
-          assignmentIds.push(task.case_id);
-        }
-      }
+      initListeners();
+      initWatchers();
 
-      angular.forEach(taskList, function (task) {
-        collectCId(task);
-        collectAId(task);
-      });
-    }
+      $rootScope.$broadcast('ct-spinner-hide');
+      $log.info($rootScope.cache);
+    }());
 
     /**
      * Applies the filters on the sidebar
@@ -221,6 +204,62 @@ define([
     }
 
     /**
+     * Collects contact and assignment Ids for the given task
+     *
+     * @param  {object} taskList
+     */
+    function collectId (taskList) {
+      var contactIds = vm.contactIds;
+      var assignmentIds = vm.assignmentIds;
+
+      contactIds.push(config.LOGGED_IN_CONTACT_ID);
+
+      if (config.CONTACT_ID) {
+        contactIds.push(config.CONTACT_ID);
+      }
+
+      function collectCId (task) {
+        contactIds.push(task.source_contact_id);
+
+        if (task.assignee_contact_id && task.assignee_contact_id.length) {
+          contactIds.push(task.assignee_contact_id[0]);
+        }
+
+        if (task.target_contact_id && task.target_contact_id.length) {
+          contactIds.push(task.target_contact_id[0]);
+        }
+      }
+
+      function collectAId (task) {
+        if (task.case_id) {
+          assignmentIds.push(task.case_id);
+        }
+      }
+
+      angular.forEach(taskList, function (task) {
+        collectCId(task);
+        collectAId(task);
+      });
+    }
+
+    function deleteTask (task) {
+      $dialog.open({
+        msg: 'Are you sure you want to delete this task?'
+      }).then(function (confirm) {
+        if (!confirm) {
+          return;
+        }
+
+        TaskService.delete(task.id).then(function (results) {
+          vm.list.splice(vm.list.indexOf(task), 1);
+
+          $rootScope.$broadcast('taskDelete', task.id);
+          AssignmentService.updateTab();
+        });
+      });
+    }
+
+    /**
      * Filters the tasks list based on filter type and due or expiry date
      *
      * @param {string} type filter type
@@ -230,41 +269,42 @@ define([
       return $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
     }
 
-    function updateTask (task, updateObj) {
-      vm.cacheContact(task.assignee_contact_id[0]);
+    function initListeners () {
+      $scope.$on('assignmentFormSuccess', function (e, output) {
+        Array.prototype.push.apply(vm.list, output.taskList);
+      });
 
-      return TaskService
-        .save(angular.extend({}, task, updateObj))
-        .catch(function (reason) {
-          CRM.alert(reason, 'Error', 'error');
-        });
-    }
+      $scope.$on('taskFormSuccess', function (e, output, input) {
+        angular.equals({}, input) ? vm.list.push(output) : angular.extend(input, output);
+      });
 
-    function updateContacts (contacts) {
-      vm.contacts = contacts;
-    }
+      $scope.$on('crmFormSuccess', function (e, data) {
+        if (data.status === 'success') {
+          var pattern = /case|activity|assignment/i;
 
-    function refreshContacts (input) {
-      if (!input) {
-        return;
-      }
-
-      ContactService.search(input, {
-        contact_type: 'Individual'
-      }).then(function (results) {
-        vm.contacts = results;
+          if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
+            $rootScope.cache.assignment = {
+              obj: {},
+              arr: []
+            };
+            $state.go($state.current, {}, {reload: true});
+          }
+        }
       });
     }
 
-    function refreshAssignments (input, targetContactId, caseId) {
-      if (!input || !targetContactId || !caseId) {
-        return;
-      }
+    /**
+     * Whenever the date filters will change, their corrispondent
+     * datepickers will have the minDate or maxDate setting updated
+     * accordingly
+     */
+    function initWatchers () {
+      $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
+        vm.datepickerOptions.until.minDate = newValue;
+      });
 
-      AssignmentService.search(input, caseId).then(function (results) {
-        vm.assignments = $filter('filter')(results, function (val) {
-          return +val.extra.contact_id === +targetContactId;
-        });
+      $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
+        vm.datepickerOptions.from.maxDate = newValue;
       });
     }
 
@@ -305,27 +345,6 @@ define([
       });
     }
 
-    function deleteTask (task) {
-      $dialog.open({
-        msg: 'Are you sure you want to delete this task?'
-      }).then(function (confirm) {
-        if (!confirm) {
-          return;
-        }
-
-        TaskService.delete(task.id).then(function (results) {
-          vm.list.splice(vm.list.indexOf(task), 1);
-
-          $rootScope.$broadcast('taskDelete', task.id);
-          AssignmentService.updateTab();
-        });
-      });
-    }
-
-    function viewInCalendar (view) {
-      $state.go('calendar.mwl.' + view);
-    }
-
     /**
      * Check the CRM message title to match the given pattern
      *
@@ -337,64 +356,46 @@ define([
       return (data.crmMessages && data.crmMessages.length) && pattern.test(data.crmMessages[0].title);
     }
 
-    (function init () {
-      var contactIds = vm.contactIds;
-      var assignmentIds = vm.assignmentIds;
+    function refreshAssignments (input, targetContactId, caseId) {
+      if (!input || !targetContactId || !caseId) {
+        return;
+      }
 
-      vm.collectId(taskList);
-      if (contactIds && contactIds.length) {
-        ContactService.get({'IN': contactIds}).then(function (data) {
-          ContactService.updateCache(data);
+      AssignmentService.search(input, caseId).then(function (results) {
+        vm.assignments = $filter('filter')(results, function (val) {
+          return +val.extra.contact_id === +targetContactId;
         });
+      });
+    }
+
+    function refreshContacts (input) {
+      if (!input) {
+        return;
       }
 
-      if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-        AssignmentService.get({'IN': assignmentIds}).then(function (data) {
-          AssignmentService.updateCache(data);
+      ContactService.search(input, {
+        contact_type: 'Individual'
+      }).then(function (results) {
+        vm.contacts = results;
+      });
+    }
+
+    function updateContacts (contacts) {
+      vm.contacts = contacts;
+    }
+
+    function updateTask (task, updateObj) {
+      vm.cacheContact(task.assignee_contact_id[0]);
+
+      return TaskService
+        .save(angular.extend({}, task, updateObj))
+        .catch(function (reason) {
+          CRM.alert(reason, 'Error', 'error');
         });
-      }
+    }
 
-      watchDateFilters();
-
-      $rootScope.$broadcast('ct-spinner-hide');
-      $log.info($rootScope.cache);
-    })();
-
-    $scope.$on('assignmentFormSuccess', function (e, output) {
-      Array.prototype.push.apply(vm.list, output.taskList);
-    });
-
-    $scope.$on('taskFormSuccess', function (e, output, input) {
-      angular.equals({}, input) ? vm.list.push(output) : angular.extend(input, output);
-    });
-
-    $scope.$on('crmFormSuccess', function (e, data) {
-      if (data.status === 'success') {
-        var pattern = /case|activity|assignment/i;
-
-        if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
-          $rootScope.cache.assignment = {
-            obj: {},
-            arr: []
-          };
-          $state.go($state.current, {}, {reload: true});
-        }
-      }
-    });
-
-    /**
-     * Whenever the date filters will change, their corrispondent
-     * datepickers will have the minDate or maxDate setting updated
-     * accordingly
-     */
-    function watchDateFilters () {
-      $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
-        vm.datepickerOptions.until.minDate = newValue;
-      });
-
-      $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
-        vm.datepickerOptions.from.maxDate = newValue;
-      });
+    function viewInCalendar (view) {
+      $state.go('calendar.mwl.' + view);
     }
   }
 

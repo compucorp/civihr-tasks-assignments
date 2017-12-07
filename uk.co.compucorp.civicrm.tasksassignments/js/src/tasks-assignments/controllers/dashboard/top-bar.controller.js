@@ -4,9 +4,9 @@ define(function () {
   'use strict';
 
   TopBarController.__name = 'TopBarController';
-  TopBarController.$inject = ['$scope', '$rootScope', '$state', '$log'];
+  TopBarController.$inject = ['$log', '$rootScope', '$scope', '$state'];
 
-  function TopBarController ($scope, $rootScope, $state, $log) {
+  function TopBarController ($log, $rootScope, $scope, $state) {
     $log.debug('Controller: TopBarController');
 
     $rootScope.itemAdd = {};

@@ -4,14 +4,16 @@ define(function () {
   'use strict';
 
   NavMainController.__name = 'NavMainController';
-  NavMainController.$inject = ['$scope', '$state', '$log'];
+  NavMainController.$inject = ['$log', '$scope', '$state'];
 
-  function NavMainController ($scope, $state, $log) {
+  function NavMainController ($log, $scope, $state) {
     $log.debug('Controller: NavMainController');
 
-    $scope.isActive = function (viewLocation) {
+    $scope.isActive = isActive;
+
+    function isActive (viewLocation) {
       return $state.includes(viewLocation);
-    };
+    }
   }
 
   return NavMainController;

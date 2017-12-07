@@ -7,36 +7,153 @@ define([
 
   ModalTaskMigrateController.__name = 'ModalTaskMigrateController';
   ModalTaskMigrateController.$inject = [
-    '$scope', '$uibModalInstance', '$rootScope', '$rootElement', '$q', '$log',
-    '$filter', '$uibModal', '$dialog', '$timeout', 'AssignmentService', 'TaskService',
-    'Task', 'activityType', 'ContactService', 'UtilsService', 'settings'
+    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$uibModal', '$uibModalInstance', '$dialog', 'AssignmentService', 'ContactService',
+    'TaskService', 'UtilsService', 'Task', 'activityType', 'settings'
   ];
 
-  function ModalTaskMigrateController ($scope, $modalInstance, $rootScope, $rootElement, $q, $log, $filter,
-    $modal, $dialog, $timeout, AssignmentService, TaskService, Task, activityType,
-    ContactService, UtilsService, settings) {
+  function ModalTaskMigrateController ($filter, $log, $q, $rootElement, $rootScope,
+    $scope, $timeout, $modal, $modalInstance, $dialog, AssignmentService, ContactService,
+    TaskService, UtilsService, Task, activityType, settings) {
     $log.debug('Controller: ModalTaskMigrateController');
 
+    $scope.contacts = $rootScope.cache.contact.arrSearch;
     $scope.migrate = {};
     $scope.migrate.dataLoaded = false;
     $scope.migrate.from = '';
     $scope.migrate.to = '';
-
+    $scope.migrate.document = {
+      list: [],
+      statusList: [],
+      statusListSelected: []
+    };
     $scope.migrate.task = {
       list: [],
       statusList: [],
       statusListSelected: []
     };
 
-    $scope.migrate.document = {
-      list: [],
-      statusList: [],
-      statusListSelected: []
-    };
+    $scope.cacheContact = cacheContact;
+    $scope.cancel = cancel;
+    $scope.confirm = confirm;
+    $scope.getActivities = getActivities;
+    $scope.refreshContacts = refreshContacts;
 
-    $scope.contacts = $rootScope.cache.contact.arrSearch;
+    function cacheContact ($item) {
+      var obj = {};
 
-    $scope.getActivities = function (contactId) {
+      obj[$item.id] = {
+        contact_id: $item.id,
+        contact_type: $item.icon_class,
+        sort_name: $item.label,
+        display_name: $item.label,
+        email: $item.description.length ? $item.description[0] : ''
+      };
+
+      ContactService.updateCache(obj);
+    }
+
+    function cancel () {
+      if ($scope.taskMigrateForm.$pristine) {
+        $modalInstance.dismiss('cancel');
+        return;
+      }
+
+      $dialog.open({
+        copyCancel: 'No',
+        msg: 'Are you sure you want to cancel? Changes will be lost!'
+      }).then(function (confirm) {
+        if (!confirm) {
+          return;
+        }
+
+        $scope.$broadcast('ct-spinner-hide');
+        $modalInstance.dismiss('cancel');
+      });
+    }
+
+    function confirm () {
+      if (!$scope.migrate.task.statusListSelected &&
+        !$scope.migrate.document.statusListSelected) {
+        return;
+      }
+
+      var activityListSelected = [];
+      var promiseActivity = [];
+      var promisePrev;
+      var i = 0;
+
+      angular.forEach($scope.migrate.task.list, function (task) {
+        if ($scope.migrate.task.statusListSelected.indexOf(task.status_id) > -1) {
+          this.push(task);
+        }
+      }, activityListSelected);
+
+      if (+settings.tabEnabled.documents) {
+        angular.forEach($scope.migrate.document.list, function (document) {
+          if ($scope.migrate.document.statusListSelected.indexOf(document.status_id) > -1) {
+            this.push(document);
+          }
+        }, activityListSelected);
+      }
+
+      $scope.$broadcast('ct-spinner-show');
+
+      angular.forEach(activityListSelected, function (activity) {
+        activity.assignee_contact_id[0] = $scope.migrate.to;
+
+        this.push(function () {
+          var deferred = $q.defer();
+
+          promisePrev = i ? this[i - 1] : {};
+
+        // fix DB deadlock issue
+          $q.when(promisePrev).then(function () {
+            Task.save({
+              'entity': 'Activity',
+              'action': 'create',
+              'json': angular.extend({
+                'sequential': '1',
+                'component': ''
+              }, activity)
+            }, null, function (data) {
+              if (UtilsService.errorHandler(data, 'Unable to save task', deferred)) {
+                return;
+              }
+
+              deferred.resolve(data.values.length === 1 ? data.values[0] : null);
+            }, function () {
+              deferred.reject('Unable to save task');
+            });
+          });
+
+          return deferred.promise;
+        }.bind(this)());
+
+        i++;
+      }, promiseActivity);
+
+      $q.all(promiseActivity).then(function (results) {
+        if (results.length) {
+          CRM.alert(results.length + ' item(s) re-assigned from: ' +
+          $rootScope.cache.contact.obj[$scope.migrate.from].sort_name + ' to: ' +
+          $rootScope.cache.contact.obj[$scope.migrate.to].sort_name,
+          'Migrate Tasks', 'success');
+        } else {
+          CRM.alert('0 items re-assigned.',
+          'Migrate Tasks', 'warning');
+        }
+
+        $modalInstance.dismiss();
+        $scope.$broadcast('ct-spinner-hide');
+      }, function (reason) {
+        CRM.alert(reason, 'Error', 'error');
+        $modalInstance.dismiss();
+        $scope.$broadcast('ct-spinner-hide');
+      });
+    }
+
+    function getActivities (contactId) {
       $scope.$broadcast('ct-spinner-show');
 
       contactId = contactId || $scope.migrate.from;
@@ -122,9 +239,9 @@ define([
           $scope.$broadcast('ct-spinner-hide');
         }
       });
-    };
+    }
 
-    $scope.refreshContacts = function (input) {
+    function refreshContacts (input) {
       if (!input) {
         return;
       }
@@ -134,121 +251,7 @@ define([
       }).then(function (results) {
         $scope.contacts = results;
       });
-    };
-
-    $scope.cacheContact = function ($item) {
-      var obj = {};
-
-      obj[$item.id] = {
-        contact_id: $item.id,
-        contact_type: $item.icon_class,
-        sort_name: $item.label,
-        display_name: $item.label,
-        email: $item.description.length ? $item.description[0] : ''
-      };
-
-      ContactService.updateCache(obj);
-    };
-
-    $scope.cancel = function () {
-      if ($scope.taskMigrateForm.$pristine) {
-        $modalInstance.dismiss('cancel');
-        return;
-      }
-
-      $dialog.open({
-        copyCancel: 'No',
-        msg: 'Are you sure you want to cancel? Changes will be lost!'
-      }).then(function (confirm) {
-        if (!confirm) {
-          return;
-        }
-
-        $scope.$broadcast('ct-spinner-hide');
-        $modalInstance.dismiss('cancel');
-      });
-    };
-
-    $scope.confirm = function () {
-      if (!$scope.migrate.task.statusListSelected &&
-        !$scope.migrate.document.statusListSelected) {
-        return;
-      }
-
-      var activityListSelected = [];
-      var promiseActivity = [];
-      var promisePrev;
-      var i = 0;
-
-      angular.forEach($scope.migrate.task.list, function (task) {
-        if ($scope.migrate.task.statusListSelected.indexOf(task.status_id) > -1) {
-          this.push(task);
-        }
-      }, activityListSelected);
-
-      if (+settings.tabEnabled.documents) {
-        angular.forEach($scope.migrate.document.list, function (document) {
-          if ($scope.migrate.document.statusListSelected.indexOf(document.status_id) > -1) {
-            this.push(document);
-          }
-        }, activityListSelected);
-      }
-
-      $scope.$broadcast('ct-spinner-show');
-
-      angular.forEach(activityListSelected, function (activity) {
-        activity.assignee_contact_id[0] = $scope.migrate.to;
-
-        this.push(function () {
-          var deferred = $q.defer();
-
-          promisePrev = i ? this[i - 1] : {};
-
-        // fix DB deadlock issue
-          $q.when(promisePrev).then(function () {
-            Task.save({
-              'entity': 'Activity',
-              'action': 'create',
-              'json': angular.extend({
-                'sequential': '1',
-                'component': ''
-              }, activity)
-            }, null, function (data) {
-              if (UtilsService.errorHandler(data, 'Unable to save task', deferred)) {
-                return;
-              }
-
-              deferred.resolve(data.values.length === 1 ? data.values[0] : null);
-            }, function () {
-              deferred.reject('Unable to save task');
-            });
-          });
-
-          return deferred.promise;
-        }.bind(this)());
-
-        i++;
-      }, promiseActivity);
-
-      $q.all(promiseActivity).then(function (results) {
-        if (results.length) {
-          CRM.alert(results.length + ' item(s) re-assigned from: ' +
-          $rootScope.cache.contact.obj[$scope.migrate.from].sort_name + ' to: ' +
-          $rootScope.cache.contact.obj[$scope.migrate.to].sort_name,
-          'Migrate Tasks', 'success');
-        } else {
-          CRM.alert('0 items re-assigned.',
-          'Migrate Tasks', 'warning');
-        }
-
-        $modalInstance.dismiss();
-        $scope.$broadcast('ct-spinner-hide');
-      }, function (reason) {
-        CRM.alert(reason, 'Error', 'error');
-        $modalInstance.dismiss();
-        $scope.$broadcast('ct-spinner-hide');
-      });
-    };
+    }
   }
 
   return ModalTaskMigrateController;

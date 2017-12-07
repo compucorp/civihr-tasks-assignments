@@ -5,11 +5,11 @@ define(function () {
 
   AssignmentsController.__name = 'AssignmentsController';
   AssignmentsController.$inject = [
-    '$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config'
+    '$log', '$rootElement', '$rootScope', '$scope', '$uibModal', '$state', 'config'
   ];
 
-  function AssignmentsController ($scope, $log, $modal, $rootElement, $rootScope, $state,
-    config) {
+  function AssignmentsController ($log, $rootElement, $rootScope, $scope, $modal,
+    $state, config) {
     $log.info('Controller: AssignmentsController');
   }
 

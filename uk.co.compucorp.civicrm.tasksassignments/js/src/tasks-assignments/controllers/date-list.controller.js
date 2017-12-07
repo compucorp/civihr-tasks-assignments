@@ -7,15 +7,49 @@ define([
 
   DateListController.__name = 'DateListController';
   DateListController.$inject = [
-    '$scope', '$uibModal', '$rootElement', '$rootScope', '$filter', '$log',
-    '$timeout', 'contactList', 'KeyDateService', 'config'
+    '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$uibModal', 'KeyDateService', 'config', 'contactList'
   ];
 
-  function DateListController ($scope, $modal, $rootElement, $rootScope, $filter, $log,
-    $timeout, contactList, KeyDateService, config) {
+  function DateListController ($filter, $log, $rootElement, $rootScope, $scope, $timeout,
+    $modal, KeyDateService, config, contactList) {
     $log.debug('Controller: DateListController');
 
-    this.init = function () {
+    $scope.dataLoading = true;
+    $scope.dateList = [];
+    $scope.dateListLimit = 5;
+    $scope.dateListSelected = [];
+    $scope.dpOpened = {
+      filterDates: {}
+    };
+    $scope.filterParams = {
+      date: 'month',
+      dateType: [],
+      dateRange: {
+        from: moment().startOf('day').toDate(),
+        until: moment().add(1, 'month').startOf('day').toDate()
+      }
+    };
+    $scope.datepickerOptions = {
+      from: { maxDate: $scope.filterParams.dateRange.until },
+      until: { minDate: $scope.filterParams.dateRange.from }
+    };
+    $scope.isCollapsed = {
+      filterDates: true
+    };
+    $scope.label = {
+      isoWeek: 'Week',
+      month: 'Month',
+      year: 'Year',
+      dateRange: ''
+    };
+
+    this.createDateList = createDateList.bind(this);
+    $scope.csvExport = csvExport;
+    $scope.labelDateRange = labelDateRange;
+    $scope.showDateRange = showDateRange.bind(this);
+
+    (function init () {
       $scope.dateList = this.createDateList(contactList);
 
       $rootScope.$broadcast('ct-spinner-hide');
@@ -26,11 +60,11 @@ define([
         $scope.dataLoading = false;
       }.bind(this));
 
-      watchDateFilters();
-    };
+      initWatchers();
+    }.bind(this)());
 
     // Create date list from contact list
-    this.createDateList = function (contactList) {
+    function createDateList (contactList) {
       var i = 0;
       var len = contactList.length;
       var date;
@@ -50,43 +84,9 @@ define([
       }
 
       return dateList;
-    };
+    }
 
-    $scope.dataLoading = true;
-    $scope.dateList = [];
-    $scope.dateListLimit = 5;
-    $scope.dateListSelected = [];
-
-    $scope.dpOpened = {
-      filterDates: {}
-    };
-
-    $scope.isCollapsed = {
-      filterDates: true
-    };
-
-    $scope.filterParams = {
-      dateRange: {
-        from: moment().startOf('day').toDate(),
-        until: moment().add(1, 'month').startOf('day').toDate()
-      },
-      date: 'month',
-      dateType: []
-    };
-
-    $scope.datepickerOptions = {
-      from: { maxDate: $scope.filterParams.dateRange.until },
-      until: { minDate: $scope.filterParams.dateRange.from }
-    };
-
-    $scope.label = {
-      isoWeek: 'Week',
-      month: 'Month',
-      year: 'Year',
-      dateRange: ''
-    };
-
-    $scope.csvExport = function () {
+    function csvExport () {
       var startDate, endDate;
 
       if ($scope.filterParams.date === 'dateRange') {
@@ -102,9 +102,24 @@ define([
       }
 
       window.location.href = config.url.CSV_EXPORT + '/keydatescsv?start_date=' + startDate + '&end_date=' + endDate;
-    };
+    }
 
-    $scope.labelDateRange = function (from, until) {
+    /**
+     * Whenever the date filters will change, their corrispondent
+     * datepickers will have the minDate or maxDate setting updated
+     * accordingly
+     */
+    function initWatchers () {
+      $scope.$watch('filterParams.dateRange.from', function (newValue) {
+        $scope.datepickerOptions.until.minDate = newValue;
+      });
+
+      $scope.$watch('filterParams.dateRange.until', function (newValue) {
+        $scope.datepickerOptions.from.maxDate = newValue;
+      });
+    }
+
+    function labelDateRange (from, until) {
       var filterDateTimeFrom = $filter('date')(from, 'dd/MM/yyyy') || '';
       var filterDateTimeUntil = $filter('date')(until, 'dd/MM/yyyy') || '';
 
@@ -117,9 +132,9 @@ define([
       }
 
       $scope.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
-    };
+    }
 
-    $scope.showDateRange = function (from, until) {
+    function showDateRange (from, until) {
       $scope.$broadcast('ct-spinner-show', 'dateList');
 
       KeyDateService.get(moment(from), moment(until)).then(function (contactList) {
@@ -127,23 +142,6 @@ define([
         $scope.filterParams.date = 'dateRange';
         $scope.$broadcast('ct-spinner-hide', 'dateList');
       }.bind(this));
-    }.bind(this);
-
-    this.init();
-
-    /**
-     * Whenever the date filters will change, their corrispondent
-     * datepickers will have the minDate or maxDate setting updated
-     * accordingly
-     */
-    function watchDateFilters () {
-      $scope.$watch('filterParams.dateRange.from', function (newValue) {
-        $scope.datepickerOptions.until.minDate = newValue;
-      });
-
-      $scope.$watch('filterParams.dateRange.until', function (newValue) {
-        $scope.datepickerOptions.from.maxDate = newValue;
-      });
     }
   }
 

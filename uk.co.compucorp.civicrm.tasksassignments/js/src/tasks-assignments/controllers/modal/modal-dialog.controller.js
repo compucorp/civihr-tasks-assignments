@@ -5,24 +5,27 @@ define(function () {
 
   ModalDialogController.__name = 'ModalDialogController';
   ModalDialogController.$inject = [
-    '$scope', '$uibModalInstance', '$timeout', 'content', '$log'
+    '$log', '$scope', '$timeout', '$uibModalInstance', 'content'
   ];
 
-  function ModalDialogController ($scope, $modalInstance, $timeout, content, $log) {
+  function ModalDialogController ($log, $scope, $timeout, $modalInstance, content) {
     $log.debug('Controller: ModalDialogController');
 
-    $scope.title = content.title || 'CiviHR Tasks & Assignments';
-    $scope.msg = content.msg || '';
-    $scope.copyConfirm = content.copyConfirm || 'Yes';
     $scope.copyCancel = content.copyCancel || 'Cancel';
+    $scope.copyConfirm = content.copyConfirm || 'Yes';
+    $scope.msg = content.msg || '';
+    $scope.title = content.title || 'CiviHR Tasks & Assignments';
 
-    $scope.confirm = function (action) {
-      $modalInstance.close(action || true);
-    };
+    $scope.confirm = confirm;
+    $scope.cancel = cancel;
 
-    $scope.cancel = function () {
+    function cancel () {
       $modalInstance.close(false);
-    };
+    }
+
+    function confirm (action) {
+      $modalInstance.close(action || true);
+    }
   }
 
   return ModalDialogController;

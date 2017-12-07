@@ -5,23 +5,29 @@ define(function () {
 
   ExternalPageController.__name = 'ExternalPageController';
   ExternalPageController.$inject = [
-    '$scope', '$log', '$uibModal', '$rootElement', '$rootScope', '$state', 'config'
+    '$log', '$rootElement', '$rootScope', '$scope', '$state', '$uibModal', 'config'
   ];
 
-  function ExternalPageController ($scope, $log, $modal, $rootElement, $rootScope,
-    $state, config) {
+  function ExternalPageController ($log, $rootElement, $rootScope, $scope, $state,
+    $modal, config) {
     $log.debug('Controller: ExternalPageController');
 
     $scope.assignmentsUrl = config.url.ASSIGNMENTS + '?reset=1';
     $scope.reportsUrl = config.url.CIVI_DASHBOARD + '?reset=1';
 
-    $scope.$on('assignmentFormSuccess', function () {
-      $state.go($state.current, {}, {reload: true});
-    });
+    (function init () {
+      initListeners();
+    }());
 
-    $scope.$on('iframe-ready', function () {
-      $rootScope.$broadcast('ct-spinner-hide');
-    });
+    function initListeners () {
+      $scope.$on('assignmentFormSuccess', function () {
+        $state.go($state.current, {}, {reload: true});
+      });
+
+      $scope.$on('iframe-ready', function () {
+        $rootScope.$broadcast('ct-spinner-hide');
+      });
+    }
   }
 
   return ExternalPageController;

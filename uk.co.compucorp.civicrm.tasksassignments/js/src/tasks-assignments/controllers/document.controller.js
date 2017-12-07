@@ -6,9 +6,9 @@ define([
   'use strict';
 
   DocumentController.__name = 'DocumentController';
-  DocumentController.$inject = ['$scope', '$rootScope', 'config', '$log'];
+  DocumentController.$inject = ['$log', '$rootScope', '$scope', 'config'];
 
-  function DocumentController ($scope, $rootScope, config, $log) {
+  function DocumentController ($log, $rootScope, $scope, config) {
     $log.debug('Controller: DocumentController');
 
     $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;
@@ -17,9 +17,15 @@ define([
     $scope.document.remind_me = $scope.document.remind_me === 1;
     $scope.urlFile = config.url.FILE + '/zip?entityID=' + $scope.document.id + '&entityTable=civicrm_activity';
 
-    $scope.$watch('document.activity_date_time', function (documentDateTime) {
-      $scope.document.due = new Date(documentDateTime).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
-    });
+    (function init () {
+      initWatchers();
+    }());
+
+    function initWatchers () {
+      $scope.$watch('document.activity_date_time', function (documentDateTime) {
+        $scope.document.due = new Date(documentDateTime).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+      });
+    }
   }
 
   return DocumentController;

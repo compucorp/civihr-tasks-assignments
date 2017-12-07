@@ -7,12 +7,12 @@ define([
 
   ModalReminderController.__name = 'ModalReminderController';
   ModalReminderController.$inject = [
-    '$scope', '$uibModalInstance', '$dialog', '$rootScope', '$q', '$log', '$filter',
-    'TaskService', 'DocumentService', 'data', 'type', 'config'
+    '$filter', '$log', '$q', '$rootScope', '$scope', '$dialog', '$uibModalInstance',
+    'DocumentService', 'TaskService', 'config', 'data', 'type'
   ];
 
-  function ModalReminderController ($scope, $modalInstance, $dialog, $rootScope, $q,
-    $log, $filter, TaskService, DocumentService, data, type, config) {
+  function ModalReminderController ($filter, $log, $q, $rootScope, $scope, $dialog,
+    $modalInstance, DocumentService, TaskService, config, data, type) {
     $log.debug('Controller: ModalReminderController');
 
     $scope.data = {};
@@ -26,11 +26,14 @@ define([
     $scope.contacts = $rootScope.cache.contact.arrSearch;
     $scope.showCId = !config.CONTACT_ID;
 
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
+    $scope.cancel = cancel;
+    $scope.confirm = confirm;
 
-    $scope.confirm = function () {
+    function cancel () {
+      $modalInstance.dismiss('cancel');
+    }
+
+    function confirm () {
       $scope.$broadcast('ct-spinner-show');
 
       (type === 'task' ? TaskService : DocumentService).sendReminder($scope.data.id, $scope.reminder.notes).then(function () {
@@ -44,7 +47,7 @@ define([
         $scope.$broadcast('ta-spinner-hide');
         return $q.reject();
       });
-    };
+    }
   }
 
   return ModalReminderController;

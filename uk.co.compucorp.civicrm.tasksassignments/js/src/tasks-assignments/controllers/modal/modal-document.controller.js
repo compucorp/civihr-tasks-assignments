@@ -10,15 +10,18 @@ define([
   'use strict';
 
   ModalDocumentController.__name = 'ModalDocumentController';
-  ModalDocumentController.$inject = ['$window', '$scope', '$uibModalInstance', '$rootScope',
-    '$rootElement', '$q', '$log', 'role', '$filter', '$uibModal', '$dialog', '$timeout',
-    'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'AppSettingsService',
-    'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService'
+  ModalDocumentController.$inject = [
+    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$window', '$dialog', '$uibModal', '$uibModalInstance', 'HR_settings', 'config',
+    'AppSettingsService', 'AssignmentService', 'ContactService', 'DocumentService',
+    'FileService', 'fileService', 'notificationService', 'modalMode', 'role',
+    'data', 'files'
   ];
 
-  function ModalDocumentController ($window, $scope, $modalInstance, $rootScope, $rootElement,
-    $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService, DocumentService,
-    ContactService, FileService, data, AppSettingsService, files, config, HRSettings, modalMode, notificationService, fileService) {
+  function ModalDocumentController ($filter, $log, $q, $rootElement, $rootScope,
+    $scope, $timeout, $window, $dialog, $modal, $modalInstance, HRSettings, config,
+    AppSettingsService, AssignmentService, ContactService, DocumentService,
+    FileService, fileService, notificationService, modalMode, role, data, files) {
     $log.debug('Controller: ModalDocumentController');
 
     var vm = this;
