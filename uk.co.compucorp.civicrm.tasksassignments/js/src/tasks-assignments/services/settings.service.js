@@ -12,60 +12,64 @@ define(function () {
     $log.debug('Service: settingsService');
 
     return {
-      get: function (fields) {
-        var deferred = $q.defer();
+      get: get,
+      set: set
+    };
 
-        fields = fields && typeof fields === 'object' ? fields : [];
+    function get (fields) {
+      var deferred = $q.defer();
 
-        Settings.get({
-          'action': 'get',
-          'json': {
-            'sequential': 1,
-            'debug': config.DEBUG,
-            'fields': fields
-          }
-        }, function (data) {
-          deferred.resolve(data.values);
-        }, function () {
-          deferred.reject('Unable to fetch tasks list');
-        });
+      fields = fields && typeof fields === 'object' ? fields : [];
 
-        return deferred.promise;
-      },
-      set: function (fields) {
-        if (!fields || typeof fields !== 'object') {
-          return null;
+      Settings.get({
+        'action': 'get',
+        'json': {
+          'sequential': 1,
+          'debug': config.DEBUG,
+          'fields': fields
+        }
+      }, function (data) {
+        deferred.resolve(data.values);
+      }, function () {
+        deferred.reject('Unable to fetch tasks list');
+      });
+
+      return deferred.promise;
+    }
+
+    function set (fields) {
+      if (!fields || typeof fields !== 'object') {
+        return null;
+      }
+
+      var deferred = $q.defer();
+
+      Settings.save({
+        'action': 'set',
+        'json': {
+          'sequential': 1,
+          'debug': config.DEBUG,
+          'fields': fields
+        }
+      }, null, function (data) {
+        if (utilsService.errorHandler(data, 'Unable to save', deferred)) {
+          return;
         }
 
-        var deferred = $q.defer();
+        settings.tabEnabled = {
+          documents: fields.documents_tab || settings.tabEnabled.documents_tab,
+          keyDates: fields.keydates_tab || settings.tabEnabled.keydates_tab
+        };
 
-        Settings.save({
-          'action': 'set',
-          'json': {
-            'sequential': 1,
-            'debug': config.DEBUG,
-            'fields': fields
-          }
-        }, null, function (data) {
-          if (utilsService.errorHandler(data, 'Unable to save', deferred)) {
-            return;
-          }
+        settings.copy.button.assignmentAdd = fields.add_assignment_button_title;
 
-          settings.tabEnabled = {
-            documents: fields.documents_tab || settings.tabEnabled.documents_tab,
-            keyDates: fields.keydates_tab || settings.tabEnabled.keydates_tab
-          };
+        deferred.resolve(data.values);
+      }, function () {
+        deferred.reject('Unable to save');
+      });
 
-          settings.copy.button.assignmentAdd = fields.add_assignment_button_title;
-
-          deferred.resolve(data.values);
-        }, function () {
-          deferred.reject('Unable to save');
-        });
-
-        return deferred.promise;
-      }
-    };
+      return deferred.promise;
+    }
   }
 
   return settingsService;
