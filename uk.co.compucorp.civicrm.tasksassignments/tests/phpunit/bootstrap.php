@@ -9,7 +9,16 @@ define('DRUPAL_ROOT', realpath($GLOBALS["civicrm_root"] . '../../../..'));
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
+addCiviHRExtensionToIncludePath('/uk.co.compucorp.civicrm.hrcore/');
+
 require_once 'TasksassignmentsTestTrait.php';
+
+function addCiviHRExtensionToIncludePath($extensionDirectory) {
+  $civicrmRoot = realpath($GLOBALS['civicrm_root']);
+  $civiHRDir = $civicrmRoot . '/tools/extensions/civihr';
+  $extensionDir = $civiHRDir . $extensionDirectory;
+  set_include_path($extensionDir . PATH_SEPARATOR . get_include_path());
+}
 
 /**
  * Call the "cv" command.
