@@ -43,10 +43,13 @@ class CRM_Tasksassignments_Test_Fabricator_Assignment {
    */
   private static function getOneCaseType() {
     $result = civicrm_api3('CaseType', 'get', [
-      'sequential' => 1,
       'is_active' => 1,
       'options' => ['limit' => 1],
     ]);
+
+    if ($result['count'] == 0) {
+      return CRM_HRCore_Test_Fabricator_CaseType::fabricate()['id'];
+    }
 
     return $result['id'];
   }
