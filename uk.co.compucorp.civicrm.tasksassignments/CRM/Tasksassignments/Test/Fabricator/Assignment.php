@@ -17,14 +17,16 @@ class CRM_Tasksassignments_Test_Fabricator_Assignment {
    */
   public static function fabricate($params = []) {
     self::setDefaultValues();
-    return CRM_Tasksassignments_BAO_Assignment::create(array_merge(self::$defaultParams, $params));
+    $params = array_merge(self::$defaultParams, $params);
+
+    return CRM_Tasksassignments_BAO_Assignment::create($params);
   }
 
   /**
    * Creates an array with minimum parameters that should be used to create an
    * assignment.
    */
-  private function setDefaultValues() {
+  private static function setDefaultValues() {
     self::$defaultParams = [
       'case_type_id' => self::getOneCaseType(),
       'subject' => 'A subject ' . ('Y-m-d H:i:s'),

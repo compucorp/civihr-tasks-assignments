@@ -17,7 +17,9 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    */
   public static function fabricate($params = []) {
     self::setDefaultParameters();
-    return CRM_Tasksassignments_BAO_Document::create(array_merge(self::$defaultParams, $params));
+    $params = array_merge(self::$defaultParams, $params);
+
+    return CRM_Tasksassignments_BAO_Document::create($params);
   }
 
   /**
@@ -62,7 +64,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    * @return int
    *   ID of the first valid document type found on the database
    */
-  private function getTestDocumentTypeID() {
+  private static function getTestDocumentTypeID() {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => 'activity_type',
@@ -79,7 +81,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    * @return int
    *   ID of the first valid priority found on the database
    */
-  private function getTestPriorityID() {
+  private static function getTestPriorityID() {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => 'priority',
