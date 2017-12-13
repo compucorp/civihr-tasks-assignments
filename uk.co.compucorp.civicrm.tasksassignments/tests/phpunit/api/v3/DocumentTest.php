@@ -1,11 +1,13 @@
 <?php
+
 use CRM_Tasksassignments_Test_Fabricator_Assignment as AssignmentFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
 
 /**
- * Class Api_DocumentTest
+ * @group headless
  */
-class api_v3_DocumentTest extends CiviUnitTestCase {
+class api_v3_DocumentTest extends BaseHeadlessTest {
 
   /**
    * @var int
@@ -15,19 +17,15 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   /**
    * Runs installer and sets default document type
    */
+  public function setUpHeadless() {
+    return \Civi\Test::headless()
+      ->installMe(__DIR__)
+      ->apply();
+  }
+
   public function setUp() {
-    parent::setUp();
-    $this->quickCleanup(['civicrm_activity', 'civicrm_case', 'civicrm_case_activity'], TRUE);
-    $upgrader = CRM_Tasksassignments_Upgrader::instance();
-    $upgrader->install();
-
-    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
-    $hrCaseUpgrader->install();
-
-    // Pick one of Document types.
-    $documentTypes = civicrm_api3('Document', 'getoptions', array(
-      'field' => 'activity_type_id',
-    ));
+    $params = ['field' => 'activity_type_id'];
+    $documentTypes = civicrm_api3('Document', 'getoptions', $params);
     $this->_documentTypeId = array_shift($documentTypes['values']);
   }
 
@@ -305,12 +303,13 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   }
 
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
+    $originalCount = civicrm_api3('Activity', 'getcount');
     $assignment = AssignmentFabricator::fabricate();
 
     $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
     $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
     $activityCount = civicrm_api3('Activity', 'getcount');
-    $this->assertEquals(2, $activityCount);
+    $this->assertEquals(2 + $originalCount, $activityCount);
 
     foreach ($documents as $currentDocument) {
       DocumentFabricator::fabricateWithAPI([
@@ -321,7 +320,7 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       ]);
     }
 
-    $this->assertEquals(3, civicrm_api3('Activity', 'getcount'));
+    $this->assertEquals(3 + $originalCount, civicrm_api3('Activity', 'getcount'));
     $this->assertEquals(1, $this->getDocumentRevisionCount($documents['standAloneDocument']['id']));
     $this->assertEquals(2, $this->getDocumentRevisionCount($documents['caseDocument']['id']));
   }
@@ -423,15 +422,5 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     }
 
     return CRM_Utils_Array::value($fieldName, $fieldNames);
-  }
-
-  public function tearDown() {
-    parent::tearDown();
-
-    $upgrader = CRM_Tasksassignments_Upgrader::instance();
-    $upgrader->uninstall();
-
-    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
-    $hrCaseUpgrader->uninstall();
   }
 }
