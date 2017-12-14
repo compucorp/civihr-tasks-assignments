@@ -1,5 +1,4 @@
 <?php
-use CRM_HRCore_Test_Fabricator_Contact as ContactFabricator;
 
 /**
  * Documents Fabricator class
@@ -44,11 +43,7 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    * @return array
    */
   private static function getDefaultParameters() {
-    $contactID = CRM_Core_Session::getLoggedInContactID();
-
-    if (!$contactID) {
-      $contactID = ContactFabricator::fabricate()['id'];
-    }
+    $contactID = self::getTestContactID();
 
     return [
       'activity_type_id' => self::getTestDocumentTypeID(),
@@ -90,5 +85,25 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
     ]);
 
     return array_shift($result['values'])['value'];
+  }
+
+  /**
+   * @return int|NULL
+   */
+  private static function getTestContactID() {
+    $contactID = CRM_Core_Session::getLoggedInContactID();
+
+    if ($contactID) {
+      return $contactID;
+    }
+
+    $contacts = civicrm_api3('Contact', 'get')['values'];
+    if (empty($contacts)) {
+      throw new \Exception('At least one contact must exist');
+    }
+
+    $contactID = array_shift($contacts)['id'];
+
+    return $contactID;
   }
 }

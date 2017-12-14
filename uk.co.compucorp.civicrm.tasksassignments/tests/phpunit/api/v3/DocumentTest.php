@@ -9,6 +9,8 @@ use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
  */
 class api_v3_DocumentTest extends BaseHeadlessTest {
 
+  use CRM_Tasksassignments_Test_Helper_TableCleanupTrait;
+
   /**
    * @var int
    */
@@ -294,6 +296,7 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
   }
 
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
+    $this->truncateTables(['civicrm_activity']);
     $originalCount = civicrm_api3('Activity', 'getcount');
     $assignment = AssignmentFabricator::fabricate();
 
