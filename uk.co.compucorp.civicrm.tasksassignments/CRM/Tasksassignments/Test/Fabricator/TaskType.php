@@ -9,7 +9,7 @@ class CRM_Tasksassignments_Test_Fabricator_TaskType {
   ];
 
   /**
-   * Fabricates an assignment merging given parameters with default minimum
+   * Fabricates a task type merging given parameters with default minimum
    * parameters.
    *
    * @param array $params

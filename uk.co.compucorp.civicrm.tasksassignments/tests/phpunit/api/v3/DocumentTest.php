@@ -14,15 +14,6 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
    */
   private $_documentTypeId;
 
-  /**
-   * Runs installer and sets default document type
-   */
-  public function setUpHeadless() {
-    return \Civi\Test::headless()
-      ->installMe(__DIR__)
-      ->apply();
-  }
-
   public function setUp() {
     $params = ['field' => 'activity_type_id'];
     $documentTypes = civicrm_api3('Document', 'getoptions', $params);

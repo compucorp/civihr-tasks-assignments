@@ -4,6 +4,7 @@
  * Assignments Fabricator class
  */
 class CRM_Tasksassignments_Test_Fabricator_Task {
+
   private static $defaultParams = [
     'activity_name' => 'Test Task',
     'source_contact_id' => 'user_contact_id',
@@ -12,8 +13,7 @@ class CRM_Tasksassignments_Test_Fabricator_Task {
   ];
 
   /**
-   * Fabricates an assignment merging given parameters with default minimum
-   * parameters.
+   * Fabricates a task merging given parameters with default minimum params.
    *
    * @param array $params
    *   List of parameters to use to create the Assignment

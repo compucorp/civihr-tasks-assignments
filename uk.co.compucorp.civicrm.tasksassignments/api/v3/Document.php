@@ -592,7 +592,7 @@ function civicrm_api3_document_get($params) {
             )
         ));
 
-      // foreach loop will break if doing 'is_count' request
+      // If 'is_count' is set $getResult will be an int, and foreach will break
       if (!empty($params['options']['is_count'])) {
         return $getResult;
       }

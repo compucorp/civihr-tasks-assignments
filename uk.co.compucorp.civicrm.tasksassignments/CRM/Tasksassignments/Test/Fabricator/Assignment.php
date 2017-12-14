@@ -48,7 +48,9 @@ class CRM_Tasksassignments_Test_Fabricator_Assignment {
     ]);
 
     if ($result['count'] == 0) {
-      return CRM_HRCore_Test_Fabricator_CaseType::fabricate()['id'];
+      $params = ['title' => 'TestType'];
+      $result = civicrm_api3('CaseType', 'create', $params);
+      $result = array_shift($result['values']);
     }
 
     return $result['id'];
