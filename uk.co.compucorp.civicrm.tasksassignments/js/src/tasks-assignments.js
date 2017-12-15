@@ -23,7 +23,12 @@
     'use strict';
 
     document.addEventListener('taInit', function (e) {
-      angular.bootstrap(document.getElementById(e.detail.module), ['tasks-assignments.' + e.detail.app]);
+      var element = angular.element(document.getElementById(e.detail.module));
+      var isBootstrapped = element.injector();
+
+      if (!isBootstrapped) {
+        angular.bootstrap(element, ['tasks-assignments.' + e.detail.app]);
+      }
     });
 
     document.dispatchEvent(typeof window.CustomEvent === 'function' ? new window.CustomEvent('taReady') : (function () {
