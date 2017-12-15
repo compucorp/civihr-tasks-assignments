@@ -23,11 +23,11 @@
     'use strict';
 
     document.addEventListener('taInit', function (e) {
-      var element = angular.element(document.getElementById(e.detail.module));
-      var isBootstrapped = element.injector();
+      var appRootElement = angular.element(document.getElementById(e.detail.module));
+      var isBootstrapped = !!appRootElement.injector();
 
       if (!isBootstrapped) {
-        angular.bootstrap(element, ['tasks-assignments.' + e.detail.app]);
+        angular.bootstrap(appRootElement, ['tasks-assignments.' + e.detail.app]);
       }
     });
 
