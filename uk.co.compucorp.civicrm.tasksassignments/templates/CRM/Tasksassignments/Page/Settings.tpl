@@ -1,7 +1,7 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" class="{$prefix}page-loading" ng-controller="MainCtrl">
+<div id="{$module}" class="{$prefix}page-loading" ng-controller="MainController">
     <div class="container" ct-spinner ct-spinner-main-view>
         <div class="fade-in-up" ui-view>
             <div ct-spinner ct-spinner-main-view>
@@ -17,7 +17,7 @@
         (function(){
 
             var detail = {
-                'app': 'appSettings',
+                'app': 'settings',
                 'module': 'civitasks'
             };
 
