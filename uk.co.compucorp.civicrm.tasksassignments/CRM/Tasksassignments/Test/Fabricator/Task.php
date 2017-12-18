@@ -7,9 +7,6 @@ class CRM_Tasksassignments_Test_Fabricator_Task {
 
   private static $defaultParams = [
     'activity_name' => 'Test Task',
-    'source_contact_id' => 'user_contact_id',
-    'target_id' => 'user_contact_id',
-    'assignee_id' => 'user_contact_id',
   ];
 
   /**
@@ -26,4 +23,5 @@ class CRM_Tasksassignments_Test_Fabricator_Task {
 
     return array_shift($result['values']);
   }
+
 }
