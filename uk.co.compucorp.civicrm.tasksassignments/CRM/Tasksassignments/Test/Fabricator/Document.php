@@ -43,16 +43,11 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    * @return array
    */
   private static function getDefaultParameters() {
-    $contactID = self::getTestContactID();
-
     return [
       'activity_type_id' => self::getTestDocumentTypeID(),
       'activity_date_time' => date('Y-m-d'),
       'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
       'priority_id' => self::getTestPriorityID(),
-      'source_contact_id' => $contactID,
-      'target_contact_id' => [$contactID],
-      'assignee_contact_id' => [$contactID],
     ];
   }
 
@@ -87,23 +82,4 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
     return array_shift($result['values'])['value'];
   }
 
-  /**
-   * @return int|NULL
-   */
-  private static function getTestContactID() {
-    $contactID = CRM_Core_Session::getLoggedInContactID();
-
-    if ($contactID) {
-      return $contactID;
-    }
-
-    $contacts = civicrm_api3('Contact', 'get')['values'];
-    if (empty($contacts)) {
-      throw new \Exception('At least one contact must exist');
-    }
-
-    $contactID = array_shift($contacts)['id'];
-
-    return $contactID;
-  }
 }

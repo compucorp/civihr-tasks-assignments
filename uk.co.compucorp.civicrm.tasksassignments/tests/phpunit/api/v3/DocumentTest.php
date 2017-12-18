@@ -3,6 +3,7 @@
 use CRM_Tasksassignments_Test_Fabricator_Assignment as AssignmentFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
 use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
+use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
 
 /**
  * @group headless
@@ -265,10 +266,13 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
 
     // Create assignment
     $assignment = AssignmentFabricator::fabricate();
+    $contactID = ContactFabricator::fabricate()['id'];
 
     // Create document - we need to use the API so new revisions are created.
     $document = DocumentFabricator::fabricateWithAPI([
       'case_id' => $assignment->id,
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
     ]);
     $this->assertClonableRevisionCount(0);
 
@@ -279,6 +283,8 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
       'expire_date' => date('Y-m-d'),
       'remind_me' => 1,
       'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
     ]);
     $this->assertClonableRevisionCount(1);
 
@@ -298,9 +304,17 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
     $this->truncateTables(['civicrm_activity']);
     $assignment = AssignmentFabricator::fabricate();
+    $contactID = ContactFabricator::fabricate()['id'];
 
-    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
-    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
+    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI([
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
+    ]);
+    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI([
+      'case_id' => $assignment->id,
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
+    ]);
     $activityCount = civicrm_api3('Activity', 'getcount');
     $this->assertEquals(2, $activityCount);
 
@@ -310,6 +324,8 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
         'expire_date' => date('Y-m-d'),
         'remind_me' => 1,
         'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+        'source_contact_id' => $contactID,
+        'target_contact_id' => $contactID,
       ]);
     }
 
