@@ -44,7 +44,6 @@ class CRM_Tasksassignments_Test_Fabricator_Document {
    */
   private static function getDefaultParameters() {
     return [
-      'activity_type_id' => 'Visa',
       'activity_date_time' => date('Y-m-d'),
       'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
     ];
