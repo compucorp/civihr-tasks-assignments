@@ -297,13 +297,12 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
 
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
     $this->truncateTables(['civicrm_activity']);
-    $originalCount = civicrm_api3('Activity', 'getcount');
     $assignment = AssignmentFabricator::fabricate();
 
     $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
     $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
     $activityCount = civicrm_api3('Activity', 'getcount');
-    $this->assertEquals(2 + $originalCount, $activityCount);
+    $this->assertEquals(2, $activityCount);
 
     foreach ($documents as $currentDocument) {
       DocumentFabricator::fabricateWithAPI([
@@ -314,7 +313,7 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
       ]);
     }
 
-    $this->assertEquals(3 + $originalCount, civicrm_api3('Activity', 'getcount'));
+    $this->assertEquals(3, civicrm_api3('Activity', 'getcount'));
     $this->assertEquals(1, $this->getDocumentRevisionCount($documents['standAloneDocument']['id']));
     $this->assertEquals(2, $this->getDocumentRevisionCount($documents['caseDocument']['id']));
   }
