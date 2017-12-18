@@ -302,7 +302,7 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
   }
 
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
-    $this->truncateTables(['civicrm_activity']);
+    $this->truncateTables(['civicrm_activity', 'civicrm_activity_contact']);
     $assignment = AssignmentFabricator::fabricate();
     $contactID = ContactFabricator::fabricate()['id'];
 
