@@ -215,6 +215,8 @@ class CRM_Tasksassignments_Reminder {
         $activityDueDate = substr($activityResult['activity_date_time'], 0, 10);
       }
 
+      $assigneeContacts = CRM_Utils_Array::value('assignee', $activityContacts, []);
+
       $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
         'isReminder' => $isReminder,
         'isDelete' => $isDelete,
@@ -223,7 +225,7 @@ class CRM_Tasksassignments_Reminder {
         'activityName' => $activityName,
         'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
         'activityTargets' => implode(', ', $activityContacts['targets']['links']),
-        'activityAssignee' => implode(', ', $activityContacts['assignees']['links']),
+        'activityAssignee' => implode(', ', CRM_Utils_Array::value('links', $assigneeContacts, [])),
         'previousAssignee' => $previousAssignee ? $previousAssignee['link'] : null,
         'activityStatus' => self::$_activityOptions[$isTask ? 'status' : 'document_status'][$activityResult['status_id']],
         'activityDue' => $activityDueDate,
