@@ -10,9 +10,10 @@ define([
   'tasks-assignments/filters/date.filter',
   'tasks-assignments/filters/offset.filter',
   'tasks-assignments/filters/ownership.filter',
-  'tasks-assignments/filters/status.filter'
+  'tasks-assignments/filters/status.filter',
+  'tasks-assignments/filters/unique.filter'
 ], function (angular, filterByAssignmentType, filterByContactId, filterByDateField,
-  dateParse, filterByDateType, filterByDate, offset, filterByOwnership, filterByStatus) {
+  dateParse, filterByDateType, filterByDate, offset, filterByOwnership, filterByStatus, uniqueFilter) {
   'use strict';
 
   return angular.module('tasks-assignments.filters', [])
@@ -24,5 +25,6 @@ define([
     .filter(filterByDate.__name, filterByDate)
     .filter(offset.__name, offset)
     .filter(filterByOwnership.__name, filterByOwnership)
-    .filter(filterByStatus.__name, filterByStatus);
+    .filter(filterByStatus.__name, filterByStatus)
+    .filter(uniqueFilter.__name, uniqueFilter);
 });
