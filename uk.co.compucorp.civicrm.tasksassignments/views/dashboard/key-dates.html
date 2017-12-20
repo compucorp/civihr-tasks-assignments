@@ -86,7 +86,7 @@
       </div>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
         <li
-          ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
+          ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit) | unique: 'date'"
           ng-include
           src="'key-date.html'"
           class="panel panel-light panel-secondary">
@@ -94,7 +94,7 @@
       </ul>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
         <li
-          ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
+          ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterByDateType:filterParams.dateType) | limitTo: dateListLimit) | unique: 'date'"
           ng-include
           src="'key-date.html'"
           class="panel panel-light panel-secondary">
