@@ -1,7 +1,7 @@
 /* eslint-env amd */
 
 define([
-  'common/lodash',
+  'common/lodash'
 ], function (_) {
   'use strict';
 
@@ -33,18 +33,20 @@ define([
         if (nestedKeyDates) {
           _.forEach(nestedKeyDates, function (singleKeyDate) {
             if (dateTypeList.indexOf(singleKeyDate.type) !== -1) {
-              return filteredDateContactList.push(contactKeyDate);
+              filteredDateContactList.push(contactKeyDate);
+
+              return false; // break loop
             }
           });
         } else {
           if (dateTypeList.indexOf(contactKeyDate.type) !== -1) {
-            return filteredDateContactList.push(contactKeyDate);
+            filteredDateContactList.push(contactKeyDate);
           }
         }
       });
 
       return filteredDateContactList;
-    }
+    };
   }
 
   return filterByDateType;
