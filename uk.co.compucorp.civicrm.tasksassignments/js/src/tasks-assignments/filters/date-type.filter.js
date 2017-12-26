@@ -1,6 +1,8 @@
 /* eslint-env amd */
 
-define(function () {
+define([
+  'common/lodash'
+], function (_) {
   'use strict';
 
   filterByDateType.__name = 'filterByDateType';
@@ -9,33 +11,41 @@ define(function () {
   function filterByDateType ($filter, $rootScope, $log) {
     $log.debug('Filter: filterBy.dateType');
 
-    return function (inputArr, dateTypeArr) {
-      var filteredArr = [];
-      var i = 0;
-      var ii;
-      var inputArrLen = inputArr.length;
-      var dateTypeArrLen = dateTypeArr.length;
-      var dateContactList;
-      var dateContactListLen;
+    /**
+     * Filters the array of key dates in both cases
+     * case 1: when the input array contains key dates in dateContactList propery
+     * case 2: when the input array is itself is a list of key dates list.
+     *
+     * @param  {Array} dateContactList List of contact key dates
+     * @param  {Array} dateTypeList list of date types
+     * @return {Array}
+     */
+    return function (dateContactList, dateTypeList) {
+      var filteredDateContactList = [];
 
-      if (!inputArrLen || !dateTypeArrLen) {
-        return inputArr;
+      if (!dateContactList.length || !dateTypeList.length) {
+        return dateContactList;
       }
 
-      for (i; i < inputArrLen; i++) {
-        ii = 0;
-        dateContactList = inputArr[i].dateContactList;
-        dateContactListLen = dateContactList.length;
+      _.forEach(dateContactList, function (contactKeyDate) {
+        var nestedKeyDates = contactKeyDate.dateContactList;
 
-        for (ii; ii < dateContactListLen; ii++) {
-          if (dateTypeArr.indexOf(dateContactList[ii].type) !== -1) {
-            filteredArr.push(inputArr[i]);
-            break;
+        if (nestedKeyDates) {
+          _.forEach(nestedKeyDates, function (singleKeyDate) {
+            if (dateTypeList.indexOf(singleKeyDate.type) !== -1) {
+              filteredDateContactList.push(contactKeyDate);
+
+              return false; // break loop
+            }
+          });
+        } else {
+          if (dateTypeList.indexOf(contactKeyDate.type) !== -1) {
+            filteredDateContactList.push(contactKeyDate);
           }
         }
-      }
+      });
 
-      return filteredArr;
+      return filteredDateContactList;
     };
   }
 
