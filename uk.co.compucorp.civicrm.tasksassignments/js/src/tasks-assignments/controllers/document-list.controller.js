@@ -165,21 +165,6 @@ define([
     })();
 
     /**
-     * Adds or Removes Document fom the document list
-     * "3" => approved & 4 => rejected
-     * @param array list
-     * @param object output
-     * @param object input
-     */
-    function addRemoveDocument (list, output, input) {
-      switch (true) {
-        case (output.status_id !== '3') && (output.status_id !== '4') && (!input.status_id):
-          list.push(output);
-          break;
-      }
-    }
-
-    /**
      * Apply action to delete the given list of documents
      *
      * @param {string} action
@@ -305,10 +290,10 @@ define([
         Array.prototype.push.apply(vm.list, output.documentList);
       });
 
-      // Calls addRemoveDocument function to add or remove the document in or from the list
+      // Adds new document in list or updates the existing document
       $scope.$on('documentFormSuccess', function (e, output, input) {
         if (angular.equals({}, input)) {
-          addRemoveDocument(vm.list, output, input);
+          vm.list.push(output);
         } else {
           angular.extend(input, output);
         }

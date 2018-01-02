@@ -344,6 +344,41 @@ define([
       });
     });
 
+    describe('document is saved', function () {
+      var document, changedDoc;
+
+      beforeEach(function () {
+        initController();
+      });
+
+      describe('when adding new document', function () {
+        beforeEach(function () {
+          $rootScope.$broadcast('documentFormSuccess', documentFabricator.single(), {});
+          $scope.$apply();
+
+          document = controller.list[controller.list.length - 1];
+        });
+
+        it('adds new document in the document list', () => {
+          expect(document).toEqual(documentFabricator.single());
+        });
+      });
+
+      describe('when editing existing document', function () {
+        beforeEach(function () {
+          changedDoc = angular.extend({}, documentFabricator.list()[0], {status_id: '4', activity_type_id: '70'});
+          $rootScope.$broadcast('documentFormSuccess', changedDoc, documentFabricator.list()[0]);
+          $scope.$apply();
+
+          document = _.find(controller.list, { 'id': documentFabricator.list()[0].id });
+        });
+
+        it('adds new document in the document list', () => {
+          expect(document.status_id).toEqual(changedDoc.status_id);
+        });
+      });
+    });
+
     function initController (scopeValues) {
       controller = $controller('DocumentListController', {
         $scope: $scope,
