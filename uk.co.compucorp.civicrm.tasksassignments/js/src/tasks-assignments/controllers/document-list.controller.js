@@ -291,11 +291,11 @@ define([
       });
 
       // Adds new document in list or updates the existing document
-      $scope.$on('documentFormSuccess', function (e, output, input) {
-        if (angular.equals({}, input)) {
-          vm.list.push(output);
+      $scope.$on('documentFormSuccess', function (e, newData, existingData) {
+        if (angular.equals({}, existingData)) {
+          vm.list.push(newData);
         } else {
-          angular.extend(input, output);
+          angular.extend(existingData, newData);
         }
       });
 
