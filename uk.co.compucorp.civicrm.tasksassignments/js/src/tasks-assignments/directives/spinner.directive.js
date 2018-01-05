@@ -19,7 +19,7 @@ define(function () {
       var coverSet = false;
       var spinner;
 
-      cover.className = 'ct-spinner-cover ct-spinner-img';
+      cover.className = 'ct-spinner-cover spinner';
 
       if (typeof attrs.ctSpinnerShow !== 'undefined') {
         appendSpinner();
@@ -29,7 +29,7 @@ define(function () {
         cover.className = 'ct-spinner-cover';
 
         spinner = document.createElement('div');
-        spinner.className = 'ct-spinner ct-spinner-img';
+        spinner.className = 'ct-spinner spinner';
 
         $rootScope.$on('$stateChangeStart', function () {
           appendSpinner();

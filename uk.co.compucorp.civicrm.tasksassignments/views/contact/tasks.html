@@ -38,7 +38,7 @@
   <div uib-collapse="list.isCollapsed.taskListResolved">
     <div class="well {{prefix}}spinner-container" ng-show="!list.listResolvedLoaded">
       Loading resolved tasks...
-      <div class="{{prefix}}spinner-cover {{prefix}}spinner-img"></div>
+      <div class="{{prefix}}spinner-cover spinner"></div>
     </div>
     <div class="alert alert-danger" ng-show="list.listResolvedLoaded && !list.listResolved.length">No results found.</div>
     <ul class="{{prefix}}list-task">
