@@ -6,7 +6,13 @@ define(function () {
   var TaskDetailsComponent = {
     __name: 'taskDetails',
     bindings: {
-      task: '<'
+      task: '<',
+      showMore: '<'
+    },
+    transclude: {
+      title: '?taskDetailsTitle',
+      targetContact: '?taskDetailsTargetContact',
+      assignedContact: '?taskDetailsAssignedContact'
     },
     controller: TaskDetailsController,
     controllerAs: 'taskDetails',

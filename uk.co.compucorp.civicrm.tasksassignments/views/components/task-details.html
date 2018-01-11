@@ -1,2 +1,77 @@
 <div class="task-component">
+  <header class="row">
+    <div class="col-xs-6">
+      <input type="checkbox"
+        name="task"
+        class="{{taskDetails.prefix}}task-checkbox"
+        ng-change="taskDetails.markTaskAsCompleted()"
+        ng-disabled="taskDetails.task.completed"
+        ng-model="task.completed" />
+
+        <div ng-transclude="title"></div>
+    </div>
+    <div class="col-xs-6">
+      <div class="dropdown" uib-dropdown>
+        <a href class="{{taskDetails.prefix}}context-menu-toggle dropdown-toggle pull-right" uib-dropdown-toggle>
+          <i class="fa fa-ellipsis-v"></i>
+        </a>
+        <ul class="dropdown-menu pull-right" uib-dropdown-menu>
+          <li>
+            <a href ng-click="taskDetails.onEditClick({ $task: taskDetails.task })">
+              <i class="fa fa-pencil"></i> Edit
+            </a>
+          </li>
+          <li>
+            <a href ng-click="taskDetails.onSendReminderClick({ $task: taskDetails.task } );">
+              <i class="fa fa-envelope-o"></i> Send reminder
+            </a>
+          </li>
+          <li ng-if="taskDetails.taskCanBeDeleted">
+            <a href ng-click="taskDetails.onDeleteClick({ $task: taskDetails.task })">
+              <i class="fa fa-trash-o"></i> Delete
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div ng-transclude="targetContact"></div>
+    </div>
+  </header>
+  <div class="row">
+    <div class="col-xs-6">
+      <div ng-transclude="assignedContact"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a href ng-click="taskDetails.showMore = !taskDetails.showMore" class="btn btn-collapse">
+        <span
+          class="fa"
+          ng-class="{fa: true, 'fa-chevron-down': taskDetails.showMore, 'fa-chevron-right': !taskDetails.showMore }"
+          aria-hidden="true">
+        </span>
+        Show More
+      </a>
+    </div>
+  </div>
+  <article class="row" uib-collapse="!taskDetails.showMore">
+    <div class="col-xs-12">
+      <div class="{{taskDetails.prefix}}task-more">
+        <div editable-ta="task.details" onbeforesave="taskDetails.onBeforeSave({ $task: taskDetails.task });">
+          <div ta-bind ng-model="task.details">
+          </div>
+          <i class="fa fa-pencil"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-8">
+      <p class="{{taskDetails.prefix}}task-contact-source">
+        Created by:&nbsp;
+        <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[task.source_contact_id].id}}">
+          <span ng-bind="cache.contact.obj[task.source_contact_id].sort_name"></span>
+        </a>
+        &nbsp;-&nbsp;
+        <span class="{{taskDetails.prefix}}task-status" ng-bind="cache.taskStatus.obj[task.status_id]"></span>
+      </p>
+    </div>
+  </article>
 </div>
