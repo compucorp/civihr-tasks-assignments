@@ -100,7 +100,10 @@
               ) | limitTo: listLimit)"
             ng-class="{ '{{prefix}}task-completed': task.completed, '{{prefix}}task-due': task.due }"
             ct-spinner ct-spinner-id="task{{task.id}}">
-            <task-details task="task">
+            <task-details
+              created-by="cache.contact.obj[task.source_contact_id]"
+              status="cache.taskStatus.obj[task.status_id]"
+              task="task">
               <task-title class="task-title">
                 <span ng-show="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title">
                   {{cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title}}:

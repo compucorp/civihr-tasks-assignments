@@ -6,8 +6,10 @@ define(function () {
   var TaskDetailsComponent = {
     __name: 'taskDetails',
     bindings: {
-      task: '<',
-      showMore: '<'
+      createdBy: '<',
+      showMore: '<',
+      status: '<',
+      task: '<'
     },
     transclude: {
       title: 'taskTitle',
@@ -22,10 +24,14 @@ define(function () {
   };
 
   TaskDetailsController.__name = 'TaskDetailsComponent';
-  TaskDetailsController.$inject = ['$log'];
+  TaskDetailsController.$inject = ['$log', 'config'];
 
-  function TaskDetailsController ($log) {
-    $log.info('Component: TaskDetailsComponent');
+  function TaskDetailsController ($log, config) {
+    var vm = this;
+
+    (function init () {
+      vm.CONTACTS_URL = config.url.CONTACT;
+    })();
   }
 
   return TaskDetailsComponent;

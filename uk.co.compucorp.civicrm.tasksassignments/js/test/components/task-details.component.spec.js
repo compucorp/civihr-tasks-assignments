@@ -6,12 +6,13 @@ define([
   'use strict';
 
   describe('TaskDetailsComponent', function () {
-    var $componentController, ctrl;
+    var $componentController, config, ctrl;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_$componentController_) {
+    beforeEach(inject(function (_$componentController_, _config_) {
       $componentController = _$componentController_;
+      config = _config_;
     }));
 
     beforeEach(function () {
@@ -20,6 +21,10 @@ define([
 
     it('is defined', function () {
       expect(ctrl).toBeDefined();
+    });
+
+    it('stores the contacts\' URL', function () {
+      expect(ctrl.CONTACTS_URL).toBe(config.url.CONTACT);
     });
   });
 });
