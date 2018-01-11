@@ -31,7 +31,17 @@ define(function () {
 
     (function init () {
       vm.CONTACTS_URL = config.url.CONTACT;
+      convertTaskStringDateToDateObject();
     })();
+
+    /**
+     * Converts the task activity date from a string into a Date object.
+     */
+    function convertTaskStringDateToDateObject () {
+      if (vm.task && vm.task.activity_date_time) {
+        vm.task.activity_date_time = new Date(vm.task.activity_date_time);
+      }
+    }
   }
 
   return TaskDetailsComponent;

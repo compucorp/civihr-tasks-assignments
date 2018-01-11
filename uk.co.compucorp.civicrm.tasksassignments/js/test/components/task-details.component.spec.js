@@ -26,5 +26,25 @@ define([
     it('stores the contacts\' URL', function () {
       expect(ctrl.CONTACTS_URL).toBe(config.url.CONTACT);
     });
+
+    describe('Task Date', function () {
+      var expectedDate;
+
+      beforeEach(function () {
+        var date = '2000-01-01T00:00:00';
+        var task = {
+          activity_date_time: date
+        };
+
+        expectedDate = new Date(date);
+        ctrl = $componentController('taskDetails', null, {
+          task: task
+        });
+      });
+
+      it('converts the activity string date into a Date object', function () {
+        expect(ctrl.task.activity_date_time).toEqual(expectedDate);
+      });
+    });
   });
 });
