@@ -27,6 +27,10 @@ define([
       expect(ctrl.CONTACTS_URL).toBe(config.url.CONTACT);
     });
 
+    it('stores the permission value for deleting tasks', function () {
+      expect(ctrl.CAN_DELETE_TASKS).toBe(config.permissions.allowDelete);
+    });
+
     describe('Task Date', function () {
       var expectedDate;
 

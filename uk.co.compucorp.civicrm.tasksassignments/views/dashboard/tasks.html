@@ -102,6 +102,9 @@
             ct-spinner ct-spinner-id="task{{task.id}}">
             <task-details
               created-by="cache.contact.obj[task.source_contact_id]"
+              on-delete-click="list.deleteTask(task);"
+              on-edit-click="modalTask(task);"
+              on-send-reminder-click="modalReminder(task, 'task');"
               status="cache.taskStatus.obj[task.status_id]"
               task="task">
               <task-title class="task-title">

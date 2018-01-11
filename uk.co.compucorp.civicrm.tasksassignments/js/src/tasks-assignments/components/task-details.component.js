@@ -7,9 +7,13 @@ define(function () {
     __name: 'taskDetails',
     bindings: {
       createdBy: '<',
+      onDeleteClick: '&',
+      onEditClick: '&',
+      onSendReminderClick: '&',
       showMore: '<',
       status: '<',
-      task: '<'
+      task: '<',
+      taskCanBeDeleted: '<'
     },
     transclude: {
       title: 'taskTitle',
@@ -31,6 +35,7 @@ define(function () {
 
     (function init () {
       vm.CONTACTS_URL = config.url.CONTACT;
+      vm.CAN_DELETE_TASKS = config.permissions.allowDelete;
       convertTaskStringDateToDateObject();
     })();
 

@@ -7,7 +7,6 @@
         ng-change="taskDetails.markTaskAsCompleted()"
         ng-disabled="taskDetails.task.completed"
         ng-model="task.completed" />
-
         <span ng-transclude="title"></span>
     </div>
     <div class="col-xs-6">
@@ -26,7 +25,7 @@
               <i class="fa fa-envelope-o"></i> Send reminder
             </a>
           </li>
-          <li ng-if="taskDetails.taskCanBeDeleted">
+          <li ng-if="taskDetails.CAN_DELETE_TASKS">
             <a href ng-click="taskDetails.onDeleteClick({ $task: taskDetails.task })">
               <i class="fa fa-trash-o"></i> Delete
             </a>
