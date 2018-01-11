@@ -4,8 +4,9 @@ module.exports = function (config) {
   var extPath = 'tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/';
 
   config.set({
+    browserNoActivityTimeout: 100000,
     basePath: civicrmPath,
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
     frameworks: ['jasmine'],
     files: [
       // the global dependencies
@@ -55,6 +56,17 @@ module.exports = function (config) {
     ngHtml2JsPreprocessor: {
       prependPrefix: '/base/',
       moduleName: 'tasks-assignments.templates'
+    },
+    customLaunchers: {
+      ChromeHeadless: {
+        base: 'Chrome',
+        flags: [
+          '--headless',
+          '--disable-gpu',
+          // Without a remote debugging port, Google Chrome exits immediately.
+          '--remote-debugging-port=9222'
+        ]
+      }
     }
   });
 };
