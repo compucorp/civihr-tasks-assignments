@@ -8,7 +8,7 @@
         ng-disabled="taskDetails.task.completed"
         ng-model="task.completed" />
 
-        <div ng-transclude="title"></div>
+        <span ng-transclude="title"></span>
     </div>
     <div class="col-xs-6">
       <div class="dropdown" uib-dropdown>
@@ -37,6 +37,32 @@
     </div>
   </header>
   <div class="row">
+    <div class="col-xs-6">
+      <p class="{{taskDetails.prefix}}task-subject">
+        Due:
+        <time
+          editable-bsdate="taskDetails.task.activity_date_time"
+          onbeforesave="taskDetails.onBeforeSave({ $task: taskDetails.task });"
+          onshow="taskDetails.dpOpen()"
+          class="editable-small stick-to-label"
+          e-ng-click="taskDetails.dpOpen()"
+          e-show-calendar-button="false"
+          e-is-open="picker.opened"
+          e-datepicker-popup>
+          <i class="fa fa-pencil"></i>
+          {{taskDetails.task.activity_date_time | date: 'MMM d'}}
+        </time>
+        <span>Subject:</span>
+        <span
+          editable-text="taskDetails.task.subject"
+          onbeforesave="list.updateTask(task, { subject: $data })"
+          class="editable-small"
+          e-placeholder="Subject...">
+          <i class="fa fa-pencil"></i>
+          {{ (taskDetails.task.subject | limitTo: 60) + (taskDetails.task.subject.length > 60 ? '...' : '') }}
+        </span>
+      </p>
+    </div>
     <div class="col-xs-6">
       <div ng-transclude="assignedContact"></div>
     </div>

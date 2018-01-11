@@ -10,9 +10,9 @@ define(function () {
       showMore: '<'
     },
     transclude: {
-      title: '?taskDetailsTitle',
-      targetContact: '?taskDetailsTargetContact',
-      assignedContact: '?taskDetailsAssignedContact'
+      title: 'taskTitle',
+      targetContact: '?taskTargetContact',
+      assignedContact: '?taskAssignedContact'
     },
     controller: TaskDetailsController,
     controllerAs: 'taskDetails',
