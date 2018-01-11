@@ -17,6 +17,11 @@
   ],
   "author": "",
   "license": "ISC",
+  "semistandard": {
+    "globals": [
+      "inject"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/compucorp/civihr-tasks-assignments/issues"
   },
