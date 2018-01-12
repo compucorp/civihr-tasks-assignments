@@ -13,7 +13,6 @@ define([
       onEditClick: '&',
       onSendReminderClick: '&',
       showMore: '<',
-      status: '<',
       task: '<',
       taskCanBeDeleted: '<'
     },
@@ -30,12 +29,14 @@ define([
   };
 
   TaskDetailsController.__name = 'TaskDetailsComponent';
-  TaskDetailsController.$inject = ['$log', 'config', 'taskService'];
+  TaskDetailsController.$inject = ['$log', '$rootScope', 'config',
+    'taskService'];
 
-  function TaskDetailsController ($log, config, taskService) {
+  function TaskDetailsController ($log, $rootScope, config, taskService) {
     var vm = this;
 
     vm.taskActivityDateTime = null;
+    vm.taskStatusName = null;
 
     vm.updateTask = updateTask;
 
@@ -43,6 +44,7 @@ define([
       vm.CONTACTS_URL = config.url.CONTACT;
       vm.CAN_DELETE_TASKS = config.permissions.allowDelete;
       initTaskActivityDateTime();
+      initTaskStatusName();
     })();
 
     /**
@@ -52,6 +54,10 @@ define([
       if (vm.task && vm.task.activity_date_time) {
         vm.taskActivityDateTime = new Date(vm.task.activity_date_time);
       }
+    }
+
+    function initTaskStatusName () {
+      vm.taskStatusName = $rootScope.cache.taskStatus.obj[vm.task.status_id];
     }
 
     /**

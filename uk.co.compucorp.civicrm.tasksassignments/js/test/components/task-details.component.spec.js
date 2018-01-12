@@ -8,7 +8,7 @@ define([
   'use strict';
 
   describe('TaskDetailsComponent', function () {
-    var $componentController, $q, $rootScope, config, ctrl, taskService;
+    var $componentController, $q, $rootScope, config, ctrl, task, taskService;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
@@ -26,25 +26,7 @@ define([
     }));
 
     beforeEach(function () {
-      var task = {
-        'id': '625',
-        'activity_date_time': '2017-03-15T03:00:00.000Z',
-        'activity_type_id': '13',
-        'details': '<p>Test</p>',
-        'subject': 'test',
-        'status_id': '1',
-        'assignee_contact_id': ['6'],
-        'source_contact_id': '205',
-        'target_contact_id': ['84'],
-        'case_id': '',
-        'resolved': false,
-        'completed': false,
-        'due': true
-      };
-
-      ctrl = $componentController('taskDetails', null, {
-        task: task
-      });
+      initTaskDetailsController();
     });
 
     it('is defined', function () {
@@ -76,6 +58,22 @@ define([
 
       it('it stores the task activty date as a Date object', function () {
         expect(ctrl.taskActivityDateTime).toEqual(expectedDate);
+      });
+    });
+
+    describe('Displaying the task\'s status name', function () {
+      var expectedStatusName;
+
+      beforeEach(function () {
+        expectedStatusName = 'Scheduled';
+        $rootScope.cache.taskStatus.obj = {
+          1: expectedStatusName
+        };
+        initTaskDetailsController();
+      });
+
+      it('stores the task\'s status name ', function () {
+        expect(ctrl.taskStatusName).toBe(expectedStatusName);
       });
     });
 
@@ -128,5 +126,27 @@ define([
         });
       });
     });
+
+    function initTaskDetailsController () {
+      task = {
+        'id': '625',
+        'activity_date_time': '2017-03-15T03:00:00.000Z',
+        'activity_type_id': '13',
+        'details': '<p>Test</p>',
+        'subject': 'test',
+        'status_id': '1',
+        'assignee_contact_id': ['6'],
+        'source_contact_id': '205',
+        'target_contact_id': ['84'],
+        'case_id': '',
+        'resolved': false,
+        'completed': false,
+        'due': true
+      };
+
+      ctrl = $componentController('taskDetails', null, {
+        task: task
+      });
+    }
   });
 });

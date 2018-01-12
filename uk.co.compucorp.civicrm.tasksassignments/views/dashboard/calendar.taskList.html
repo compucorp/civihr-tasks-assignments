@@ -14,7 +14,6 @@
       on-delete-click="list.deleteTask(task);"
       on-edit-click="modalTask(task);"
       on-send-reminder-click="modalReminder(task, 'task');"
-      status="cache.taskStatus.obj[task.status_id]"
       task="task">
       <task-title>
         <a href class="{{prefix}}task-title" ng-click="modalTask(task);" ng-bind="cache.taskType.obj[task.activity_type_id]"></a>:

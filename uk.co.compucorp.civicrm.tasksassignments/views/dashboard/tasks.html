@@ -105,7 +105,6 @@
               on-delete-click="list.deleteTask(task);"
               on-edit-click="modalTask(task);"
               on-send-reminder-click="modalReminder(task, 'task');"
-              status="cache.taskStatus.obj[task.status_id]"
               task="task">
               <task-title class="task-title">
                 <span ng-show="cache.assignmentType.obj[cache.assignment.obj[task.case_id].case_type_id].title">
