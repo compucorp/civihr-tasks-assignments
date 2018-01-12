@@ -40,7 +40,7 @@
       Loading resolved tasks...
       <div class="{{prefix}}spinner-cover spinner"></div>
     </div>
-    <div class="alert alert-danger" ng-show="list.listResolvedLoaded && !list.listResolved.length">No results found.</div>
+    <div class="alert alert-danger" ng-show="list.listResolvedLoaded && !listResolved.length">No results found.</div>
     <ul class="{{prefix}}list-task">
       <li ng-repeat="task in listResolved = (listFiltered | filterByStatus:cache.taskStatusResolve:true)" ng-controller="TaskController" ng-class="'{{prefix}}task-resolved'" ng-include src="'task.html'" ct-spinner>
       </li>
