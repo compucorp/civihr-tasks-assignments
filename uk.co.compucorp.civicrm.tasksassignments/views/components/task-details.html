@@ -40,7 +40,7 @@
       <p class="{{taskDetails.prefix}}task-subject">
         Due:
         <time
-          editable-bsdate="taskDetails.task.activity_date_time"
+          editable-bsdate="taskDetails.taskActivityDateTime"
           onaftersave="taskDetails.updateTask();"
           onshow="taskDetails.dpOpen()"
           class="editable-small stick-to-label"
@@ -49,7 +49,7 @@
           e-is-open="picker.opened"
           e-datepicker-popup>
           <i class="fa fa-pencil"></i>
-          {{taskDetails.task.activity_date_time | date: 'MMM d'}}
+          {{taskDetails.taskActivityDateTime | date: 'MMM d'}}
         </time>
         <span>Subject:</span>
         <span

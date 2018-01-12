@@ -1,6 +1,8 @@
 /* eslint-env amd */
 
-define(function () {
+define([
+  'common/angular'
+], function (angular) {
   'use strict';
 
   var TaskDetailsComponent = {
@@ -33,20 +35,22 @@ define(function () {
   function TaskDetailsController ($log, config, taskService) {
     var vm = this;
 
+    vm.taskActivityDateTime = null;
+
     vm.updateTask = updateTask;
 
     (function init () {
       vm.CONTACTS_URL = config.url.CONTACT;
       vm.CAN_DELETE_TASKS = config.permissions.allowDelete;
-      convertTaskStringDateToDateObject();
+      initTaskActivityDateTime();
     })();
 
     /**
      * Converts the task activity date from a string into a Date object.
      */
-    function convertTaskStringDateToDateObject () {
+    function initTaskActivityDateTime () {
       if (vm.task && vm.task.activity_date_time) {
-        vm.task.activity_date_time = new Date(vm.task.activity_date_time);
+        vm.taskActivityDateTime = new Date(vm.task.activity_date_time);
       }
     }
 
@@ -54,8 +58,13 @@ define(function () {
      * Updates the task using the API service.
      */
     function updateTask () {
+      vm.task.activity_date_time = vm.taskActivityDateTime;
+
       return taskService
         .save(vm.task)
+        .then(function (task) {
+          angular.extend(vm.task, task);
+        })
         .catch(function (reason) {
           CRM.alert(reason, 'Error', 'error');
         });

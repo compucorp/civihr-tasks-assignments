@@ -1,8 +1,10 @@
 /* eslint-env amd, jasmine */
 
 define([
+  'common/angular',
+  'common/moment',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function () {
+], function (angular, moment) {
   'use strict';
 
   describe('TaskDetailsComponent', function () {
@@ -57,7 +59,7 @@ define([
       expect(ctrl.CAN_DELETE_TASKS).toBe(config.permissions.allowDelete);
     });
 
-    describe('Task Date', function () {
+    describe('Task Activity Date', function () {
       var expectedDate;
 
       beforeEach(function () {
@@ -72,8 +74,8 @@ define([
         });
       });
 
-      it('converts the activity string date into a Date object', function () {
-        expect(ctrl.task.activity_date_time).toEqual(expectedDate);
+      it('it stores the task activty date as a Date object', function () {
+        expect(ctrl.taskActivityDateTime).toEqual(expectedDate);
       });
     });
 
@@ -87,6 +89,26 @@ define([
 
         it('saves the task', function () {
           expect(taskService.save).toHaveBeenCalledWith(ctrl.task);
+        });
+      });
+
+      describe('when changing the activty date', function () {
+        var isSameDate;
+
+        beforeEach(function () {
+          var expectedDate, expectedTask;
+
+          spyOn(taskService, 'save').and.callThrough();
+          expectedDate = moment().add(1, 'day');
+          expectedTask = angular.extend({}, ctrl.task);
+          expectedTask.activity_date_time = expectedDate.toDate();
+          ctrl.taskActivityDateTime = expectedDate.toDate();
+          ctrl.updateTask();
+          isSameDate = expectedDate.isSame(ctrl.task.activity_date_time, 'day');
+        });
+
+        it('updates the task activty date', function () {
+          expect(isSameDate).toBe(true);
         });
       });
 
