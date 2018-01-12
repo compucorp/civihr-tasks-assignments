@@ -41,7 +41,7 @@
         Due:
         <time
           editable-bsdate="taskDetails.task.activity_date_time"
-          onbeforesave="taskDetails.onBeforeSave({ $task: taskDetails.task });"
+          onaftersave="taskDetails.updateTask();"
           onshow="taskDetails.dpOpen()"
           class="editable-small stick-to-label"
           e-ng-click="taskDetails.dpOpen()"
@@ -54,7 +54,7 @@
         <span>Subject:</span>
         <span
           editable-text="taskDetails.task.subject"
-          onbeforesave="list.updateTask(task, { subject: $data })"
+          onaftersave="taskDetails.updateTask();"
           class="editable-small"
           e-placeholder="Subject...">
           <i class="fa fa-pencil"></i>
@@ -81,7 +81,7 @@
   <article class="row" uib-collapse="!taskDetails.showMore">
     <div class="col-xs-12">
       <div class="{{taskDetails.prefix}}task-more">
-        <div editable-ta="task.details" onbeforesave="taskDetails.onBeforeSave({ $task: taskDetails.task });">
+        <div editable-ta="task.details" onaftersave="taskDetails.updateTask();">
           <div ta-bind ng-model="task.details">
           </div>
           <i class="fa fa-pencil"></i>

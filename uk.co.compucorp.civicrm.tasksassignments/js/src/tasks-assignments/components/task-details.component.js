@@ -28,10 +28,12 @@ define(function () {
   };
 
   TaskDetailsController.__name = 'TaskDetailsComponent';
-  TaskDetailsController.$inject = ['$log', 'config'];
+  TaskDetailsController.$inject = ['$log', 'config', 'taskService'];
 
-  function TaskDetailsController ($log, config) {
+  function TaskDetailsController ($log, config, taskService) {
     var vm = this;
+
+    vm.updateTask = updateTask;
 
     (function init () {
       vm.CONTACTS_URL = config.url.CONTACT;
@@ -46,6 +48,17 @@ define(function () {
       if (vm.task && vm.task.activity_date_time) {
         vm.task.activity_date_time = new Date(vm.task.activity_date_time);
       }
+    }
+
+    /**
+     * Updates the task using the API service.
+     */
+    function updateTask () {
+      return taskService
+        .save(vm.task)
+        .catch(function (reason) {
+          CRM.alert(reason, 'Error', 'error');
+        });
     }
   }
 
