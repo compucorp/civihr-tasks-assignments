@@ -40,7 +40,7 @@
       Loading resolved tasks...
       <div class="{{prefix}}spinner-cover spinner"></div>
     </div>
-    <div class="alert alert-danger" ng-show="list.listResolvedLoaded && !list.listResolved.length">No results found.</div>
+    <div class="alert alert-danger" ng-show="list.listResolvedLoaded && !listResolved.length">No results found.</div>
     <ul class="{{prefix}}list-task">
       <li ng-repeat="task in listResolved = (listFiltered | filterByStatus:cache.taskStatusResolve:true)" ng-controller="TaskController" ng-class="'{{prefix}}task-resolved'" ng-include src="'task.html'" ct-spinner>
       </li>
@@ -94,14 +94,14 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <a href ng-click="list.isCollapsed = !list.isCollapsed" class="btn btn-collapse">
+      <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse">
         <span class="fa"
-          ng-class="{fa: true, 'fa-chevron-down': !list.isCollapsed, 'fa-chevron-right': list.isCollapsed }"
+          ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
           aria-hidden="true">
         </span>
         Show More
       </a>
-      <article class="row" uib-collapse="list.isCollapsed">
+      <article class="row" uib-collapse="isCollapsed">
         <div class="col-xs-12">
           <div class="{{prefix}}task-more">
             <div editable-ta="task.details" onbeforesave="list.updateTask(task, { details: ta.$data });">
