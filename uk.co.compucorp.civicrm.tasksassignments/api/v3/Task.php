@@ -478,19 +478,29 @@ function civicrm_api3_task_get($params) {
 
   $activityIds = [];
 
-  $assigneeContactId = isset($params['assignee_contact_id']) ? (array)$params['assignee_contact_id'] : null;
-  $sourceContactId = isset($params['source_contact_id']) ? (array)$params['source_contact_id'] : null;
-  $caseId = isset($params['case_id']) ? $params['case_id'] : null;
+  $assigneeContactIds = CRM_Utils_Array::value('assignee_contact_id', $params);
+  $assigneeContactIds = (array) $assigneeContactIds;
+  $sourceContactIds = CRM_Utils_Array::value('source_contact_id', $params);
+  $sourceContactIds = (array) $sourceContactIds;
+  $caseId = CRM_Utils_Array::value('case_id', $params);
 
-  if ($assigneeContactId) {
-    _loadActivityIDsForContactIntoArray($assigneeContactId, $activityIds);
+  if ($assigneeContactIds) {
+    _loadActivityIDsForContactIntoArray(
+      $assigneeContactIds,
+      $activityIds,
+      ActivityService::RECORD_TYPE_ASSIGNEE
+    );
   }
 
-  if ($sourceContactId) {
-    _loadActivityIDsForContactIntoArray($sourceContactId, $activityIds);
+  if ($sourceContactIds) {
+    _loadActivityIDsForContactIntoArray(
+      $sourceContactIds,
+      $activityIds,
+      ActivityService::RECORD_TYPE_CREATOR
+    );
   }
 
-  if (($assigneeContactId || $sourceContactId) && empty($activityIds)) {
+  if (($assigneeContactIds || $sourceContactIds) && empty($activityIds)) {
     return civicrm_api3_create_success([], $params, 'task', 'getbycomponent');
   }
 
@@ -549,17 +559,23 @@ function civicrm_api3_task_get($params) {
 /**
  * Loads activity ID's for given contact into provided array.
  *
- * @param int $contactID
+ * @param array $contactIDs
  *   ID for contact
  * @param array $activityIds
  *   Reference to array of activity ID's
+ * @param int $recordTypeId
+ *   The type of the activity_contact record
  */
-function _loadActivityIDsForContactIntoArray($contactID, &$activityIds) {
+function _loadActivityIDsForContactIntoArray(
+  $contactIDs,
+  &$activityIds,
+  $recordTypeId
+) {
   $result = civicrm_api3('ActivityContact', 'get', [
     'sequential' => 1,
     'return' => 'activity_id',
-    'contact_id' => ['IN' => $contactID],
-    'record_type_id' => 1,
+    'contact_id' => ['IN' => $contactIDs],
+    'record_type_id' => $recordTypeId,
     'options' => ['limit' => 0],
   ]);
   foreach ($result['values'] as $value) {
