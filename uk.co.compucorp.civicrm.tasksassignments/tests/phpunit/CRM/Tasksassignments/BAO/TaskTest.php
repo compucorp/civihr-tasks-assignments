@@ -1,9 +1,11 @@
 <?php
 
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
+
 /**
- * Class CRM_Tasksassignments_BAO_TaskTest
+ * @group headless
  */
-class CRM_Tasksassignments_BAO_TaskTest extends CiviUnitTestCase {
+class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
   private $_taskTypeId = null;
 
   function setUp() {

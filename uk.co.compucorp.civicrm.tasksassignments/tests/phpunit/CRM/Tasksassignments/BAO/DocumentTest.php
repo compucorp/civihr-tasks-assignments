@@ -1,9 +1,12 @@
 <?php
 
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
+
 /**
- * Class CRM_Tasksassignments_BAO_DocumentTest
+ * @group headless
  */
-class CRM_Tasksassignments_BAO_DocumentTest extends CiviUnitTestCase {
+class CRM_Tasksassignments_BAO_DocumentTest extends BaseHeadlessTest {
+
   private $_documentTypeId = null;
 
   function setUp() {
