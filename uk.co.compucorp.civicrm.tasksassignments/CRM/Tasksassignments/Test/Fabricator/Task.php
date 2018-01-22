@@ -5,12 +5,9 @@
  */
 class CRM_Tasksassignments_Test_Fabricator_Task {
 
-  private static $defaultParams = [
-    'activity_name' => 'Test Task',
-  ];
-
   /**
    * Fabricates a task merging given parameters with default minimum params.
+   * Requires activity_type_id and source_contact_id
    *
    * @param array $params
    *   List of parameters to use to create the Assignment
@@ -18,7 +15,6 @@ class CRM_Tasksassignments_Test_Fabricator_Task {
    * @return array
    */
   public static function fabricate($params = []) {
-    $params = array_merge($params, self::$defaultParams);
     $result = civicrm_api3('Task', 'create', $params);
 
     return array_shift($result['values']);
