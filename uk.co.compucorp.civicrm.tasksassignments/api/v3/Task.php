@@ -519,6 +519,11 @@ function civicrm_api3_task_get($params) {
       ['activity_type_id' => ['IN' => $typesIds]]
     ));
 
+    // If 'is_count' is set $getResult will be an int, and foreach will break
+    if (!empty($params['options']['is_count'])) {
+      return $getResult;
+    }
+
     if (CRM_Core_DAO::checkTableExists('civicrm_case_activity')) {
       $caseActivityQuery = 'SELECT case_id FROM civicrm_case_activity WHERE activity_id = %1';
 

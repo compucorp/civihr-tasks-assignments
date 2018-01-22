@@ -1,33 +1,27 @@
 <?php
+
 use CRM_Tasksassignments_Test_Fabricator_Assignment as AssignmentFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
+use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
+use CRM_Tasksassignments_Test_Fabricator_CaseType as CaseTypeFabriactor;
+use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
 
 /**
- * Class Api_DocumentTest
+ * @group headless
  */
-class api_v3_DocumentTest extends CiviUnitTestCase {
+class api_v3_DocumentTest extends BaseHeadlessTest {
+
+  use CRM_Tasksassignments_Test_Helper_TableCleanupTrait;
 
   /**
    * @var int
    */
   private $_documentTypeId;
 
-  /**
-   * Runs installer and sets default document type
-   */
   public function setUp() {
-    parent::setUp();
-    $this->quickCleanup(['civicrm_activity', 'civicrm_case', 'civicrm_case_activity'], TRUE);
-    $upgrader = CRM_Tasksassignments_Upgrader::instance();
-    $upgrader->install();
-
-    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
-    $hrCaseUpgrader->install();
-
-    // Pick one of Document types.
-    $documentTypes = civicrm_api3('Document', 'getoptions', array(
-      'field' => 'activity_type_id',
-    ));
+    $params = ['field' => 'activity_type_id'];
+    $documentTypes = civicrm_api3('Document', 'getoptions', $params);
     $this->_documentTypeId = array_shift($documentTypes['values']);
   }
 
@@ -273,11 +267,17 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     $this->setDaysBeforeExpiryToClone(1);
 
     // Create assignment
-    $assignment = AssignmentFabricator::fabricate();
+    $caseType = CaseTypeFabriactor::fabricate();
+    $params = ['case_type_id' => $caseType['id']];
+    $assignment = AssignmentFabricator::fabricate($params);
+    $contactID = ContactFabricator::fabricate()['id'];
 
     // Create document - we need to use the API so new revisions are created.
     $document = DocumentFabricator::fabricateWithAPI([
       'case_id' => $assignment->id,
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
+      'activity_type_id' => OptionValueFabricator::fabricateDocumentType()['value'],
     ]);
     $this->assertClonableRevisionCount(0);
 
@@ -288,6 +288,8 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
       'expire_date' => date('Y-m-d'),
       'remind_me' => 1,
       'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
     ]);
     $this->assertClonableRevisionCount(1);
 
@@ -305,10 +307,24 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
   }
 
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
-    $assignment = AssignmentFabricator::fabricate();
+    $this->truncateTables(['civicrm_activity', 'civicrm_activity_contact']);
+    $caseType = CaseTypeFabriactor::fabricate();
+    $params = ['case_type_id' => $caseType['id']];
+    $assignment = AssignmentFabricator::fabricate($params);
+    $contactID = ContactFabricator::fabricate()['id'];
+    $activityTypeValue = OptionValueFabricator::fabricateDocumentType()['value'];
 
-    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI();
-    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI(['case_id' => $assignment->id]);
+    $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI([
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
+      'activity_type_id' => $activityTypeValue,
+    ]);
+    $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI([
+      'case_id' => $assignment->id,
+      'source_contact_id' => $contactID,
+      'target_contact_id' => $contactID,
+      'activity_type_id' => $activityTypeValue,
+    ]);
     $activityCount = civicrm_api3('Activity', 'getcount');
     $this->assertEquals(2, $activityCount);
 
@@ -318,6 +334,8 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
         'expire_date' => date('Y-m-d'),
         'remind_me' => 1,
         'status_id' => CRM_Tasksassignments_BAO_Document::STATUS_APPROVED,
+        'source_contact_id' => $contactID,
+        'target_contact_id' => $contactID,
       ]);
     }
 
@@ -425,13 +443,4 @@ class api_v3_DocumentTest extends CiviUnitTestCase {
     return CRM_Utils_Array::value($fieldName, $fieldNames);
   }
 
-  public function tearDown() {
-    parent::tearDown();
-
-    $upgrader = CRM_Tasksassignments_Upgrader::instance();
-    $upgrader->uninstall();
-
-    $hrCaseUpgrader = CRM_HRCase_Upgrader::instance();
-    $hrCaseUpgrader->uninstall();
-  }
 }
