@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
+
 /**
  * Class Api_TaskTest
  */
@@ -17,13 +19,7 @@ class api_v3_TaskTest extends CiviUnitTestCase {
     parent::setUp();
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
-
-    $result = civicrm_api3('OptionValue', 'create', [
-      'option_group_id' => 'activity_type',
-      'component_id' => 'CiviTask',
-      'label' => 'Sample Task Type',
-    ]);
-    $result = array_pop($result['values']);
+    $result = OptionValueFabricator::fabricateTaskType();
 
     $this->_taskTypeId = $result['value'];
   }

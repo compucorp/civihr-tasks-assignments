@@ -5,6 +5,7 @@ use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
 use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
 use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
 use CRM_Tasksassignments_Test_Fabricator_CaseType as CaseTypeFabriactor;
+use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
 
 /**
  * @group headless
@@ -276,7 +277,7 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
       'case_id' => $assignment->id,
       'source_contact_id' => $contactID,
       'target_contact_id' => $contactID,
-      'activity_type_id' => $this->fabricateDocumentType()['value'],
+      'activity_type_id' => OptionValueFabricator::fabricateDocumentType()['value'],
     ]);
     $this->assertClonableRevisionCount(0);
 
@@ -311,7 +312,7 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
     $params = ['case_type_id' => $caseType['id']];
     $assignment = AssignmentFabricator::fabricate($params);
     $contactID = ContactFabricator::fabricate()['id'];
-    $activityTypeValue = $this->fabricateDocumentType()['value'];
+    $activityTypeValue = OptionValueFabricator::fabricateDocumentType()['value'];
 
     $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI([
       'source_contact_id' => $contactID,
@@ -440,20 +441,6 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
     }
 
     return CRM_Utils_Array::value($fieldName, $fieldNames);
-  }
-
-  /**
-   * @return array
-   */
-  private function fabricateDocumentType() {
-    $name = 'TestType';
-    $result = civicrm_api3('OptionValue', 'create', [
-      'name' => $name,
-      'option_group_id' => 'activity_type',
-      'component_id' => 'CiviDocument',
-    ]);
-
-    return array_shift($result['values']);
   }
 
 }
