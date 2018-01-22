@@ -12,7 +12,7 @@ class CRM_Tasksassignments_Test_Fabricator_CaseType {
    * parameters.
    *
    * @param array $params
-   *   List of parameters to use to create the Task Type
+   *   List of parameters to use to create the Case Type
    *
    * @return array
    */
