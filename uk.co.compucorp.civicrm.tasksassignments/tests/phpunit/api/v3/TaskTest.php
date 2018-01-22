@@ -1,11 +1,12 @@
 <?php
 
 use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
 
 /**
- * Class Api_TaskTest
+ * @group headless
  */
-class api_v3_TaskTest extends CiviUnitTestCase {
+class api_v3_TaskTest extends BaseHeadlessTest {
 
   /**
    * @var int
