@@ -4,6 +4,7 @@ use CRM_Tasksassignments_Test_Fabricator_Assignment as AssignmentFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Document as DocumentFabricator;
 use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
 use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
+use CRM_Tasksassignments_Test_Fabricator_CaseType as CaseTypeFabriactor;
 
 /**
  * @group headless
@@ -265,7 +266,9 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
     $this->setDaysBeforeExpiryToClone(1);
 
     // Create assignment
-    $assignment = AssignmentFabricator::fabricate();
+    $caseType = CaseTypeFabriactor::fabricate();
+    $params = ['case_type_id' => $caseType['id']];
+    $assignment = AssignmentFabricator::fabricate($params);
     $contactID = ContactFabricator::fabricate()['id'];
 
     // Create document - we need to use the API so new revisions are created.
@@ -273,6 +276,7 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
       'case_id' => $assignment->id,
       'source_contact_id' => $contactID,
       'target_contact_id' => $contactID,
+      'activity_type_id' => $this->fabricateDocumentType()['value'],
     ]);
     $this->assertClonableRevisionCount(0);
 
@@ -303,17 +307,22 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
 
   public function testOnlyDocumentsAssignedToACaseCreateRevisionsOnUpdate() {
     $this->truncateTables(['civicrm_activity', 'civicrm_activity_contact']);
-    $assignment = AssignmentFabricator::fabricate();
+    $caseType = CaseTypeFabriactor::fabricate();
+    $params = ['case_type_id' => $caseType['id']];
+    $assignment = AssignmentFabricator::fabricate($params);
     $contactID = ContactFabricator::fabricate()['id'];
+    $activityTypeValue = $this->fabricateDocumentType()['value'];
 
     $documents['standAloneDocument'] = DocumentFabricator::fabricateWithAPI([
       'source_contact_id' => $contactID,
       'target_contact_id' => $contactID,
+      'activity_type_id' => $activityTypeValue,
     ]);
     $documents['caseDocument'] = DocumentFabricator::fabricateWithAPI([
       'case_id' => $assignment->id,
       'source_contact_id' => $contactID,
       'target_contact_id' => $contactID,
+      'activity_type_id' => $activityTypeValue,
     ]);
     $activityCount = civicrm_api3('Activity', 'getcount');
     $this->assertEquals(2, $activityCount);
@@ -432,4 +441,19 @@ class api_v3_DocumentTest extends BaseHeadlessTest {
 
     return CRM_Utils_Array::value($fieldName, $fieldNames);
   }
+
+  /**
+   * @return array
+   */
+  private function fabricateDocumentType() {
+    $name = 'TestType';
+    $result = civicrm_api3('OptionValue', 'create', [
+      'name' => $name,
+      'option_group_id' => 'activity_type',
+      'component_id' => 'CiviDocument',
+    ]);
+
+    return array_shift($result['values']);
+  }
+
 }
