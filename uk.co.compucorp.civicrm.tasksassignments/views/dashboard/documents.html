@@ -182,7 +182,12 @@
   </div>
 </div>
 <script type="text/ng-template" id="document.html">
-  <td><a ng-href="{{fileUrl}}" ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);" ng-bind="cache.documentType.obj[document.activity_type_id]"></a></td>
+  <td>
+    <a ng-href="{{fileUrl}}"
+      ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);">
+      {{cache.documentType.obj[document.activity_type_id]}}
+    </a>
+    </td>
   <td>
     <a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.target_contact_id[0]].contact_id}}">
       {{ (cache.contact.obj[document.target_contact_id[0]].sort_name | limitTo: 15) + (cache.contact.obj[document.target_contact_id[0]].sort_name.length > 15 ? '...' : '') }}
