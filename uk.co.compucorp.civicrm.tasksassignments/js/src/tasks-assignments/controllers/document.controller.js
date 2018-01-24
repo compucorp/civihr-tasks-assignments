@@ -15,7 +15,7 @@ define([
     $scope.document.expire_date = $scope.document.expire_date ? moment($scope.document.expire_date).toDate() : null;
     $scope.document.valid_from = $scope.document.valid_from ? moment($scope.document.valid_from).toDate() : null;
     $scope.document.remind_me = $scope.document.remind_me === 1;
-    $scope.urlFile = config.url.FILE + '/zip?entityID=' + $scope.document.id + '&entityTable=civicrm_activity';
+    $scope.fileUrl = config.url.FILE + '/zip?entityID=' + $scope.document.id + '&entityTable=civicrm_activity';
 
     (function init () {
       initWatchers();
