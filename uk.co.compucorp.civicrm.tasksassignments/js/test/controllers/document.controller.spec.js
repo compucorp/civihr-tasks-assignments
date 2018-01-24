@@ -28,6 +28,22 @@ define([
       });
     });
 
+    describe('File URL', function () {
+      var expectedUrl;
+
+      beforeEach(function () {
+        expectedUrl = getDocumentFileUrl();
+      });
+
+      it('it initializes the document\'s file URL', function () {
+        expect($scope.fileUrl).toBe(expectedUrl);
+      });
+    });
+
+    function getDocumentFileUrl () {
+      return config.url.FILE + '/zip?entityID=' + mockDocument.id + '&entityTable=civicrm_activity';
+    }
+
     function initController () {
       $scope = $rootScope.$new();
       $scope.document = mockDocument;
