@@ -43,7 +43,7 @@ define([
 
       describe('when the document id is updated', function () {
         beforeEach(function () {
-          $scope.document.id += 1;
+          $scope.document.id = (+$scope.document.id + 1).toString(); // Increase the document ID by one
           expectedUrl = getDocumentFileUrl();
 
           $scope.$digest();
