@@ -395,8 +395,20 @@ class CRM_Tasksassignments_Reminder {
 
     $result = db_query($query, $queryParams);
     $uids = $result->fetchCol();
+    $contactIDs = [];
 
-    return $uids;
+    if (empty($uids)) {
+      return $contactIDs;
+    }
+
+    $params = ['uf_id' => ['IN' => $uids]];
+    $ufMatches = civicrm_api3('UFMatch', 'get', $params)['values'];
+
+    if (count($ufMatches) < 1) {
+      return $ufMatches;
+    }
+
+    return array_column($ufMatches, 'contact_id');
   }
 
   /**
