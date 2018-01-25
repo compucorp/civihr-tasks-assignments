@@ -20,6 +20,9 @@ define([
       initWatchers();
     }());
 
+    /**
+     * initializes the document watch functions.
+     */
     function initWatchers () {
       $scope.$watch('document.activity_date_time', function (documentDateTime) {
         $scope.document.due = new Date(documentDateTime).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
