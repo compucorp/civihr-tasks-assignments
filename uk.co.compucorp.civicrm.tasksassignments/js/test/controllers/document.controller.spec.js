@@ -37,7 +37,7 @@ define([
         expectedUrl = getDocumentFileUrl();
       });
 
-      it('it initializes the document\'s file URL', function () {
+      it('initializes the document\'s file URL', function () {
         expect($scope.fileUrl).toBe(expectedUrl);
       });
 

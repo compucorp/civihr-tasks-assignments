@@ -21,7 +21,9 @@ define([
     }());
 
     /**
-     * initializes the document watch functions.
+     * Initializes the document watch functions.
+     * - When the activity date changes, it determines if the document is due or not.
+     * - reacts to the document ID change and builds URL for file download.
      */
     function initWatchers () {
       $scope.$watch('document.activity_date_time', function (documentDateTime) {
