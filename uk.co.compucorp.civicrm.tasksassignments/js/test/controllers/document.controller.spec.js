@@ -20,9 +20,11 @@ define([
       $httpBackend.whenGET(/action=/).respond({});
     }));
 
-    describe('init', function () {
-      beforeEach(initController);
+    beforeEach(function () {
+      initController();
+    });
 
+    describe('init', function () {
       it('is defined', function () {
         expect(controller).toBeDefined();
       });
@@ -38,20 +40,34 @@ define([
       it('it initializes the document\'s file URL', function () {
         expect($scope.fileUrl).toBe(expectedUrl);
       });
+
+      describe('when the document id is updated', function () {
+        beforeEach(function () {
+          $scope.document.id += 1;
+          expectedUrl = getDocumentFileUrl();
+
+          $scope.$digest();
+        });
+
+        it('updates the the document\'s file URL', function () {
+          expect($scope.fileUrl).toBe(expectedUrl);
+        });
+      });
     });
 
     function getDocumentFileUrl () {
-      return config.url.FILE + '/zip?entityID=' + mockDocument.id + '&entityTable=civicrm_activity';
+      return config.url.FILE + '/zip?entityID=' + $scope.document.id + '&entityTable=civicrm_activity';
     }
 
     function initController () {
       $scope = $rootScope.$new();
       $scope.document = mockDocument;
-
       controller = $controller('DocumentController', {
         $scope: $scope,
         config: config
       });
+
+      $scope.$digest();
     }
   });
 });
