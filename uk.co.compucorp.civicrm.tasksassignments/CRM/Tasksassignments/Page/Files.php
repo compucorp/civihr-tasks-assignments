@@ -12,7 +12,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     }
     $result = array();
     $fileID = CRM_Core_BAO_File::getEntityFile( $postParams['entityTable'], $postParams['entityID'] );
-    
+
     if($fileID) {
       foreach($fileID as $k => $v) {
         $fileType = $v['mime_type'];
@@ -20,7 +20,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         $eid = $postParams['entityID'];
         $url = null;
         $uri = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_File', $fid, 'uri');
-        
+
         if ($fileType == 'image/jpeg' ||
           $fileType == 'image/pjpeg' ||
           $fileType == 'image/gif' ||
@@ -34,15 +34,15 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         } else {
           $url = CRM_Utils_System::url('civicrm/file', "reset=1&id=$fid&eid=$eid");
         }
-        
+
         list($sql, $params) = CRM_Core_BAO_File::sql($postParams['entityTable'], $postParams['entityID'], NULL, $v['fileID']);
         $dao = CRM_Core_DAO::executeQuery($sql, $params);
-        
+
         $fileSize = 0;
         if ($dao->fetch()) {
           $fileSize = filesize($config->customFileUploadDir . DIRECTORY_SEPARATOR . $dao->uri);
         }
-        
+
         $result[] = array(
           'entityTable' => $postParams['entityTable'],
           'entityID' => $eid,
@@ -54,7 +54,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         );
       }
     }
-    
+
     if ($return) {
         return $result;
     }
@@ -64,7 +64,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
   public static function fileDisplay() {// Display evidence file
     $postParams = $_POST;
     $fileID = CRM_Core_BAO_File::getEntityFile( $postParams['entityTable'], $postParams['entityID'] );
-    
+
     if($fileID) {
       foreach($fileID as $k => $v) {
         $fileType = $v['mime_type'];
@@ -111,9 +111,9 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     }
     $fileId = $postParams['fileID'];
     $result = 0;
-    
+
     CRM_Core_BAO_File::deleteEntityFile( $postParams['entityTable'], $postParams['entityID'], $fileTypeID = NULL, $fileId );
-    
+
     list($path) = CRM_Core_BAO_File::path($fileId, $postParams['entityID'], NULL, NULL);
     if ($path === null)
     {
@@ -135,7 +135,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     if ($dest != ''  && substr($dest, -1) != '/') {
       $dest .= '/';
     }
-    
+
     $files = $_FILES;
     if(is_array($files) && !empty($files)) {
       foreach($files as $k => $v) {
@@ -176,7 +176,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     echo html_entity_decode(stripcslashes(json_encode(array('values' => array(array('result' => $result))), true)));
     CRM_Utils_System::civiExit( );
   }
-  
+
   static function fileZip() {
       $config = CRM_Core_Config::singleton();
       $dest = $config->customFileUploadDir;
@@ -185,11 +185,11 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
       $mimeType = 'application/zip';
       $ext = 'zip';
       $entityFiles = CRM_Core_BAO_File::getEntityFile( $params['entityTable'], $params['entityID'] );
-      
+
       if (empty($entityFiles)) {
           CRM_Utils_System::civiExit();
       }
-      
+
       $zipname = 'document_' . (int)$params['entityID'] . '_files';
       $contactQuery = 'SELECT c.sort_name, ov.label FROM civicrm_activity a
         LEFT JOIN civicrm_activity_contact ac ON a.id = ac.activity_id
@@ -204,7 +204,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
       if ($contactResult->fetch()) {
           $zipname = CRM_Utils_String::munge($contactResult->sort_name) . '-' . CRM_Utils_String::munge($contactResult->label);
       }
-      
+
       if (count($entityFiles) > 1) {
         foreach ($entityFiles as $entityFile) {
             if (!empty($entityFile['fullPath'])) {
@@ -215,7 +215,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         if (empty($files)) {
             CRM_Utils_System::civiExit();
         }
-        
+
         $zipname .= '.' . $ext;
         $zipfullpath = $dest . '/' . $zipname;
         $zip = new ZipArchive();
@@ -232,15 +232,15 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         $ext = end($parts);
         $zipname .= '.' . $ext;
       }
-      
+
       header('Content-Type: ' . $mimeType);
       header('Content-disposition: attachment; filename='.$zipname);
       header('Content-Length: ' . filesize($zipfullpath));
       readfile($zipfullpath);
-      
+
       CRM_Utils_System::civiExit();
   }
-  
+
   /**
    * @param $name
    *
@@ -252,7 +252,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
       0, -(strlen(CRM_Utils_Array::value('extension', $info)) + (CRM_Utils_Array::value('extension', $info) == '' ? 0 : 1))
     );
     $filename = null;
-    
+
     if (!CRM_Utils_File::isExtensionSafe(CRM_Utils_Array::value('extension', $info))) {
       // munge extension so it cannot have an embbeded dot in it
       // The maximum length of a filename for most filesystems is 255 chars.
@@ -262,14 +262,14 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     else {
       $filename = CRM_Utils_String::munge("{$basename}", '_', 240) . "." . CRM_Utils_Array::value('extension', $info);
     }
-    
+
     $newFilename = $filename;
     $i = 1;
     while (file_exists($dest . $newFilename)) {
         $fileinfo = pathinfo($dest . $filename);
         $newFilename = $fileinfo['filename'] . '(' . $i++ . ')' . '.' . $fileinfo['extension'];
     }
-    
+
     return $newFilename;
   }
 }
