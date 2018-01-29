@@ -1,9 +1,14 @@
 <?php
 
+use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
+use CRM_Tasksassignments_Test_Fabricator_Task as TaskFabricator;
+use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
+
 /**
- * Class Api_TaskTest
+ * @group headless
  */
-class api_v3_TaskTest extends CiviUnitTestCase {
+class api_v3_TaskTest extends BaseHeadlessTest {
 
   /**
    * @var int
@@ -17,13 +22,7 @@ class api_v3_TaskTest extends CiviUnitTestCase {
     parent::setUp();
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
-
-    $result = civicrm_api3('OptionValue', 'create', [
-      'option_group_id' => 'activity_type',
-      'component_id' => 'CiviTask',
-      'label' => 'Sample Task Type',
-    ]);
-    $result = array_pop($result['values']);
+    $result = OptionValueFabricator::fabricateTaskType();
 
     $this->_taskTypeId = $result['value'];
   }
@@ -84,6 +83,24 @@ class api_v3_TaskTest extends CiviUnitTestCase {
       'source_contact_id' => 1,
       'assignee_contact_id' => 2,
     ]);
+  }
+
+  public function testFetchingBySourceWillReturnExpectedTasks() {
+    $sourceContact = ContactFabricator::fabricate();
+    $contactId = $sourceContact['id'];
+    $params = [
+      'activity_type_id' => $this->_taskTypeId,
+      'source_contact_id' => $contactId,
+      'target_contact_id' => $contactId,
+    ];
+    $task = TaskFabricator::fabricate($params);
+
+    $params = ['source_contact_id' => $contactId];
+    $results = civicrm_api3('Task', 'get', $params);
+
+    $this->assertEquals(1, $results['count']);
+    $returnedTask = array_shift($results['values']);
+    $this->assertEquals($task['id'], $returnedTask['id']);
   }
 
 }

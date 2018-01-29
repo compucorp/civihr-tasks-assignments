@@ -4,28 +4,24 @@ define([
   'common/angular',
   'common/lodash',
   'common/moment',
-  'tasks-assignments/controllers/controllers',
   'common/services/file.service',
-  'common/services/notification.service',
-  'tasks-assignments/services/contact',
-  'tasks-assignments/services/dialog',
-  'tasks-assignments/services/document',
-  'tasks-assignments/services/settings',
-  'tasks-assignments/services/file'
-], function (angular, _, moment, controllers) {
+  'common/services/notification.service'
+], function (angular, _, moment) {
   'use strict';
 
-  controllers.controller('ModalDocumentController', ModalDocumentCtrl);
-
-  ModalDocumentCtrl.$inject = ['$window', '$scope', '$uibModalInstance', '$rootScope',
-    '$rootElement', '$q', '$log', 'role', '$filter', '$uibModal', '$dialog', '$timeout',
-    'AssignmentService', 'DocumentService', 'ContactService', 'FileService', 'data', 'AppSettingsService',
-    'files', 'config', 'HR_settings', 'modalMode', 'notificationService', 'fileService'
+  ModalDocumentController.__name = 'ModalDocumentController';
+  ModalDocumentController.$inject = [
+    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$window', '$dialog', '$uibModal', '$uibModalInstance', 'HR_settings', 'config',
+    'appSettingsService', 'assignmentService', 'contactService', 'documentService',
+    'fileServiceTA', 'fileService', 'notificationService', 'modalMode', 'role',
+    'data', 'files'
   ];
 
-  function ModalDocumentCtrl ($window, $scope, $modalInstance, $rootScope, $rootElement,
-    $q, $log, role, $filter, $modal, $dialog, $timeout, AssignmentService, DocumentService,
-    ContactService, FileService, data, AppSettingsService, files, config, HRSettings, modalMode, notificationService, fileService) {
+  function ModalDocumentController ($filter, $log, $q, $rootElement, $rootScope,
+    $scope, $timeout, $window, $dialog, $modal, $modalInstance, HRSettings, config,
+    appSettingsService, assignmentService, contactService, documentService,
+    fileServiceTA, fileService, notificationService, modalMode, role, data, files) {
     $log.debug('Controller: ModalDocumentController');
 
     var vm = this;
@@ -40,7 +36,7 @@ define([
     vm.remindMeMessage = 'Checking this box sets a reminder that this document needs to be renewed a set number of days before the Expiry Date. You can set this by going <a target="_blank" href="/civicrm/tasksassignments/settings">here</a> CiviHR will do this by creating a copy of this document with the status ‘awaiting upload’, which you will be able to see in your Documents list.';
     vm.role = role || 'admin';
     vm.showCId = !config.CONTACT_ID;
-    vm.uploader = FileService.uploader('civicrm_activity');
+    vm.uploader = fileServiceTA.uploader('civicrm_activity');
     vm.dpOpened = {
       due: false,
       exp: false,
@@ -105,8 +101,8 @@ define([
      * @param {string} value
      * @returns {string}
      */
-    function addQueryParam(path, name, value) {
-      path += (path.split('?')[1] ? '&':'?') + name + '=' + value;
+    function addQueryParam (path, name, value) {
+      path += (path.split('?')[1] ? '&' : '?') + name + '=' + value;
 
       return path;
     }
@@ -138,7 +134,7 @@ define([
         subject: $item.extra.case_subject
       };
 
-      AssignmentService.updateCache(obj);
+      assignmentService.updateCache(obj);
     }
 
     /**
@@ -157,7 +153,7 @@ define([
         email: $item.description.length ? $item.description[0] : ''
       };
 
-      ContactService.updateCache(obj);
+      contactService.updateCache(obj);
     }
 
     /**
@@ -242,12 +238,12 @@ define([
       if (vm.filesTrash.length) {
         for (var i = 0; i < vm.filesTrash.length; i++) {
           file = vm.filesTrash[i];
-          promiseFilesDelete.push(FileService.delete(file.fileID, file.entityID, file.entityTable));
+          promiseFilesDelete.push(fileServiceTA.delete(file.fileID, file.entityID, file.entityTable));
         }
       }
 
       $q.all({
-        document: DocumentService.save(doc),
+        document: documentService.save(doc),
         files: promiseFilesDelete.length ? $q.all(promiseFilesDelete) : []
       }).then(function (result) {
         if (vm.uploader.queue.length) {
@@ -255,7 +251,7 @@ define([
             appendTo: $rootElement.find('div').eq(0),
             templateUrl: config.path.TPL + '/modal/progress.html?v=1',
             size: 'sm',
-            controller: 'ModalProgressCtrl',
+            controller: 'ModalProgressController',
             resolve: {
               uploader: function () {
                 return vm.uploader;
@@ -277,7 +273,7 @@ define([
         vm.document.id = result.document.id;
         vm.document.status_id = result.document.status_id;
 
-        AssignmentService.updateTab();
+        assignmentService.updateTab();
         $modalInstance.close(vm.document);
         $rootScope.$broadcast('document-saved');
         $scope.$broadcast('ta-spinner-hide');
@@ -338,7 +334,7 @@ define([
      * Get and initialize max value file Size to be uploaded
      */
     function initFileSize () {
-      AppSettingsService.get(['maxFileSize']).then(function (result) {
+      appSettingsService.get(['maxFileSize']).then(function (result) {
         vm.fileSizeLimit = +result[0].maxFileSize * 1000000;
       });
     }
@@ -463,7 +459,7 @@ define([
 
       var targetContactId = vm.document.target_contact_id;
 
-      AssignmentService.search(input, vm.document.case_id).then(function (results) {
+      assignmentService.search(input, vm.document.case_id).then(function (results) {
         vm.assignments = $filter('filter')(results, function (val) {
           return +val.extra.contact_id === +targetContactId;
         });
@@ -481,7 +477,7 @@ define([
         return;
       }
 
-      ContactService.search(input, {
+      contactService.search(input, {
         contact_type: 'Individual'
       }).then(function (results) {
         vm.contacts[type] = results;
@@ -500,7 +496,7 @@ define([
      * @return {promise}
      */
     function searchContactAssignments (targetContactId) {
-      return AssignmentService.search(null, null, targetContactId)
+      return assignmentService.search(null, null, targetContactId)
         .then(function (assignments) {
           vm.assignments = assignments;
           $rootScope.$broadcast('ct-spinner-hide');
@@ -602,4 +598,6 @@ define([
       $rootScope.$watch('cache.contact.arrSearch', collectContacts);
     }
   }
+
+  return ModalDocumentController;
 });

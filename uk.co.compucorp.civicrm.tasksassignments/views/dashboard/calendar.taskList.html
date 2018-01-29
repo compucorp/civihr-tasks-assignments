@@ -4,7 +4,7 @@
     | filterByStatus:cache.taskStatusResolve:false
     | filterByDateField:'dateRange':'activity_date_time':{ from: calendarDay, until: calendarDay }
     | orderBy: 'activity_date_time')"
-    ng-controller="TaskCtrl"
+    ng-controller="TaskController"
     ng-class="{
       '{{prefix}}task-completed': task.completed,
       '{{prefix}}task-due': task.due
@@ -72,15 +72,15 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <a href ng-click="list.isCollapsed = !list.isCollapsed" class="btn btn-collapse">
+      <a href ng-click="isCollapsed = !isCollapsed" class="btn btn-collapse">
         <span
           class="fa"
-          ng-class="{fa: true, 'fa-chevron-down': !list.isCollapsed, 'fa-chevron-right': list.isCollapsed }"
+          ng-class="{fa: true, 'fa-chevron-down': !isCollapsed, 'fa-chevron-right': isCollapsed }"
           aria-hidden="true">
         </span>
         Show More
       </a>
-      <article class="row" uib-collapse="list.isCollapsed">
+      <article class="row" uib-collapse="isCollapsed">
         <div class="col-xs-12">
           <div class="{{prefix}}task-more">
             <div editable-ta="task.details" onbeforesave="list.updateTask(task, { details: ta.$data });">

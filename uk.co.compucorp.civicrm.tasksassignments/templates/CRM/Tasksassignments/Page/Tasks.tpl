@@ -1,8 +1,8 @@
 {assign var="module" value="civitasks" }
 {assign var="prefix" value="ct-" }
 
-<div id="{$module}" ng-controller="MainCtrl" ct-spinner ct-spinner-show>
-    <div class="container fade-in" ui-view>
+<div id="{$module}" ng-controller="MainController" ct-spinner ct-spinner-show>
+    <div class="container-fluid fade-in" ui-view>
     </div>
 </div>
 {literal}
@@ -10,7 +10,7 @@
         (function(){
             function taInit(){
                 var detail = {
-                    'app': 'appTasks',
+                    'app': 'tasks',
                     'module': 'civitasks'
                 };
 

@@ -3,24 +3,20 @@
 define([
   'common/angular',
   'common/lodash',
-  'common/moment',
-  'tasks-assignments/controllers/controllers',
-  'tasks-assignments/services/contact',
-  'tasks-assignments/services/dialog',
-  'tasks-assignments/services/task',
-  'tasks-assignments/services/assignment'
-], function (angular, _, moment, controllers) {
+  'common/moment'
+], function (angular, _, moment) {
   'use strict';
 
-  controllers.controller('TaskListController', TaskListController);
-
-  TaskListController.$inject = ['$scope', '$uibModal', '$dialog', '$rootElement',
-    '$rootScope', '$filter', '$timeout', '$state', '$log', 'taskList', 'config',
-    'ContactService', 'AssignmentService', 'TaskService', 'settings', 'HR_settings'
+  TaskListController.__name = 'TaskListController';
+  TaskListController.$inject = [
+    '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
+    '$dialog', '$state', '$uibModal', 'assignmentService', 'contactService',
+    'taskService', 'HR_settings', 'config', 'settings', 'taskList'
   ];
 
-  function TaskListController ($scope, $modal, $dialog, $rootElement, $rootScope, $filter, $timeout, $state, $log, taskList,
-    config, ContactService, AssignmentService, TaskService, settings, HRSettings) {
+  function TaskListController ($filter, $log, $rootElement, $rootScope, $scope,
+    $timeout, $dialog, $state, $modal, assignmentService, contactService,
+    taskService, HRSettings, config, settings, taskList) {
     $log.debug('Controller: TaskListController');
 
     var vm = this;
@@ -39,19 +35,14 @@ define([
     vm.listResolved = [];
     vm.listResolvedLoaded = false;
     vm.overdue = 0;
+    vm.dpOpened = {
+      filterDates: {}
+    };
     vm.dueFilters = [
       { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
       { badgeClass: 'primary', calendarView: 'day', value: 'dueToday' },
       { badgeClass: 'primary', calendarView: 'week', value: 'dueThisWeek' }
     ];
-    vm.dpOpened = {
-      filterDates: {}
-    };
-    vm.isCollapsed = {
-      filterAdvanced: true,
-      filterDates: true,
-      taskListResolved: true
-    };
     vm.filterParams = {
       contactId: null,
       ownership: $state.params.ownership || null,
@@ -72,7 +63,11 @@ define([
       from: { maxDate: vm.filterParamsHolder.dateRange.until },
       until: { minDate: vm.filterParamsHolder.dateRange.from }
     };
-
+    vm.isCollapsed = {
+      filterAdvanced: true,
+      filterDates: true,
+      taskListResolved: true
+    };
     vm.label = {
       overdue: 'Overdue',
       dueToday: 'Due Today',
@@ -93,46 +88,30 @@ define([
     vm.updateContacts = updateContacts;
     vm.updateTask = updateTask;
     vm.viewInCalendar = viewInCalendar;
-    vm.watchDateFilters = watchDateFilters;
 
-    /**
-     * Collects contact and assignment Ids for the given task
-     *
-     * @param  {object} taskList
-     */
-    function collectId (taskList) {
+    (function init () {
       var contactIds = vm.contactIds;
       var assignmentIds = vm.assignmentIds;
 
-      contactIds.push(config.LOGGED_IN_CONTACT_ID);
-
-      if (config.CONTACT_ID) {
-        contactIds.push(config.CONTACT_ID);
+      vm.collectId(taskList);
+      if (contactIds && contactIds.length) {
+        contactService.get({'IN': contactIds}).then(function (data) {
+          contactService.updateCache(data);
+        });
       }
 
-      function collectCId (task) {
-        contactIds.push(task.source_contact_id);
-
-        if (task.assignee_contact_id && task.assignee_contact_id.length) {
-          contactIds.push(task.assignee_contact_id[0]);
-        }
-
-        if (task.target_contact_id && task.target_contact_id.length) {
-          contactIds.push(task.target_contact_id[0]);
-        }
+      if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+        assignmentService.get({'IN': assignmentIds}).then(function (data) {
+          assignmentService.updateCache(data);
+        });
       }
 
-      function collectAId (task) {
-        if (task.case_id) {
-          assignmentIds.push(task.case_id);
-        }
-      }
+      initListeners();
+      initWatchers();
 
-      angular.forEach(taskList, function (task) {
-        collectCId(task);
-        collectAId(task);
-      });
-    }
+      $rootScope.$broadcast('ct-spinner-hide');
+      $log.info($rootScope.cache);
+    }());
 
     /**
      * Applies the filters on the sidebar
@@ -175,7 +154,7 @@ define([
         subject: $item.extra.case_subject
       };
 
-      AssignmentService.updateCache(obj);
+      assignmentService.updateCache(obj);
     }
 
     /**
@@ -206,7 +185,7 @@ define([
         email: contact.description.length ? contact.description[0] : ''
       };
 
-      ContactService.updateCache(obj);
+      contactService.updateCache(obj);
 
       return true;
     }
@@ -214,98 +193,52 @@ define([
     function changeStatus (task, statusId) {
       $scope.$broadcast('ct-spinner-show', 'task' + task.id);
 
-      TaskService.save({
+      taskService.save({
         id: task.id,
         status_id: statusId || '2'
       }).then(function (results) {
         $rootScope.$broadcast('taskFormSuccess', results, task);
         $scope.$broadcast('ct-spinner-hide', 'task' + task.id);
-        AssignmentService.updateTab();
+        assignmentService.updateTab();
       });
     }
 
     /**
-     * Filters the tasks list based on filter type and due or expiry date
+     * Collects contact and assignment Ids for the given task
      *
-     * @param {string} type filter type
-     * @return {array} task list
+     * @param  {object} taskList
      */
-    function filterByDateField (type) {
-      return $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
-    };
+    function collectId (taskList) {
+      var contactIds = vm.contactIds;
+      var assignmentIds = vm.assignmentIds;
 
-    function updateTask (task, updateObj) {
-      vm.cacheContact(task.assignee_contact_id[0]);
+      contactIds.push(config.LOGGED_IN_CONTACT_ID);
 
-      return TaskService
-        .save(angular.extend({}, task, updateObj))
-        .catch(function (reason) {
-          CRM.alert(reason, 'Error', 'error');
-        });
-    }
-
-    function updateContacts (contacts) {
-      vm.contacts = contacts;
-    }
-
-    function refreshContacts (input) {
-      if (!input) {
-        return;
+      if (config.CONTACT_ID) {
+        contactIds.push(config.CONTACT_ID);
       }
 
-      ContactService.search(input, {
-        contact_type: 'Individual'
-      }).then(function (results) {
-        vm.contacts = results;
-      });
-    }
+      function collectCId (task) {
+        contactIds.push(task.source_contact_id);
 
-    function refreshAssignments (input, targetContactId, caseId) {
-      if (!input || !targetContactId || !caseId) {
-        return;
+        if (task.assignee_contact_id && task.assignee_contact_id.length) {
+          contactIds.push(task.assignee_contact_id[0]);
+        }
+
+        if (task.target_contact_id && task.target_contact_id.length) {
+          contactIds.push(task.target_contact_id[0]);
+        }
       }
 
-      AssignmentService.search(input, caseId).then(function (results) {
-        vm.assignments = $filter('filter')(results, function (val) {
-          return +val.extra.contact_id === +targetContactId;
-        });
-      });
-    }
-
-    function loadTasksResolved () {
-      if (vm.listResolvedLoaded) {
-        return;
+      function collectAId (task) {
+        if (task.case_id) {
+          assignmentIds.push(task.case_id);
+        }
       }
 
-      // Remove resolved tasks from the task list
-      $filter('filterByStatus')(vm.list, $rootScope.cache.taskStatusResolve, false);
-
-      TaskService.get({
-        'target_contact_id': config.CONTACT_ID,
-        'status_id': {
-          'IN': config.status.resolve.TASK
-        }
-      }).then(function (taskListResolved) {
-        var contactIds = vm.contactIds;
-        var assignmentIds = vm.assignmentIds;
-
-        vm.collectId(taskListResolved);
-
-        if (contactIds && contactIds.length) {
-          ContactService.get({'IN': contactIds}).then(function (data) {
-            ContactService.updateCache(data);
-          });
-        }
-
-        if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-          AssignmentService.get({'IN': assignmentIds}).then(function (data) {
-            AssignmentService.updateCache(data);
-          });
-        }
-
-        Array.prototype.push.apply(vm.list, taskListResolved);
-
-        vm.listResolvedLoaded = true;
+      angular.forEach(taskList, function (task) {
+        collectCId(task);
+        collectAId(task);
       });
     }
 
@@ -317,17 +250,99 @@ define([
           return;
         }
 
-        TaskService.delete(task.id).then(function (results) {
+        taskService.delete(task.id).then(function (results) {
           vm.list.splice(vm.list.indexOf(task), 1);
 
           $rootScope.$broadcast('taskDelete', task.id);
-          AssignmentService.updateTab();
+          assignmentService.updateTab();
         });
       });
     }
 
-    function viewInCalendar (view) {
-      $state.go('calendar.mwl.' + view);
+    /**
+     * Filters the tasks list based on filter type and due or expiry date
+     *
+     * @param {string} type filter type
+     * @return {array} task list
+     */
+    function filterByDateField (type) {
+      return $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
+    }
+
+    function initListeners () {
+      $scope.$on('assignmentFormSuccess', function (e, output) {
+        Array.prototype.push.apply(vm.list, output.taskList);
+      });
+
+      $scope.$on('taskFormSuccess', function (e, output, input) {
+        angular.equals({}, input) ? vm.list.push(output) : angular.extend(input, output);
+      });
+
+      $scope.$on('crmFormSuccess', function (e, data) {
+        if (data.status === 'success') {
+          var pattern = /case|activity|assignment/i;
+
+          if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
+            $rootScope.cache.assignment = {
+              obj: {},
+              arr: []
+            };
+            $state.go($state.current, {}, {reload: true});
+          }
+        }
+      });
+    }
+
+    /**
+     * Whenever the date filters will change, their corrispondent
+     * datepickers will have the minDate or maxDate setting updated
+     * accordingly
+     */
+    function initWatchers () {
+      $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
+        vm.datepickerOptions.until.minDate = newValue;
+      });
+
+      $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
+        vm.datepickerOptions.from.maxDate = newValue;
+      });
+    }
+
+    function loadTasksResolved () {
+      if (vm.listResolvedLoaded) {
+        return;
+      }
+
+      // Remove resolved tasks from the task list
+      $filter('filterByStatus')(vm.list, $rootScope.cache.taskStatusResolve, false);
+
+      taskService.get({
+        'target_contact_id': config.CONTACT_ID,
+        'status_id': {
+          'IN': config.status.resolve.TASK
+        }
+      }).then(function (taskListResolved) {
+        var contactIds = vm.contactIds;
+        var assignmentIds = vm.assignmentIds;
+
+        vm.collectId(taskListResolved);
+
+        if (contactIds && contactIds.length) {
+          contactService.get({'IN': contactIds}).then(function (data) {
+            contactService.updateCache(data);
+          });
+        }
+
+        if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
+          assignmentService.get({'IN': assignmentIds}).then(function (data) {
+            assignmentService.updateCache(data);
+          });
+        }
+
+        Array.prototype.push.apply(vm.list, taskListResolved);
+
+        vm.listResolvedLoaded = true;
+      });
     }
 
     /**
@@ -341,64 +356,48 @@ define([
       return (data.crmMessages && data.crmMessages.length) && pattern.test(data.crmMessages[0].title);
     }
 
-    (function init () {
-      var contactIds = vm.contactIds;
-      var assignmentIds = vm.assignmentIds;
+    function refreshAssignments (input, targetContactId, caseId) {
+      if (!input || !targetContactId || !caseId) {
+        return;
+      }
 
-      vm.collectId(taskList);
-      if (contactIds && contactIds.length) {
-        ContactService.get({'IN': contactIds}).then(function (data) {
-          ContactService.updateCache(data);
+      assignmentService.search(input, caseId).then(function (results) {
+        vm.assignments = $filter('filter')(results, function (val) {
+          return +val.extra.contact_id === +targetContactId;
         });
-      }
-
-      if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
-        AssignmentService.get({'IN': assignmentIds}).then(function (data) {
-          AssignmentService.updateCache(data);
-        });
-      }
-
-      watchDateFilters();
-
-      $rootScope.$broadcast('ct-spinner-hide');
-      $log.info($rootScope.cache);
-    })();
-
-    $scope.$on('assignmentFormSuccess', function (e, output) {
-      Array.prototype.push.apply(vm.list, output.taskList);
-    });
-
-    $scope.$on('taskFormSuccess', function (e, output, input) {
-      angular.equals({}, input) ? vm.list.push(output) : angular.extend(input, output);
-    });
-
-    $scope.$on('crmFormSuccess', function (e, data) {
-      if (data.status === 'success') {
-        var pattern = /case|activity|assignment/i;
-
-        if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
-          $rootScope.cache.assignment = {
-            obj: {},
-            arr: []
-          };
-          $state.go($state.current, {}, {reload: true});
-        }
-      }
-    });
-
-    /**
-     * Whenever the date filters will change, their corrispondent
-     * datepickers will have the minDate or maxDate setting updated
-     * accordingly
-     */
-    function watchDateFilters () {
-      $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
-        vm.datepickerOptions.until.minDate = newValue;
-      });
-
-      $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
-        vm.datepickerOptions.from.maxDate = newValue;
       });
     }
+
+    function refreshContacts (input) {
+      if (!input) {
+        return;
+      }
+
+      contactService.search(input, {
+        contact_type: 'Individual'
+      }).then(function (results) {
+        vm.contacts = results;
+      });
+    }
+
+    function updateContacts (contacts) {
+      vm.contacts = contacts;
+    }
+
+    function updateTask (task, updateObj) {
+      vm.cacheContact(task.assignee_contact_id[0]);
+
+      return taskService
+        .save(angular.extend({}, task, updateObj))
+        .catch(function (reason) {
+          CRM.alert(reason, 'Error', 'error');
+        });
+    }
+
+    function viewInCalendar (view) {
+      $state.go('calendar.mwl.' + view);
+    }
   }
+
+  return TaskListController;
 });
