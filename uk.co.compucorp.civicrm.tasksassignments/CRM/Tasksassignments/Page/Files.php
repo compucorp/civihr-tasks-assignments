@@ -219,7 +219,7 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         $zipname .= '.' . $ext;
         $zipfullpath = $dest . '/' . $zipname;
         $zip = new ZipArchive();
-        $zip->open($zipfullpath, ZipArchive::CREATE);
+        $zip->open($zipfullpath, ZipArchive::OVERWRITE);
         foreach ($files as $file) {
           $zip->addFile($file, substr($file, strrpos($file, '/') + 1));
         }
