@@ -218,12 +218,13 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
 
         $zipname .= '.' . $ext;
         $zipfullpath = $dest . '/' . $zipname;
-        $zip = self::_createZipArchive($zipfullpath);
-
+        $zip = new ZipArchive();
+        // @see https://bugs.php.net/bug.php?id=71064
+        $mode = ZipArchive::CREATE | ZipArchive::OVERWRITE;
+        $zip->open($zipfullpath, $mode);
         foreach ($files as $file) {
           $zip->addFile($file, substr($file, strrpos($file, '/') + 1));
         }
-
         $zip->close();
       } else {
         $firstFile = CRM_Utils_Array::first($entityFiles);
@@ -272,24 +273,5 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     }
 
     return $newFilename;
-  }
-
-  /**
-   * Creates a new zip file at the given path, replacing any previous zip
-   * files if any.
-   *
-   * @param string $zipfullpath - The full path of the zip archive.
-   *
-   * @return ZipArchive - The reference of the newly created zip file.
-   */
-  static protected function _createZipArchive($zipfullpath) {
-    if (file_exists($zipfullpath)) {
-      unlink($zipfullpath);
-    }
-
-    $zip = new ZipArchive();
-    $zip->open($zipfullpath, ZipArchive::CREATE);
-
-    return $zip;
   }
 }
