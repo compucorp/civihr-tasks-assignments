@@ -5,18 +5,28 @@ define(function () {
 
   MainController.__name = 'MainController';
   MainController.$inject = [
-    '$log', '$q', '$rootScope', '$rootElement', '$scope', '$uibModal', 'fileServiceTA',
-    'config'
+    'beforeHashQueryParams', '$log', '$q', '$rootElement', '$rootScope',
+    '$scope', '$uibModal', 'config', 'fileServiceTA'
   ];
 
-  function MainController ($log, $q, $rootScope, $rootElement, $scope, $modal,
-    fileServiceTA, config) {
+  function MainController (beforeHashQueryParams, $log, $q, $rootElement,
+    $rootScope, $scope, $modal, config, fileServiceTA) {
     $log.debug('Controller: MainController');
+
+    var params = beforeHashQueryParams.parse();
 
     $rootScope.modalAssignment = modalAssignment;
     $rootScope.modalDocument = modalDocument;
     $rootScope.modalReminder = modalReminder;
     $rootScope.modalTask = modalTask;
+
+    (function init () {
+      if (params.openModal) {
+        params.openModal === 'task' && $rootScope.modalTask();
+        params.openModal === 'assignment' && $rootScope.modalAssignment();
+        params.openModal === 'document' && $rootScope.modalDocument();
+      }
+    }());
 
     function modalAssignment (data) {
       data = data || {};
