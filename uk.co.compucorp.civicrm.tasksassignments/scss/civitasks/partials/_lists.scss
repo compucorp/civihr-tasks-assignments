@@ -3,6 +3,10 @@
   margin: 0;
   padding: 0;
 
+  > div {
+    margin-top: 20px;
+  }
+
   > li {
     @include box-shadow($box-shadow-list);
     background-color: $panel-bg;
@@ -186,6 +190,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+
+  > div {
+    margin-top: 20px;
+  }
 
   a {
     color: $text-color;
