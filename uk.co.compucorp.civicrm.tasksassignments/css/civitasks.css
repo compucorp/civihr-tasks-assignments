@@ -12793,6 +12793,12 @@ fieldset[disabled]
 #civitasks .civihr-ui-select__button:not(:last-child), #cividocuments .civihr-ui-select__button:not(:last-child) {
   padding-right: 5px !important;
 }
+#civitasks .civihr-ui-select *, #cividocuments .civihr-ui-select * {
+  border-color: #0071BD !important;
+}
+#civitasks .civihr-ui-select .select2-search-choice, #cividocuments .civihr-ui-select .select2-search-choice {
+  font-size: 13px;
+}
 #civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
   background: none !important;
   top: 3px !important;

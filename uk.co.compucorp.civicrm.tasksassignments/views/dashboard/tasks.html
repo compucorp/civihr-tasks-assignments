@@ -51,7 +51,7 @@
                     <label class="col-xs-12 col-sm-2 control-label">Contact:</label>
                     <div class="col-xs-12 col-sm-10">
                       <div class="input-group">
-                        <ui-select prevent-animations allow-clear ng-model="list.filterParams.contactId">
+                        <ui-select theme="civihr-ui-select" prevent-animations allow-clear ng-model="list.filterParams.contactId">
                           <ui-select-match prevent-animations class="ui-select-match" placeholder="Search / Filter">
                             {{$select.selected.label}}
                           </ui-select-match>
@@ -73,7 +73,7 @@
                   <div class="form-group">
                     <label class="col-xs-12 col-sm-4 control-label">Workflow Type:</label>
                     <div class="col-xs-12 col-sm-8">
-                      <ui-select prevent-animations multiple ng-model="list.filterParams.assignmentType">
+                      <ui-select prevent-animations multiple theme="civihr-ui-select" ng-model="list.filterParams.assignmentType">
                         <ui-select-match prevent-animations class="ui-select-match" placeholder="Select workflow...">{{$item.title}}
                         </ui-select-match>
                         <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.id as type in cache.assignmentType.arr">
