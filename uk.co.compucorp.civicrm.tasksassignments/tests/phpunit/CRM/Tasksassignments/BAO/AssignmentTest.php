@@ -1,13 +1,12 @@
 <?php
 
-use Civi\Test\HeadlessInterface;
-use Civi\Test\TransactionalInterface;
+use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
 
 /**
  *
  * @group headless
  */
-class CRM_Tasksassignments_BAO_AssignmentTest extends \PHPUnit_Framework_TestCase implements HeadlessInterface, TransactionalInterface {
+class CRM_Tasksassignments_BAO_AssignmentTest extends BaseHeadlessTest {
 
   use TasksassignmentsTestTrait;
 
@@ -16,12 +15,6 @@ class CRM_Tasksassignments_BAO_AssignmentTest extends \PHPUnit_Framework_TestCas
   private $case_type_id;
 
   private $open_status_id;
-
-  public function setUpHeadless() {
-    return \Civi\Test::headless()
-      ->installMe(__DIR__)
-      ->apply();
-  }
 
   public function setUp() {
     // Create Contact

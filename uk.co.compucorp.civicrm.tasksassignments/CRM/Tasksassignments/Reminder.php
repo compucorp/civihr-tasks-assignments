@@ -215,6 +215,8 @@ class CRM_Tasksassignments_Reminder {
         $activityDueDate = substr($activityResult['activity_date_time'], 0, 10);
       }
 
+      $assigneeContacts = CRM_Utils_Array::value('assignee', $activityContacts, []);
+
       $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
         'isReminder' => $isReminder,
         'isDelete' => $isDelete,
@@ -223,7 +225,7 @@ class CRM_Tasksassignments_Reminder {
         'activityName' => $activityName,
         'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
         'activityTargets' => implode(', ', $activityContacts['targets']['links']),
-        'activityAssignee' => implode(', ', $activityContacts['assignees']['links']),
+        'activityAssignee' => implode(', ', CRM_Utils_Array::value('links', $assigneeContacts, [])),
         'previousAssignee' => $previousAssignee ? $previousAssignee['link'] : null,
         'activityStatus' => self::$_activityOptions[$isTask ? 'status' : 'document_status'][$activityResult['status_id']],
         'activityDue' => $activityDueDate,
@@ -371,7 +373,7 @@ class CRM_Tasksassignments_Reminder {
   }
 
   /**
-   * Returns contact ID's for users with the 'administrator' or 'civihr_admin'
+   * Returns contact ID's for users with the 'administrator' or 'HR Admin'
    * roles.
    *
    * @return array
@@ -379,7 +381,7 @@ class CRM_Tasksassignments_Reminder {
    */
   private static function _getAdminContactIds() {
     $adminRole = user_role_load_by_name('administrator');
-    $civihrAdminRole = user_role_load_by_name('civihr_admin');
+    $civihrAdminRole = user_role_load_by_name('HR Admin');
 
     $query = '
       SELECT ur.uid
@@ -393,8 +395,20 @@ class CRM_Tasksassignments_Reminder {
 
     $result = db_query($query, $queryParams);
     $uids = $result->fetchCol();
+    $contactIDs = [];
 
-    return $uids;
+    if (empty($uids)) {
+      return $contactIDs;
+    }
+
+    $params = ['uf_id' => ['IN' => $uids]];
+    $ufMatches = civicrm_api3('UFMatch', 'get', $params)['values'];
+
+    if (count($ufMatches) < 1) {
+      return $ufMatches;
+    }
+
+    return array_column($ufMatches, 'contact_id');
   }
 
   /**
@@ -439,7 +453,7 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Builds query to obtain contact ID's for the following:
    *
-   *   - Users with administrator or civihr_admin roles
+   *   - Users with administrator or HR Admin roles
    *   - Contacts with key dates in given time period
    *   - Appraisals due in the given timeframe
    *
@@ -607,7 +621,7 @@ class CRM_Tasksassignments_Reminder {
     }
 
     $user = user_load($ufMatchContact['uf_id']);
-    if (in_array('administrator', $user->roles) || in_array('civihr_admin', $user->roles)) {
+    if (in_array('administrator', $user->roles) || in_array('HR Admin', $user->roles)) {
       return TRUE;
     }
 

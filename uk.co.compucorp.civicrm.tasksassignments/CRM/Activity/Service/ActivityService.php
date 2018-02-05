@@ -2,6 +2,10 @@
 
 class CRM_Activity_Service_ActivityService {
 
+  const RECORD_TYPE_ASSIGNEE = 1;
+  const RECORD_TYPE_CREATOR = 2;
+  const RECORD_TYPE_TARGET = 3;
+
   /**
    * Returns the activity types for a certain component.
    * Default limit is 0 (unlimited)
