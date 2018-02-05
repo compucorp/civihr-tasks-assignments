@@ -1,19 +1,19 @@
 /* eslint-env amd */
 
-define(function () {
+define([
+  'common/lodash'
+], function (_) {
   'use strict';
 
   MainController.__name = 'MainController';
   MainController.$inject = [
-    'beforeHashQueryParams', '$log', '$q', '$rootElement', '$rootScope',
-    '$scope', '$uibModal', 'config', 'fileServiceTA'
+    '$log', '$q', '$rootElement', '$rootScope',
+    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA'
   ];
 
-  function MainController (beforeHashQueryParams, $log, $q, $rootElement,
-    $rootScope, $scope, $modal, config, fileServiceTA) {
+  function MainController ($log, $q, $rootElement,
+    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA) {
     $log.debug('Controller: MainController');
-
-    var params = beforeHashQueryParams.parse();
 
     $rootScope.modalAssignment = modalAssignment;
     $rootScope.modalDocument = modalDocument;
@@ -21,12 +21,21 @@ define(function () {
     $rootScope.modalTask = modalTask;
 
     (function init () {
-      if (params.openModal) {
-        params.openModal === 'task' && $rootScope.modalTask();
-        params.openModal === 'assignment' && $rootScope.modalAssignment();
-        params.openModal === 'document' && $rootScope.modalDocument();
-      }
+      var queryParams = beforeHashQueryParams.parse();
+
+      queryParams.openModal && autoOpenModal(queryParams.openModal);
     }());
+
+    /**
+     * Automatically opens the modal of the given type
+     *
+     * @param {String} modalType
+     */
+    function autoOpenModal (modalType) {
+      var method = $rootScope['modal' + _.capitalize(modalType)];
+
+      (typeof method === 'function') && method();
+    }
 
     function modalAssignment (data) {
       data = data || {};
