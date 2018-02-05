@@ -3,7 +3,6 @@
 define([
   'common/angularMocks',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-
 ], function () {
   'use strict';
 
@@ -38,37 +37,82 @@ define([
         expect($rootScope.modalTask).toBeDefined();
       });
 
-      describe("when 'openModal' query param is 'task'", function () {
-        beforeEach(function () {
-          spyOn(beforeHashQueryParams, 'parse').and.returnValue({ 'openModal': 'task' });
+      describe('automatic opening of a modal', function () {
+        describe('when there is a "openModal" query string param', function () {
+          describe('when the param value is "task"', function () {
+            beforeEach(function () {
+              mockQueryStringAndInit({ 'openModal': 'task' });
+            });
+
+            it('opens the task modal', function () {
+              expect(isModalControllerOfType('Task')).toBe(true);
+            });
+          });
+
+          describe('when the param value is "document"', function () {
+            beforeEach(function () {
+              mockQueryStringAndInit({ 'openModal': 'document' });
+            });
+
+            it('opens the document modal', function () {
+              expect(isModalControllerOfType('Document')).toBe(true);
+            });
+          });
+
+          describe('when the param value is "assignment"', function () {
+            beforeEach(function () {
+              mockQueryStringAndInit({ 'openModal': 'assignment' });
+            });
+
+            it('opens the assignment modal', function () {
+              expect(isModalControllerOfType('Assignment')).toBe(true);
+            });
+          });
+
+          describe('when the param value is none of the above', function () {
+            beforeEach(function () {
+              mockQueryStringAndInit({ 'openModal': 'foobar' });
+            });
+
+            it('does not automatically open a modal', function () {
+              expect($modal.open).not.toHaveBeenCalled();
+            });
+          });
+        });
+
+        describe('when there is no "openModal" query string param', function () {
+          beforeEach(function () {
+            mockQueryStringAndInit({ 'foo': 'bar' });
+          });
+
+          it('does not automatically open a modal', function () {
+            expect($modal.open).not.toHaveBeenCalled();
+          });
+        });
+
+        /**
+         * Checks if the controller of the modal just opened is of the given type
+         * (= if the type is in the name of the controller)
+         *
+         * @param {String} type
+         * @return {Boolean}
+         */
+        function isModalControllerOfType (type) {
+          var ctrlName = $modal.open.calls.argsFor(0)[0].controller;
+
+          return _.includes(ctrlName, type);
+        }
+
+        /**
+         * Mocks the query string by faking the value returned by the
+         * beforeHashQueryParams, and then it initializes the controller
+         *
+         * @param {Object} queryStringParams
+         */
+        function mockQueryStringAndInit(queryStringParams) {
+          spyOn(beforeHashQueryParams, 'parse').and.returnValue(queryStringParams);
           initController($controller);
-        });
-
-        it('opens Task Modal', function () {
-          expect($modal.open).toHaveBeenCalled();
-        });
-      });
-
-      describe("when 'openModal' query param is 'assignment'", function () {
-        beforeEach(function () {
-          spyOn(beforeHashQueryParams, 'parse').and.returnValue({ 'openModal': 'assignment' });
-          initController($controller);
-        });
-
-        it('opens Assignment Modal', function () {
-          expect($modal.open).toHaveBeenCalled();
-        });
-      });
-
-      describe("when 'openModal' query param is 'document'", function () {
-        beforeEach(function () {
-          spyOn(beforeHashQueryParams, 'parse').and.returnValue({ 'openModal': 'document' });
-          initController($controller);
-        });
-
-        it('opens Document Modal', function () {
-          expect($modal.open).toHaveBeenCalled();
-        });
+        }
       });
     });
 

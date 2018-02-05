@@ -69,9 +69,9 @@ define([
      * Opens Document Modal based on passed modal mode, role and
      * list of attachments, document data to Document Modal
      *
-     * @param {string} modalMode Mode of the Modal, 'edit' or 'new'
-     * @param {object} data Document data
-     * @param {object} e Triggered event
+     * @param {String} modalMode Mode of the Modal, 'edit' or 'new'
+     * @param {Object} data Document data
+     * @param {Object} e Triggered event
      */
     function modalDocument (modalMode, data, e) {
       var modalInstance;
