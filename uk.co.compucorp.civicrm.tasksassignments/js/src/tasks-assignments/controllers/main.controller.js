@@ -34,7 +34,11 @@ define([
     function autoOpenModal (modalType) {
       var method = $rootScope['modal' + _.capitalize(modalType)];
 
-      (typeof method === 'function') && method();
+      if (typeof method === 'function') {
+        method();
+      } else {
+        $log.warn('There is no method available for opening the required ' + modalType + ' modal!');
+      }
     }
 
     /**

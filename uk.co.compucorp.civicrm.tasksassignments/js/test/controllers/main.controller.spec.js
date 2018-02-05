@@ -7,13 +7,14 @@ define([
   'use strict';
 
   describe('MainController', function () {
-    var beforeHashQueryParams, $controller, $rootScope, $modal;
+    var beforeHashQueryParams, $controller, $log, $rootScope, $modal;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_$controller_, _$rootScope_, _beforeHashQueryParams_, _$uibModal_) {
+    beforeEach(inject(function (_$controller_, _$log_, _$rootScope_, _beforeHashQueryParams_, _$uibModal_) {
       beforeHashQueryParams = _beforeHashQueryParams_;
       $controller = _$controller_;
+      $log = _$log_;
       $modal = _$uibModal_;
       $rootScope = _$rootScope_;
 
@@ -71,11 +72,16 @@ define([
 
           describe('when the param value is none of the above', function () {
             beforeEach(function () {
+              spyOn($log, 'warn');
               mockQueryStringAndInit({ 'openModal': 'foobar' });
             });
 
             it('does not automatically open a modal', function () {
               expect($modal.open).not.toHaveBeenCalled();
+            });
+
+            it('outputs a warning message on the console', function () {
+              expect($log.warn).toHaveBeenCalled();
             });
           });
         });
