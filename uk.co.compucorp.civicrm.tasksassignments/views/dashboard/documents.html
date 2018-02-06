@@ -135,8 +135,8 @@
           </div>
         </div>
       </div>
+      <div class="{{prefix}}list-no-result text-center" ng-if="listPaginated.length === 0">There are no documents</div>
       <div class="panel-body">
-        <div class="text-center" ng-if="listPaginated.length === 0">There are no documents</div>
         <div ng-show="listPaginated.length > 0" class="{{prefix}}documents-container" ct-spinner ct-spinner-id="list">
             <table class="table table-striped {{prefix}}table-documents">
               <thead>

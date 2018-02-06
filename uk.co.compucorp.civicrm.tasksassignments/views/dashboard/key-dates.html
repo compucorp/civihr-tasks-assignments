@@ -85,8 +85,12 @@
           </div>
         </div>
       </div>
+      <div
+        class="{{prefix}}list-no-result text-center"
+        ng-if="(filterParams.date != 'dateRange' && dateListFiltered.length === 0) || (filterParams.date == 'dateRange' && dateListSelectedFiltered.length === 0)">
+        There are no dates
+      </div>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
-        <div class="text-center" ng-if="dateListFiltered.length === 0">There are no dates</div>
         <li
           ng-repeat="dateObj in dateListFiltered = (dateListUnlimited = (dateList | filterByDate:filterParams.date | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
           ng-include
@@ -95,7 +99,6 @@
         </li>
       </ul>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date == 'dateRange'" ct-spinner ct-spinner-id="dateList">
-        <div class="text-center" ng-if="dateListSelectedFiltered.length === 0">There are no dates</div>
         <li
           ng-repeat="dateObj in dateListSelectedFiltered = (dateListSelectedUnlimited = (dateListSelected | filterByDateType:filterParams.dateType) | limitTo: dateListLimit)"
           ng-include

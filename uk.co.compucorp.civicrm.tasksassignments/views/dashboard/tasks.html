@@ -87,8 +87,8 @@
             </div>
           </div>
         </div>
+        <div class="{{prefix}}list-no-result text-center" ng-if="listFiltered.length === 0">There are no tasks</div>
         <ul class="{{prefix}}list-task">
-          <div class="text-center" ng-if="listFiltered.length === 0">There are no tasks</div>
           <li ng-repeat="task in listFiltered =
             (listUnlimited =
               (listOngoing =

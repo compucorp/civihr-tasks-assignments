@@ -7,7 +7,7 @@
 
 // Customizations specific for T&A
 .civihr-ui-select {
-  * {
+  .ui-select-match-item {
     border-color: $brand-primary !important;
   }
 
