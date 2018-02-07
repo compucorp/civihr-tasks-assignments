@@ -4,9 +4,10 @@ define([
   'common/lodash',
   'common/angular',
   'mocks/data/assignment.data',
+  'mocks/fabricators/assignment.fabricator',
   'common/angularMocks',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function (_, angular, Mock) {
+], function (_, angular, Mock, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
@@ -231,6 +232,31 @@ define([
 
       it('sets the selected activity type', function () {
         expect(scope.activity.activitySet).toEqual($rootScope.cache.assignmentType.obj['2'].definition.activitySets[0]);
+      });
+    });
+
+    describe('watchers', function () {
+      describe('Assignment Type cache', function () {
+        var caseTypeId;
+
+        beforeEach(function (){
+          var mockedTypes = assignmentFabricator.assignmentTypes();
+
+          caseTypeId = Object.keys(mockedTypes)[0];
+
+          scope.assignment.subject = '';
+          scope.assignment.case_type_id = caseTypeId;
+
+          $rootScope.cache.assignmentType.obj[caseTypeId] = assignmentFabricator.assignmentTypes()[caseTypeId]
+          // remove the activit sets to avoid triggering another watcher
+          $rootScope.cache.assignmentType.obj[caseTypeId].definition.activitySets = [];
+
+          $rootScope.$digest();
+        });
+
+        it('automatically sets the data associated with the case type of the assignment', function () {
+          expect(scope.assignment.subject).toBe($rootScope.cache.assignmentType.obj[caseTypeId].title);
+        });
       });
     });
 
