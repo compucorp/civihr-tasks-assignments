@@ -13,6 +13,8 @@ define([
 
   function MainController ($log, $q, $rootElement,
     $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA) {
+    var queryParams;
+
     $log.debug('Controller: MainController');
 
     $rootScope.modalAssignment = modalAssignment;
@@ -21,7 +23,7 @@ define([
     $rootScope.modalTask = modalTask;
 
     (function init () {
-      var queryParams = beforeHashQueryParams.parse();
+      queryParams = beforeHashQueryParams.parse();
 
       queryParams.openModal && autoOpenModal(queryParams.openModal);
     }());
@@ -49,7 +51,7 @@ define([
     function modalAssignment (data) {
       var modalInstance;
 
-      data = data || {};
+      data = data || { case_type_id: (queryParams.caseTypeId || null) };
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/assignment.html?v=3',

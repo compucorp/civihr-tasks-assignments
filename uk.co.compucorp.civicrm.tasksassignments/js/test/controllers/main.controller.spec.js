@@ -1,9 +1,10 @@
 /* eslint-env amd, jasmine */
 
 define([
+  'common/lodash',
   'common/angularMocks',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function () {
+], function (_) {
   'use strict';
 
   describe('MainController', function () {
@@ -62,12 +63,28 @@ define([
         });
 
         describe('when the param value is "assignment"', function () {
-          beforeEach(function () {
-            mockQueryStringAndInit({ 'openModal': 'assignment' });
+          describe('basic tests', function () {
+            beforeEach(function () {
+              mockQueryStringAndInit({ 'openModal': 'assignment' });
+            });
+
+            it('opens the assignment modal', function () {
+              expect(isModalControllerOfType('Assignment')).toBe(true);
+            });
           });
 
-          it('opens the assignment modal', function () {
-            expect(isModalControllerOfType('Assignment')).toBe(true);
+          describe('when there is a "caseTypeId" query string param', function () {
+            var caseTypeId = '123';
+
+            beforeEach(function () {
+              mockQueryStringAndInit({ 'openModal': 'assignment', 'caseTypeId': caseTypeId });
+            });
+
+            it('opens the assignment modal with the given case type id', function () {
+              var dataPassed = $modal.open.calls.argsFor(0)[0].resolve.data();
+
+              expect(dataPassed.case_type_id).toBe(caseTypeId);
+            });
           });
         });
 
@@ -116,7 +133,7 @@ define([
        *
        * @param {Object} queryStringParams
        */
-      function mockQueryStringAndInit(queryStringParams) {
+      function mockQueryStringAndInit (queryStringParams) {
         spyOn(beforeHashQueryParams, 'parse').and.returnValue(queryStringParams);
         initController($controller);
       }
