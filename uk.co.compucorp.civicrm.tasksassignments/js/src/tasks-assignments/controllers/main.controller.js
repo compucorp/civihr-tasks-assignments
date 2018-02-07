@@ -37,7 +37,7 @@ define([
       var method = $rootScope['modal' + _.capitalize(modalType)];
 
       if (typeof method === 'function') {
-        method();
+        method({ case_type_id: (queryParams.caseTypeId || null) });
       } else {
         $log.warn('There is no method available for opening the required ' + modalType + ' modal!');
       }
@@ -51,7 +51,7 @@ define([
     function modalAssignment (data) {
       var modalInstance;
 
-      data = data || { case_type_id: (queryParams.caseTypeId || null) };
+      data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
