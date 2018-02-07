@@ -13,6 +13,8 @@ define([
 
   function MainController ($log, $q, $rootElement,
     $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA) {
+    var queryParams;
+
     $log.debug('Controller: MainController');
 
     $rootScope.modalAssignment = modalAssignment;
@@ -21,7 +23,7 @@ define([
     $rootScope.modalTask = modalTask;
 
     (function init () {
-      var queryParams = beforeHashQueryParams.parse();
+      queryParams = beforeHashQueryParams.parse();
 
       queryParams.openModal && autoOpenModal(queryParams.openModal);
     }());
@@ -35,7 +37,7 @@ define([
       var method = $rootScope['modal' + _.capitalize(modalType)];
 
       if (typeof method === 'function') {
-        method();
+        method({ case_type_id: (queryParams.caseTypeId || null) });
       } else {
         $log.warn('There is no method available for opening the required ' + modalType + ' modal!');
       }
@@ -73,11 +75,11 @@ define([
      * Opens Document Modal based on passed modal mode, role and
      * list of attachments, document data to Document Modal
      *
-     * @param {String} modalMode Mode of the Modal, 'edit' or 'new'
      * @param {Object} data Document data
+     * @param {String} modalMode Mode of the Modal, 'edit' or 'new'
      * @param {Object} e Triggered event
      */
-    function modalDocument (modalMode, data, e) {
+    function modalDocument (data, modalMode, e) {
       var modalInstance;
 
       e && e.preventDefault();

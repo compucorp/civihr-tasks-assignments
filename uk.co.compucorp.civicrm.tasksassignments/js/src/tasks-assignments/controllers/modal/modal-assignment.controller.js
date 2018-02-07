@@ -71,6 +71,8 @@ define([
     $scope.updateTimeline = updateTimeline;
 
     (function init () {
+      angular.copy(data, $scope.assignment);
+
       initWatchers();
     }());
 
@@ -260,6 +262,8 @@ define([
     }
 
     function initWatchers () {
+      var assignmentTypesListener;
+
       $scope.$watch('activity.activitySet', function (activitySet) {
         if (!activitySet || !activitySet.activityTypes) {
           $scope.taskList = [];
@@ -301,6 +305,13 @@ define([
 
         angular.copy(documentList, $scope.documentList);
       });
+
+      assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
+        if (!_.isEmpty(cache)) {
+          setData();
+          assignmentTypesListener();
+        }
+      }, true);
     }
 
     /**

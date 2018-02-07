@@ -1,9 +1,10 @@
 /* eslint-env amd, jasmine */
 
 define([
+  'common/lodash',
   'common/angularMocks',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function () {
+], function (_) {
   'use strict';
 
   describe('MainController', function () {
@@ -37,30 +38,32 @@ define([
       it('defines modalTask()', function () {
         expect($rootScope.modalTask).toBeDefined();
       });
+    });
 
-      describe('automatic opening of a modal', function () {
-        describe('when there is a "openModal" query string param', function () {
-          describe('when the param value is "task"', function () {
-            beforeEach(function () {
-              mockQueryStringAndInit({ 'openModal': 'task' });
-            });
-
-            it('opens the task modal', function () {
-              expect(isModalControllerOfType('Task')).toBe(true);
-            });
+    describe('automatic opening of a modal', function () {
+      describe('when there is a "openModal" query string param', function () {
+        describe('when the param value is "task"', function () {
+          beforeEach(function () {
+            mockQueryStringAndInit({ 'openModal': 'task' });
           });
 
-          describe('when the param value is "document"', function () {
-            beforeEach(function () {
-              mockQueryStringAndInit({ 'openModal': 'document' });
-            });
+          it('opens the task modal', function () {
+            expect(isModalControllerOfType('Task')).toBe(true);
+          });
+        });
 
-            it('opens the document modal', function () {
-              expect(isModalControllerOfType('Document')).toBe(true);
-            });
+        describe('when the param value is "document"', function () {
+          beforeEach(function () {
+            mockQueryStringAndInit({ 'openModal': 'document' });
           });
 
-          describe('when the param value is "assignment"', function () {
+          it('opens the document modal', function () {
+            expect(isModalControllerOfType('Document')).toBe(true);
+          });
+        });
+
+        describe('when the param value is "assignment"', function () {
+          describe('basic tests', function () {
             beforeEach(function () {
               mockQueryStringAndInit({ 'openModal': 'assignment' });
             });
@@ -70,56 +73,70 @@ define([
             });
           });
 
-          describe('when the param value is none of the above', function () {
+          describe('when there is a "caseTypeId" query string param', function () {
+            var caseTypeId = '123';
+
             beforeEach(function () {
-              spyOn($log, 'warn');
-              mockQueryStringAndInit({ 'openModal': 'foobar' });
+              mockQueryStringAndInit({ 'openModal': 'assignment', 'caseTypeId': caseTypeId });
             });
 
-            it('does not automatically open a modal', function () {
-              expect($modal.open).not.toHaveBeenCalled();
-            });
+            it('opens the assignment modal with the given case type id', function () {
+              var dataPassed = $modal.open.calls.argsFor(0)[0].resolve.data();
 
-            it('outputs a warning message on the console', function () {
-              expect($log.warn).toHaveBeenCalled();
+              expect(dataPassed.case_type_id).toBe(caseTypeId);
             });
           });
         });
 
-        describe('when there is no "openModal" query string param', function () {
+        describe('when the param value is none of the above', function () {
           beforeEach(function () {
-            mockQueryStringAndInit({ 'foo': 'bar' });
+            spyOn($log, 'warn');
+            mockQueryStringAndInit({ 'openModal': 'foobar' });
           });
 
           it('does not automatically open a modal', function () {
             expect($modal.open).not.toHaveBeenCalled();
           });
+
+          it('outputs a warning message on the console', function () {
+            expect($log.warn).toHaveBeenCalled();
+          });
+        });
+      });
+
+      describe('when there is no "openModal" query string param', function () {
+        beforeEach(function () {
+          mockQueryStringAndInit({ 'foo': 'bar' });
         });
 
-        /**
-         * Checks if the controller of the modal just opened is of the given type
-         * (= if the type is in the name of the controller)
-         *
-         * @param {String} type
-         * @return {Boolean}
-         */
-        function isModalControllerOfType (type) {
-          var ctrlName = $modal.open.calls.argsFor(0)[0].controller;
-
-          return _.includes(ctrlName, type);
-        }
-
-        /**
-         * Mocks the query string by faking the value returned by the
-         * beforeHashQueryParams, and then it initializes the controller
-         *
-         * @param {Object} queryStringParams
-         */
-        function mockQueryStringAndInit(queryStringParams) {
-          spyOn(beforeHashQueryParams, 'parse').and.returnValue(queryStringParams);
-          initController($controller);
-        }
+        it('does not automatically open a modal', function () {
+          expect($modal.open).not.toHaveBeenCalled();
+        });
       });
+
+      /**
+       * Checks if the controller of the modal just opened is of the given type
+       * (= if the type is in the name of the controller)
+       *
+       * @param {String} type
+       * @return {Boolean}
+       */
+      function isModalControllerOfType (type) {
+        var ctrlName = $modal.open.calls.argsFor(0)[0].controller;
+
+        return _.includes(ctrlName, type);
+      }
+
+      /**
+       * Mocks the query string by faking the value returned by the
+       * beforeHashQueryParams, and then it initializes the controller
+       *
+       * @param {Object} queryStringParams
+       */
+      function mockQueryStringAndInit (queryStringParams) {
+        spyOn(beforeHashQueryParams, 'parse').and.returnValue(queryStringParams);
+        initController($controller);
+      }
     });
 
     /**
