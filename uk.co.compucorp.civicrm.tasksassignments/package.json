@@ -19,9 +19,11 @@
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.1",
+    "karma-junit-reporter": "^1.2.0",
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-requirejs": "^1.1.0",
     "path": "^0.12.7",
-    "requirejs": "^2.3.5"
+    "requirejs": "^2.3.5",
+    "yargs": "^11.0.0"
   }
 }
