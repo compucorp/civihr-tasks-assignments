@@ -262,6 +262,8 @@ define([
     }
 
     function initWatchers () {
+      var assignmentTypesListener;
+
       $scope.$watch('activity.activitySet', function (activitySet) {
         if (!activitySet || !activitySet.activityTypes) {
           $scope.taskList = [];
@@ -304,10 +306,10 @@ define([
         angular.copy(documentList, $scope.documentList);
       });
 
-      var listener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
+      assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
         if (!_.isEmpty(cache)) {
           setData();
-          listener();
+          assignmentTypesListener();
         }
       }, true);
     }
