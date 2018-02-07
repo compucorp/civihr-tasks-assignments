@@ -75,11 +75,11 @@ define([
      * Opens Document Modal based on passed modal mode, role and
      * list of attachments, document data to Document Modal
      *
-     * @param {String} modalMode Mode of the Modal, 'edit' or 'new'
      * @param {Object} data Document data
+     * @param {String} modalMode Mode of the Modal, 'edit' or 'new'
      * @param {Object} e Triggered event
      */
-    function modalDocument (modalMode, data, e) {
+    function modalDocument (data, modalMode, e) {
       var modalInstance;
 
       e && e.preventDefault();
