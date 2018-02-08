@@ -1,11 +1,12 @@
+var cv = require('civicrm-cv')({ mode: 'sync' });
+
 module.exports = function (config) {
-  var civicrmPath = '../../../../../';
-  var civihrPath = 'tools/extensions/civihr/';
-  var extPath = 'tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/';
+  var civicrmPath = cv("path -d '[civicrm.root]'")[0].value;
+  var extPath = cv('path -x uk.co.compucorp.civicrm.tasksassignments')[0].value;
 
   config.set({
     basePath: civicrmPath,
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
     frameworks: ['jasmine'],
     files: [
       // the global dependencies
@@ -20,41 +21,57 @@ module.exports = function (config) {
       'js/crm.ajax.js',
 
       // Global variables that need to be accessible in the test environment
-      extPath + 'js/test/globals.js',
+      extPath + '/js/test/globals.js',
 
       // manual loading of requirejs as to avoid interference with the global dependencies above
-      extPath + 'node_modules/requirejs/require.js',
-      extPath + 'node_modules/karma-requirejs/lib/adapter.js',
+      extPath + '/node_modules/requirejs/require.js',
+      extPath + '/node_modules/karma-requirejs/lib/adapter.js',
 
       // all the common/ dependencies
-      civihrPath + 'org.civicrm.reqangular/dist/reqangular.min.js',
+      cv('path -x org.civicrm.reqangular/dist/reqangular.min.js')[0].value,
 
       // the application modules
-      { pattern: extPath + 'js/src/tasks-assignments/**/*.js', included: false },
+      { pattern: extPath + '/js/src/tasks-assignments/**/*.js', included: false },
 
       // the mocked components files
-      { pattern: extPath + 'js/test/mocks/**/*.js', included: false },
+      { pattern: extPath + '/js/test/mocks/**/*.js', included: false },
 
       // the test files
-      { pattern: extPath + 'js/test/**/*.spec.js', included: false },
+      { pattern: extPath + '/js/test/**/*.spec.js', included: false },
 
       // angular templates
-      extPath + 'views/**/*.html',
+      extPath + '/views/**/*.html',
 
       // the requireJS config file that bootstraps the whole test suite
-      extPath + 'js/test/test-main.js'
+      extPath + '/js/test/test-main.js'
     ],
     exclude: [
-      extPath + 'js/src/tasks-assignments.js'
+      extPath + '/js/src/tasks-assignments.js'
     ],
     // Used to transform angular templates in JS strings
     preprocessors: (function (obj) {
-      obj[extPath + 'views/**/*.html'] = ['ng-html2js'];
+      obj[extPath + '/views/**/*.html'] = ['ng-html2js'];
       return obj;
     })({}),
     ngHtml2JsPreprocessor: {
       prependPrefix: '/base/',
       moduleName: 'tasks-assignments.templates'
+    },
+    customLaunchers: {
+      ChromeHeadless: {
+        base: 'Chrome',
+        flags: [
+          '--headless',
+          '--disable-gpu',
+          // Without a remote debugging port, Google Chrome exits immediately.
+          '--remote-debugging-port=9222'
+        ]
+      }
+    },
+    junitReporter: {
+      outputDir: extPath + '/test-reports',
+      useBrowserName: false,
+      outputFile: 'karma.xml'
     }
   });
 };
