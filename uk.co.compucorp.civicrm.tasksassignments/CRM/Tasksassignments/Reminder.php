@@ -943,7 +943,7 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Loads civicrm_uf_match data based on passed contact_id
    *
-   * @param $contact_id
+   * @param int $contact_id
    *
    * @return mixed
    *
