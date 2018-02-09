@@ -638,8 +638,7 @@ class CRM_Tasksassignments_Reminder {
   public static function createActivityURL($contactId = NULL, $activityResultId = NULL) {
 
     if ($contactId) {
-      $activityUrl = '';
-      $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
+      $drupal_user = user_load(self::getUfMatchContact($contactId)['uf_id']);
 
       if (user_access('access CiviCRM', $drupal_user)) {
         $activityUrl = CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResultId . '&cid=' . $contactId . '&context=activity&searchContext=activity';
@@ -662,7 +661,7 @@ class CRM_Tasksassignments_Reminder {
   public static function createContactURL($contactId = NULL) {
 
     if ($contactId) {
-      $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
+      $drupal_user = user_load(self::getUfMatchContact($contactId)['uf_id']);
 
       if (user_access('access CiviCRM', $drupal_user)) {
         $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId;
@@ -939,6 +938,29 @@ class CRM_Tasksassignments_Reminder {
     $result = CRM_Utils_Mail::send($mailParams);
 
     return $result;
+  }
+
+  /**
+   * Loads civicrm_uf_match data based on passed contact_id
+   *
+   * @param int $contact_id
+   *
+   * @return mixed
+   *
+   * @throws CiviCRM_API3_Exception
+   */
+  private static function getUfMatchContact($contact_id) {
+    $params = [
+      'contact_id' => $contact_id,
+      'version' => 3,
+      'sequential' => 1,
+    ];
+
+    // Get the "civicrm_uf_match" data from the passed target contact ID
+    $res = civicrm_api3('UFMatch', 'Get', $params);
+    $uf_match_data = array_shift($res['values']);
+
+    return $uf_match_data;
   }
 
 }
