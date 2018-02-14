@@ -31,7 +31,7 @@ define([
       offset: 0
     };
 
-    $scope.assignment = {};
+    $scope.assignment = angular.copy(data);
     $scope.assignment.status_id = '1';
     $scope.assignment.contact_id = config.CONTACT_ID;
     $scope.assignment.client_id = $scope.assignment.contact_id;
@@ -71,8 +71,6 @@ define([
     $scope.updateTimeline = updateTimeline;
 
     (function init () {
-      angular.copy(data, $scope.assignment);
-
       initWatchers();
     }());
 

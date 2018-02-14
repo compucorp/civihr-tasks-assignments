@@ -34,6 +34,18 @@ define([
       angular.extend(scope, Mock);
     }));
 
+    describe('on init', function () {
+      var resolvedData = { foo: 'foo' };
+
+      beforeEach(function () {
+        initController(resolvedData);
+      });
+
+      it('copies the passed data in the $scope assignment object', function () {
+        expect(scope.assignment.foo).toBe(resolvedData.foo);
+      });
+    });
+
     describe('Lookup contacts lists', function () {
       it('has the lists empty', function () {
         expect(scope.contacts.target).toEqual([]);
@@ -277,8 +289,12 @@ define([
 
     /**
      * Initializes ModalAssignmentController controller
+     *
+     * @param {Object} resolvedData mocked resolved data to pass to the controller
      */
-    function initController () {
+    function initController (resolvedData) {
+      resolvedData = resolvedData ? _.cloneDeep(resolvedData) : {};
+
       $controller('ModalAssignmentController', {
         $scope: scope,
         $rootScope: $rootScope,
@@ -286,7 +302,7 @@ define([
         taskService: taskService,
         documentService: documentService,
         contactService: contactService,
-        data: {},
+        data: resolvedData,
         config: {},
         settings: {
           tabEnabled: {
