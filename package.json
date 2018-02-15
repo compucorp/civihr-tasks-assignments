@@ -16,6 +16,10 @@
     "*.js": [
       "semistandard --fix",
       "git add"
+    ],
+    "*.scss": [
+      "stylelint --fix",
+      "git add"
     ]
   },
   "semistandard": {
@@ -23,6 +27,19 @@
       "CRM",
       "inject"
     ]
+  },
+  "stylelint": {
+    "extends": "stylelint-config-sass-guidelines",
+    "plugins": [
+      "stylelint-order",
+      "stylelint-scss"
+    ],
+    "rules": {
+      "selector-class-pattern": null,
+      "max-nesting-depth": 3,
+      "no-extra-semicolons": true,
+      "no-duplicate-selectors": true
+    }
   },
   "devDependencies": {
     "civicrm-cv": "^0.1.2",
@@ -32,8 +49,8 @@
     "gulp-replace": "^0.6.1",
     "gulp-sass": "^3.1.0",
     "gulp-sass-bulk-import": "^1.0.1",
-    "jasmine-core": "^2.9.1",
     "husky": "^0.14.3",
+    "jasmine-core": "^2.9.1",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.1",
@@ -44,6 +61,10 @@
     "path": "^0.12.7",
     "requirejs": "^2.3.5",
     "semistandard": "^12.0.0",
+    "stylelint": "^8.4.0",
+    "stylelint-config-sass-guidelines": "^4.1.0",
+    "stylelint-order": "^0.8.0",
+    "stylelint-scss": "^2.3.0",
     "yargs": "^11.0.0"
   }
 }
