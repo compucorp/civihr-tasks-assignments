@@ -19,6 +19,6 @@ define([
       }
     },
     isTaskDashboardDefault: CRM.tasksAssignments.settings.is_task_dashboard_default,
-    daysToCreateADocumentClone: CRM.tasksAssignments.settings.days_to_create_a_document_clone
+    daysToCreateADocumentClone: parseInt(CRM.tasksAssignments.settings.days_to_create_a_document_clone)
   });
 });
