@@ -24,8 +24,8 @@ module.exports = function (config) {
       extPath + '/js/test/globals.js',
 
       // manual loading of requirejs as to avoid interference with the global dependencies above
-      extPath + '/node_modules/requirejs/require.js',
-      extPath + '/node_modules/karma-requirejs/lib/adapter.js',
+      extPath + '/../node_modules/requirejs/require.js',
+      extPath + '/../node_modules/karma-requirejs/lib/adapter.js',
 
       // all the common/ dependencies
       cv('path -x org.civicrm.reqangular/dist/reqangular.min.js')[0].value,
