@@ -68,6 +68,7 @@
                     <label class="col-xs-12 col-sm-2 control-label">Date Type:</label>
                     <div class="col-xs-12 col-sm-10">
                       <ui-select
+                        theme="civihr-ui-select"
                         prevent-animations
                         multiple
                         ng-model="filterParams.dateType">
@@ -83,6 +84,11 @@
             </div>
           </div>
         </div>
+      </div>
+      <div
+        class="{{prefix}}list-no-result text-center"
+        ng-if="(filterParams.date != 'dateRange' && dateListFiltered.length === 0) || (filterParams.date == 'dateRange' && dateListSelectedFiltered.length === 0)">
+        There are no dates
       </div>
       <ul class="{{prefix}}list-key-dates" ng-show="filterParams.date != 'dateRange'" ct-spinner ct-spinner-id="dateList">
         <li
