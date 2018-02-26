@@ -31,7 +31,7 @@ define([
       offset: 0
     };
 
-    $scope.assignment = {};
+    $scope.assignment = angular.copy(data);
     $scope.assignment.status_id = '1';
     $scope.assignment.contact_id = config.CONTACT_ID;
     $scope.assignment.client_id = $scope.assignment.contact_id;
@@ -260,6 +260,8 @@ define([
     }
 
     function initWatchers () {
+      var assignmentTypesListener;
+
       $scope.$watch('activity.activitySet', function (activitySet) {
         if (!activitySet || !activitySet.activityTypes) {
           $scope.taskList = [];
@@ -301,6 +303,13 @@ define([
 
         angular.copy(documentList, $scope.documentList);
       });
+
+      assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
+        if (!_.isEmpty(cache)) {
+          setData();
+          assignmentTypesListener();
+        }
+      }, true);
     }
 
     /**

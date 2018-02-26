@@ -43,7 +43,7 @@
 
 <script type="text/ng-template" id="document.html">
   <td><a ng-href="{{fileUrl}}"
-    ng-click="(!document.file_count || document.file_count == '0') && modalDocument('edit', document, $event);"
+    ng-click="(!document.file_count || document.file_count == '0') && modalDocument(document, 'edit', $event);"
     ng-bind="cache.documentType.obj[document.activity_type_id]"></a>
   </td>
   <td><a ng-href="{{url.CONTACT+'?reset=1&cid='+cache.contact.obj[document.assignee_contact_id[0]].id}}"
@@ -70,7 +70,7 @@
       <a href class="dropdown-toggle {{prefix}}context-menu-toggle" uib-dropdown-toggle><i class="fa fa-ellipsis-v"></i></a>
       <ul class="dropdown-menu pull-right" uib-dropdown-menu>
         <li ng-show="document.file_count && document.file_count != '0'"><a ng-href="{{fileUrl}}"><i class="fa fa-download"></i> Download</a></li>
-        <li><a href ng-click="modalDocument('edit', document, $event);"><i class="fa fa-pencil"></i> Edit</a></li>
+        <li><a href ng-click="modalDocument(document, 'edit', $event);"><i class="fa fa-pencil"></i> Edit</a></li>
         <li><a href ng-click="modalReminder(document, 'document');"><i class="fa fa-envelope-o"></i> Send reminder</a></li>
         <li ng-if="permissions.allowDelete"><a href ng-click="list.deleteDocument(document);"><i class="fa fa-trash-o"></i> Delete</a></li>
       </ul>
