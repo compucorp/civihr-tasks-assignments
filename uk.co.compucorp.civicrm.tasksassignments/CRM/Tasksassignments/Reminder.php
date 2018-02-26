@@ -373,7 +373,7 @@ class CRM_Tasksassignments_Reminder {
   }
 
   /**
-   * Returns contact ID's for users with the 'administrator' or 'civihr_admin'
+   * Returns contact ID's for users with the 'administrator' or 'HR Admin'
    * roles.
    *
    * @return array
@@ -381,7 +381,7 @@ class CRM_Tasksassignments_Reminder {
    */
   private static function _getAdminContactIds() {
     $adminRole = user_role_load_by_name('administrator');
-    $civihrAdminRole = user_role_load_by_name('civihr_admin');
+    $civihrAdminRole = user_role_load_by_name('HR Admin');
 
     $query = '
       SELECT ur.uid
@@ -453,7 +453,7 @@ class CRM_Tasksassignments_Reminder {
   /**
    * Builds query to obtain contact ID's for the following:
    *
-   *   - Users with administrator or civihr_admin roles
+   *   - Users with administrator or HR Admin roles
    *   - Contacts with key dates in given time period
    *   - Appraisals due in the given timeframe
    *
@@ -621,7 +621,7 @@ class CRM_Tasksassignments_Reminder {
     }
 
     $user = user_load($ufMatchContact['uf_id']);
-    if (in_array('administrator', $user->roles) || in_array('civihr_admin', $user->roles)) {
+    if (in_array('administrator', $user->roles) || in_array('HR Admin', $user->roles)) {
       return TRUE;
     }
 
@@ -638,8 +638,7 @@ class CRM_Tasksassignments_Reminder {
   public static function createActivityURL($contactId = NULL, $activityResultId = NULL) {
 
     if ($contactId) {
-      $activityUrl = '';
-      $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
+      $drupal_user = user_load(self::getUfMatchContact($contactId)['uf_id']);
 
       if (user_access('access CiviCRM', $drupal_user)) {
         $activityUrl = CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityResultId . '&cid=' . $contactId . '&context=activity&searchContext=activity';
@@ -662,7 +661,7 @@ class CRM_Tasksassignments_Reminder {
   public static function createContactURL($contactId = NULL) {
 
     if ($contactId) {
-      $drupal_user = user_load(_get_uf_match_contact($contactId)['uf_id']);
+      $drupal_user = user_load(self::getUfMatchContact($contactId)['uf_id']);
 
       if (user_access('access CiviCRM', $drupal_user)) {
         $contactUrl = CIVICRM_UF_BASEURL . '/civicrm/contact/view?reset=1&cid=' . $contactId;
@@ -939,6 +938,29 @@ class CRM_Tasksassignments_Reminder {
     $result = CRM_Utils_Mail::send($mailParams);
 
     return $result;
+  }
+
+  /**
+   * Loads civicrm_uf_match data based on passed contact_id
+   *
+   * @param int $contact_id
+   *
+   * @return mixed
+   *
+   * @throws CiviCRM_API3_Exception
+   */
+  private static function getUfMatchContact($contact_id) {
+    $params = [
+      'contact_id' => $contact_id,
+      'version' => 3,
+      'sequential' => 1,
+    ];
+
+    // Get the "civicrm_uf_match" data from the passed target contact ID
+    $res = civicrm_api3('UFMatch', 'Get', $params);
+    $uf_match_data = array_shift($res['values']);
+
+    return $uf_match_data;
   }
 
 }

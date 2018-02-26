@@ -7,6 +7,14 @@
 
 // Customizations specific for T&A
 .civihr-ui-select {
+  .ui-select-match-item {
+    border-color: $brand-primary !important;
+  }
+
+  .select2-search-choice {
+    font-size: 13px;
+  }
+
   .select2-search-choice-close {
     background: none !important;
     top: 3px !important;

@@ -11715,6 +11715,9 @@ fieldset[disabled]
 #civitasks .ct-list-key-dates .panel-heading, #cividocuments .ct-list-key-dates .panel-heading {
   padding: 11px 15px 12px;
 }
+#civitasks .ct-list-no-result, #cividocuments .ct-list-no-result {
+  margin-top: 20px;
+}
 #civitasks .ct-sidebar-main > li, #cividocuments .ct-sidebar-main > li {
   z-index: 1;
 }
@@ -12786,6 +12789,12 @@ fieldset[disabled]
 }
 #civitasks .civihr-ui-select__button:not(:last-child), #cividocuments .civihr-ui-select__button:not(:last-child) {
   padding-right: 5px !important;
+}
+#civitasks .civihr-ui-select .ui-select-match-item, #cividocuments .civihr-ui-select .ui-select-match-item {
+  border-color: #0071BD !important;
+}
+#civitasks .civihr-ui-select .select2-search-choice, #cividocuments .civihr-ui-select .select2-search-choice {
+  font-size: 13px;
 }
 #civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
   background: none !important;

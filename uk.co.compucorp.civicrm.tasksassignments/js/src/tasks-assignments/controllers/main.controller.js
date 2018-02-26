@@ -1,16 +1,20 @@
 /* eslint-env amd */
 
-define(function () {
+define([
+  'common/lodash'
+], function (_) {
   'use strict';
 
   MainController.__name = 'MainController';
   MainController.$inject = [
-    '$log', '$q', '$rootScope', '$rootElement', '$scope', '$uibModal', 'fileServiceTA',
-    'config'
+    '$log', '$q', '$rootElement', '$rootScope',
+    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA'
   ];
 
-  function MainController ($log, $q, $rootScope, $rootElement, $scope, $modal,
-    fileServiceTA, config) {
+  function MainController ($log, $q, $rootElement,
+    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA) {
+    var queryParams;
+
     $log.debug('Controller: MainController');
 
     $rootScope.modalAssignment = modalAssignment;
@@ -18,9 +22,37 @@ define(function () {
     $rootScope.modalReminder = modalReminder;
     $rootScope.modalTask = modalTask;
 
+    (function init () {
+      queryParams = beforeHashQueryParams.parse();
+
+      queryParams.openModal && autoOpenModal(queryParams.openModal);
+    }());
+
+    /**
+     * Automatically opens the modal of the given type
+     *
+     * @param {String} modalType
+     */
+    function autoOpenModal (modalType) {
+      var method = $rootScope['modal' + _.capitalize(modalType)];
+
+      if (typeof method === 'function') {
+        method({ case_type_id: (queryParams.caseTypeId || null) });
+      } else {
+        $log.warn('There is no method available for opening the required ' + modalType + ' modal!');
+      }
+    }
+
+    /**
+     * Opens the assignment modal
+     *
+     * @param {Object} data
+     */
     function modalAssignment (data) {
+      var modalInstance;
+
       data = data || {};
-      var modalInstance = $modal.open({
+      modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
         controller: 'ModalAssignmentController',
@@ -43,17 +75,18 @@ define(function () {
      * Opens Document Modal based on passed modal mode, role and
      * list of attachments, document data to Document Modal
      *
-     * @param {string} modalMode - Mode of the Modal, 'edit' or 'new'
-     * @param {object} data - Document data
-     * @param {object} e - Triggered event
+     * @param {Object} data Document data
+     * @param {String} modalMode Mode of the Modal, 'edit' or 'new'
+     * @param {Object} e Triggered event
      */
-    function modalDocument (modalMode, data, e) {
+    function modalDocument (data, modalMode, e) {
+      var modalInstance;
+
       e && e.preventDefault();
 
       modalMode = modalMode || 'new';
       data = data || {};
-
-      var modalInstance = $modal.open({
+      modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/document.html?v=3',
         controller: 'ModalDocumentController',
@@ -85,6 +118,12 @@ define(function () {
       });
     }
 
+    /**
+     * Opens the reminder modal
+     *
+     * @param {Object} data
+     * @param {Object} type
+     */
     function modalReminder (data, type) {
       if (!data || typeof data !== 'object' || !type || typeof type !== 'string') {
         return null;
@@ -105,9 +144,16 @@ define(function () {
       });
     }
 
+    /**
+     * Opens the task modal
+     *
+     * @param {Object} data
+     */
     function modalTask (data) {
+      var modalInstance;
+
       data = data || {};
-      var modalInstance = $modal.open({
+      modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
         templateUrl: config.path.TPL + 'modal/task.html?v=5',
         controller: 'ModalTaskController',

@@ -43,7 +43,7 @@
             Key Date:
           </label>
           <div class="col-xs-12 col-sm-3">
-            <div class="input-group date-input-group form-group" ng-class="{'has-error': assignmentForm.dueDate.$invalid}">
+            <div class="input-group date-input-group form-group" ng-class="{'has-error': assignmentForm.submitted && assignmentForm.dueDate.$invalid}">
               <input
                 type="text"
                 id="{{prefix}}assignment-due"
