@@ -712,19 +712,20 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
-    /**
-     * Upgrade CustomGroup, setting Probation and Activity_Custom_Fields to is_reserved Yes
-     * @return bool
-     */
+  /**
+   * Upgrade CustomGroup, setting Probation and Activity_Custom_Fields to is_reserved Yes
+   *
+   * @return bool
+   */
   public function upgrade_1032() {
-      $result = civicrm_api3('CustomGroup', 'get', [
-          'sequential' => 1,
-          'return' => ["id"],
-          'name' => ['IN' => ["Probation", "Activity_Custom_Fields"]],
-          'api.CustomGroup.create' => ['id' => "\$value.id", 'is_reserved' => 1],
-      ]);
+    civicrm_api3('CustomGroup', 'get', [
+      'sequential' => 1,
+      'return' => ['id'],
+      'name' => ['IN' => ['Probation', 'Activity_Custom_Fields']],
+      'api.CustomGroup.create' => ['id' => '\$value.id', 'is_reserved' => 1],
+    ]);
 
-      return true;
+    return TRUE;
   }
 
   public function uninstall() {
