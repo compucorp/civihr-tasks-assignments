@@ -712,6 +712,21 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+    /**
+     * Upgrade CustomGroup, setting Probation and Activity_Custom_Fields to is_reserved Yes
+     * @return bool
+     */
+  public function upgrade_1032() {
+      $result = civicrm_api3('CustomGroup', 'get', [
+          'sequential' => 1,
+          'return' => ["id"],
+          'name' => ['IN' => ["Probation", "Activity_Custom_Fields"]],
+          'api.CustomGroup.create' => ['id' => "\$value.id", 'is_reserved' => 1],
+      ]);
+
+      return true;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
