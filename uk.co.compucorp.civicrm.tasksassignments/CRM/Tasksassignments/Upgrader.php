@@ -718,12 +718,18 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
    * @return bool
    */
   public function upgrade_1032() {
-    civicrm_api3('CustomGroup', 'get', [
+    $result = civicrm_api3('CustomGroup', 'get', [
       'sequential' => 1,
       'return' => ['id'],
       'name' => ['IN' => ['Probation', 'Activity_Custom_Fields']],
-      'api.CustomGroup.create' => ['id' => '\$value.id', 'is_reserved' => 1],
     ]);
+    
+    foreach ($result['values'] as $value) {
+      civicrm_api3('CustomGroup', 'create', [
+        'id' => $value['id'],
+        'is_reserved' => 1,
+      ]);
+    }
 
     return TRUE;
   }
