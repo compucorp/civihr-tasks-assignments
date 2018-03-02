@@ -287,7 +287,7 @@ function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$
     'tasksassignments_administer',
     ['Case Types' => 'Workflow Types']
   );
-  
+
   _tasksassignments_deleteAdministerSubMenu($administerMenuItems, 'CiviCase');
 }
 
@@ -337,7 +337,7 @@ function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$ad
 
   foreach ($menuItems as $item) {
     $itemID = $item['attributes']['navID'];
-    $item['attributes']['parentID'] = $subMenuTargetID; 
+    $item['attributes']['parentID'] = $subMenuTargetID;
 
     if ($labelsMapping[$item['attributes']['name']]) {
       $item['attributes']['label'] = $labelsMapping[$item['attributes']['name']];
@@ -350,7 +350,7 @@ function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$ad
 /**
  * Deletes a sub menu of the given name from the Administer main menu
  *
- * @param array $administerMenuItems 
+ * @param array $administerMenuItems
  * @param string $subMenuName
  */
 function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMenuName) {
@@ -414,4 +414,33 @@ function tasksassignments_extensionsPageRedirect()  {
     ])
   );
   CRM_Utils_System::redirect($url);
+}
+
+/**
+ * Implements the alterAngular hook so it can modify the template for the
+ * Workflow Create/Edit screen.
+ *
+ * @param \Civi\Angular\Manager $angular
+ * @return \Civi\Angular\ChangeSet
+ */
+function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
+  $changeSet = \Civi\Angular\ChangeSet::create('Workflow Modifications');
+
+  $changeSet->alterHtml('~/crmCaseType/edit.html', function (phpQueryObject $doc) {
+    _tasksAssignments_civicrm_alterAngular_change_workflow_help_text($doc);
+  });
+
+  $angular->add($changeSet);
+}
+
+/**
+ * Modifies the help text for the Workflow Create/Edit screen.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_civicrm_alterAngular_change_workflow_help_text(phpQueryObject $doc) {
+  $text = '<p>' . ts('Configure your workflow timelines below. Each workflow type can have several different task timelines. Each timeline allows you to set different tasks and documents which become part of your task list on your task dashboard. As such different timelines can be setup in the system if slightly different steps are required when the workflow is used for different staff types or situations. For example you may wish to configure a different joining timeline for head office staff as for regional staff.') . '</p>';
+  $text .= '<p>' . ts('Workflows are normally used to manage joining and exiting processes but can be used for other processes too, such as a person going on maternity leave or moving region or location.') . '</p>';
+
+  $doc->find('.crmCaseType .help')->html($text);
 }
