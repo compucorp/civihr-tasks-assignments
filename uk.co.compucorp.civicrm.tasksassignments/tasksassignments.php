@@ -283,6 +283,7 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
 
   $changeSet->alterHtml('~/crmCaseType/edit.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_workflow_help_text($doc);
+    _tasksAssignments_remove_non_civihr_tabs_from_workflow($doc);
   });
 
   $angular->add($changeSet);
@@ -453,4 +454,18 @@ function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
     location.') . '</p>';
 
   $doc->find('.crmCaseType .help')->html($text);
+}
+
+/**
+ * Removes tabs that are not relevant for CiviHR from the workflow configuration screen.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_remove_non_civihr_tabs_from_workflow (phpQueryObject $doc) {
+  $tabs = ['roles', 'statuses', 'actType'];
+
+  foreach ($tabs as $tab) {
+    $doc->find('a[href=#acttab-' . $tab . ']')->remove();
+    $doc->find('#acttab-' . $tab)->remove();
+  }
 }
