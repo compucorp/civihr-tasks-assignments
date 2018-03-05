@@ -284,6 +284,7 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
   $changeSet->alterHtml('~/crmCaseType/edit.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_workflow_help_text($doc);
     _tasksAssignments_remove_non_civihr_tabs_from_workflow($doc);
+    _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
   $angular->add($changeSet);
@@ -468,4 +469,23 @@ function _tasksAssignments_remove_non_civihr_tabs_from_workflow (phpQueryObject 
     $doc->find('a[href=#acttab-' . $tab . ']')->remove();
     $doc->find('#acttab-' . $tab)->remove();
   }
+}
+
+/**
+ * Removes the Workflow configuration's actions dropdown and replaces it with a
+ * button that only allows the "Add timeline" action.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) {
+  $actionDropdown = $doc->find('select[ng-model="newActivitySetWorkflow"]');
+  $addTimelineBtn = '
+    <button class="btn btn-secondary pull-right"
+      ng-show="isNewActivitySetAllowed(\'timeline\')"
+      ng-click="addActivitySet(\'timeline\')">
+      Add timeline
+    </button>';
+
+  $actionDropdown->after($addTimelineBtn);
+  $actionDropdown->remove();
 }
