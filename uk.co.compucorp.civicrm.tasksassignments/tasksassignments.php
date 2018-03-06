@@ -444,6 +444,8 @@ function tasksassignments_extensionsPageRedirect()  {
  * @param phpQueryObject $doc
  */
 function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
+  $helpBlock = $doc->find('.crmCaseType .help');
+
   $text = '<p>' . ts('Configure your workflow timelines below. Each workflow type can have several
     different task timelines. Each timeline allows you to set different tasks and documents which
     become part of your task list on your task dashboard. As such different timelines can be setup
@@ -454,7 +456,9 @@ function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
     be used for other processes too, such as a person going on maternity leave or moving region or
     location.') . '</p>';
 
-  $doc->find('.crmCaseType .help')->html($text);
+  $helpBlock->html($text);
+  // Places the help text outside of the case type form:
+  $helpBlock->insertBefore('.crmCaseType');
 }
 
 /**
