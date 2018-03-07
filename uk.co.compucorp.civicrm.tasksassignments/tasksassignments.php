@@ -284,6 +284,7 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
   $changeSet->alterHtml('~/crmCaseType/edit.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_workflow_help_text($doc);
     _tasksAssignments_remove_non_civihr_tabs_from_workflow($doc);
+    _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
   $angular->add($changeSet);
@@ -437,6 +438,8 @@ function tasksassignments_extensionsPageRedirect()  {
  * @param phpQueryObject $doc
  */
 function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
+  $helpBlock = $doc->find('.crmCaseType .help');
+
   $text = '<p>' . ts('Configure your workflow timelines below. Each workflow type can have several
     different task timelines. Each timeline allows you to set different tasks and documents which
     become part of your task list on your task dashboard. As such different timelines can be setup
@@ -447,7 +450,9 @@ function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
     be used for other processes too, such as a person going on maternity leave or moving region or
     location.') . '</p>';
 
-  $doc->find('.crmCaseType .help')->html($text);
+  $helpBlock->html($text);
+  // Places the help text outside of the case type form:
+  $helpBlock->insertBefore('.crmCaseType');
 }
 
 /**
@@ -462,4 +467,23 @@ function _tasksAssignments_remove_non_civihr_tabs_from_workflow (phpQueryObject 
     $doc->find('a[href=#acttab-' . $tab . ']')->remove();
     $doc->find('#acttab-' . $tab)->remove();
   }
+}
+
+/**
+ * Removes the Workflow configuration's actions dropdown and replaces it with a
+ * button that only allows the "Add timeline" action.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) {
+  $actionDropdown = $doc->find('select[ng-model="newActivitySetWorkflow"]');
+  $addTimelineBtn = '
+    <button class="btn btn-secondary pull-right"
+      ng-show="isNewActivitySetAllowed(\'timeline\')"
+      ng-click="addActivitySet(\'timeline\')">
+      Add timeline
+    </button>';
+
+  $actionDropdown->after($addTimelineBtn);
+  $actionDropdown->remove();
 }
