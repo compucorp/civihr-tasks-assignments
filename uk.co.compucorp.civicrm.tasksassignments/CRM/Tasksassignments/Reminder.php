@@ -9,6 +9,7 @@ class CRM_Tasksassignments_Reminder {
   private static $_activityOptions = array();
   private static $_relatedExtensions = array(
     'appraisals' => false,
+    'hrjobcontract' => false
   );
   private static $_reminderSettings = [];
 
@@ -30,9 +31,13 @@ class CRM_Tasksassignments_Reminder {
   }
 
   private static function _checkRelatedExtensions() {
-    $isEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.appraisals', 'is_active', 'full_name');
-    if ($isEnabled) {
+    $isAppraisalEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.appraisals', 'is_active', 'full_name');
+    $isJobContractEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'org.civicrm.hrjobcontract', 'is_active', 'full_name');
+    if ($isAppraisalEnabled) {
       self::$_relatedExtensions['appraisals'] = true;
+    }
+    if ($isJobContractEnabled) {
+      self::$_relatedExtensions['hrjobcontract'] = true;
     }
   }
 
@@ -278,11 +283,25 @@ class CRM_Tasksassignments_Reminder {
     $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery);
 
     $settings = self::_getReminderSettings();
+    $contactsData = [];
 
     while ($contactsResult->fetch()) {
+      $contactsData[$contactsResult->contact_id] = [
+        'contact_id' => $contactsResult->contact_id,
+        'email' => $contactsResult->email,
+        'activity_ids' => !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : []
+      ];
+    }
+    $contactsWithActiveContracts = self::getContactsWithActiveContracts(array_column($contactsData, 'contact_id'));
+
+    foreach($contactsData as $contactData) {
+      if(!in_array($contactData['contact_id'], $contactsWithActiveContracts)){
+        continue;
+      }
+
       $reminderData = self::_getContactDailyReminderData(
-        $contactsResult->contact_id,
-        !empty($contactsResult->activity_ids) ? explode(',', $contactsResult->activity_ids) : [],
+        $contactData['contact_id'],
+        $contactData['activity_ids'],
         $to,
         $settings
       );
@@ -299,10 +318,31 @@ class CRM_Tasksassignments_Reminder {
         'settings' => $settings,
       ]);
 
-      self::_send($contactsResult->contact_id, $contactsResult->email, 'Daily Reminder', $templateBodyHTML);
+      self::_send($contactData['contact_id'], $contactData['email'], 'Daily Reminder', $templateBodyHTML);
     }
 
     return true;
+  }
+
+  /**
+   * Returns contacts with active contracts from the list of
+   * contacts passed in.  If the job contract extension is not
+   * enabled the contacts passed in are returned as is.
+   *
+   * @param array $contactID
+   *
+   * @return array
+   */
+  private static function getContactsWithActiveContracts(array $contactID) {
+    if (self::$_relatedExtensions['hrjobcontract']) {
+      $result = civicrm_api3('HRJobContract', 'getcontactswithcontractsinperiod',[
+        'contact_id' => ['IN' => $contactID],
+      ]);
+
+      return array_column($result['values'], 'id');
+    }
+
+    return $contactID;
   }
 
   /**
@@ -430,11 +470,13 @@ class CRM_Tasksassignments_Reminder {
       FROM `civicrm_activity` a
       LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
       LEFT JOIN civicrm_email e ON e.contact_id = ac.contact_id
+      LEFT JOIN civicrm_location_type lt ON e.location_type_id = lt.id
       WHERE (
         activity_date_time <= '$to'
         AND a.status_id IN (" . implode(', ', $incompleteStatuses) . ")
         AND ac.record_type_id IN ( 1, 2 )
         AND e.is_primary = 1
+        AND lt.name = 'Work'
         AND a.activity_type_id IN (
           SELECT value
           FROM civicrm_option_value ov
@@ -478,9 +520,13 @@ class CRM_Tasksassignments_Reminder {
     if (!empty($contacts)) {
       return '
         SELECT NULL AS activity_ids, e.contact_id, e.email
-        FROM `civicrm_email` e
+        FROM civicrm_email e
+        LEFT JOIN civicrm_location_type lt
+        ON e.location_type_id = lt.id
         WHERE (
-          e.contact_id IN (' . implode(',', $contacts) . ')
+          e.contact_id IN (' . implode(',', $contacts) . ') 
+          AND e.is_primary = 1
+          AND lt.name = "Work"
         )
         GROUP BY e.contact_id
       ';
