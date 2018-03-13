@@ -723,13 +723,37 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
       'return' => ['id'],
       'name' => ['IN' => ['Probation', 'Activity_Custom_Fields']],
     ]);
-    
+
     foreach ($result['values'] as $value) {
       civicrm_api3('CustomGroup', 'create', [
         'id' => $value['id'],
         'is_reserved' => 1,
       ]);
     }
+
+    return TRUE;
+  }
+
+  /**
+   * Update permissions and set the weight for the "Tasks" menu item.
+   *
+   * @return bool
+   */
+  public function upgrade_1033() {
+    $params = ['return' => 'id', 'name' => 'tasksassignments_administer'];
+    $parentId = (int) civicrm_api3('Navigation', 'getvalue', $params);
+    $params = ['return' => 'id', 'name' => 'ta_settings'];
+    $taSettingsId = (int) civicrm_api3('Navigation', 'getvalue', $params);
+    $permission = 'administer CiviCase';
+
+    // Update permissions
+    foreach ([$parentId, $taSettingsId] as $navId) {
+      $params = ['permission' => $permission, 'id' => $navId];
+      civicrm_api3('Navigation', 'create', $params);
+    }
+
+    // Update parent weight
+    civicrm_api3('Navigation', 'create', ['id' => $parentId, 'weight' => -97]);
 
     return TRUE;
   }
