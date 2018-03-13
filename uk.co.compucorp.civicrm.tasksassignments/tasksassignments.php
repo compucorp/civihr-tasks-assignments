@@ -275,12 +275,18 @@ function tasksassignments_civicrm_navigationMenu(&$params) {
  */
 function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$params) {
   $administerMenuItems = &_tasksassignments_getAdministerMenuItems($params);
-  $menuItemsToClone = _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuItems, 'CiviCase', ['Case Types', 'Case Statuses']);
+  $menuItemsToClone = _tasksassignments_filterMenuItemsOfAdministerSubMenu(
+    $administerMenuItems,
+    'CiviCase',
+    ['Case Types']
+  );
 
-  _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels($administerMenuItems, $menuItemsToClone, 'tasksassignments_administer', [
-    'Case Types' => 'Workflows',
-    'Case Statuses' => 'Workflows Status'
-  ]);
+  _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(
+    $administerMenuItems,
+    $menuItemsToClone,
+    'tasksassignments_administer',
+    ['Case Types' => 'Workflows',]
+  );
   
   _tasksassignments_deleteAdministerSubMenu($administerMenuItems, 'CiviCase');
 }
@@ -323,7 +329,7 @@ function _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuIte
  *
  * @param array $administerMenuItems
  * @param array $menuItems
- * @param array $subMenuName
+ * @param string $subMenuName
  * @param array $labelsMapping
  */
 function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$administerMenuItems, $menuItems, $subMenuName, $labelsMapping) {
