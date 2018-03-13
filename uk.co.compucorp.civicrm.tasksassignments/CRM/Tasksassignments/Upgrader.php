@@ -740,20 +740,23 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
    * @return bool
    */
   public function upgrade_1033() {
-    $params = ['return' => 'id', 'name' => 'tasksassignments_administer'];
-    $parentId = (int) civicrm_api3('Navigation', 'getvalue', $params);
-    $params = ['return' => 'id', 'name' => 'ta_settings'];
-    $taSettingsId = (int) civicrm_api3('Navigation', 'getvalue', $params);
     $permission = 'administer CiviCase';
+    $itemsToChange = ['tasksassignments_administer', 'ta_settings'];
 
-    // Update permissions
-    foreach ([$parentId, $taSettingsId] as $navId) {
-      $params = ['permission' => $permission, 'id' => $navId];
-      civicrm_api3('Navigation', 'create', $params);
-    }
+    // get item IDs
+    $params = ['name' => ['IN' => $itemsToChange]];
+    $itemsToChange = civicrm_api3('Navigation', 'get', $params);
+    $itemsToChange = array_column($itemsToChange['values'], 'name', 'id');
+    $tasksId = array_search('tasksassignments_administer', $itemsToChange);
+    $taSettingsId = array_search('ta_settings', $itemsToChange);
 
-    // Update parent weight
-    civicrm_api3('Navigation', 'create', ['id' => $parentId, 'weight' => -97]);
+    // Update permissions for settings item
+    $params = ['permission' => $permission, 'id' => $taSettingsId];
+    civicrm_api3('Navigation', 'create', $params);
+
+    // Update parent weight + permission
+    $params = ['id' => $tasksId, 'weight' => -97, 'permission' => $permission];
+    civicrm_api3('Navigation', 'create', $params);
 
     return TRUE;
   }
