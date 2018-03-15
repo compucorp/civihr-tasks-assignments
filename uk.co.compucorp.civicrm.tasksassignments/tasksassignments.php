@@ -285,7 +285,7 @@ function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$
     $administerMenuItems,
     $menuItemsToClone,
     'tasksassignments_administer',
-    ['Case Types' => 'Workflows',]
+    ['Case Types' => 'Workflow Types']
   );
   
   _tasksassignments_deleteAdministerSubMenu($administerMenuItems, 'CiviCase');
