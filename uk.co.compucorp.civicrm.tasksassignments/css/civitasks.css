@@ -12784,6 +12784,7 @@ fieldset[disabled]
   background: #FFFFFF;
   color: #586277;
   padding: 7px;
+  vertical-align: middle;
 }
 #civitasks .uib-daypicker tbody, #cividocuments .uib-daypicker tbody {
   background: transparent;
@@ -12795,7 +12796,7 @@ fieldset[disabled]
 #cividocuments .uib-month,
 #civitasks .uib-year,
 #cividocuments .uib-year {
-  padding: 7px 3px;
+  padding: 7px;
 }
 #civitasks .uib-day .text-muted, #cividocuments .uib-day .text-muted,
 #civitasks .uib-month .text-muted,
@@ -12825,13 +12826,6 @@ fieldset[disabled]
   min-width: 0;
   padding: 7px;
 }
-#civitasks .uib-day .btn-default span, #cividocuments .uib-day .btn-default span,
-#civitasks .uib-month .btn-default span,
-#cividocuments .uib-month .btn-default span,
-#civitasks .uib-year .btn-default span,
-#cividocuments .uib-year .btn-default span {
-  padding: 5px !important;
-}
 #civitasks .uib-day .btn-default.active, #cividocuments .uib-day .btn-default.active,
 #civitasks .uib-month .btn-default.active,
 #cividocuments .uib-month .btn-default.active,
@@ -12851,7 +12845,7 @@ fieldset[disabled]
 }
 #civitasks .uib-datepicker-popup, #cividocuments .uib-datepicker-popup {
   border: 0;
-  padding: 10px;
+  padding: 10px !important;
 }
 .mobile [type='date'][uib-datepicker-popup] {
   line-height: normal;
