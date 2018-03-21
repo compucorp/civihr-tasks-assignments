@@ -12828,6 +12828,13 @@ fieldset[disabled]
   min-width: 0;
   padding: 7px;
 }
+#civitasks .uib-day .btn-default span, #cividocuments .uib-day .btn-default span,
+#civitasks .uib-month .btn-default span,
+#cividocuments .uib-month .btn-default span,
+#civitasks .uib-year .btn-default span,
+#cividocuments .uib-year .btn-default span {
+  padding: 0 !important;
+}
 #civitasks .uib-day .btn-default.active, #cividocuments .uib-day .btn-default.active,
 #civitasks .uib-month .btn-default.active,
 #cividocuments .uib-month .btn-default.active,
