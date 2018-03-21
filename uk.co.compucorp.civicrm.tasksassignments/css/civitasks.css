@@ -9454,6 +9454,7 @@ fieldset[disabled]
 }
 #civitasks .form-horizontal .has-feedback, #cividocuments .form-horizontal .has-feedback {
   /* stylelint-disable selector-max-compound-selectors */
+  /* stylelint-enable selector-max-compound-selectors */
 }
 #civitasks .form-horizontal .has-feedback select + .form-control-feedback, #cividocuments .form-horizontal .has-feedback select + .form-control-feedback {
   right: 28px;
@@ -9472,6 +9473,7 @@ fieldset[disabled]
   margin-bottom: 0;
 }
 #civitasks .form-horizontal .well .form-group + .form-group, #cividocuments .form-horizontal .well .form-group + .form-group {
+  /* stylelint-disable-line selector-max-compound-selectors */
   margin-top: 15px;
 }
 #civitasks .text-required, #cividocuments .text-required {
