@@ -120,16 +120,14 @@ define([
       assignmentService.save($scope.assignment).then(function (resultAssignment) {
         var documentListAssignment = $scope.documentList.filter(function (doc) {
           return doc.create;
-        })
-        .map(function (doc) {
+        }).map(function (doc) {
           doc.case_id = resultAssignment.id;
           return doc;
         });
 
         var taskListAssignment = $scope.taskList.filter(function (task) {
           return task.create;
-        })
-        .map(function (task) {
+        }).map(function (task) {
           task.case_id = resultAssignment.id;
           return task;
         });
@@ -142,8 +140,7 @@ define([
           task: taskService.saveMultiple(taskListAssignment.map(function (task) {
             return angular.copy(task);
           }))
-        })
-        .then(function (results) {
+        }).then(function (results) {
           var i;
           var taskArr = [];
           var documentArr = [];
@@ -331,16 +328,14 @@ define([
         return;
       }
 
-      contactService.search(input, {
-        contact_type: 'Individual'
-      })
-      .then(function (results) {
-        if (type === 'target') {
-          $scope.contacts[type] = results;
-        } else {
-          $scope.contacts[type][index] = results;
-        }
-      });
+      contactService.search(input, { contact_type: 'Individual' })
+        .then(function (results) {
+          if (type === 'target') {
+            $scope.contacts[type] = results;
+          } else {
+            $scope.contacts[type][index] = results;
+          }
+        });
     }
 
     function removeActivity (activityArr, index) {
@@ -393,15 +388,15 @@ define([
       $scope.taskList.filter(function (task) {
         return task.create;
       })
-      .forEach(function (task) {
-        if (!_.includes(missingRequiredFields, 'Activity type')) {
-          !task.activity_type_id && missingRequiredFields.push('Activity type');
-        }
+        .forEach(function (task) {
+          if (!_.includes(missingRequiredFields, 'Activity type')) {
+            !task.activity_type_id && missingRequiredFields.push('Activity type');
+          }
 
-        if (!_.includes(missingRequiredFields, 'Activity Due Date')) {
-          !task.activity_date_time && missingRequiredFields.push('Activity Due Date');
-        }
-      });
+          if (!_.includes(missingRequiredFields, 'Activity Due Date')) {
+            !task.activity_date_time && missingRequiredFields.push('Activity Due Date');
+          }
+        });
 
       if (missingRequiredFields.length) {
         var notification = CRM.alert(missingRequiredFields.join(', '),
