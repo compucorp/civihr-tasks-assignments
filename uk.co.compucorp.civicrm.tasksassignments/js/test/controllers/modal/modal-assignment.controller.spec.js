@@ -4,10 +4,11 @@ define([
   'common/lodash',
   'common/angular',
   'mocks/data/assignment.data',
+  'mocks/data/option-values.data',
   'mocks/fabricators/assignment.fabricator',
   'common/angularMocks',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function (_, angular, Mock, assignmentFabricator) {
+], function (_, angular, Mock, optionValuesMockData, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
@@ -270,6 +271,35 @@ define([
 
         it('automatically sets the data associated with the case type of the assignment', function () {
           expect(scope.assignment.subject).toBe($rootScope.cache.assignmentType.obj[caseTypeId].title);
+        });
+      });
+    });
+
+    describe('selecting the default assignee', function () {
+      var activityType, defaultAssigneeOptionsIndex;
+
+      beforeEach(function () {
+        var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
+        defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
+        $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
+        $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
+        scope.assignment.case_type_id = $rootScope.cache.assignmentType.arr[0].id;
+        scope.activity.activitySet = $rootScope.cache.assignmentType.arr[0].definition.activitySets[0];
+        activityType = scope.activity.activitySet.activityTypes[0];
+      });
+
+      describe('when the default assignee is a specific contact', function () {
+        var assigneeId = 123456;
+
+        beforeEach(function () {
+          activityType.default_assignee_type = defaultAssigneeOptionsIndex.NONE.id;
+          activityType.default_assignee_contact = assigneeId;
+
+          $rootScope.$digest();
+        });
+
+        it('assigns the default assignee contact to the task', function () {
+          expect(scope.taskList[0].assignee_contact_id).toEqual([assigneeId]);
         });
       });
     });

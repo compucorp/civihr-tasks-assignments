@@ -289,6 +289,8 @@ define([
 
           taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
           activity.activity_type_id = taskType ? taskType.key : null;
+          activity.assignee_contact_id = [activityTypes[i].default_assignee_contact];
+
           taskList.push(activity);
         }
 
