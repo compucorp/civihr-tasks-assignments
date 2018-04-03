@@ -16,6 +16,8 @@ define([
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _assignmentService_, _documentService_, _taskService_) {
+      var modelTypesStructure = { obj: {}, arr: [] };
+
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
 
@@ -29,6 +31,12 @@ define([
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
 
       scope = $rootScope.$new();
+
+      $rootScope.cache = {
+        assignmentType: angular.copy(modelTypesStructure),
+        documentType: angular.copy(modelTypesStructure),
+        taskType: angular.copy(modelTypesStructure)
+      };
 
       initController();
       angular.extend(scope, Mock);
@@ -213,12 +221,6 @@ define([
     describe('setData()', function () {
       beforeEach(function () {
         scope.assignment.case_type_id = '2';
-        $rootScope.cache = {
-          assignmentType: {
-            obj: [],
-            arr: []
-          }
-        };
 
         $rootScope.cache.assignmentType.obj['2'] = {
           definition: {
@@ -259,7 +261,7 @@ define([
           scope.assignment.subject = '';
           scope.assignment.case_type_id = caseTypeId;
 
-          $rootScope.cache.assignmentType.obj[caseTypeId] = assignmentFabricator.assignmentTypes()[caseTypeId];
+          $rootScope.cache.assignmentType.obj[caseTypeId] = mockedTypes[caseTypeId];
           // remove the activit sets to avoid triggering another watcher
           $rootScope.cache.assignmentType.obj[caseTypeId].definition.activitySets = [];
 
