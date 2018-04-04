@@ -11,14 +11,15 @@ define([
   ModalAssignmentController.$inject = [
     '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
     'HR_settings', 'config', 'settings', 'assignmentService', 'taskService',
-    'documentService', 'contactService', 'data'
+    'documentService', 'contactService', 'data', 'defaultAssigneeOptions', 'session'
   ];
 
   function ModalAssignmentController ($filter, $log, $q, $rootScope, $scope,
     $timeout, $modalInstance, hrSettings, config, settings, assignmentService,
-    taskService, documentService, contactService, data) {
+    taskService, documentService, contactService, data, defaultAssigneeOptions, session) {
     $log.debug('Controller: ModalAssignmentController');
 
+    var defaultAssigneeOptionsIndex;
     var activityModel = {
       activity_type_id: null,
       assignee_contact_id: [],
@@ -71,6 +72,7 @@ define([
     $scope.updateTimeline = updateTimeline;
 
     (function init () {
+      initDefaultAssigneeOptionsIndex();
       initWatchers();
     }());
 
@@ -256,6 +258,33 @@ define([
       });
     }
 
+    /**
+     * Returns the default assignee for the activity type provided.
+     *
+     * @param {Object} activityType the activity type definition.
+     * @return {Array} an array wrapping the default assignee's contact id.
+     */
+    function getDefaultAssigneeForActivityType (activityType) {
+      switch (activityType.default_assignee_type) {
+        case defaultAssigneeOptionsIndex.SPECIFIC_CONTACT:
+          return [ activityType.default_assignee_contact ];
+        case defaultAssigneeOptionsIndex.USER_CREATING_THE_CASE:
+          return [ session.contactId ];
+      }
+    }
+
+    /**
+     * Initializes the default assignee options index by converting the array
+     * of options into an object of name/value pairs.
+     */
+    function initDefaultAssigneeOptionsIndex () {
+      defaultAssigneeOptionsIndex = {};
+
+      _.forEach(defaultAssigneeOptions, function (option) {
+        defaultAssigneeOptionsIndex[option.name] = option.value;
+      });
+    }
+
     function initWatchers () {
       var assignmentTypesListener;
 
@@ -289,7 +318,7 @@ define([
 
           taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
           activity.activity_type_id = taskType ? taskType.key : null;
-          activity.assignee_contact_id = [activityTypes[i].default_assignee_contact];
+          activity.assignee_contact_id = getDefaultAssigneeForActivityType(activityTypes[i]);
 
           taskList.push(activity);
         }

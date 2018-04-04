@@ -47,7 +47,7 @@ define([
       var resolvedData = { foo: 'foo' };
 
       beforeEach(function () {
-        initController(resolvedData);
+        initController({ data: resolvedData });
       });
 
       it('copies the passed data in the $scope assignment object', function () {
@@ -277,10 +277,17 @@ define([
 
     describe('selecting the default assignee', function () {
       var activityType, defaultAssigneeOptionsIndex;
+      var loggedInContactId = 7891011;
 
       beforeEach(function () {
         var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
         defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
+
+        initController({
+          defaultAssigneeOptions: defaultAssigneeOptions,
+          session: { contactId: loggedInContactId }
+        });
+
         $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
         $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
         scope.assignment.case_type_id = $rootScope.cache.assignmentType.arr[0].id;
@@ -292,14 +299,26 @@ define([
         var assigneeId = 123456;
 
         beforeEach(function () {
-          activityType.default_assignee_type = defaultAssigneeOptionsIndex.NONE.id;
+          activityType.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
           activityType.default_assignee_contact = assigneeId;
 
           $rootScope.$digest();
         });
 
-        it('assigns the default assignee contact to the task', function () {
+        it('assigns the contact to the task', function () {
           expect(scope.taskList[0].assignee_contact_id).toEqual([assigneeId]);
+        });
+      });
+
+      describe('when the default assignee is the user creating the tasks', function () {
+        beforeEach(function () {
+          activityType.default_assignee_type = defaultAssigneeOptionsIndex.USER_CREATING_THE_CASE.value;
+
+          $rootScope.$digest();
+        });
+
+        it('assigns the current logged in user to the task', function () {
+          expect(scope.taskList[0].assignee_contact_id).toEqual([loggedInContactId]);
         });
       });
     });
@@ -322,10 +341,15 @@ define([
     /**
      * Initializes ModalAssignmentController controller
      *
-     * @param {Object} resolvedData mocked resolved data to pass to the controller
+     * @param {Object} resolvedValues mocked resolved values to pass to the controller for
+     * the activity data, session, and default assignee options.
      */
-    function initController (resolvedData) {
-      resolvedData = resolvedData ? _.cloneDeep(resolvedData) : {};
+    function initController (resolvedValues) {
+      resolvedValues = _.defaultsDeep(resolvedValues || {}, {
+        data: {},
+        defaultAssigneeOptions: [],
+        session: { contactId: 123 }
+      });
 
       $controller('ModalAssignmentController', {
         $scope: scope,
@@ -334,7 +358,9 @@ define([
         taskService: taskService,
         documentService: documentService,
         contactService: contactService,
-        data: resolvedData,
+        data: resolvedValues.data,
+        defaultAssigneeOptions: resolvedValues.defaultAssigneeOptions,
+        session: resolvedValues.session,
         config: {},
         settings: {
           tabEnabled: {
