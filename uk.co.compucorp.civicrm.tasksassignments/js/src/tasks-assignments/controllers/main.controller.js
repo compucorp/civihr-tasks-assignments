@@ -8,11 +8,13 @@ define([
   MainController.__name = 'MainController';
   MainController.$inject = [
     '$log', '$q', '$rootElement', '$rootScope',
-    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA'
+    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA',
+    'OptionGroup', 'Session'
   ];
 
   function MainController ($log, $q, $rootElement,
-    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA) {
+    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA,
+    OptionGroup, Session) {
     var queryParams;
 
     $log.debug('Controller: MainController');
@@ -60,6 +62,12 @@ define([
         resolve: {
           data: function () {
             return data;
+          },
+          session: function () {
+            return Session.get();
+          },
+          defaultAssigneeOptions: function () {
+            return OptionGroup.valuesOf('activity_default_assignee');
           }
         }
       });
