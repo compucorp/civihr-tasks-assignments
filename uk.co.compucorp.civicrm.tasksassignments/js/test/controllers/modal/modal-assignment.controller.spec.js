@@ -321,6 +321,30 @@ define([
           expect(scope.taskList[0].assignee_contact_id).toEqual([loggedInContactId]);
         });
       });
+
+      describe('when the default assignee is set to be no one', function () {
+        beforeEach(function () {
+          activityType.default_assignee_type = defaultAssigneeOptionsIndex.NONE.value;
+
+          $rootScope.$digest();
+        });
+
+        it('does not assign anyone to the task', function () {
+          expect(scope.taskList[0].assignee_contact_id).toEqual(null);
+        });
+      });
+
+      describe('when the default assignee type is not known', function () {
+        beforeEach(function () {
+          activityType.default_assignee_type = undefined;
+
+          $rootScope.$digest();
+        });
+
+        it('does not assign anyone to the task', function () {
+          expect(scope.taskList[0].assignee_contact_id).toEqual(null);
+        });
+      });
     });
 
     /**

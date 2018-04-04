@@ -270,6 +270,9 @@ define([
           return [ activityType.default_assignee_contact ];
         case defaultAssigneeOptionsIndex.USER_CREATING_THE_CASE:
           return [ session.contactId ];
+        case defaultAssigneeOptionsIndex.NONE:
+        default:
+          return null;
       }
     }
 
