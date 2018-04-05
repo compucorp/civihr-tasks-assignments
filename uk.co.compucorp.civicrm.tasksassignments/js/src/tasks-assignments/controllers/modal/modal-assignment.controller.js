@@ -11,12 +11,14 @@ define([
   ModalAssignmentController.$inject = [
     '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
     'HR_settings', 'config', 'settings', 'assignmentService', 'taskService',
-    'documentService', 'contactService', 'data', 'defaultAssigneeOptions', 'session'
+    'documentService', 'contactService', 'data', 'defaultAssigneeOptions', 'session',
+    'RelationshipModel'
   ];
 
   function ModalAssignmentController ($filter, $log, $q, $rootScope, $scope,
     $timeout, $modalInstance, hrSettings, config, settings, assignmentService,
-    taskService, documentService, contactService, data, defaultAssigneeOptions, session) {
+    taskService, documentService, contactService, data, defaultAssigneeOptions,
+    session, Relationship) {
     $log.debug('Controller: ModalAssignmentController');
 
     var defaultAssigneeOptionsIndex;
@@ -262,18 +264,60 @@ define([
      * Returns the default assignee for the activity type provided.
      *
      * @param {Object} activityType the activity type definition.
-     * @return {Array} an array wrapping the default assignee's contact id.
+     * @return {Promise} resolves to an array wrapping the default assignee's contact id or NULL in case of none.
      */
     function getDefaultAssigneeForActivityType (activityType) {
       switch (activityType.default_assignee_type) {
         case defaultAssigneeOptionsIndex.SPECIFIC_CONTACT:
-          return [ activityType.default_assignee_contact ];
+          return $q.resolve([ activityType.default_assignee_contact ]);
         case defaultAssigneeOptionsIndex.USER_CREATING_THE_CASE:
-          return [ session.contactId ];
+          return $q.resolve([ session.contactId ]);
+        case defaultAssigneeOptionsIndex.BY_RELATIONSHIP:
+          return getDefaultAssigneeForActivityTypeByRelationship(activityType);
         case defaultAssigneeOptionsIndex.NONE:
         default:
-          return null;
+          return $q.resolve(null);
       }
+    }
+
+    /**
+     * Returns the default assignee depending on the relationship to the selected
+     * target contact.
+     *
+     * @param {Object} activityType the activity type definition.
+     * @return {Promise}
+     */
+    function getDefaultAssigneeForActivityTypeByRelationship (activityType) {
+      return Relationship.allValid({
+        'contact_id_a': $scope.assignment.client_id,
+        'relationship_type_id.name_b_a': activityType.default_assignee_relationship,
+        'options': { 'limit': 1 }
+      })
+        .then(function (result) {
+          return result.list.map(function (relationship) {
+            return relationship.contact_id_b;
+          });
+        });
+    }
+
+    /**
+     * Initializes the default assignee for each one of the tasks available.
+     */
+    function initDefaultAssigneesForTasks () {
+      $scope.activity.activitySet.activityTypes.forEach(function (activityType) {
+        var task = _.find($scope.taskList, function (task) {
+          return task.name === activityType.name;
+        });
+
+        if (!task) {
+          return;
+        }
+
+        getDefaultAssigneeForActivityType(activityType)
+          .then(function (assigneeId) {
+            task.assignee_contact_id = assigneeId;
+          });
+      });
     }
 
     /**
@@ -299,34 +343,32 @@ define([
 
         var activity;
         var activityTypes = activitySet.activityTypes;
-        var activityTypesLen = activityTypes.length;
         var documentList = [];
         var documentType;
         var taskList = [];
         var taskType;
-        var i = 0;
 
-        for (; i < activityTypesLen; i++) {
+        activityTypes.forEach(function (activityType) {
           activity = angular.copy(activityModel);
-          activity.name = activityTypes[i].name;
-          activity.offset = activityTypes[i].reference_offset;
+          activity.name = activityType.name;
+          activity.offset = activityType.reference_offset;
 
           documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
 
           if (documentType) {
             activity.activity_type_id = documentType.key;
             documentList.push(activity);
-            continue;
+            return;
           }
 
           taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
           activity.activity_type_id = taskType ? taskType.key : null;
-          activity.assignee_contact_id = getDefaultAssigneeForActivityType(activityTypes[i]);
 
           taskList.push(activity);
-        }
+        });
 
         angular.copy(taskList, $scope.taskList);
+        initDefaultAssigneesForTasks();
 
         if (!+settings.tabEnabled.documents) {
           return;

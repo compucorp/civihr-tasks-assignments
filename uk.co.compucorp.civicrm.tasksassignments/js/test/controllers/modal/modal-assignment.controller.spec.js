@@ -7,16 +7,18 @@ define([
   'mocks/data/option-values.data',
   'mocks/fabricators/assignment.fabricator',
   'common/angularMocks',
+  'common/models/relationship.model',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (_, angular, Mock, optionValuesMockData, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
-    var $q, $controller, scope, assignmentService,
-      taskService, documentService, contactService, HRSettings, $rootScope;
+    var $controller, $q, $rootScope, assignmentService, contactService, documentService,
+      HRSettings, taskService, RelationshipModel, scope;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_, _assignmentService_, _documentService_, _taskService_) {
+    beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_,
+      _assignmentService_, _documentService_, _taskService_, _RelationshipModel_) {
       var modelTypesStructure = { obj: {}, arr: [] };
 
       // A workaround to avoid actual API calls
@@ -27,6 +29,7 @@ define([
       assignmentService = _assignmentService_;
       documentService = _documentService_;
       taskService = _taskService_;
+      RelationshipModel = _RelationshipModel_;
       contactService = {};
       $rootScope = _$rootScope_;
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -343,6 +346,26 @@ define([
 
         it('does not assign anyone to the task', function () {
           expect(scope.taskList[0].assignee_contact_id).toEqual(null);
+        });
+      });
+
+      describe('when the default assignee type is determined by a relationship', function () {
+        var contact = { id: 123 };
+        var assignee = { id: 456 };
+
+        beforeEach(function () {
+          activityType.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
+          activityType.default_assignee_relationship = 789;
+
+          spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
+            list: [ { id: 1, contact_id_a: contact.id, contact_id_b: assignee.id } ]
+          }));
+
+          $rootScope.$digest();
+        });
+
+        it('assigns the contact that belongs to the relationship', function () {
+          expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
         });
       });
     });
