@@ -15,6 +15,8 @@ define([
   describe('ModalAssignmentController', function () {
     var $controller, $q, $rootScope, assignmentService, contactService, documentService,
       HRSettings, taskService, RelationshipModel, scope;
+    var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
+    var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_,
@@ -44,7 +46,7 @@ define([
         taskType: angular.copy(modelTypesStructure)
       };
 
-      initController();
+      initController({ defaultAssigneeOptions: defaultAssigneeOptions });
       angular.extend(scope, Mock);
     }));
 
@@ -280,14 +282,39 @@ define([
       });
     });
 
+    describe('when the target contact changes', function () {
+      var assigneeId = 5;
+
+      beforeEach(function () {
+        scope.assignment.client_id = 1;
+        scope.assignment.contact_id = 2;
+        scope.taskList = [ { id: 3 } ];
+        scope.activity.activitySet = {
+          activityTypes: [{
+            id: 4,
+            default_assignee_type: defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value,
+            default_assignee_contact: assigneeId
+          }]
+        };
+
+        scope.onTargetContactChange();
+        $rootScope.$digest();
+      });
+
+      it('assigns the contact id to the client id', function () {
+        expect(scope.assignment.client_id).toBe(scope.assignment.contact_id);
+      });
+
+      it('loads the default assignees related to the new target contact', function () {
+        expect(scope.taskList[0].assignee_contact_id).toEqual([assigneeId]);
+      });
+    });
+
     describe('selecting the default assignee', function () {
-      var activityType, defaultAssigneeOptionsIndex;
+      var activityType;
       var loggedInContactId = 7891011;
 
       beforeEach(function () {
-        var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
-        defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
-
         initController({
           defaultAssigneeOptions: defaultAssigneeOptions,
           session: { contactId: loggedInContactId }
@@ -356,6 +383,7 @@ define([
         var assignee = { id: 456 };
 
         beforeEach(function () {
+          scope.assignment.client_id = contact.id;
           activityType.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
           activityType.default_assignee_relationship = 789;
 

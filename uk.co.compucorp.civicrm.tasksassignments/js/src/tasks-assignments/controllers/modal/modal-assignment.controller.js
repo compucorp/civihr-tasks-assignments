@@ -68,6 +68,7 @@ define([
     $scope.copyAssignee = copyAssignee;
     $scope.copyDate = copyDate;
     $scope.dpOpen = dpOpen;
+    $scope.onTargetContactChange = onTargetContactChange;
     $scope.refreshContacts = refreshContacts;
     $scope.removeActivity = removeActivity;
     $scope.setData = setData;
@@ -288,6 +289,11 @@ define([
      * @return {Promise}
      */
     function getDefaultAssigneeForActivityTypeByRelationship (activityType) {
+      // skip if a target contact has not been selected:
+      if (!$scope.assignment.client_id) {
+        return $q.resolve(null);
+      }
+
       return Relationship.allValid({
         'contact_id_a': $scope.assignment.client_id,
         'relationship_type_id.name_b_a': activityType.default_assignee_relationship,
@@ -304,6 +310,11 @@ define([
      * Initializes the default assignee for each one of the tasks available.
      */
     function initDefaultAssigneesForTasks () {
+      // skip if an activity set and types have not been defined:
+      if (!$scope.activity.activitySet.activityTypes) {
+        return;
+      }
+
       $scope.activity.activitySet.activityTypes.forEach(function (activityType) {
         var task = _.find($scope.taskList, function (task) {
           return task.name === activityType.name;
@@ -399,7 +410,7 @@ define([
     function loadAndCacheContactForTask (task) {
       var index = $scope.taskList.indexOf(task);
 
-      if (!task.assignee_contact_id) {
+      if (_.isEmpty(task.assignee_contact_id)) {
         return $q.resolve();
       }
 
@@ -412,6 +423,12 @@ define([
             };
           });
         });
+    }
+
+    function onTargetContactChange () {
+      $scope.assignment.client_id = $scope.assignment.contact_id;
+
+      initDefaultAssigneesForTasks();
     }
 
     /**
