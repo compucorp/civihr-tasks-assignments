@@ -316,6 +316,9 @@ define([
         getDefaultAssigneeForActivityType(activityType)
           .then(function (assigneeId) {
             task.assignee_contact_id = assigneeId;
+          })
+          .then(function () {
+            return loadAndCacheContactForTask(task);
           });
       });
     }
@@ -383,6 +386,32 @@ define([
           assignmentTypesListener();
         }
       }, true);
+    }
+
+    /**
+     * Requests the contact information for the task provided and caches it. This can
+     * be useful when manually selecting assignees since the name of the contact
+     * would not be displayed otherwise.
+     *
+     * @param {Object} task - the task containing the assignee's contact id.
+     * @return {Promise}
+     */
+    function loadAndCacheContactForTask (task) {
+      var index = $scope.taskList.indexOf(task);
+
+      if (!task.assignee_contact_id) {
+        return $q.resolve();
+      }
+
+      return contactService.get({ IN: task.assignee_contact_id })
+        .then(function (contacts) {
+          $scope.contacts.task[index] = _.map(contacts, function (contact) {
+            return {
+              id: contact.id,
+              label: contact.display_name
+            };
+          });
+        });
     }
 
     /**

@@ -30,9 +30,11 @@ define([
       documentService = _documentService_;
       taskService = _taskService_;
       RelationshipModel = _RelationshipModel_;
-      contactService = {};
       $rootScope = _$rootScope_;
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      contactService = {
+        get: jasmine.createSpy('get').and.returnValue($q.resolve([]))
+      };
 
       scope = $rootScope.$new();
 
@@ -366,6 +368,29 @@ define([
 
         it('assigns the contact that belongs to the relationship', function () {
           expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+        });
+      });
+
+      describe('after selecting a default assignee', function () {
+        var contact = { id: 123, display_name: 'Jon Snow' };
+
+        beforeEach(function () {
+          activityType.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
+          activityType.default_assignee_contact = contact.id;
+
+          contactService.get.and.returnValue($q.resolve([ contact ]));
+          $rootScope.$digest();
+        });
+
+        it('requests the contact data', function () {
+          expect(contactService.get).toHaveBeenCalledWith({ IN: [ contact.id ] });
+        });
+
+        it('caches the id and name of the assignee', function () {
+          expect(scope.contacts.task[0]).toEqual([{
+            id: contact.id,
+            label: contact.display_name
+          }]);
         });
       });
     });
