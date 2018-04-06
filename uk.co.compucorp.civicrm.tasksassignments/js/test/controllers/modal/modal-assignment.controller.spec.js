@@ -9,7 +9,7 @@ define([
   'common/angularMocks',
   'common/models/relationship.model',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function (_, angular, Mock, optionValuesMockData, assignmentFabricator) {
+], function (_, angular, assignmentMockData, optionValuesMockData, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
@@ -47,7 +47,7 @@ define([
       };
 
       initController({ defaultAssigneeOptions: defaultAssigneeOptions });
-      angular.extend(scope, Mock);
+      angular.extend(scope, assignmentMockData);
     }));
 
     describe('on init', function () {
@@ -120,11 +120,11 @@ define([
     });
 
     describe('copyAssignee()', function () {
-      var assigneeId = [2];
+      var assigneeId = [_.uniqueId()];
 
       beforeEach(function () {
-        _.assign(scope.taskList[0], { create: false, assignee_contact_id: [3] });
-        _.assign(scope.taskList[1], { create: false, assignee_contact_id: [1] });
+        _.assign(scope.taskList[0], { create: false, assignee_contact_id: [_.uniqueId()] });
+        _.assign(scope.taskList[1], { create: false, assignee_contact_id: [_.uniqueId()] });
         _.assign(scope.taskList[2], { create: true, assignee_contact_id: assigneeId });
         _.assign(scope.taskList[4], { create: false });
 
@@ -203,7 +203,7 @@ define([
 
       describe('when activity types exist', function () {
         beforeEach(function () {
-          newActivitySet = Mock.timeline[0];
+          newActivitySet = assignmentMockData.timeline[0];
           scope.updateTimeline(newActivitySet);
           scope.$digest();
         });
@@ -215,7 +215,7 @@ define([
 
       describe('when activity types do not exist', function () {
         beforeEach(function () {
-          newActivitySet = Mock.timeline[1];
+          newActivitySet = assignmentMockData.timeline[1];
           scope.updateTimeline(newActivitySet);
           scope.$digest();
         });
@@ -227,10 +227,12 @@ define([
     });
 
     describe('setData()', function () {
-      beforeEach(function () {
-        scope.assignment.case_type_id = '2';
+      var caseTypeId = _.uniqueId();
 
-        $rootScope.cache.assignmentType.obj['2'] = {
+      beforeEach(function () {
+        scope.assignment.case_type_id = caseTypeId;
+
+        $rootScope.cache.assignmentType.obj[caseTypeId] = {
           definition: {
             activitySets: [
               {
@@ -253,7 +255,8 @@ define([
       });
 
       it('sets the selected activity type', function () {
-        expect(scope.activity.activitySet).toEqual($rootScope.cache.assignmentType.obj['2'].definition.activitySets[0]);
+        expect(scope.activity.activitySet)
+          .toEqual($rootScope.cache.assignmentType.obj[caseTypeId].definition.activitySets[0]);
       });
     });
 
@@ -283,15 +286,15 @@ define([
     });
 
     describe('when the target contact changes', function () {
-      var assigneeId = 5;
+      var assigneeId = _.uniqueId();
 
       beforeEach(function () {
-        scope.assignment.client_id = 1;
-        scope.assignment.contact_id = 2;
-        scope.taskList = [ { id: 3 } ];
+        scope.assignment.client_id = _.uniqueId();
+        scope.assignment.contact_id = _.uniqueId();
+        scope.taskList = [{ id: _.uniqueId() }];
         scope.activity.activitySet = {
           activityTypes: [{
-            id: 4,
+            id: _.uniqueId(),
             default_assignee_type: defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value,
             default_assignee_contact: assigneeId
           }]
@@ -312,7 +315,7 @@ define([
 
     describe('selecting the default assignee', function () {
       var activityType;
-      var loggedInContactId = 7891011;
+      var loggedInContactId = _.uniqueId();
 
       beforeEach(function () {
         initController({
@@ -328,7 +331,7 @@ define([
       });
 
       describe('when the default assignee is a specific contact', function () {
-        var assigneeId = 123456;
+        var assigneeId = _.uniqueId();
 
         beforeEach(function () {
           activityType.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
@@ -379,16 +382,16 @@ define([
       });
 
       describe('when the default assignee type is determined by a relationship', function () {
-        var contact = { id: 123 };
-        var assignee = { id: 456 };
+        var contact = { id: _.uniqueId() };
+        var assignee = { id: _.uniqueId() };
 
         beforeEach(function () {
           scope.assignment.client_id = contact.id;
           activityType.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-          activityType.default_assignee_relationship = 789;
+          activityType.default_assignee_relationship = _.uniqueId();
 
           spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
-            list: [ { id: 1, contact_id_a: contact.id, contact_id_b: assignee.id } ]
+            list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
           }));
 
           $rootScope.$digest();
@@ -400,7 +403,7 @@ define([
       });
 
       describe('after selecting a default assignee', function () {
-        var contact = { id: 123, display_name: 'Jon Snow' };
+        var contact = { id: _.uniqueId(), display_name: 'Jon Snow' };
 
         beforeEach(function () {
           activityType.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
@@ -448,7 +451,7 @@ define([
       resolvedValues = _.defaultsDeep(resolvedValues || {}, {
         data: {},
         defaultAssigneeOptions: [],
-        session: { contactId: 123 }
+        session: { contactId: _.uniqueId() }
       });
 
       $controller('ModalAssignmentController', {

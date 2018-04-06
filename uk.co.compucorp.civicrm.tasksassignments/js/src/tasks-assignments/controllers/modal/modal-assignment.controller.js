@@ -15,7 +15,7 @@ define([
     'RelationshipModel'
   ];
 
-  function ModalAssignmentController ($filter, $log, $q, $rootScope, $scope,
+  function ModalAssignmentController ($filter, $log, $q, $rootScope, vm,
     $timeout, $modalInstance, hrSettings, config, settings, assignmentService,
     taskService, documentService, contactService, data, defaultAssigneeOptions,
     session, Relationship) {
@@ -34,45 +34,45 @@ define([
       offset: 0
     };
 
-    $scope.assignment = angular.copy(data);
-    $scope.assignment.status_id = '1';
-    $scope.assignment.contact_id = config.CONTACT_ID;
-    $scope.assignment.client_id = $scope.assignment.contact_id;
-    $scope.assignment.subject = '';
-    $scope.assignment.dueDate = null;
-    $scope.copyMessage = 'Click here to copy the value in row one to all rows.';
-    $scope.documentList = [];
-    $scope.dpOpened = {};
-    $scope.format = hrSettings.DATE_FORMAT.toLowerCase();
-    $scope.showCId = !config.CONTACT_ID;
-    $scope.taskList = [];
-    $scope.activity = {
+    vm.assignment = angular.copy(data);
+    vm.assignment.status_id = '1';
+    vm.assignment.contact_id = config.CONTACT_ID;
+    vm.assignment.client_id = vm.assignment.contact_id;
+    vm.assignment.subject = '';
+    vm.assignment.dueDate = null;
+    vm.copyMessage = 'Click here to copy the value in row one to all rows.';
+    vm.documentList = [];
+    vm.dpOpened = {};
+    vm.format = hrSettings.DATE_FORMAT.toLowerCase();
+    vm.showCId = !config.CONTACT_ID;
+    vm.taskList = [];
+    vm.activity = {
       activitySet: {}
     };
-    $scope.alert = {
+    vm.alert = {
       show: false,
       msg: '',
       type: 'danger'
     };
     // The contacts collections used by the lookup directives divided by type
-    $scope.contacts = {
+    vm.contacts = {
       target: [],
       document: [],
       task: []
     };
 
-    $scope.addActivity = addActivity;
-    $scope.cacheContact = cacheContact;
-    $scope.cancel = cancel;
-    $scope.confirm = confirm;
-    $scope.copyAssignee = copyAssignee;
-    $scope.copyDate = copyDate;
-    $scope.dpOpen = dpOpen;
-    $scope.onTargetContactChange = onTargetContactChange;
-    $scope.refreshContacts = refreshContacts;
-    $scope.removeActivity = removeActivity;
-    $scope.setData = setData;
-    $scope.updateTimeline = updateTimeline;
+    vm.addActivity = addActivity;
+    vm.cacheContact = cacheContact;
+    vm.cancel = cancel;
+    vm.confirm = confirm;
+    vm.copyAssignee = copyAssignee;
+    vm.copyDate = copyDate;
+    vm.dpOpen = dpOpen;
+    vm.onTargetContactChange = onTargetContactChange;
+    vm.refreshContacts = refreshContacts;
+    vm.removeActivity = removeActivity;
+    vm.setData = setData;
+    vm.updateTimeline = updateTimeline;
 
     (function init () {
       initDefaultAssigneeOptionsIndex();
@@ -107,30 +107,30 @@ define([
 
     function confirm () {
       if (
-        !($filter('filter')($scope.taskList, { create: true })).length &&
-        !($filter('filter')($scope.documentList, { create: true })).length
+        !($filter('filter')(vm.taskList, { create: true })).length &&
+        !($filter('filter')(vm.documentList, { create: true })).length
       ) {
-        $scope.alert.msg = 'Please add at least one task.';
-        $scope.alert.show = true;
+        vm.alert.msg = 'Please add at least one task.';
+        vm.alert.show = true;
         return;
       }
 
-      if (!validateRequiredFields($scope.assignment)) {
+      if (!validateRequiredFields(vm.assignment)) {
         return;
       }
 
-      $scope.$broadcast('ct-spinner-show');
-      $scope.assignment.start_date = new Date();
+      vm.$broadcast('ct-spinner-show');
+      vm.assignment.start_date = new Date();
 
-      assignmentService.save($scope.assignment).then(function (resultAssignment) {
-        var documentListAssignment = $scope.documentList.filter(function (doc) {
+      assignmentService.save(vm.assignment).then(function (resultAssignment) {
+        var documentListAssignment = vm.documentList.filter(function (doc) {
           return doc.create;
         }).map(function (doc) {
           doc.case_id = resultAssignment.id;
           return doc;
         });
 
-        var taskListAssignment = $scope.taskList.filter(function (task) {
+        var taskListAssignment = vm.taskList.filter(function (task) {
           return task.create;
         }).map(function (task) {
           task.case_id = resultAssignment.id;
@@ -138,7 +138,7 @@ define([
         });
 
         $q.all({
-          relationship: assignmentService.assignCoordinator($scope.assignment.contact_id, resultAssignment.id),
+          relationship: assignmentService.assignCoordinator(vm.assignment.contact_id, resultAssignment.id),
           document: documentService.saveMultiple(documentListAssignment.map(function (doc) {
             return angular.copy(doc);
           })),
@@ -161,18 +161,18 @@ define([
             documentArr.push(results.document[i].id);
           }
 
-          cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy($scope.assignment), {
+          cacheAssignmentObj[resultAssignment.id] = angular.extend(angular.copy(vm.assignment), {
             id: resultAssignment.id,
             client_id: {
-              '1': $scope.assignment.client_id
+              '1': vm.assignment.client_id
             },
             contact_id: {
-              '1': $scope.assignment.contact_id
+              '1': vm.assignment.contact_id
             },
             contacts: [
               {
-                sort_name: $rootScope.cache.contact.obj[$scope.assignment.contact_id].sort_name,
-                contact_id: $scope.assignment.contact_id,
+                sort_name: $rootScope.cache.contact.obj[vm.assignment.contact_id].sort_name,
+                contact_id: vm.assignment.contact_id,
                 role: 'Client'
               },
               {
@@ -194,15 +194,15 @@ define([
             taskList: taskListAssignment
           });
 
-          $scope.$broadcast('ct-spinner-hide');
+          vm.$broadcast('ct-spinner-hide');
         }, function (reason) {
           CRM.alert(reason, 'Error', 'error');
-          $scope.$broadcast('ct-spinner-hide');
+          vm.$broadcast('ct-spinner-hide');
           return $q.reject();
         });
       }, function (reason) {
         CRM.alert(reason, 'Error', 'error');
-        $scope.$broadcast('ct-spinner-hide');
+        vm.$broadcast('ct-spinner-hide');
         return $q.reject();
       });
     }
@@ -218,11 +218,11 @@ define([
       var firstEnabled = firstEnabledItem(list);
 
       list.forEach(function (item, index) {
-        var firstEnabledContacts = $scope.contacts[type][_.indexOf(list, firstEnabled)] || [];
+        var firstEnabledContacts = vm.contacts[type][_.indexOf(list, firstEnabled)] || [];
         var firstEnabledAssignee = firstEnabled.assignee_contact_id ? [firstEnabled.assignee_contact_id[0]] : firstEnabled.assignee_contact_id;
 
         if (item.create) {
-          $scope.contacts[type][index] = firstEnabledContacts.slice();
+          vm.contacts[type][index] = firstEnabledContacts.slice();
           item.assignee_contact_id = firstEnabledAssignee;
         }
       });
@@ -246,7 +246,7 @@ define([
       $event.preventDefault();
       $event.stopPropagation();
 
-      $scope.dpOpened[key] = true;
+      vm.dpOpened[key] = true;
     }
 
     /**
@@ -290,20 +290,19 @@ define([
      */
     function getDefaultAssigneeForActivityTypeByRelationship (activityType) {
       // skip if a target contact has not been selected:
-      if (!$scope.assignment.client_id) {
+      if (!vm.assignment.client_id) {
         return $q.resolve(null);
       }
 
       return Relationship.allValid({
-        'contact_id_a': $scope.assignment.client_id,
+        'contact_id_a': vm.assignment.client_id,
         'relationship_type_id.name_b_a': activityType.default_assignee_relationship,
         'options': { 'limit': 1 }
-      })
-        .then(function (result) {
-          return result.list.map(function (relationship) {
-            return relationship.contact_id_b;
-          });
+      }).then(function (result) {
+        return result.list.map(function (relationship) {
+          return relationship.contact_id_b;
         });
+      });
     }
 
     /**
@@ -311,12 +310,12 @@ define([
      */
     function initDefaultAssigneesForTasks () {
       // skip if an activity set and types have not been defined:
-      if (!$scope.activity.activitySet.activityTypes) {
+      if (!vm.activity.activitySet.activityTypes) {
         return;
       }
 
-      $scope.activity.activitySet.activityTypes.forEach(function (activityType) {
-        var task = _.find($scope.taskList, function (task) {
+      vm.activity.activitySet.activityTypes.forEach(function (activityType) {
+        var task = _.find(vm.taskList, function (task) {
           return task.name === activityType.name;
         });
 
@@ -349,9 +348,9 @@ define([
     function initWatchers () {
       var assignmentTypesListener;
 
-      $scope.$watch('activity.activitySet', function (activitySet) {
+      vm.$watch('activity.activitySet', function (activitySet) {
         if (!activitySet || !activitySet.activityTypes) {
-          $scope.taskList = [];
+          vm.taskList = [];
           return;
         }
 
@@ -381,14 +380,14 @@ define([
           taskList.push(activity);
         });
 
-        angular.copy(taskList, $scope.taskList);
+        angular.copy(taskList, vm.taskList);
         initDefaultAssigneesForTasks();
 
         if (!+settings.tabEnabled.documents) {
           return;
         }
 
-        angular.copy(documentList, $scope.documentList);
+        angular.copy(documentList, vm.documentList);
       });
 
       assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
@@ -408,7 +407,7 @@ define([
      * @return {Promise}
      */
     function loadAndCacheContactForTask (task) {
-      var index = $scope.taskList.indexOf(task);
+      var index = vm.taskList.indexOf(task);
 
       if (_.isEmpty(task.assignee_contact_id)) {
         return $q.resolve();
@@ -416,7 +415,7 @@ define([
 
       return contactService.get({ IN: task.assignee_contact_id })
         .then(function (contacts) {
-          $scope.contacts.task[index] = _.map(contacts, function (contact) {
+          vm.contacts.task[index] = _.map(contacts, function (contact) {
             return {
               id: contact.id,
               label: contact.display_name
@@ -425,8 +424,13 @@ define([
         });
     }
 
+    /**
+     * Event function triggered when the target contact changes. It copies the
+     * assignment's contact_id into the client_id property and initializes the
+     * tass default assignees based on the selected target contact.
+     */
     function onTargetContactChange () {
-      $scope.assignment.client_id = $scope.assignment.contact_id;
+      vm.assignment.client_id = vm.assignment.contact_id;
 
       initDefaultAssigneesForTasks();
     }
@@ -453,9 +457,9 @@ define([
       contactService.search(input, { contact_type: 'Individual' })
         .then(function (results) {
           if (type === 'target') {
-            $scope.contacts[type] = results;
+            vm.contacts[type] = results;
           } else {
-            $scope.contacts[type][index] = results;
+            vm.contacts[type][index] = results;
           }
         });
     }
@@ -469,19 +473,19 @@ define([
     }
 
     function setData () {
-      var assignmentType = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id];
+      var assignmentType = $rootScope.cache.assignmentType.obj[vm.assignment.case_type_id];
 
       if (!assignmentType) {
-        $scope.activity.activitySet = {};
-        $scope.assignment.subject = '';
+        vm.activity.activitySet = {};
+        vm.assignment.subject = '';
 
         return;
       }
 
-      $scope.activity.activitySet = assignmentType.definition.activitySets[0];
-      $scope.assignment.subject = $rootScope.cache.assignmentType.obj[$scope.assignment.case_type_id].title;
+      vm.activity.activitySet = assignmentType.definition.activitySets[0];
+      vm.assignment.subject = $rootScope.cache.assignmentType.obj[vm.assignment.case_type_id].title;
 
-      $scope.assignment.dueDate = $scope.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
+      vm.assignment.dueDate = vm.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
     }
 
     /**
@@ -490,7 +494,7 @@ define([
      * @param  {object} item Timeline item
      */
     function updateTimeline (item) {
-      $scope.activity.activitySet = item;
+      vm.activity.activitySet = item;
     }
 
     /**
@@ -507,7 +511,7 @@ define([
       !assignment.case_type_id && missingRequiredFields.push('Assignment type');
       !assignment.dueDate && missingRequiredFields.push('Key date');
 
-      $scope.taskList.filter(function (task) {
+      vm.taskList.filter(function (task) {
         return task.create;
       })
         .forEach(function (task) {
