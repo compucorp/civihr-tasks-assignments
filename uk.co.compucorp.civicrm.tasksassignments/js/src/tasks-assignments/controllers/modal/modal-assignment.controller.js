@@ -306,6 +306,61 @@ define([
     }
 
     /**
+     * Initializes the watcher for activity set. When a new timeline is selected,
+     * the activities are split into tasks and documents. Finally, the default
+     * assignee for each activity is populated.
+     */
+    function initActivitySetWatcher () {
+      var documentsTabIsVisible = !!settings.tabEnabled.documents;
+      var documentTypesIndexedByName = _.indexBy($rootScope.cache.documentType.arr, 'value');
+      var taskTypesIndexedByName = _.indexBy($rootScope.cache.taskType.arr, 'value');
+
+      vm.$watch('activity.activitySet', function (activitySet) {
+        if (!activitySet || !activitySet.activityTypes) {
+          vm.taskList = [];
+          return;
+        }
+
+        vm.documentList = [];
+        vm.taskList = [];
+
+        activitySet.activityTypes.forEach(function (activityType) {
+          var activity = angular.copy(activityModel);
+          var documentType = documentTypesIndexedByName[activityType.name];
+          var taskType = taskTypesIndexedByName[activityType.name];
+
+          activity.name = activityType.name;
+          activity.offset = activityType.reference_offset;
+
+          if (documentType && documentsTabIsVisible) {
+            activity.activity_type_id = documentType.key;
+            vm.documentList.push(activity);
+          } else if (!documentType) {
+            // anything other than a document is added tot he task list:
+            activity.activity_type_id = taskType ? taskType.key : null;
+            vm.taskList.push(activity);
+          }
+        });
+
+        initDefaultAssigneesForTasks();
+      });
+    }
+
+    /**
+     * Initializes the assignment types watcher. This is done in order to wait
+     * for the root cache to load the assignment types and store the activity
+     * sets (timelines).
+     */
+    function initAssignmentTypesWatcher () {
+      var assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
+        if (!_.isEmpty(cache)) {
+          setData();
+          assignmentTypesListener();
+        }
+      }, true);
+    }
+
+    /**
      * Initializes the default assignee for each one of the tasks available.
      */
     function initDefaultAssigneesForTasks () {
@@ -345,57 +400,12 @@ define([
       });
     }
 
+    /**
+     * Initializes the watchers for activity set and assignment types.
+     */
     function initWatchers () {
-      var assignmentTypesListener;
-
-      vm.$watch('activity.activitySet', function (activitySet) {
-        if (!activitySet || !activitySet.activityTypes) {
-          vm.taskList = [];
-          return;
-        }
-
-        var activity;
-        var activityTypes = activitySet.activityTypes;
-        var documentList = [];
-        var documentType;
-        var taskList = [];
-        var taskType;
-
-        activityTypes.forEach(function (activityType) {
-          activity = angular.copy(activityModel);
-          activity.name = activityType.name;
-          activity.offset = activityType.reference_offset;
-
-          documentType = activity.name ? $filter('filter')($rootScope.cache.documentType.arr, { value: activity.name }, true)[0] : '';
-
-          if (documentType) {
-            activity.activity_type_id = documentType.key;
-            documentList.push(activity);
-            return;
-          }
-
-          taskType = activity.name ? $filter('filter')($rootScope.cache.taskType.arr, { value: activity.name }, true)[0] : '';
-          activity.activity_type_id = taskType ? taskType.key : null;
-
-          taskList.push(activity);
-        });
-
-        angular.copy(taskList, vm.taskList);
-        initDefaultAssigneesForTasks();
-
-        if (!+settings.tabEnabled.documents) {
-          return;
-        }
-
-        angular.copy(documentList, vm.documentList);
-      });
-
-      assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
-        if (!_.isEmpty(cache)) {
-          setData();
-          assignmentTypesListener();
-        }
-      }, true);
+      initActivitySetWatcher();
+      initAssignmentTypesWatcher();
     }
 
     /**
