@@ -714,10 +714,12 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
   /**
    * Renames the case status Ongoing and Resolved to In Progress and Completed.
+   *
+   * @return bool
    */
   public function upgrade_1032() {
-    $this->_renameCaseStatus('Ongoing', 'In Progress');
-    $this->_renameCaseStatus('Resolved', 'Completed');
+    $this->_relabelCaseStatus('Ongoing', 'In Progress');
+    $this->_relabelCaseStatus('Resolved', 'Completed');
 
     return TRUE;
   }
@@ -810,17 +812,20 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
    * @param string $fromLabel
    * @param string $toLabel
    */
-  private function _renameCaseStatus($fromLabel, $toLabel) {
-    $optionValue = civicrm_api3('OptionValue', 'getsingle', [
+  private function _relabelCaseStatus($fromLabel, $toLabel) {
+    $result = civicrm_api3('OptionValue', 'get', [
       'option_group_id.name' => 'case_status',
       'label' => $fromLabel,
       'is_reserved' => 1,
+      'sequential' => 1,
       'options' => [ 'limit' => 1 ],
     ]);
 
-    civicrm_api3('OptionValue', 'create', [
-      'id' => $optionValue['id'],
-      'label' => $toLabel
-    ]);
+    if ($result['count']) {
+      civicrm_api3('OptionValue', 'create', [
+        'id' => $result['values'][0]['id'],
+        'label' => $toLabel
+      ]);
+    }
   }
 }
