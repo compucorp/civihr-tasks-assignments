@@ -342,7 +342,8 @@ define([
           }
         });
 
-        initDefaultAssigneesForActivities();
+        initDefaultAssigneesForActivities()
+          .then(loadAndCacheContactForActivities);
       });
     }
 
@@ -362,33 +363,32 @@ define([
 
     /**
      * Initializes the default assignee for each one of the tasks and documents available.
+     *
+     * @return {Promise}
      */
     function initDefaultAssigneesForActivities () {
+      var promises;
+
       // skip if an activity set and types have not been defined:
       if (!vm.activity.activitySet.activityTypes) {
         return;
       }
 
-      vm.activity.activitySet.activityTypes.forEach(function (activityType) {
-        var activity, activityTypeName;
-        var document = _.find(vm.documentList, { name: activityType.name });
-        var task = _.find(vm.taskList, { name: activityType.name });
-
-        activity = task || document;
-        activityTypeName = document ? 'document' : 'task';
+      promises = vm.activity.activitySet.activityTypes.map(function (activityType) {
+        var activity = _.chain(vm.documentList).concat(vm.taskList)
+          .find({ name: activityType.name }).value();
 
         if (!activity) {
           return;
         }
 
-        getDefaultAssigneeForActivityType(activityType)
+        return getDefaultAssigneeForActivityType(activityType)
           .then(function (assigneeId) {
             activity.assignee_contact_id = assigneeId;
-          })
-          .then(function () {
-            return loadAndCacheContactForActivity(activity, activityTypeName);
           });
       });
+
+      return $q.all(promises);
     }
 
     /**
@@ -412,29 +412,30 @@ define([
     }
 
     /**
-     * Requests the contact information for the task provided and caches it. This can
-     * be useful when manually selecting assignees since the name of the contact
-     * would not be displayed otherwise.
+     * Requests the contact information for each task and document assignees and
+     * populates the contact's cache. This can  be useful when selecting assignees
+     * automatically since the name of the contact would not be displayed otherwise.
      *
-     * @param {Object} task - the task containing the assignee's contact id.
      * @return {Promise}
      */
-    function loadAndCacheContactForActivity (activity, activityType) {
-      var activityList = activityType === 'document' ? vm.documentList : vm.taskList;
-      var index = activityList.indexOf(activity);
+    function loadAndCacheContactForActivities () {
+      var contactIds = _.chain(vm.taskList).concat(vm.documentList).map(function (activity) {
+        return activity.assignee_contact_id;
+      }).flatten().compact().uniq().value();
 
-      if (_.isEmpty(activity.assignee_contact_id)) {
-        return $q.resolve();
+      // skip if there are no contacts assigned to activitities
+      if (contactIds.length === 0) {
+        return;
       }
 
-      return contactService.get({ IN: activity.assignee_contact_id })
+      return contactService.get({ IN: contactIds })
         .then(function (contacts) {
-          vm.contacts[activityType][index] = _.map(contacts, function (contact) {
-            return {
-              id: contact.id,
-              label: contact.display_name
-            };
+          var cachedContacts = _.map(contacts, function (contact) {
+            return { id: contact.id, label: contact.display_name };
           });
+
+          vm.contacts.task = vm.taskList.map(function () { return cachedContacts; });
+          vm.contacts.document = vm.documentList.map(function () { return cachedContacts; });
         });
     }
 
@@ -446,7 +447,8 @@ define([
     function onTargetContactChange () {
       vm.assignment.client_id = vm.assignment.contact_id;
 
-      initDefaultAssigneesForActivities();
+      initDefaultAssigneesForActivities()
+        .then(loadAndCacheContactForActivities);
     }
 
     /**
