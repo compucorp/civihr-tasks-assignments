@@ -324,7 +324,7 @@ define([
         vm.documentList = [];
         vm.taskList = [];
 
-        activitySet.activityTypes.forEach(function (activityType, index) {
+        activitySet.activityTypes.forEach(function (activityType) {
           var activity = angular.copy(activityModel);
           var documentType = documentTypesIndexedByName[activityType.name];
           var taskType = taskTypesIndexedByName[activityType.name];
