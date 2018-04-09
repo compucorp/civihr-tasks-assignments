@@ -3,21 +3,28 @@
 define([
   'common/lodash',
   'common/angularMocks',
+  'common/models/option-group',
+  'common/models/session.model',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (_) {
   'use strict';
 
   describe('MainController', function () {
-    var beforeHashQueryParams, $controller, $log, $rootScope, $modal;
+    var beforeHashQueryParams, $controller, $log, $q, $rootScope, $modal,
+      OptionGroup, Session;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_$controller_, _$log_, _$rootScope_, _beforeHashQueryParams_, _$uibModal_) {
+    beforeEach(inject(function (_$controller_, _$log_, _$q_, _$rootScope_,
+      _beforeHashQueryParams_, _$uibModal_, _OptionGroup_, _Session_) {
       beforeHashQueryParams = _beforeHashQueryParams_;
       $controller = _$controller_;
       $log = _$log_;
+      $q = _$q_;
       $modal = _$uibModal_;
       $rootScope = _$rootScope_;
+      OptionGroup = _OptionGroup_;
+      Session = _Session_;
 
       spyOn($modal, 'open').and.callThrough();
     }));
@@ -136,6 +143,50 @@ define([
       function mockQueryStringAndInit (queryStringParams) {
         spyOn(beforeHashQueryParams, 'parse').and.returnValue(queryStringParams);
         initController($controller);
+      }
+    });
+
+    describe('when opening the Assignment Modal', function () {
+      var activityData, defaultAssigneeOptionsPromise, sessionPromise;
+
+      beforeEach(function () {
+        activityData = { id: 123 };
+        sessionPromise = $q.resolve({ contactId: 123 });
+        defaultAssigneeOptionsPromise = $q.resolve([{ id: 123 }]);
+
+        spyOn(Session, 'get').and.returnValue(sessionPromise);
+        spyOn(OptionGroup, 'valuesOf').and.returnValue(defaultAssigneeOptionsPromise);
+        initController();
+        $rootScope.modalAssignment(activityData);
+      });
+
+      it('requests the session data', function () {
+        expect(Session.get).toHaveBeenCalled();
+      });
+
+      it('requests the default assignee types for activities', function () {
+        expect(OptionGroup.valuesOf).toHaveBeenCalledWith('activity_default_assignee');
+      });
+
+      it('resolves the activity data', function () {
+        expect(getModalResolvedData('data')).toBe(activityData);
+      });
+
+      it('resolves the session data', function () {
+        expect(getModalResolvedData('session')).toBe(sessionPromise);
+      });
+
+      it('resolves the default assignee options', function () {
+        expect(getModalResolvedData('defaultAssigneeOptions'))
+          .toBe(defaultAssigneeOptionsPromise);
+      });
+
+      function getModalResolvedData (dataName) {
+        var resolve = $modal.open.calls.argsFor(0)[0].resolve;
+
+        if (resolve && resolve[dataName]) {
+          return resolve[dataName]();
+        }
       }
     });
 
