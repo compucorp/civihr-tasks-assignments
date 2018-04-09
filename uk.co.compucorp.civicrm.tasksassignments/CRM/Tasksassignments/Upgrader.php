@@ -761,6 +761,16 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  /*
+   * Renames the case status Ongoing and Resolved to In Progress and Completed.
+   */
+  public function upgrade_1034() {
+    $this->_renameCaseStatus('Ongoing', 'In Progress');
+    $this->_renameCaseStatus('Resolved', 'Completed');
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
@@ -841,5 +851,25 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     foreach ($typeIds as $id) {
       civicrm_api3('OptionValue', 'delete', array('id' => $id));
     }
+  }
+
+  /**
+   * Renames the label for a case status
+   *
+   * @param string $fromLabel
+   * @param string $toLabel
+   */
+  private function _renameCaseStatus($fromLabel, $toLabel) {
+    $optionValue = civicrm_api3('OptionValue', 'getsingle', [
+      'option_group_id.name' => 'case_status',
+      'label' => $fromLabel,
+      'is_reserved' => 1,
+      'options' => [ 'limit' => 1 ],
+    ]);
+
+    civicrm_api3('OptionValue', 'create', [
+      'id' => $optionValue['id'],
+      'label' => $toLabel
+    ]);
   }
 }
