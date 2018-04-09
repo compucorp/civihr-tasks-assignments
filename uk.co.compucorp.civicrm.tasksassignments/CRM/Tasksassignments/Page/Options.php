@@ -3,11 +3,25 @@
 require_once 'CRM/Core/Page.php';
 
 class CRM_Tasksassignments_Page_Options extends CRM_Admin_Page_Options {
-  
+
   function run() {
     parent::run();
   }
-    
+
+  /**
+   * Browse all options.
+   */
+  public function browse() {
+    parent::browse();
+
+    $optionValues = $this->get_template_vars('rows');
+    $optionValues = array_filter($optionValues, function ($item) {
+      return $item['is_reserved'] == 0;
+    });
+
+    $this->assign('rows', $optionValues);
+  }
+
   /**
    * Use the form name to create the tpl file name
    *
@@ -20,7 +34,7 @@ class CRM_Tasksassignments_Page_Options extends CRM_Admin_Page_Options {
       'CRM_Admin_Page_Options'
     ) . '.tpl';
   }
-    
+
   function editForm() {
     //return self::$_gName ? 'CRM_Admin_Form_Options' : 'CRM_Admin_Form_OptionGroup';
     if (self::$_gName === 'activity_type') {
