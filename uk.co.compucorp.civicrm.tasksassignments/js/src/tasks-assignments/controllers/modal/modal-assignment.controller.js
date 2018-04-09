@@ -324,7 +324,7 @@ define([
         vm.documentList = [];
         vm.taskList = [];
 
-        activitySet.activityTypes.forEach(function (activityType) {
+        activitySet.activityTypes.forEach(function (activityType, index) {
           var activity = angular.copy(activityModel);
           var documentType = documentTypesIndexedByName[activityType.name];
           var taskType = taskTypesIndexedByName[activityType.name];
@@ -342,7 +342,7 @@ define([
           }
         });
 
-        initDefaultAssigneesForTasks();
+        initDefaultAssigneesForActivities();
       });
     }
 
@@ -361,29 +361,32 @@ define([
     }
 
     /**
-     * Initializes the default assignee for each one of the tasks available.
+     * Initializes the default assignee for each one of the tasks and documents available.
      */
-    function initDefaultAssigneesForTasks () {
+    function initDefaultAssigneesForActivities () {
       // skip if an activity set and types have not been defined:
       if (!vm.activity.activitySet.activityTypes) {
         return;
       }
 
       vm.activity.activitySet.activityTypes.forEach(function (activityType) {
-        var task = _.find(vm.taskList, function (task) {
-          return task.name === activityType.name;
-        });
+        var activity, activityTypeName;
+        var document = _.find(vm.documentList, { name: activityType.name });
+        var task = _.find(vm.taskList, { name: activityType.name });
 
-        if (!task) {
+        activity = task || document;
+        activityTypeName = document ? 'document' : 'task';
+
+        if (!activity) {
           return;
         }
 
         getDefaultAssigneeForActivityType(activityType)
           .then(function (assigneeId) {
-            task.assignee_contact_id = assigneeId;
+            activity.assignee_contact_id = assigneeId;
           })
           .then(function () {
-            return loadAndCacheContactForTask(task);
+            return loadAndCacheContactForActivity(activity, activityTypeName);
           });
       });
     }
@@ -416,16 +419,17 @@ define([
      * @param {Object} task - the task containing the assignee's contact id.
      * @return {Promise}
      */
-    function loadAndCacheContactForTask (task) {
-      var index = vm.taskList.indexOf(task);
+    function loadAndCacheContactForActivity (activity, activityType) {
+      var activityList = activityType === 'document' ? vm.documentList : vm.taskList;
+      var index = activityList.indexOf(activity);
 
-      if (_.isEmpty(task.assignee_contact_id)) {
+      if (_.isEmpty(activity.assignee_contact_id)) {
         return $q.resolve();
       }
 
-      return contactService.get({ IN: task.assignee_contact_id })
+      return contactService.get({ IN: activity.assignee_contact_id })
         .then(function (contacts) {
-          vm.contacts.task[index] = _.map(contacts, function (contact) {
+          vm.contacts[activityType][index] = _.map(contacts, function (contact) {
             return {
               id: contact.id,
               label: contact.display_name
@@ -442,7 +446,7 @@ define([
     function onTargetContactChange () {
       vm.assignment.client_id = vm.assignment.contact_id;
 
-      initDefaultAssigneesForTasks();
+      initDefaultAssigneesForActivities();
     }
 
     /**

@@ -314,28 +314,35 @@ define([
     });
 
     describe('selecting the default assignee', function () {
-      var activityType;
+      var activity, document;
       var loggedInContactId = _.uniqueId();
 
       beforeEach(function () {
+        var documentType;
+
+        $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
+        $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
+        documentType = $rootScope.cache.assignmentType.arr[1];
+        $rootScope.cache.documentType.arr = [{ key: documentType.id, value: documentType.name }];
+
         initController({
           defaultAssigneeOptions: defaultAssigneeOptions,
           session: { contactId: loggedInContactId }
         });
 
-        $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
-        $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
         scope.assignment.case_type_id = $rootScope.cache.assignmentType.arr[0].id;
         scope.activity.activitySet = $rootScope.cache.assignmentType.arr[0].definition.activitySets[0];
-        activityType = scope.activity.activitySet.activityTypes[0];
+        activity = scope.activity.activitySet.activityTypes[0];
+        document = scope.activity.activitySet.activityTypes[1];
+        document.name = documentType.name;
       });
 
       describe('when the default assignee is a specific contact', function () {
         var assigneeId = _.uniqueId();
 
         beforeEach(function () {
-          activityType.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
-          activityType.default_assignee_contact = assigneeId;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
+          activity.default_assignee_contact = assigneeId;
 
           $rootScope.$digest();
         });
@@ -347,7 +354,7 @@ define([
 
       describe('when the default assignee is the user creating the tasks', function () {
         beforeEach(function () {
-          activityType.default_assignee_type = defaultAssigneeOptionsIndex.USER_CREATING_THE_CASE.value;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.USER_CREATING_THE_CASE.value;
 
           $rootScope.$digest();
         });
@@ -359,7 +366,7 @@ define([
 
       describe('when the default assignee is set to be no one', function () {
         beforeEach(function () {
-          activityType.default_assignee_type = defaultAssigneeOptionsIndex.NONE.value;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.NONE.value;
 
           $rootScope.$digest();
         });
@@ -371,7 +378,7 @@ define([
 
       describe('when the default assignee type is not known', function () {
         beforeEach(function () {
-          activityType.default_assignee_type = undefined;
+          activity.default_assignee_type = undefined;
 
           $rootScope.$digest();
         });
@@ -387,8 +394,8 @@ define([
 
         beforeEach(function () {
           scope.assignment.client_id = contact.id;
-          activityType.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-          activityType.default_assignee_relationship = _.uniqueId();
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
+          activity.default_assignee_relationship = _.uniqueId();
 
           spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
             list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
@@ -406,8 +413,10 @@ define([
         var contact = { id: _.uniqueId(), display_name: 'Jon Snow' };
 
         beforeEach(function () {
-          activityType.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
-          activityType.default_assignee_contact = contact.id;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
+          activity.default_assignee_contact = contact.id;
+          document.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
+          document.default_assignee_contact = contact.id;
 
           contactService.get.and.returnValue($q.resolve([ contact ]));
           $rootScope.$digest();
@@ -417,8 +426,15 @@ define([
           expect(contactService.get).toHaveBeenCalledWith({ IN: [ contact.id ] });
         });
 
-        it('caches the id and name of the assignee', function () {
+        it('caches the id and name of the task assignee', function () {
           expect(scope.contacts.task[0]).toEqual([{
+            id: contact.id,
+            label: contact.display_name
+          }]);
+        });
+
+        it('caches the id and name of the document assignee', function () {
+          expect(scope.contacts.document[0]).toEqual([{
             id: contact.id,
             label: contact.display_name
           }]);
