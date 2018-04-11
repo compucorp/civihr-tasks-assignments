@@ -9719,9 +9719,6 @@ fieldset[disabled]
     margin: 60px auto;
   }
 }
-#civitasks .ct-page-contact, #cividocuments .ct-page-contact {
-  padding: 20px;
-}
 #civitasks .pagination, #cividocuments .pagination {
   margin-top: 0;
 }
