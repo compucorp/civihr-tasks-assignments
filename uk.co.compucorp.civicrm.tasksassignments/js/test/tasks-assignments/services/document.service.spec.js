@@ -42,7 +42,7 @@ define([
         Document.save({
           action: 'create'
         }, {json: documentMock.single() || {}}
-      );
+        );
 
         requestBody = Document.save.calls.argsFor(0)[1];
         $httpBackend.flush();
