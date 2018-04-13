@@ -285,9 +285,20 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_change_workflow_help_text($doc);
     _tasksAssignments_remove_non_civihr_tabs_from_workflow($doc);
     _tasksAssignments_allow_only_add_timeline_action($doc);
+
+    $doc->find('.crmCaseType')
+      ->attr('ng-controller', 'CaseTypeExtendedController');
   });
 
   $angular->add($changeSet);
+}
+
+function tasksAssignments_civicrm_angularModules(&$angularModules) {
+  $angularModules['crm-tasks-workflows'] = array(
+    'ext' => 'civicrm',
+    'js' => array(
+      'tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js')
+  );
 }
 
 /**
