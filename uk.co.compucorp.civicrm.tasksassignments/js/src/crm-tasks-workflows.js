@@ -1,10 +1,11 @@
 /* global angular */
 
 (function (angular) {
-  var coreModules = ['crmCaseType'];
+  'use strict';
 
-  angular.module('crm-tasks-workflows', coreModules.concat([
+  angular.module('crm-tasks-workflows', [
+    'crm-tasks-workflows.core',
     'crm-tasks-workflows.controllers',
     'crm-tasks-workflows.decorators'
-  ]));
+  ]);
 })(angular);
