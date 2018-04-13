@@ -55,7 +55,7 @@ gulp.task('watch', function () {
   ], ['js-crm']).on('change', function (file) {
     try { test.for(file.path); } catch (ex) { test.all(); }
   });
-  gulp.watch(['js/test/**/*.js', '!js/test/mocks/**/*.js', '!js/test/test-main.js']).on('change', function (file) {
+  gulp.watch(['js/test/**/*.js', '!js/test/mocks/**/*.js', '!js/test/tasks-assignments/test-main.js']).on('change', function (file) {
     test.single(file.path);
   });
 });
