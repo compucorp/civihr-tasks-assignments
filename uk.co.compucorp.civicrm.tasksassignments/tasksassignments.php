@@ -290,6 +290,10 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
       ->attr('ng-controller', 'CaseTypeExtendedController');
   });
 
+  $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
+    _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
+  });
+
   $angular->add($changeSet);
 }
 
@@ -449,6 +453,17 @@ function tasksassignments_extensionsPageRedirect()  {
   CRM_Utils_System::redirect($url);
 }
 
+/**
+ * Modifies the placeholder of Add Activity Dropdown
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_add_activity_dropdown_placeholder(phpQueryObject $doc) {
+  $addActivityDropDown = $doc->find('[crm-options=activityTypeOptions]');
+  $newPlaceHolder = 'Add task or document';
+
+  $addActivityDropDown->attr('placeholder', $newPlaceHolder);
+}
 /**
  * Modifies the help text for the Workflow Create/Edit screen.
  *
