@@ -5,7 +5,6 @@
 
   angular.module('crm-tasks-workflows', [
     'crm-tasks-workflows.core',
-    'crm-tasks-workflows.controllers',
-    'crm-tasks-workflows.decorators'
+    'crm-tasks-workflows.controllers'
   ]);
 })(angular);
