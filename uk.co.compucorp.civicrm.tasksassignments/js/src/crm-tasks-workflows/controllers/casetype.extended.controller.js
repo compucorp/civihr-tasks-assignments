@@ -14,6 +14,9 @@
     $log.debug('Controller: CaseTypeExtendedController');
 
     $scope.activityTypeOptions = [];
+    $scope.loading = {
+      activityOptions: false
+    };
 
     (function init () {
       fetchActivityTypes();
@@ -25,9 +28,11 @@
      * @return {Promise}
      */
     function fetchActivityTypes () {
+      $scope.loading.activityOptions = true;
+
       return crmApi('OptionValue', 'get', {
         option_group_id: 'activity_type',
-        component_id: {'IN': ['CiviTask', 'CiviDocument']},
+        component_id: { 'IN': ['CiviTask', 'CiviDocument'] },
         sequential: 1,
         options: {
           sort: 'name',
@@ -37,6 +42,8 @@
         $scope.activityTypeOptions = data.values.map(function (type) {
           return { id: type.name, text: type.label, icon: type.icon };
         });
+      }).finally(function () {
+        $scope.loading.activityOptions = false;
       });
     }
   }
