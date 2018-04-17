@@ -41,6 +41,10 @@
       expect($scope.activityTypeOptions).toEqual(expectedValues);
     });
 
+    it('hides the loader', function () {
+      expect($scope.loading.activityOptions).toBe(false);
+    });
+
     function initController (crmApi) {
       $scope = $rootScope.$new();
 
