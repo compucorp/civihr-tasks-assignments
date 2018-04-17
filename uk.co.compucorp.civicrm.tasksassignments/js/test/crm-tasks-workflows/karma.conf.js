@@ -19,7 +19,6 @@ module.exports = function (config) {
 
       // the mocked components files
       { pattern: extPath + '/js/test/crm-tasks-workflows/mocks/modules/*.js' },
-      { pattern: extPath + '/js/test/crm-tasks-workflows/mocks/services/*.js' },
       { pattern: extPath + '/js/test/crm-tasks-workflows/mocks/data/*.js' },
 
       // the test files
