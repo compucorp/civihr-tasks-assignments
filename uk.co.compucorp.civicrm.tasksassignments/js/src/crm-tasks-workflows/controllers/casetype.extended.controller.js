@@ -20,7 +20,7 @@
     })();
 
     /**
-     * Fetch activity types which are components of CiviTask or CiviDocument
+     * Fetch activity types
      *
      * @return {Promise}
      */
