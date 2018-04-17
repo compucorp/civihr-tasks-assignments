@@ -287,7 +287,19 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
+  $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
+    _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
+  });
+
   $angular->add($changeSet);
+}
+
+function tasksAssignments_civicrm_angularModules(&$angularModules) {
+  $angularModules['crm-tasks-workflows'] = array(
+    'ext' => 'civicrm',
+    'js' => array(
+      'tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js')
+  );
 }
 
 /**
@@ -432,6 +444,17 @@ function tasksassignments_extensionsPageRedirect()  {
   CRM_Utils_System::redirect($url);
 }
 
+/**
+ * Modifies the placeholder of Add Activity Dropdown
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_add_activity_dropdown_placeholder(phpQueryObject $doc) {
+  $addActivityDropDown = $doc->find('[crm-options=activityTypeOptions]');
+  $newPlaceHolder = 'Add task or document';
+
+  $addActivityDropDown->attr('placeholder', $newPlaceHolder);
+}
 /**
  * Modifies the help text for the Workflow Create/Edit screen.
  *
