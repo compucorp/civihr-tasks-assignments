@@ -289,7 +289,6 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
 
   $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
-    _tasksAssignments_add_activity_options_loader($doc);
   });
 
   $angular->add($changeSet);
@@ -516,16 +515,4 @@ function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) 
 
   $actionDropdown->after($addTimelineBtn);
   $actionDropdown->remove();
-}
-
-/**
- * Add a loader to the activity options
- *
- * @param phpQueryObject $doc
- */
-function _tasksAssignments_add_activity_options_loader ($doc) {
-  $doc->find('[crm-options=activityTypeOptions]')
-    ->attr('ng-hide', 'loading.activityOptions');
-  $doc->find('[crm-options=activityTypeOptions]')
-    ->after('<div prevent-animations class="spinner" ng-show="loading.activityOptions"></div>');
 }

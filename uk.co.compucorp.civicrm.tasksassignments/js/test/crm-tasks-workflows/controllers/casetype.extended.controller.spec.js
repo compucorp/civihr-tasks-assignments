@@ -4,54 +4,38 @@
   'use strict';
 
   describe('CaseTypeExtendedController', function () {
-    var $controller, $rootScope, $scope, $q, crmApi, crmApiData;
+    var $controller, $rootScope, $scope, crmApi, activityOptionsData, activityOptions;
 
     beforeEach(function () {
       module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers');
     });
 
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$q_, _crmApiData_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _activityOptionsData_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
-      $q = _$q_;
-      crmApiData = _crmApiData_;
+      activityOptionsData = _activityOptionsData_;
 
-      crmApi = jasmine.createSpy('crmApi').and.returnValue($q.resolve({ values: crmApiData }));
+      activityOptions = { values: activityOptionsData };
 
-      initController(crmApi);
+      initController(crmApi, activityOptions);
     }));
 
-    it('calls the API to get CiviTask and CiviDocument Activity Types', function () {
-      expect(crmApi).toHaveBeenCalledWith('OptionValue', 'get', {
-        option_group_id: 'activity_type',
-        component_id: {'IN': ['CiviTask', 'CiviDocument']},
-        sequential: 1,
-        options: {
-          sort: 'name',
-          limit: 0
-        }
-      });
-    });
-
     it('returns the mapped data from api', function () {
-      var expectedValues = crmApiData.map(function (type) {
+      var expectedValues = activityOptionsData.map(function (type) {
         return { id: type.name, text: type.label, icon: type.icon };
       });
 
       expect($scope.activityTypeOptions).toEqual(expectedValues);
     });
 
-    it('hides the loader', function () {
-      expect($scope.loading.activityOptions).toBe(false);
-    });
-
-    function initController (crmApi) {
+    function initController (crmApi, activityOptions) {
       $scope = $rootScope.$new();
 
       $controller('CaseTypeExtendedController', {
         $scope: $scope,
-        crmApi: crmApi,
-        apiCalls: {}
+        crmApi: {},
+        apiCalls: {},
+        activityOptions: activityOptions
       });
 
       $scope.$digest();
