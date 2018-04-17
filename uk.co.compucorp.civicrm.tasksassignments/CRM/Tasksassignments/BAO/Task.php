@@ -1,6 +1,8 @@
 <?php
 
 class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
+  const COMPLETED_STATUS = 'Completed';
+
   /**
    * Create a new Task based on array-data
    *
@@ -31,6 +33,10 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
 
     $instance = parent::create($params);
     CRM_Tasksassignments_Reminder::sendReminder((int) $instance->id, NULL, FALSE, $previousAssigneeId);
+
+    if ($hook === 'edit' && self::checkIfTasksBelongingToCaseAreCompleted($instance->case_id)) {
+      self::markCaseAsClosed($instance->case_id);
+    }
 
     CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
 
@@ -63,6 +69,44 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     }
 
     return $id;
+  }
+
+  /**
+   * Checks if all tasks belonging to a case have been marked as completed.
+   *
+   * @param int $caseId
+   *
+   * @return bool
+   */
+  private static function checkIfTasksBelongingToCaseAreCompleted($caseId) {
+    if (empty($caseId)) {
+      return FALSE;
+    }
+
+    $tasks = civicrm_api3('Task', 'get', [
+      'case_id' => $caseId,
+      'return' => ['status_id.name']
+    ]);
+
+    foreach ($tasks['values'] as $task) {
+      if ($task['status_id.name'] !== self::COMPLETED_STATUS) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Marks the given case as closed.
+   *
+   * @param int $caseId
+   */
+  private static function markCaseAsClosed($caseId) {
+    civicrm_api3('Case', 'create', [
+      'id' => $caseId,
+      'status_id' => 'Closed'
+    ]);
   }
 
   /**
