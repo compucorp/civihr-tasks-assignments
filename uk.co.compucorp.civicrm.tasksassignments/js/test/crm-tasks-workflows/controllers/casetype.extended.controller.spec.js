@@ -10,16 +10,13 @@
       module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers');
     });
 
-    beforeEach(inject(function (_$controller_, _$rootScope_, _$q_, _crmApi_, _crmApiData_) {
+    beforeEach(inject(function (_$controller_, _$rootScope_, _$q_, _crmApiData_) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $q = _$q_;
-      crmApi = _crmApi_;
       crmApiData = _crmApiData_;
 
-      spyCrmApiAndReturn({
-        values: crmApiData
-      });
+      crmApi = jasmine.createSpy('crmApi').and.returnValue($q.resolve({ values: crmApiData }));
 
       initController(crmApi);
     }));
@@ -53,16 +50,6 @@
       });
 
       $scope.$digest();
-    }
-
-    function spyCrmApiAndReturn (returnData) {
-      crmApi = jasmine.createSpy('crmApi', crmApi).and.callFake(function () {
-        var deferred = $q.defer();
-
-        deferred.resolve(returnData);
-
-        return deferred.promise;
-      });
     }
   });
 })();

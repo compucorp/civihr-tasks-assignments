@@ -20,7 +20,7 @@ gulp.task('sass', function (done) {
   });
 });
 
-gulp.task('js-crm', function () {
+gulp.task('crm-js-bundle', function () {
   return gulp.src([
     'js/src/crm-tasks-workflows/modules/*.js',
     'js/src/crm-tasks-workflows/controllers/*.js',
@@ -33,7 +33,7 @@ gulp.task('js-crm', function () {
     .pipe(gulp.dest('js/dist/'));
 });
 
-gulp.task('js-requirejs-bundle', function (done) {
+gulp.task('requirejs-bundle', function (done) {
   exec('r.js -o js/build.js', function (err, stdout, stderr) {
     err && err.code && console.log(stdout);
     done();
@@ -45,13 +45,13 @@ gulp.task('watch', function () {
   gulp.watch([
     'js/src/tasks-assignments.js',
     'js/src/tasks-assignments.js/**/*.js'
-  ], ['js-requirejs-bundle']).on('change', function (file) {
+  ], ['requirejs-bundle']).on('change', function (file) {
     try { test.for(file.path); } catch (ex) { test.all(); }
   });
   gulp.watch([
     'js/src/crm-tasks-workflows.js',
     'js/src/crm-tasks-workflows/**/*.js'
-  ], ['js-crm']).on('change', function (file) {
+  ], ['crm-js-bundle']).on('change', function (file) {
     try { test.for(file.path); } catch (ex) { test.all(); }
   });
   gulp.watch([
@@ -73,7 +73,7 @@ gulp.task('test', function (done) {
   test.all();
 });
 
-gulp.task('default', ['js-crm', 'js-requirejs-bundle', 'sass', 'test', 'watch']);
+gulp.task('default', ['crm-js-bundle', 'requirejs-bundle', 'sass', 'test', 'watch']);
 
 var test = (function () {
   /**
