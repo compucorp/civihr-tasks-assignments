@@ -14,11 +14,13 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
 
       { pattern: extPath + '/js/src/crm-tasks-workflows/modules/*.js' },
+      { pattern: extPath + '/js/src/crm-tasks-workflows/configs/*.js' },
       { pattern: extPath + '/js/src/crm-tasks-workflows/controllers/*.js' },
       { pattern: extPath + '/js/src/crm-tasks-workflows.js' },
 
       // the mocked components files
       { pattern: extPath + '/js/test/crm-tasks-workflows/mocks/modules/*.js' },
+      { pattern: extPath + '/js/test/crm-tasks-workflows/mocks/controllers/*.js' },
       { pattern: extPath + '/js/test/crm-tasks-workflows/mocks/data/*.js' },
 
       // the test files

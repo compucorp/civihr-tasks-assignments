@@ -7,11 +7,13 @@
     .controller('CaseTypeExtendedController', CaseTypeExtendedController);
 
   CaseTypeExtendedController.$inject = [
-    '$log', '$scope', 'crmApi'
+    '$controller', '$log', '$scope', 'crmApi', 'apiCalls'
   ];
 
-  function CaseTypeExtendedController ($log, $scope, crmApi) {
+  function CaseTypeExtendedController ($controller, $log, $scope, crmApi, apiCalls) {
     $log.debug('Controller: CaseTypeExtendedController');
+
+    $controller('CaseTypeCtrl', {$scope: $scope, crmApi: crmApi, apiCalls: apiCalls});
 
     $scope.activityTypeOptions = [];
     $scope.loading = {
@@ -47,6 +49,4 @@
       });
     }
   }
-
-  return CaseTypeExtendedController;
 })(angular);

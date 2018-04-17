@@ -50,7 +50,8 @@
 
       $controller('CaseTypeExtendedController', {
         $scope: $scope,
-        crmApi: crmApi
+        crmApi: crmApi,
+        apiCalls: {}
       });
 
       $scope.$digest();

@@ -285,7 +285,6 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_change_workflow_help_text($doc);
     _tasksAssignments_remove_non_civihr_tabs_from_workflow($doc);
     _tasksAssignments_allow_only_add_timeline_action($doc);
-    _tasksAssignments_add_casetype_controller($doc);
   });
 
   $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
@@ -517,16 +516,6 @@ function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) 
 
   $actionDropdown->after($addTimelineBtn);
   $actionDropdown->remove();
-}
-
-/**
- * Adds a new controller to the case type container
- *
- * @param phpQueryObject $doc
- */
-function _tasksAssignments_add_casetype_controller ($doc) {
-  $doc->find('.crmCaseType')
-    ->attr('ng-controller', 'CaseTypeExtendedController');
 }
 
 /**
