@@ -23,6 +23,7 @@ gulp.task('sass', function (done) {
 gulp.task('crm-js-bundle', function () {
   return gulp.src([
     'js/src/crm-tasks-workflows/modules/*.js',
+    'js/src/crm-tasks-workflows/configs/*.js',
     'js/src/crm-tasks-workflows/controllers/*.js',
     'js/src/crm-tasks-workflows.js'
   ])
