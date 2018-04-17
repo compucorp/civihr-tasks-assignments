@@ -505,7 +505,8 @@ function civicrm_api3_task_get($params) {
   }
 
   if ($caseId) {
-    $caseActivityIds = array_keys(CRM_Case_BAO_Case::getCaseActivity($caseId));
+    $activities = CRM_Case_BAO_Case::getCaseActivity($caseId);
+    $caseActivityIds = array_column($activities['data'], 'DT_RowId');
     $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
     if (empty($activityIds)) {
       $activityIds[] = 0;
