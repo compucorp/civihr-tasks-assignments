@@ -3,7 +3,7 @@
 (function (angular) {
   'use strict';
 
-  angular.module('crm-tasks-workflows.decorator')
+  angular.module('crm-tasks-workflows.decorators')
     .config(['$provide', '$routeProvider', function ($provide, $routeProvider) {
       $provide.decorator('$route', RouteDecorator);
     }]);
