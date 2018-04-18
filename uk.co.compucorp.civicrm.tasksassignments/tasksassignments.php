@@ -289,8 +289,8 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
 
   $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
-    _tasksAssignments_remove_columns_from_timeline($doc);
     _tasksAssignments_change_column_text($doc);
+    _tasksAssignments_remove_columns_from_timeline($doc);
   });
 
   $angular->add($changeSet);
@@ -518,22 +518,16 @@ function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) 
  *
  * @param phpQueryObject $doc
  */
-function _tasksAssignments_remove_columns_from_timeline ($doc) {
-  $selectColumnHeader = $doc->find('table th:nth-child(6)');
-  $selectColumnBody = $doc->find('table td:nth-child(6)');
-  $referenceColumnHeader = $doc->find('table th:nth-child(4)');
-  $referenceColumnBody = $doc->find('table td:nth-child(4)');
-  $statusColumnHeader = $doc->find('table th:nth-child(3)');
-  $statusColumnBody = $doc->find('table td:nth-child(3)');
+function _tasksAssignments_remove_columns_from_timeline (phpQueryObject $doc) {
+  $columnsToBeRemovedFromTimeline = [ 'Status', 'Reference', 'Select' ];
 
-  $elementsToRemove = [
-    $selectColumnHeader, $selectColumnBody,
-    $referenceColumnHeader, $referenceColumnBody,
-    $statusColumnHeader, $statusColumnBody
-  ];
+  foreach ($columnsToBeRemovedFromTimeline as $columnName) {
+    $columnHeader = $doc->find('table th:contains("' . $columnName . '"');
+    $columnIndex = $doc->find('table th')->index($columnHeader) + 1;
+    $columnBody = $doc->find('table td:nth-child('. $columnIndex .')');
 
-  foreach( $elementsToRemove as $element ) {
-    $element->remove();
+    $columnHeader->remove();
+    $columnBody->remove();
   }
 }
 
@@ -542,7 +536,7 @@ function _tasksAssignments_remove_columns_from_timeline ($doc) {
  *
  * @param phpQueryObject $doc
  */
-function _tasksAssignments_change_column_text ($doc) {
+function _tasksAssignments_change_column_text (phpQueryObject $doc) {
   $doc->find('th:contains("Activity")')
     ->text('Task / Document Type');
 }
