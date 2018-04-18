@@ -3,5 +3,5 @@
 (function (angular) {
   'use strict';
 
-  angular.module('crm-tasks-workflows.decorator', []);
+  angular.module('crm-tasks-workflows.decorators', []);
 })(angular);

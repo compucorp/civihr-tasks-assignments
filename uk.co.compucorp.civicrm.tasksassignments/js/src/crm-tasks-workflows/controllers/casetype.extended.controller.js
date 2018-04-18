@@ -13,14 +13,12 @@
   function CaseTypeExtendedController ($controller, $log, $scope, crmApi, apiCalls, activityOptionsTask, activityOptionsDocument) {
     $log.debug('Controller: CaseTypeExtendedController');
 
-    $controller('CaseTypeCtrl', {$scope: $scope, crmApi: crmApi, apiCalls: apiCalls});
-
     var originalAddActivity = $scope.addActivity;
 
     $scope.addActivity = addActivity;
 
     (function init () {
-      prepareActivityTypes();
+      initParentController();
     })();
 
     /**
@@ -37,25 +35,37 @@
       activitySet.activityTypes.forEach(function (activity) {
         if (activity.name === activityType) {
           delete activity.reference_activity;
-
-          return false;
         }
       });
     }
 
     /**
+     * Initialise the parent controller
+     */
+    function initParentController () {
+      apiCalls.actTypes = { values: prepareActivityTypes() };
+      $controller('CaseTypeCtrl', {$scope: $scope, crmApi: crmApi, apiCalls: apiCalls});
+    }
+
+    /**
      * Add component type label to activity types
+     *
+     * @return {Array}
      */
     function prepareActivityTypes () {
       var taskOptions = activityOptionsTask.values.map(function (type) {
-        return { id: type.name, text: (type.label + ' (Task)'), icon: type.icon };
+        type.label = (type.label + ' (Task)');
+
+        return type;
       });
 
-      var documentOptions = activityOptionsDocument.values.map(function (type) {
-        return { id: type.name, text: (type.label + ' (Document)'), icon: type.icon };
+      var documentOptions = activityOptionsDocument.values.map(function (document) {
+        document.label = (document.label + ' (Document)');
+
+        return document;
       });
 
-      $scope.activityTypeOptions = taskOptions.concat(documentOptions);
+      return taskOptions.concat(documentOptions);
     }
   }
 })(angular);
