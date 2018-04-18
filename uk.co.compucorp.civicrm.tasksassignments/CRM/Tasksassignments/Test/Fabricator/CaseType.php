@@ -5,7 +5,7 @@ class CRM_Tasksassignments_Test_Fabricator_CaseType {
   private static $defaultParams = [
     'title' => 'Test Case Type',
     'name' => 'test_case_type',
-    'category' => 1,
+    'category' => 'WORKFLOW',
     'is_active' => 1,
     'sequential'   => 1,
     'weight' => 100,

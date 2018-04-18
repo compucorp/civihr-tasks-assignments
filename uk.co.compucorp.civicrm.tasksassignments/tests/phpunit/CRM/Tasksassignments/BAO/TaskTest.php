@@ -23,20 +23,26 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $upgrader->install();
 
     $this->_taskType = OptionValueFabricator::fabricateTaskType();
+
+    civicrm_api3('OptionGroup', 'create', ['name' => 'case_type_category']);
+    OptionValueFabricator::fabricate([ 'name' => 'WORKFLOW', 'option_group_id' => 'case_type_category' ]);
+    OptionValueFabricator::fabricate([ 'name' => 'VACANCY', 'option_group_id' => 'case_type_category'  ]);
   }
 
   /**
    * Fabricates and stores a Case and a list of Tasks for testing purposes.
    */
-  private function setupCaseAndTasks() {
+  private function setupCaseAndTasks($caseParameters = []) {
     $contact = ContactFabricator::fabricate();
     $caseType = CaseTypeFabricator::fabricate();
-    $this->_case = CaseFabricator::fabricate([
+    $defaultCaseParameters = [
       'contact_id' => $contact['id'],
       'creator_id' => $contact['id'],
       'case_type_id' => $caseType['id'],
       'subject' => 'Sample Case'
-    ]);
+    ];
+    $caseParameters = array_merge($defaultCaseParameters, $caseParameters);
+    $this->_case = CaseFabricator::fabricate($caseParameters);
 
     for ($i = 0; $i < self::SAMPLE_TASKS_COUNT; $i++) {
       $this->_tasks[] = TaskFabricator::fabricate([
@@ -120,6 +126,31 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
       'id' => $this->_tasks[0]['id'],
       'status_id' => 'Completed'
     ]);
+
+    $updatedCase = civicrm_api3('Case', 'getsingle', [
+      'id' => $this->_case['id'],
+      'return' => [ 'status_id.name' ]
+    ]);
+
+    $this->assertEquals('Open', $updatedCase['status_id.name']);
+  }
+
+  function testNotClosingTHeCaseWhenTheCaseCategoryIsNotWorkflow() {
+    $vacancyType = CaseTypeFabricator::fabricate([
+      'name' => 'Application',
+      'category' => 'VACANCY'
+    ]);
+
+    $this->setupCaseAndTasks([
+      'case_type_id' => $vacancyType['id']
+    ]);
+
+    foreach ($this->_tasks as $task) {
+      civicrm_api3('Task', 'create', [
+        'id' => $task['id'],
+        'status_id' => 'Completed'
+      ]);
+    }
 
     $updatedCase = civicrm_api3('Case', 'getsingle', [
       'id' => $this->_case['id'],

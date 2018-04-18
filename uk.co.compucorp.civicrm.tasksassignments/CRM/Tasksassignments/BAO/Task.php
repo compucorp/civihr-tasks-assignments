@@ -34,13 +34,39 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     $instance = parent::create($params);
     CRM_Tasksassignments_Reminder::sendReminder((int) $instance->id, NULL, FALSE, $previousAssigneeId);
 
-    if ($hook === 'edit' && self::checkIfTasksBelongingToCaseAreCompleted($instance->case_id)) {
-      self::markCaseAsClosed($instance->case_id);
+    if ($hook === 'edit') {
+      $isWorkflowCaseCategory = 'WORKFLOW' === self::getCaseCategory($instance->case_id);
+      $allCaseTasksAreCompleted = self::checkIfTasksBelongingToCaseAreCompleted($instance->case_id);
+
+      if ($isWorkflowCaseCategory && $allCaseTasksAreCompleted) {
+        self::markCaseAsClosed($instance->case_id);
+      }
     }
 
     CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
 
     return $instance;
+  }
+
+  /**
+   * Returns the case category (Workflow or Vacancy) by checking the category of the
+   * parent case type.
+   *
+   * @param int $caseId
+   *
+   * @return string|null
+   */
+  private static function getCaseCategory($caseId) {
+    if (empty($caseId)) {
+      return NULL;
+    }
+
+    $case = civicrm_api3('Case', 'getsingle', [
+      'id' => $caseId,
+      'return' => [ 'case_type_id.category.name' ]
+    ]);
+
+    return $case['case_type_id.category.name'];
   }
 
   /**
