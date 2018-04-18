@@ -112,4 +112,20 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
 
     $this->assertEquals('Closed', $updatedCase['status_id.name']);
   }
+
+  function testNotClosingTheCaseWhenOnlySomeTasksAreCompleted() {
+    $this->setupCaseAndTasks();
+
+    civicrm_api3('Task', 'create', [
+      'id' => $this->_tasks[0]['id'],
+      'status_id' => 'Completed'
+    ]);
+
+    $updatedCase = civicrm_api3('Case', 'getsingle', [
+      'id' => $this->_case['id'],
+      'return' => [ 'status_id.name' ]
+    ]);
+
+    $this->assertEquals('Open', $updatedCase['status_id.name']);
+  }
 }
