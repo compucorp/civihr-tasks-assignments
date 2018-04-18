@@ -12,43 +12,26 @@
 
   function RouteDecorator ($delegate) {
     (function init () {
-      $delegate.routes['/caseType/:id'].controller = 'CaseTypeExtendedController';
-      addActivityOptionsTask();
-      addActivityOptionsDocument();
+      var caseTypeEditRoute = $delegate.routes['/caseType/:id'];
+
+      caseTypeEditRoute.controller = 'CaseTypeExtendedController';
+      caseTypeEditRoute.resolve.activityOptionsTask = getResolverForActivityTypeComponent('CiviTask');
+      caseTypeEditRoute.resolve.activityOptionsDocument = getResolverForActivityTypeComponent('CiviDocument');
     })();
 
-    function addActivityOptionsTask () {
-      $delegate.routes['/caseType/:id'].resolve.activityOptionsTask = activityOptionsTask;
-      activityOptionsTask.$inject = ['crmApi'];
+    function getResolverForActivityTypeComponent (componentName) {
+      activityOptionsResolver.$inject = ['crmApi'];
 
-      function activityOptionsTask (crmApi) {
+      function activityOptionsResolver (crmApi) {
         return crmApi('OptionValue', 'get', {
           option_group_id: 'activity_type',
-          component_id: 'CiviTask',
+          component_id: componentName,
           sequential: 1,
-          options: {
-            sort: 'name',
-            limit: 0
-          }
+          options: { sort: 'name', limit: 0 }
         });
       }
-    }
 
-    function addActivityOptionsDocument () {
-      $delegate.routes['/caseType/:id'].resolve.activityOptionsDocument = activityOptionsDocument;
-      activityOptionsDocument.$inject = ['crmApi'];
-
-      function activityOptionsDocument (crmApi) {
-        return crmApi('OptionValue', 'get', {
-          option_group_id: 'activity_type',
-          component_id: 'CiviDocument',
-          sequential: 1,
-          options: {
-            sort: 'name',
-            limit: 0
-          }
-        });
-      }
+      return activityOptionsResolver;
     }
 
     return $delegate;

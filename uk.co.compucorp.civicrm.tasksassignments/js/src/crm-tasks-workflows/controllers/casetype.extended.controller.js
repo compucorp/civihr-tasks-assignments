@@ -13,13 +13,10 @@
   function CaseTypeExtendedController ($controller, $log, $scope, crmApi, apiCalls, activityOptionsTask, activityOptionsDocument) {
     $log.debug('Controller: CaseTypeExtendedController');
 
+    initParentController();
     var originalAddActivity = $scope.addActivity;
 
     $scope.addActivity = addActivity;
-
-    (function init () {
-      initParentController();
-    })();
 
     /**
      * Add new activity
@@ -48,7 +45,7 @@
     }
 
     /**
-     * Add component type label to activity types
+     * Get list of activity types with component type added to label
      *
      * @return {Array}
      */

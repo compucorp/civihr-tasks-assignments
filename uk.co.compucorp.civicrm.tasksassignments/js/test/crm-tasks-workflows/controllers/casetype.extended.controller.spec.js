@@ -59,6 +59,11 @@
       });
     });
 
+    /**
+     * Initialise the controller
+     *
+     * @param {Object} $scope
+     */
     function initController ($scope) {
       $scope = $scope || $rootScope.$new();
 
@@ -73,6 +78,11 @@
       $scope.$digest();
     }
 
+    /**
+     * Get list of activity types with component type added to label
+     *
+     * @return {Array} activity types
+     */
     function getActivityTypes () {
       var taskOptions = TaskActivityOptionsData.map(function (type) {
         type.label = (type.label + ' (Task)');
