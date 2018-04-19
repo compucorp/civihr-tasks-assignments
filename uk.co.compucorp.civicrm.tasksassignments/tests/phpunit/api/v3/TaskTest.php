@@ -6,6 +6,7 @@ use CRM_Tasksassignments_Test_Fabricator_Case as CaseFabricator;
 use CRM_Tasksassignments_Test_Fabricator_CaseType as CaseTypeFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Task as TaskFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
+use CRM_Tasksassignments_Test_Fabricator_OptionGroup as OptionGroupFabricator;
 
 /**
  * @group headless
@@ -28,9 +29,7 @@ class api_v3_TaskTest extends BaseHeadlessTest {
 
     $this->_taskTypeId = $result['value'];
 
-    civicrm_api3('OptionGroup', 'create', ['name' => 'case_type_category']);
-    OptionValueFabricator::fabricate([ 'name' => 'WORKFLOW', 'option_group_id' => 'case_type_category' ]);
-    OptionValueFabricator::fabricate([ 'name' => 'VACANCY', 'option_group_id' => 'case_type_category'  ]);
+    OptionGroupFabricator::fabricateCaseCategoryGroupAndValues();
   }
 
   /**
