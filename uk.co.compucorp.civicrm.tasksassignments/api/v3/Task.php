@@ -504,15 +504,6 @@ function civicrm_api3_task_get($params) {
     return civicrm_api3_create_success([], $params, 'task', 'getbycomponent');
   }
 
-  if ($caseId) {
-    $activities = CRM_Case_BAO_Case::getCaseActivity($caseId);
-    $caseActivityIds = array_column($activities['data'], 'DT_RowId');
-    $activityIds = !empty($activityIds) ? array_intersect($activityIds, $caseActivityIds) : $caseActivityIds;
-    if (empty($activityIds)) {
-      $activityIds[] = 0;
-    }
-  }
-
   if (!isset($params['id']) && !empty($activityIds)) {
     $params['id'] = array('IN' => $activityIds);
   }
