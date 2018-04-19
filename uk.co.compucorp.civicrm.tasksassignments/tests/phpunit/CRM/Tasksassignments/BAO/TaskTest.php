@@ -13,11 +13,11 @@ use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
 class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
   const SAMPLE_TASKS_COUNT = 3;
 
-  private $_case = null;
-  private $_taskType = null;
+  private $_case = NULL;
+  private $_taskType = NULL;
   private $_tasks = [];
 
-  function setUp() {
+  public function setUp() {
     parent::setUp();
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
@@ -58,7 +58,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
   /**
    * @expectedException CRM_Exception
    */
-  function testCreateTaskWithNoContacts() {
+  public function testCreateTaskWithNoContacts() {
     $params = array(
       'activity_type_id' => $this->_taskType['value'],
     );
@@ -68,7 +68,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
   /**
    * @expectedException CRM_Exception
    */
-  function testCreateTaskWithNoSource() {
+  public function testCreateTaskWithNoSource() {
     $params = array(
       'activity_type_id' => $this->_taskType['value'],
       'assignee_contact_id' => 1,
@@ -77,7 +77,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     CRM_Tasksassignments_BAO_Task::create($params);
   }
 
-  function testCreateTaskWithNoAssignee() {
+  public function testCreateTaskWithNoAssignee() {
     $params = array(
       'activity_type_id' => $this->_taskType['value'],
       'source_contact_id' => 1,
@@ -92,7 +92,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
   /**
    * @expectedException CRM_Exception
    */
-  function testCreateTaskWithNoTarget() {
+  public function testCreateTaskWithNoTarget() {
     $params = array(
       'activity_type_id' => $this->_taskType['value'],
       'source_contact_id' => 1,
@@ -101,7 +101,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     CRM_Tasksassignments_BAO_Task::create($params);
   }
 
-  function testClosingTheCaseWhenAllTasksAreCompleted() {
+  public function testClosingTheCaseWhenAllTasksAreCompleted() {
     $this->setupCaseAndTasks();
 
     foreach ($this->_tasks as $task) {
@@ -119,7 +119,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $this->assertEquals('Closed', $updatedCase['status_id.name']);
   }
 
-  function testNotClosingTheCaseWhenOnlySomeTasksAreCompleted() {
+  public function testNotClosingTheCaseWhenOnlySomeTasksAreCompleted() {
     $this->setupCaseAndTasks();
 
     civicrm_api3('Task', 'create', [
@@ -135,7 +135,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $this->assertEquals('Open', $updatedCase['status_id.name']);
   }
 
-  function testNotClosingTHeCaseWhenTheCaseCategoryIsNotWorkflow() {
+  public function testNotClosingTHeCaseWhenTheCaseCategoryIsNotWorkflow() {
     $vacancyType = CaseTypeFabricator::fabricate([
       'name' => 'Application',
       'category' => 'VACANCY'
@@ -159,4 +159,5 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
 
     $this->assertEquals('Open', $updatedCase['status_id.name']);
   }
+
 }

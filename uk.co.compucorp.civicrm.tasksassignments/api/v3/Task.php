@@ -15,7 +15,7 @@ use CRM_Activity_Service_ActivityService as ActivityService;
 function civicrm_api3_task_create($params) {
 
   if (!empty($params['task'])) {
-      return civicrm_api3_task_create_multiple($params);
+    return civicrm_api3_task_create_multiple($params);
   }
 
   if (empty($params['id'])) {
@@ -32,7 +32,6 @@ function civicrm_api3_task_create($params) {
   if (!empty($errors)) {
     return $errors;
   }
-
 
   $values = $activityArray = array();
   _civicrm_api3_custom_format_params($params, $values, 'Task');
@@ -124,73 +123,78 @@ function civicrm_api3_task_create($params) {
     _civicrm_api3_object_to_array($activityBAO, $activityArray[$activityBAO->id]);
     //return civicrm_api3_create_success($activityArray, $params, 'activity', 'get', $activityBAO);
     return civicrm_api3_task_get(array(
-        'sequential' => isset($params['sequential']) ? $params['sequential'] : 0,
-        'debug' => isset($params['debug']) ? $params['debug'] : 0,
-        'id' => $activityBAO->id
+      'sequential' => isset($params['sequential']) ? $params['sequential'] : 0,
+      'debug' => isset($params['debug']) ? $params['debug'] : 0,
+      'id' => $activityBAO->id,
     ));
   }
 }
 
 function civicrm_api3_task_copy_to_assignment($params) {
+  if (empty($params['id'])) {
+    throw new API_Exception(ts("Please specify 'id' value(s)."));
+  }
 
-    if (empty($params['id'])) {
-        throw new API_Exception(ts("Please specify 'id' value(s)."));
-    }
-    if (empty($params['case_id'])) {
-        throw new API_Exception(ts("Please specify 'case_id' value."));
-    }
+  if (empty($params['case_id'])) {
+    throw new API_Exception(ts("Please specify 'case_id' value."));
+  }
 
-    if (empty($params['sequential'])) {
-        $params['sequential'] = 0;
-    }
-    if (empty($params['debug'])) {
-        $params['debug'] = 0;
-    }
+  if (empty($params['sequential'])) {
+    $params['sequential'] = 0;
+  }
 
-    $ids = (array)$params['id'];
-    $caseId = (int)$params['case_id'];
-    $result = array();
-    foreach ($ids as $id) {
-        $taskToAssignment = array(
-          'sequential' => $params['sequential'],
-          'debug' => $params['debug'],
-          'id' => $id,
-          'case_id' => $caseId,
-        );
-        $createResult = civicrm_api3('Task', 'create', $taskToAssignment);
-        if ($createResult['count']) {
-            $result[] = array_shift($createResult['values']);
-        }
-    }
+  if (empty($params['debug'])) {
+    $params['debug'] = 0;
+  }
 
-    return civicrm_api3_create_success($result, $params);
+  $ids = (array) $params['id'];
+  $caseId = (int) $params['case_id'];
+  $result = array();
+
+  foreach ($ids as $id) {
+    $taskToAssignment = array(
+      'sequential' => $params['sequential'],
+      'debug' => $params['debug'],
+      'id' => $id,
+      'case_id' => $caseId,
+    );
+    $createResult = civicrm_api3('Task', 'create', $taskToAssignment);
+
+    if ($createResult['count']) {
+      $result[] = array_shift($createResult['values']);
+    }
+  }
+
+  return civicrm_api3_create_success($result, $params);
 }
 
 function civicrm_api3_task_create_multiple($params) {
+  if (empty($params['task'])) {
+    throw new API_Exception(ts("Please specify 'task' array."));
+  }
 
-    if (empty($params['task'])) {
-        throw new API_Exception(ts("Please specify 'task' array."));
-    }
+  if (empty($params['sequential'])) {
+    $params['sequential'] = 0;
+  }
 
-    if (empty($params['sequential'])) {
-        $params['sequential'] = 0;
-    }
-    if (empty($params['debug'])) {
-        $params['debug'] = 0;
-    }
+  if (empty($params['debug'])) {
+    $params['debug'] = 0;
+  }
 
-    $tasks = (array)$params['task'];
-    $result = array();
-    foreach ($tasks as $task) {
-        $task['sequential'] = $params['sequential'];
-        $task['debug'] = $params['debug'];
-        $createResult = civicrm_api3('Task', 'create', $task);
-        if ($createResult['count']) {
-            $result[] = array_shift($createResult['values']);
-        }
-    }
+  $tasks = (array) $params['task'];
+  $result = array();
 
-    return civicrm_api3_create_success($result, $params);
+  foreach ($tasks as $task) {
+    $task['sequential'] = $params['sequential'];
+    $task['debug'] = $params['debug'];
+    $createResult = civicrm_api3('Task', 'create', $task);
+
+    if ($createResult['count']) {
+      $result[] = array_shift($createResult['values']);
+    }
+  }
+
+  return civicrm_api3_create_success($result, $params);
 }
 
 /**
@@ -199,7 +203,6 @@ function civicrm_api3_task_create_multiple($params) {
  * @param array $params (reference) array of parameters determined by getfields
  */
 function _civicrm_api3_task_create_spec(&$params) {
-
   //default for source_contact_id = currently logged in user
   $params['source_contact_id']['api.default'] = 'user_contact_id';
 
@@ -219,11 +222,11 @@ function _civicrm_api3_task_create_spec(&$params) {
   );
 
   $params['source_contact_id'] = array(
-      'name' => 'source_contact_id',
-      'title' => 'Activity Source Contact',
-      'type' => 1,
-      'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
-      'api.default' => 'user_contact_id',
+    'name' => 'source_contact_id',
+    'title' => 'Activity Source Contact',
+    'type' => 1,
+    'FKClassName' => 'CRM_Activity_DAO_ActivityContact',
+    'api.default' => 'user_contact_id',
   );
 
 }
@@ -239,10 +242,12 @@ function _civicrm_api3_task_create_spec(&$params) {
  */
 function _civicrm_api3_task_get_formatResult($params, $activities) {
   $returns = CRM_Utils_Array::value('return', $params, array());
+
   if (!is_array($returns)) {
     $returns = str_replace(' ', '', $returns);
     $returns = explode(',', $returns);
   }
+
   $returns = array_fill_keys($returns, 1);
 
   foreach ($params as $n => $v) {
@@ -251,7 +256,9 @@ function _civicrm_api3_task_get_formatResult($params, $activities) {
       $returns[$returnkey] = $v;
     }
   }
+
   $returns['source_contact_id'] = 1;
+
   foreach ($returns as $n => $v) {
     switch ($n) {
       case 'assignee_contact_id':
@@ -259,28 +266,33 @@ function _civicrm_api3_task_get_formatResult($params, $activities) {
           $activities[$key]['assignee_contact_id'] = CRM_Activity_BAO_ActivityAssignment::retrieveAssigneeIdsByActivityId($activityArray['id']);
         }
         break;
+
       case 'target_contact_id':
         foreach ($activities as $key => $activityArray) {
           $activities[$key]['target_contact_id'] = CRM_Activity_BAO_ActivityTarget::retrieveTargetIdsByActivityId($activityArray['id']);
         }
         break;
+
       case 'source_contact_id':
         foreach ($activities as $key => $activityArray) {
           $activities[$key]['source_contact_id'] = CRM_Activity_BAO_Activity::getSourceContactID($activityArray['id']);
         }
         break;
+
       default:
         if (substr($n, 0, 6) == 'custom') {
           $returnProperties[$n] = $v;
         }
     }
   }
+
   if (!empty($activities) && (!empty($returnProperties) || !empty($params['contact_id']))) {
     foreach ($activities as $activityId => $values) {
       //@todo - should possibly load activity type id if not loaded (update with id)
       _civicrm_api3_custom_data_get($activities[$activityId], 'Activity', $activityId, NULL, CRM_Utils_Array::value('activity_type_id', $values));
     }
   }
+
   return $activities;
 }
 
@@ -306,7 +318,7 @@ function civicrm_api3_task_delete($params) {
     throw new API_Exception('You don\'t have permissions to delete Tasks');
   }
 
-  CRM_Tasksassignments_Reminder::sendReminder($params['id'], null, false, null, true);
+  CRM_Tasksassignments_Reminder::sendReminder($params['id'], NULL, FALSE, NULL, TRUE);
   if (CRM_Activity_BAO_Activity::deleteActivity($params)) {
     return civicrm_api3_create_success(1, $params, 'activity', 'delete');
   }
@@ -327,24 +339,23 @@ function civicrm_api3_task_delete($params) {
  * @return array $error array with errors
  */
 function _civicrm_api3_task_check_params(&$params) {
-
-  $contactIDFields = array_intersect_key($params,
-                     array(
-                       'source_contact_id' => 1,
-                       'assignee_contact_id' => 1,
-                       'target_contact_id' => 1,
-                     )
-  );
+  $contactIDFields = array_intersect_key($params, array(
+    'source_contact_id' => 1,
+    'assignee_contact_id' => 1,
+    'target_contact_id' => 1,
+  ));
 
   // this should be handled by wrapper layer & probably the api would already manage it
   //correctly by doing post validation - ie. a failure should result in a roll-back = an error
   // needs testing
   if (!empty($contactIDFields)) {
     $contactIds = array();
+
     foreach ($contactIDFields as $fieldname => $contactfield) {
       if (empty($contactfield)) {
         continue;
       }
+
       if (is_array($contactfield)) {
         foreach ($contactfield as $contactkey => $contactvalue) {
           $contactIds[$contactvalue] = $contactvalue;
@@ -355,20 +366,20 @@ function _civicrm_api3_task_check_params(&$params) {
       }
     }
 
-
     $sql = '
 SELECT  count(*)
   FROM  civicrm_contact
  WHERE  id IN (' . implode(', ', $contactIds) . ' )';
+
     if (count($contactIds) != CRM_Core_DAO::singleValueQuery($sql)) {
       throw new API_Exception('Invalid ' .  ' Contact Id');
     }
   }
 
-
-  $activityIds = array('activity' => CRM_Utils_Array::value('id', $params),
-                 'parent' => CRM_Utils_Array::value('parent_id', $params),
-                 'original' => CRM_Utils_Array::value('original_id', $params),
+  $activityIds = array(
+    'activity' => CRM_Utils_Array::value('id', $params),
+    'parent' => CRM_Utils_Array::value('parent_id', $params),
+    'original' => CRM_Utils_Array::value('original_id', $params),
   );
 
   foreach ($activityIds as $id => $value) {
@@ -378,6 +389,7 @@ SELECT  count(*)
       throw new API_Exception('Invalid ' . ucfirst($id) . ' Id');
     }
   }
+
   // this should be handled by wrapper layer & probably the api would already manage it
   //correctly by doing pseudoconstant validation
   // needs testing
@@ -385,6 +397,7 @@ SELECT  count(*)
   $activityName  = CRM_Utils_Array::value('activity_name', $params);
   $activityName  = ucfirst($activityName);
   $activityLabel = CRM_Utils_Array::value('activity_label', $params);
+
   if ($activityLabel) {
     $activityTypes = CRM_Activity_BAO_Activity::buildOptions('activity_type_id', 'create');
   }
@@ -395,17 +408,17 @@ SELECT  count(*)
     $activityTypeIdInList = array_search(($activityName ? $activityName : $activityLabel), $activityTypes);
 
     if (!$activityTypeIdInList) {
-      $errorString = $activityName ? "Invalid Activity Name : $activityName"  : "Invalid Activity Type Label";
+      $errorString = $activityName ? "Invalid Activity Name : $activityName" : "Invalid Activity Type Label";
+
       throw new Exception($errorString);
     }
     elseif ($activityTypeId && ($activityTypeId != $activityTypeIdInList)) {
       throw new API_Exception('Mismatch in Activity');
     }
+
     $params['activity_type_id'] = $activityTypeIdInList;
   }
-  elseif ($activityTypeId &&
-    !array_key_exists($activityTypeId, $activityTypes)
-  ) {
+  elseif ($activityTypeId && !array_key_exists($activityTypeId, $activityTypes)) {
     throw new API_Exception('Invalid Activity Type ID');
   }
 
@@ -415,7 +428,6 @@ SELECT  count(*)
   if (isset($params['duration_minutes']) && !is_numeric($params['duration_minutes'])) {
     throw new API_Exception('Invalid Activity Duration (in minutes)');
   }
-
 
   //if adding a new activity & date_time not set make it now
   // this should be managed by the wrapper layer & setting ['api.default'] in speces
@@ -428,7 +440,7 @@ SELECT  count(*)
 }
 
 /**
- * @see _civicrm_api3_generic_getlist_params.
+ * @see _civicrm_api3_generic_getlist_params
  *
  * @param $request array
  */
@@ -452,6 +464,7 @@ function _civicrm_api3_task_getlist_params(&$request) {
  */
 function _civicrm_api3_task_getlist_output($result, $request) {
   $output = array();
+
   if (!empty($result['values'])) {
     foreach ($result['values'] as $row) {
       $data = array(
@@ -459,25 +472,28 @@ function _civicrm_api3_task_getlist_output($result, $request) {
         'label' => $row[$request['label_field']] ? $row[$request['label_field']] : ts('(no subject)'),
         'description' => array(CRM_Core_Pseudoconstant::getLabel('CRM_Activity_BAO_Activity', 'activity_type_id', $row['activity_type_id'])),
       );
+
       if (!empty($row['activity_date_time'])) {
         $data['description'][0] .= ': ' . CRM_Utils_Date::customFormat($row['activity_date_time']);
       }
+
       if (!empty($row['source_contact_id'])) {
         $data['description'][] = ts('By %1', array(1 => CRM_Core_DAO::getFieldValue('CRM_Contact_DAO_Contact', $row['source_contact_id'], 'display_name')));
       }
+
       foreach ($request['extra'] as $field) {
         $data['extra'][$field] = isset($row[$field]) ? $row[$field] : NULL;
       }
+
       $output[] = $data;
     }
   }
+
   return $output;
 }
 
 function civicrm_api3_task_get($params) {
-
   $activityIds = [];
-
   $assigneeContactIds = CRM_Utils_Array::value('assignee_contact_id', $params);
   $assigneeContactIds = (array) $assigneeContactIds;
   $sourceContactIds = CRM_Utils_Array::value('source_contact_id', $params);
@@ -534,7 +550,7 @@ function civicrm_api3_task_get($params) {
           1 => [$value['id'], 'Integer'],
         ];
         $caseActivityResult = CRM_Core_DAO::executeQuery($caseActivityQuery, $caseActivityParams);
-        $getResult['values'][$key]['case_id'] = null;
+        $getResult['values'][$key]['case_id'] = NULL;
 
         if ($caseActivityResult->fetch()) {
           $getResult['values'][$key]['case_id'] = $caseActivityResult->case_id;
@@ -570,6 +586,7 @@ function _loadActivityIDsForContactIntoArray(
     'record_type_id' => $recordTypeId,
     'options' => ['limit' => 0],
   ]);
+
   foreach ($result['values'] as $value) {
     $activityIds[] = $value['activity_id'];
   }
@@ -610,57 +627,56 @@ function civicrm_api3_task_getoptions($params) {
 }
 
 function civicrm_api3_task_getstatuses($params) {
+  $optionGroupID = (int) CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
 
-    $optionGroupID = (int)CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'activity_status', 'id', 'name');
+  if ($optionGroupID) {
+    return $result = civicrm_api3('OptionValue', 'get', array_merge($params, array(
+      'option_group_id' => $optionGroupID,
+    )));
+  }
 
-    if ($optionGroupID) {
-        return $result = civicrm_api3('OptionValue', 'get', array_merge($params, array(
-          'option_group_id' => $optionGroupID,
-        )));
-    }
-
-    return null;
+  return NULL;
 }
 
-/*
+/**
  * Task Reminder on demand.
  */
 function civicrm_api3_task_sendreminder($params) {
+  if (empty($params['activity_id'])) {
+    throw new API_Exception(ts("Please specify 'activity_id' value."));
+  }
 
-    if (empty($params['activity_id'])) {
-        throw new API_Exception(ts("Please specify 'activity_id' value."));
-    }
+  $result = CRM_Tasksassignments_Reminder::sendReminder((int) $params['activity_id'],
+    isset($params['notes']) ? $params['notes'] : '', TRUE);
 
-    $result = CRM_Tasksassignments_Reminder::sendReminder((int)$params['activity_id'], isset($params['notes']) ? $params['notes'] : '', true);
-    return civicrm_api3_create_success($result, $params, 'task', 'reminder');
+  return civicrm_api3_create_success($result, $params, 'task', 'reminder');
 }
 
-/*
+/**
  * Daily Task Reminder.
  */
 function civicrm_api3_task_senddailyreminder($params) {
-
-    CRM_Tasksassignments_Reminder::sendDailyReminder();
-    return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
+  CRM_Tasksassignments_Reminder::sendDailyReminder();
+  return civicrm_api3_create_success(1, $params, 'task', 'dailyreminder');
 }
 
 function civicrm_api3_task_getcontactlist($params) {
   $options = array();
   $sortName = isset($params['sort_name']) ? $params['sort_name'] : '';
-  $relationshipName = isset($params['relationship_name']) ? $params['relationship_name'] : null;
-  $relatedContactId = isset($params['related_contact_id']) ? $params['related_contact_id'] : null;
-  $includeRelatedContact = isset($params['include_related_contact']) ? $params['include_related_contact'] : false;
+  $relationshipName = isset($params['relationship_name']) ? $params['relationship_name'] : NULL;
+  $relatedContactId = isset($params['related_contact_id']) ? $params['related_contact_id'] : NULL;
+  $includeRelatedContact = isset($params['include_related_contact']) ? $params['include_related_contact'] : FALSE;
   $params = array(
     "contact_is_deleted" => 0,
     "sort_name" => $sortName,
     "options" => array(
-        "limit" => 0,
-        "offset" => 0,
-        "sort" => "sort_name",
+      "limit" => 0,
+      "offset" => 0,
+      "sort" => "sort_name",
     ),
     "sequential" => 1,
     "return" => array("email", "sort_name", "contact_type"),
-    "check_permissions" => false,
+    "check_permissions" => FALSE,
     "version" => 3,
   );
 
@@ -670,35 +686,41 @@ function civicrm_api3_task_getcontactlist($params) {
       'name_a_b' => $relationshipName,
     ));
     $relationshipType = CRM_Utils_Array::first($relationshipTypeResult['values']);
+
     if ($relationshipType['id']) {
       $relationshipResult = civicrm_api3('Relationship', 'get', array(
         'sequential' => 1,
-        'relationship_type_id' => (int)$relationshipType['id'],
+        'relationship_type_id' => (int) $relationshipType['id'],
         'contact_id_b' => $relatedContactId,
         'return' => "contact_id_a",
       ));
       $relationshipContactIds = array();
+
       foreach ($relationshipResult['values'] as $relationship) {
-        $relationshipContactIds[] = (int)$relationship['contact_id_a'];
+        $relationshipContactIds[] = (int) $relationship['contact_id_a'];
       }
+
       if ($includeRelatedContact) {
         $relationshipContactIds[] = $relatedContactId;
       }
+
       if (empty($relationshipContactIds)) {
         return civicrm_api3_create_success(array(), $params, 'contact');
       }
+
       $params['id'] = array('IN' => $relationshipContactIds);
     }
   }
 
   _civicrm_api3_task_get_supportanomalies($params, $options);
   $contacts = _civicrm_api3_get_using_query_object('contact', $params, $options);
+
   return civicrm_api3_create_success($contacts, $params, 'contact');
 }
 
 function civicrm_api3_task_getcontact($params) {
-    $params['check_permissions'] = false;
-    return civicrm_api3('Contact', 'get', $params);
+  $params['check_permissions'] = FALSE;
+  return civicrm_api3('Contact', 'get', $params);
 }
 
 function _civicrm_api3_task_get_supportanomalies(&$params, &$options) {
@@ -706,24 +728,31 @@ function _civicrm_api3_task_get_supportanomalies(&$params, &$options) {
     if (strtolower($params['showAll']) == "active") {
       $params['contact_is_deleted'] = 0;
     }
+
     if (strtolower($params['showAll']) == "trash") {
       $params['contact_is_deleted'] = 1;
     }
+
     if (strtolower($params['showAll']) == "all" && isset($params['contact_is_deleted'])) {
       unset($params['contact_is_deleted']);
     }
   }
+
   // support for group filters
   if (array_key_exists('filter_group_id', $params)) {
     $params['filter.group_id'] = $params['filter_group_id'];
     unset($params['filter_group_id']);
   }
+
   // filter.group_id works both for 1,2,3 and array (1,2,3)
   if (array_key_exists('filter.group_id', $params)) {
     if (is_array($params['filter.group_id'])) {
       $groups = $params['filter.group_id'];
     }
-    else $groups = explode(',', $params['filter.group_id']);
+    else {
+      $groups = explode(',', $params['filter.group_id']);
+    }
+
     unset($params['filter.group_id']);
     $groups = array_flip($groups);
     $groups[key($groups)] = 1;
