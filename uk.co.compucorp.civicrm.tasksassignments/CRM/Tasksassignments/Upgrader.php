@@ -210,7 +210,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         ),
         'keydates_tab' => array(
           'label' => 'Show or hide the Key Dates tab',
-          'value' => 1,
+          'value' => 2,
         ),
         'add_assignment_button_title' => array(
           'label' => 'Configure \'Add Assignment\' button title',
@@ -398,7 +398,6 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
         'option_group_id' => 'ta_settings',
         'name' => 'is_task_dashboard_default',
         'label' => 'Is task dashboard the default page',
-        'value' => '1'
       );
       civicrm_api3('OptionValue', 'create', $opValueParams);
     }

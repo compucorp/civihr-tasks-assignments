@@ -17,7 +17,7 @@ class CRM_Tasksassignments_Test_Fabricator_OptionValue {
    * @return array
    */
   public static function fabricate($params = []) {
-    $params = array_merge($params, self::$defaultParams);
+    $params = array_merge(self::$defaultParams, $params);
     $result = civicrm_api3('OptionValue', 'create', $params);
 
     return array_shift($result['values']);
