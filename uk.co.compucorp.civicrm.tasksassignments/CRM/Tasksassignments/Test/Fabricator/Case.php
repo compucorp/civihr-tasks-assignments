@@ -4,6 +4,9 @@
  * Case Fabricator class
  */
 class CRM_Tasksassignments_Test_Fabricator_Case {
+  private static $defaultParams = [
+    'subject' => 'Sample Case'
+  ];
 
   /**
    * Fabricates a Case.
@@ -20,6 +23,7 @@ class CRM_Tasksassignments_Test_Fabricator_Case {
    * @return array
    */
   public static function fabricate($params = []) {
+    $params = array_merge($params, self::$defaultParams);
     $result = civicrm_api3('Case', 'create', $params);
 
     return array_shift($result['values']);

@@ -2,6 +2,7 @@
 
 class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
   const COMPLETED_STATUS = 'Completed';
+  const WORKFLOW_CATEGORY = 'WORKFLOW';
 
   /**
    * Create a new Task based on array-data
@@ -35,7 +36,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     CRM_Tasksassignments_Reminder::sendReminder((int) $instance->id, NULL, FALSE, $previousAssigneeId);
 
     if ($hook === 'edit') {
-      $isWorkflowCaseCategory = 'WORKFLOW' === self::getCaseCategory($instance->case_id);
+      $isWorkflowCaseCategory = self::getCaseCategory($instance->case_id) === self::WORKFLOW_CATEGORY;
       $allCaseTasksAreCompleted = self::checkIfTasksBelongingToCaseAreCompleted($instance->case_id);
 
       if ($isWorkflowCaseCategory && $allCaseTasksAreCompleted) {
@@ -63,7 +64,7 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
 
     $case = civicrm_api3('Case', 'getsingle', [
       'id' => $caseId,
-      'return' => [ 'case_type_id.category.name' ]
+      'return' => ['case_type_id.category.name']
     ]);
 
     return $case['case_type_id.category.name'];

@@ -185,8 +185,7 @@ class api_v3_TaskTest extends BaseHeadlessTest {
     $case = CaseFabricator::fabricate([
       'contact_id' => $cecil['id'],
       'creator_id' => $cecil['id'],
-      'case_type_id' => $caseType['id'],
-      'subject' => 'Sample Joining Case'
+      'case_type_id' => $caseType['id']
     ]);
 
     $tasksAssignedToAna = $this->fabricateSeveralTasks(6, [

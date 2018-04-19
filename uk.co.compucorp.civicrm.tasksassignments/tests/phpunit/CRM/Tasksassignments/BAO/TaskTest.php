@@ -38,8 +38,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $defaultCaseParameters = [
       'contact_id' => $contact['id'],
       'creator_id' => $contact['id'],
-      'case_type_id' => $caseType['id'],
-      'subject' => 'Sample Case'
+      'case_type_id' => $caseType['id']
     ];
     $caseParameters = array_merge($defaultCaseParameters, $caseParameters);
     $this->_case = CaseFabricator::fabricate($caseParameters);
