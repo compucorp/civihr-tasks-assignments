@@ -713,16 +713,58 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   }
 
   /**
-   * Renames the case status Ongoing and Resolved to In Progress and Completed.
-   *
-   * @return bool
+   * Upgrade CustomGroup, setting Probation and Activity_Custom_Fields to is_reserved Yes
    */
   public function upgrade_1032() {
-    $this->_relabelCaseStatus('Ongoing', 'In Progress');
-    $this->_relabelCaseStatus('Resolved', 'Completed');
+    $result = civicrm_api3('CustomGroup', 'get', [
+      'sequential' => 1,
+      'return' => ['id'],
+      'name' => ['IN' => ['Probation', 'Activity_Custom_Fields']],
+    ]);
+
+    foreach ($result['values'] as $value) {
+      civicrm_api3('CustomGroup', 'create', [
+        'id' => $value['id'],
+        'is_reserved' => 1,
+      ]);
+    }
+  }
+
+  /**
+   * Update permissions and set the weight for the "Tasks" menu item.
+   */
+  public function upgrade_1033() {
+    $permission = 'administer CiviCase';
+    $itemsToChange = ['tasksassignments_administer', 'ta_settings'];
+
+    // get item IDs
+    $params = ['name' => ['IN' => $itemsToChange]];
+    $itemsToChange = civicrm_api3('Navigation', 'get', $params);
+    $itemsToChange = array_column($itemsToChange['values'], 'name', 'id');
+    $tasksId = array_search('tasksassignments_administer', $itemsToChange);
+    $taSettingsId = array_search('ta_settings', $itemsToChange);
+
+    // Update permissions for settings item
+    $params = ['permission' => $permission, 'id' => $taSettingsId];
+    civicrm_api3('Navigation', 'create', $params);
+
+    // Update parent weight + permission
+    $params = ['id' => $tasksId, 'weight' => -97, 'permission' => $permission];
+    civicrm_api3('Navigation', 'create', $params);
 
     return TRUE;
   }
+
+  /**
+   * Renames the case status Ongoing and Resolved to In Progress and Completed,
+   *
+   * @return bool
+   */
+  public function upgrade_1034() {
+    $this->_relabelCaseStatus('Ongoing', 'In Progress');
+    $this->_relabelCaseStatus('Resolved', 'Completed');
+  }
+
 
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
