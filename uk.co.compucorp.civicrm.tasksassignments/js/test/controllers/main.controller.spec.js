@@ -10,13 +10,14 @@ define([
   'use strict';
 
   describe('MainController', function () {
-    var beforeHashQueryParams, $controller, $log, $q, $rootScope, $modal,
-      OptionGroup, Session;
+    var $controller, $log, $modal, $q, $rootScope, $scope, beforeHashQueryParams,
+      OptionGroup, notificationService, Session, taskService;
 
     beforeEach(module('tasks-assignments.dashboard'));
 
-    beforeEach(inject(function (_$controller_, _$log_, _$q_, _$rootScope_,
-      _beforeHashQueryParams_, _$uibModal_, _OptionGroup_, _Session_) {
+    beforeEach(inject(function (_$controller_, $httpBackend, _$log_, _$q_, _$rootScope_,
+      _beforeHashQueryParams_, _$uibModal_, config, _OptionGroup_, _notificationService_,
+      _Session_, _taskService_) {
       beforeHashQueryParams = _beforeHashQueryParams_;
       $controller = _$controller_;
       $log = _$log_;
@@ -24,9 +25,15 @@ define([
       $modal = _$uibModal_;
       $rootScope = _$rootScope_;
       OptionGroup = _OptionGroup_;
+      notificationService = _notificationService_;
       Session = _Session_;
+      taskService = _taskService_;
 
       spyOn($modal, 'open').and.callThrough();
+
+      // Avoid actual API calls
+      $httpBackend.whenGET(/action=/).respond({});
+      $httpBackend.whenGET(/\.html/).respond('');
     }));
 
     describe('init()', function () {
@@ -190,14 +197,61 @@ define([
       }
     });
 
+    describe('displaying the case closed message', function () {
+      describe('when the last task is marked as completed', function () {
+        var caseClosedMessage, caseData, taskData;
+
+        beforeEach(function () {
+          var contactData = { display_name: 'Justin Tyme' };
+          var messageTemplate = 'All tasks in the {Case type} workflow for {Case client} have been completed. Good work!';
+          caseData = {
+            'case_id.case_type_id.title': 'Joining',
+            'case_id.status_id.name': 'Closed'
+          };
+          taskData = {
+            id: _.uniqueId(),
+            case_id: _.uniqueId(),
+            target_contact_id: [ _.uniqueId() ]
+          };
+          caseClosedMessage = messageTemplate
+            .replace('{Case type}', caseData['case_id.case_type_id.title'])
+            .replace('{Case client}', contactData.display_name);
+          // stores the task's target contact in the cache:
+          $rootScope.cache.contact.obj[taskData.target_contact_id[0]] = contactData;
+
+          spyOn(notificationService, 'success');
+          spyOn(taskService, 'get').and.returnValue($q.resolve([caseData]));
+          initController();
+          $scope.$emit('taskFormSuccess', {}, taskData);
+          $scope.$digest();
+        });
+
+        it('fetches the case status and title', function () {
+          expect(taskService.get).toHaveBeenCalledWith({
+            id: taskData.id,
+            return: [
+              'case_id.case_type_id.title',
+              'case_id.status_id.name'
+            ]
+          });
+        });
+
+        it('displays a success message', function () {
+          expect(notificationService.success).toHaveBeenCalledWith('Success', caseClosedMessage);
+        });
+      });
+    });
+
     /**
      * Initializes MainController
      */
     function initController () {
+      $scope = $rootScope.$new();
+
       $controller('MainController', {
         beforeHashQueryParams: beforeHashQueryParams,
         $rootScope: $rootScope,
-        $scope: $rootScope.$new(),
+        $scope: $scope,
         $uibModal: $modal
       });
     }
