@@ -14,6 +14,11 @@
           activityOptionsTask: function () {},
           activityOptionsDocument: function () {}
         }
+      }).when('/caseType', {
+        controller: 'CaseTypeListCtrl',
+        resolve: {
+          caseTypes: function () {}
+        }
       });
     }));
 
@@ -52,6 +57,23 @@
           component_id: 'CiviDocument',
           sequential: 1,
           options: { sort: 'name', limit: 0 }
+        });
+      });
+    });
+
+    describe('Extending CaseTypeListCtrl', function () {
+      var caseTypeListRoute;
+
+      beforeEach(function () {
+        caseTypeListRoute = $route.routes['/caseType'];
+
+        caseTypeListRoute.resolve.caseTypes(crmApiSpy);
+      });
+
+      it('resolves a list of workflow case types', function () {
+        expect(crmApiSpy).toHaveBeenCalledWith('CaseType', 'get', {
+          category: 'WORKFLOW',
+          options: { limit: 0 }
         });
       });
     });
