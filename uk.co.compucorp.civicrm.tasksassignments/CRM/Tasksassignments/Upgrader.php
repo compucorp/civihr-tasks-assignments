@@ -823,11 +823,11 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       'CiviPledge',
     ]);
 
-    $this->_uninstallActivitiesByLabel([
+    $this->_uninstallActivitiesByName([
       'Downloaded Invoice',
       'Emailed Invoice',
       'Inbound SMS',
-      'Outbound SMS',
+      'SMS',
       'SMS delivery',
       'Tell a Friend',
     ]);
@@ -920,15 +920,15 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
   }
 
   /**
-   * Removes activity types by using their labels as reference.
+   * Removes activity types by using their names as reference.
    *
-   * @param array $activityLabels
+   * @param array $activityNames
    */
-  private function _uninstallActivitiesByLabel(array $activityLabels) {
+  private function _uninstallActivitiesByName(array $activityNames) {
     $result = civicrm_api3('OptionValue', 'get', [
       'sequential' => 1,
       'option_group_id' => 'activity_type',
-      'label' => [ 'IN' => $activityLabels ],
+      'name' => ['IN' => $activityNames],
       'return' => 'id'
     ]);
 
@@ -948,7 +948,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     $result = civicrm_api3('OptionValue', 'get', [
       'component_id' => $params['component_id'],
       'option_group_id' => $params['option_group_id'],
-      'name' => array('IN' => $types),
+      'name' => ['IN' => $types],
       'return' => 'id',
     ]);
 
@@ -964,9 +964,8 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    */
   private function _uninstallAllComponentActivities(array $componentNames) {
     $result = civicrm_api3('OptionValue', 'get', [
-      'sequential' => 1,
       'option_group_id' => 'activity_type',
-      'component_id' => [ 'IN' => $componentNames ],
+      'component_id' => ['IN' => $componentNames],
       'return' => 'id'
     ]);
 
