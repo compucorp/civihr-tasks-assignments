@@ -833,7 +833,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     ]);
 
     $this->_uninstallActivityTypes('CiviCase', [
-      'Background_Check',
+      'Background Check',
       'Collate and print goals',
       'Collection of Appraisal forms',
       'Collection of appraisal paperwork',
@@ -945,17 +945,15 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    */
   private function _uninstallActivityTypes($componentName, array $types) {
     $params = $this->_fetchActivityTypeParams($componentName);
-    $typeIds = array_map(function ($type) {
-      return $type['id'];
-    }, civicrm_api3('OptionValue', 'get', array(
+    $result = civicrm_api3('OptionValue', 'get', [
       'component_id' => $params['component_id'],
       'option_group_id' => $params['option_group_id'],
       'name' => array('IN' => $types),
       'return' => 'id',
-    ))['values']);
+    ]);
 
-    foreach ($typeIds as $id) {
-      civicrm_api3('OptionValue', 'delete', array('id' => $id));
+    foreach ($result['values'] as $activity) {
+      civicrm_api3('OptionValue', 'delete', ['id' => $activity['id']]);
     }
   }
 
