@@ -203,9 +203,10 @@ define([
 
         beforeEach(function () {
           var contactData = { display_name: 'Justin Tyme' };
-          var messageTemplate = 'All tasks in the {Case type} workflow for {Case client} have been completed. Good work!';
+          var caseTitle = 'Joining';
+
           caseData = {
-            'case_id.case_type_id.title': 'Joining',
+            'case_id.case_type_id.title': caseTitle,
             'case_id.status_id.name': 'Closed'
           };
           taskData = {
@@ -213,9 +214,8 @@ define([
             case_id: _.uniqueId(),
             target_contact_id: [ _.uniqueId() ]
           };
-          caseClosedMessage = messageTemplate
-            .replace('{Case type}', caseData['case_id.case_type_id.title'])
-            .replace('{Case client}', contactData.display_name);
+          caseClosedMessage = 'All tasks in the ' + caseTitle +
+            ' workflow for ' + contactData.display_name + ' have been completed. Good work!';
           // stores the task's target contact in the cache:
           $rootScope.cache.contact.obj[taskData.target_contact_id[0]] = contactData;
 

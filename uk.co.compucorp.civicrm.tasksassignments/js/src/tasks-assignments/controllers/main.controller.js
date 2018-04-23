@@ -28,7 +28,6 @@ define([
       queryParams = beforeHashQueryParams.parse();
 
       queryParams.openModal && autoOpenModal(queryParams.openModal);
-
       initWatchers();
     }());
 
@@ -55,9 +54,8 @@ define([
      * @param {String} clientDisplayName - the display name of the case client.
      */
     function displayCaseClosedSuccessMessage (caseTypeTitle, clientDisplayName) {
-      var messageTemplte = 'All tasks in the {Case type} workflow for {Case client} have been completed. Good work!';
-      var message = messageTemplte.replace('{Case type}', caseTypeTitle)
-        .replace('{Case client}', clientDisplayName);
+      var message = 'All tasks in the ' + caseTypeTitle + ' workflow for ' +
+        clientDisplayName + ' have been completed. Good work!';
 
       notificationService.success('Success', message);
     }
@@ -65,7 +63,7 @@ define([
     /**
      * Returns the parent's case title and status for the given child task id.
      *
-     * @param {Number} taskId - the child task id.
+     * @param  {Number}  taskId - the child task id.
      * @return {Promise} resolves to the parent case title and status.
      */
     function getCaseDataFromTask (taskId) {
@@ -75,14 +73,16 @@ define([
           'case_id.case_type_id.title',
           'case_id.status_id.name'
         ]
-      }).then(function (result) {
-        if (result.length === 0) {
+      }).then(function (listOfTasks) {
+        var task = listOfTasks[0];
+
+        if (!task) {
           return;
         }
 
         return {
-          caseTypeTitle: result[0]['case_id.case_type_id.title'],
-          statusName: result[0]['case_id.status_id.name']
+          caseTypeTitle: task['case_id.case_type_id.title'],
+          statusName: task['case_id.status_id.name']
         };
       });
     }
@@ -100,10 +100,11 @@ define([
 
         getCaseDataFromTask(task.id)
           .then(function (caseData) {
-            if (caseData.statusName === 'Closed') {
-              displayCaseClosedSuccessMessage(
-                caseData.caseTypeTitle, clientData.display_name);
+            if (caseData.statusName !== 'Closed') {
+              return;
             }
+
+            displayCaseClosedSuccessMessage(caseData.caseTypeTitle, clientData.display_name);
           });
       });
     }
