@@ -287,6 +287,10 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
+  $changeSet->alterHtml('~/crmCaseType/list.html', function (phpQueryObject $doc) {
+    _tasksAssignments_remove_column($doc, 'Category');
+  });
+
   $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
     _tasksAssignments_change_column_text($doc);
@@ -528,13 +532,20 @@ function _tasksAssignments_remove_columns_from_timeline (phpQueryObject $doc) {
   $columnsToBeRemovedFromTimeline = [ 'Status', 'Reference', 'Select' ];
 
   foreach ($columnsToBeRemovedFromTimeline as $columnName) {
-    $columnHeader = $doc->find('table th:contains("' . $columnName . '"');
-    $columnIndex = $doc->find('table th')->index($columnHeader) + 1;
-    $columnBody = $doc->find('table td:nth-child('. $columnIndex .')');
-
-    $columnHeader->remove();
-    $columnBody->remove();
+    _tasksAssignments_remove_column($doc, $columnName);
   }
+}
+
+/**
+ * Removes the category header from the workflow configuration screen.
+ */
+function _tasksAssignments_remove_column (phpQueryObject $doc, $columnName) {
+  $columnHeader = $doc->find('table th:contains("' . $columnName . '")');
+  $columnIndex = $doc->find('table th')->index($columnHeader) + 1;
+  $columnBody = $doc->find('table td:nth-child('. $columnIndex .')');
+
+  $columnHeader->remove();
+  $columnBody->remove();
 }
 
 /**
