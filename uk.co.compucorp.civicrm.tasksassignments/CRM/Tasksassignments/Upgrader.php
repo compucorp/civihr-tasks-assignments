@@ -773,6 +773,54 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
     return TRUE;
   }
 
+  /**
+   * Deletes activity types that are not needed by T&W.
+   */
+  public function upgrade_1035() {
+    $this->_uninstallAllComponentActivities([
+      'CiviCampaign',
+      'CiviContribute',
+      'CiviEvent',
+      'CiviMember',
+      'CiviPledge',
+    ]);
+
+    $this->_uninstallActivitiesByLabel([
+      'Downloaded Invoice',
+      'Emailed Invoice',
+      'Inbound SMS',
+      'Outbound SMS',
+      'SMS delivery',
+      'Tell a Friend',
+    ]);
+
+    $this->_uninstallActivityTypes('CiviCase', [
+      'Background_Check',
+      'Collate and print goals',
+      'Collection of Appraisal forms',
+      'Collection of appraisal paperwork',
+      'Conduct appraisal',
+      'Follow up on progress',
+      'ID badge',
+      'Interview Prospect',
+      'Issue confirmation/warning letter',
+      'Issue extension letter',
+      'Prepare and email schedule',
+      'Prepare formats',
+      'Print formats',
+      'Revoke access to databases',
+    ]);
+
+    $this->_uninstallActivityTypes('CiviDocument', [
+      'Joining Document 2',
+      'Joining Document 3',
+      'Exiting document 2',
+      'Exiting document 3',
+    ]);
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
@@ -834,13 +882,31 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
   }
 
   /**
+   * Removes activity types by using their labels as reference.
+   *
+   * @param array $activityLabels
+   */
+  private function _uninstallActivitiesByLabel(array $activityLabels) {
+    $result = civicrm_api3('OptionValue', 'get', [
+      'sequential' => 1,
+      'option_group_id' => 'activity_type',
+      'label' => [ 'IN' => $activityLabels ],
+      'return' => 'id'
+    ]);
+
+    foreach ($result['values'] as $activity) {
+      civicrm_api3('OptionValue', 'delete', ['id' => $activity['id']]);
+    }
+  }
+
+  /**
    * Uninstall (if they exist) the given activity types for the given component
    *
    * @param  string $component
    * @param  array  $types
    */
-  private function _uninstallActivityTypes($component, array $types) {
-    $params = $this->_fetchActivityTypeParams('CiviDocument');
+  private function _uninstallActivityTypes($componentName, array $types) {
+    $params = $this->_fetchActivityTypeParams($componentName);
     $typeIds = array_map(function ($type) {
       return $type['id'];
     }, civicrm_api3('OptionValue', 'get', array(
@@ -852,6 +918,24 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base
 
     foreach ($typeIds as $id) {
       civicrm_api3('OptionValue', 'delete', array('id' => $id));
+    }
+  }
+
+  /**
+   * Removes activity types by using their parent component as reference.
+   *
+   * @param array $componentNames
+   */
+  private function _uninstallAllComponentActivities(array $componentNames) {
+    $result = civicrm_api3('OptionValue', 'get', [
+      'sequential' => 1,
+      'option_group_id' => 'activity_type',
+      'component_id' => [ 'IN' => $componentNames ],
+      'return' => 'id'
+    ]);
+
+    foreach ($result['values'] as $activity) {
+      civicrm_api3('OptionValue', 'delete', ['id' => $activity['id']]);
     }
   }
 
