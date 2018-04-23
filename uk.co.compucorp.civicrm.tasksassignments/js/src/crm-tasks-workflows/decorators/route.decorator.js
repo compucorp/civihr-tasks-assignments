@@ -4,7 +4,7 @@
   'use strict';
 
   angular.module('crm-tasks-workflows.decorators')
-    .config(['$provide', '$routeProvider', function ($provide, $routeProvider) {
+    .config(['$provide', function ($provide) {
       $provide.decorator('$route', RouteDecorator);
     }]);
 
@@ -19,6 +19,12 @@
       caseTypeEditRoute.resolve.activityOptionsDocument = getResolverForActivityTypeComponent('CiviDocument');
     })();
 
+    /**
+     * Returns a resolver for the list of activity types for a particular component.
+     *
+     * @param  {String}   componentName - the name of the activity type's component.
+     * @return {Function} the function that will resolve the activity types.
+     */
     function getResolverForActivityTypeComponent (componentName) {
       activityOptionsResolver.$inject = ['crmApi'];
 
