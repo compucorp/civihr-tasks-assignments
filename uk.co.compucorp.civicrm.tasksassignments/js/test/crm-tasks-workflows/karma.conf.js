@@ -12,6 +12,7 @@ module.exports = function (config) {
       // the global dependencies
       'bower_components/angular/angular.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-route/angular-route.min.js',
 
       { pattern: extPath + '/js/src/crm-tasks-workflows/modules/*.js' },
       { pattern: extPath + '/js/src/crm-tasks-workflows/controllers/*.js' },
