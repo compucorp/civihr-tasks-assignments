@@ -41,7 +41,7 @@ function tasksassignments_civicrm_apiWrappers(&$wrappers, $apiRequest) {
 /**
  * Implements hook_civicrm_xmlMenu().
  *
- * @param array(string) $files
+ * @param array $files
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_xmlMenu
  */
@@ -299,10 +299,10 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
 }
 
 function tasksAssignments_civicrm_angularModules(&$angularModules) {
-  $angularModules['crm-tasks-workflows'] = array(
+  $angularModules['crm-tasks-workflows'] = [
     'ext' => 'civicrm',
-    'js' => array('tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js'),
-  );
+    'js' => ['tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js'],
+  ];
 }
 
 /**
@@ -534,10 +534,19 @@ function _tasksAssignments_remove_columns_from_timeline(phpQueryObject $doc) {
 }
 
 /**
- * Removes the category header from the workflow configuration screen.
+ * Removes a column from a table by using the column's header name as a reference.
+ *
+ * @param phpQueryObject $doc
+ * @param string $columnName
  */
 function _tasksAssignments_remove_column(phpQueryObject $doc, $columnName) {
   $columnHeader = $doc->find('table th:contains("' . $columnName . '")');
+
+  // skip if the column does not exist:
+  if (!$columnHeader->count()) {
+    return;
+  }
+
   $columnIndex = $doc->find('table th')->index($columnHeader) + 1;
   $columnBody = $doc->find('table td:nth-child(' . $columnIndex . ')');
 
