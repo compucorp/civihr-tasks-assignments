@@ -9,21 +9,26 @@
     beforeEach(module('ngRoute', 'crm-tasks-workflows.decorators', function ($routeProvider, $provide) {
       crmApiSpy = jasmine.createSpy('crmApi');
 
-      // This happens before the configuration phase:
-      $routeProvider.when('/caseType/:id', {
-        controller: 'CaseTypeCtrl',
-        resolve: {
-          activityOptionsTask: function () {},
-          activityOptionsDocument: function () {}
-        }
-      }).when('/caseType', {
-        controller: 'CaseTypeListCtrl',
-        resolve: {
-          caseTypes: function () {}
-        }
-      });
-
       $provide.value('crmApi', crmApiSpy);
+
+      // mocks the route configuration before the decorator executes:
+      $routeProvider
+        .when('/caseType/:id', {
+          controller: 'CaseTypeCtrl',
+          resolve: {
+            activityOptionsTask: resolverToBeReplaced,
+            activityOptionsDocument: resolverToBeReplaced
+          }
+        })
+        .when('/caseType', {
+          controller: 'CaseTypeListCtrl',
+          resolve: {
+            caseTypes: resolverToBeReplaced
+          }
+        });
+
+      // mock resolve function that should be replaced by the decorator:
+      function resolverToBeReplaced () {}
     }));
 
     beforeEach(inject(function (_$injector_, _$route_) {
