@@ -4,9 +4,11 @@
   'use strict';
 
   describe('RouteDecorator', function () {
-    var $route, crmApiSpy;
+    var $injector, $route, crmApiSpy;
 
-    beforeEach(module('ngRoute', 'crm-tasks-workflows.decorators', function ($routeProvider) {
+    beforeEach(module('ngRoute', 'crm-tasks-workflows.decorators', function ($routeProvider, $provide) {
+      crmApiSpy = jasmine.createSpy('crmApi');
+
       // This happens before the configuration phase:
       $routeProvider.when('/caseType/:id', {
         controller: 'CaseTypeCtrl',
@@ -20,12 +22,13 @@
           caseTypes: function () {}
         }
       });
+
+      $provide.value('crmApi', crmApiSpy);
     }));
 
-    beforeEach(inject(function (_$route_) {
+    beforeEach(inject(function (_$injector_, _$route_) {
+      $injector = _$injector_;
       $route = _$route_;
-
-      crmApiSpy = jasmine.createSpy('crmApi');
     }));
 
     describe('Extending CaseTypeCtrl', function () {
@@ -34,8 +37,8 @@
       beforeEach(function () {
         caseTypeRoute = $route.routes['/caseType/:id'];
 
-        caseTypeRoute.resolve.activityOptionsTask(crmApiSpy);
-        caseTypeRoute.resolve.activityOptionsDocument(crmApiSpy);
+        $injector.invoke(caseTypeRoute.resolve.activityOptionsTask);
+        $injector.invoke(caseTypeRoute.resolve.activityOptionsDocument);
       });
 
       it('replaces the original controller for the extended one', function () {
@@ -67,7 +70,7 @@
       beforeEach(function () {
         caseTypeListRoute = $route.routes['/caseType'];
 
-        caseTypeListRoute.resolve.caseTypes(crmApiSpy);
+        $injector.invoke(caseTypeListRoute.resolve.caseTypes);
       });
 
       it('resolves a list of workflow case types', function () {

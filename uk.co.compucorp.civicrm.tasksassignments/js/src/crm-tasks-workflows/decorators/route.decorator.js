@@ -29,18 +29,14 @@
      * @return {Function} the function that will resolve the activity types.
      */
     function getResolverForActivityTypeComponent (componentName) {
-      activityOptionsResolver.$inject = ['crmApi'];
-
-      function activityOptionsResolver (crmApi) {
+      return ['crmApi', function activityOptionsResolver (crmApi) {
         return crmApi('OptionValue', 'get', {
           option_group_id: 'activity_type',
           component_id: componentName,
           sequential: 1,
           options: { sort: 'name', limit: 0 }
         });
-      }
-
-      return activityOptionsResolver;
+      }];
     }
 
     /**
@@ -49,16 +45,12 @@
      * @return {Function} the function that will resolve the workflow case types.
      */
     function getResolverForWorkflowTypes () {
-      workflowTypesResolver.$inject = ['crmApi'];
-
-      function workflowTypesResolver (crmApi) {
+      return ['crmApi', function workflowTypesResolver (crmApi) {
         return crmApi('CaseType', 'get', {
           category: 'WORKFLOW',
           options: { limit: 0 }
         });
-      }
-
-      return workflowTypesResolver;
+      }];
     }
 
     return $delegate;

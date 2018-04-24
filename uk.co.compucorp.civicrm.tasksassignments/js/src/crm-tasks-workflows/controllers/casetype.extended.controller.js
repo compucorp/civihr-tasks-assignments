@@ -29,7 +29,6 @@
      * @param {String} activityType
      */
     function addActivity (activitySet, activityType) {
-      // call parent
       parentMethods.addActivity(activitySet, activityType);
 
       // remove reference_activity property from newly added activity
