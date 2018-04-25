@@ -834,6 +834,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
 
     $this->_uninstallActivityTypes('CiviCase', [
       'Background Check',
+      'Background_Check',
       'Collate and print goals',
       'Collection of Appraisal forms',
       'Collection of appraisal paperwork',
