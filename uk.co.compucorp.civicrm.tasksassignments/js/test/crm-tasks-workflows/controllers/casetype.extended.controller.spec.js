@@ -9,22 +9,16 @@
       TaskActivityOptionsData, DocumentActivityOptionsData;
 
     beforeEach(module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers', function ($controllerProvider) {
-      var caseType = {
-        definition: {
-          activitySets: [{
-            activityTypes: [{ name: 'Open Case', status: 'Completed' }]
-          }]
-        }
-      };
+      var defaultCaseType = getMockCaseType();
 
       parentControllerSpy = jasmine.createSpy('parentControllerSpy');
 
       // mocks the original CaseTypeCtrl:
       CaseTypeCtrl = ['$scope', 'crmApi', 'apiCalls', function ($scope, crmApi,
         apiCalls) {
-        $scope.caseType = caseType;
-
         parentControllerSpy(apiCalls);
+
+        $scope.caseType = apiCalls.caseType ? apiCalls.caseType : defaultCaseType;
       }];
 
       $controllerProvider.register('CaseTypeCtrl', CaseTypeCtrl);
@@ -50,6 +44,35 @@
 
       it('initialises the parent controller with activity types having component labels', function () {
         expect(parentControllerSpy).toHaveBeenCalledWith(expectedApiCalls);
+      });
+    });
+
+    describe('when creating a new case type', function () {
+      beforeEach(function () {
+        $scope = $rootScope.$new();
+
+        initController($scope);
+      });
+
+      it('it clears all activities from the main activity set', function () {
+        expect($scope.caseType.definition.activitySets[0].activityTypes).toEqual([]);
+      });
+    });
+
+    describe('when editing an existing case type', function () {
+      var caseType = getMockCaseType();
+
+      beforeEach(function () {
+        $scope = $rootScope.$new();
+        caseType.id = 100;
+
+        initController($scope, {
+          caseType: caseType
+        });
+      });
+
+      it('it does not clear the activity types from the main activity set', function () {
+        expect($scope.caseType.definition.activitySets[0].activityTypes).not.toEqual([]);
       });
     });
 
@@ -81,15 +104,17 @@
     /**
      * Initialise the controller
      *
-     * @param {Object} $scope
+     * @param {Object} scope - an optional custom $scope to pass to the controller.
+     * @param {Object} apiCalls - an optional apiCalls mock object to pass to the controller.
      */
-    function initController ($scope) {
-      $scope = $scope || $rootScope.$new();
+    function initController (scope, apiCalls) {
+      $scope = scope || $rootScope.$new();
+      apiCalls = angular.copy(apiCalls || {});
 
       $controller('CaseTypeExtendedController', {
         $scope: $scope,
         crmApi: {},
-        apiCalls: {},
+        apiCalls: apiCalls,
         activityOptionsTask: { values: angular.copy(TaskActivityOptionsData) },
         activityOptionsDocument: { values: angular.copy(DocumentActivityOptionsData) }
       });
@@ -116,6 +141,21 @@
       });
 
       return taskOptions.concat(documentOptions);
+    }
+
+    /**
+     * Returns a mock Case Types
+     *
+     * @return {Object}
+     */
+    function getMockCaseType () {
+      return {
+        definition: {
+          activitySets: [{
+            activityTypes: [{ name: 'Open Case', status: 'Completed' }]
+          }]
+        }
+      };
     }
   });
 })();
