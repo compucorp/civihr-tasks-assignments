@@ -5,11 +5,30 @@
   'use strict';
 
   describe('CaseTypeExtendedController', function () {
-    var $controller, $log, $rootScope, $scope, TaskActivityOptionsData, DocumentActivityOptionsData;
+    var $controller, $log, $rootScope, $scope, CaseTypeCtrl, parentControllerSpy,
+      TaskActivityOptionsData, DocumentActivityOptionsData;
 
-    beforeEach(function () {
-      module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers');
-    });
+    beforeEach(module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers', function ($controllerProvider) {
+      var caseType = {
+        definition: {
+          activitySets: [{
+            activityTypes: [{ name: 'Open Case', status: 'Completed' }]
+          }]
+        }
+      };
+
+      parentControllerSpy = jasmine.createSpy('parentControllerSpy');
+
+      // mocks the original CaseTypeCtrl:
+      CaseTypeCtrl = ['$scope', 'crmApi', 'apiCalls', function ($scope, crmApi,
+        apiCalls) {
+        $scope.caseType = caseType;
+
+        parentControllerSpy(apiCalls);
+      }];
+
+      $controllerProvider.register('CaseTypeCtrl', CaseTypeCtrl);
+    }));
 
     beforeEach(inject(function (_$controller_, _$log_, _$rootScope_, _TaskActivityOptionsData_, _DocumentActivityOptionsData_) {
       $controller = _$controller_;
@@ -23,14 +42,14 @@
     }));
 
     describe('when initialized', function () {
-      var expectedValue;
+      var expectedApiCalls;
 
       beforeEach(function () {
-        expectedValue = { actTypes: { values: getActivityTypes() } };
+        expectedApiCalls = { actTypes: { values: getActivityTypes() } };
       });
 
       it('initialises the parent controller with activity types having component labels', function () {
-        expect($log.debug).toHaveBeenCalledWith('Init CaseTypeCtrl with', jasmine.any(Object), jasmine.any(Object), expectedValue);
+        expect(parentControllerSpy).toHaveBeenCalledWith(expectedApiCalls);
       });
     });
 
