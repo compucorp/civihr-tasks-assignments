@@ -296,7 +296,7 @@ define([
     /**
      * Returns object pairings of all the activities and their parent activity type.
      *
-     * @return {Array} Each elements contains an object that holds an activity and
+     * @return {Array} Each element contains an object that holds an activity and
      *   a type field.
      */
     function getActivitiesAndTypes () {
@@ -312,7 +312,6 @@ define([
         }
       });
 
-      // removes empty values:
       return _.compact(activityAndTypes);
     }
 
@@ -320,7 +319,7 @@ define([
      * Returns all activites that are missing a default assignee related to the
      * target contact.
      *
-     * @param {Array} activitiesAndTypes - An array of activities and their types.
+     * @param  {Array} activitiesAndTypes - An array of activities and their types.
      * @return {Array} the filtered `activitiesAndTypes`.
      */
     function getActivitiesWithoutDefaultRelationship (activitiesAndTypes) {
@@ -594,7 +593,7 @@ define([
      * Finds the default assignee for the given activity type and assigns them
      * to their corresponding activity.
      *
-     * @param {Array} activitiesAndTypes - An array of activities and their types.
+     * @param  {Array}   activitiesAndTypes - An array of activities and their types.
      * @return {Promise} After configuring the default assignees it resolves to
      *  the provided `activitiesAndTypes` parameter for chaining purposes.
      */
@@ -612,7 +611,7 @@ define([
     }
 
     /**
-     * It populates the `relationshipMissingWarnings` object based on activites
+     * Populates the `relationshipMissingWarnings` object based on activites
      * that are missing a default assignee where the default assignee is related
      * to the target contact.
      *
