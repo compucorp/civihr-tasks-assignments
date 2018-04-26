@@ -44,6 +44,7 @@ define([
     vm.documentList = [];
     vm.dpOpened = {};
     vm.format = hrSettings.DATE_FORMAT.toLowerCase();
+    vm.relationshipMissingWarnings = {};
     vm.showCId = !config.CONTACT_ID;
     vm.taskList = [];
     vm.workflowActivityTypes = getWorkflowActivityTypes();
@@ -267,6 +268,45 @@ define([
     }
 
     /**
+     * Returns object pairings of all the activities and their parent activity type.
+     *
+     * @return {Array} Each elements contains an object that holds an activity and
+     *   a type field.
+     */
+    function getActivitiesAndTypes () {
+      var allActivities = _.chain(vm.documentList).concat(vm.taskList).value();
+      var activityAndTypes = vm.activity.activitySet.activityTypes.map(function (activityType) {
+        var activity = _.find(allActivities, { name: activityType.name });
+
+        if (activity) {
+          return {
+            activity: activity,
+            type: activityType
+          };
+        }
+      });
+
+      // removes empty values:
+      return _.compact(activityAndTypes);
+    }
+
+    /**
+     * Returns all activites that are missing a default assignee related to the
+     * target contact.
+     *
+     * @param {Array} activitiesAndTypes - An array of activities and their types.
+     * @return {Array} the filtered `activitiesAndTypes`.
+     */
+    function getActivitiesWithoutDefaultRelationship (activitiesAndTypes) {
+      return activitiesAndTypes.filter(function (activityAndType) {
+        var isDefaultAssigneeByRelationship = activityAndType.type.default_assignee_type === defaultAssigneeOptionsIndex.BY_RELATIONSHIP;
+        var hasNoAssignee = _.isEmpty(activityAndType.activity.assignee_contact_id);
+
+        return isDefaultAssigneeByRelationship && hasNoAssignee;
+      });
+    }
+
+    /**
      * Returns the default assignee for the activity type provided.
      *
      * @param {Object} activityType the activity type definition.
@@ -382,32 +422,22 @@ define([
 
     /**
      * Initializes the default assignee for each one of the tasks and documents available.
+     * It also populates the relationshop warnings object in case one or more relationships
+     * are missing for the target contact.
      *
      * @return {Promise}
      */
     function initDefaultAssigneesForActivities () {
-      var promises;
-
       // skip if an activity set and types have not been defined:
       if (!vm.activity.activitySet.activityTypes) {
         return $q.resolve();
       }
 
-      promises = vm.activity.activitySet.activityTypes.map(function (activityType) {
-        var activity = _.chain(vm.documentList).concat(vm.taskList)
-          .find({ name: activityType.name }).value();
+      vm.relationshipMissingWarnings = {};
 
-        if (!activity) {
-          return;
-        }
-
-        return getDefaultAssigneeForActivityType(activityType)
-          .then(function (assigneeId) {
-            activity.assignee_contact_id = assigneeId;
-          });
-      });
-
-      return $q.all(promises);
+      return $q.resolve(getActivitiesAndTypes())
+        .then(setDefaultAssignees)
+        .then(setRelationshipMissingWarnings);
     }
 
     /**
@@ -521,6 +551,47 @@ define([
       vm.assignment.subject = $rootScope.cache.assignmentType.obj[vm.assignment.case_type_id].title;
 
       vm.assignment.dueDate = vm.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    /**
+     * Finds the default assignee for the given activity type and assigns them
+     * to their corresponding activity.
+     *
+     * @param {Array} activitiesAndTypes - An array of activities and their types.
+     * @return {Promise} After configuring the default assignees it resolves to
+     *  the provided `activitiesAndTypes` parameter for chaining purposes.
+     */
+    function setDefaultAssignees (activitiesAndTypes) {
+      var promises = activitiesAndTypes.map(function (activityAndType) {
+        return getDefaultAssigneeForActivityType(activityAndType.type)
+          .then(function (assigneeId) {
+            activityAndType.activity.assignee_contact_id = assigneeId;
+
+            return activityAndType;
+          });
+      });
+
+      return $q.all(promises);
+    }
+
+    /**
+     * It populates the `relationshipMissingWarnings` object based on activites
+     * that are missing a default assignee where the default assignee is related
+     * to the target contact.
+     *
+     * @param {Array} activitiesAndTypes - An array of activities and their types.
+     */
+    function setRelationshipMissingWarnings (activitiesAndTypes) {
+      var activitiesWithMissingRelationships;
+
+      // skip if no contact has been selected:
+      if (!vm.assignment.client_id) {
+        return;
+      }
+
+      activitiesWithMissingRelationships = getActivitiesWithoutDefaultRelationship(activitiesAndTypes);
+      vm.relationshipMissingWarnings = _.chain(activitiesWithMissingRelationships)
+        .indexBy('activity.activity_type_id').mapValues('type.default_assignee_relationship').value();
     }
 
     /**

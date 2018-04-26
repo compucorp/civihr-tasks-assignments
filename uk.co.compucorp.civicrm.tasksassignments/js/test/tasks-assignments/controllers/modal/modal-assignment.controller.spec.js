@@ -500,6 +500,72 @@ define([
           }]);
         });
       });
+
+      describe('when the contact is missing a relationship defined as default', function () {
+        var hasRelationshipWarning;
+        var contact = { id: _.uniqueId() };
+
+        beforeEach(function () {
+          scope.assignment.client_id = contact.id;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
+          activity.default_assignee_relationship = _.uniqueId();
+
+          spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
+            list: []
+          }));
+          $rootScope.$digest();
+
+          hasRelationshipWarning = _.chain(scope.relationshipMissingWarnings)
+            .values().indexOf(activity.default_assignee_relationship).value() >= 0;
+        });
+
+        it('adds the missing relationships to an relationship missing warnings index', function () {
+          expect(hasRelationshipWarning).toBe(true);
+        });
+      });
+
+      describe('when the contact has all its default assignee relationships', function () {
+        var hasRelationshipWarning;
+        var contact = { id: _.uniqueId() };
+
+        beforeEach(function () {
+          scope.assignment.client_id = contact.id;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
+          activity.default_assignee_relationship = _.uniqueId();
+
+          spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
+            list: [{ id: _.uniqueId() }]
+          }));
+          $rootScope.$digest();
+
+          hasRelationshipWarning = _.values(scope.relationshipMissingWarnings).length > 0;
+        });
+
+        it('does not add any warnings to the relationship warnings object', function () {
+          expect(hasRelationshipWarning).toBe(false);
+        });
+      });
+
+      describe('when the target contact has not been selected', function () {
+        var hasRelationshipWarning;
+
+        beforeEach(function () {
+          scope.assignment.client_id = null;
+          activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
+          activity.default_assignee_relationship = _.uniqueId();
+
+          spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
+            list: []
+          }));
+          $rootScope.$digest();
+
+          hasRelationshipWarning = _.values(scope.relationshipMissingWarnings).length > 0;
+        });
+
+        it('does not add any warnings to the relationship warnings object', function () {
+          expect(hasRelationshipWarning).toBe(false);
+        });
+      });
     });
 
     /**
