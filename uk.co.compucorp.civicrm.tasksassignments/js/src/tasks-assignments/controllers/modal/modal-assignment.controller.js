@@ -263,9 +263,9 @@ define([
 
       CRM.loadForm(formUrl)
         .on('crmFormSuccess', function () {
-          // $evalAsync will execute the code in the next digest.
+          // $timeout will execute the code in the next digest.
           // this is done because CRM.loadForm works outside of Angular:
-          vm.$evalAsync(function () {
+          $timeout(function () {
             canCacheRelationshipRequests = false;
 
             initDefaultAssigneesForActivities()
