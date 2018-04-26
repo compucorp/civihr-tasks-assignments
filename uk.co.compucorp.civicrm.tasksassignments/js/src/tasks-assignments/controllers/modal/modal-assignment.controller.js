@@ -70,6 +70,7 @@ define([
     vm.copyAssignee = copyAssignee;
     vm.copyDate = copyDate;
     vm.dpOpen = dpOpen;
+    vm.hasRelationshipWarnings = hasRelationshipWarnings;
     vm.onTargetContactChange = onTargetContactChange;
     vm.refreshContacts = refreshContacts;
     vm.removeActivity = removeActivity;
@@ -362,6 +363,15 @@ define([
       return $rootScope.cache.assignmentType.arr.filter(function (assignment) {
         return assignment[CATEGORY_FIELD] === WORKFLOW_TYPE;
       });
+    }
+
+    /**
+     * Returns true when there are relationship warnigns to be displayed.
+     *
+     * @return {Boolean}
+     */
+    function hasRelationshipWarnings () {
+      return _.values(vm.relationshipMissingWarnings).length > 0;
     }
 
     /**

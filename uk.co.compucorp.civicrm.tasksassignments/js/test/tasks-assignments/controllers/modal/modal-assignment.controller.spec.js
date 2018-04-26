@@ -568,6 +568,28 @@ define([
       });
     });
 
+    describe('hasRelationshipWarnings()', function () {
+      describe('when there are relationship warnings', function () {
+        beforeEach(function () {
+          scope.relationshipMissingWarnings = { 1: 'HR Manager' };
+        });
+
+        it('returns true', function () {
+          expect(scope.hasRelationshipWarnings()).toBe(true);
+        });
+      });
+
+      describe('when there are no relationship warnings', function () {
+        beforeEach(function () {
+          scope.relationshipMissingWarnings = {};
+        });
+
+        it('returns true', function () {
+          expect(scope.hasRelationshipWarnings()).toBe(false);
+        });
+      });
+    });
+
     /**
      * Fills up the contacts collection of the given list
      * with random placeholder data
