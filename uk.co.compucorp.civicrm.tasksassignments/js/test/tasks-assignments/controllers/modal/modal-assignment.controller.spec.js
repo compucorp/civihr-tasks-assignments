@@ -376,18 +376,14 @@ define([
       beforeEach(function () {
         var documentType;
 
-        $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
-        $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
-        documentType = $rootScope.cache.assignmentType.arr[1];
-        $rootScope.cache.documentType.arr = [{ key: documentType.id, value: documentType.name }];
-
+        setupRootScopeCaches();
         initController({
           defaultAssigneeOptions: defaultAssigneeOptions,
           session: { contactId: loggedInContactId }
         });
+        selectDefaultClientAndAssignation();
 
-        scope.assignment.case_type_id = $rootScope.cache.assignmentType.arr[0].id;
-        scope.activity.activitySet = $rootScope.cache.assignmentType.arr[0].definition.activitySets[0];
+        documentType = $rootScope.cache.assignmentType.arr[1];
         activity = scope.activity.activitySet.activityTypes[0];
         document = scope.activity.activitySet.activityTypes[1];
         document.name = documentType.name;
@@ -590,6 +586,58 @@ define([
       });
     });
 
+    describe('createRelationshipForTargetContact()', function () {
+      var activity, expectedFormUrl;
+      var assignee = { id: _.uniqueId() };
+      var contact = { id: _.uniqueId() };
+
+      beforeEach(function () {
+        setupRootScopeCaches();
+        initController({
+          defaultAssigneeOptions: defaultAssigneeOptions,
+          session: { contactId: _.uniqueId() }
+        });
+        selectDefaultClientAndAssignation();
+
+        activity = scope.activity.activitySet.activityTypes[0];
+
+        // set default assignee by relationship:
+        activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
+        activity.default_assignee_relationship = _.uniqueId();
+
+        spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
+          list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
+        }));
+        spyOn(CRM, 'loadForm').and.returnValue({
+          on: function (eventName, callback) {
+            eventName === 'crmFormSuccess' && callback();
+          }
+        });
+
+        expectedFormUrl = CRM.url('civicrm/contact/view/rel', {
+          action: 'add',
+          cid: contact.id
+        });
+
+        scope.assignment.client_id = contact.id;
+        scope.createRelationshipForTargetContact();
+
+        $rootScope.$digest();
+      });
+
+      it('loads the relationship form for the current selected contact', function () {
+        expect(CRM.loadForm).toHaveBeenCalledWith(expectedFormUrl);
+      });
+
+      it('reloads the default assignees on success', function () {
+        expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+      });
+
+      it('does not cache the request for the relationships', function () {
+        expect(RelationshipModel.allValid).toHaveBeenCalledWith(jasmine.any(Object), null, null, false);
+      });
+    });
+
     /**
      * Fills up the contacts collection of the given list
      * with random placeholder data
@@ -645,6 +693,32 @@ define([
           }
         }
       });
+    }
+
+    /**
+     * Selects the default client and case type assignations.
+     */
+    function selectDefaultClientAndAssignation () {
+      var selectedAssignment = $rootScope.cache.assignmentType.arr[0];
+
+      scope.assignment.client_id = _.uniqueId();
+      scope.assignment.case_type_id = selectedAssignment.id;
+      scope.activity.activitySet = selectedAssignment.definition.activitySets[0];
+    }
+
+    /**
+     * Initializes the cache for assignment and document types.
+     */
+    function setupRootScopeCaches () {
+      var documentType;
+
+      // setup assignments types:
+      $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
+      $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
+
+      // setup document type:
+      documentType = $rootScope.cache.assignmentType.arr[1];
+      $rootScope.cache.documentType.arr = [{ key: documentType.id, value: documentType.name }];
     }
   });
 

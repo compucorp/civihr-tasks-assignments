@@ -22,6 +22,7 @@ define([
     $log.debug('Controller: ModalAssignmentController');
 
     var defaultAssigneeOptionsIndex;
+    var canCacheRelationshipRequests = true;
     var activityModel = {
       activity_type_id: null,
       assignee_contact_id: [],
@@ -69,6 +70,7 @@ define([
     vm.confirm = confirm;
     vm.copyAssignee = copyAssignee;
     vm.copyDate = copyDate;
+    vm.createRelationshipForTargetContact = createRelationshipForTargetContact;
     vm.dpOpen = dpOpen;
     vm.hasRelationshipWarnings = hasRelationshipWarnings;
     vm.onTargetContactChange = onTargetContactChange;
@@ -249,6 +251,29 @@ define([
       });
     }
 
+    /**
+     * Opens the contact's relationship creation modal. When a relationship is
+     * successfully created it reloads the default assignees for each activity.
+     */
+    function createRelationshipForTargetContact () {
+      var formUrl = CRM.url('civicrm/contact/view/rel', {
+        action: 'add',
+        cid: vm.assignment.client_id
+      });
+
+      CRM.loadForm(formUrl)
+        .on('crmFormSuccess', function () {
+          // $evalAsync will execute the code in the next digest.
+          // this is done because CRM.loadForm works outside of Angular:
+          vm.$evalAsync(function () {
+            canCacheRelationshipRequests = false;
+
+            initDefaultAssigneesForActivities()
+              .then(loadAndCacheContactForActivities);
+          });
+        });
+    }
+
     function dpOpen ($event, key) {
       $event.preventDefault();
       $event.stopPropagation();
@@ -344,7 +369,9 @@ define([
         'contact_id_a': vm.assignment.client_id,
         'relationship_type_id.name_b_a': activityType.default_assignee_relationship,
         'options': { 'limit': 1 }
-      }).then(function (result) {
+      }, null, null, canCacheRelationshipRequests).then(function (result) {
+        canCacheRelationshipRequests = true;
+
         return result.list.map(function (relationship) {
           return relationship.contact_id_b;
         });

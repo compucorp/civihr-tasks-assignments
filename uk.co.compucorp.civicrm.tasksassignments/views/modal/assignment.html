@@ -170,7 +170,8 @@
                     <button type="button"
                       class="btn btn-small btn-secondary-outline"
                       uib-tooltip-template="'missing-relationship-tooltip.html'"
-                      ng-if="relationshipMissingWarnings[activity.activity_type_id]">
+                      ng-if="relationshipMissingWarnings[activity.activity_type_id]"
+                      ng-click="createRelationshipForTargetContact()">
                       <i class="fa fa-user-plus"></i>
                     </button>
                   </td>
@@ -269,7 +270,8 @@
                     <button type="button"
                       class="btn btn-small btn-secondary-outline"
                       uib-tooltip-template="'missing-relationship-tooltip.html'"
-                      ng-if="relationshipMissingWarnings[activity.activity_type_id]">
+                      ng-if="relationshipMissingWarnings[activity.activity_type_id]"
+                      ng-click="createRelationshipForTargetContact()">
                       <i class="fa fa-user-plus"></i>
                     </button>
                   </td>
