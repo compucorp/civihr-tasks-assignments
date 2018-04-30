@@ -54,7 +54,7 @@
         initController($scope);
       });
 
-      it('it clears all activities from the main activity set', function () {
+      it('clears all activities from the main activity set', function () {
         expect($scope.caseType.definition.activitySets[0].activityTypes).toEqual([]);
       });
     });
@@ -71,7 +71,7 @@
         });
       });
 
-      it('it does not clear the activity types from the main activity set', function () {
+      it('does not clear the activity types from the main activity set', function () {
         expect($scope.caseType.definition.activitySets[0].activityTypes).not.toEqual([]);
       });
     });
@@ -144,7 +144,7 @@
     }
 
     /**
-     * Returns a mock Case Types
+     * Returns a mock for Case Types
      *
      * @return {Object}
      */
