@@ -19,7 +19,6 @@ module.exports = function (config) {
       'packages/jquery/plugins/jquery.blockUI.js',
       'js/Common.js',
       'js/crm.ajax.js',
-
       // Global variables that need to be accessible in the test environment
       extPath + '/js/test/globals.js',
 
@@ -34,16 +33,16 @@ module.exports = function (config) {
       { pattern: extPath + '/js/src/tasks-assignments/**/*.js', included: false },
 
       // the mocked components files
-      { pattern: extPath + '/js/test/mocks/**/*.js', included: false },
+      { pattern: extPath + '/js/test/tasks-assignments/mocks/**/*.js', included: false },
 
       // the test files
-      { pattern: extPath + '/js/test/**/*.spec.js', included: false },
+      { pattern: extPath + '/js/test/tasks-assignments/**/*.spec.js', included: false },
 
       // angular templates
       extPath + '/views/**/*.html',
 
       // the requireJS config file that bootstraps the whole test suite
-      extPath + '/js/test/test-main.js'
+      extPath + '/js/test/tasks-assignments/test-main.js'
     ],
     exclude: [
       extPath + '/js/src/tasks-assignments.js'

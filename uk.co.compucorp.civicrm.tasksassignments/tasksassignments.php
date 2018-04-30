@@ -269,6 +269,42 @@ function tasksassignments_civicrm_navigationMenu(&$params) {
 }
 
 /**
+ * Implements the alterAngular hook so it can modify the template for the
+ * Workflow Create/Edit screen.
+ *
+ * @param \Civi\Angular\Manager $angular
+ *
+ * @return \Civi\Angular\ChangeSet
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/framework/angular/changeset/
+ */
+function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
+  $changeSet = \Civi\Angular\ChangeSet::create('Workflow Modifications');
+
+  $changeSet->alterHtml('~/crmCaseType/edit.html', function (phpQueryObject $doc) {
+    _tasksAssignments_change_workflow_help_text($doc);
+    _tasksAssignments_remove_non_civihr_tabs_from_workflow($doc);
+    _tasksAssignments_allow_only_add_timeline_action($doc);
+  });
+
+  $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
+    _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
+    _tasksAssignments_change_column_text($doc);
+    _tasksAssignments_remove_columns_from_timeline($doc);
+  });
+
+  $angular->add($changeSet);
+}
+
+function tasksAssignments_civicrm_angularModules(&$angularModules) {
+  $angularModules['crm-tasks-workflows'] = array(
+    'ext' => 'civicrm',
+    'js' => array(
+      'tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js')
+  );
+}
+
+/**
  * Moves some of the items of the "Administer > Civi Case" sub menu under the "Administer > Tasks" sub menu
  *
  * @param array $params
@@ -287,7 +323,7 @@ function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$
     'tasksassignments_administer',
     ['Case Types' => 'Workflow Types']
   );
-  
+
   _tasksassignments_deleteAdministerSubMenu($administerMenuItems, 'CiviCase');
 }
 
@@ -337,7 +373,7 @@ function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$ad
 
   foreach ($menuItems as $item) {
     $itemID = $item['attributes']['navID'];
-    $item['attributes']['parentID'] = $subMenuTargetID; 
+    $item['attributes']['parentID'] = $subMenuTargetID;
 
     if ($labelsMapping[$item['attributes']['name']]) {
       $item['attributes']['label'] = $labelsMapping[$item['attributes']['name']];
@@ -350,7 +386,7 @@ function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$ad
 /**
  * Deletes a sub menu of the given name from the Administer main menu
  *
- * @param array $administerMenuItems 
+ * @param array $administerMenuItems
  * @param string $subMenuName
  */
 function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMenuName) {
@@ -414,4 +450,99 @@ function tasksassignments_extensionsPageRedirect()  {
     ])
   );
   CRM_Utils_System::redirect($url);
+}
+
+/**
+ * Modifies the placeholder of Add Activity Dropdown
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_add_activity_dropdown_placeholder(phpQueryObject $doc) {
+  $addActivityDropDown = $doc->find('[crm-options=activityTypeOptions]');
+  $newPlaceHolder = 'Add task or document';
+
+  $addActivityDropDown->attr('placeholder', $newPlaceHolder);
+}
+/**
+ * Modifies the help text for the Workflow Create/Edit screen.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
+  $helpBlock = $doc->find('.crmCaseType .help');
+
+  $text = '<p>' . ts('Configure your workflow timelines below. Each workflow type can have several
+    different task timelines. Each timeline allows you to set different tasks and documents which
+    become part of your task list on your task dashboard. As such different timelines can be setup
+    in the system if slightly different steps are required when the workflow is used for different
+    staff types or situations. For example you may wish to configure a different joining timeline
+    for head office staff as for regional staff.') . '</p>';
+  $text .= '<p>' . ts('Workflows are normally used to manage joining and exiting processes but can
+    be used for other processes too, such as a person going on maternity leave or moving region or
+    location.') . '</p>';
+
+  $helpBlock->html($text);
+  // Places the help text outside of the case type form:
+  $helpBlock->insertBefore('.crmCaseType');
+}
+
+/**
+ * Removes tabs that are not relevant for CiviHR from the workflow configuration screen.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_remove_non_civihr_tabs_from_workflow (phpQueryObject $doc) {
+  $tabs = ['roles', 'statuses', 'actType'];
+
+  foreach ($tabs as $tab) {
+    $doc->find('a[href=#acttab-' . $tab . ']')->remove();
+    $doc->find('#acttab-' . $tab)->remove();
+  }
+}
+
+/**
+ * Removes the Workflow configuration's actions dropdown and replaces it with a
+ * button that only allows the "Add timeline" action.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) {
+  $actionDropdown = $doc->find('select[ng-model="newActivitySetWorkflow"]');
+  $addTimelineBtn = '
+    <button class="btn btn-secondary pull-right"
+      ng-show="isNewActivitySetAllowed(\'timeline\')"
+      ng-click="addActivitySet(\'timeline\')">
+      Add timeline
+    </button>';
+
+  $actionDropdown->after($addTimelineBtn);
+  $actionDropdown->remove();
+}
+
+/**
+ * Remove columns from timeline
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_remove_columns_from_timeline (phpQueryObject $doc) {
+  $columnsToBeRemovedFromTimeline = [ 'Status', 'Reference', 'Select' ];
+
+  foreach ($columnsToBeRemovedFromTimeline as $columnName) {
+    $columnHeader = $doc->find('table th:contains("' . $columnName . '"');
+    $columnIndex = $doc->find('table th')->index($columnHeader) + 1;
+    $columnBody = $doc->find('table td:nth-child('. $columnIndex .')');
+
+    $columnHeader->remove();
+    $columnBody->remove();
+  }
+}
+
+/**
+ * Change column text for timeline
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_column_text (phpQueryObject $doc) {
+  $doc->find('th:contains("Activity")')
+    ->text('Task / Document Type');
 }

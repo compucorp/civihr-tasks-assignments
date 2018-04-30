@@ -14,7 +14,7 @@ define(function () {
     $scope.copyCancel = content.copyCancel || 'Cancel';
     $scope.copyConfirm = content.copyConfirm || 'Yes';
     $scope.msg = content.msg || '';
-    $scope.title = content.title || 'CiviHR Tasks & Assignments';
+    $scope.title = content.title || 'CiviHR Tasks & Workflows';
 
     $scope.confirm = confirm;
     $scope.cancel = cancel;
