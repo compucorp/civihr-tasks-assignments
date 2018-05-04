@@ -56,32 +56,23 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
 
     CRM_Utils_System::setTitle('Add New Task / Document Type');
 
-    $newOptions = array();
-
-    if ($this->elementExists('component_id')) {
-      $componentSelectElement = $this->getElement('component_id');
-      $options = $componentSelectElement->_options;
-
-      foreach ($options as $value) {
-        $newOptions[$value['attr']['value']] = $value['text'];
-      }
-    }
+    $categoryOptions = array();
 
     $civiTaskId = CRM_Core_Component::getComponentID('CiviTask');
     $civiDocumentId = CRM_Core_Component::getComponentID('CiviDocument');
 
     if ($civiTaskId !== NULL) {
-      $newOptions[$civiTaskId] = t('Tasks');
+      $categoryOptions[$civiTaskId] = t('Tasks');
     }
 
     if ($civiDocumentId !== NULL) {
-      $newOptions[$civiDocumentId] = t('Documents');
+      $categoryOptions[$civiDocumentId] = t('Documents');
     }
 
     $this->add('select',
       'component_id',
       ts('Category'),
-      $newOptions, FALSE
+      $categoryOptions, FALSE
     );
 
     //$this->addFormRule(array('CRM_Admin_Form_Options', 'formRule'), $this);
