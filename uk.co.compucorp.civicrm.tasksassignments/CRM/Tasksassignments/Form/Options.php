@@ -40,7 +40,7 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
    *
    * @return void
    */
-  function setDefaultValues() {
+  public function setDefaultValues() {
     $defaults = parent::setDefaultValues();
     return $defaults;
   }
@@ -53,33 +53,35 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
    */
   public function buildQuickForm() {
     parent::buildQuickForm();
-    
+
     $newOptions = array();
+
     if ($this->elementExists('component_id')) {
-        $componentSelectElement = $this->getElement('component_id');
-        $options = $componentSelectElement->_options;
-        foreach ($options as $value) {
-          $newOptions[$value['attr']['value']] = $value['text'];
-        }
+      $componentSelectElement = $this->getElement('component_id');
+      $options = $componentSelectElement->_options;
+
+      foreach ($options as $value) {
+        $newOptions[$value['attr']['value']] = $value['text'];
+      }
     }
-    
+
     $civiTaskId = CRM_Core_Component::getComponentID('CiviTask');
-    if ($civiTaskId !== null)
-    {
-        $newOptions[$civiTaskId] = t('Tasks and Assignments');
-    }
     $civiDocumentId = CRM_Core_Component::getComponentID('CiviDocument');
-    if ($civiDocumentId !== null)
-    {
-        $newOptions[$civiDocumentId] = t('Documents and Assignments');
+
+    if ($civiTaskId !== NULL) {
+      $newOptions[$civiTaskId] = t('Tasks and Assignments');
     }
-    
+
+    if ($civiDocumentId !== NULL) {
+      $newOptions[$civiDocumentId] = t('Documents and Assignments');
+    }
+
     $this->add('select',
       'component_id',
       ts('Component'),
       $newOptions, FALSE
     );
-    
+
     //$this->addFormRule(array('CRM_Admin_Form_Options', 'formRule'), $this);
   }
 
@@ -94,7 +96,7 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
    * @access public
    * @static
    */
-  static function formRule($fields, $files, $self) {
+  public static function formRule($fields, $files, $self) {
     return parent::formRule($fields, $files, $self);
   }
 
@@ -108,4 +110,5 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
   public function postProcess() {
     return parent::postProcess();
   }
+
 }
