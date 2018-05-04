@@ -54,6 +54,8 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
   public function buildQuickForm() {
     parent::buildQuickForm();
 
+    CRM_Utils_System::setTitle('Add New Task / Document Type');
+
     $newOptions = array();
 
     if ($this->elementExists('component_id')) {
@@ -69,16 +71,16 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
     $civiDocumentId = CRM_Core_Component::getComponentID('CiviDocument');
 
     if ($civiTaskId !== NULL) {
-      $newOptions[$civiTaskId] = t('Tasks and Assignments');
+      $newOptions[$civiTaskId] = t('Tasks');
     }
 
     if ($civiDocumentId !== NULL) {
-      $newOptions[$civiDocumentId] = t('Documents and Assignments');
+      $newOptions[$civiDocumentId] = t('Documents');
     }
 
     $this->add('select',
       'component_id',
-      ts('Component'),
+      ts('Category'),
       $newOptions, FALSE
     );
 
