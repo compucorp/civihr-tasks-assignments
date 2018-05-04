@@ -56,7 +56,7 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
 
     CRM_Utils_System::setTitle('Add New Task / Document Type');
 
-    $categoryOptions = array();
+    $categoryOptions = [];
 
     $civiTaskId = CRM_Core_Component::getComponentID('CiviTask');
     $civiDocumentId = CRM_Core_Component::getComponentID('CiviDocument');
@@ -76,8 +76,6 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
     );
 
     Civi::resources()->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', 'js/CRM/Form/Options.js');
-
-    //$this->addFormRule(array('CRM_Admin_Form_Options', 'formRule'), $this);
   }
 
   /**

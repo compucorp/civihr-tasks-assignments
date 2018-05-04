@@ -1,9 +1,9 @@
 'use strict';
 
-(function init () {
-  var componentIdRow = CRM.$('select#component_id').parents('tr');
-  var tableBody = componentIdRow.parents('tbody');
+(function init (CRM) {
+  var componentIdRow = CRM.$('#component_id').closest('tr');
+  var tableBody = componentIdRow.closest('tbody');
 
   // Move the category field to the top of the form:
-  componentIdRow.detach().prependTo(tableBody);
-})();
+  componentIdRow.prependTo(tableBody);
+})(CRM);
