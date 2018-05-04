@@ -75,6 +75,8 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
       $categoryOptions, FALSE
     );
 
+    Civi::resources()->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', 'js/CRM/Form/Options.js');
+
     //$this->addFormRule(array('CRM_Admin_Form_Options', 'formRule'), $this);
   }
 
