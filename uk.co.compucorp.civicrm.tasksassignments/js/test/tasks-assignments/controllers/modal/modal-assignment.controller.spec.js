@@ -251,7 +251,7 @@ define([
       describe('Assignment Type cache', function () {
         var caseTypeId;
 
-        beforeEach(function (){
+        beforeEach(function () {
           var mockedTypes = assignmentFabricator.assignmentTypes();
 
           caseTypeId = Object.keys(mockedTypes)[0];
@@ -259,7 +259,7 @@ define([
           scope.assignment.subject = '';
           scope.assignment.case_type_id = caseTypeId;
 
-          $rootScope.cache.assignmentType.obj[caseTypeId] = assignmentFabricator.assignmentTypes()[caseTypeId]
+          $rootScope.cache.assignmentType.obj[caseTypeId] = assignmentFabricator.assignmentTypes()[caseTypeId];
           // remove the activit sets to avoid triggering another watcher
           $rootScope.cache.assignmentType.obj[caseTypeId].definition.activitySets = [];
 
