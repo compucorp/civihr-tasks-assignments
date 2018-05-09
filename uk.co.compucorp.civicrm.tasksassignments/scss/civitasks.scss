@@ -89,7 +89,6 @@
   @import 'civihr/partials/breadcrumb';
   @import 'civihr/partials/buttons';
   @import 'civihr/partials/collapse';
-  @import 'civihr/partials/datepicker';
   @import 'civihr/partials/dropdowns';
   @import 'civihr/partials/forms';
   @import 'civihr/partials/iframe';
@@ -132,10 +131,15 @@
 
   @import 'civitasks/modules/ie';
   @import 'civitasks/modules/civihr-ui-select';
+
+  @import '../../../org.civicrm.shoreditch/scss/bootstrap/overrides/variables';
+  @import '../../../org.civicrm.shoreditch/scss/bootstrap/mixins/prefix';
+  @import '../../../org.civicrm.shoreditch/scss/angular/overrides/uib-datepicker';
+  @import '../../../org.civicrm.shoreditch/scss/angular/overrides/text-angular';
 }
 
 @for $i from 2 through length($module-list) {
   ##{nth($module-list, $i)} {
-    @extend ##{nth($module-list, 1)};
+    @extend ##{nth($module-list, 1)}; /* stylelint-disable-line scss/at-extend-no-missing-placeholder */
   }
 }

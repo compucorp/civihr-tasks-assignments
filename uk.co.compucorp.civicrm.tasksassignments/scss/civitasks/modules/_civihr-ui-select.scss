@@ -2,8 +2,8 @@
 
 
 // Include the original ui-select css + the civihr-ui-select dropdown theme
-@import "../../../../../org.civicrm.shoreditch/scss/bootstrap/vendor/ui-select/ui-select";
-@import "../../../../../civihr/org.civicrm.bootstrapcivihr/scss/components/civihr-ui-select/civihr-ui-select";
+@import '../../../../../org.civicrm.shoreditch/scss/angular/vendor/ui-select/ui-select';
+@import '../../../../../civihr/org.civicrm.bootstrapcivihr/scss/components/civihr-ui-select/civihr-ui-select';
 
 // Customizations specific for T&A
 .civihr-ui-select {
@@ -20,15 +20,15 @@
     top: 3px !important;
   }
 
-  & a.select2-search-choice-close {
+  a.select2-search-choice-close { /* stylelint-disable-line selector-no-qualifying-type */
     top: 0 !important;
   }
 
   &.open {
     .select2-chosen {
       border: 1px solid $dropdown-border !important;
-      padding-left: 12px !important;
       border-bottom: 0 !important;
+      padding-left: 12px !important;
     }
 
     .select2-arrow {
@@ -42,7 +42,6 @@
   }
 
   .select2-chosen {
-
     &.empty {
       color: $crm-gray-matte !important;
     }
@@ -63,7 +62,7 @@
 
 // Do not display dropdown for ui-select-multiple with attribute no-dropdown
 [no-dropdown].ui-select-multiple {
-  &:after {
+  &::after {
     display: none;
   }
 }
