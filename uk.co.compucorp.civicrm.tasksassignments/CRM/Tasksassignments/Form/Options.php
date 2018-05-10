@@ -54,7 +54,14 @@ class CRM_Tasksassignments_Form_Options extends CRM_Admin_Form_Options {
   public function buildQuickForm() {
     parent::buildQuickForm();
 
-    CRM_Utils_System::setTitle('Add New Task / Document Type');
+    $isNewOptionValue = empty($this->get('id'));
+
+    if ($isNewOptionValue) {
+      CRM_Utils_System::setTitle('Add New Task / Document Type');
+    }
+    else {
+      CRM_Utils_System::setTitle('Edit Task / Document Type');
+    }
 
     $categoryOptions = [];
 
