@@ -601,12 +601,12 @@ function civicrm_api3_task_getoptions($params) {
 
     foreach ($types as $type) {
       if (!$sequential) {
-        $result[$type['value']] = $type['name'];
+        $result[$type['value']] = $type['label'];
       }
       else {
         $result[] = array(
           'key' => $type['value'],
-          'value' => $type['name'],
+          'value' => $type['label'],
         );
       }
     }
