@@ -11,6 +11,7 @@ define([
   'common/filters/angular-date/format-date',
   'common/services/angular-date/date-format',
   'common/services/before-hash-query-params.service',
+  'common/services/crm-ang.service',
   'tasks-assignments/vendor/angular-bootstrap-calendar',
   'tasks-assignments/vendor/angular-checklist-model',
   'tasks-assignments/vendor/angular-router',

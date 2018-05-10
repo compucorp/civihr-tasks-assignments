@@ -29,13 +29,16 @@
         </div>
         <div class="row separately">
           <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Workflow Type:</label>
-          <div class="col-xs-12 col-sm-6">
+          <div class="col-xs-11 col-sm-6">
             <div class="crm_custom-select crm_custom-select--full">
               <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control no-select2" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in cache.assignmentType.arr">
                 <option value="">- select -</option>
               </select>
               <span class="crm_custom-select__arrow"></span>
             </div>
+          </div>
+          <div class="col-xs-1 control-label">
+            <a href="/civicrm/a/#/caseType" target="_blank"><i class="crm-i fa-wrench"> </i></a>
           </div>
         </div>
         <div class="row separately">
