@@ -15,12 +15,13 @@ define([
 
   describe('ModalDocumentController', function () {
     var $controller, $rootScope, $filter, $scope, $q, $httpBackend, HRSettings, contactService, config,
-      assignmentService, appSettingsService, documentService, notification, fileService, data, role, files, sampleAssignee,
-      modalMode, promise, mockDocument, controller;
+      assignmentService, appSettingsService, crmAngService, documentService, notification, fileService, data, role, files, sampleAssignee,
+      modalMode, promise, mockDocument, controller, onPopupFormSuccess, popupFormUrl;
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$window_, _$controller_, _$rootScope_, _$filter_, _$q_, _config_,
-      _contactService_, _documentService_, _assignmentService_, _$httpBackend_, _fileService_, _appSettingsService_) {
+      _contactService_, _documentService_, _assignmentService_, _$httpBackend_, _fileService_, _appSettingsService_,
+      _crmAngService_) {
       data = {};
       files = {};
       modalMode = '';
@@ -45,6 +46,7 @@ define([
       assignmentService = _assignmentService_;
       appSettingsService = _appSettingsService_;
       fileService = _fileService_;
+      crmAngService = _crmAngService_;
       window.alert = function () {}; // prevent alert from being logged in console
 
       $rootScope.cache.documentStatus.obj = {
@@ -609,6 +611,28 @@ define([
 
       it('gets the blob file url for given file', function () {
         expect(fileService.openFile).toHaveBeenCalledWith(file);
+      });
+    });
+
+    describe('when user clicks on the document wrench icon', function () {
+      beforeEach(function () {
+        popupFormUrl = '/civicrm/admin/options/activity_type?reset=1';
+
+        spyOn(crmAngService, 'loadForm').and.callFake(function () {
+          return {
+            on: function (event, callback) {
+              if (event === 'crmUnload') {
+                onPopupFormSuccess = callback;
+              }
+            }
+          };
+        });
+        initController();
+        controller.openActivityTypeOptionsEditor();
+      });
+
+      it('calls crmAngService with the required url', function () {
+        expect(crmAngService.loadForm).toHaveBeenCalledWith(popupFormUrl);
       });
     });
 

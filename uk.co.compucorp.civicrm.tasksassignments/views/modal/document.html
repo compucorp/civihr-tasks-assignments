@@ -13,7 +13,7 @@
 
   <crm-loading show="!isLoading || false">
     <div class="modal-body" nv-file-drop uploader="documentModal.uploader">
-      <div class="container">
+      <div class="container form-horizontal">
         <!-- Search and select by name and email -->
         <div class="row">
           <div class="col-xs-12">
@@ -42,7 +42,7 @@
   </div>
   <!-- Document Type -->
   <div class="row" ng-hide="documentModal.isRole('staff') && !documentModal.isRole('manager')">
-    <div class="col-xs-12">
+    <div class="col-xs-11">
       <div class="crm_custom-select crm_custom-select--full">
         <ui-select prevent-animations theme="civihr-ui-select"
         ng-model="documentModal.document.activity_type_id"
@@ -56,7 +56,12 @@
       </ui-select>
     </div>
   </div>
-</div>
+    <div class="col-xs-1 control-label">
+      <a class="pointer">
+        <i class="crm-i fa-wrench" ng-click="documentModal.openActivityTypeOptionsEditor()"></i>
+      </a>
+    </div>
+  </div>
 </div>
 <div class="container">
   <ul class="nav nav-tabs" ng-hide="documentModal.isRole('staff') || documentModal.isRole('manager')">

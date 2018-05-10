@@ -34,15 +34,26 @@
           </div>
         </div>
         <div class="col-xs-12 col-sm-6" ng-show="!data.activity_type_id">
-          <div class="crm_custom-select crm_custom-select--full">
-            <ui-select prevent-animations theme="civihr-ui-select" ng-model="task.activity_type_id" ng-required="true" class="required-field-indicator">
-              <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Select Task Type">
-                {{$select.selected.value}}
-              </ui-select-match>
-              <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.taskType.arr | filter: $select.search">
-                <div ng-bind="type.value"></div>
-              </ui-select-choices>
-            </ui-select>
+          <div class="form-inline">
+            <div class="row">
+              <div class="col-xs-10">
+                <div class="crm_custom-select crm_custom-select--full">
+                  <ui-select prevent-animations theme="civihr-ui-select" ng-model="task.activity_type_id" ng-required="true" class="required-field-indicator ">
+                    <ui-select-match prevent-animations allow-clear class="ui-select-match" placeholder="Select Task Type">
+                      {{$select.selected.value}}
+                    </ui-select-match>
+                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                      <div ng-bind="type.value"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+              </div>
+              <div class="col-xs-2 control-label">
+                <a class="pointer">
+                  <i class="crm-i fa-wrench" ng-click="task.openActivityTypeOptionsEditor()"></i>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6">
