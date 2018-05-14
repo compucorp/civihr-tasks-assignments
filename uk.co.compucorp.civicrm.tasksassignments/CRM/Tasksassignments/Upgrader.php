@@ -1,6 +1,8 @@
 <?php
 
 class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
+  const OPEN_CASE_TYPE = 'Open Case';
+
   public function install() {
 
     // $this->executeCustomDataFile('xml/customdata.xml');
@@ -856,6 +858,39 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       'Exiting document 2',
       'Exiting document 3',
     ]);
+
+    return TRUE;
+  }
+
+  /**
+   * Removes the Open Case activity type from any Case Type that contains them in one
+   * of their timelines.
+   *
+   * @return bool
+   */
+  public function upgrade_1036() {
+    $caseTypes = civicrm_api3('CaseType', 'get', ['sequential' => 1]);
+    $needsToRemoveOpenType = FALSE;
+
+    foreach ($caseTypes['values'] as $caseType) {
+      $activitySets = $caseType['definition']['activitySets'];
+
+      foreach ($activitySets as $setIndex => $set) {
+        $openCaseIndex = array_search(self::OPEN_CASE_TYPE, array_column($set['activityTypes'], 'name'));
+
+        if ($openCaseIndex !== FALSE) {
+          $needsToRemoveOpenType = TRUE;
+
+          // needs to unset the full path for the activity to be properly removed:
+          unset($caseType['definition']['activitySets'][$setIndex]['activityTypes'][$openCaseIndex]);
+        }
+      }
+
+      // Removes Open Case activities from the Case Type only if they include this activity type:
+      if ($needsToRemoveOpenType) {
+        civicrm_api3('CaseType', 'create', $caseType);
+      }
+    }
 
     return TRUE;
   }
