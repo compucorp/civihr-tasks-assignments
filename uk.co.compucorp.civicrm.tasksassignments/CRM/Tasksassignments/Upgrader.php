@@ -895,6 +895,24 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Adds a new menu item for Activity Types under the tasks administration menu.
+   *
+   * @return bool
+   */
+  public function upgrade_1037() {
+    civicrm_api3('Navigation', 'create', [
+      'label' => 'Activity Types',
+      'name' => 'activity_types_administer',
+      'url' => 'civicrm/admin/options/activity_type?reset=1',
+      'permission' => 'administer CiviCase',
+      'parent_id' => 'tasksassignments_administer',
+      'is_active' => 1,
+    ]);
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
