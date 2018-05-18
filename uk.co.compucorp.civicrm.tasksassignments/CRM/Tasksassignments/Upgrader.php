@@ -901,14 +901,21 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    * @return bool
    */
   public function upgrade_1037() {
-    civicrm_api3('Navigation', 'create', [
-      'label' => 'Activity Types',
+    $activityTypeMenuItem = civicrm_api3('Navigation', 'get', [
       'name' => 'activity_types_administer',
-      'url' => 'civicrm/admin/options/activity_type?reset=1',
-      'permission' => 'administer CiviCase',
-      'parent_id' => 'tasksassignments_administer',
-      'is_active' => 1,
     ]);
+
+    // Create the menu item only if it doesn't exist:
+    if ($activityTypeMenuItem['count'] === 0) {
+      civicrm_api3('Navigation', 'create', [
+        'label' => 'Activity Types',
+        'name' => 'activity_types_administer',
+        'url' => 'civicrm/admin/options/activity_type?reset=1',
+        'permission' => 'administer CiviCase',
+        'parent_id' => 'tasksassignments_administer',
+        'is_active' => 1,
+      ]);
+    }
 
     return TRUE;
   }
