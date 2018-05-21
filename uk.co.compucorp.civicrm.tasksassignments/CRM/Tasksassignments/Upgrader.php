@@ -908,7 +908,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     // Create the menu item only if it doesn't exist:
     if ($activityTypeMenuItem['count'] === 0) {
       civicrm_api3('Navigation', 'create', [
-        'label' => 'Activity Types',
+        'label' => 'Task and Document Types',
         'name' => 'activity_types_administer',
         'url' => 'civicrm/admin/options/activity_type?reset=1',
         'permission' => 'administer CiviCase',
