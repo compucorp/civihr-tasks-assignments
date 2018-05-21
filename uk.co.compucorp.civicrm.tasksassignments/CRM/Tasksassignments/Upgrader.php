@@ -902,14 +902,14 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    */
   public function upgrade_1037() {
     $activityTypeMenuItem = civicrm_api3('Navigation', 'get', [
-      'name' => 'activity_types_administer',
+      'name' => 'task_and_document_types_administer',
     ]);
 
     // Create the menu item only if it doesn't exist:
     if ($activityTypeMenuItem['count'] === 0) {
       civicrm_api3('Navigation', 'create', [
         'label' => 'Task and Document Types',
-        'name' => 'activity_types_administer',
+        'name' => 'task_and_document_types_administer',
         'url' => 'civicrm/admin/options/activity_type?reset=1',
         'permission' => 'administer CiviCase',
         'parent_id' => 'tasksassignments_administer',
