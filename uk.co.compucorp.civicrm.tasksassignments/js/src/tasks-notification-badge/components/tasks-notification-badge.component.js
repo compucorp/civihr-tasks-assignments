@@ -12,9 +12,9 @@ define([
     controller: TasksNotificationBadgeController
   });
 
-  TasksNotificationBadgeController.$inject = ['$log', '$q', 'Session'];
+  TasksNotificationBadgeController.$inject = ['$log', 'Session'];
 
-  function TasksNotificationBadgeController ($log, $q, Session) {
+  function TasksNotificationBadgeController ($log, Session) {
     $log.debug('Component: tasks-notification-badge');
 
     var vm = this;
@@ -24,24 +24,12 @@ define([
     vm.refreshCountEventName = 'TasksBadge:: Update Count';
 
     (function init () {
-      $q.all([
-        getAssigneeUserId()
-      ]).then(function () {
-        vm.filters = [taskFilters, documentFilters];
-      });
-    })();
-
-    /**
-     * Get the logged in contact id and save it as assignee
-     *
-     * @returns {Promise}
-     */
-    function getAssigneeUserId () {
-      return Session.get()
+      Session.get()
         .then(function (session) {
           taskFilters.params.assignee_contact_id = session.contactId;
           documentFilters.params.assignee_contact_id = session.contactId;
+          vm.filters = [taskFilters, documentFilters];
         });
-    }
+    })();
   }
 });
