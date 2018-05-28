@@ -28,6 +28,7 @@ form {
       .ng-submitted .ng-invalid ~ span.input-group-addon {
         border-color: $brand-danger !important;
       }
+
     }
   }
 
@@ -393,4 +394,15 @@ form {
       }
     }
   }
+}
+
+button.info-button {
+  background: none;
+  border: none;
+  padding-top: 7px;
+  margin-bottom: 0px;
+}
+
+button.info-button .fa {
+  color: #0071bd
 }
