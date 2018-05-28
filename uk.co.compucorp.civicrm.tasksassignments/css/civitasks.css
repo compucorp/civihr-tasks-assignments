@@ -11515,6 +11515,15 @@ fieldset[disabled]
 #cividocuments .ui-select-container + .input-group-btn .btn-default:focus .fa {
   color: #333;
 }
+#civitasks button.info-button, #cividocuments button.info-button {
+  background: none;
+  border: none;
+  padding-top: 7px;
+  margin-bottom: 0px;
+}
+#civitasks button.info-button .fa, #cividocuments button.info-button .fa {
+  color: #0071bd;
+}
 #civitasks .ct-iframe-assignments, #cividocuments .ct-iframe-assignments,
 #civitasks .ct-iframe-reports,
 #cividocuments .ct-iframe-reports {
