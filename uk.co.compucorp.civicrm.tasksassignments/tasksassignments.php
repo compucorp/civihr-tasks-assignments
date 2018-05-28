@@ -164,7 +164,7 @@ function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params
   ];
 
   if (in_array($entity, $entitiesToAvoidPermissions)) {
-    $params['check_permissions'] = TRUE;
+    $params['check_permissions'] = FALSE;
   }
 
   $permissions['setting']['get'] = ['access AJAX API'];
