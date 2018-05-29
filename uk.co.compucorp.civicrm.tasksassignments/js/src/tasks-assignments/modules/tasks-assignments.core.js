@@ -6,6 +6,7 @@ define([
   'common/modules/xeditable-civi',
   'common/modules/routers/compu-ui-router',
   'common/directives/angular-date/date-input',
+  'common/directives/help-text.directive',
   'common/directives/prevent-animations',
   'common/directives/loading',
   'common/filters/angular-date/format-date',
