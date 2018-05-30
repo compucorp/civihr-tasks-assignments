@@ -47,12 +47,13 @@ define([
         });
       });
 
-      it('filters the Documents where status is awaiting upload and assignee is the logged in user', function () {
+      it('filters the Documents where status is awaiting upload, assignee is the logged in user and only loads the current version of documents', function () {
         expect(controller.filters[1]).toEqual({
           apiName: 'Document',
           params: {
             status_id: 'awaiting upload',
-            assignee_contact_id: loggedInUserID
+            assignee_contact_id: loggedInUserID,
+            is_current_revision: true
           }
         });
       });
