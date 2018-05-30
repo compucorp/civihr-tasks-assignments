@@ -52,7 +52,8 @@ define([
           apiName: 'Document',
           params: {
             status_id: 'awaiting upload',
-            assignee_contact_id: loggedInUserID
+            assignee_contact_id: loggedInUserID,
+            is_current_revision: true
           }
         });
       });

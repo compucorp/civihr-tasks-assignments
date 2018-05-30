@@ -19,7 +19,7 @@ define([
 
     var vm = this;
     var taskFilters = { apiName: 'Task', params: { status_id: {'!=': 'Completed'} } };
-    var documentFilters = { apiName: 'Document', params: { status_id: 'awaiting upload' } };
+    var documentFilters = { apiName: 'Document', params: { status_id: 'awaiting upload', is_current_revision: true } };
 
     vm.refreshCountEventName = 'TasksBadge:: Update Count';
 
