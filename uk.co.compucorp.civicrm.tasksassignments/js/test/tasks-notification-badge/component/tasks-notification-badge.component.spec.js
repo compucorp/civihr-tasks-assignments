@@ -37,12 +37,13 @@ define([
         $rootScope.$digest();
       });
 
-      it('filters the Tasks where status is not completed and assignee is the logged in user', function () {
+      it('filters the Tasks where status is not completed and assignee is the logged in user and only loads the current version of tasks', function () {
         expect(controller.filters[0]).toEqual({
           apiName: 'Task',
           params: {
             status_id: { '!=': 'Completed' },
-            assignee_contact_id: loggedInUserID
+            assignee_contact_id: loggedInUserID,
+            is_current_revision: true
           }
         });
       });

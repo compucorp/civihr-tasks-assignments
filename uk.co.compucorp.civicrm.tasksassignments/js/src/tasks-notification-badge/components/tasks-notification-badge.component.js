@@ -18,7 +18,7 @@ define([
     $log.debug('Component: tasks-notification-badge');
 
     var vm = this;
-    var taskFilters = { apiName: 'Task', params: { status_id: {'!=': 'Completed'} } };
+    var taskFilters = { apiName: 'Task', params: { status_id: {'!=': 'Completed'}, is_current_revision: true } };
     var documentFilters = { apiName: 'Document', params: { status_id: 'awaiting upload', is_current_revision: true } };
 
     vm.refreshCountEventName = 'TasksBadge:: Update Count';
