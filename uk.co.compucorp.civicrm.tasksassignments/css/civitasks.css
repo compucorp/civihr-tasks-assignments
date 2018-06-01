@@ -11180,12 +11180,12 @@ fieldset[disabled]
   margin-bottom: 20px;
 }
 #civitasks form.form-task .modal-header, #cividocuments form.form-task .modal-header, #civitasks form.form-document .modal-header, #cividocuments form.form-document .modal-header {
-  padding: 10px 15px 10px;
+  padding: 10px 15px;
   /* using this override until we have a separate directive for that */
 }
 #civitasks form.form-task .modal-header .close, #cividocuments form.form-task .modal-header .close, #civitasks form.form-document .modal-header .close, #cividocuments form.form-document .modal-header .close {
-  margin-top: 5px;
   margin-left: -3px;
+  margin-top: 5px;
 }
 #civitasks form.form-task .modal-header > *[class^='col-'], #cividocuments form.form-task .modal-header > *[class^='col-'], #civitasks form.form-document .modal-header > *[class^='col-'], #cividocuments form.form-document .modal-header > *[class^='col-'] {
   margin-left: -15px;
@@ -11199,15 +11199,15 @@ fieldset[disabled]
   padding: 0;
 }
 #civitasks form.form-task .modal-header .ui-select-container .ui-select-toggle .caret:before, #cividocuments form.form-task .modal-header .ui-select-container .ui-select-toggle .caret:before, #civitasks form.form-document .modal-header .ui-select-container .ui-select-toggle .caret:before, #cividocuments form.form-document .modal-header .ui-select-container .ui-select-toggle .caret:before {
-  position: relative;
-  top: -10px;
-  left: -10px;
-  content: "\f002";
-  opacity: .3;
+  content: '\f002';
   font-family: FontAwesome;
-  font-weight: 200;
   font-size: 16px;
   font-style: normal;
+  font-weight: 200;
+  left: -10px;
+  opacity: 0.3;
+  position: relative;
+  top: -10px;
   transform: translate(0, 0);
 }
 #civitasks form.form-task .modal-header .ui-select-container .ui-select-toggle .ui-select-placeholder, #cividocuments form.form-task .modal-header .ui-select-container .ui-select-toggle .ui-select-placeholder,
@@ -11218,7 +11218,7 @@ fieldset[disabled]
   color: #4D4D69 !important;
   font-size: 20px !important;
 }
-#civitasks form.form-task .modal-body .input-group[class^="col-"], #cividocuments form.form-task .modal-body .input-group[class^="col-"], #civitasks form.form-document .modal-body .input-group[class^="col-"], #cividocuments form.form-document .modal-body .input-group[class^="col-"] {
+#civitasks form.form-task .modal-body .input-group[class^='col-'], #cividocuments form.form-task .modal-body .input-group[class^='col-'], #civitasks form.form-document .modal-body .input-group[class^='col-'], #cividocuments form.form-document .modal-body .input-group[class^='col-'] {
   float: left;
 }
 #civitasks form.form-task .modal-body .ui-select-bootstrap > .ui-select-choices, #cividocuments form.form-task .modal-body .ui-select-bootstrap > .ui-select-choices, #civitasks form.form-document .modal-body .ui-select-bootstrap > .ui-select-choices, #cividocuments form.form-document .modal-body .ui-select-bootstrap > .ui-select-choices {
@@ -11229,9 +11229,9 @@ fieldset[disabled]
   left: auto;
 }
 #civitasks form.form-task .modal-body table, #cividocuments form.form-task .modal-body table, #civitasks form.form-document .modal-body table, #cividocuments form.form-document .modal-body table {
+  background: transparent;
   padding-left: 15px;
   padding-right: 15px;
-  background: transparent;
 }
 #civitasks form.form-task .modal-body table *, #cividocuments form.form-task .modal-body table *, #civitasks form.form-document .modal-body table *, #cividocuments form.form-document .modal-body table * {
   border: none;
@@ -11245,9 +11245,9 @@ fieldset[disabled]
 }
 #civitasks form.form-task .modal-body .drop-zone, #cividocuments form.form-task .modal-body .drop-zone, #civitasks form.form-document .modal-body .drop-zone, #cividocuments form.form-document .modal-body .drop-zone {
   background: transparent;
-  text-align: center;
-  padding: 25px;
   cursor: pointer;
+  padding: 25px;
+  text-align: center;
 }
 #civitasks form.form-task .modal-body .drop-zone > .fa, #cividocuments form.form-task .modal-body .drop-zone > .fa, #civitasks form.form-document .modal-body .drop-zone > .fa, #cividocuments form.form-document .modal-body .drop-zone > .fa {
   font-size: 25px;
@@ -11257,10 +11257,10 @@ fieldset[disabled]
   font-weight: 600;
 }
 #civitasks form.form-task .modal-body .ui-select-match-text > span, #cividocuments form.form-task .modal-body .ui-select-match-text > span, #civitasks form.form-document .modal-body .ui-select-match-text > span, #cividocuments form.form-document .modal-body .ui-select-match-text > span {
-  width: 80%;
   overflow: hidden;
-  text-overflow: ellipsis;
   position: absolute;
+  text-overflow: ellipsis;
+  width: 80%;
 }
 #civitasks form.form-task .modal-body .container, #cividocuments form.form-task .modal-body .container, #civitasks form.form-document .modal-body .container, #cividocuments form.form-document .modal-body .container {
   padding: 0 15px;
@@ -11286,15 +11286,15 @@ fieldset[disabled]
   margin-bottom: 10px;
 }
 #civitasks form.form-assignment .display-only.header, #cividocuments form.form-assignment .display-only.header {
-  margin-top: 7px;
   height: 32px;
+  margin-top: 7px;
 }
 #civitasks form.form-assignment .display-only.header > span, #cividocuments form.form-assignment .display-only.header > span {
   line-height: 34px;
 }
 #civitasks form.form-assignment .modal-table, #cividocuments form.form-assignment .modal-table {
-  margin-top: 10px;
   border: 1px solid #E8EEF0;
+  margin-top: 10px;
 }
 #civitasks form.form-assignment .modal-table.table-striped > thead > tr > th.action-column, #cividocuments form.form-assignment .modal-table.table-striped > thead > tr > th.action-column {
   width: 5%;
@@ -11306,15 +11306,15 @@ fieldset[disabled]
   width: 30%;
 }
 #civitasks form.form-assignment .modal-table.table-striped > thead > tr > th.date-column, #cividocuments form.form-assignment .modal-table.table-striped > thead > tr > th.date-column {
-  width: 20%;
   min-width: 150px;
+  width: 20%;
 }
 #civitasks form.form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #cividocuments form.form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #civitasks form.form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd), #cividocuments form.form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd) {
   background-color: #FFFFFF;
 }
 #civitasks form.form-assignment .modal-table th > .btn, #cividocuments form.form-assignment .modal-table th > .btn {
-  margin-top: -6px;
   margin-bottom: -6px;
+  margin-top: -6px;
 }
 #civitasks form.form-assignment .separately, #cividocuments form.form-assignment .separately {
   margin-bottom: 20px;
@@ -11322,8 +11322,8 @@ fieldset[disabled]
 #civitasks form.form-assignment .separately label, #cividocuments form.form-assignment .separately label, #civitasks form.form-assignment .separately .checkbox-label, #cividocuments form.form-assignment .separately .checkbox-label,
 #civitasks form.form-assignment .separately .radio-label,
 #cividocuments form.form-assignment .separately .radio-label {
-  margin-top: 3px;
   margin-bottom: 12px;
+  margin-top: 3px;
 }
 #civitasks form.form-task-migrate label, #cividocuments form.form-task-migrate label, #civitasks form.form-task-migrate .checkbox-label, #cividocuments form.form-task-migrate .checkbox-label,
 #civitasks form.form-task-migrate .radio-label,
@@ -11331,11 +11331,11 @@ fieldset[disabled]
   text-transform: capitalize;
 }
 #civitasks form.ct-form-action, #cividocuments form.ct-form-action {
-  margin-top: -12px;
+  float: left;
   margin-bottom: -12px;
+  margin-top: -12px;
   max-width: 817px;
   width: 100%;
-  float: left;
 }
 #civitasks form.ct-form-action .row, #cividocuments form.ct-form-action .row,
 #civitasks form.ct-form-action .form-horizontal .form-group,
@@ -11347,9 +11347,9 @@ fieldset[disabled]
 #civitasks form.ct-form-action .form-horizontal .control-label, #cividocuments form.ct-form-action .form-horizontal .control-label {
   text-align: right;
 }
-#civitasks form.ct-form-action [class^="col-"], #cividocuments form.ct-form-action [class^="col-"],
-#civitasks form.ct-form-action [class*=" col-"],
-#cividocuments form.ct-form-action [class*=" col-"] {
+#civitasks form.ct-form-action [class^='col-'], #cividocuments form.ct-form-action [class^='col-'],
+#civitasks form.ct-form-action [class*=' col-'],
+#cividocuments form.ct-form-action [class*=' col-'] {
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -11363,8 +11363,8 @@ fieldset[disabled]
   display: table-cell;
 }
 #civitasks form .ui-select-required:after, #cividocuments form .ui-select-required:after {
-  content: "*";
   color: red;
+  content: '*';
   display: table-cell;
   padding-left: 3px;
   position: absolute;
@@ -11391,8 +11391,8 @@ fieldset[disabled]
 #cividocuments .form-control .input-group-btn,
 #civitasks .form-control .input-group .form-control,
 #cividocuments .form-control .input-group .form-control {
-  display: table-cell;
   border-radius: #C2CFD8;
+  display: table-cell;
 }
 #civitasks .ui-select-multiple.ui-select-bootstrap input.ui-select-search, #cividocuments .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
   font-weight: normal;
