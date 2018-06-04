@@ -11,12 +11,4 @@
     'tasks-assignments/vendor/angular-checklist-model': 'tasks-assignments/vendor/angular/checklist-model',
     'tasks-assignments/vendor/angular-router': 'tasks-assignments/vendor/angular/angular-ui-router',
   }
-},{
-  baseUrl : 'src',
-  out: 'dist/tasks-notification-badge.min.js',
-  name: 'tasks-notification-badge',
-  skipModuleInsertion: true,
-  paths: {
-    'common': 'empty:'
-  }
 })
