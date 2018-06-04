@@ -28,6 +28,7 @@ form {
       .ng-submitted .ng-invalid ~ span.input-group-addon {
         border-color: $brand-danger !important;
       }
+
     }
   }
 
@@ -36,8 +37,8 @@ form {
       background: none;
     }
   }
-  &.form-horizontal {
 
+  &.form-horizontal {
     .input-group.date-input-group {
       margin-left: 0;
       margin-right: 0;
@@ -47,7 +48,6 @@ form {
 
   &.form-task,
   &.form-document {
-
     .form-control-static {
       a:link {
         font-size: 12px;
@@ -70,11 +70,11 @@ form {
     }
 
     .modal-header {
-      padding: 10px 15px 10px;
+      padding: 10px 15px;
 
       .close {
-        margin-top: 5px;
         margin-left: -3px;
+        margin-top: 5px;
       }
 
       > *[class^='col-'] {
@@ -84,7 +84,6 @@ form {
 
       /* using this override until we have a separate directive for that */
       .ui-select-container {
-
         * {
           border: none !important;
           box-shadow: none !important;
@@ -94,18 +93,18 @@ form {
           padding: 0;
 
           .caret:before {
-            position: relative;
-            top: -10px;
-            left: -10px;
 
             // Magnifying Glass
-            content: "\f002";
-            opacity: .3;
+            content: '\f002';
 
             font-family: FontAwesome;
-            font-weight: 200;
             font-size: 16px;
             font-style: normal;
+            font-weight: 200;
+            left: -10px;
+            opacity: 0.3;
+            position: relative;
+            top: -10px;
 
             transform: translate(0, 0);
           }
@@ -120,8 +119,7 @@ form {
     }
 
     .modal-body {
-
-      .input-group[class^="col-"] {
+      .input-group[class^='col-'] {
         float: left;
       }
 
@@ -135,9 +133,10 @@ form {
       }
 
       table {
+        background: transparent;
         padding-left: 15px;
         padding-right: 15px;
-        background: transparent;
+
         * {
           border: none;
         }
@@ -154,9 +153,9 @@ form {
 
       .drop-zone {
         background: transparent;
-        text-align: center;
-        padding: 25px;
         cursor: pointer;
+        padding: 25px;
+        text-align: center;
 
         > .fa {
           font-size: 25px;
@@ -169,10 +168,10 @@ form {
       }
 
       .ui-select-match-text > span {
-        width: 80%;
         overflow: hidden;
-        text-overflow: ellipsis;
         position: absolute;
+        text-overflow: ellipsis;
+        width: 80%;
       }
 
       .container {
@@ -194,7 +193,6 @@ form {
   }
 
   &.form-assignment {
-
     h2 {
       font-size: 16px;
       line-height: 32px;
@@ -210,10 +208,9 @@ form {
     }
 
     .display-only {
-
       &.header {
-        margin-top: 7px;
         height: 32px;
+        margin-top: 7px;
 
         > span {
           line-height: 34px;
@@ -223,17 +220,13 @@ form {
 
     //TODO Move it to org.civicrm.bootstrapcivicrm
     .modal-table {
-      margin-top: 10px;
       border: 1px solid $table-border-color;
+      margin-top: 10px;
 
       &.table-striped {
-
         > thead {
-
           > tr {
-
             > th {
-
               &.action-column {
                 width: 5%;
               }
@@ -247,15 +240,14 @@ form {
               }
 
               &.date-column {
-                width: 20%;
                 min-width: 150px;
+                width: 20%;
               }
             }
           }
         }
 
         > tbody, tfoot {
-
           > tr:nth-child(odd) {
             background-color: $table-bg-accent;
           }
@@ -263,10 +255,9 @@ form {
       }
 
       th {
-
         > .btn {
-          margin-top: -6px;
           margin-bottom: -6px;
+          margin-top: -6px;
         }
       }
     }
@@ -275,25 +266,24 @@ form {
       margin-bottom: 20px;
 
       label {
-        margin-top: 3px;
         margin-bottom: 12px;
+        margin-top: 3px;
       }
     }
   }
 
   &.form-task-migrate {
-
     label {
       text-transform: capitalize;
     }
   }
 
   &.#{$prefix}form-action {
-    margin-top: -12px;
+    float: left;
     margin-bottom: -12px;
+    margin-top: -12px;
     max-width: 817px;
     width: 100%;
-    float: left;
 
     .row,
     .form-horizontal .form-group {
@@ -308,8 +298,8 @@ form {
       text-align: right;
     }
 
-    [class^="col-"],
-    [class*=" col-"] {
+    [class^='col-'],
+    [class*=' col-'] {
       padding: {
         left: 5px;
         right: 5px;
@@ -328,8 +318,8 @@ form {
     }
 
     &:after {
-      content: "*";
       color: red;
+      content: '*';
       display: table-cell;
       padding-left: 3px;
       position: absolute;
@@ -362,8 +352,8 @@ form {
   .input-group-addon,
   .input-group-btn,
   .input-group .form-control {
-    display: table-cell;
     border-radius: $input-border;
+    display: table-cell;
   }
 }
 
@@ -375,10 +365,10 @@ form {
 
 .ui-select-match,
 .ui-select-container + .input-group-btn {
-
   input {
     font-weight: normal;
   }
+
   .btn-default {
     border-color: $input-border;
     border-radius: $input-border 0 0 $input-border;

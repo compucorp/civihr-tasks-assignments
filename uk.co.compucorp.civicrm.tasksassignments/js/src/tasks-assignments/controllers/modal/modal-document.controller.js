@@ -12,14 +12,14 @@ define([
   ModalDocumentController.__name = 'ModalDocumentController';
   ModalDocumentController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$window', '$dialog', '$uibModal', '$uibModalInstance', 'HR_settings', 'config',
+    '$window', '$dialog', '$uibModal', '$uibModalInstance', 'crmAngService', 'HR_settings', 'config',
     'appSettingsService', 'assignmentService', 'contactService', 'documentService',
     'fileServiceTA', 'fileService', 'notificationService', 'modalMode', 'role',
     'data', 'files'
   ];
 
   function ModalDocumentController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $window, $dialog, $modal, $modalInstance, HRSettings, config,
+    $scope, $timeout, $window, $dialog, $modal, $modalInstance, crmAngService, HRSettings, config,
     appSettingsService, assignmentService, contactService, documentService,
     fileServiceTA, fileService, notificationService, modalMode, role, data, files) {
     $log.debug('Controller: ModalDocumentController');
@@ -66,6 +66,7 @@ define([
     vm.showStatusField = showStatusField;
     vm.searchContactAssignments = searchContactAssignments;
     vm.viewFile = viewFile;
+    vm.openActivityTypeOptionsEditor = openActivityTypeOptionsEditor;
 
     (function init () {
       angular.copy(data, vm.document);
@@ -596,6 +597,19 @@ define([
      */
     function initWatchers () {
       $rootScope.$watch('cache.contact.arrSearch', collectContacts);
+    }
+
+    /**
+     * Opens editor for activity type options editing
+     */
+    function openActivityTypeOptionsEditor () {
+      crmAngService.loadForm('/civicrm/admin/options/activity_type?reset=1')
+        .on('crmUnload', function () {
+          documentService.getOptions()
+            .then(function (options) {
+              angular.extend($rootScope.cache, options);
+            });
+        });
     }
   }
 
