@@ -34,12 +34,21 @@ gulp.task('crm-js-bundle', function () {
     .pipe(gulp.dest('js/dist/'));
 });
 
-gulp.task('requirejs-bundle', function (done) {
-  exec('r.js -o js/build.js', function (err, stdout, stderr) {
+gulp.task('requirejs-bundle-ta', function (done) {
+  exec('r.js -o js/tasks-assignments.build.js', function (err, stdout, stderr) {
     err && err.code && console.log(stdout);
     done();
   });
 });
+
+gulp.task('requirejs-bundle-badge', function (done) {
+  exec('r.js -o js/tasks-notification-badge.build.js', function (err, stdout, stderr) {
+    err && err.code && console.log(stdout);
+    done();
+  });
+});
+
+gulp.task('requirejs-bundle', ['requirejs-bundle-ta', 'requirejs-bundle-badge']);
 
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', ['sass']);
