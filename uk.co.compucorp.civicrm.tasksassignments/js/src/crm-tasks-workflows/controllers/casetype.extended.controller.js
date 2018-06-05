@@ -13,10 +13,21 @@
   function CaseTypeExtendedController ($controller, $log, $scope, crmApi, apiCalls, activityOptionsTask, activityOptionsDocument) {
     $log.debug('Controller: CaseTypeExtendedController');
 
-    initParentController();
-    var originalAddActivity = $scope.addActivity;
+    var parentMethods = {};
 
-    $scope.addActivity = addActivity;
+    (function init () {
+      var isNewCaseType;
+
+      initParentController();
+
+      parentMethods.addActivity = $scope.addActivity;
+      $scope.addActivity = addActivity;
+      isNewCaseType = !$scope.caseType.id;
+
+      if (isNewCaseType) {
+        clearAllActivityTypesFromMainActivitySet();
+      }
+    })();
 
     /**
      * Add new activity
@@ -25,8 +36,7 @@
      * @param {String} activityType
      */
     function addActivity (activitySet, activityType) {
-      // call parent
-      originalAddActivity(activitySet, activityType);
+      parentMethods.addActivity(activitySet, activityType);
 
       // remove reference_activity property from newly added activity
       activitySet.activityTypes.forEach(function (activity) {
@@ -34,6 +44,13 @@
           delete activity.reference_activity;
         }
       });
+    }
+
+    /**
+     * Clears all the activity types defined in the main activity set.
+     */
+    function clearAllActivityTypesFromMainActivitySet () {
+      $scope.caseType.definition.activitySets[0].activityTypes = [];
     }
 
     /**

@@ -5,11 +5,24 @@
   'use strict';
 
   describe('CaseTypeExtendedController', function () {
-    var $controller, $log, $rootScope, $scope, TaskActivityOptionsData, DocumentActivityOptionsData;
+    var $controller, $log, $rootScope, $scope, CaseTypeCtrl, parentControllerSpy,
+      TaskActivityOptionsData, DocumentActivityOptionsData;
 
-    beforeEach(function () {
-      module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers');
-    });
+    beforeEach(module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers', function ($controllerProvider) {
+      var defaultCaseType = getMockCaseType();
+
+      parentControllerSpy = jasmine.createSpy('parentControllerSpy');
+
+      // mocks the original CaseTypeCtrl:
+      CaseTypeCtrl = ['$scope', 'crmApi', 'apiCalls', function ($scope, crmApi,
+        apiCalls) {
+        parentControllerSpy(apiCalls);
+
+        $scope.caseType = apiCalls.caseType ? apiCalls.caseType : defaultCaseType;
+      }];
+
+      $controllerProvider.register('CaseTypeCtrl', CaseTypeCtrl);
+    }));
 
     beforeEach(inject(function (_$controller_, _$log_, _$rootScope_, _TaskActivityOptionsData_, _DocumentActivityOptionsData_) {
       $controller = _$controller_;
@@ -23,14 +36,43 @@
     }));
 
     describe('when initialized', function () {
-      var expectedValue;
+      var expectedApiCalls;
 
       beforeEach(function () {
-        expectedValue = { actTypes: { values: getActivityTypes() } };
+        expectedApiCalls = { actTypes: { values: getActivityTypes() } };
       });
 
       it('initialises the parent controller with activity types having component labels', function () {
-        expect($log.debug).toHaveBeenCalledWith('Init CaseTypeCtrl with', jasmine.any(Object), jasmine.any(Object), expectedValue);
+        expect(parentControllerSpy).toHaveBeenCalledWith(expectedApiCalls);
+      });
+    });
+
+    describe('when creating a new case type', function () {
+      beforeEach(function () {
+        $scope = $rootScope.$new();
+
+        initController($scope);
+      });
+
+      it('clears all activities from the main activity set', function () {
+        expect($scope.caseType.definition.activitySets[0].activityTypes).toEqual([]);
+      });
+    });
+
+    describe('when editing an existing case type', function () {
+      var caseType = getMockCaseType();
+
+      beforeEach(function () {
+        $scope = $rootScope.$new();
+        caseType.id = 100;
+
+        initController($scope, {
+          caseType: caseType
+        });
+      });
+
+      it('does not clear the activity types from the main activity set', function () {
+        expect($scope.caseType.definition.activitySets[0].activityTypes).not.toEqual([]);
       });
     });
 
@@ -62,15 +104,17 @@
     /**
      * Initialise the controller
      *
-     * @param {Object} $scope
+     * @param {Object} scope - an optional custom $scope to pass to the controller.
+     * @param {Object} apiCalls - an optional apiCalls mock object to pass to the controller.
      */
-    function initController ($scope) {
-      $scope = $scope || $rootScope.$new();
+    function initController (scope, apiCalls) {
+      $scope = scope || $rootScope.$new();
+      apiCalls = angular.copy(apiCalls || {});
 
       $controller('CaseTypeExtendedController', {
         $scope: $scope,
         crmApi: {},
-        apiCalls: {},
+        apiCalls: apiCalls,
         activityOptionsTask: { values: angular.copy(TaskActivityOptionsData) },
         activityOptionsDocument: { values: angular.copy(DocumentActivityOptionsData) }
       });
@@ -97,6 +141,21 @@
       });
 
       return taskOptions.concat(documentOptions);
+    }
+
+    /**
+     * Returns a mock for Case Types
+     *
+     * @return {Object}
+     */
+    function getMockCaseType () {
+      return {
+        definition: {
+          activitySets: [{
+            activityTypes: [{ name: 'Open Case', status: 'Completed' }]
+          }]
+        }
+      };
     }
   });
 })();

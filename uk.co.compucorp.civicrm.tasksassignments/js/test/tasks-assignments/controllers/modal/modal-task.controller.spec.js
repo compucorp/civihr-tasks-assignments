@@ -11,10 +11,10 @@ define([
 
   describe('ModalTaskController', function () {
     var $controller, $q, $rootScope, $scope, HRSettings,
-      data, assignmentService;
+      data, assignmentService, crmAngService;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _assignmentService_, $httpBackend) {
+    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _assignmentService_, _crmAngService_, $httpBackend) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
 
@@ -23,6 +23,7 @@ define([
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       assignmentService = _assignmentService_;
+      crmAngService = _crmAngService_;
 
       data = {};
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -161,6 +162,30 @@ define([
 
       it("loads the target contact's assignments", function () {
         expect(assignmentService.search).toHaveBeenCalledWith(null, null, targetContactId);
+      });
+    });
+
+    describe('when user clicks on the task wrench icon', function () {
+      var onPopupFormSuccess, url;
+
+      beforeEach(function () {
+        url = '/civicrm/admin/options/activity_type?reset=1';
+
+        spyOn(crmAngService, 'loadForm').and.callFake(function () {
+          return {
+            on: function (event, callback) {
+              if (event === 'crmUnload') {
+                onPopupFormSuccess = callback;
+              }
+            }
+          };
+        });
+        initController();
+        $scope.task.openActivityTypeOptionsEditor();
+      });
+
+      it('calls crmAngService with the required url', function () {
+        expect(crmAngService.loadForm).toHaveBeenCalledWith(url);
       });
     });
 

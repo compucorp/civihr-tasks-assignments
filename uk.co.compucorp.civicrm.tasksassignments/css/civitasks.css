@@ -40,6 +40,7 @@
   /* add generic styling for the editor */
   /* add the styling for the awesomness of the resizer */
   /* copy the popover code from bootstrap so this will work even without it */
+  /* stylelint-disable selector-no-qualifying-type */
   /**
    * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
    * @version v0.10.6
@@ -560,8 +561,8 @@
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+  src: url(font-path("../fonts/bootstrap/glyphicons-halflings-regular.eot"));
+  src: url(font-path("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix")) format("embedded-opentype"), url(font-path("../fonts/bootstrap/glyphicons-halflings-regular.woff")) format("woff"), url(font-path("../fonts/bootstrap/glyphicons-halflings-regular.ttf")) format("truetype"), url(font-path("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular")) format("svg");
 }
 #civitasks .glyphicon, #cividocuments .glyphicon {
   position: relative;
@@ -9404,80 +9405,6 @@ fieldset[disabled]
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu, #cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu {
-  padding: 10px;
-}
-#civitasks .ct-datepicker, #cividocuments .ct-datepicker {
-  -webkit-box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
-  box-shadow: 1px 4px 15px 0px rgba(0, 0, 0, 0.1);
-}
-#civitasks .ct-datepicker table:focus, #cividocuments .ct-datepicker table:focus,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table:focus,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table:focus {
-  outline: 0 none;
-}
-#civitasks .ct-datepicker table tbody .btn, #cividocuments .ct-datepicker table tbody .btn,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn {
-  border-radius: 20px;
-  padding: 7px;
-  line-height: 1;
-  width: auto !important;
-}
-#civitasks .ct-datepicker table tbody .btn:active, #cividocuments .ct-datepicker table tbody .btn:active,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:active,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:active {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-#civitasks .ct-datepicker table tbody .btn:focus, #cividocuments .ct-datepicker table tbody .btn:focus,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:focus,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn:focus {
-  outline: 0 none;
-  background-color: #F3F6F7;
-}
-#civitasks .ct-datepicker table tbody .btn.active, #cividocuments .ct-datepicker table tbody .btn.active,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  background-color: #0071BD;
-}
-#civitasks .ct-datepicker table tbody .btn.active span, #cividocuments .ct-datepicker table tbody .btn.active span,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active span,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table tbody .btn.active span {
-  color: #fff;
-}
-#civitasks .ct-datepicker table td, #cividocuments .ct-datepicker table td, #civitasks .ct-datepicker table th, #cividocuments .ct-datepicker table th,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table td,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table td,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table th,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table th {
-  padding: 7px;
-}
-#civitasks .ct-datepicker table thead small, #cividocuments .ct-datepicker table thead small,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table thead small,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table thead small {
-  color: #464354;
-  font-size: 11px;
-}
-#civitasks .ct-datepicker table .btn, #cividocuments .ct-datepicker table .btn,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table .btn,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table .btn {
-  border-width: 0;
-  font-size: 12px;
-  font-weight: normal;
-}
-#civitasks .ct-datepicker table .text-muted, #cividocuments .ct-datepicker table .text-muted,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table .text-muted,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table .text-muted {
-  color: #CCCCCC;
-}
-#civitasks .ct-datepicker table > thead > tr > th, #cividocuments .ct-datepicker table > thead > tr > th,
-#civitasks [uib-datepicker-popup-wrap] > .dropdown-menu table > thead > tr > th,
-#cividocuments [uib-datepicker-popup-wrap] > .dropdown-menu table > thead > tr > th {
-  vertical-align: middle;
-}
 #civitasks .dropdown-menu, #cividocuments .dropdown-menu {
   padding: 0;
 }
@@ -9495,17 +9422,17 @@ fieldset[disabled]
   text-align: center;
   width: 1.25em;
 }
-#civitasks input[type="radio"], #cividocuments input[type="radio"],
-#civitasks input[type="checkbox"],
-#cividocuments input[type="checkbox"],
-#civitasks .radio input[type="radio"],
-#cividocuments .radio input[type="radio"],
-#civitasks .radio-inline input[type="radio"],
-#cividocuments .radio-inline input[type="radio"],
-#civitasks .checkbox input[type="checkbox"],
-#cividocuments .checkbox input[type="checkbox"],
-#civitasks .checkbox-inline input[type="checkbox"],
-#cividocuments .checkbox-inline input[type="checkbox"] {
+#civitasks input[type='radio'], #cividocuments input[type='radio'],
+#civitasks input[type='checkbox'],
+#cividocuments input[type='checkbox'],
+#civitasks .radio input[type='radio'],
+#cividocuments .radio input[type='radio'],
+#civitasks .radio-inline input[type='radio'],
+#cividocuments .radio-inline input[type='radio'],
+#civitasks .checkbox input[type='checkbox'],
+#cividocuments .checkbox input[type='checkbox'],
+#civitasks .checkbox-inline input[type='checkbox'],
+#cividocuments .checkbox-inline input[type='checkbox'] {
   margin-top: 2px;
 }
 #civitasks .form-control-file, #cividocuments .form-control-file {
@@ -9525,6 +9452,10 @@ fieldset[disabled]
   margin-top: -3px;
   padding-top: 0;
 }
+#civitasks .form-horizontal .has-feedback, #cividocuments .form-horizontal .has-feedback {
+  /* stylelint-disable selector-max-compound-selectors */
+  /* stylelint-enable selector-max-compound-selectors */
+}
 #civitasks .form-horizontal .has-feedback select + .form-control-feedback, #cividocuments .form-horizontal .has-feedback select + .form-control-feedback {
   right: 28px;
 }
@@ -9542,46 +9473,44 @@ fieldset[disabled]
   margin-bottom: 0;
 }
 #civitasks .form-horizontal .well .form-group + .form-group, #cividocuments .form-horizontal .well .form-group + .form-group {
+  /* stylelint-disable-line selector-max-compound-selectors */
   margin-top: 15px;
 }
 #civitasks .text-required, #cividocuments .text-required {
   color: #CF3458;
 }
-#civitasks .form-group.required .control-label:after, #cividocuments .form-group.required .control-label:after {
-  content: '*';
+#civitasks .form-group.required .control-label::after, #cividocuments .form-group.required .control-label::after {
   color: #CF3458;
+  content: '*';
 }
 #civitasks select.required-field-indicator[required] + .crm_custom-select__arrow::after, #cividocuments select.required-field-indicator[required] + .crm_custom-select__arrow::after {
-  content: '*';
   color: #CF3458;
+  content: '*';
   position: absolute;
   right: -10px;
-  top: 0;
-}
-#civitasks select.required-field-indicator[required] + .crm_custom-select__arrow::after, #cividocuments select.required-field-indicator[required] + .crm_custom-select__arrow::after {
   top: -6px;
 }
 #civitasks .required-field-indicator:not(.ui-select-container)::after, #cividocuments .required-field-indicator:not(.ui-select-container)::after {
-  content: '*';
   color: #CF3458;
-  padding-left: 5px;
+  content: '*';
   display: inline-block;
+  padding-left: 5px;
 }
 #civitasks .required-field-indicator.ui-select-container .ui-select-placeholder::after, #cividocuments .required-field-indicator.ui-select-container .ui-select-placeholder::after {
-  content: '*';
   color: #CF3458;
+  content: '*';
   font-size: 13px;
+  padding-left: 5px;
   position: absolute;
   top: 2px;
-  padding-left: 5px;
 }
 #civitasks .required-field-indicator.ui-select-container .select2-chosen.empty::after, #cividocuments .required-field-indicator.ui-select-container .select2-chosen.empty::after {
-  content: '*';
   color: #CF3458;
+  content: '*';
   font-size: 13px;
+  padding-left: 5px;
   position: absolute;
   top: -1px;
-  padding-left: 5px;
 }
 #civitasks select[required] + .crm_custom-select__arrow::after, #cividocuments select[required] + .crm_custom-select__arrow::after {
   top: -6px;
@@ -9603,21 +9532,10 @@ fieldset[disabled]
   color: #464354;
   font-weight: 600;
 }
-#civitasks .ta-editor.ta-html, #cividocuments .ta-editor.ta-html,
-#civitasks .ta-scroll-window.form-control,
-#cividocuments .ta-scroll-window.form-control {
-  min-height: 120px;
-  overflow: visible;
-}
-#civitasks .ta-scroll-window > .ta-bind, #cividocuments .ta-scroll-window > .ta-bind {
-  min-height: 120px;
-}
-#civitasks .ta-toolbar, #cividocuments .ta-toolbar {
-  background-color: #F3F6F7;
-  padding: 5px;
-  margin: 0;
-  border: 1px solid #C2CFD8;
-  margin-bottom: -1px;
+#civitasks .checkbox-label, #cividocuments .checkbox-label,
+#civitasks .radio-label,
+#cividocuments .radio-label {
+  /* stylelint-disable-line scss/at-extend-no-missing-placeholder */
 }
 #civitasks .drop-zone, #cividocuments .drop-zone {
   background-color: #F3F6F7;
@@ -11262,12 +11180,12 @@ fieldset[disabled]
   margin-bottom: 20px;
 }
 #civitasks form.form-task .modal-header, #cividocuments form.form-task .modal-header, #civitasks form.form-document .modal-header, #cividocuments form.form-document .modal-header {
-  padding: 10px 15px 10px;
+  padding: 10px 15px;
   /* using this override until we have a separate directive for that */
 }
 #civitasks form.form-task .modal-header .close, #cividocuments form.form-task .modal-header .close, #civitasks form.form-document .modal-header .close, #cividocuments form.form-document .modal-header .close {
-  margin-top: 5px;
   margin-left: -3px;
+  margin-top: 5px;
 }
 #civitasks form.form-task .modal-header > *[class^='col-'], #cividocuments form.form-task .modal-header > *[class^='col-'], #civitasks form.form-document .modal-header > *[class^='col-'], #cividocuments form.form-document .modal-header > *[class^='col-'] {
   margin-left: -15px;
@@ -11281,15 +11199,15 @@ fieldset[disabled]
   padding: 0;
 }
 #civitasks form.form-task .modal-header .ui-select-container .ui-select-toggle .caret:before, #cividocuments form.form-task .modal-header .ui-select-container .ui-select-toggle .caret:before, #civitasks form.form-document .modal-header .ui-select-container .ui-select-toggle .caret:before, #cividocuments form.form-document .modal-header .ui-select-container .ui-select-toggle .caret:before {
-  position: relative;
-  top: -10px;
-  left: -10px;
-  content: "\f002";
-  opacity: .3;
+  content: '\f002';
   font-family: FontAwesome;
-  font-weight: 200;
   font-size: 16px;
   font-style: normal;
+  font-weight: 200;
+  left: -10px;
+  opacity: 0.3;
+  position: relative;
+  top: -10px;
   transform: translate(0, 0);
 }
 #civitasks form.form-task .modal-header .ui-select-container .ui-select-toggle .ui-select-placeholder, #cividocuments form.form-task .modal-header .ui-select-container .ui-select-toggle .ui-select-placeholder,
@@ -11300,7 +11218,7 @@ fieldset[disabled]
   color: #4D4D69 !important;
   font-size: 20px !important;
 }
-#civitasks form.form-task .modal-body .input-group[class^="col-"], #cividocuments form.form-task .modal-body .input-group[class^="col-"], #civitasks form.form-document .modal-body .input-group[class^="col-"], #cividocuments form.form-document .modal-body .input-group[class^="col-"] {
+#civitasks form.form-task .modal-body .input-group[class^='col-'], #cividocuments form.form-task .modal-body .input-group[class^='col-'], #civitasks form.form-document .modal-body .input-group[class^='col-'], #cividocuments form.form-document .modal-body .input-group[class^='col-'] {
   float: left;
 }
 #civitasks form.form-task .modal-body .ui-select-bootstrap > .ui-select-choices, #cividocuments form.form-task .modal-body .ui-select-bootstrap > .ui-select-choices, #civitasks form.form-document .modal-body .ui-select-bootstrap > .ui-select-choices, #cividocuments form.form-document .modal-body .ui-select-bootstrap > .ui-select-choices {
@@ -11311,9 +11229,9 @@ fieldset[disabled]
   left: auto;
 }
 #civitasks form.form-task .modal-body table, #cividocuments form.form-task .modal-body table, #civitasks form.form-document .modal-body table, #cividocuments form.form-document .modal-body table {
+  background: transparent;
   padding-left: 15px;
   padding-right: 15px;
-  background: transparent;
 }
 #civitasks form.form-task .modal-body table *, #cividocuments form.form-task .modal-body table *, #civitasks form.form-document .modal-body table *, #cividocuments form.form-document .modal-body table * {
   border: none;
@@ -11327,9 +11245,9 @@ fieldset[disabled]
 }
 #civitasks form.form-task .modal-body .drop-zone, #cividocuments form.form-task .modal-body .drop-zone, #civitasks form.form-document .modal-body .drop-zone, #cividocuments form.form-document .modal-body .drop-zone {
   background: transparent;
-  text-align: center;
-  padding: 25px;
   cursor: pointer;
+  padding: 25px;
+  text-align: center;
 }
 #civitasks form.form-task .modal-body .drop-zone > .fa, #cividocuments form.form-task .modal-body .drop-zone > .fa, #civitasks form.form-document .modal-body .drop-zone > .fa, #cividocuments form.form-document .modal-body .drop-zone > .fa {
   font-size: 25px;
@@ -11339,10 +11257,10 @@ fieldset[disabled]
   font-weight: 600;
 }
 #civitasks form.form-task .modal-body .ui-select-match-text > span, #cividocuments form.form-task .modal-body .ui-select-match-text > span, #civitasks form.form-document .modal-body .ui-select-match-text > span, #cividocuments form.form-document .modal-body .ui-select-match-text > span {
-  width: 80%;
   overflow: hidden;
-  text-overflow: ellipsis;
   position: absolute;
+  text-overflow: ellipsis;
+  width: 80%;
 }
 #civitasks form.form-task .modal-body .container, #cividocuments form.form-task .modal-body .container, #civitasks form.form-document .modal-body .container, #cividocuments form.form-document .modal-body .container {
   padding: 0 15px;
@@ -11368,15 +11286,15 @@ fieldset[disabled]
   margin-bottom: 10px;
 }
 #civitasks form.form-assignment .display-only.header, #cividocuments form.form-assignment .display-only.header {
-  margin-top: 7px;
   height: 32px;
+  margin-top: 7px;
 }
 #civitasks form.form-assignment .display-only.header > span, #cividocuments form.form-assignment .display-only.header > span {
   line-height: 34px;
 }
 #civitasks form.form-assignment .modal-table, #cividocuments form.form-assignment .modal-table {
-  margin-top: 10px;
   border: 1px solid #E8EEF0;
+  margin-top: 10px;
 }
 #civitasks form.form-assignment .modal-table.table-striped > thead > tr > th.action-column, #cividocuments form.form-assignment .modal-table.table-striped > thead > tr > th.action-column {
   width: 5%;
@@ -11388,15 +11306,15 @@ fieldset[disabled]
   width: 30%;
 }
 #civitasks form.form-assignment .modal-table.table-striped > thead > tr > th.date-column, #cividocuments form.form-assignment .modal-table.table-striped > thead > tr > th.date-column {
-  width: 20%;
   min-width: 150px;
+  width: 20%;
 }
 #civitasks form.form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #cividocuments form.form-assignment .modal-table.table-striped > tbody > tr:nth-child(odd), #civitasks form.form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd), #cividocuments form.form-assignment .modal-table.table-striped tfoot > tr:nth-child(odd) {
   background-color: #FFFFFF;
 }
 #civitasks form.form-assignment .modal-table th > .btn, #cividocuments form.form-assignment .modal-table th > .btn {
-  margin-top: -6px;
   margin-bottom: -6px;
+  margin-top: -6px;
 }
 #civitasks form.form-assignment .separately, #cividocuments form.form-assignment .separately {
   margin-bottom: 20px;
@@ -11404,8 +11322,8 @@ fieldset[disabled]
 #civitasks form.form-assignment .separately label, #cividocuments form.form-assignment .separately label, #civitasks form.form-assignment .separately .checkbox-label, #cividocuments form.form-assignment .separately .checkbox-label,
 #civitasks form.form-assignment .separately .radio-label,
 #cividocuments form.form-assignment .separately .radio-label {
-  margin-top: 3px;
   margin-bottom: 12px;
+  margin-top: 3px;
 }
 #civitasks form.form-task-migrate label, #cividocuments form.form-task-migrate label, #civitasks form.form-task-migrate .checkbox-label, #cividocuments form.form-task-migrate .checkbox-label,
 #civitasks form.form-task-migrate .radio-label,
@@ -11413,11 +11331,11 @@ fieldset[disabled]
   text-transform: capitalize;
 }
 #civitasks form.ct-form-action, #cividocuments form.ct-form-action {
-  margin-top: -12px;
+  float: left;
   margin-bottom: -12px;
+  margin-top: -12px;
   max-width: 817px;
   width: 100%;
-  float: left;
 }
 #civitasks form.ct-form-action .row, #cividocuments form.ct-form-action .row,
 #civitasks form.ct-form-action .form-horizontal .form-group,
@@ -11429,9 +11347,9 @@ fieldset[disabled]
 #civitasks form.ct-form-action .form-horizontal .control-label, #cividocuments form.ct-form-action .form-horizontal .control-label {
   text-align: right;
 }
-#civitasks form.ct-form-action [class^="col-"], #cividocuments form.ct-form-action [class^="col-"],
-#civitasks form.ct-form-action [class*=" col-"],
-#cividocuments form.ct-form-action [class*=" col-"] {
+#civitasks form.ct-form-action [class^='col-'], #cividocuments form.ct-form-action [class^='col-'],
+#civitasks form.ct-form-action [class*=' col-'],
+#cividocuments form.ct-form-action [class*=' col-'] {
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -11445,8 +11363,8 @@ fieldset[disabled]
   display: table-cell;
 }
 #civitasks form .ui-select-required:after, #cividocuments form .ui-select-required:after {
-  content: "*";
   color: red;
+  content: '*';
   display: table-cell;
   padding-left: 3px;
   position: absolute;
@@ -11473,8 +11391,8 @@ fieldset[disabled]
 #cividocuments .form-control .input-group-btn,
 #civitasks .form-control .input-group .form-control,
 #cividocuments .form-control .input-group .form-control {
-  display: table-cell;
   border-radius: #C2CFD8;
+  display: table-cell;
 }
 #civitasks .ui-select-multiple.ui-select-bootstrap input.ui-select-search, #cividocuments .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
   font-weight: normal;
@@ -12798,12 +12716,13 @@ fieldset[disabled]
   top: 3px !important;
 }
 #civitasks .civihr-ui-select a.select2-search-choice-close, #cividocuments .civihr-ui-select a.select2-search-choice-close {
+  /* stylelint-disable-line selector-no-qualifying-type */
   top: 0 !important;
 }
 #civitasks .civihr-ui-select.open .select2-chosen, #cividocuments .civihr-ui-select.open .select2-chosen {
   border: 1px solid #C2CFD8 !important;
-  padding-left: 12px !important;
   border-bottom: 0 !important;
+  padding-left: 12px !important;
 }
 #civitasks .civihr-ui-select.open .select2-arrow, #cividocuments .civihr-ui-select.open .select2-arrow {
   line-height: 31px;
@@ -12820,6 +12739,198 @@ fieldset[disabled]
 #civitasks .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple:not(.open) .select2-choices::before {
   content: '\f002' !important;
 }
-#civitasks [no-dropdown].ui-select-multiple:after, #cividocuments [no-dropdown].ui-select-multiple:after {
+#civitasks [no-dropdown].ui-select-multiple::after, #cividocuments [no-dropdown].ui-select-multiple::after {
   display: none;
+}
+
+#cividocuments {
+  /* stylelint-disable-line scss/at-extend-no-missing-placeholder */
+}
+
+#civitasks [uib-datepicker-popup], #cividocuments [uib-datepicker-popup] {
+  border-color: #C2CFD8;
+}
+#civitasks [uib-datepicker-popup] .form-control, #cividocuments [uib-datepicker-popup] .form-control {
+  border-color: #C2CFD8;
+}
+#civitasks [uib-datepicker-popup-wrap] + .input-group-btn > button, #cividocuments [uib-datepicker-popup-wrap] + .input-group-btn > button {
+  border-color: #C2CFD8;
+  color: #C2CFD8;
+}
+#civitasks .uib-left, #cividocuments .uib-left,
+#civitasks .uib-right,
+#cividocuments .uib-right,
+#civitasks .uib-title,
+#cividocuments .uib-title {
+  border: 0;
+  color: #464354;
+}
+#civitasks .uib-left:hover, #cividocuments .uib-left:hover,
+#civitasks .uib-right:hover,
+#cividocuments .uib-right:hover,
+#civitasks .uib-title:hover,
+#cividocuments .uib-title:hover {
+  background: transparent;
+}
+#civitasks .uib-left i, #cividocuments .uib-left i,
+#civitasks .uib-right i,
+#cividocuments .uib-right i {
+  font-weight: 300;
+}
+#civitasks .uib-title strong, #cividocuments .uib-title strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+#civitasks .uib-daypicker, #cividocuments .uib-daypicker {
+  outline: 0;
+}
+#civitasks .uib-daypicker th, #cividocuments .uib-daypicker th {
+  background: #FFFFFF;
+  color: #586277;
+  padding: 7px;
+  vertical-align: middle;
+}
+#civitasks .uib-daypicker tbody, #cividocuments .uib-daypicker tbody {
+  background: transparent;
+  border-top: 0;
+  box-shadow: 0;
+}
+#civitasks .uib-day, #cividocuments .uib-day,
+#civitasks .uib-month,
+#cividocuments .uib-month,
+#civitasks .uib-year,
+#cividocuments .uib-year {
+  padding: 7px;
+}
+#civitasks .uib-day .text-muted, #cividocuments .uib-day .text-muted,
+#civitasks .uib-month .text-muted,
+#cividocuments .uib-month .text-muted,
+#civitasks .uib-year .text-muted,
+#cividocuments .uib-year .text-muted {
+  color: #dcdddd;
+}
+#civitasks .uib-day .text-info, #cividocuments .uib-day .text-info,
+#civitasks .uib-month .text-info,
+#cividocuments .uib-month .text-info,
+#civitasks .uib-year .text-info,
+#cividocuments .uib-year .text-info {
+  background-color: transparent;
+  border-radius: 50%;
+  color: #0071BD;
+}
+#civitasks .uib-day .btn-default, #cividocuments .uib-day .btn-default,
+#civitasks .uib-month .btn-default,
+#cividocuments .uib-month .btn-default,
+#civitasks .uib-year .btn-default,
+#cividocuments .uib-year .btn-default {
+  background: transparent;
+  border: 0;
+  color: #464354;
+  line-height: 1;
+  min-width: 0;
+  padding: 7px;
+}
+#civitasks .uib-day .btn-default span, #cividocuments .uib-day .btn-default span,
+#civitasks .uib-month .btn-default span,
+#cividocuments .uib-month .btn-default span,
+#civitasks .uib-year .btn-default span,
+#cividocuments .uib-year .btn-default span {
+  padding: 0 !important;
+}
+#civitasks .uib-day .btn-default.active, #cividocuments .uib-day .btn-default.active,
+#civitasks .uib-month .btn-default.active,
+#cividocuments .uib-month .btn-default.active,
+#civitasks .uib-year .btn-default.active,
+#cividocuments .uib-year .btn-default.active {
+  background-color: #0071BD;
+  border-radius: 50%;
+  box-shadow: none;
+  color: #FFFFFF;
+}
+#civitasks .uib-day .btn-default.active .text-info, #cividocuments .uib-day .btn-default.active .text-info,
+#civitasks .uib-month .btn-default.active .text-info,
+#cividocuments .uib-month .btn-default.active .text-info,
+#civitasks .uib-year .btn-default.active .text-info,
+#cividocuments .uib-year .btn-default.active .text-info {
+  color: inherit;
+}
+#civitasks .uib-datepicker-popup, #cividocuments .uib-datepicker-popup {
+  border: 0;
+  padding: 10px !important;
+}
+#civitasks [text-angular], #cividocuments [text-angular] {
+  border: 1px solid #E8EEF0;
+  padding: 0;
+}
+#civitasks [text-angular] .ta-editor, #cividocuments [text-angular] .ta-editor {
+  border: 0 !important;
+}
+#civitasks [text-angular] .form-control, #cividocuments [text-angular] .form-control {
+  border: 0;
+  box-shadow: none !important;
+  min-height: 120px;
+}
+#civitasks [text-angular] .form-control.ta-scroll-window, #cividocuments [text-angular] .form-control.ta-scroll-window {
+  height: auto;
+}
+#civitasks [text-angular] .form-control.ta-scroll-window > .ta-bind, #cividocuments [text-angular] .form-control.ta-scroll-window > .ta-bind {
+  min-height: 120px;
+  outline: 0;
+}
+#civitasks [text-angular-toolbar], #cividocuments [text-angular-toolbar] {
+  background-color: #f4f7f8;
+  border: 0;
+  margin-left: 0;
+  padding: 10px;
+}
+#civitasks [text-angular-toolbar] .btn, #cividocuments [text-angular-toolbar] .btn {
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+  color: #4D4D69;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#civitasks [text-angular-toolbar] .btn.active, #cividocuments [text-angular-toolbar] .btn.active {
+  color: #464354 !important;
+}
+#civitasks [text-angular-toolbar] .btn:hover:not(:disabled), #cividocuments [text-angular-toolbar] .btn:hover:not(:disabled) {
+  color: #4D4D69;
+}
+#civitasks [text-angular-toolbar] .btn .fa, #cividocuments [text-angular-toolbar] .btn .fa {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mobile [type='date'][uib-datepicker-popup] {
+  line-height: normal;
+  /* stylelint-disable selector-max-compound-selectors */
+  /* stylelint-enable */
+}
+.mobile [type='date'][uib-datepicker-popup]::-webkit-inner-spin-button, .mobile [type='date'][uib-datepicker-popup]::-webkit-clear-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+.mobile [type='date'][uib-datepicker-popup]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: -50px;
+  top: 0;
+  width: auto;
+}
+.mobile [type='date'][uib-datepicker-popup] + .input-group-addon {
+  border-left: 1px solid #C2CFD8 !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  padding: 0 !important;
+  pointer-events: none;
+  position: absolute !important;
+  right: 0 !important;
+  width: 38px !important;
+  z-index: 3;
 }
