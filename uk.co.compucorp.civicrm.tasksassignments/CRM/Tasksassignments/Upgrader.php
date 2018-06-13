@@ -919,12 +919,85 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
 
     return TRUE;
   }
-
+  
+  /**
+   * Sets up option values, custom group and custom field
+   * for case type categorization
+   *
+   * @return bool
+   */
+  public function upgrade_1038() {
+    $optionValues = civicrm_api3('OptionValue', 'get', [
+      'option_group_id' => 'cg_extend_objects',
+      'name' => 'civicrm_case_type'
+    ]);
+    if ($optionValues['count'] == 0) {
+      $this->_createOptionValue();
+    }
+    
+    $customGroups = civicrm_api3('CustomGroup', 'get', [
+      'extends' => 'CaseType',
+      'name' => 'case_type_category',
+    ]);
+    if ($customGroups['count'] == 0) {
+      $this->_createCustomGroup();
+    }
+    
+    $customFields = civicrm_api3('CustomField', 'get', [
+      'custom_group_id' => 'case_type_category',
+    ]);
+    if ($customFields['count'] == 0) {
+      $this->_createCustomField();
+    }
+    
+    return TRUE;
+  }
+  
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
 
     return TRUE;
+  }
+  
+  /**
+   * Creates case type option value for cg_extend_objects option group
+   */
+  private function _createOptionValue() {
+    civicrm_api3('OptionValue', 'create', [
+      'option_group_id' => 'cg_extend_objects',
+      'name' => 'civicrm_case_type',
+      'label' => ts('Case Type'),
+      'value' => 'CaseType',
+    ]);
+  }
+  
+  /**
+   * Creates case type category custom group
+   */
+  private function _createCustomGroup() {
+    civicrm_api3('CustomGroup', 'create', [
+      'title' => ts('Case Type Category'),
+      'extends' => 'CaseType',
+      'name' => 'case_type_category',
+      'table_name' => 'civicrm_value_case_type_category'
+    ]);
+  }
+  
+  /**
+   * Creates category custom field for case type category custom group
+   */
+  private function _createCustomField() {
+    civicrm_api3('CustomField', 'create', [
+      'custom_group_id' => 'case_type_category',
+      'label' => 'Category',
+      'name' => 'category',
+      'data_type' => 'String',
+      'html_type' => 'Select',
+      'is_required' => 1,
+      'column_name' => 'category',
+      'option_values' => array('Workflow' => 'Workflow', 'Vacancy' => 'Vacancy'),
+    ]);
   }
 
   /**
