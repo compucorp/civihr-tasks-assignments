@@ -11,13 +11,19 @@ define([
 
   dashboardConfig.$inject = [
     'config', '$resourceProvider', '$httpProvider', '$logProvider', '$urlRouterProvider',
-    '$stateProvider', 'calendarConfigProvider', 'uibDatepickerConfig', 'uiSelectConfig'
+    '$stateProvider', '$analyticsProvider', 'calendarConfigProvider', 'uibDatepickerConfig',
+    'uiSelectConfig'
   ];
 
   function dashboardConfig (config, $resourceProvider, $httpProvider, $logProvider,
-    $urlRouterProvider, $stateProvider, calendarConfigProvider, datepickerConfig,
-    uiSelectConfig) {
+    $urlRouterProvider, $stateProvider, $analyticsProvider, calendarConfigProvider,
+    datepickerConfig, uiSelectConfig) {
     $logProvider.debugEnabled(config.DEBUG);
+
+    $analyticsProvider.withAutoBase(true);
+    $analyticsProvider.settings.ga = {
+      userId: _.get(CRM, 'vars.session.contact_id')
+    };
 
     $urlRouterProvider.otherwise('/tasks');
 
