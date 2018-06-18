@@ -14,11 +14,26 @@ define([
     '$logProvider'
   ];
 
+  /**
+   * Configures Google Analytics via the angulartics provider
+   *
+   * @param {Object} $analyticsProvider
+   */
+  function configureAnalytics ($analyticsProvider) {
+    $analyticsProvider.withAutoBase(true);
+    $analyticsProvider.settings.ga = {
+      userId: _.get(CRM, 'vars.session.contact_id')
+    };
+  }
+
   function settingsConfig (config, $stateProvider, $urlRouterProvider,
     $resourceProvider, $httpProvider, $analyticsProvider, datepickerConfig,
     uiSelectConfig, $logProvider) {
-    $logProvider.debugEnabled(config.DEBUG);
+    configureAnalytics($analyticsProvider);
 
+    $logProvider.debugEnabled(config.DEBUG);
+    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    $resourceProvider.defaults.stripTrailingSlashes = false;
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
@@ -27,14 +42,6 @@ define([
         controller: 'SettingsController',
         templateUrl: config.path.TPL + 'settings.html?v=5'
       });
-
-    $analyticsProvider.withAutoBase(true);
-    $analyticsProvider.settings.ga = {
-      userId: _.get(CRM, 'vars.session.contact_id')
-    };
-
-    $resourceProvider.defaults.stripTrailingSlashes = false;
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     datepickerConfig.showWeeks = false;
     uiSelectConfig.theme = 'bootstrap';

@@ -15,17 +15,34 @@ define([
     'uiSelectConfig'
   ];
 
-  function dashboardConfig (config, $resourceProvider, $httpProvider, $logProvider,
-    $urlRouterProvider, $stateProvider, $analyticsProvider, calendarConfigProvider,
-    datepickerConfig, uiSelectConfig) {
-    $logProvider.debugEnabled(config.DEBUG);
-
+  /**
+   * Configures Google Analytics via the angulartics provider
+   *
+   * @param {Object} $analyticsProvider
+   */
+  function configureAnalytics ($analyticsProvider) {
     $analyticsProvider.withAutoBase(true);
     $analyticsProvider.settings.ga = {
       userId: _.get(CRM, 'vars.session.contact_id')
     };
+  }
 
+  function dashboardConfig (config, $resourceProvider, $httpProvider, $logProvider,
+    $urlRouterProvider, $stateProvider, $analyticsProvider, calendarConfigProvider,
+    datepickerConfig, uiSelectConfig) {
+    configureAnalytics($analyticsProvider);
+
+    $logProvider.debugEnabled(config.DEBUG);
+    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    $resourceProvider.defaults.stripTrailingSlashes = false;
     $urlRouterProvider.otherwise('/tasks');
+
+    datepickerConfig.showWeeks = false;
+    uiSelectConfig.theme = 'bootstrap';
+
+    calendarConfigProvider.setDateFormats({
+      weekDay: 'ddd'
+    });
 
     $stateProvider
       .resolveForAll({
@@ -196,17 +213,5 @@ define([
           }]
         }
       });
-
-    $resourceProvider.defaults.stripTrailingSlashes = false;
-
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-    calendarConfigProvider.setDateFormats({
-      weekDay: 'ddd'
-    });
-
-    datepickerConfig.showWeeks = false;
-
-    uiSelectConfig.theme = 'bootstrap';
   }
 });
