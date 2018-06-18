@@ -928,10 +928,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    */
   public function upgrade_1038() {
     $optionValue = civicrm_api3('OptionValue', 'get', [
-      'sequential' => 1,
       'option_group_id' => 'ta_settings',
       'name' => 'days_to_create_a_document_clone',
     ]);
+    if(empty($optionValue['id'])) {
+      return TRUE;
+    }
+
     $optionValue = array_shift($optionValue['values']);
     if (empty($optionValue['value'])) {
       civicrm_api3('OptionValue', 'create', [
