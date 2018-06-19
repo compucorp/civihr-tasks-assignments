@@ -16,10 +16,17 @@
     var parentMethods = {};
 
     (function init () {
+      var isNewCaseType;
+
       initParentController();
 
       parentMethods.addActivity = $scope.addActivity;
       $scope.addActivity = addActivity;
+      isNewCaseType = !$scope.caseType.id;
+
+      if (isNewCaseType) {
+        clearAllActivityTypesFromMainActivitySet();
+      }
     })();
 
     /**
@@ -37,6 +44,13 @@
           delete activity.reference_activity;
         }
       });
+    }
+
+    /**
+     * Clears all the activity types defined in the main activity set.
+     */
+    function clearAllActivityTypesFromMainActivitySet () {
+      $scope.caseType.definition.activitySets[0].activityTypes = [];
     }
 
     /**

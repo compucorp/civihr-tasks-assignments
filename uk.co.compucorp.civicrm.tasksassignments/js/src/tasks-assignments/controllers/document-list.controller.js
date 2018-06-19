@@ -305,7 +305,11 @@ define([
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
 
-          if (pattern.test(data.title) || matchMessageTitle(pattern, data) || (pattern.test(data.crmMessages[0].text))) {
+          if ((pattern.test(data.title) ||
+            matchMessageTitle(pattern, data) ||
+            (pattern.test(data.crmMessages[0].text))) &&
+            (!'activity_type'.test(data.userContext)) // Adding activity type does not require page reload as it auto update cache
+          ) {
             $rootScope.cache.assignment = {
               obj: {},
               arr: []

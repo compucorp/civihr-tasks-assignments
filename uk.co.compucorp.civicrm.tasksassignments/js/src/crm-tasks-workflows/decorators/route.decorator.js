@@ -25,8 +25,8 @@
     /**
      * Returns a resolver for the list of activity types for a particular component.
      *
-     * @param  {String}   componentName - the name of the activity type's component.
-     * @return {Function} the function that will resolve the activity types.
+     * @param  {String} componentName - the name of the activity type's component.
+     * @return {Array}  An array containing the function that will resolve the activity types.
      */
     function getResolverForActivityTypeComponent (componentName) {
       return ['crmApi', function activityOptionsResolver (crmApi) {
