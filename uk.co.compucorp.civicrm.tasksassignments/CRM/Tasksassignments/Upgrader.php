@@ -932,7 +932,13 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       'name' => 'civicrm_case_type'
     ]);
     if ($optionValues['count'] == 0) {
-      $this->_createOptionValue();
+      $params = [
+        'option_group_id' => 'cg_extend_objects',
+        'name' => 'civicrm_case_type',
+        'label' => ts('Case Type'),
+        'value' => 'CaseType',
+      ];
+      $this->createOptionValue($params);
     }
     
     $customGroups = civicrm_api3('CustomGroup', 'get', [
@@ -940,14 +946,19 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       'name' => 'case_type_category',
     ]);
     if ($customGroups['count'] == 0) {
-      $this->_createCustomGroup();
+      $this->createCaseTypeCategoryCustomGroup();
     }
     
     $customFields = civicrm_api3('CustomField', 'get', [
       'custom_group_id' => 'case_type_category',
     ]);
     if ($customFields['count'] == 0) {
-      $this->_createCustomField();
+      $optionGroupId = $this->createCaseTypeCategoryOptionValues();
+      if ($optionGroupId == null) {
+        return FALSE;
+      }
+
+      $this->createCaseTypeCategoryCustomField($optionGroupId);
     }
     
     return TRUE;
@@ -961,21 +972,62 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
   }
   
   /**
-   * Creates case type option value for cg_extend_objects option group
+   * Sets up option group and values used for case type category custom field
+   *
+   * @return null
    */
-  private function _createOptionValue() {
-    civicrm_api3('OptionValue', 'create', [
-      'option_group_id' => 'cg_extend_objects',
-      'name' => 'civicrm_case_type',
-      'label' => ts('Case Type'),
-      'value' => 'CaseType',
+  private function createCaseTypeCategoryOptionValues() {
+    $result = civicrm_api3('OptionGroup', 'get', [
+      'name' => 'case_type_category',
     ]);
+    if ($result['count'] == 0) {
+      $optionValues = ['Workflow', 'Vacancy'];
+      $groupParams = [
+        'name' => 'case_type_category',
+        'title' => 'Category',
+      ];
+      
+      $optionGroupResult = $this->createOptionGroup($groupParams);
+      foreach ($optionValues as $optionValue) {
+        $valueParams = [
+          'option_group_id' => 'case_type_category',
+          'label' => $optionValue,
+          'name' => $optionValue,
+          'value' => $optionValue
+        ];
+        $this->createOptionValue($valueParams);
+      }
+      
+      return $optionGroupResult['id'];
+    }
+    
+    return null;
+  }
+  
+  /**
+   * Creates option group
+   *
+   * @param array $params
+   *
+   * @return array
+   */
+  private function createOptionGroup($params) {
+    return civicrm_api3('OptionGroup', 'create', $params);
+  }
+  
+  /**
+   * Creates option value
+   *
+   * @param array $params
+   */
+  private function createOptionValue($params) {
+    civicrm_api3('OptionValue', 'create', $params);
   }
   
   /**
    * Creates case type category custom group
    */
-  private function _createCustomGroup() {
+  private function createCaseTypeCategoryCustomGroup() {
     civicrm_api3('CustomGroup', 'create', [
       'title' => ts('Case Type Category'),
       'extends' => 'CaseType',
@@ -986,8 +1038,10 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
   
   /**
    * Creates category custom field for case type category custom group
+   *
+   * @param int $optionGroupId
    */
-  private function _createCustomField() {
+  private function createCaseTypeCategoryCustomField($optionGroupId) {
     civicrm_api3('CustomField', 'create', [
       'custom_group_id' => 'case_type_category',
       'label' => 'Category',
@@ -996,7 +1050,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       'html_type' => 'Select',
       'is_required' => 1,
       'column_name' => 'category',
-      'option_values' => array('Workflow' => 'Workflow', 'Vacancy' => 'Vacancy'),
+      'option_group_id' => $optionGroupId,
     ]);
   }
 
