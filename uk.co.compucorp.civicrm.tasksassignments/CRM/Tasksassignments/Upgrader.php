@@ -920,6 +920,32 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Set default number of days before document expiry when the clone document
+   * should be created = 90 days If this field is blank, update it to 90 days.
+   *
+   * @return bool
+   */
+  public function upgrade_1038() {
+    $optionValue = civicrm_api3('OptionValue', 'get', [
+      'option_group_id' => 'ta_settings',
+      'name' => 'days_to_create_a_document_clone',
+    ]);
+    if(empty($optionValue['id'])) {
+      return TRUE;
+    }
+
+    $optionValue = array_shift($optionValue['values']);
+    if (empty($optionValue['value'])) {
+      civicrm_api3('OptionValue', 'create', [
+        'id' => $optionValue['id'],
+        'value' => 90,
+      ]);
+    }
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
