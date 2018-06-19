@@ -31,12 +31,11 @@ define([
     $urlRouterProvider, $stateProvider, $analyticsProvider, calendarConfigProvider,
     datepickerConfig, uiSelectConfig) {
     configureAnalytics($analyticsProvider);
-
     $logProvider.debugEnabled(config.DEBUG);
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-    $resourceProvider.defaults.stripTrailingSlashes = false;
     $urlRouterProvider.otherwise('/tasks');
 
+    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    $resourceProvider.defaults.stripTrailingSlashes = false;
     datepickerConfig.showWeeks = false;
     uiSelectConfig.theme = 'bootstrap';
 
