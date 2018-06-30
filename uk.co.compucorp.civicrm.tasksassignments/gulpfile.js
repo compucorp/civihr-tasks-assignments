@@ -7,7 +7,6 @@ var karma = require('karma');
 var exec = require('child_process').exec;
 var path = require('path');
 var fs = require('fs');
-var argv = require('yargs').argv;
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 
@@ -101,11 +100,8 @@ var test = (function () {
    * @param {Function} cb - The callback to call when the server closes
    */
   function runServer (configFile, cb) {
-    var reporters = argv.reporters ? argv.reporters.split(',') : ['progress'];
-
     new karma.Server({
       configFile: path.join(__dirname, '/js/test/', configFile),
-      reporters: reporters,
       singleRun: true
     }, function () {
       cb && cb();
