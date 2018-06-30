@@ -1,3 +1,4 @@
+var argv = require('yargs').argv;
 var cv = require('civicrm-cv')({ mode: 'sync' });
 
 module.exports = function (config) {
@@ -38,6 +39,7 @@ module.exports = function (config) {
         ]
       }
     },
+    reporters: argv.reporters ? argv.reporters.split(',') : ['spec'],
     junitReporter: {
       outputDir: extPath + '/test-reports',
       useBrowserName: false,
