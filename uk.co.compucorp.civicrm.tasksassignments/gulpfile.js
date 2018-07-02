@@ -115,7 +115,8 @@ var test = (function () {
   return {
 
     /**
-     * Runs all the tests in sequence to improve output readability
+     * Runs all the tests in sequence
+     * @NOTE running tests in sequence improves output readability
      */
     all: function () {
       runServer('crm-tasks-workflows/karma.conf.js')
