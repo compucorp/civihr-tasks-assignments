@@ -98,25 +98,33 @@ var test = (function () {
    *
    * @param {string} configFile - The full path to the karma config file
    * @param {Function} cb - The callback to call when the server closes
+   * @return {Promise}
    */
   function runServer (configFile, cb) {
-    new karma.Server({
-      configFile: path.join(__dirname, '/js/test/', configFile),
-      singleRun: true
-    }, function () {
-      cb && cb();
-    }).start();
+    return new Promise(function (resolve, reject) {
+      new karma.Server({
+        configFile: path.join(__dirname, '/js/test/', configFile),
+        singleRun: true
+      }, function () {
+        cb && cb();
+        resolve();
+      }).start();
+    });
   }
 
   return {
 
     /**
-     * Runs all the tests
+     * Runs all the tests in sequence to improve output readability
      */
     all: function () {
-      runServer('crm-tasks-workflows/karma.conf.js');
-      runServer('tasks-assignments/karma.conf.js');
-      runServer('tasks-notification-badge/karma.conf.js');
+      runServer('crm-tasks-workflows/karma.conf.js')
+        .then(function () {
+          runServer('tasks-assignments/karma.conf.js');
+        })
+        .then(function () {
+          runServer('tasks-notification-badge/karma.conf.js');
+        });
     },
 
     /**
