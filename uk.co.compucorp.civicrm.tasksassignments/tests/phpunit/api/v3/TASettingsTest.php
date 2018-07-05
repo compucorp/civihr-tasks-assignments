@@ -86,13 +86,7 @@ class api_v3_TASettingsTest extends BaseHeadlessTest {
   }
 
   private function getValidFields() {
-    $result = civicrm_api3('OptionValue', 'get', [
-      'sequential' => 1,
-      'option_group_id' => 'ta_settings',
-      'return' => ['name']
-    ]);
-
-    return array_column($result['values'], 'name');
+    return _civicrm_api3_t_a_settings_valid_fields();
   }
 
 }
