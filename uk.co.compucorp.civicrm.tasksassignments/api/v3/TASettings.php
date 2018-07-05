@@ -1,7 +1,6 @@
 <?php
 
 function civicrm_api3_t_a_settings_get($params) {
-
   $fields = [
     'documents_tab',
     'keydates_tab',
@@ -16,27 +15,26 @@ function civicrm_api3_t_a_settings_get($params) {
     $fields = (array) $params['fields'];
   }
 
+  $settings = array_shift(civicrm_api3('Setting', 'get', [
+    'sequential' => 1,
+    'return' => ['ta_settings'],
+  ])['values']);
+
   $result = [];
 
   foreach ($fields as $field) {
-    $setting = civicrm_api3('OptionValue', 'get', [
-      'option_group_id' => 'ta_settings',
-      'name' => $field,
-    ]);
-
-    $item = CRM_Utils_Array::first($setting['values']);
-    $result[$field] = [
-      'name' => $item['name'],
-      //'label' => $item['label'],
-      'value' => $item['value'] != "null" ? $item['value'] : ""
-    ];
+    if (array_key_exists($field, $settings['ta_settings'])) {
+      $result[$field] = [
+        'name' => $field,
+        'value' => $settings['ta_settings'][$field] != 'null' ? $settings['ta_settings'][$field] : ''
+      ];
+    }
   }
 
   return civicrm_api3_create_success($result, $params, 'TASettings', 'get');
 }
 
 function civicrm_api3_t_a_settings_set($params) {
-
   foreach ((array) $params['fields'] as $key => $value) {
     if ($key === 'is_task_dashboard_default') {
       if ($value == '1') {
@@ -50,19 +48,14 @@ function civicrm_api3_t_a_settings_set($params) {
       $value = (int) $value;
     }
 
-    $setting = civicrm_api3('OptionValue', 'get', [
-      'option_group_id' => 'ta_settings',
-      'name' => $key,
-    ]);
+    $settings = array_shift(civicrm_api3('Setting', 'get', [
+      'sequential' => 1,
+      'return' => ['ta_settings']
+    ])['values']);
 
-    if (empty($setting['id'])) {
-      continue;
-    }
+    $settings['ta_settings'][$key] = $value;
 
-    civicrm_api3('OptionValue', 'create', [
-      'id' => $setting['id'],
-      'value' => $value,
-    ]);
+    civicrm_api3('Setting', 'create', $settings);
   }
 
   return civicrm_api3('TASettings', 'get', [
