@@ -853,6 +853,41 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Migrate the T&A Settings from Option Values to CiviCRM Settings.
+   *
+   * As part of the migration, the Option Values (and their Option Group)
+   * are deleted.
+   *
+   * @return bool
+   * @throws \CiviCRM_API3_Exception
+   */
+  public function upgrade_1039() {
+    // We need to flush the cache to make sure the settings
+    // metadata in settings/taskandassignments.settings.php
+    // will be read by Civi
+    CRM_Utils_System::flushCache();
+
+    $taSettingsOptionValues = $this->_getTaSettingsOptionValues();
+
+    if ($taSettingsOptionValues === NULL) {
+      return TRUE;
+    }
+
+    $settings = [];
+    foreach ($taSettingsOptionValues as $name => $value) {
+      $settings[$name] = $value;
+    }
+
+    civicrm_api3('TASettings', 'set', [
+      'fields' => $settings
+    ]);
+
+    $this->_deleteTASettingsOptionGroup();
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
@@ -989,6 +1024,43 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
         'label' => $toLabel
       ]);
     }
+  }
+
+  /**
+   * Returns a list of all the Option Values of the ta_settings Option Group.
+   *
+   * The format of the list will be: [ option_value_name => option_value_value ]
+   *
+   * @return array|null
+   *   An array with the Option Values, or NULL in case neither
+   *   the option group or values exist anymore
+   */
+  private function _getTaSettingsOptionValues() {
+    try {
+      $result = civicrm_api3('OptionValue', 'get', [
+        'sequential' => 1,
+        'option_group_id' => 'ta_settings'
+      ]);
+    } catch (CiviCRM_API3_Exception $e) {
+      return NULL;
+    }
+
+    return array_column($result['values'], 'value', 'name');
+  }
+
+  /**
+   * Deletes the ta_settings Option Group
+   *
+   * @throws \CiviCRM_API3_Exception
+   */
+  private function _deleteTASettingsOptionGroup() {
+    civicrm_api3('OptionGroup', 'get', [
+      'sequential' => 1,
+      'name' => 'ta_settings',
+      'api.OptionGroup.delete' => [
+        'id' => '$value.id'
+      ]
+    ]);
   }
 
 }

@@ -40,6 +40,12 @@ function civicrm_api3_t_a_settings_get($params) {
 
   $result = [];
 
+  // safeguard in case this API gets called while the
+  // ta_settings setting is still not available
+  if (empty($settings['ta_settings'])) {
+    return $result;
+  }
+
   foreach ($fields as $field) {
     if (array_key_exists($field, $settings['ta_settings'])) {
       $result[$field] = [
