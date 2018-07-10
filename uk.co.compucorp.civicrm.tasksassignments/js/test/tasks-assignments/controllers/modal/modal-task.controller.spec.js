@@ -166,19 +166,13 @@ define([
     });
 
     describe('when user clicks on the task wrench icon', function () {
-      var onPopupFormSuccess, url;
+      var url;
 
       beforeEach(function () {
         url = '/civicrm/admin/options/activity_type?reset=1';
 
-        spyOn(crmAngService, 'loadForm').and.callFake(function () {
-          return {
-            on: function (event, callback) {
-              if (event === 'crmUnload') {
-                onPopupFormSuccess = callback;
-              }
-            }
-          };
+        spyOn(crmAngService, 'loadForm').and.returnValue({
+          on: function (event, callback) {}
         });
         initController();
         $scope.task.openActivityTypeOptionsEditor();
