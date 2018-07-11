@@ -85,8 +85,49 @@ class api_v3_TASettingsTest extends BaseHeadlessTest {
     $this->assertEquals($expected, $result['values']);
   }
 
+  public function testSetUpdatesDashboardUrlToTasksAndAssignmentsWhenIsTaskDashboardIs1() {
+    $this->setHomeNavigationUrl('foo');
+    $this->assertEquals('foo', $this->getHomeNavigationUrl());
+
+    civicrm_api3('TASettings', 'set', [
+      'fields' => [
+        'is_task_dashboard_default' => 1
+      ]
+    ]);
+
+    $this->assertEquals('civicrm/tasksassignments/dashboard#/tasks', $this->getHomeNavigationUrl());
+  }
+
+  public function testSetUpdatesDashboardUrlToDefaultCiviDashboardWhenIsTaskDashboardIsNot1() {
+    $this->setHomeNavigationUrl('foo');
+    $this->assertEquals('foo', $this->getHomeNavigationUrl());
+
+    civicrm_api3('TASettings', 'set', [
+      'fields' => [
+        'is_task_dashboard_default' => 0
+      ]
+    ]);
+
+    $this->assertEquals('civicrm/dashboard?reset=1', $this->getHomeNavigationUrl());
+  }
+
   private function getValidFields() {
     return _civicrm_api3_t_a_settings_valid_fields();
   }
 
+  private function setHomeNavigationUrl($url) {
+    CRM_Core_DAO::executeQuery("UPDATE civicrm_navigation SET url=%1 WHERE name='Home'", [
+      1 => [
+        $url,
+        'String'
+      ]
+    ]);
+  }
+
+  private function getHomeNavigationUrl() {
+    $result = CRM_Core_DAO::executeQuery("SELECT url FROM civicrm_navigation WHERE name='Home'");
+    $result->fetch();
+
+    return $result->url;
+  }
 }

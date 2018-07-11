@@ -27,7 +27,6 @@ function _civicrm_api3_t_a_settings_get_spec(&$spec) {
  * @param array $params
  *
  * @return array
- * @throws \CiviCRM_API3_Exception
  */
 function civicrm_api3_t_a_settings_get($params) {
   $fields = _civicrm_api3_t_a_settings_valid_fields();
@@ -42,15 +41,15 @@ function civicrm_api3_t_a_settings_get($params) {
 
   // safeguard in case this API gets called while the
   // ta_settings setting is still not available
-  if (empty($settings['ta_settings'])) {
+  if (empty($settings)) {
     return $result;
   }
 
   foreach ($fields as $field) {
-    if (array_key_exists($field, $settings['ta_settings'])) {
+    if (array_key_exists($field, $settings)) {
       $result[$field] = [
         'name' => $field,
-        'value' => $settings['ta_settings'][$field] != 'null' ? $settings['ta_settings'][$field] : ''
+        'value' => $settings[$field] != 'null' ? $settings[$field] : ''
       ];
     }
   }
@@ -98,29 +97,29 @@ function civicrm_api3_t_a_settings_set($params) {
     $requestFields = $params['fields'];
   }
 
+  $settings = _civicrm_api3_t_a_settings_get_settings();
   foreach ($requestFields as $field => $value) {
     if (!in_array($field, $validFields)) {
       throw new \CiviCRM_API3_Exception("'{$field}' is not a valid field and cannot be set", 'invalid_field');
     }
 
-    if ($field === 'is_task_dashboard_default') {
-      if ($value == '1') {
-        CRM_Tasksassignments_DashboardSwitcher::switchToTasksAndAssignments();
-      }
-      else {
-        CRM_Tasksassignments_DashboardSwitcher::switchToDefault();
-      }
-    }
     if ($field === 'days_to_create_a_document_clone') {
       $value = (int) $value;
     }
 
-    $settings = _civicrm_api3_t_a_settings_get_settings();
-
-    $settings['ta_settings'][$field] = $value;
-
-    civicrm_api3('Setting', 'create', $settings);
+    $settings[$field] = $value;
   }
+
+  if (array_key_exists('is_task_dashboard_default', $requestFields)) {
+    if ($requestFields['is_task_dashboard_default'] == '1') {
+      CRM_Tasksassignments_DashboardSwitcher::switchToTasksAndAssignments();
+    }
+    else {
+      CRM_Tasksassignments_DashboardSwitcher::switchToDefault();
+    }
+  }
+
+  civicrm_api3('Setting', 'create', ['ta_settings' => $settings]);
 
   return civicrm_api3('TASettings', 'get', [
     'fields' => array_keys($params['fields']),
@@ -132,15 +131,18 @@ function civicrm_api3_t_a_settings_set($params) {
  * Returns the T&A Settings
  *
  * @return array
- * @throws \CiviCRM_API3_Exception
  */
 function _civicrm_api3_t_a_settings_get_settings() {
-  $settings = array_shift(civicrm_api3('Setting', 'get', [
-    'sequential' => 1,
-    'return' => ['ta_settings']
-  ])['values']);
+  try {
+    $values = array_shift(civicrm_api3('Setting', 'get', [
+      'sequential' => 1,
+      'return' => ['ta_settings'],
+    ])['values']);
+  } catch (CiviCRM_API3_Exception $e) {
+    return [];
+  }
 
-  return $settings;
+  return array_shift($values);
 }
 
 /**
