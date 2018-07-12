@@ -214,52 +214,8 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    * @return bool
    */
   public function upgrade_0007() {
-    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'ta_settings', 'id', 'name');
-
-    if (!$optionGroupID) {
-      $params = array(
-        'name' => 'ta_settings',
-        'title' => 'Tasks and Assignments settings',
-        'is_active' => 1,
-        'is_reserved' => 1,
-      );
-
-      civicrm_api3('OptionGroup', 'create', $params);
-
-      $optionsValue = array(
-        'documents_tab' => array(
-          'label' => 'Show or hide the Documents tab',
-          'value' => 1,
-        ),
-        'keydates_tab' => array(
-          'label' => 'Show or hide the Key Dates tab',
-          'value' => 1,
-        ),
-        'add_assignment_button_title' => array(
-          'label' => 'Configure \'Add Assignment\' button title',
-          'value' => '',
-        ),
-        'number_of_days' => array(
-          'label' => 'No of days prior to Key Date to create task',
-          'value' => 30,
-        ),
-        'auto_tasks_assigned_to' => array(
-          'label' => 'Auto generated Tasks assigned to',
-          'value' => '',
-        ),
-      );
-
-      foreach ($optionsValue as $key => $value) {
-        $opValueParams = array(
-          'option_group_id' => 'ta_settings',
-          'name' => $key,
-          'label' => $value['label'],
-          'value' => $value['value'],
-        );
-
-        civicrm_api3('OptionValue', 'create', $opValueParams);
-      }
-    }
+    // NOOP
+    // This is now done by the postInstall hook
 
     return TRUE;
   }
@@ -415,21 +371,8 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
   }
 
   public function upgrade_1015() {
-    $setting = civicrm_api3('OptionValue', 'get', array(
-      'option_group_id' => 'ta_settings',
-      'name' => 'is_task_dashboard_default',
-    ));
-
-    if (empty($setting['id'])) {
-      $opValueParams = array(
-        'option_group_id' => 'ta_settings',
-        'name' => 'is_task_dashboard_default',
-        'label' => 'Is task dashboard the default page',
-        'value' => '1',
-      );
-      civicrm_api3('OptionValue', 'create', $opValueParams);
-    }
-
+    // NOOP
+    // This is now done by the postInstall hook
     return TRUE;
   }
 
@@ -490,31 +433,8 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    * @return bool
    */
   public function upgrade_1020() {
-    $optionGroupID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_OptionGroup', 'ta_settings', 'id', 'name');
-
-    if (!$optionGroupID) {
-      civicrm_api3('OptionGroup', 'create', array(
-        'name' => 'ta_settings',
-        'title' => 'Tasks and Assignments settings',
-        'is_active' => 1,
-        'is_reserved' => 1,
-      ));
-    }
-
-    $optionValue = civicrm_api3('OptionValue', 'get', array(
-      'sequential' => 1,
-      'option_group_id' => 'ta_settings',
-      'name' => "days_to_create_a_document_clone",
-    ));
-
-    if (empty($optionValue['id'])) {
-      civicrm_api3('OptionValue', 'create', array(
-        'option_group_id' => 'ta_settings',
-        'name' => 'days_to_create_a_document_clone',
-        'label' => is_callable('t') ? t('Renewed document creation date offset (days)') : 'Renewed document creation date offset (days)',
-        'value' => 0,
-      ));
-    }
+    // NOOP
+    // This is now done by the postInstall Hook
 
     return TRUE;
   }
@@ -927,21 +847,43 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    * @return bool
    */
   public function upgrade_1038() {
-    $optionValue = civicrm_api3('OptionValue', 'get', [
-      'option_group_id' => 'ta_settings',
-      'name' => 'days_to_create_a_document_clone',
-    ]);
-    if(empty($optionValue['id'])) {
+    // NOOP
+    // This is now done by the postInstall hook
+
+    return TRUE;
+  }
+
+  /**
+   * Migrate the T&A Settings from Option Values to CiviCRM Settings.
+   *
+   * As part of the migration, the Option Values (and their Option Group)
+   * are deleted.
+   *
+   * @return bool
+   * @throws \CiviCRM_API3_Exception
+   */
+  public function upgrade_1039() {
+    // We need to flush the cache to make sure the settings
+    // metadata in settings/taskandassignments.settings.php
+    // will be read by Civi
+    CRM_Utils_System::flushCache();
+
+    $taSettingsOptionValues = $this->_getTaSettingsOptionValues();
+
+    if ($taSettingsOptionValues === NULL) {
       return TRUE;
     }
 
-    $optionValue = array_shift($optionValue['values']);
-    if (empty($optionValue['value'])) {
-      civicrm_api3('OptionValue', 'create', [
-        'id' => $optionValue['id'],
-        'value' => 90,
-      ]);
+    $settings = [];
+    foreach ($taSettingsOptionValues as $name => $value) {
+      $settings[$name] = $value;
     }
+
+    civicrm_api3('TASettings', 'set', [
+      'fields' => $settings
+    ]);
+
+    $this->_deleteTASettingsOptionGroup();
 
     return TRUE;
   }
@@ -1082,6 +1024,43 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
         'label' => $toLabel
       ]);
     }
+  }
+
+  /**
+   * Returns a list of all the Option Values of the ta_settings Option Group.
+   *
+   * The format of the list will be: [ option_value_name => option_value_value ]
+   *
+   * @return array|null
+   *   An array with the Option Values, or NULL in case neither
+   *   the option group or values exist anymore
+   */
+  private function _getTaSettingsOptionValues() {
+    try {
+      $result = civicrm_api3('OptionValue', 'get', [
+        'sequential' => 1,
+        'option_group_id' => 'ta_settings'
+      ]);
+    } catch (CiviCRM_API3_Exception $e) {
+      return NULL;
+    }
+
+    return array_column($result['values'], 'value', 'name');
+  }
+
+  /**
+   * Deletes the ta_settings Option Group
+   *
+   * @throws \CiviCRM_API3_Exception
+   */
+  private function _deleteTASettingsOptionGroup() {
+    civicrm_api3('OptionGroup', 'get', [
+      'sequential' => 1,
+      'name' => 'ta_settings',
+      'api.OptionGroup.delete' => [
+        'id' => '$value.id'
+      ]
+    ]);
   }
 
 }

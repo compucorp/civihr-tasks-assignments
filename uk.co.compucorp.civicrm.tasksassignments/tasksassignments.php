@@ -59,6 +59,15 @@ function tasksassignments_civicrm_install() {
 }
 
 /**
+ * Implements hook_civicrm_postInstall().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall/
+ */
+function tasksassignments_civicrm_postInstall() {
+  _taskassignments_saveDefaultSettings();
+}
+
+/**
  * Implements hook_civicrm_uninstall().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
@@ -542,4 +551,23 @@ function _tasksAssignments_remove_columns_from_timeline(phpQueryObject $doc) {
 function _tasksAssignments_change_column_text(phpQueryObject $doc) {
   $doc->find('th:contains("Activity")')
     ->text('Task / Document Type');
+}
+
+/**
+ * Sets the default values for the T&A Settings
+ *
+ * @throws \CiviCRM_API3_Exception
+ */
+function _taskassignments_saveDefaultSettings() {
+  civicrm_api3('TASettings', 'set', [
+    'fields' => [
+      'documents_tab' => 1,
+      'keydates_tab' => 1,
+      'add_assignment_button_title' => '',
+      'number_of_days' => 30,
+      'auto_tasks_assigned_to' => '',
+      'is_task_dashboard_default' => 1,
+      'days_to_create_a_document_clone' => 90
+    ]
+  ]);
 }
