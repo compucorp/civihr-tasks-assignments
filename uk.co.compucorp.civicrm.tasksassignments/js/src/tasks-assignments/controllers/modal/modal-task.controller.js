@@ -27,6 +27,7 @@ define([
 
     angular.copy(data, $scope.task);
 
+    $scope.modalTitle = $scope.task.id ? 'Edit Task' : 'New Task';
     $scope.task.activity_date_time = $scope.task.activity_date_time || moment().toDate();
     $scope.task.assignee_contact_id = $scope.task.assignee_contact_id || [];
     $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;

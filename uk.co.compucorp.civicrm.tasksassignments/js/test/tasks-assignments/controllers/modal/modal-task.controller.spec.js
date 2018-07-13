@@ -33,6 +33,29 @@ define([
       spyOn(assignmentService, 'search').and.returnValue($q.resolve([{}, {}]));
     }));
 
+    describe('modalTitle', function () {
+      describe('when creating new task', function () {
+        beforeEach(function () {
+          initController();
+        });
+
+        it('sets the modal title as "New Task"', function () {
+          expect($scope.modalTitle).toBe('New Task');
+        });
+      });
+
+      describe('when editing an existing task', function () {
+        beforeEach(function () {
+          data.id = '1';
+          initController();
+        });
+
+        it('sets the document modal title to "Edit Task"', function () {
+          expect($scope.modalTitle).toBe('Edit Task');
+        });
+      });
+    });
+
     describe('Default due date', function () {
       describe('when the task has not a due date set', function () {
         beforeEach(function () {
@@ -166,19 +189,13 @@ define([
     });
 
     describe('when user clicks on the task wrench icon', function () {
-      var onPopupFormSuccess, url;
+      var url;
 
       beforeEach(function () {
         url = '/civicrm/admin/options/activity_type?reset=1';
 
-        spyOn(crmAngService, 'loadForm').and.callFake(function () {
-          return {
-            on: function (event, callback) {
-              if (event === 'crmUnload') {
-                onPopupFormSuccess = callback;
-              }
-            }
-          };
+        spyOn(crmAngService, 'loadForm').and.returnValue({
+          on: function (event, callback) {}
         });
         initController();
         $scope.task.openActivityTypeOptionsEditor();

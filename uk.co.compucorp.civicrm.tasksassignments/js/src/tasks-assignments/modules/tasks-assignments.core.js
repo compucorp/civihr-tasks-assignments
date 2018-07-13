@@ -2,6 +2,8 @@
 
 define([
   'common/angular',
+  'common/angulartics',
+  'common/angulartics-google-tag-manager',
   'common/ui-select',
   'common/models/option-group',
   'common/models/relationship.model',
@@ -29,6 +31,8 @@ define([
     'ngResource',
     'ngSanitize',
     'angularFileUpload',
+    'angulartics',
+    'angulartics.google.tagmanager',
     'mwl.calendar',
     'textAngular',
     'ui.select',
