@@ -294,10 +294,6 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
-  $changeSet->alterHtml('~/crmCaseType/list.html', function (phpQueryObject $doc) {
-    _tasksAssignments_remove_column($doc, 'Category');
-  });
-
   $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
     _tasksAssignments_change_column_text($doc);
