@@ -208,6 +208,7 @@ function tasksassignments_civicrm_entityTypes(&$entityTypes) {
 function tasksassignments_civicrm_pageRun($page) {
   $resources = CRM_Core_Resources::singleton();
   $hooks = [
+    new CRM_Tasksassignments_Hook_PageRun_CustomFieldIds($resources),
     new CRM_Tasksassignments_Hook_PageRun_Resources($resources),
   ];
 
