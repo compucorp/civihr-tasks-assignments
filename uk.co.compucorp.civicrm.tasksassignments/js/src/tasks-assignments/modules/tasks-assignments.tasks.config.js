@@ -9,11 +9,12 @@ define([
 
   tasksConfig.$inject = [
     'config', '$urlRouterProvider', '$stateProvider', '$resourceProvider',
-    '$httpProvider', 'uibDatepickerConfig', 'uiSelectConfig', '$logProvider'
+    '$httpProvider', '$analyticsProvider', 'uibDatepickerConfig', 'uiSelectConfig',
+    '$logProvider'
   ];
 
   function tasksConfig (config, $urlRouterProvider, $stateProvider, $resourceProvider,
-    $httpProvider, datepickerConfig, uiSelectConfig, $logProvider) {
+    $httpProvider, $analyticsProvider, datepickerConfig, uiSelectConfig, $logProvider) {
     $logProvider.debugEnabled(config.DEBUG);
 
     $urlRouterProvider.otherwise('/');
@@ -41,12 +42,12 @@ define([
         }
       });
 
-    $resourceProvider.defaults.stripTrailingSlashes = false;
+    $analyticsProvider.virtualPageviews(false);
 
+    $resourceProvider.defaults.stripTrailingSlashes = false;
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     datepickerConfig.showWeeks = false;
-
     uiSelectConfig.theme = 'bootstrap';
   }
 });

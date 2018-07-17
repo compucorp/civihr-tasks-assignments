@@ -46,7 +46,7 @@ pipeline {
       steps {
         script {
           // Build site with CV Buildkit
-          sh "civibuild create ${params.BUILDNAME} --type drupal-clean --civi-ver 4.7.27 --url $WEBURL --admin-pass $ADMIN_PASS"
+          sh "civibuild create ${params.BUILDNAME} --type drupal-clean --civi-ver 5.3.0 --url $WEBURL --admin-pass $ADMIN_PASS"
 
           // Get target and PR branches name
           def prBranch = env.CHANGE_BRANCH
@@ -308,7 +308,7 @@ def mergeEnvBranchInAllRepositories(String envBranch) {
 def listRepositories() {
   return [
     [
-      'url': 'https://github.com/civicrm/civihr.git',
+      'url': 'https://github.com/compucorp/civihr.git',
       'folder': "$CIVICRM_EXT_ROOT/civihr"
     ],
     [

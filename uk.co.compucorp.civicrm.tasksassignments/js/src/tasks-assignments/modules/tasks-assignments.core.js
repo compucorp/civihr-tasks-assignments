@@ -2,6 +2,8 @@
 
 define([
   'common/angular',
+  'common/angulartics',
+  'common/angulartics-google-tag-manager',
   'common/ui-select',
   'common/modules/xeditable-civi',
   'common/modules/routers/compu-ui-router',
@@ -26,6 +28,8 @@ define([
     'ngResource',
     'ngSanitize',
     'angularFileUpload',
+    'angulartics',
+    'angulartics.google.tagmanager',
     'mwl.calendar',
     'textAngular',
     'ui.select',
