@@ -43,8 +43,7 @@ define([
         obj: {
           period_start_date: 'Contract Start Date',
           period_end_date: 'Contract End Date',
-          birth_date: 'Birthday',
-          probation_end_date: 'Probation End Date'
+          birth_date: 'Birthday'
         },
         arr: []
       },
