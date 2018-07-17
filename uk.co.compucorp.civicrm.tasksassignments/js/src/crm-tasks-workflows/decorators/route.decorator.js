@@ -45,11 +45,12 @@
      * @return {Function} the function that will resolve the workflow case types.
      */
     function getResolverForWorkflowTypes () {
-      return ['crmApi', function workflowTypesResolver (crmApi) {
-        return crmApi('CaseType', 'get', {
-          category: 'WORKFLOW',
-          options: { limit: 0 }
-        });
+      return ['crmApi', 'customFieldIds', function workflowTypesResolver (crmApi, customFieldIds) {
+        var caseTypeCategoryField = 'custom_' + customFieldIds['caseType.category'];
+        var filters = { options: { limit: 0 } };
+        filters[ caseTypeCategoryField ] = 'Workflow';
+
+        return crmApi('CaseType', 'get', filters);
       }];
     }
 

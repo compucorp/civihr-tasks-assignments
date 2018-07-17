@@ -15,6 +15,7 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-route/angular-route.min.js',
 
+      // modules
       { pattern: extPath + '/js/src/crm-tasks-workflows/modules/*.js' },
       { pattern: extPath + '/js/src/crm-tasks-workflows/controllers/*.js' },
       { pattern: extPath + '/js/src/crm-tasks-workflows/decorators/*.js' },
