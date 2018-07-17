@@ -956,6 +956,31 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Updates current case types so they have a category assigned. All case types
+   * are assigned the Workflow category by default except for the Application case
+   * type, which gets the Vacancy category.
+   *
+   * @return bool
+   */
+  public function upgrade_1042() {
+    $categoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID('category', 'case_type_category');
+    $caseTypes = civicrm_api3('CaseType', 'get', [
+      'options' => [ 'limit' => 0 ]
+    ]);
+
+    foreach ($caseTypes['values'] as $caseType) {
+      $category = $caseType['name'] === 'Application' ? 'Vacancy' : 'Workflow';
+
+      civicrm_api3('CaseType', 'create', [
+        'id' => $caseType['id'],
+        'custom_' . $categoryFieldId => $category,
+      ]);
+    }
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
