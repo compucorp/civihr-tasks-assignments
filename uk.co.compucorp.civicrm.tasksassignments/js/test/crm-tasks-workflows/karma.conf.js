@@ -15,6 +15,9 @@ module.exports = function (config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-route/angular-route.min.js',
 
+      // Global variables that need to be accessible in the test environment
+      extPath + '/js/test/crm-tasks-workflows/globals.js',
+
       // modules
       { pattern: extPath + '/js/src/crm-tasks-workflows/modules/*.js' },
       { pattern: extPath + '/js/src/crm-tasks-workflows/controllers/*.js' },
