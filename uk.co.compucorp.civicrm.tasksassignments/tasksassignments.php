@@ -6,7 +6,7 @@ use \CRM_Utils_Array as ArrayHelper;
 use \CRM_Tasksassignments_Wrapper_StripInvalidTaskTypesWrapper as StripInvalidTaskTypesWrapper;
 
 /**
- * Implementation of hook_civicrm_config
+ * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
@@ -15,7 +15,7 @@ function tasksassignments_civicrm_config(&$config) {
 }
 
 /**
- * Implements hook_apiWrappers.
+ * Implements hook_apiWrappers().
  *
  * @param array $wrappers
  * @param array $apiRequest
@@ -39,9 +39,9 @@ function tasksassignments_civicrm_apiWrappers(&$wrappers, $apiRequest) {
 }
 
 /**
- * Implementation of hook_civicrm_xmlMenu
+ * Implements hook_civicrm_xmlMenu().
  *
- * @param $files array(string)
+ * @param array $files
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_xmlMenu
  */
@@ -50,7 +50,7 @@ function tasksassignments_civicrm_xmlMenu(&$files) {
 }
 
 /**
- * Implementation of hook_civicrm_install
+ * Implements hook_civicrm_install().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
@@ -59,43 +59,52 @@ function tasksassignments_civicrm_install() {
 }
 
 /**
- * Implementation of hook_civicrm_uninstall
+ * Implements hook_civicrm_postInstall().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall/
+ */
+function tasksassignments_civicrm_postInstall() {
+  _taskassignments_saveDefaultSettings();
+}
+
+/**
+ * Implements hook_civicrm_uninstall().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
 function tasksassignments_civicrm_uninstall() {
   // PCHR-1263 : hrcase should not be installed/enabled without Task & Assignments extension
-  if (tasksassignments_checkHrcase())  {
+  if (tasksassignments_checkHrcase()) {
     tasksassignments_extensionsPageRedirect();
   }
   _tasksassignments_civix_civicrm_uninstall();
 }
 
 /**
- * Implementation of hook_civicrm_enable
+ * Implements hook_civicrm_enable().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function tasksassignments_civicrm_enable() {
   _tasksassignments_toggleMenuItems();
-  _tasksassignments_toggleCaseMenuItems(false);
+  _tasksassignments_toggleCaseMenuItems(FALSE);
 
   CRM_Core_BAO_Navigation::resetNavigation();
   _tasksassignments_civix_civicrm_enable();
 }
 
 /**
- * Implementation of hook_civicrm_disable
+ * Implements hook_civicrm_disable().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
  */
 function tasksassignments_civicrm_disable() {
   // PCHR-1263 : hrcase should not be installed/enabled without Task & Assignments extension
-  if (tasksassignments_checkHrcase())  {
+  if (tasksassignments_checkHrcase()) {
     tasksassignments_extensionsPageRedirect();
   }
 
-  _tasksassignments_toggleMenuItems(false);
+  _tasksassignments_toggleMenuItems(FALSE);
   _tasksassignments_toggleCaseMenuItems();
 
   CRM_Core_BAO_Navigation::resetNavigation();
@@ -103,7 +112,7 @@ function tasksassignments_civicrm_disable() {
 }
 
 /**
- * Implementation of hook_civicrm_upgrade
+ * Implements hook_civicrm_upgrade().
  *
  * @param $op string, the type of operation being performed; 'check' or 'enqueue'
  * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
@@ -118,7 +127,7 @@ function tasksassignments_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
 }
 
 /**
- * Implementation of hook_civicrm_managed
+ * Implements hook_civicrm_managed().
  *
  * Generate a list of entities to create/deactivate/delete when this module
  * is installed, disabled, uninstalled.
@@ -130,7 +139,7 @@ function tasksassignments_civicrm_managed(&$entities) {
 }
 
 /**
- * Implementation of hook_civicrm_caseTypes
+ * Implements hook_civicrm_caseTypes().
  *
  * Generate a list of case-types
  *
@@ -143,7 +152,7 @@ function tasksassignments_civicrm_caseTypes(&$caseTypes) {
 }
 
 /**
- * Implementation of hook_civicrm_alterSettingsFolders
+ * Implements hook_civicrm_alterSettingsFolders().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterSettingsFolders
  */
@@ -164,14 +173,14 @@ function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params
   ];
 
   if (in_array($entity, $entitiesToAvoidPermissions)) {
-    $params['check_permissions'] = false;
+    $params['check_permissions'] = FALSE;
   }
 
   $permissions['setting']['get'] = ['access AJAX API'];
 }
 
 /**
- * Implementation of hook_civicrm_entityTypes
+ * Implements hook_civicrm_entityTypes().
  */
 function tasksassignments_civicrm_entityTypes(&$entityTypes) {
   $entityTypes[] = array(
@@ -192,23 +201,24 @@ function tasksassignments_civicrm_entityTypes(&$entityTypes) {
 }
 
 /**
- * Implementation of hook_civicrm_pageRun
+ * Implements hook_civicrm_pageRun().
+ *
+ * @link https://docs.civicrm.org/dev/en/master/hooks/hook_civicrm_pageRun/
  */
 function tasksassignments_civicrm_pageRun($page) {
-  if ($page instanceof CRM_Tasksassignments_Page_Tasks ||
-      $page instanceof CRM_Tasksassignments_Page_Documents ||
-      $page instanceof CRM_Tasksassignments_Page_Dashboard ||
-      $page instanceof CRM_Tasksassignments_Page_Settings) {
+  $resources = CRM_Core_Resources::singleton();
+  $hooks = [
+    new CRM_Tasksassignments_Hook_PageRun_CustomFieldIds($resources),
+    new CRM_Tasksassignments_Hook_PageRun_Resources($resources),
+  ];
 
-    CRM_Core_Resources::singleton()
-      ->addScriptFile('uk.co.compucorp.civicrm.tasksassignments', CRM_Core_Config::singleton()->debug ? 'js/src/tasks-assignments.js' : 'js/dist/tasks-assignments.min.js',1010);
-    CRM_Core_Resources::singleton()
-      ->addStyleFile('uk.co.compucorp.civicrm.tasksassignments', 'css/civitasks.css');
+  foreach ($hooks as $hook) {
+    $hook->handle($page);
   }
 }
 
 /**
- * Implementation of hook_civicrm_tabset.
+ * Implements hook_civicrm_tabset().
  *
  * Tasks and documents tabs should appear after Assignments tab directly
  * and since assignments tab weight is set to 30 we set both of those to
@@ -218,7 +228,6 @@ function tasksassignments_civicrm_pageRun($page) {
  * @param array &$tabs
  * @param array $context
  */
-
 function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
   if ($tabsetName === 'civicrm/contact/view') {
     CRM_Tasksassignments_Page_Tasksassignments::registerScripts();
@@ -245,9 +254,10 @@ function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
 }
 
 /**
- * Implementation of hook_civicrm_permission
+ * Implements hook_civicrm_permission().
  *
  * @param array $permissions
+ *
  * @return void
  */
 function tasksassignments_civicrm_permission(&$permissions) {
@@ -274,8 +284,6 @@ function tasksassignments_civicrm_navigationMenu(&$params) {
  *
  * @param \Civi\Angular\Manager $angular
  *
- * @return \Civi\Angular\ChangeSet
- *
  * @link https://docs.civicrm.org/dev/en/latest/framework/angular/changeset/
  */
 function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
@@ -287,7 +295,20 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
+  $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
+    _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
+    _tasksAssignments_change_column_text($doc);
+    _tasksAssignments_remove_columns_from_timeline($doc);
+  });
+
   $angular->add($changeSet);
+}
+
+function tasksAssignments_civicrm_angularModules(&$angularModules) {
+  $angularModules['crm-tasks-workflows'] = [
+    'ext' => 'civicrm',
+    'js' => ['tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js'],
+  ];
 }
 
 /**
@@ -297,12 +318,18 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
  */
 function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$params) {
   $administerMenuItems = &_tasksassignments_getAdministerMenuItems($params);
-  $menuItemsToClone = _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuItems, 'CiviCase', ['Case Types', 'Case Statuses']);
+  $menuItemsToClone = _tasksassignments_filterMenuItemsOfAdministerSubMenu(
+    $administerMenuItems,
+    'CiviCase',
+    ['Case Types']
+  );
 
-  _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels($administerMenuItems, $menuItemsToClone, 'tasksassignments_administer', [
-    'Case Types' => 'Workflows',
-    'Case Statuses' => 'Workflows Status'
-  ]);
+  _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(
+    $administerMenuItems,
+    $menuItemsToClone,
+    'tasksassignments_administer',
+    ['Case Types' => 'Workflow Types']
+  );
 
   _tasksassignments_deleteAdministerSubMenu($administerMenuItems, 'CiviCase');
 }
@@ -345,7 +372,7 @@ function _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuIte
  *
  * @param array $administerMenuItems
  * @param array $menuItems
- * @param array $subMenuName
+ * @param string $subMenuName
  * @param array $labelsMapping
  */
 function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$administerMenuItems, $menuItems, $subMenuName, $labelsMapping) {
@@ -378,10 +405,10 @@ function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMe
 /**
  * Sets the is_state flag of its own menu items
  *
- * @param boolean $activate
+ * @param bool $activate
  * @return void
  */
-function _tasksassignments_toggleMenuItems($activate = true) {
+function _tasksassignments_toggleMenuItems($activate = TRUE) {
   $is_active = $activate ? 1 : 0;
   $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
 
@@ -391,10 +418,10 @@ function _tasksassignments_toggleMenuItems($activate = true) {
 /**
  * Sets the is_state flag of the Case extension menu items
  *
- * @param boolean $activate
+ * @param bool $activate
  * @return void
  */
-function _tasksassignments_toggleCaseMenuItems($activate = true) {
+function _tasksassignments_toggleCaseMenuItems($activate = TRUE) {
   $is_active = $activate ? 1 : 0;
   $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name = 'Cases' AND parent_id IS NULL";
 
@@ -406,7 +433,7 @@ function _tasksassignments_toggleCaseMenuItems($activate = true) {
  *
  * @return int
  */
-function tasksassignments_checkHrcase()  {
+function tasksassignments_checkHrcase() {
   $isEnabled = CRM_Core_DAO::getFieldValue(
     'CRM_Core_DAO_Extension',
     'org.civicrm.hrcase',
@@ -420,7 +447,7 @@ function tasksassignments_checkHrcase()  {
  * redirect to extension list page and show error notification if hrcase is installed/enabled
  *
  */
-function tasksassignments_extensionsPageRedirect()  {
+function tasksassignments_extensionsPageRedirect() {
   $message = ts("You should disable/uninstall hrcase extension first");
   CRM_Core_Session::setStatus($message, ts('Cannot disable/uninstall extension'), 'error');
   $url = CRM_Utils_System::url(
@@ -432,6 +459,17 @@ function tasksassignments_extensionsPageRedirect()  {
   CRM_Utils_System::redirect($url);
 }
 
+/**
+ * Modifies the placeholder of Add Activity Dropdown
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_add_activity_dropdown_placeholder(phpQueryObject $doc) {
+  $addActivityDropDown = $doc->find('[crm-options=activityTypeOptions]');
+  $newPlaceHolder = 'Add task or document';
+
+  $addActivityDropDown->attr('placeholder', $newPlaceHolder);
+}
 /**
  * Modifies the help text for the Workflow Create/Edit screen.
  *
@@ -460,7 +498,7 @@ function _tasksAssignments_change_workflow_help_text(phpQueryObject $doc) {
  *
  * @param phpQueryObject $doc
  */
-function _tasksAssignments_remove_non_civihr_tabs_from_workflow (phpQueryObject $doc) {
+function _tasksAssignments_remove_non_civihr_tabs_from_workflow(phpQueryObject $doc) {
   $tabs = ['roles', 'statuses', 'actType'];
 
   foreach ($tabs as $tab) {
@@ -475,7 +513,7 @@ function _tasksAssignments_remove_non_civihr_tabs_from_workflow (phpQueryObject 
  *
  * @param phpQueryObject $doc
  */
-function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) {
+function _tasksAssignments_allow_only_add_timeline_action(phpQueryObject $doc) {
   $actionDropdown = $doc->find('select[ng-model="newActivitySetWorkflow"]');
   $addTimelineBtn = '
     <button class="btn btn-secondary pull-right"
@@ -486,4 +524,67 @@ function _tasksAssignments_allow_only_add_timeline_action (phpQueryObject $doc) 
 
   $actionDropdown->after($addTimelineBtn);
   $actionDropdown->remove();
+}
+
+/**
+ * Remove columns from timeline
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_remove_columns_from_timeline(phpQueryObject $doc) {
+  $columnsToBeRemovedFromTimeline = [ 'Status', 'Reference', 'Select' ];
+
+  foreach ($columnsToBeRemovedFromTimeline as $columnName) {
+    _tasksAssignments_remove_column($doc, $columnName);
+  }
+}
+
+/**
+ * Removes a column from a table by using the column's header name as a reference.
+ *
+ * @param phpQueryObject $doc
+ * @param string $columnName
+ */
+function _tasksAssignments_remove_column(phpQueryObject $doc, $columnName) {
+  $columnHeader = $doc->find('table th:contains("' . $columnName . '")');
+
+  // skip if the column does not exist:
+  if (!$columnHeader->count()) {
+    return;
+  }
+
+  $columnIndex = $doc->find('table th')->index($columnHeader) + 1;
+  $columnBody = $doc->find('table td:nth-child(' . $columnIndex . ')');
+
+  $columnHeader->remove();
+  $columnBody->remove();
+}
+
+/**
+ * Change column text for timeline
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_change_column_text(phpQueryObject $doc) {
+  $doc->find('th:contains("Activity")')
+    ->text('Task / Document Type');
+}
+
+/**
+ * Sets the default values for the T&A Settings
+ *
+ * @throws \CiviCRM_API3_Exception
+ */
+function _taskassignments_saveDefaultSettings() {
+  civicrm_api3('TASettings', 'set', [
+    'fields' => [
+      'documents_tab' => 1,
+      'keydates_tab' => 1,
+      'add_assignment_button_title' => '',
+      'number_of_days' => 30,
+      'auto_tasks_assigned_to' => '',
+      'is_task_dashboard_default' => 1,
+      'days_to_create_a_document_clone' => 90
+    ]
+  ]);
 }

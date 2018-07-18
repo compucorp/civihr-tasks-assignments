@@ -27,9 +27,10 @@ class CRM_Tasksassignments_Test_Fabricator_Assignment {
    * assignment.
    */
   private static function setDefaultValues() {
+    $now = date('Y-m-d H:i:s');
     self::$defaultParams = [
-      'subject' => 'A subject ' . ('Y-m-d H:i:s'),
-      'start_date' => ('Y-m-d H:i:s'),
+      'subject' => 'A subject ' . $now,
+      'start_date' => $now,
       'status_id' => 1,
     ];
   }

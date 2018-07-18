@@ -9,12 +9,12 @@ define([
   ModalTaskController.__name = 'ModalTaskController';
   ModalTaskController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', '$uibModalInstance', '$dialog', 'assignmentService', 'contactService',
+    '$uibModal', '$uibModalInstance', '$dialog', 'crmAngService', 'assignmentService', 'contactService',
     'taskService', 'HR_settings', 'data', 'config'
   ];
 
   function ModalTaskController ($filter, $log, $q, $rootElement, $rootScope, $scope,
-    $timeout, $modal, $modalInstance, $dialog, assignmentService, contactService,
+    $timeout, $modal, $modalInstance, $dialog, crmAngService, assignmentService, contactService,
     taskService, hrSettings, data, config) {
     $log.debug('Controller: ModalTaskController');
 
@@ -27,6 +27,7 @@ define([
 
     angular.copy(data, $scope.task);
 
+    $scope.modalTitle = $scope.task.id ? 'Edit Task' : 'New Task';
     $scope.task.activity_date_time = $scope.task.activity_date_time || moment().toDate();
     $scope.task.assignee_contact_id = $scope.task.assignee_contact_id || [];
     $scope.task.source_contact_id = $scope.task.source_contact_id || config.LOGGED_IN_CONTACT_ID;
@@ -42,6 +43,7 @@ define([
     $scope.confirm = confirm;
     $scope.dpOpen = dpOpen;
     $scope.refreshContacts = refreshContacts;
+    $scope.task.openActivityTypeOptionsEditor = openActivityTypeOptionsEditor;
 
     (function init () {
       initWatchers();
@@ -127,7 +129,7 @@ define([
 
       $scope.$broadcast('ct-spinner-show');
 
-        // temporary remove case_id
+      // temporary remove case_id
       +task.case_id === +data.case_id && delete task.case_id;
       task.activity_date_time = task.activity_date_time || new Date();
 
@@ -208,10 +210,10 @@ define([
       $timeout(function () { $scope.$broadcast('ct-spinner-show'); }, 0);
 
       assignmentService.search(null, null, contactId)
-          .then(function (results) {
-            $scope.assignments = results;
-            $scope.$broadcast('ct-spinner-hide');
-          });
+        .then(function (results) {
+          $scope.assignments = results;
+          $scope.$broadcast('ct-spinner-hide');
+        });
     }
 
     function refreshContacts (input, type) {
@@ -248,7 +250,7 @@ define([
 
       if (missingRequiredFields.length) {
         var notification = CRM.alert(missingRequiredFields.join(', '),
-            missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
+          missingRequiredFields.length === 1 ? 'Required field' : 'Required fields', 'error');
         $timeout(function () {
           notification.close();
           notification = null;
@@ -257,6 +259,19 @@ define([
       }
 
       return true;
+    }
+
+    /**
+     * Opens editor for activity type options editing
+     */
+    function openActivityTypeOptionsEditor () {
+      crmAngService.loadForm('/civicrm/admin/options/activity_type?reset=1')
+        .on('crmUnload', function () {
+          taskService.getOptions()
+            .then(function (options) {
+              angular.extend($rootScope.cache, options);
+            });
+        });
     }
   }
 

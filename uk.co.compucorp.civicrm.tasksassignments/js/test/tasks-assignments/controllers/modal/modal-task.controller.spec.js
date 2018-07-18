@@ -11,10 +11,10 @@ define([
 
   describe('ModalTaskController', function () {
     var $controller, $q, $rootScope, $scope, HRSettings,
-      data, assignmentService;
+      data, assignmentService, crmAngService;
 
     beforeEach(module('tasks-assignments.dashboard'));
-    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _assignmentService_, $httpBackend) {
+    beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _assignmentService_, _crmAngService_, $httpBackend) {
       // A workaround to avoid actual API calls
       $httpBackend.whenGET(/action=/).respond({});
 
@@ -23,6 +23,7 @@ define([
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       assignmentService = _assignmentService_;
+      crmAngService = _crmAngService_;
 
       data = {};
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
@@ -31,6 +32,29 @@ define([
 
       spyOn(assignmentService, 'search').and.returnValue($q.resolve([{}, {}]));
     }));
+
+    describe('modalTitle', function () {
+      describe('when creating new task', function () {
+        beforeEach(function () {
+          initController();
+        });
+
+        it('sets the modal title as "New Task"', function () {
+          expect($scope.modalTitle).toBe('New Task');
+        });
+      });
+
+      describe('when editing an existing task', function () {
+        beforeEach(function () {
+          data.id = '1';
+          initController();
+        });
+
+        it('sets the document modal title to "Edit Task"', function () {
+          expect($scope.modalTitle).toBe('Edit Task');
+        });
+      });
+    });
 
     describe('Default due date', function () {
       describe('when the task has not a due date set', function () {
@@ -161,6 +185,24 @@ define([
 
       it("loads the target contact's assignments", function () {
         expect(assignmentService.search).toHaveBeenCalledWith(null, null, targetContactId);
+      });
+    });
+
+    describe('when user clicks on the task wrench icon', function () {
+      var url;
+
+      beforeEach(function () {
+        url = '/civicrm/admin/options/activity_type?reset=1';
+
+        spyOn(crmAngService, 'loadForm').and.returnValue({
+          on: function (event, callback) {}
+        });
+        initController();
+        $scope.task.openActivityTypeOptionsEditor();
+      });
+
+      it('calls crmAngService with the required url', function () {
+        expect(crmAngService.loadForm).toHaveBeenCalledWith(url);
       });
     });
 
