@@ -2,6 +2,10 @@
 
 class CRM_Tasksassignments_Hook_PageRun_CustomFieldIds {
 
+  /**
+   * @var CRM_Core_Resources
+   *   stores the provided Core Resources instance.
+   */
   private $resources;
 
   /**
@@ -21,8 +25,13 @@ class CRM_Tasksassignments_Hook_PageRun_CustomFieldIds {
       return;
     }
 
+    $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
+      'category',
+      'case_type_category'
+    );
+
     $this->resources->addVars('customFieldIds', [
-      'caseType.category' => CRM_Core_BAO_CustomField::getCustomFieldID('category', 'case_type_category'),
+      'caseType.category' => $caseTypeCategoryFieldId,
     ]);
   }
 
@@ -33,10 +42,7 @@ class CRM_Tasksassignments_Hook_PageRun_CustomFieldIds {
    * @param CRM_Core_Page $page
    */
   public function shouldHandle($page) {
-    $pageClassName = get_class($page);
-    $pageWhereTheVarIsDefined = 'Civi\Angular\Page\Main';
-
-    return $pageClassName === $pageWhereTheVarIsDefined;
+    return $page instanceof Civi\Angular\Page\Main;
   }
 
 }

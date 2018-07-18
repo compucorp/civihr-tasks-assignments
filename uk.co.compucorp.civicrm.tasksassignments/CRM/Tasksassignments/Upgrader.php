@@ -965,6 +965,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    */
   public function upgrade_1042() {
     $categoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID('category', 'case_type_category');
+    $categoryFieldName = 'custom_' . $categoryFieldId;
     $caseTypes = civicrm_api3('CaseType', 'get', [
       'options' => [ 'limit' => 0 ]
     ]);
@@ -974,7 +975,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
 
       civicrm_api3('CaseType', 'create', [
         'id' => $caseType['id'],
-        'custom_' . $categoryFieldId => $category,
+        $categoryFieldName => $category,
       ]);
     }
 

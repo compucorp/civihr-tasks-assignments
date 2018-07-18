@@ -1,7 +1,22 @@
 <?php
 
 class CRM_Tasksassignments_Hook_PageRun_Resources {
+  /**
+   * @var string
+   *   The key for the T&W extension.
+   */
+  const EXTENSION_KEY = 'uk.co.compucorp.civicrm.tasksassignments';
 
+  /**
+   * @var int
+   *   The priority value for the reqangular.min.js file, which this extension depends on.
+   */
+  const REQANGULAR_PRIORITY = 1000;
+
+  /**
+   * @var CRM_Core_Resources
+   *   Stores the provided Core Resources instance.
+   */
   private $resources;
 
   /**
@@ -21,15 +36,19 @@ class CRM_Tasksassignments_Hook_PageRun_Resources {
       return;
     }
 
-    $this->resources->addScriptFile('uk.co.compucorp.civicrm.tasksassignments',
-        CRM_Core_Config::singleton()->debug
-          ? 'js/src/tasks-assignments.js'
-          : 'js/dist/tasks-assignments.min.js',
-        1010
-      );
+    $isDevEnvironment = CRM_Core_Config::singleton()->debug;
+    $scriptFile = $isDevEnvironment ? 'js/src/tasks-assignments.js' : 'js/dist/tasks-assignments.min.js';
 
-    $this->resources->addStyleFile('uk.co.compucorp.civicrm.tasksassignments',
-      'css/civitasks.css');
+    $this->resources->addScriptFile(
+      self::EXTENSION_KEY,
+      $scriptFile,
+      self::REQANGULAR_PRIORITY + 10 // so it's after reqangular
+    );
+
+    $this->resources->addStyleFile(
+      self::EXTENSION_KEY,
+      'css/civitasks.css'
+    );
   }
 
   /**
@@ -40,14 +59,14 @@ class CRM_Tasksassignments_Hook_PageRun_Resources {
    */
   public function shouldHandle($page) {
     $pageClassName = get_class($page);
-    $pagesWhereTheResourceIsDefined = [
-      'CRM_Tasksassignments_Page_Tasks',
-      'CRM_Tasksassignments_Page_Documents',
-      'CRM_Tasksassignments_Page_Dashboard',
-      'CRM_Tasksassignments_Page_Settings',
+    $pagesWhereTheResourcesAreUsed = [
+      CRM_Tasksassignments_Page_Tasks::class,
+      CRM_Tasksassignments_Page_Documents::class,
+      CRM_Tasksassignments_Page_Dashboard::class,
+      CRM_Tasksassignments_Page_Settings::class,
     ];
 
-    return in_array($pageClassName, $pagesWhereTheResourceIsDefined);
+    return in_array($pageClassName, $pagesWhereTheResourcesAreUsed);
   }
 
 }
