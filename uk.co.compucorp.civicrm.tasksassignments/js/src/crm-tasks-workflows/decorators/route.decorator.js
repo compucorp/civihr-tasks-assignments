@@ -41,15 +41,19 @@
 
     /**
      * Returns a resolver for the list of workflow case types.
+     * To filter by category we need to use the custom category field id as
+     * provided by the CRM vars. The category field can be referenced by using
+     * `custom_123` where `123` is the id of the category field.
      *
      * @return {Function} the function that will resolve the workflow case types.
      */
     function getResolverForWorkflowTypes () {
-      return ['crmApi', function workflowTypesResolver (crmApi) {
-        return crmApi('CaseType', 'get', {
-          category: 'WORKFLOW',
-          options: { limit: 0 }
-        });
+      return ['crmApi', 'customFieldIds', function workflowTypesResolver (crmApi, customFieldIds) {
+        var caseTypeCategoryField = 'custom_' + customFieldIds['caseType.category'];
+        var filters = { options: { limit: 0 } };
+        filters[ caseTypeCategoryField ] = 'Workflow';
+
+        return crmApi('CaseType', 'get', filters);
       }];
     }
 
