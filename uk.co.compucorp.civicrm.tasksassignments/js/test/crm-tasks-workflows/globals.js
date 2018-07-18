@@ -2,5 +2,7 @@
 'use strict';
 
 var CRM = {
-  vars: {}
+  vars: {
+    'caseType.category': 80
+  }
 };
