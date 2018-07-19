@@ -2,7 +2,7 @@
 
 class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
   const COMPLETED_STATUS = 'Completed';
-  const WORKFLOW_CATEGORY = 'WORKFLOW';
+  const WORKFLOW_CATEGORY = 'Workflow';
 
   /**
    * Create a new Task based on array-data
@@ -62,12 +62,28 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
       return NULL;
     }
 
+    $caseTypeCategoryFieldName = self::getCaseTypeCategoryFieldName();
+
     $case = civicrm_api3('Case', 'getsingle', [
       'id' => $caseId,
-      'return' => ['case_type_id.category.name']
+      'return' => [$caseTypeCategoryFieldName]
     ]);
 
-    return $case['case_type_id.category.name'];
+    return $case[$caseTypeCategoryFieldName];
+  }
+
+  /**
+   * Returns the name for the case type's custom category field.
+   *
+   * @return string
+   */
+  private static function getCaseTypeCategoryFieldName() {
+    $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
+      'category',
+      'case_type_category'
+    );
+
+    return 'case_type_id.custom_' . $caseTypeCategoryFieldId;
   }
 
   /**
