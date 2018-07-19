@@ -28,8 +28,6 @@ class api_v3_TaskTest extends BaseHeadlessTest {
     $result = OptionValueFabricator::fabricateTaskType();
 
     $this->_taskTypeId = $result['value'];
-
-    OptionGroupFabricator::fabricateCaseCategoryGroupAndValues();
   }
 
   /**

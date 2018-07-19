@@ -24,8 +24,6 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $upgrader->install();
 
     $this->_taskType = OptionValueFabricator::fabricateTaskType();
-
-    OptionGroupFabricator::fabricateCaseCategoryGroupAndValues();
   }
 
   /**

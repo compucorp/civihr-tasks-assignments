@@ -19,10 +19,4 @@ class CRM_Tasksassignments_Test_Fabricator_OptionGroup {
     return array_shift($result['values']);
   }
 
-  public static function fabricateCaseCategoryGroupAndValues() {
-    self::fabricate(['name' => 'case_type_category']);
-    OptionValueFabricator::fabricate([ 'name' => 'WORKFLOW', 'option_group_id' => 'case_type_category' ]);
-    OptionValueFabricator::fabricate([ 'name' => 'VACANCY', 'option_group_id' => 'case_type_category'  ]);
-  }
-
 }
