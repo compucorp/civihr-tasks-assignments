@@ -51,6 +51,16 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     }
   }
 
+  public function testGetCaseTypeCategoryFieldIdMethod() {
+    $expectedCaseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
+      'category',
+      'case_type_category'
+    );
+    $actualCaseTypeCategoryFieldId = CRM_Tasksassignments_BAO_Task::getCaseTypeCategoryFieldId();
+
+    $this->assertEquals($expectedCaseTypeCategoryFieldId, $actualCaseTypeCategoryFieldId);
+  }
+
   /**
    * @expectedException CRM_Exception
    */
