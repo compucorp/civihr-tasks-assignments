@@ -49,11 +49,7 @@ class CRM_Tasksassignments_Test_Fabricator_CaseType {
    * field, the prefix "custom_" + field id is used.
    */
   public static function setDefaultCaseTypeCategoryValue() {
-    $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
-      'category',
-      'case_type_category'
-    );
-    $caseTypeCategoryField = 'custom_' . $caseTypeCategoryFieldId;
+    $caseTypeCategoryField = 'custom_' . CRM_Tasksassignments_BAO_Task::getCaseTypeCategoryFieldId();
     self::$defaultParams[$caseTypeCategoryField] = 'Workflow';
   }
 

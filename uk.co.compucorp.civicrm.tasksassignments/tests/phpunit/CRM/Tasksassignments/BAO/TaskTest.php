@@ -131,12 +131,8 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $this->assertEquals('Open', $updatedCase['status_id.name']);
   }
 
-  public function testNotClosingTHeCaseWhenTheCaseCategoryIsNotWorkflow() {
-    $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
-      'category',
-      'case_type_category'
-    );
-    $caseTypeCategoryField = 'custom_' . $caseTypeCategoryFieldId;
+  public function testNotClosingTheCaseWhenTheCaseCategoryIsNotWorkflow() {
+    $caseTypeCategoryField = 'custom_' . CRM_Tasksassignments_BAO_Task::getCaseTypeCategoryFieldId();
 
     $vacancyType = CaseTypeFabricator::fabricate([
       'name' => 'Application',
