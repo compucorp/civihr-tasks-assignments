@@ -24,8 +24,6 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $upgrader->install();
 
     $this->_taskType = OptionValueFabricator::fabricateTaskType();
-
-    OptionGroupFabricator::fabricateCaseCategoryGroupAndValues();
   }
 
   /**
@@ -51,6 +49,16 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
         'status_id' => 'Scheduled'
       ]);
     }
+  }
+
+  public function testGetCaseTypeCategoryFieldIdMethod() {
+    $expectedCaseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
+      'category',
+      'case_type_category'
+    );
+    $actualCaseTypeCategoryFieldId = CRM_Tasksassignments_BAO_Task::getCaseTypeCategoryFieldId();
+
+    $this->assertEquals($expectedCaseTypeCategoryFieldId, $actualCaseTypeCategoryFieldId);
   }
 
   /**
@@ -133,10 +141,12 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $this->assertEquals('Open', $updatedCase['status_id.name']);
   }
 
-  public function testNotClosingTHeCaseWhenTheCaseCategoryIsNotWorkflow() {
+  public function testNotClosingTheCaseWhenTheCaseCategoryIsNotWorkflow() {
+    $caseTypeCategoryField = 'custom_' . CRM_Tasksassignments_BAO_Task::getCaseTypeCategoryFieldId();
+
     $vacancyType = CaseTypeFabricator::fabricate([
       'name' => 'Application',
-      'category' => 'VACANCY'
+      $caseTypeCategoryField => 'Vacancy'
     ]);
 
     $this->setupCaseAndTasks([
