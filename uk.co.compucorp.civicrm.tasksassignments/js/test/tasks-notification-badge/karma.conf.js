@@ -29,7 +29,7 @@ module.exports = function (config) {
       extPath + '/../node_modules/karma-requirejs/lib/adapter.js',
 
       // all the common/ dependencies
-      cv('path -x org.civicrm.reqangular/dist/reqangular.min.js')[0].value,
+      cv('path -x org.civicrm.reqangular/js/dist/reqangular.min.js')[0].value,
 
       // the application modules
       { pattern: extPath + '/js/src/tasks-notification-badge/**/*.js', included: false },
