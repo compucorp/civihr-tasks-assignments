@@ -9,12 +9,12 @@ define([
   MainController.$inject = [
     '$log', '$q', '$rootElement', '$rootScope',
     '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA',
-    'OptionGroup', 'Session'
+    'OptionGroup', 'Session', 'notificationService', 'taskService'
   ];
 
   function MainController ($log, $q, $rootElement,
     $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA,
-    OptionGroup, Session) {
+    OptionGroup, Session, notificationService, taskService) {
     var queryParams;
 
     $log.debug('Controller: MainController');
@@ -28,6 +28,7 @@ define([
       queryParams = beforeHashQueryParams.parse();
 
       queryParams.openModal && autoOpenModal(queryParams.openModal);
+      initWatchers();
     }());
 
     /**
@@ -43,6 +44,69 @@ define([
       } else {
         $log.warn('There is no method available for opening the required ' + modalType + ' modal!');
       }
+    }
+
+    /**
+     * Displays a case closed success message given the provided case and client
+     * data.
+     *
+     * @param {String} caseTypeTitle - the case type title.
+     * @param {String} clientDisplayName - the display name of the case client.
+     */
+    function displayCaseClosedSuccessMessage (caseTypeTitle, clientDisplayName) {
+      var message = 'All tasks in the ' + caseTypeTitle + ' workflow for ' +
+        clientDisplayName + ' have been completed. Good work!';
+
+      notificationService.success('Success', message);
+    }
+
+    /**
+     * Returns the parent's case title and status for the given child task id.
+     *
+     * @param  {Number}  taskId - the child task id.
+     * @return {Promise} resolves to the parent case title and status.
+     */
+    function getCaseDataFromTask (taskId) {
+      return taskService.get({
+        id: taskId,
+        return: [
+          'case_id.case_type_id.title',
+          'case_id.status_id.name'
+        ]
+      }).then(function (listOfTasks) {
+        var task = listOfTasks[0];
+
+        if (!task) {
+          return;
+        }
+
+        return {
+          caseTypeTitle: task['case_id.case_type_id.title'],
+          statusName: task['case_id.status_id.name']
+        };
+      });
+    }
+
+    /**
+     * Initializes the taskFormSuccess watcher.
+     */
+    function initWatchers () {
+      $scope.$on('taskFormSuccess', function (event, localTaskData, task) {
+        var clientData = $rootScope.cache.contact.obj[task.target_contact_id[0]];
+
+        if (_.isEmpty(task.case_id)) {
+          return;
+        }
+
+        getCaseDataFromTask(task.id)
+          .then(function (caseData) {
+            if (caseData.statusName !== 'Closed') {
+              return;
+            }
+
+            displayCaseClosedSuccessMessage(caseData.caseTypeTitle, clientData.display_name);
+          });
+      });
     }
 
     /**

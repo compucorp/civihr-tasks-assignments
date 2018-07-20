@@ -1,6 +1,9 @@
 <?php
 
 class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
+  const COMPLETED_STATUS = 'Completed';
+  const WORKFLOW_CATEGORY = 'Workflow';
+
   /**
    * Create a new Task based on array-data
    *
@@ -32,9 +35,55 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     $instance = parent::create($params);
     CRM_Tasksassignments_Reminder::sendReminder((int) $instance->id, NULL, FALSE, $previousAssigneeId);
 
+    if ($hook === 'edit') {
+      $isWorkflowCaseCategory = self::getCaseCategory($instance->case_id) === self::WORKFLOW_CATEGORY;
+      $allCaseTasksAreCompleted = self::checkIfTasksBelongingToCaseAreCompleted($instance->case_id);
+
+      if ($isWorkflowCaseCategory && $allCaseTasksAreCompleted) {
+        self::markCaseAsClosed($instance->case_id);
+      }
+    }
+
     CRM_Utils_Hook::post($hook, $entityName, $instance->id, $instance);
 
     return $instance;
+  }
+
+  /**
+   * Returns the id for the case type's custom category field.
+   *
+   * @return int
+   */
+  public static function getCaseTypeCategoryFieldId() {
+    $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
+      'category',
+      'case_type_category'
+    );
+
+    return  $caseTypeCategoryFieldId;
+  }
+
+  /**
+   * Returns the case category (Workflow or Vacancy) by checking the category of the
+   * parent case type.
+   *
+   * @param int $caseId
+   *
+   * @return string|null
+   */
+  private static function getCaseCategory($caseId) {
+    if (empty($caseId)) {
+      return NULL;
+    }
+
+    $caseTypeCategoryFieldName = 'case_type_id.custom_' . self::getCaseTypeCategoryFieldId();
+
+    $case = civicrm_api3('Case', 'getsingle', [
+      'id' => $caseId,
+      'return' => [$caseTypeCategoryFieldName]
+    ]);
+
+    return $case[$caseTypeCategoryFieldName];
   }
 
   /**
@@ -63,6 +112,44 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
     }
 
     return $id;
+  }
+
+  /**
+   * Checks if all tasks belonging to a case have been marked as completed.
+   *
+   * @param int $caseId
+   *
+   * @return bool
+   */
+  private static function checkIfTasksBelongingToCaseAreCompleted($caseId) {
+    if (empty($caseId)) {
+      return FALSE;
+    }
+
+    $tasks = civicrm_api3('Task', 'get', [
+      'case_id' => $caseId,
+      'return' => ['status_id.name']
+    ]);
+
+    foreach ($tasks['values'] as $task) {
+      if ($task['status_id.name'] !== self::COMPLETED_STATUS) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Marks the given case as closed.
+   *
+   * @param int $caseId
+   */
+  private static function markCaseAsClosed($caseId) {
+    civicrm_api3('Case', 'create', [
+      'id' => $caseId,
+      'status_id' => 'Closed'
+    ]);
   }
 
   /**

@@ -371,7 +371,7 @@ define([
 
       // skip if an activity set and types have not been defined:
       if (!vm.activity.activitySet.activityTypes) {
-        return;
+        return $q.resolve();
       }
 
       promises = vm.activity.activitySet.activityTypes.map(function (activityType) {
