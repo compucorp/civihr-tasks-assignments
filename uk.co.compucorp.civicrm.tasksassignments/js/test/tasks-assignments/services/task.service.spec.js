@@ -15,8 +15,8 @@ define([
 
   var mockBackendCalls = function ($httpBackend) {
     $httpBackend.whenGET(/action=getoptions&entity=Document/).respond({});
-    $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
-    $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({});
+    $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({ values: [ jasmine.any(Object) ] });
+    $httpBackend.whenGET(/action=get&entity=CaseType/).respond({ values: [ jasmine.any(Object) ] });
     $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
     $httpBackend.whenGET(/views.*/).respond({});
