@@ -16,7 +16,6 @@ require.config({
     'tasks-assignments': srcPath,
     'tasks-assignments/vendor/angular-bootstrap-calendar': srcPath + '/vendor/angular/angular-bootstrap-calendar-tpls-custom',
     'tasks-assignments/vendor/angular-checklist-model': srcPath + '/vendor/angular/checklist-model',
-    'tasks-assignments/vendor/angular-router': srcPath + '/vendor/angular/angular-ui-router',
     'mocks': mocksPath
   },
   shim: {
