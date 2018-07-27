@@ -46,7 +46,7 @@ pipeline {
       steps {
         script {
           // Build site with CV Buildkit
-          sh "civibuild create ${params.BUILDNAME} --type drupal-clean --civi-ver 5.3.0 --url $WEBURL --admin-pass $ADMIN_PASS"
+          sh "civibuild create ${params.BUILDNAME} --type drupal-clean --civi-ver 5.3.1 --url $WEBURL --admin-pass $ADMIN_PASS"
 
           // Get target and PR branches name
           def prBranch = env.CHANGE_BRANCH
