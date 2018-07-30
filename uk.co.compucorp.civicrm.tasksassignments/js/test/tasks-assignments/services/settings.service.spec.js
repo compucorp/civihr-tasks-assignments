@@ -24,7 +24,10 @@ define([
     }));
 
     beforeEach(function () {
+      $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({ values: [ jasmine.any(Object) ] });
+      $httpBackend.whenGET(/action=get&entity=CaseType/).respond({ values: [ jasmine.any(Object) ] });
       $httpBackend.whenGET(/action=get&debug=true&entity=Setting/).respond(settingsMock.onGet);
+
       mockBackendCalls($httpBackend);
       spyOn(AppSettings, 'get').and.callThrough();
 
