@@ -20,7 +20,6 @@ define([
   'common/services/crm-ang.service',
   'tasks-assignments/vendor/angular-bootstrap-calendar',
   'tasks-assignments/vendor/angular-checklist-model',
-  'tasks-assignments/vendor/angular-router',
   'tasks-assignments/modules/tasks-assignments.constants',
   'tasks-assignments/modules/tasks-assignments.values'
 ], function (angular) {
