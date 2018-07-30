@@ -881,20 +881,20 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
 
     return TRUE;
   }
-  
+
   /**
    * Deletes or disables "Probation" custom group
    *
    * @return bool
    */
-  public function upgrade_1039() {
+  public function upgrade_1040() {
     $result = civicrm_api3('CustomGroup', 'get', [
       'name' => 'Probation',
     ]);
     if ($result['count'] == 0) {
       return TRUE;
     }
-    
+
     $customGroupTable = $result['values'][$result['id']]['table_name'];
     $sql = "SELECT * FROM `" . $customGroupTable . "`";
     $sqlResult = CRM_Core_DAO::executeQuery($sql);
@@ -908,7 +908,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
         'is_active' => 0
       ]);
     }
-    
+
     return TRUE;
   }
 
