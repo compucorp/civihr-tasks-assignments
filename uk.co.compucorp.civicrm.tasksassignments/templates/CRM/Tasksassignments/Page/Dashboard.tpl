@@ -29,25 +29,25 @@
       <div class="{$prefix}container-main">
         <ul class="nav {$prefix}sidebar {$prefix}sidebar-main" ng-controller="NavMainController">
           <li ng-class="{literal}{ active: isActive('tasks')}{/literal}">
-            <a href="#/tasks">
+            <a ui-sref="tasks">
               <i class="fa fa-list"></i>
               <span class="{$prefix}sidebar-main-title">Tasks</span>
             </a>
           </li>
           <li ng-if="settings.tabEnabled.documents == '1'" ng-class="{literal}{ active: isActive('documents')}{/literal}">
-            <a href="#/documents">
+            <a ui-sref="documents">
               <i class="fa fa-files-o"></i>
               <span class="{$prefix}sidebar-main-title">Documents</span>
             </a>
           </li>
           <li ng-class="{literal}{ active: isActive('calendar')}{/literal}">
-            <a href="#/calendar">
+            <a ui-sref="calendar.mwl">
               <i class="fa fa-calendar"></i>
               <span class="{$prefix}sidebar-main-title">Calendar</span>
             </a>
           </li>
           <li ng-if="settings.tabEnabled.keyDates == '1'" ng-class="{literal}{ active: isActive('keyDates')}{/literal}">
-            <a href="#/key-dates">
+            <a ui-sref="keyDates">
               <i class="fa fa-birthday-cake"></i>
               <span class="{$prefix}sidebar-main-title">Key Dates</span>
             </a>

@@ -16,13 +16,6 @@ require.config({
     'tasks-assignments': srcPath,
     'tasks-assignments/vendor/angular-bootstrap-calendar': srcPath + '/vendor/angular/angular-bootstrap-calendar-tpls-custom',
     'tasks-assignments/vendor/angular-checklist-model': srcPath + '/vendor/angular/checklist-model',
-    'tasks-assignments/vendor/angular-router': srcPath + '/vendor/angular/angular-ui-router',
-    'tasks-assignments/vendor/angular-select': srcPath + '/vendor/angular/select',
-    'tasks-assignments/vendor/angular-xeditable': srcPath + '/vendor/angular/xeditable',
-    'tasks-assignments/vendor/angular-xeditable-civi': srcPath + '/vendor/angular/xeditable-civi',
-    'tasks-assignments/vendor/text-angular': srcPath + '/vendor/angular/textAngular.min',
-    'tasks-assignments/vendor/text-angular-rangy': srcPath + '/vendor/angular/textAngular-rangy.min',
-    'tasks-assignments/vendor/text-angular-sanitize': srcPath + '/vendor/angular/textAngular-sanitize.min',
     'mocks': mocksPath
   },
   shim: {
