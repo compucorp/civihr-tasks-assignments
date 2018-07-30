@@ -19,6 +19,15 @@ gulp.task('sass', function (done) {
   });
 });
 
+/**
+ * This is a custom build process, because requirejs cannot be used here
+ *
+ * RequireJS could not be used because when we declare the module from PHP,
+ * it excepts the module to be present synchronously.
+ * https://github.com/compucorp/civihr-tasks-assignments/blob/staging/uk.co.compucorp.civicrm.tasksassignments/tasksassignments.php#L307
+ *
+ * More Details can be found in this proof of concept https://github.com/compucorp/civihr-tasks-assignments/pull/337
+ */
 gulp.task('js-bundle:crm', function () {
   return gulp.src([
     'js/src/crm-tasks-workflows/modules/*.js',
