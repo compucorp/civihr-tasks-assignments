@@ -43,15 +43,6 @@
   },
   "devDependencies": {
     "civicrm-cv": "^0.1.2",
-    "gulp": "^3.9.1",
-    "gulp-clean": "^0.4.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.6.1",
-    "gulp-sass": "^3.2.1",
-    "gulp-sass-bulk-import": "^1.0.1",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.0",
     "husky": "^0.14.3",
     "jasmine-core": "^2.9.1",
     "karma": "^2.0.2",
@@ -70,5 +61,16 @@
     "stylelint-order": "^0.8.1",
     "stylelint-scss": "^2.5.0",
     "yargs": "^11.1.0"
+  },
+  "dependencies": {
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sass-bulk-import": "^1.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.1"
   }
 }

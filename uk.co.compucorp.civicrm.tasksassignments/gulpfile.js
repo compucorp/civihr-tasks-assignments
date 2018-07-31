@@ -57,19 +57,19 @@ gulp.task('js-bundle:requirejs:badge', function (done) {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('scss/**/*.scss', ['sass']);
+  gulp.watch('scss/**/*.scss', gulp.parallel('sass'));
   gulp.watch([
     'js/src/tasks-assignments.js',
     'js/src/tasks-assignments/**/*.js',
     'js/src/tasks-notification-badge.js',
     'js/src/tasks-notification-badge/**/*.js'
-  ], ['js-bundle:requirejs']).on('change', function (file) {
+  ], gulp.parallel('js-bundle:requirejs')).on('change', function (file) {
     try { test.for(file.path); } catch (ex) { test.all(); }
   });
   gulp.watch([
     'js/src/crm-tasks-workflows.js',
     'js/src/crm-tasks-workflows/**/*.js'
-  ], ['js-bundle:crm']).on('change', function (file) {
+  ], gulp.parallel('js-bundle:crm')).on('change', function (file) {
     try { test.for(file.path); } catch (ex) { test.all(); }
   });
   gulp.watch([
@@ -97,9 +97,9 @@ gulp.task('test', function (done) {
   test.all();
 });
 
-gulp.task('js-bundle:requirejs', ['js-bundle:requirejs:ta', 'js-bundle:requirejs:badge']);
-gulp.task('js-bundle', ['js-bundle:crm', 'js-bundle:requirejs']);
-gulp.task('default', ['js-bundle', 'sass', 'test', 'watch']);
+gulp.task('js-bundle:requirejs', gulp.parallel('js-bundle:requirejs:ta', 'js-bundle:requirejs:badge'));
+gulp.task('js-bundle', gulp.parallel('js-bundle:crm', 'js-bundle:requirejs'));
+gulp.task('default', gulp.parallel('js-bundle', 'sass', 'test', 'watch'));
 
 var test = (function () {
   /**
