@@ -99,7 +99,7 @@ gulp.task('test', function (done) {
 
 gulp.task('js-bundle:requirejs', gulp.parallel('js-bundle:requirejs:ta', 'js-bundle:requirejs:badge'));
 gulp.task('js-bundle', gulp.parallel('js-bundle:crm', 'js-bundle:requirejs'));
-gulp.task('default', gulp.parallel('js-bundle', 'sass', 'test', 'watch'));
+gulp.task('default', gulp.parallel('js-bundle', 'sass', 'test'));
 
 var test = (function () {
   /**
