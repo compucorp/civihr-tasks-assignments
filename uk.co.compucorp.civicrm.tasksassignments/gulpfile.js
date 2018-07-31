@@ -11,9 +11,13 @@ var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('sass', function (done) {
-  // The app style relies on compass's gems, so we need to rely on it
-  // for the time being
-  exec('compass compile', function (_, stdout, stderr) {
+  // The app style relies on compass's gems,
+  // so we need to rely on it for the time being
+  exec('compass compile', function (error, stdout) {
+    if (error) {
+      console.log(error);
+    }
+
     console.log(stdout);
     done();
   });
