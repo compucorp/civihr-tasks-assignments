@@ -93,13 +93,8 @@ gulp.task('watch', function () {
   });
 });
 
-gulp.task('test', function (done) {
-  test.all();
-});
-
 gulp.task('js-bundle:requirejs', gulp.parallel('js-bundle:requirejs:ta', 'js-bundle:requirejs:badge'));
 gulp.task('js-bundle', gulp.parallel('js-bundle:crm', 'js-bundle:requirejs'));
-gulp.task('default', gulp.parallel('js-bundle', 'sass', 'test'));
 
 var test = (function () {
   /**
@@ -126,9 +121,11 @@ var test = (function () {
     /**
      * Runs all the tests in sequence
      * @NOTE running tests in sequence improves output readability
+     *
+     * @return {Promise}
      */
     all: function () {
-      runServer('crm-tasks-workflows/karma.conf.js')
+      return runServer('crm-tasks-workflows/karma.conf.js')
         .then(function () {
           runServer('tasks-assignments/karma.conf.js');
         })
@@ -185,3 +182,6 @@ var test = (function () {
     }
   };
 })();
+
+gulp.task('test', test.all);
+gulp.task('default', gulp.parallel('js-bundle', 'sass', 'test'));
