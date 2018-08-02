@@ -62,39 +62,9 @@ gulp.task('js-bundle:requirejs:badge', function (done) {
 
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', gulp.parallel('sass'));
-  gulp.watch([
-    'js/src/tasks-assignments.js',
-    'js/src/tasks-assignments/**/*.js',
-    'js/src/tasks-notification-badge.js',
-    'js/src/tasks-notification-badge/**/*.js'
-  ], gulp.parallel('js-bundle:requirejs')).on('change', function (filePath) {
-    try { test.for(filePath); } catch (ex) { test.all(); }
-  });
-  gulp.watch([
-    'js/src/crm-tasks-workflows.js',
-    'js/src/crm-tasks-workflows/**/*.js'
-  ], gulp.parallel('js-bundle:crm')).on('change', function (filePath) {
-    try { test.for(filePath); } catch (ex) { test.all(); }
-  });
-  gulp.watch([
-    'js/test/crm-tasks-workflows/**/*.js',
-    '!js/test/crm-tasks-workflows/mocks/**/*.js'
-  ]).on('change', function (filePath) {
-    test.single('crm-tasks-workflows', filePath);
-  });
-  gulp.watch([
-    'js/test/tasks-assignments/**/*.js',
-    '!js/test/tasks-assignments/mocks/**/*.js',
-    '!js/test/tasks-assignments/test-main.js'
-  ]).on('change', function (filePath) {
-    test.single('tasks-assignments', filePath);
-  });
-  gulp.watch([
-    'js/test/tasks-notification-badge/**/*.js',
-    '!js/test/tasks-notification-badge/test-main.js'
-  ]).on('change', function (filePath) {
-    test.single('tasks-notification-badge', filePath);
-  });
+  watchModule('tasks-notification-badge', 'js-bundle:requirejs');
+  watchModule('tasks-assignments', 'js-bundle:requirejs');
+  watchModule('crm-tasks-workflows', 'js-bundle:crm');
 });
 
 gulp.task('js-bundle:requirejs', gulp.parallel('js-bundle:requirejs:ta', 'js-bundle:requirejs:badge'));
@@ -104,8 +74,8 @@ var test = (function () {
   /**
    * Runs the karma server which does a single run of the test/s
    *
-   * @param {string} configFile - The full path to the karma config file
-   * @param {Function} cb - The callback to call when the server closes
+   * @param  {String} configFile - The full path to the karma config file
+   * @param  {Function} cb - The callback to call when the server closes
    * @return {Promise}
    */
   function runServer (configFile, cb) {
@@ -145,9 +115,11 @@ var test = (function () {
      * of the source file in `src/tasks-assignments/`
      *   i.e. src/tasks-assignments/models/model.js -> test/models/model_test.js
      *
-     * @throw {Error}
+     * @param  {String} moduleName
+     * @param  {String} srcFile
+     * @throws {Error}
      */
-    for: function (srcFile) {
+    for: function (moduleName, srcFile) {
       var srcFileNoExt = path.basename(srcFile, path.extname(srcFile));
       var testFile = srcFile
         .replace('src/', 'test/')
@@ -156,7 +128,7 @@ var test = (function () {
       try {
         var stats = fs.statSync(testFile);
 
-        stats.isFile() && this.single(testFile);
+        stats.isFile() && this.single(moduleName, testFile);
       } catch (ex) {
         throw ex;
       }
@@ -168,13 +140,13 @@ var test = (function () {
      * It passes to the karma server a temporary config file
      * which is deleted once the test has been run
      *
-     * @param {string} module - The module name
-     * @param {string} testFile - The full path of a test file
+     * @param {String} moduleName - The module name
+     * @param {String} testFile - The full path of a test file
      */
-    single: function (module, testFile) {
+    single: function (moduleName, testFile) {
       var configFile = 'karma.' + path.basename(testFile, path.extname(testFile)) + '.conf.temp.js';
 
-      gulp.src(path.join(__dirname, '/js/test/', module, '/karma.conf.js'))
+      gulp.src(path.join(__dirname, '/js/test/', moduleName, '/karma.conf.js'))
         .pipe(replace('*.spec.js', path.basename(testFile)))
         .pipe(rename(configFile))
         .pipe(gulp.dest(path.join(__dirname, '/js/test')))
@@ -186,6 +158,39 @@ var test = (function () {
     }
   };
 })();
+
+/**
+ * Starts watching a module
+ * Watches source files and launches a correspondent spec file if it exists,
+ *   if not, launches all specs. Also builds distributive files.
+ * Watches spec files and launches them.
+ * Watches mock files and launches all specs.
+ *
+ * @param {String} moduleName
+ * @param {String} buildTaskName
+ */
+function watchModule (moduleName, buildTaskName) {
+  gulp.watch([
+    'js/src/' + moduleName + '.js',
+    'js/src/' + moduleName + '/**/*.js'
+  ], gulp.parallel(buildTaskName)).on('change', function (filePath) {
+    try {
+      test.for(moduleName, filePath);
+    } catch (ex) {
+      test.all();
+    }
+  });
+  gulp.watch([
+    'js/test/' + moduleName + '/**/*.spec.js'
+  ]).on('change', function (filePath) {
+    test.single(moduleName, filePath);
+  });
+  gulp.watch([
+    'js/test/' + moduleName + '/mocks/**/*.js'
+  ]).on('change', function (filePath) {
+    test.all();
+  });
+}
 
 gulp.task('test', test.all);
 gulp.task('default', gulp.parallel('js-bundle', 'sass', 'test'));
