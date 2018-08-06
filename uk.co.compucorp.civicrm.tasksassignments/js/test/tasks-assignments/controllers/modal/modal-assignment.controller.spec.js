@@ -389,11 +389,11 @@ define([
       });
 
       describe('when the default assignee type is determined by a relationship', function () {
-        var contact = { id: _.uniqueId() };
+        var contact = { id: _.uniqueId(), contact_id: _.uniqueId() };
         var assignee = { id: _.uniqueId() };
 
         beforeEach(function () {
-          scope.assignment.client_id = contact.id;
+          scope.assignment.client_id = contact.contact_id;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
           activity.default_assignee_relationship = _.uniqueId();
 
@@ -410,7 +410,11 @@ define([
       });
 
       describe('after selecting a default assignee', function () {
-        var contact = { id: _.uniqueId(), display_name: 'Jon Snow' };
+        var contact = {
+          contact_id: _.uniqueId(),
+          display_name: 'Jon Snow',
+          id: _.uniqueId()
+        };
 
         beforeEach(function () {
           activity.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
@@ -426,16 +430,16 @@ define([
           expect(contactService.get).toHaveBeenCalledWith({ IN: [ contact.id ] });
         });
 
-        it('caches the id and name of the task assignee', function () {
+        it('caches the contact id and name of the task assignee', function () {
           expect(scope.contacts.task[0]).toEqual([{
-            id: contact.id,
+            id: contact.contact_id,
             label: contact.display_name
           }]);
         });
 
-        it('caches the id and name of the document assignee', function () {
+        it('caches the contact id and name of the document assignee', function () {
           expect(scope.contacts.document[0]).toEqual([{
-            id: contact.id,
+            id: contact.contact_id,
             label: contact.display_name
           }]);
         });

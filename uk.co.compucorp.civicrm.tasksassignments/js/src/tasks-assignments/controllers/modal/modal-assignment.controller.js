@@ -431,7 +431,7 @@ define([
       return contactService.get({ IN: contactIds })
         .then(function (contacts) {
           var cachedContacts = _.map(contacts, function (contact) {
-            return { id: contact.id, label: contact.display_name };
+            return { id: contact.contact_id, label: contact.display_name };
           });
 
           vm.contacts.task = vm.taskList.map(function () { return cachedContacts; });
