@@ -194,10 +194,7 @@ define([
 
       beforeEach(function () {
         initController();
-
-        _.each(documentFabricator.documentStatus(), function (option) {
-          $rootScope.cache.documentStatus.obj[option.key] = option.value;
-        });
+        fabricateDocumentStatuses();
 
         _.each(documentFabricator.documentTypes(), function (option) {
           $rootScope.cache.documentType.obj[option.key] = option.value;
@@ -344,6 +341,74 @@ define([
       });
     });
 
+    describe('filter tabs', function () {
+      var allDocumentStatuses = _.pluck(documentFabricator.documentStatus(), 'key');
+      var onlyPendingDocumentStatuses = getDocumentStatusesIds(
+        ['awaiting upload', 'awaiting approval']);
+      var sampleDocumentStatuses = getDocumentStatusesIds(
+        ['awaiting upload', 'approved', 'rejected']);
+      var tabsShowingOnlyPendingDocuments = [
+        { title: 'Overdue', value: 'overdue' },
+        { title: 'Next fortnight', value: 'dueInNextFortnight' },
+        { title: '90 days', value: 'dueInNinetyDays' }
+      ];
+
+      beforeEach(function () {
+        initController();
+        fabricateDocumentStatuses();
+
+        controller.filterParamsHolder.documentStatus = sampleDocumentStatuses;
+      });
+
+      tabsShowingOnlyPendingDocuments.forEach(function (tab) {
+        describe('user selects "' + tab.title + '" filter tab', function () {
+          beforeEach(function () {
+            controller.filterParams.due = tab.value;
+
+            $rootScope.$digest();
+          });
+
+          it('sets the document statuses to filter by to only pending ones', function () {
+            expect(controller.filterParams.documentStatus)
+              .toEqual(onlyPendingDocumentStatuses);
+          });
+
+          it('allows to select only pending statuses for further filtering', function () {
+            expect(_.pluck(controller.filterParams.allowedStatuses, 'key'))
+              .toEqual(onlyPendingDocumentStatuses);
+          });
+
+          it('removes "Approved" and "Rejected" statuses from the filter selection', function () {
+            expect(controller.filterParamsHolder.documentStatus)
+              .toEqual(getDocumentStatusesIds(['awaiting upload']));
+          });
+        });
+      });
+
+      describe('user selects "All" filter tab', function () {
+        beforeEach(function () {
+          // @NOTE in this case the `due` propetry is an empty string, not "all"
+          controller.filterParams.due = '';
+
+          $rootScope.$digest();
+        });
+
+        it('flushes the document statuses so no filtering by status happens', function () {
+          expect(controller.filterParams.documentStatus).toEqual([]);
+        });
+
+        it('allows to select any statuses for further filtering', function () {
+          expect(_.pluck(controller.filterParams.allowedStatuses, 'key'))
+            .toEqual(allDocumentStatuses);
+        });
+
+        it('leaves selected statuses in the filter unamended', function () {
+          expect(controller.filterParamsHolder.documentStatus)
+            .toEqual(sampleDocumentStatuses);
+        });
+      });
+    });
+
     describe('document is saved', function () {
       var document, changedDoc;
 
@@ -382,7 +447,35 @@ define([
       });
     });
 
-    function initController (scopeValues) {
+    /**
+     * Fabricates document statuses and sets them to the root scope cache
+     */
+    function fabricateDocumentStatuses () {
+      _.each(documentFabricator.documentStatus(), function (option) {
+        $rootScope.cache.documentStatus.obj[option.key] = option.value;
+        $rootScope.cache.documentStatus.arr.push(option);
+      });
+    }
+
+    /**
+     * Gets document statuses IDs by their names
+     *
+     * @param  {Array} statusesNames
+     * @return {Array} statuses IDs
+     */
+    function getDocumentStatusesIds (statusesNames) {
+      var statuses = documentFabricator.documentStatus();
+
+      return statusesNames
+        .map(function (statusName) {
+          return _.find(statuses, { value: statusName }).key;
+        });
+    }
+
+    /**
+     * Initiates the controller
+     */
+    function initController () {
       controller = $controller('DocumentListController', {
         $scope: $scope,
         config: config,

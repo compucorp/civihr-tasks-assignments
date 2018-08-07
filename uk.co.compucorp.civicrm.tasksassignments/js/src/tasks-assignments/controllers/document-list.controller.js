@@ -20,7 +20,7 @@ define([
     $log.debug('Controller: DocumentListController');
 
     var vm = this;
-    var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
+    var onlyPendingStatuses = ['1', '2']; // 1: "awaiting upload", 2: "awaiting approval"
 
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
@@ -98,12 +98,13 @@ define([
       filterDates: {}
     };
     vm.dueFilters = [
-      { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
-      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
-      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' },
+      { badgeClass: 'danger', calendarView: 'month', value: 'overdue', statuses: onlyPendingStatuses },
+      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight', statuses: onlyPendingStatuses },
+      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays', statuses: onlyPendingStatuses },
       { badgeClass: 'primary', calendarView: 'month', value: 'all' }
     ];
     vm.filterParams = {
+      allowedStatuses: [],
       contactId: null,
       documentStatus: [],
       ownership: $state.params.ownership || null,
@@ -115,7 +116,7 @@ define([
       assignmentType: []
     };
     vm.filterParamsHolder = {
-      documentStatus: defaultDocumentStatus,
+      documentStatus: onlyPendingStatuses,
       dateRange: {
         from: null,
         until: null
@@ -331,6 +332,28 @@ define([
 
       $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
         vm.datepickerOptions.from.maxDate = newValue;
+      });
+
+      $scope.$watch(function () {
+        return vm.filterParams.due;
+      }, function (filterType) {
+        var allStatuses = $rootScope.cache.documentStatus.arr;
+        var allowOnlyPendingStatuses =
+          _.includes(['overdue', 'dueInNextFortnight', 'dueInNinetyDays'], filterType);
+
+        vm.filterParams.documentStatus = allowOnlyPendingStatuses
+          ? onlyPendingStatuses : [];
+
+        vm.filterParams.allowedStatuses = allowOnlyPendingStatuses
+          ? _.filter(allStatuses, function (status) {
+            return _.includes(onlyPendingStatuses, status.key);
+          })
+          : allStatuses;
+
+        if (allowOnlyPendingStatuses) {
+          vm.filterParamsHolder.documentStatus =
+            _.intersection(vm.filterParamsHolder.documentStatus, onlyPendingStatuses);
+        }
       });
     }
 
