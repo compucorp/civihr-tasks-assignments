@@ -3,13 +3,14 @@
 define([
   'common/lodash',
   'common/angular',
+  'common/moment',
   'mocks/data/assignment.data',
   'mocks/data/option-values.data',
   'mocks/fabricators/assignment.fabricator',
   'common/angularMocks',
   'common/models/relationship.model',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function (_, angular, assignmentMockData, optionValuesMockData, assignmentFabricator) {
+], function (_, angular, moment, assignmentMockData, optionValuesMockData, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
@@ -17,6 +18,10 @@ define([
       HRSettings, taskService, RelationshipModel, scope;
     var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
     var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
+    var sampleData = {
+      date: '2013-01-01',
+      contactName: 'Arya Stark'
+    };
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_,
@@ -93,7 +98,7 @@ define([
         expectedDocumentsParameters = getActivitiesToBeSentToAPI(scope.documentList);
         expectedTasksParameters = getActivitiesToBeSentToAPI(scope.taskList);
 
-        scope.confirm() && scope.$digest();
+        scope.confirm();
       });
 
       it('saves every document', function () {
@@ -108,11 +113,13 @@ define([
        * Returns a list of activities containing the fields required by their
        * respective services. It will only return activities marked for creation.
        *
-       * @param {Array} activities a list of activities that are missing their assignee and case ids.
+       * @param {Array} activities a list of activities missing their assignee and case IDs.
+       *
        * @return {Array}
        */
       function getActivitiesToBeSentToAPI (activities) {
-        return _.chain(activities).cloneDeep()
+        return _.chain(activities)
+          .cloneDeep()
           .filter(function (activity) {
             return activity.create;
           })
@@ -138,7 +145,7 @@ define([
         scope.taskList.forEach(function (task) {
           _.assign(task, {
             assignee_contact_id: [ expectedContactId ],
-            activity_date_time: '2013-01-01'
+            activity_date_time: sampleData.date
           });
         });
       }
@@ -195,12 +202,12 @@ define([
     });
 
     describe('copyDate()', function () {
-      var activityDate = '2015-05-05';
+      var expectedActivityDate = moment(sampleData.date).add(2, 'year').format('YYYY-MM-DD');
 
       beforeEach(function () {
-        _.assign(scope.taskList[0], { create: false, activity_date_time: '2013-01-01' });
-        _.assign(scope.taskList[1], { create: false, activity_date_time: '2014-01-01' });
-        _.assign(scope.taskList[2], { create: true, activity_date_time: activityDate });
+        _.assign(scope.taskList[0], { create: false, activity_date_time: sampleData.date });
+        _.assign(scope.taskList[1], { create: false, activity_date_time: sampleData.date });
+        _.assign(scope.taskList[2], { create: true, activity_date_time: expectedActivityDate });
         _.assign(scope.taskList[4], { create: false });
 
         scope.copyDate(scope.taskList);
@@ -210,7 +217,7 @@ define([
         scope.taskList.filter(function (item) {
           return item.create;
         }).forEach(function (item) {
-          expect(item.activity_date_time).toEqual(activityDate);
+          expect(item.activity_date_time).toEqual(expectedActivityDate);
         });
       });
 
@@ -218,7 +225,7 @@ define([
         scope.taskList.filter(function (item) {
           return !item.create;
         }).forEach(function (item) {
-          expect(item.activity_date_time).not.toEqual(activityDate);
+          expect(item.activity_date_time).not.toEqual(expectedActivityDate);
         });
       });
     });
@@ -437,7 +444,7 @@ define([
       describe('after selecting a default assignee', function () {
         var contact = {
           contact_id: _.uniqueId(),
-          display_name: 'Jon Snow',
+          display_name: sampleData.contactName,
           id: _.uniqueId()
         };
 
