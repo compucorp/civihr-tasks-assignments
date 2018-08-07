@@ -126,14 +126,18 @@ define([
         var documentListAssignment = vm.documentList.filter(function (doc) {
           return doc.create;
         }).map(function (doc) {
+          doc.assignee_id = _.first(doc.assignee_contact_id);
           doc.case_id = resultAssignment.id;
+
           return doc;
         });
 
         var taskListAssignment = vm.taskList.filter(function (task) {
           return task.create;
         }).map(function (task) {
+          task.assignee_id = _.first(task.assignee_contact_id);
           task.case_id = resultAssignment.id;
+
           return task;
         });
 

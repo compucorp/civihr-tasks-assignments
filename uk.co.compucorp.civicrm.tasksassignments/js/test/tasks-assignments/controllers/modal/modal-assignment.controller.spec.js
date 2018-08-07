@@ -71,6 +71,10 @@ define([
     });
 
     describe('confirm()', function () {
+      var expectedDocumentsParameters, expectedTasksParameters;
+      var expectedCaseId = _.uniqueId();
+      var expectedContactId = _.uniqueId();
+
       beforeEach(function () {
         spyOn($q, 'all').and.returnValue({ then: _.noop });
         spyOn(taskService, 'saveMultiple');
@@ -78,30 +82,48 @@ define([
         spyOn(assignmentService, 'save').and.returnValue({
           then: function (callback) {
             // fakes the db permanence, attaching an id to the assignment on the scope
-            callback(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
+            callback(_.assign(_.clone(scope.assignment), { id: expectedCaseId }));
           }
         });
       });
+
       beforeEach(function () {
         prepAssignment();
+
+        expectedDocumentsParameters = getActivitiesToBeSentToAPI(scope.documentList);
+        expectedTasksParameters = getActivitiesToBeSentToAPI(scope.taskList);
+
         scope.confirm() && scope.$digest();
       });
 
-      it('does not pass the original documents objects to the documentService', function () {
-        var documents = documentService.saveMultiple.calls.mostRecent().args[0];
-
-        expect(documents.every(function (doc, index) {
-          return doc !== scope.taskList[index];
-        })).toBe(true);
+      it('saves every document', function () {
+        expect(documentService.saveMultiple).toHaveBeenCalledWith(expectedDocumentsParameters);
       });
 
-      it('does not pass the original tasks objects to the taskService', function () {
-        var tasks = taskService.saveMultiple.calls.mostRecent().args[0];
-
-        expect(tasks.every(function (task, index) {
-          return task !== scope.taskList[index];
-        })).toBe(true);
+      it('saves every task', function () {
+        expect(taskService.saveMultiple).toHaveBeenCalledWith(expectedTasksParameters);
       });
+
+      /**
+       * Returns a list of activities containing the fields required by their
+       * respective services. It will only return activities marked for creation.
+       *
+       * @param {Array} activities a list of activities that are missing their assignee and case ids.
+       * @return {Array}
+       */
+      function getActivitiesToBeSentToAPI (activities) {
+        return _.chain(activities).cloneDeep()
+          .filter(function (activity) {
+            return activity.create;
+          })
+          .map(function (activity) {
+            activity.assignee_id = _.first(activity.assignee_contact_id);
+            activity.case_id = expectedCaseId;
+
+            return activity;
+          })
+          .value();
+      }
 
       /**
        * Prepares the assignment data to pass the confirm() validation
@@ -114,7 +136,10 @@ define([
         });
 
         scope.taskList.forEach(function (task) {
-          _.assign(task, { activity_date_time: '2013-01-01', assignee_contact_id: [3] });
+          _.assign(task, {
+            assignee_contact_id: [ expectedContactId ],
+            activity_date_time: '2013-01-01'
+          });
         });
       }
     });
