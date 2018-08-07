@@ -341,6 +341,39 @@ define([
       });
     });
 
+    describe('date range filter', function () {
+      var sampleDate1 = '14/04/1989';
+      var sampleDate2 = '17/08/1989';
+
+      beforeEach(function () {
+        initController();
+      });
+
+      describe('when the "from" date is changed', function () {
+        beforeEach(function () {
+          controller.filterParamsHolder.dateRange.from = sampleDate1;
+
+          $rootScope.$digest();
+        });
+
+        it('sets the minimum "to" date', function () {
+          expect(controller.datepickerOptions.until.minDate).toBe(sampleDate1);
+        });
+      });
+
+      describe('when the "to" date is changed', function () {
+        beforeEach(function () {
+          controller.filterParamsHolder.dateRange.until = sampleDate2;
+
+          $rootScope.$digest();
+        });
+
+        it('sets the maximum "from" date', function () {
+          expect(controller.datepickerOptions.from.maxDate).toBe(sampleDate2);
+        });
+      });
+    });
+
     describe('filter tabs', function () {
       var allDocumentStatuses = _.pluck(documentFabricator.documentStatus(), 'key');
       var onlyPendingDocumentStatuses = getDocumentStatusesIds(

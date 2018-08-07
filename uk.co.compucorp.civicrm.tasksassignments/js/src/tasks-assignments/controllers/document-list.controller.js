@@ -326,11 +326,15 @@ define([
       // Whenever the date filters will change, their corrispondent
       // datepickers will have the minDate or maxDate setting updated
       // accordingly
-      $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
+      $scope.$watch(function () {
+        return vm.filterParamsHolder.dateRange.from;
+      }, function (newValue) {
         vm.datepickerOptions.until.minDate = newValue;
       });
 
-      $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
+      $scope.$watch(function () {
+        return vm.filterParamsHolder.dateRange.until;
+      }, function (newValue) {
         vm.datepickerOptions.from.maxDate = newValue;
       });
 
