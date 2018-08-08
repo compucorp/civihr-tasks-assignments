@@ -218,18 +218,28 @@
 #civitasks td,
 #cividocuments td {
   background: initial;
+  border: initial;
   margin: initial;
   padding: initial;
-  border: initial;
   vertical-align: initial;
+}
+#civitasks h3, #cividocuments h3 {
+  border: 0;
+  border: initial;
+  border-radius: 0;
+  border-radius: initial;
+  box-shadow: none;
+  box-shadow: initial;
 }
 #civitasks ol, #cividocuments ol,
 #civitasks ul,
 #cividocuments ul {
-  padding-start: 40px;
+  list-style: initial;
+  /* stylelint-disable property-no-vendor-prefix, property-no-unknown */
   -moz-padding-start: 40px;
   -webkit-padding-start: 40px;
-  list-style: initial;
+  padding-start: 40px;
+  /* stylelint-enable */
 }
 #civitasks ol, #cividocuments ol {
   list-style: decimal;
@@ -239,13 +249,13 @@
 #cividocuments q {
   quotes: initial;
 }
-#civitasks blockquote:before, #cividocuments blockquote:before,
-#civitasks blockquote:after,
-#cividocuments blockquote:after,
-#civitasks q:before,
-#cividocuments q:before,
-#civitasks q:after,
-#cividocuments q:after {
+#civitasks blockquote::before, #cividocuments blockquote::before,
+#civitasks blockquote::after,
+#cividocuments blockquote::after,
+#civitasks q::before,
+#cividocuments q::before,
+#civitasks q::after,
+#cividocuments q::after {
   content: initial;
 }
 #civitasks ins, #cividocuments ins {
@@ -258,7 +268,9 @@
   border-collapse: initial;
   border-spacing: initial;
 }
-#civitasks table td, #cividocuments table td, #civitasks table th, #cividocuments table th {
+#civitasks table td, #cividocuments table td,
+#civitasks table th,
+#cividocuments table th {
   color: inherit;
   font-size: inherit;
 }
