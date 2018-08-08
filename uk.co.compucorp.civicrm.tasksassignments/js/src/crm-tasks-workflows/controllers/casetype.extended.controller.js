@@ -22,6 +22,7 @@
 
       parentMethods.addActivity = $scope.addActivity;
       $scope.addActivity = addActivity;
+      $scope.defaultRelationshipTypeOptions = getDefaultRelationshipTypeOptions();
       isNewCaseType = !$scope.caseType.id;
 
       if (isNewCaseType) {
@@ -51,6 +52,48 @@
      */
     function clearAllActivityTypesFromMainActivitySet () {
       $scope.caseType.definition.activitySets[0].activityTypes = [];
+    }
+
+    /**
+     * Returns the default relationship type options. If the relationship is
+     * bidirectional (Ex: Spouse of) it adds a single option otherwise it adds
+     * two options representing the relationship type directions
+     * (Ex: Employee of, Employer is)
+     *
+     * @return {Array}
+     */
+    function getDefaultRelationshipTypeOptions () {
+      var activeRelationshipTypes = getActiveRelationshipTypes();
+      var defaultRelationshipTypeOptions = [];
+
+      activeRelationshipTypes.forEach(function (relationshipType) {
+        var isBidirectionalRelationship = relationshipType.label_a_b === relationshipType.label_b_a;
+
+        defaultRelationshipTypeOptions.push({
+          label: relationshipType.label_b_a,
+          value: relationshipType.id + '_b_a'
+        });
+
+        if (!isBidirectionalRelationship) {
+          defaultRelationshipTypeOptions.push({
+            label: relationshipType.label_a_b,
+            value: relationshipType.id + '_a_b'
+          });
+        }
+      });
+
+      return defaultRelationshipTypeOptions;
+    }
+
+    /**
+     * Returns a list of active relationship types.
+     *
+     * @return {Array}
+     */
+    function getActiveRelationshipTypes () {
+      return apiCalls.relTypes.values.filter(function (relationshipType) {
+        return relationshipType.is_active === '1';
+      });
     }
 
     /**
