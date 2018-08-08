@@ -70,18 +70,20 @@ tr,
 th,
 td {
   background: initial;
+  border: initial;
   margin: initial;
   padding: initial;
-  border: initial;
   vertical-align: initial;
 }
 
 ol,
 ul {
-  padding-start: 40px;
+  list-style: initial;
+  /* stylelint-disable property-no-vendor-prefix, property-no-unknown */
   -moz-padding-start: 40px;
   -webkit-padding-start: 40px;
-  list-style: initial;
+  padding-start: 40px;
+  /* stylelint-enable */
 }
 
 ol {
@@ -92,10 +94,11 @@ blockquote,
 q {
   quotes: initial;
 }
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
+
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
   content: initial;
 }
 
@@ -103,6 +106,7 @@ q:after {
 ins {
   text-decoration: initial;
 }
+
 del {
   text-decoration: initial;
 }
@@ -112,9 +116,10 @@ table {
   border-collapse: initial;
   border-spacing: initial;
 
-  td, th {
-      color: inherit;
-      font-size: inherit;
+  td,
+  th {
+    color: inherit;
+    font-size: inherit;
   }
 
 }
@@ -130,6 +135,7 @@ select,
 textarea {
   font-family: initial;
 }
+
 textarea {
   font-size: initial;
   line-height: initial;
