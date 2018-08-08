@@ -167,10 +167,10 @@ define([
     })();
 
     /**
-     * Apply action to delete the given list of documents
+     * Applies an action to delete the given list of documents
      *
-     * @param {string} action
-     * @param {array} documentList
+     * @param {String} action
+     * @param {Array} documentList
      */
     function apply (action, documentList) {
       var documentListLen = documentList.length;
@@ -216,7 +216,7 @@ define([
     }
 
     /**
-     * Applies the filters on the sidebar
+     * Applies the sidebar filters selection
      */
     function applySidebarFilters () {
       vm.filterParams.dateRange.from = vm.filterParamsHolder.dateRange.from;
@@ -228,10 +228,10 @@ define([
     }
 
     /**
-     * Updates the given document with new document's statusId
+     * Updates the given document with new document's status ID
      *
-     * @param {object} document
-     * @param {string} statusId
+     * @param {Object} document
+     * @param {String} statusId
      */
     function changeStatus (document, statusId) {
       if (!statusId || typeof +statusId !== 'number') {
@@ -275,8 +275,9 @@ define([
 
     /**
      * Filters the documents list based on filter type and due date
-     * @param {string} type filter type
-     * @return {array} documents list
+     *
+     * @param  {String} type filter type
+     * @return {Array} documents list
      */
     function filterByDateField (type) {
       var listByDueDate = $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
@@ -349,24 +350,83 @@ define([
       });
     }
 
-    // Subscribers for event listeners
+    /**
+     * Subscribes to event listeners
+     */
     function initListeners () {
-      // Updates document with given list of documents
+      listenToAssignmentFormSuccess();
+      listenToDocumentFormSuccess();
+      listenToCRMFormSuccess();
+    }
+
+    /**
+     * Initiates all watchers
+     */
+    function initWatchers () {
+      initDateRangeWatchers();
+      initDueStateWatcher();
+    }
+
+    /**
+     * Creates the date range label using from and until dates in
+     * format 'dd/MM/yyyy'
+     *
+     * @param {String} from
+     * @param {String} until
+     */
+    function labelDateRange () {
+      var filterDateTimeFrom = $filter('date')(vm.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
+      var filterDateTimeUntil = $filter('date')(vm.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
+
+      if (filterDateTimeUntil) {
+        filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
+      }
+
+      if (filterDateTimeFrom) {
+        filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
+      }
+
+      vm.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
+    }
+
+    /**
+     * Creates a collection of assignees names
+     *
+     * @param  {Array} assigneesIds
+     * @return {Object}
+     */
+    function listAssignees (assigneesIds) {
+      var assigneeList = {};
+
+      if (assigneesIds.length) {
+        _.each(assigneesIds, function (assigneeId) {
+          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+          if (assignee) {
+            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+          }
+        });
+      }
+
+      return assigneeList;
+    }
+
+    /**
+     * Listens to assignment form success and
+     * updates document with given list of documents.
+     */
+    function listenToAssignmentFormSuccess () {
       $scope.$on('assignmentFormSuccess', function (e, output) {
         Array.prototype.push.apply(vm.list, output.documentList);
       });
+    }
 
-      // Adds new document in list or updates the existing document
-      $scope.$on('documentFormSuccess', function (e, newData, existingData) {
-        if (angular.equals({}, existingData)) {
-          vm.list.push(newData);
-        } else {
-          angular.extend(existingData, newData);
-        }
-      });
-
-      // For data with success status, if the pattern of messages matchses
-      // assignment cache is cleared and the current state is reloaded.
+    /**
+     * Listens to CRM form successful submission.
+     * For data with success status, if the pattern of messages matches,
+     * the assignment cache is cleared and the current state is reloaded.
+     */
+    function listenToCRMFormSuccess () {
       $scope.$on('crmFormSuccess', function (e, data) {
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
@@ -386,70 +446,35 @@ define([
       });
     }
 
-    // Execute watchers for the changes
-    function initWatchers () {
-      initDateRangeWatchers();
-      initDueStateWatcher();
-    }
-
     /**
-     * Creates the date range label using from and until dates in
-     * format 'dd/MM/yyyy'
-     *
-     * @param {string} from
-     * @param {string} until
+     * Listens to document form success and
+     * adds a new document in the list or updates the existing document
      */
-    function labelDateRange () {
-      var filterDateTimeFrom = $filter('date')(vm.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
-      var filterDateTimeUntil = $filter('date')(vm.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
-
-      if (filterDateTimeUntil) {
-        filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
-      }
-
-      if (filterDateTimeFrom) {
-        filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
-      }
-
-      vm.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
+    function listenToDocumentFormSuccess () {
+      $scope.$on('documentFormSuccess', function (e, newData, existingData) {
+        if (angular.equals({}, existingData)) {
+          vm.list.push(newData);
+        } else {
+          angular.extend(existingData, newData);
+        }
+      });
     }
 
     /**
-     * Creates the list of contact name as  object
-     * @param  {array} assigneesIds
-     * @return {object}
-     */
-    function listAssignees (assigneesIds) {
-      var assigneeList = {};
-
-      if (assigneesIds.length) {
-        _.each(assigneesIds, function (assigneeId) {
-          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
-
-          if (assignee) {
-            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
-          }
-        });
-      }
-
-      return assigneeList;
-    }
-
-    /**
-     * Check the CRM message title to match the given pattern
+     * Checks the CRM message title to match the given pattern
      *
-     * @param  {string} pattern
-     * @param  {object} data
-     * @return {boolean}
+     * @param  {String} pattern
+     * @param  {Object} data
+     * @return {Boolean}
      */
     function matchMessageTitle (pattern, data) {
       return (data.crmMessages && data.crmMessages.length) && pattern.test(data.crmMessages[0].title);
     }
 
     /**
-     * Sort the document list based on the property type
-     * @param  {string} propertyName
-     * @return {array}
+     * Sorts the document list based on the property name
+     *
+     * @param  {String} propertyName
      */
     function sortBy (propertyName) {
       vm.reverse = (vm.propertyName === propertyName) ? !vm.reverse : false;
@@ -490,9 +515,9 @@ define([
     }
 
     /**
-     * Navigates to calander view
+     * Navigates to the calander view
      *
-     * @param {string} view
+     * @param {String} view
      */
     function viewInCalendar (view) {
       $state.go('calendar.mwl.' + view);
