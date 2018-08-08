@@ -38,6 +38,7 @@ define([
 
         return $q.resolve(mockDocument);
       });
+      fabricateDocumentStatuses();
     });
 
     describe('init()', function () {
@@ -194,7 +195,6 @@ define([
 
       beforeEach(function () {
         initController();
-        fabricateDocumentStatuses();
 
         _.each(documentFabricator.documentTypes(), function (option) {
           $rootScope.cache.documentType.obj[option.key] = option.value;
@@ -342,8 +342,10 @@ define([
     });
 
     describe('date range filter', function () {
-      var sampleDate1 = '14/04/1989';
-      var sampleDate2 = '17/08/1989';
+      var sampleDates = {
+        from: '14/04/1989',
+        until: '17/08/1989'
+      };
 
       beforeEach(function () {
         initController();
@@ -351,25 +353,25 @@ define([
 
       describe('when the "from" date is changed', function () {
         beforeEach(function () {
-          controller.filterParamsHolder.dateRange.from = sampleDate1;
+          controller.filterParamsHolder.dateRange.from = sampleDates.from;
 
           $rootScope.$digest();
         });
 
         it('sets the minimum "to" date', function () {
-          expect(controller.datepickerOptions.until.minDate).toBe(sampleDate1);
+          expect(controller.datepickerOptions.until.minDate).toBe(sampleDates.from);
         });
       });
 
       describe('when the "to" date is changed', function () {
         beforeEach(function () {
-          controller.filterParamsHolder.dateRange.until = sampleDate2;
+          controller.filterParamsHolder.dateRange.until = sampleDates.until;
 
           $rootScope.$digest();
         });
 
         it('sets the maximum "from" date', function () {
-          expect(controller.datepickerOptions.from.maxDate).toBe(sampleDate2);
+          expect(controller.datepickerOptions.from.maxDate).toBe(sampleDates.until);
         });
       });
     });
@@ -388,13 +390,12 @@ define([
 
       beforeEach(function () {
         initController();
-        fabricateDocumentStatuses();
 
         controller.filterParamsHolder.documentStatus = sampleDocumentStatuses;
       });
 
       tabsShowingOnlyPendingDocuments.forEach(function (tab) {
-        describe('user selects "' + tab.title + '" filter tab', function () {
+        describe('when the user selects "' + tab.title + '" filter tab', function () {
           beforeEach(function () {
             controller.filterParams.due = tab.value;
 
@@ -418,7 +419,7 @@ define([
         });
       });
 
-      describe('user selects "All" filter tab', function () {
+      describe('when the user selects "All" filter tab', function () {
         beforeEach(function () {
           // @NOTE in this case the `due` propetry is an empty string, not "all"
           controller.filterParams.due = '';

@@ -20,7 +20,8 @@ define([
     $log.debug('Controller: DocumentListController');
 
     var vm = this;
-    var onlyPendingStatuses = ['1', '2']; // 1: "awaiting upload", 2: "awaiting approval"
+    var onlyPendingStatuses = getDocumentStatusesIds(
+      ['awaiting upload', 'awaiting approval']);
 
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
@@ -284,6 +285,70 @@ define([
       return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
     }
 
+    /**
+     * Gets document statuses IDs by their names
+     *
+     * @param  {Array} statusesNames
+     * @return {Array} statuses IDs
+     */
+    function getDocumentStatusesIds (statusesNames) {
+      var statuses = $rootScope.cache.documentStatus.arr;
+
+      return statusesNames
+        .map(function (statusName) {
+          return _.find(statuses, { value: statusName }).key;
+        });
+    }
+
+    /**
+     * Initiates watchers on date range values.
+     * It sets the minimum "to" date when "from" date is selected and
+     * sets the maximum "from" date when "to" date is selected.
+     */
+    function initDateRangeWatchers () {
+      $scope.$watch(function () {
+        return vm.filterParamsHolder.dateRange.from;
+      }, function (newValue) {
+        vm.datepickerOptions.until.minDate = newValue;
+      });
+
+      $scope.$watch(function () {
+        return vm.filterParamsHolder.dateRange.until;
+      }, function (newValue) {
+        vm.datepickerOptions.from.maxDate = newValue;
+      });
+    }
+
+    /**
+     * Initiates a watcher on the due filtering state.
+     * If "Overdue", "Next Fortnight" or "90 Days" state is selected,
+     * it ensures no "Approved" or "Rejected" statuses appear in
+     * neither documents lists, nor counters or allowed filter options.
+     */
+    function initDueStateWatcher () {
+      $scope.$watch(function () {
+        return vm.filterParams.due;
+      }, function (filterType) {
+        var allStatuses = $rootScope.cache.documentStatus.arr;
+        var allowOnlyPendingStatuses =
+          _.includes(['overdue', 'dueInNextFortnight', 'dueInNinetyDays'], filterType);
+
+        vm.filterParams.documentStatus = allowOnlyPendingStatuses
+          ? onlyPendingStatuses : [];
+
+        vm.filterParams.allowedStatuses = allowOnlyPendingStatuses
+          ? _.filter(allStatuses, function (status) {
+            return _.includes(onlyPendingStatuses, status.key);
+          })
+          : allStatuses;
+
+        if (allowOnlyPendingStatuses) {
+          vm.filterParamsHolder.documentStatus =
+            _.intersection(vm.filterParamsHolder.documentStatus, onlyPendingStatuses);
+        }
+      });
+    }
+
     // Subscribers for event listeners
     function initListeners () {
       // Updates document with given list of documents
@@ -323,42 +388,8 @@ define([
 
     // Execute watchers for the changes
     function initWatchers () {
-      // Whenever the date filters will change, their corrispondent
-      // datepickers will have the minDate or maxDate setting updated
-      // accordingly
-      $scope.$watch(function () {
-        return vm.filterParamsHolder.dateRange.from;
-      }, function (newValue) {
-        vm.datepickerOptions.until.minDate = newValue;
-      });
-
-      $scope.$watch(function () {
-        return vm.filterParamsHolder.dateRange.until;
-      }, function (newValue) {
-        vm.datepickerOptions.from.maxDate = newValue;
-      });
-
-      $scope.$watch(function () {
-        return vm.filterParams.due;
-      }, function (filterType) {
-        var allStatuses = $rootScope.cache.documentStatus.arr;
-        var allowOnlyPendingStatuses =
-          _.includes(['overdue', 'dueInNextFortnight', 'dueInNinetyDays'], filterType);
-
-        vm.filterParams.documentStatus = allowOnlyPendingStatuses
-          ? onlyPendingStatuses : [];
-
-        vm.filterParams.allowedStatuses = allowOnlyPendingStatuses
-          ? _.filter(allStatuses, function (status) {
-            return _.includes(onlyPendingStatuses, status.key);
-          })
-          : allStatuses;
-
-        if (allowOnlyPendingStatuses) {
-          vm.filterParamsHolder.documentStatus =
-            _.intersection(vm.filterParamsHolder.documentStatus, onlyPendingStatuses);
-        }
-      });
+      initDateRangeWatchers();
+      initDueStateWatcher();
     }
 
     /**
