@@ -107,7 +107,7 @@ pipeline {
             sh """
               cd $EXTENSION_ROOT
               yarn || true
-              gulp test --reporters junit,progress || true
+              npx gulp test --reporters junit,progress || true
               ls -l
               mv test-reports/karma.xml $TEST_REPORTS/
             """
