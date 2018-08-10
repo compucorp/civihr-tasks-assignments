@@ -3,13 +3,14 @@
 define([
   'common/lodash',
   'common/angular',
+  'common/moment',
   'mocks/data/assignment.data',
   'mocks/data/option-values.data',
   'mocks/fabricators/assignment.fabricator',
   'common/angularMocks',
   'common/models/relationship.model',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
-], function (_, angular, assignmentMockData, optionValuesMockData, assignmentFabricator) {
+], function (_, angular, moment, assignmentMockData, optionValuesMockData, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
@@ -17,6 +18,10 @@ define([
       HRSettings, taskService, RelationshipModel, scope;
     var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
     var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
+    var sampleData = {
+      date: '2013-01-01',
+      contactName: 'Arya Stark'
+    };
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_,
@@ -71,6 +76,10 @@ define([
     });
 
     describe('confirm()', function () {
+      var expectedDocumentsParameters, expectedTasksParameters;
+      var expectedCaseId = _.uniqueId();
+      var expectedContactId = _.uniqueId();
+
       beforeEach(function () {
         spyOn($q, 'all').and.returnValue({ then: _.noop });
         spyOn(taskService, 'saveMultiple');
@@ -78,30 +87,50 @@ define([
         spyOn(assignmentService, 'save').and.returnValue({
           then: function (callback) {
             // fakes the db permanence, attaching an id to the assignment on the scope
-            callback(_.assign(_.clone(scope.assignment), { id: _.uniqueId() }));
+            callback(_.assign(_.clone(scope.assignment), { id: expectedCaseId }));
           }
         });
       });
+
       beforeEach(function () {
         prepAssignment();
-        scope.confirm() && scope.$digest();
+
+        expectedDocumentsParameters = getActivitiesToBeSentToAPI(scope.documentList);
+        expectedTasksParameters = getActivitiesToBeSentToAPI(scope.taskList);
+
+        scope.confirm();
       });
 
-      it('does not pass the original documents objects to the documentService', function () {
-        var documents = documentService.saveMultiple.calls.mostRecent().args[0];
-
-        expect(documents.every(function (doc, index) {
-          return doc !== scope.taskList[index];
-        })).toBe(true);
+      it('saves every document', function () {
+        expect(documentService.saveMultiple).toHaveBeenCalledWith(expectedDocumentsParameters);
       });
 
-      it('does not pass the original tasks objects to the taskService', function () {
-        var tasks = taskService.saveMultiple.calls.mostRecent().args[0];
-
-        expect(tasks.every(function (task, index) {
-          return task !== scope.taskList[index];
-        })).toBe(true);
+      it('saves every task', function () {
+        expect(taskService.saveMultiple).toHaveBeenCalledWith(expectedTasksParameters);
       });
+
+      /**
+       * Returns a list of activities containing the fields required by their
+       * respective services. It will only return activities marked for creation.
+       *
+       * @param {Array} activities a list of activities missing their assignee and case IDs.
+       *
+       * @return {Array}
+       */
+      function getActivitiesToBeSentToAPI (activities) {
+        return _.chain(activities)
+          .cloneDeep()
+          .filter(function (activity) {
+            return activity.create;
+          })
+          .map(function (activity) {
+            activity.assignee_id = _.first(activity.assignee_contact_id);
+            activity.case_id = expectedCaseId;
+
+            return activity;
+          })
+          .value();
+      }
 
       /**
        * Prepares the assignment data to pass the confirm() validation
@@ -114,7 +143,10 @@ define([
         });
 
         scope.taskList.forEach(function (task) {
-          _.assign(task, { activity_date_time: '2013-01-01', assignee_contact_id: [3] });
+          _.assign(task, {
+            assignee_contact_id: [ expectedContactId ],
+            activity_date_time: sampleData.date
+          });
         });
       }
     });
@@ -170,12 +202,12 @@ define([
     });
 
     describe('copyDate()', function () {
-      var activityDate = '2015-05-05';
+      var expectedActivityDate = moment(sampleData.date).add(2, 'year').format('YYYY-MM-DD');
 
       beforeEach(function () {
-        _.assign(scope.taskList[0], { create: false, activity_date_time: '2013-01-01' });
-        _.assign(scope.taskList[1], { create: false, activity_date_time: '2014-01-01' });
-        _.assign(scope.taskList[2], { create: true, activity_date_time: activityDate });
+        _.assign(scope.taskList[0], { create: false, activity_date_time: sampleData.date });
+        _.assign(scope.taskList[1], { create: false, activity_date_time: sampleData.date });
+        _.assign(scope.taskList[2], { create: true, activity_date_time: expectedActivityDate });
         _.assign(scope.taskList[4], { create: false });
 
         scope.copyDate(scope.taskList);
@@ -185,7 +217,7 @@ define([
         scope.taskList.filter(function (item) {
           return item.create;
         }).forEach(function (item) {
-          expect(item.activity_date_time).toEqual(activityDate);
+          expect(item.activity_date_time).toEqual(expectedActivityDate);
         });
       });
 
@@ -193,7 +225,7 @@ define([
         scope.taskList.filter(function (item) {
           return !item.create;
         }).forEach(function (item) {
-          expect(item.activity_date_time).not.toEqual(activityDate);
+          expect(item.activity_date_time).not.toEqual(expectedActivityDate);
         });
       });
     });
@@ -389,11 +421,11 @@ define([
       });
 
       describe('when the default assignee type is determined by a relationship', function () {
-        var contact = { id: _.uniqueId() };
+        var contact = { id: _.uniqueId(), contact_id: _.uniqueId() };
         var assignee = { id: _.uniqueId() };
 
         beforeEach(function () {
-          scope.assignment.client_id = contact.id;
+          scope.assignment.client_id = contact.contact_id;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
           activity.default_assignee_relationship = _.uniqueId();
 
@@ -410,7 +442,11 @@ define([
       });
 
       describe('after selecting a default assignee', function () {
-        var contact = { id: _.uniqueId(), display_name: 'Jon Snow' };
+        var contact = {
+          contact_id: _.uniqueId(),
+          display_name: sampleData.contactName,
+          id: _.uniqueId()
+        };
 
         beforeEach(function () {
           activity.default_assignee_type = defaultAssigneeOptionsIndex.SPECIFIC_CONTACT.value;
@@ -426,16 +462,16 @@ define([
           expect(contactService.get).toHaveBeenCalledWith({ IN: [ contact.id ] });
         });
 
-        it('caches the id and name of the task assignee', function () {
+        it('caches the contact id and name of the task assignee', function () {
           expect(scope.contacts.task[0]).toEqual([{
-            id: contact.id,
+            id: contact.contact_id,
             label: contact.display_name
           }]);
         });
 
-        it('caches the id and name of the document assignee', function () {
+        it('caches the contact id and name of the document assignee', function () {
           expect(scope.contacts.document[0]).toEqual([{
-            id: contact.id,
+            id: contact.contact_id,
             label: contact.display_name
           }]);
         });
