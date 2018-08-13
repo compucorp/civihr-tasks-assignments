@@ -43,7 +43,73 @@
       });
 
       it('initialises the parent controller with activity types having component labels', function () {
-        expect(parentControllerSpy).toHaveBeenCalledWith(expectedApiCalls);
+        expect(parentControllerSpy).toHaveBeenCalledWith(jasmine.objectContaining(expectedApiCalls));
+      });
+
+      describe('default relationship options', function () {
+        var expectedRelationshipOptions;
+
+        beforeEach(function () {
+          var mockRelationships = getSeveralMockRelationships(4);
+
+          $scope = $rootScope.$new();
+          mockRelationships[2].is_active = '0';
+          expectedRelationshipOptions = getExpectedRelationshipOptions(mockRelationships);
+
+          initController($scope, {
+            relTypes: {
+              values: mockRelationships
+            }
+          });
+        });
+
+        it('should store the default assignee relationship type options', function () {
+          expect($scope.defaultRelationshipTypeOptions).toEqual(expectedRelationshipOptions);
+        });
+
+        /**
+         * Returns a list of expected relationship options. The options consists of
+         * active relationship types only and the label and value for the relationship type.
+         * Normally, two options are added for each relationship type (Ex: Parent of, Child of), but
+         * for bidirectional relationship types only one option is added (Ex: Spouse of).
+         *
+         * @param  {Array} relationshipTypes - a list of relationship types to use as base for the options.
+         * @return {Array}
+         */
+        function getExpectedRelationshipOptions (relationshipTypes) {
+          var expectedRelationshipOptions = [];
+
+          getActiveRelationshipTypes(relationshipTypes)
+            .forEach(function (relationshipType) {
+              var isBidirectionalRelationship = relationshipType.label_a_b === relationshipType.label_b_a;
+
+              expectedRelationshipOptions.push({
+                label: relationshipType.label_b_a,
+                value: relationshipType.id + '_b_a'
+              });
+
+              if (!isBidirectionalRelationship) {
+                expectedRelationshipOptions.push({
+                  label: relationshipType.label_a_b,
+                  value: relationshipType.id + '_a_b'
+                });
+              }
+            });
+
+          return expectedRelationshipOptions;
+        }
+
+        /**
+         * Returns only active relationship types.
+         *
+         * @param  {Array} relationshipTypes - a list of relationship types.
+         * @return {Array}
+         */
+        function getActiveRelationshipTypes (relationshipTypes) {
+          return relationshipTypes.filter(function (relationshipType) {
+            return relationshipType.is_active === '1';
+          });
+        }
       });
     });
 
@@ -108,8 +174,12 @@
      * @param {Object} apiCalls - an optional apiCalls mock object to pass to the controller.
      */
     function initController (scope, apiCalls) {
+      var defaultApiCalls = {
+        relTypes: { values: [] }
+      };
+
       $scope = scope || $rootScope.$new();
-      apiCalls = angular.copy(apiCalls || {});
+      apiCalls = angular.extend(defaultApiCalls, apiCalls);
 
       $controller('CaseTypeExtendedController', {
         $scope: $scope,
@@ -156,6 +226,22 @@
           }]
         }
       };
+    }
+
+    /**
+     * Returns a list of mock relationship types up to the number provided.
+     *
+     * @param  {Number} howMany - the number of mock relationship types to return.
+     * @return {Array}
+     */
+    function getSeveralMockRelationships (howMany) {
+      return Array.apply(null, { length: howMany })
+        .map(function (relationship, index) {
+          return {
+            id: index,
+            is_active: '1'
+          };
+        });
     }
   });
 })();
