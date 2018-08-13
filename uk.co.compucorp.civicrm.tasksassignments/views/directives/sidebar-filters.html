@@ -7,9 +7,9 @@
         <span class="badge badge-{{filter.badgeClass}}" ng-if="filter.value !== 'all'">
           {{(
             (list.filterByDateField(filter.value))
-            | filterByStatus:list.filterParams.documentStatus || ''
-            | filterByOwnership:list.filterParams.ownership
-            | filterByAssignmentType:list.filterParams.assignmentType
+            | filterByStatus: filter.statuses || ''
+            | filterByOwnership: list.filterParams.ownership
+            | filterByAssignmentType: list.filterParams.assignmentType
             ).length
           }}
         </span>
