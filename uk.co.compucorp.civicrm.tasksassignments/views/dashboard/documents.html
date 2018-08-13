@@ -125,7 +125,7 @@
                     <ui-select-match prevent-animations class="ui-select-match" placeholder="Select status...">
                       {{$item.value}}
                     </ui-select-match>
-                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in cache.documentStatus.arr">
+                    <ui-select-choices prevent-animations class="ui-select-choices" repeat="status.key as status in list.filterParams.allowedStatuses">
                       <div ng-bind-html="status.value | highlight: $select.search"></div>
                     </ui-select-choices>
                   </ui-select>
@@ -157,6 +157,7 @@
                   | filterByOwnership:list.filterParams.ownership
                   | filterByAssignmentType:list.filterParams.assignmentType
                   | filterByContactId:list.filterParams.contactId
+                  | filterByStatus:list.filterParams.documentStatus
                   | filterByStatus:list.filterParamsHolder.documentStatus
                   | orderBy:list.propertyName:list.reverse)
                   | offset: (list.pagination.currentPage-1)*list.pagination.itemsPerPage
