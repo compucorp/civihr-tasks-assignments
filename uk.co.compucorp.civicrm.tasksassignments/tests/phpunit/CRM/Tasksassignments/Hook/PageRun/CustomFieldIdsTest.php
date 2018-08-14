@@ -10,15 +10,20 @@ class CRM_Tasksassignments_Hook_PageRun_CustomFieldIdsTest extends BaseHeadlessT
   public function testAddingTheCustomFieldIdsVarToAllowedPages() {
     $resources = $this->prophesize(CRM_Core_Resources::class);
     $hook = new CRM_Tasksassignments_Hook_PageRun_CustomFieldIds($resources->reveal());
-    $allowedPage = new Civi\Angular\Page\Main();
     $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID('category', 'case_type_category');
+    $allowedPages = [
+      new Civi\Angular\Page\Main(),
+      new CRM_Tasksassignments_Page_Dashboard(),
+    ];
 
     $resources->addVars('customFieldIds', [
       'caseType.category' => $caseTypeCategoryFieldId,
     ])
-      ->shouldBeCalled();
+      ->shouldBeCalledTimes(count($allowedPages));
 
-    $hook->handle($allowedPage);
+    foreach ($allowedPages as $allowedPage) {
+      $hook->handle($allowedPage);
+    }
   }
 
   public function testNotAddingTheCustomIdsVarToPages() {

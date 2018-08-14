@@ -42,7 +42,13 @@ class CRM_Tasksassignments_Hook_PageRun_CustomFieldIds {
    * @param CRM_Core_Page $page
    */
   public function shouldHandle($page) {
-    return $page instanceof Civi\Angular\Page\Main;
+    $pageClassName = get_class($page);
+    $pagesWhereTheVarsAreDefined = [
+      CRM_Tasksassignments_Page_Dashboard::class,
+      Civi\Angular\Page\Main::class
+    ];
+
+    return in_array($pageClassName, $pagesWhereTheVarsAreDefined);
   }
 
 }
