@@ -14,6 +14,7 @@ class CRM_Tasksassignments_Hook_PageRun_CustomFieldIdsTest extends BaseHeadlessT
     $allowedPages = [
       new Civi\Angular\Page\Main(),
       new CRM_Tasksassignments_Page_Dashboard(),
+      new CRM_Tasksassignments_Page_Tasks(),
     ];
 
     $resources->addVars('customFieldIds', [
