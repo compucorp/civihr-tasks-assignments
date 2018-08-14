@@ -42,6 +42,7 @@ define(function () {
           'id': '3',
           'name': 'Exiting',
           'title': 'Exiting',
+          'custom_100': 'Workflow',
           'is_active': '1',
           'weight': '1',
           'definition': {
@@ -128,6 +129,7 @@ define(function () {
           'id': '4',
           'name': 'Joining',
           'title': 'Joining',
+          'custom_100': 'Workflow',
           'is_active': '1',
           'weight': '2',
           'definition': {
@@ -368,6 +370,7 @@ define(function () {
           'name': 'Application',
           'title': 'Application',
           'description': 'Application',
+          'custom_100': 'Vacancy',
           'is_active': '1',
           'is_reserved': '1',
           'weight': '7',

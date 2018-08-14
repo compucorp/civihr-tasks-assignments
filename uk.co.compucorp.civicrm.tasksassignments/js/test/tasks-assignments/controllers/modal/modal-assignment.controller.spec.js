@@ -67,6 +67,30 @@ define([
       });
     });
 
+    describe('workflow activity types', function () {
+      var expectedWorkflowActivityTypes;
+
+      beforeEach(function () {
+        var caseTypes = assignmentFabricator.assignmentTypes();
+        var CATEGORY_FIELD = 'custom_100';
+        var WORKFLOW_TYPE = 'Workflow';
+
+        $rootScope.cache.assignmentType.obj = caseTypes;
+        $rootScope.cache.assignmentType.arr = _.values(caseTypes);
+        expectedWorkflowActivityTypes = _.values(caseTypes).filter(function (caseType) {
+          return caseType[CATEGORY_FIELD] === WORKFLOW_TYPE;
+        });
+
+        initController({
+          config: { customFieldIds: { 'caseType.category': 100 } }
+        });
+      });
+
+      it('stores a list of workflow activity types', function () {
+        expect(scope.workflowActivityTypes).toEqual(expectedWorkflowActivityTypes);
+      });
+    });
+
     describe('Lookup contacts lists', function () {
       it('has the lists empty', function () {
         expect(scope.contacts.target).toEqual([]);
@@ -501,6 +525,7 @@ define([
      */
     function initController (resolvedValues) {
       resolvedValues = _.defaultsDeep(resolvedValues || {}, {
+        config: { customFieldIds: {} },
         data: {},
         defaultAssigneeOptions: [],
         session: { contactId: _.uniqueId() }
@@ -516,7 +541,7 @@ define([
         data: resolvedValues.data,
         defaultAssigneeOptions: resolvedValues.defaultAssigneeOptions,
         session: resolvedValues.session,
-        config: {},
+        config: resolvedValues.config,
         settings: {
           tabEnabled: {
             documents: '1',
