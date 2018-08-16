@@ -46,6 +46,7 @@ define([
     vm.format = hrSettings.DATE_FORMAT.toLowerCase();
     vm.showCId = !config.CONTACT_ID;
     vm.taskList = [];
+    vm.workflowActivityTypes = getWorkflowActivityTypes();
     vm.activity = {
       activitySet: {}
     };
@@ -306,6 +307,20 @@ define([
         return result.list.map(function (relationship) {
           return relationship.contact_id_b;
         });
+      });
+    }
+
+    /**
+     * returns a filtered list of activity types that belong to the Workflow category.
+     *
+     * @return {Array}
+     */
+    function getWorkflowActivityTypes () {
+      var CATEGORY_FIELD = 'custom_' + config.customFieldIds['caseType.category'];
+      var WORKFLOW_TYPE = 'Workflow';
+
+      return $rootScope.cache.assignmentType.arr.filter(function (assignment) {
+        return assignment[CATEGORY_FIELD] === WORKFLOW_TYPE;
       });
     }
 
