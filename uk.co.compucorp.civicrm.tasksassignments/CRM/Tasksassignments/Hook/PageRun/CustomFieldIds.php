@@ -40,6 +40,8 @@ class CRM_Tasksassignments_Hook_PageRun_CustomFieldIds {
    * on the page being requested.
    *
    * @param CRM_Core_Page $page
+   *
+   * @return bool
    */
   public function shouldHandle($page) {
     $pageClassName = get_class($page);

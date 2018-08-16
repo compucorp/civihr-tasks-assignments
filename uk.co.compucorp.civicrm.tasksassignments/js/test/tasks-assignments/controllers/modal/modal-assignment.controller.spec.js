@@ -86,7 +86,7 @@ define([
         });
       });
 
-      it('stores a list of workflow activity types', function () {
+      it('stores a list of workflow activity types only', function () {
         expect(scope.workflowActivityTypes).toEqual(expectedWorkflowActivityTypes);
       });
     });
