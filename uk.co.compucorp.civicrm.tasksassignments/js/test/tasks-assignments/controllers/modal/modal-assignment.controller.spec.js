@@ -14,7 +14,7 @@ define([
   'use strict';
 
   describe('ModalAssignmentController', function () {
-    var $controller, $q, $rootScope, assignmentService, contactService, documentService,
+    var $controller, $q, $rootScope, $timeout, assignmentService, contactService, documentService,
       HRSettings, taskService, RelationshipModel, scope;
     var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
     var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
@@ -25,7 +25,7 @@ define([
 
     beforeEach(module('tasks-assignments.dashboard'));
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_,
-      _assignmentService_, _documentService_, _taskService_, _RelationshipModel_) {
+      _$timeout_, _assignmentService_, _documentService_, _taskService_, _RelationshipModel_) {
       var modelTypesStructure = { obj: {}, arr: [] };
 
       // A workaround to avoid actual API calls
@@ -33,6 +33,7 @@ define([
 
       $q = _$q_;
       $controller = _$controller_;
+      $timeout = _$timeout_;
       assignmentService = _assignmentService_;
       documentService = _documentService_;
       taskService = _taskService_;
@@ -611,6 +612,7 @@ define([
         spyOn(CRM, 'loadForm').and.returnValue({
           on: function (eventName, callback) {
             eventName === 'crmFormSuccess' && callback();
+            $timeout.flush();
           }
         });
 
