@@ -12,16 +12,18 @@ define([
     '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
     'HR_settings', 'config', 'settings', 'assignmentService', 'taskService',
     'documentService', 'contactService', 'data', 'defaultAssigneeOptions', 'session',
-    'RelationshipModel'
+    'RelationshipModel', 'RelationshipType'
   ];
 
   function ModalAssignmentController ($filter, $log, $q, $rootScope, vm,
     $timeout, $modalInstance, hrSettings, config, settings, assignmentService,
     taskService, documentService, contactService, data, defaultAssigneeOptions,
-    session, Relationship) {
+    session, Relationship, RelationshipType) {
     $log.debug('Controller: ModalAssignmentController');
 
     var defaultAssigneeOptionsIndex;
+    var canCacheRelationshipRequests = true;
+    var relationshipTypesCache = {};
     var activityModel = {
       activity_type_id: null,
       assignee_contact_id: [],
@@ -44,6 +46,8 @@ define([
     vm.documentList = [];
     vm.dpOpened = {};
     vm.format = hrSettings.DATE_FORMAT.toLowerCase();
+    vm.loading = { component: false };
+    vm.relationshipMissingWarnings = {};
     vm.showCId = !config.CONTACT_ID;
     vm.taskList = [];
     vm.workflowActivityTypes = getWorkflowActivityTypes();
@@ -68,7 +72,9 @@ define([
     vm.confirm = confirm;
     vm.copyAssignee = copyAssignee;
     vm.copyDate = copyDate;
+    vm.createRelationshipForTargetContact = createRelationshipForTargetContact;
     vm.dpOpen = dpOpen;
+    vm.hasRelationshipWarnings = hasRelationshipWarnings;
     vm.onTargetContactChange = onTargetContactChange;
     vm.refreshContacts = refreshContacts;
     vm.removeActivity = removeActivity;
@@ -76,8 +82,14 @@ define([
     vm.updateTimeline = updateTimeline;
 
     (function init () {
-      initDefaultAssigneeOptionsIndex();
-      initWatchers();
+      vm.loading.component = true;
+
+      initRelationshipTypesCache()
+        .then(initDefaultAssigneeOptionsIndex)
+        .then(initWatchers)
+        .finally(function () {
+          vm.loading.component = false;
+        });
     }());
 
     function addActivity (activityArr) {
@@ -247,6 +259,29 @@ define([
       });
     }
 
+    /**
+     * Opens the contact's relationship creation modal. When a relationship is
+     * successfully created it reloads the default assignees for each activity.
+     */
+    function createRelationshipForTargetContact () {
+      var formUrl = CRM.url('civicrm/contact/view/rel', {
+        action: 'add',
+        cid: vm.assignment.client_id
+      });
+
+      CRM.loadForm(formUrl)
+        .on('crmFormSuccess', function () {
+          // $timeout will execute the code in the next digest.
+          // this is done because CRM.loadForm works outside of Angular:
+          $timeout(function () {
+            canCacheRelationshipRequests = false;
+
+            initDefaultAssigneesForActivities()
+              .then(loadAndCacheContactForActivities);
+          });
+        });
+    }
+
     function dpOpen ($event, key) {
       $event.preventDefault();
       $event.stopPropagation();
@@ -263,6 +298,44 @@ define([
     function firstEnabledItem (collection) {
       return _.find(collection, function (item) {
         return item.create;
+      });
+    }
+
+    /**
+     * Returns object pairings of all the activities and their parent activity type.
+     *
+     * @return {Array} Each element contains an object that holds an activity and
+     *   a type field.
+     */
+    function getActivitiesAndTypes () {
+      var allActivities = _.chain(vm.documentList).concat(vm.taskList).value();
+      var activityAndTypes = vm.activity.activitySet.activityTypes.map(function (activityType) {
+        var activity = _.find(allActivities, { name: activityType.name });
+
+        if (activity) {
+          return {
+            activity: activity,
+            type: activityType
+          };
+        }
+      });
+
+      return _.compact(activityAndTypes);
+    }
+
+    /**
+     * Returns all activites that are missing a default assignee related to the
+     * target contact.
+     *
+     * @param  {Array} activitiesAndTypes - An array of activities and their types.
+     * @return {Array} the filtered `activitiesAndTypes`.
+     */
+    function getActivitiesWithoutDefaultRelationship (activitiesAndTypes) {
+      return activitiesAndTypes.filter(function (activityAndType) {
+        var isDefaultAssigneeByRelationship = activityAndType.type.default_assignee_type === defaultAssigneeOptionsIndex.BY_RELATIONSHIP;
+        var hasNoAssignee = _.isEmpty(activityAndType.activity.assignee_contact_id);
+
+        return isDefaultAssigneeByRelationship && hasNoAssignee;
       });
     }
 
@@ -287,6 +360,40 @@ define([
     }
 
     /**
+     * Returns the right filters to pass to the Relationship model when searching
+     * default assignees by relationship. The filters will change depending if the
+     * relationship type that is going to be queried is bidirectional or not.
+     *
+     * @param  {Object} relationshipTypeDetails a list of useful information about the relationship type
+     * as returned by `getRelationshipTypeDetails`.
+     * @return {Object}
+     */
+    function getDefaultAssigneeFiltersForRelationshipType (relationshipTypeDetails) {
+      var filters, sourceContactFieldName;
+
+      if (relationshipTypeDetails.isBidirectional) {
+        return {
+          relationship_type_id: relationshipTypeDetails.id,
+          contact_id_a: vm.assignment.client_id,
+          contact_id_b: vm.assignment.client_id,
+          options: {
+            or: [['contact_id_a', 'contact_id_b']],
+            limit: 1
+          }
+        };
+      } else {
+        sourceContactFieldName = relationshipTypeDetails.sourceContactFieldName;
+        filters = {
+          relationship_type_id: relationshipTypeDetails.id,
+          options: { limit: 1 }
+        };
+        filters[sourceContactFieldName] = vm.assignment.client_id;
+
+        return filters;
+      }
+    }
+
+    /**
      * Returns the default assignee depending on the relationship to the selected
      * target contact.
      *
@@ -294,20 +401,30 @@ define([
      * @return {Promise}
      */
     function getDefaultAssigneeForActivityTypeByRelationship (activityType) {
+      var filters, relationshipTypeDetails;
+
       // skip if a target contact has not been selected:
       if (!vm.assignment.client_id) {
         return $q.resolve(null);
       }
 
-      return Relationship.allValid({
-        'contact_id_a': vm.assignment.client_id,
-        'relationship_type_id.name_b_a': activityType.default_assignee_relationship,
-        'options': { 'limit': 1 }
-      }).then(function (result) {
-        return result.list.map(function (relationship) {
-          return relationship.contact_id_b;
+      relationshipTypeDetails = getRelationshipTypeDetails(activityType.default_assignee_relationship);
+      filters = getDefaultAssigneeFiltersForRelationshipType(relationshipTypeDetails);
+
+      return Relationship.allValid(filters, null, null, canCacheRelationshipRequests)
+        .then(function (result) {
+          canCacheRelationshipRequests = true;
+
+          return result.list.map(function (relationship) {
+            if (relationshipTypeDetails.isBidirectional) {
+              return relationship.contact_id_a === vm.assignment.client_id
+                ? relationship.contact_id_b
+                : relationship.contact_id_a;
+            } else {
+              return relationship[relationshipTypeDetails.targetContactFieldName];
+            }
+          });
         });
-      });
     }
 
     /**
@@ -322,6 +439,49 @@ define([
       return $rootScope.cache.assignmentType.arr.filter(function (assignment) {
         return assignment[CATEGORY_FIELD] === WORKFLOW_TYPE;
       });
+    }
+
+    /**
+     * Given a default relationship type option, similar to "123_b_a",
+     * it returns the following details:
+     *
+     * - the id of the relationship.
+     * - if the relationship is bidirectional or not.
+     * - the left hand contact field name.
+     * - the right hand contact field name.
+     * - the label for the relationship, which depends on the direction.
+     *
+     * @param  {String} defaultAssigneeRelationship the relationship type option that was chosen
+     * for selecting the default assignee for the activity. Ex: 123_b_a. Where 123 is the id of
+     * the relationship, and b_a is the direction.
+     * @return {Object}
+     */
+    function getRelationshipTypeDetails (defaultAssigneeRelationship) {
+      var relationshipTypeRules = defaultAssigneeRelationship.split('_');
+      var relationshipTypeId = relationshipTypeRules[0];
+      var relationshipTypeDirection = relationshipTypeRules[1];
+      var relationshipType = relationshipTypesCache[relationshipTypeId];
+      var isRelationshipTypeBidirectional = relationshipType.label_a_b === relationshipType.label_b_a;
+      var relationshipLabel = isRelationshipTypeBidirectional || relationshipTypeDirection === 'a'
+        ? relationshipType.label_a_b
+        : relationshipType.label_b_a;
+
+      return {
+        id: relationshipType.id,
+        isBidirectional: isRelationshipTypeBidirectional,
+        sourceContactFieldName: 'contact_id_' + relationshipTypeRules[1],
+        targetContactFieldName: 'contact_id_' + relationshipTypeRules[2],
+        label: relationshipLabel
+      };
+    }
+
+    /**
+     * Returns true when there are relationship warnigns to be displayed.
+     *
+     * @return {Boolean}
+     */
+    function hasRelationshipWarnings () {
+      return _.values(vm.relationshipMissingWarnings).length > 0;
     }
 
     /**
@@ -382,32 +542,22 @@ define([
 
     /**
      * Initializes the default assignee for each one of the tasks and documents available.
+     * It also populates the relationshop warnings object in case one or more relationships
+     * are missing for the target contact.
      *
      * @return {Promise}
      */
     function initDefaultAssigneesForActivities () {
-      var promises;
-
       // skip if an activity set and types have not been defined:
       if (!vm.activity.activitySet.activityTypes) {
         return $q.resolve();
       }
 
-      promises = vm.activity.activitySet.activityTypes.map(function (activityType) {
-        var activity = _.chain(vm.documentList).concat(vm.taskList)
-          .find({ name: activityType.name }).value();
+      vm.relationshipMissingWarnings = {};
 
-        if (!activity) {
-          return;
-        }
-
-        return getDefaultAssigneeForActivityType(activityType)
-          .then(function (assigneeId) {
-            activity.assignee_contact_id = assigneeId;
-          });
-      });
-
-      return $q.all(promises);
+      return $q.resolve(getActivitiesAndTypes())
+        .then(setDefaultAssignees)
+        .then(setRelationshipMissingWarnings);
     }
 
     /**
@@ -420,6 +570,17 @@ define([
       _.forEach(defaultAssigneeOptions, function (option) {
         defaultAssigneeOptionsIndex[option.name] = option.value;
       });
+    }
+
+    /**
+     * Initializes the relationship type cache. The cache's structure is a list
+     * of relationship types indexed by id.
+     */
+    function initRelationshipTypesCache () {
+      return RelationshipType.all({ options: { limit: 0 } })
+        .then(function (relationshipTypes) {
+          relationshipTypesCache = _.indexBy(relationshipTypes.list, 'id');
+        });
     }
 
     /**
@@ -521,6 +682,58 @@ define([
       vm.assignment.subject = $rootScope.cache.assignmentType.obj[vm.assignment.case_type_id].title;
 
       vm.assignment.dueDate = vm.assignment.dueDate || new Date(new Date().setHours(0, 0, 0, 0));
+    }
+
+    /**
+     * Finds the default assignee for the given activity type and assigns them
+     * to their corresponding activity.
+     *
+     * @param  {Array}   activitiesAndTypes - An array of activities and their types.
+     * @return {Promise} After configuring the default assignees it resolves to
+     *  the provided `activitiesAndTypes` parameter for chaining purposes.
+     */
+    function setDefaultAssignees (activitiesAndTypes) {
+      var promises = activitiesAndTypes.map(function (activityAndType) {
+        return getDefaultAssigneeForActivityType(activityAndType.type)
+          .then(function (assigneeId) {
+            activityAndType.activity.assignee_contact_id = assigneeId;
+
+            return activityAndType;
+          });
+      });
+
+      return $q.all(promises);
+    }
+
+    /**
+     * Populates the `relationshipMissingWarnings` object based on activites
+     * that are missing a default assignee where the default assignee is related
+     * to the target contact.
+     *
+     * @param {Array} activitiesAndTypes - An array of activities and their types.
+     */
+    function setRelationshipMissingWarnings (activitiesAndTypes) {
+      var activitiesWithMissingRelationships;
+
+      // skip if no contact has been selected:
+      if (!vm.assignment.client_id) {
+        return;
+      }
+
+      activitiesWithMissingRelationships = getActivitiesWithoutDefaultRelationship(activitiesAndTypes);
+      vm.relationshipMissingWarnings = _.chain(activitiesWithMissingRelationships)
+        .map(function (activityAndType) {
+          var relationshipTypeDetails = getRelationshipTypeDetails(
+            activityAndType.type.default_assignee_relationship);
+
+          return {
+            activity_type_id: activityAndType.activity.activity_type_id,
+            relationshipLabel: relationshipTypeDetails.label
+          };
+        })
+        .indexBy('activity_type_id')
+        .mapValues('relationshipLabel')
+        .value();
     }
 
     /**
