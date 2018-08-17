@@ -845,6 +845,9 @@ define([
 
     /**
      * Initializes the cache for assignment, tasks, and document types.
+     * The activity types are split in half to mock lists of task and document
+     * activities for the case. This can be possible since both tasks and documents
+     * simply are specialized activities.
      */
     function setupRootScopeCaches () {
       var activityTypes = selectedAssignment.definition.activitySets[0].activityTypes
