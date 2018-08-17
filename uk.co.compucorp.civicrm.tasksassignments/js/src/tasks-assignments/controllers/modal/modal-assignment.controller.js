@@ -572,6 +572,10 @@ define([
       });
     }
 
+    /**
+     * Initializes the relationship type cache. The cache's structure is a list
+     * of relationship types indexed by id.
+     */
     function initRelationshipTypesCache () {
       return RelationshipType.all({ options: { limit: 0 } })
         .then(function (relationshipTypes) {
