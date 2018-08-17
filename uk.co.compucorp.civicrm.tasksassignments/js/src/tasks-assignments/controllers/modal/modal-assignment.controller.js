@@ -360,6 +360,40 @@ define([
     }
 
     /**
+     * Returns the right filters to pass to the Relationship model when searching
+     * default assignees by relationship. The filters will change depending if the
+     * relationship type that is going to be queried is bidirectional or not.
+     *
+     * @param  {Object} relationshipTypeDetails a list of useful information about the relationship type
+     * as returned by `getRelationshipTypeDetails`.
+     * @return {Object}
+     */
+    function getDefaultAssigneeFiltersForRelationshipType (relationshipTypeDetails) {
+      var filters, sourceContactFieldName;
+
+      if (relationshipTypeDetails.isBidirectional) {
+        return {
+          relationship_type_id: relationshipTypeDetails.id,
+          contact_id_a: vm.assignment.client_id,
+          contact_id_b: vm.assignment.client_id,
+          options: {
+            or: [['contact_id_a', 'contact_id_b']],
+            limit: 1
+          }
+        };
+      } else {
+        sourceContactFieldName = relationshipTypeDetails.sourceContactFieldName;
+        filters = {
+          relationship_type_id: relationshipTypeDetails.id,
+          options: { limit: 1 }
+        };
+        filters[sourceContactFieldName] = vm.assignment.client_id;
+
+        return filters;
+      }
+    }
+
+    /**
      * Returns the default assignee depending on the relationship to the selected
      * target contact.
      *
@@ -367,22 +401,30 @@ define([
      * @return {Promise}
      */
     function getDefaultAssigneeForActivityTypeByRelationship (activityType) {
+      var filters, relationshipTypeDetails;
+
       // skip if a target contact has not been selected:
       if (!vm.assignment.client_id) {
         return $q.resolve(null);
       }
 
-      return Relationship.allValid({
-        'contact_id_a': vm.assignment.client_id,
-        'relationship_type_id.name_b_a': activityType.default_assignee_relationship,
-        'options': { 'limit': 1 }
-      }, null, null, canCacheRelationshipRequests).then(function (result) {
-        canCacheRelationshipRequests = true;
+      relationshipTypeDetails = getRelationshipTypeDetails(activityType.default_assignee_relationship);
+      filters = getDefaultAssigneeFiltersForRelationshipType(relationshipTypeDetails);
 
-        return result.list.map(function (relationship) {
-          return relationship.contact_id_b;
+      return Relationship.allValid(filters, null, null, canCacheRelationshipRequests)
+        .then(function (result) {
+          canCacheRelationshipRequests = true;
+
+          return result.list.map(function (relationship) {
+            if (relationshipTypeDetails.isBidirectional) {
+              return relationship.contact_id_a === vm.assignment.client_id
+                ? relationship.contact_id_b
+                : relationship.contact_id_a;
+            } else {
+              return relationship[relationshipTypeDetails.targetContactFieldName];
+            }
+          });
         });
-      });
     }
 
     /**
@@ -427,8 +469,8 @@ define([
       return {
         id: relationshipType.id,
         isBidirectional: isRelationshipTypeBidirectional,
-        leftHandContact: 'contact_id_' + relationshipTypeRules[1],
-        rightHandContact: 'contact_id_' + relationshipTypeRules[2],
+        sourceContactFieldName: 'contact_id_' + relationshipTypeRules[1],
+        targetContactFieldName: 'contact_id_' + relationshipTypeRules[2],
         label: relationshipLabel
       };
     }

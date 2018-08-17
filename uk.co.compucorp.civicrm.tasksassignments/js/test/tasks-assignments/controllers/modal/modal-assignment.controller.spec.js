@@ -17,7 +17,8 @@ define([
 
   describe('ModalAssignmentController', function () {
     var $controller, $provide, $q, $rootScope, $timeout, assignmentService, contactService, documentService,
-      HRSettings, taskService, RelationshipModel, relationshipTypeApiMock, scope, selectedAssignment;
+      HRSettings, mockedRelationshipType, taskService, RelationshipModel, relationshipTypeApiMock, scope,
+      selectedAssignment;
     var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
     var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
     var sampleData = {
@@ -52,17 +53,16 @@ define([
       RelationshipModel = _RelationshipModel_;
       $rootScope = _$rootScope_;
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
-      selectedAssignment = _.chain(assignmentTypes).values().first().value();
-      contactService = {
-        get: jasmine.createSpy('get').and.returnValue($q.resolve([]))
-      };
-
+      mockedRelationshipType = _.first(relationshipTypeApiMock.mockedRelationshipTypes());
       scope = $rootScope.$new();
-
+      selectedAssignment = _.chain(assignmentTypes).values().first().value();
       $rootScope.cache = {
         assignmentType: angular.copy(modelTypesStructure),
         documentType: angular.copy(modelTypesStructure),
         taskType: angular.copy(modelTypesStructure)
+      };
+      contactService = {
+        get: jasmine.createSpy('get').and.returnValue($q.resolve([]))
       };
 
       initController({ defaultAssigneeOptions: defaultAssigneeOptions });
@@ -457,23 +457,120 @@ define([
       });
 
       describe('when the default assignee type is determined by a relationship', function () {
-        var contact = { id: _.uniqueId(), contact_id: _.uniqueId() };
+        var contact = { id: _.uniqueId() };
         var assignee = { id: _.uniqueId() };
 
         beforeEach(function () {
-          scope.assignment.client_id = contact.contact_id;
+          scope.assignment.client_id = contact.id;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-          activity.default_assignee_relationship = _.uniqueId();
 
-          spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
-            list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
-          }));
-
-          $rootScope.$digest();
+          spyOn(RelationshipModel, 'allValid');
         });
 
-        it('assigns the contact that belongs to the relationship', function () {
-          expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+        describe('when the relationship goes in a single direction', function () {
+          describe('when the target contact is the left-hand contact of the relationship', function () {
+            beforeEach(function () {
+              activity.default_assignee_relationship = mockedRelationshipType.id + '_a_b';
+
+              RelationshipModel.allValid.and.returnValue($q.resolve({
+                list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
+              }));
+              $rootScope.$digest();
+            });
+
+            it('requests a single relationship where the target contact is on the left-hand of the relationship', function () {
+              expect(RelationshipModel.allValid).toHaveBeenCalledWith({
+                relationship_type_id: mockedRelationshipType.id,
+                contact_id_a: contact.id,
+                options: { limit: 1 }
+              }, null, null, true);
+            });
+
+            it('assigns the contact that belongs to the relationship', function () {
+              expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+            });
+          });
+
+          describe('when the target contact is the right-hand contact of the relationship', function () {
+            beforeEach(function () {
+              activity.default_assignee_relationship = mockedRelationshipType.id + '_b_a';
+
+              RelationshipModel.allValid.and.returnValue($q.resolve({
+                list: [ { id: _.uniqueId(), contact_id_a: assignee.id, contact_id_b: contact.id } ]
+              }));
+              $rootScope.$digest();
+            });
+
+            it('requests a single relationship where the target contact is on the right-hand of the relationship', function () {
+              expect(RelationshipModel.allValid).toHaveBeenCalledWith({
+                relationship_type_id: mockedRelationshipType.id,
+                contact_id_b: contact.id,
+                options: { limit: 1 }
+              }, null, null, true);
+            });
+
+            it('assigns the contact that belongs to the relationship', function () {
+              expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+            });
+          });
+        });
+
+        describe('when the relationships is bidirectional', function () {
+          var relationshipType;
+
+          beforeEach(function () {
+            var allRelationshipTypes = relationshipTypeApiMock.mockedRelationshipTypes();
+
+            relationshipType = _.find(allRelationshipTypes, { name_a_b: 'Spouse of' });
+            activity.default_assignee_relationship = relationshipType.id + '_a_b';
+          });
+
+          describe('for both directions', function () {
+            beforeEach(function () {
+              RelationshipModel.allValid.and.returnValue($q.resolve({
+                list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
+              }));
+              $rootScope.$digest();
+            });
+
+            it('requests a single relationship where the target contact is either on the left or right-hand of the relationship', function () {
+              expect(RelationshipModel.allValid).toHaveBeenCalledWith({
+                relationship_type_id: relationshipType.id,
+                contact_id_a: contact.id,
+                contact_id_b: contact.id,
+                options: {
+                  or: [['contact_id_a', 'contact_id_b']],
+                  limit: 1
+                }
+              }, null, null, true);
+            });
+          });
+
+          describe('when the target contact is the left-hand contact of a bidirectional relationship', function () {
+            beforeEach(function () {
+              RelationshipModel.allValid.and.returnValue($q.resolve({
+                list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
+              }));
+              $rootScope.$digest();
+            });
+
+            it('assigns the contact that belongs to the relationship', function () {
+              expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+            });
+          });
+
+          describe('when the target contact is the right-hand contact of a bidirectional relationship', function () {
+            beforeEach(function () {
+              RelationshipModel.allValid.and.returnValue($q.resolve({
+                list: [ { id: _.uniqueId(), contact_id_a: assignee.id, contact_id_b: contact.id } ]
+              }));
+              $rootScope.$digest();
+            });
+
+            it('assigns the contact that belongs to the relationship', function () {
+              expect(scope.taskList[0].assignee_contact_id).toEqual([assignee.id]);
+            });
+          });
         });
       });
 
@@ -514,12 +611,11 @@ define([
       });
 
       describe('when the contact is missing a relationship defined as default', function () {
-        var activityTypeId, expectedRelationshipWarnings, relationshipType;
+        var activityTypeId, expectedRelationshipWarnings;
         var contact = { id: _.uniqueId() };
 
         beforeEach(function () {
           activityTypeId = _.find($rootScope.cache.taskType.arr, { value: activity.name }).key;
-          relationshipType = _.first(relationshipTypeApiMock.mockedRelationshipTypes());
           scope.assignment.client_id = contact.id;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
 
@@ -530,11 +626,11 @@ define([
 
         describe('when the target contact is the left-hand contact of the relationship', function () {
           beforeEach(function () {
-            var defaultAssigneeRelationshipValue = relationshipType.id + '_a_b';
+            var defaultAssigneeRelationshipValue = mockedRelationshipType.id + '_a_b';
 
             activity.default_assignee_relationship = defaultAssigneeRelationshipValue;
             expectedRelationshipWarnings = {};
-            expectedRelationshipWarnings[activityTypeId] = relationshipType.label_a_b;
+            expectedRelationshipWarnings[activityTypeId] = mockedRelationshipType.label_a_b;
 
             $rootScope.$digest();
           });
@@ -546,11 +642,11 @@ define([
 
         describe('when the target contact is the right-hand contact of the relationship', function () {
           beforeEach(function () {
-            var defaultAssigneeRelationshipValue = relationshipType.id + '_b_a';
+            var defaultAssigneeRelationshipValue = mockedRelationshipType.id + '_b_a';
 
             activity.default_assignee_relationship = defaultAssigneeRelationshipValue;
             expectedRelationshipWarnings = {};
-            expectedRelationshipWarnings[activityTypeId] = relationshipType.label_b_a;
+            expectedRelationshipWarnings[activityTypeId] = mockedRelationshipType.label_b_a;
 
             $rootScope.$digest();
           });
@@ -568,7 +664,7 @@ define([
         beforeEach(function () {
           scope.assignment.client_id = contact.id;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-          activity.default_assignee_relationship = _.uniqueId();
+          activity.default_assignee_relationship = mockedRelationshipType.id + '_a_b';
 
           spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
             list: [{ id: _.uniqueId() }]
@@ -589,7 +685,7 @@ define([
         beforeEach(function () {
           scope.assignment.client_id = null;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-          activity.default_assignee_relationship = _.uniqueId();
+          activity.default_assignee_relationship = mockedRelationshipType.id + '_a_b';
 
           spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
             list: []
@@ -644,7 +740,7 @@ define([
 
         // set default assignee by relationship:
         activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-        activity.default_assignee_relationship = _.uniqueId();
+        activity.default_assignee_relationship = mockedRelationshipType.id + '_a_b';
 
         spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
           list: [ { id: _.uniqueId(), contact_id_a: contact.id, contact_id_b: assignee.id } ]
