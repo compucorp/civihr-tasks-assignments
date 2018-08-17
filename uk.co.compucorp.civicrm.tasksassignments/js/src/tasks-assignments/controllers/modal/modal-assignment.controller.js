@@ -12,17 +12,18 @@ define([
     '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
     'HR_settings', 'config', 'settings', 'assignmentService', 'taskService',
     'documentService', 'contactService', 'data', 'defaultAssigneeOptions', 'session',
-    'RelationshipModel'
+    'RelationshipModel', 'RelationshipType'
   ];
 
   function ModalAssignmentController ($filter, $log, $q, $rootScope, vm,
     $timeout, $modalInstance, hrSettings, config, settings, assignmentService,
     taskService, documentService, contactService, data, defaultAssigneeOptions,
-    session, Relationship) {
+    session, Relationship, RelationshipType) {
     $log.debug('Controller: ModalAssignmentController');
 
     var defaultAssigneeOptionsIndex;
     var canCacheRelationshipRequests = true;
+    var relationshipTypesCache = {};
     var activityModel = {
       activity_type_id: null,
       assignee_contact_id: [],
@@ -45,6 +46,7 @@ define([
     vm.documentList = [];
     vm.dpOpened = {};
     vm.format = hrSettings.DATE_FORMAT.toLowerCase();
+    vm.loading = { component: false };
     vm.relationshipMissingWarnings = {};
     vm.showCId = !config.CONTACT_ID;
     vm.taskList = [];
@@ -80,8 +82,14 @@ define([
     vm.updateTimeline = updateTimeline;
 
     (function init () {
-      initDefaultAssigneeOptionsIndex();
-      initWatchers();
+      vm.loading.component = true;
+
+      initRelationshipTypesCache()
+        .then(initDefaultAssigneeOptionsIndex)
+        .then(initWatchers)
+        .finally(function () {
+          vm.loading.component = false;
+        });
     }());
 
     function addActivity (activityArr) {
@@ -392,6 +400,40 @@ define([
     }
 
     /**
+     * Given a default relationship type option, similar to "123_b_a",
+     * it returns the following details:
+     *
+     * - the id of the relationship.
+     * - if the relationship is bidirectional or not.
+     * - the left hand contact field name.
+     * - the right hand contact field name.
+     * - the label for the relationship, which depends on the direction.
+     *
+     * @param  {String} defaultAssigneeRelationship the relationship type option that was chosen
+     * for selecting the default assignee for the activity. Ex: 123_b_a. Where 123 is the id of
+     * the relationship, and b_a is the direction.
+     * @return {Object}
+     */
+    function getRelationshipTypeDetails (defaultAssigneeRelationship) {
+      var relationshipTypeRules = defaultAssigneeRelationship.split('_');
+      var relationshipTypeId = relationshipTypeRules[0];
+      var relationshipTypeDirection = relationshipTypeRules[1];
+      var relationshipType = relationshipTypesCache[relationshipTypeId];
+      var isRelationshipTypeBidirectional = relationshipType.label_a_b === relationshipType.label_b_a;
+      var relationshipLabel = isRelationshipTypeBidirectional || relationshipTypeDirection === 'a'
+        ? relationshipType.label_a_b
+        : relationshipType.label_b_a;
+
+      return {
+        id: relationshipType.id,
+        isBidirectional: isRelationshipTypeBidirectional,
+        leftHandContact: 'contact_id_' + relationshipTypeRules[1],
+        rightHandContact: 'contact_id_' + relationshipTypeRules[2],
+        label: relationshipLabel
+      };
+    }
+
+    /**
      * Returns true when there are relationship warnigns to be displayed.
      *
      * @return {Boolean}
@@ -486,6 +528,13 @@ define([
       _.forEach(defaultAssigneeOptions, function (option) {
         defaultAssigneeOptionsIndex[option.name] = option.value;
       });
+    }
+
+    function initRelationshipTypesCache () {
+      return RelationshipType.all({ options: { limit: 0 } })
+        .then(function (relationshipTypes) {
+          relationshipTypesCache = _.indexBy(relationshipTypes.list, 'id');
+        });
     }
 
     /**
@@ -627,7 +676,18 @@ define([
 
       activitiesWithMissingRelationships = getActivitiesWithoutDefaultRelationship(activitiesAndTypes);
       vm.relationshipMissingWarnings = _.chain(activitiesWithMissingRelationships)
-        .indexBy('activity.activity_type_id').mapValues('type.default_assignee_relationship').value();
+        .map(function (activityAndType) {
+          var relationshipTypeDetails = getRelationshipTypeDetails(
+            activityAndType.type.default_assignee_relationship);
+
+          return {
+            activity_type_id: activityAndType.activity.activity_type_id,
+            relationshipLabel: relationshipTypeDetails.label
+          };
+        })
+        .indexBy('activity_type_id')
+        .mapValues('relationshipLabel')
+        .value();
     }
 
     /**

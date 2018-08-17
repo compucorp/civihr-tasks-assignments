@@ -9,13 +9,15 @@ define([
   'mocks/fabricators/assignment.fabricator',
   'common/angularMocks',
   'common/models/relationship.model',
+  'common/models/relationship-type.model',
+  'common/mocks/services/api/relationship-type-mock',
   'tasks-assignments/modules/tasks-assignments.dashboard.module'
 ], function (_, angular, moment, assignmentMockData, optionValuesMockData, assignmentFabricator) {
   'use strict';
 
   describe('ModalAssignmentController', function () {
-    var $controller, $q, $rootScope, $timeout, assignmentService, contactService, documentService,
-      HRSettings, taskService, RelationshipModel, scope;
+    var $controller, $provide, $q, $rootScope, $timeout, assignmentService, contactService, documentService,
+      HRSettings, taskService, RelationshipModel, relationshipTypeApiMock, scope, selectedAssignment;
     var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
     var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
     var sampleData = {
@@ -23,9 +25,19 @@ define([
       contactName: 'Arya Stark'
     };
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard', 'common.models', 'common.mocks', function (_$provide_) {
+      $provide = _$provide_;
+    }));
+
+    beforeEach(inject(['api.relationshipType.mock', function (_relationshipTypeApiMock_) {
+      relationshipTypeApiMock = _relationshipTypeApiMock_;
+
+      $provide.value('RelationshipTypeAPI', relationshipTypeApiMock);
+    }]));
+
     beforeEach(inject(function (_$q_, _$controller_, $httpBackend, _$rootScope_,
       _$timeout_, _assignmentService_, _documentService_, _taskService_, _RelationshipModel_) {
+      var assignmentTypes = assignmentFabricator.assignmentTypes();
       var modelTypesStructure = { obj: {}, arr: [] };
 
       // A workaround to avoid actual API calls
@@ -40,6 +52,7 @@ define([
       RelationshipModel = _RelationshipModel_;
       $rootScope = _$rootScope_;
       HRSettings = { DATE_FORMAT: 'DD/MM/YYYY' };
+      selectedAssignment = _.chain(assignmentTypes).values().first().value();
       contactService = {
         get: jasmine.createSpy('get').and.returnValue($q.resolve([]))
       };
@@ -386,7 +399,9 @@ define([
 
         documentType = $rootScope.cache.assignmentType.arr[1];
         activity = scope.activity.activitySet.activityTypes[0];
+        activity.activity_type_id = _.uniqueId();
         document = scope.activity.activitySet.activityTypes[1];
+        document.activity_type_id = _.uniqueId();
         document.name = documentType.name;
       });
 
@@ -499,25 +514,50 @@ define([
       });
 
       describe('when the contact is missing a relationship defined as default', function () {
-        var hasRelationshipWarning;
+        var activityTypeId, expectedRelationshipWarnings, relationshipType;
         var contact = { id: _.uniqueId() };
 
         beforeEach(function () {
+          activityTypeId = _.find($rootScope.cache.taskType.arr, { value: activity.name }).key;
+          relationshipType = _.first(relationshipTypeApiMock.mockedRelationshipTypes());
           scope.assignment.client_id = contact.id;
           activity.default_assignee_type = defaultAssigneeOptionsIndex.BY_RELATIONSHIP.value;
-          activity.default_assignee_relationship = _.uniqueId();
 
           spyOn(RelationshipModel, 'allValid').and.returnValue($q.resolve({
             list: []
           }));
-          $rootScope.$digest();
-
-          hasRelationshipWarning = _.chain(scope.relationshipMissingWarnings)
-            .values().indexOf(activity.default_assignee_relationship).value() >= 0;
         });
 
-        it('adds the missing relationships to an relationship missing warnings index', function () {
-          expect(hasRelationshipWarning).toBe(true);
+        describe('when the target contact is the left-hand contact of the relationship', function () {
+          beforeEach(function () {
+            var defaultAssigneeRelationshipValue = relationshipType.id + '_a_b';
+
+            activity.default_assignee_relationship = defaultAssigneeRelationshipValue;
+            expectedRelationshipWarnings = {};
+            expectedRelationshipWarnings[activityTypeId] = relationshipType.label_a_b;
+
+            $rootScope.$digest();
+          });
+
+          it('adds the missing relationships to a relationship missing warnings index', function () {
+            expect(scope.relationshipMissingWarnings).toEqual(expectedRelationshipWarnings);
+          });
+        });
+
+        describe('when the target contact is the right-hand contact of the relationship', function () {
+          beforeEach(function () {
+            var defaultAssigneeRelationshipValue = relationshipType.id + '_b_a';
+
+            activity.default_assignee_relationship = defaultAssigneeRelationshipValue;
+            expectedRelationshipWarnings = {};
+            expectedRelationshipWarnings[activityTypeId] = relationshipType.label_b_a;
+
+            $rootScope.$digest();
+          });
+
+          it('adds the missing relationships to a relationship missing warnings index', function () {
+            expect(scope.relationshipMissingWarnings).toEqual(expectedRelationshipWarnings);
+          });
         });
       });
 
@@ -695,32 +735,47 @@ define([
           }
         }
       });
+      $rootScope.$digest();
     }
 
     /**
      * Selects the default client and case type assignations.
      */
     function selectDefaultClientAndAssignation () {
-      var selectedAssignment = $rootScope.cache.assignmentType.arr[0];
-
       scope.assignment.client_id = _.uniqueId();
       scope.assignment.case_type_id = selectedAssignment.id;
       scope.activity.activitySet = selectedAssignment.definition.activitySets[0];
     }
 
     /**
-     * Initializes the cache for assignment and document types.
+     * Initializes the cache for assignment, tasks, and document types.
      */
     function setupRootScopeCaches () {
-      var documentType;
+      var activityTypes = selectedAssignment.definition.activitySets[0].activityTypes
+        .map(function (activityType) {
+          return {
+            key: _.uniqueId(),
+            value: activityType.name
+          };
+        });
+      var documentTypes = activityTypes.slice(activityTypes.length / 2);
+      var taskTypes = activityTypes.slice(0, activityTypes.length / 2);
 
       // setup assignments types:
       $rootScope.cache.assignmentType.obj = assignmentFabricator.assignmentTypes();
       $rootScope.cache.assignmentType.arr = _.values($rootScope.cache.assignmentType.obj);
 
       // setup document type:
-      documentType = $rootScope.cache.assignmentType.arr[1];
-      $rootScope.cache.documentType.arr = [{ key: documentType.id, value: documentType.name }];
+      $rootScope.cache.documentType = {
+        obj: _.indexBy(documentTypes, 'key'),
+        arr: documentTypes
+      };
+
+      // setup task types:
+      $rootScope.cache.taskType = {
+        obj: _.indexBy(taskTypes, 'key'),
+        arr: taskTypes
+      };
     }
   });
 

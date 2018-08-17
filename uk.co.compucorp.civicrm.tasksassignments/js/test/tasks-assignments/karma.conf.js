@@ -4,6 +4,7 @@ var cv = require('civicrm-cv')({ mode: 'sync' });
 module.exports = function (config) {
   var civicrmPath = cv("path -d '[civicrm.root]'")[0].value;
   var extPath = cv('path -x uk.co.compucorp.civicrm.tasksassignments')[0].value;
+  var reqangularPath = cv('path -x org.civicrm.reqangular')[0].value;
 
   config.set({
     basePath: civicrmPath,
@@ -35,6 +36,9 @@ module.exports = function (config) {
 
       // the mocked components files
       { pattern: extPath + '/js/test/tasks-assignments/mocks/**/*.js', included: false },
+
+      // all the common/ mocked dependencies
+      reqangularPath + '/js/dist/reqangular.mocks.min.js',
 
       // the test files
       { pattern: extPath + '/js/test/tasks-assignments/**/*.spec.js', included: false },
