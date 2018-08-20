@@ -295,6 +295,10 @@ function tasksAssignments_civicrm_alterAngular(\Civi\Angular\Manager $angular) {
     _tasksAssignments_allow_only_add_timeline_action($doc);
   });
 
+  $changeSet->alterHtml('~/crmCaseType/caseTypeDetails.html', function (phpQueryObject $doc) {
+    _tasksAssignments_add_case_type_category_form_field($doc);
+  });
+
   $changeSet->alterHtml('~/crmCaseType/timelineTable.html', function (phpQueryObject $doc) {
     _tasksAssignments_change_add_activity_dropdown_placeholder($doc);
     _tasksAssignments_change_column_text($doc);
@@ -524,6 +528,36 @@ function _tasksAssignments_allow_only_add_timeline_action(phpQueryObject $doc) {
 
   $actionDropdown->after($addTimelineBtn);
   $actionDropdown->remove();
+}
+
+/**
+ * Adds the category form field to the case type edit screen.
+ *
+ * @param phpQueryObject $doc
+ */
+function _tasksAssignments_add_case_type_category_form_field (phpQueryObject $doc) {
+  $smarty = CRM_Core_Smarty::singleton();
+  $formFieldTemplatePath = realpath(__DIR__ . '/views/crm/case-type-category-form-field.tpl');
+
+  $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
+    'category',
+    'case_type_category'
+  );
+  $caseTypeCategoryOptions = civicrm_api3('OptionValue', 'get', [
+    'sequential' => 1,
+    'option_group_id' => 'case_type_category',
+    'options' => [
+      'sort' => 'weight ASC',
+      'limit' => 0
+    ]
+  ]);
+
+  $smarty->assign('caseTypeCategoryFieldId', $caseTypeCategoryFieldId);
+  $smarty->assign('caseTypeCategoryOptions', $caseTypeCategoryOptions['values']);
+
+  $formFieldTemplate = $smarty->fetch($formFieldTemplatePath);
+
+  $doc->find('[crm-ui-field*="caseTypeName"]')->after($formFieldTemplate);
 }
 
 /**
