@@ -956,6 +956,30 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
     return TRUE;
   }
 
+  /**
+   * Sets the default case type category to be Workflow.
+   *
+   * @return bool
+   */
+  public function upgrade_1042() {
+    $workflowCategoryOption = civicrm_api3('OptionValue', 'get', [
+      'option_group_id' => 'case_type_category',
+      'name' => 'Workflow',
+      'option' => ['limit' => 1]
+    ]);
+
+    if ($workflowCategoryOption['count'] === 0) {
+      return TRUE;
+    }
+
+    civicrm_api3('OptionValue', 'create', [
+      'id' => $workflowCategoryOption['id'],
+      'is_default' => 1
+    ]);
+
+    return TRUE;
+  }
+
   public function uninstall() {
     CRM_Core_DAO::executeQuery("DELETE FROM `civicrm_navigation` WHERE name IN ('tasksassignments', 'ta_dashboard_tasks', 'ta_dashboard_documents', 'ta_dashboard_calendar', 'ta_dashboard_keydates', 'tasksassignments_administer', 'ta_settings')");
     CRM_Core_BAO_Navigation::resetNavigation();
