@@ -7,8 +7,16 @@
   describe('CaseTypeExtendedController', function () {
     var $controller, $log, $rootScope, $scope, CaseTypeCtrl, parentControllerSpy,
       TaskActivityOptionsData, DocumentActivityOptionsData;
+    var CASE_TYPE_CATEGORY_FIELD_ID = 200;
 
-    beforeEach(module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers', function ($controllerProvider) {
+    beforeEach(module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers', function ($controllerProvider, $provide) {
+      createParentCaseTypeCtrlMock($controllerProvider);
+      $provide.value('customFieldIds', {
+        'caseType.category': CASE_TYPE_CATEGORY_FIELD_ID
+      });
+    }));
+
+    function createParentCaseTypeCtrlMock ($controllerProvider) {
       var defaultCaseType = getMockCaseType();
 
       parentControllerSpy = jasmine.createSpy('parentControllerSpy');
@@ -22,7 +30,7 @@
       }];
 
       $controllerProvider.register('CaseTypeCtrl', CaseTypeCtrl);
-    }));
+    }
 
     beforeEach(inject(function (_$controller_, _$log_, _$rootScope_, _TaskActivityOptionsData_, _DocumentActivityOptionsData_) {
       $controller = _$controller_;
@@ -110,6 +118,44 @@
             return relationshipType.is_active === '1';
           });
         }
+      });
+
+      describe('default case type category value', function () {
+        var CATEGORY_FIELD = 'custom_' + CASE_TYPE_CATEGORY_FIELD_ID;
+
+        describe('when creating a new case type', function () {
+          beforeEach(function () {
+            var caseType = getMockCaseType();
+            $scope = $rootScope.$new();
+
+            initController($scope, {
+              caseType: caseType
+            });
+          });
+
+          it('sets the default case type category equal to Workflow', function () {
+            expect($scope.caseType[CATEGORY_FIELD]).toEqual('Workflow');
+          });
+        });
+
+        describe('when updating an existing case type', function () {
+          var expectedCategory = 'Vacancy';
+
+          beforeEach(function () {
+            var caseType = getMockCaseType();
+            $scope = $rootScope.$new();
+            caseType.id = 100;
+            caseType[CATEGORY_FIELD] = expectedCategory;
+
+            initController($scope, {
+              caseType: caseType
+            });
+          });
+
+          it('does not override their current category', function () {
+            expect($scope.caseType[CATEGORY_FIELD]).toEqual(expectedCategory);
+          });
+        });
       });
     });
 
