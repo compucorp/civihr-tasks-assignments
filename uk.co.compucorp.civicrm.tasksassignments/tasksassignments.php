@@ -537,7 +537,7 @@ function _tasksAssignments_allow_only_add_timeline_action(phpQueryObject $doc) {
  */
 function _tasksAssignments_add_case_type_category_form_field (phpQueryObject $doc) {
   $smarty = CRM_Core_Smarty::singleton();
-  $formFieldTemplatePath = realpath(__DIR__ . '/views/crm/case-type-category-form-field.tpl');
+  $formFieldTemplatePath = realpath(__DIR__ . '/templates/partials/case-type-category-form-field.tpl');
 
   $caseTypeCategoryFieldId = CRM_Core_BAO_CustomField::getCustomFieldID(
     'category',
@@ -546,6 +546,7 @@ function _tasksAssignments_add_case_type_category_form_field (phpQueryObject $do
   $caseTypeCategoryOptions = civicrm_api3('OptionValue', 'get', [
     'sequential' => 1,
     'option_group_id' => 'case_type_category',
+    'return' => ['value', 'label'],
     'options' => [
       'sort' => 'weight ASC',
       'limit' => 0

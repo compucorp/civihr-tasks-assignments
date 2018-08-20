@@ -11,26 +11,11 @@
 
     beforeEach(module('crm-tasks-workflows.mocks', 'crm-tasks-workflows.controllers', function ($controllerProvider, $provide) {
       createParentCaseTypeCtrlMock($controllerProvider);
+
       $provide.value('customFieldIds', {
         'caseType.category': CASE_TYPE_CATEGORY_FIELD_ID
       });
     }));
-
-    function createParentCaseTypeCtrlMock ($controllerProvider) {
-      var defaultCaseType = getMockCaseType();
-
-      parentControllerSpy = jasmine.createSpy('parentControllerSpy');
-
-      // mocks the original CaseTypeCtrl:
-      CaseTypeCtrl = ['$scope', 'crmApi', 'apiCalls', function ($scope, crmApi,
-        apiCalls) {
-        parentControllerSpy(apiCalls);
-
-        $scope.caseType = apiCalls.caseType ? apiCalls.caseType : defaultCaseType;
-      }];
-
-      $controllerProvider.register('CaseTypeCtrl', CaseTypeCtrl);
-    }
 
     beforeEach(inject(function (_$controller_, _$log_, _$rootScope_, _TaskActivityOptionsData_, _DocumentActivityOptionsData_) {
       $controller = _$controller_;
@@ -38,6 +23,7 @@
       $rootScope = _$rootScope_;
       DocumentActivityOptionsData = _DocumentActivityOptionsData_;
       TaskActivityOptionsData = _TaskActivityOptionsData_;
+      $scope = $rootScope.$new();
 
       spyOn($log, 'debug');
       initController();
@@ -60,7 +46,6 @@
         beforeEach(function () {
           var mockRelationships = getSeveralMockRelationships(4);
 
-          $scope = $rootScope.$new();
           mockRelationships[2].is_active = '0';
           expectedRelationshipOptions = getExpectedRelationshipOptions(mockRelationships);
 
@@ -129,7 +114,6 @@
         describe('when creating a new case type', function () {
           beforeEach(function () {
             var caseType = getMockCaseType();
-            $scope = $rootScope.$new();
 
             initController($scope, {
               apiCalls: { caseType: caseType },
@@ -145,7 +129,6 @@
         describe('when updating an existing case type', function () {
           beforeEach(function () {
             var caseType = getMockCaseType();
-            $scope = $rootScope.$new();
             caseType.id = 100;
             caseType[categoryField] = expectedCategory;
 
@@ -164,8 +147,6 @@
 
     describe('when creating a new case type', function () {
       beforeEach(function () {
-        $scope = $rootScope.$new();
-
         initController($scope);
       });
 
@@ -178,7 +159,6 @@
       var caseType = getMockCaseType();
 
       beforeEach(function () {
-        $scope = $rootScope.$new();
         caseType.id = 100;
 
         initController($scope, {
@@ -196,7 +176,6 @@
       var addActivityInParent = jasmine.createSpy('addActivityInParent');
 
       beforeEach(function () {
-        $scope = $rootScope.$new();
         $scope.addActivity = addActivityInParent;
 
         activityTypes = getActivityTypes();
@@ -215,6 +194,28 @@
         expect(activityTypes[0].reference_activity).toBeUndefined();
       });
     });
+
+    /**
+     * Creates a mock controller for the parent case type controller. It also
+     * adds a spy to check the api calls parameter passed to the parent.
+     *
+     * @param {Object} $controllerProvider AngularJS' controller provider.
+     */
+    function createParentCaseTypeCtrlMock ($controllerProvider) {
+      var defaultCaseType = getMockCaseType();
+
+      parentControllerSpy = jasmine.createSpy('parentControllerSpy');
+
+      // mocks the original CaseTypeCtrl:
+      CaseTypeCtrl = ['$scope', 'crmApi', 'apiCalls', function ($scope, crmApi,
+        apiCalls) {
+        parentControllerSpy(apiCalls);
+
+        $scope.caseType = apiCalls.caseType ? apiCalls.caseType : defaultCaseType;
+      }];
+
+      $controllerProvider.register('CaseTypeCtrl', CaseTypeCtrl);
+    }
 
     /**
      * Initialise the controller

@@ -962,21 +962,18 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
    * @return bool
    */
   public function upgrade_1042() {
-    $caseTypeWorkflowCategory = civicrm_api3('OptionValue', 'get', [
-      'sequential' => 1,
+    $workflowCategoryOption = civicrm_api3('OptionValue', 'get', [
       'option_group_id' => 'case_type_category',
       'name' => 'Workflow',
       'option' => ['limit' => 1]
     ]);
 
-    if ($customFields['count'] === 0) {
+    if ($workflowCategoryOption['count'] === 0) {
       return TRUE;
     }
 
-    $caseTypeWorkflowCategory = array_pop($caseTypeWorkflowCategory['values']);
-
     civicrm_api3('OptionValue', 'create', [
-      'id' => $caseTypeWorkflowCategory['id'],
+      'id' => $workflowCategoryOption['id'],
       'is_default' => 1
     ]);
 
