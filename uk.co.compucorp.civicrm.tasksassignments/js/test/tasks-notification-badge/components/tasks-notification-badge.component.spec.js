@@ -62,6 +62,8 @@ define([
 
     function compileComponent () {
       controller = $componentController('tasksNotificationBadge', null, {});
+
+      controller.$onInit();
       $rootScope.$digest();
     }
   });

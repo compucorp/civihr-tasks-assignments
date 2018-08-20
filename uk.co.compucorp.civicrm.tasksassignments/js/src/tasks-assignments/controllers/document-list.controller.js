@@ -20,7 +20,8 @@ define([
     $log.debug('Controller: DocumentListController');
 
     var vm = this;
-    var defaultDocumentStatus = ['1', '2']; // 1: 'awaiting upload' | 2: 'awaiting approval
+    var onlyPendingStatuses = getDocumentStatusesIds(
+      ['awaiting upload', 'awaiting approval']);
 
     vm.dueThisWeek = 0;
     vm.dueToday = 0;
@@ -98,12 +99,13 @@ define([
       filterDates: {}
     };
     vm.dueFilters = [
-      { badgeClass: 'danger', calendarView: 'month', value: 'overdue' },
-      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight' },
-      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays' },
+      { badgeClass: 'danger', calendarView: 'month', value: 'overdue', statuses: onlyPendingStatuses },
+      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNextFortnight', statuses: onlyPendingStatuses },
+      { badgeClass: 'primary', calendarView: 'month', value: 'dueInNinetyDays', statuses: onlyPendingStatuses },
       { badgeClass: 'primary', calendarView: 'month', value: 'all' }
     ];
     vm.filterParams = {
+      allowedStatuses: [],
       contactId: null,
       documentStatus: [],
       ownership: $state.params.ownership || null,
@@ -115,7 +117,7 @@ define([
       assignmentType: []
     };
     vm.filterParamsHolder = {
-      documentStatus: defaultDocumentStatus,
+      documentStatus: onlyPendingStatuses,
       dateRange: {
         from: null,
         until: null
@@ -165,10 +167,10 @@ define([
     })();
 
     /**
-     * Apply action to delete the given list of documents
+     * Applies an action to delete the given list of documents
      *
-     * @param {string} action
-     * @param {array} documentList
+     * @param {String} action
+     * @param {Array} documentList
      */
     function apply (action, documentList) {
       var documentListLen = documentList.length;
@@ -214,7 +216,7 @@ define([
     }
 
     /**
-     * Applies the filters on the sidebar
+     * Applies the sidebar filters selection
      */
     function applySidebarFilters () {
       vm.filterParams.dateRange.from = vm.filterParamsHolder.dateRange.from;
@@ -226,10 +228,10 @@ define([
     }
 
     /**
-     * Updates the given document with new document's statusId
+     * Updates the given document with new document's status ID
      *
-     * @param {object} document
-     * @param {string} statusId
+     * @param {Object} document
+     * @param {String} statusId
      */
     function changeStatus (document, statusId) {
       if (!statusId || typeof +statusId !== 'number') {
@@ -273,8 +275,9 @@ define([
 
     /**
      * Filters the documents list based on filter type and due date
-     * @param {string} type filter type
-     * @return {array} documents list
+     *
+     * @param  {String} type filter type
+     * @return {Array} documents list
      */
     function filterByDateField (type) {
       var listByDueDate = $filter('filterByDateField')(vm.list, type, 'activity_date_time', vm.filterParams.dateRange);
@@ -283,24 +286,147 @@ define([
       return _.uniq(_.union(listByDueDate, listByExpiryDate), 'id');
     }
 
-    // Subscribers for event listeners
+    /**
+     * Gets document statuses IDs by their names
+     *
+     * @param  {Array} statusesNames
+     * @return {Array} statuses IDs
+     */
+    function getDocumentStatusesIds (statusesNames) {
+      var statuses = $rootScope.cache.documentStatus.arr;
+
+      return statusesNames
+        .map(function (statusName) {
+          return _.find(statuses, { value: statusName }).key;
+        });
+    }
+
+    /**
+     * Initiates watchers on date range values.
+     * It sets the minimum "to" date when "from" date is selected and
+     * sets the maximum "from" date when "to" date is selected.
+     */
+    function initDateRangeWatchers () {
+      $scope.$watch(function () {
+        return vm.filterParamsHolder.dateRange.from;
+      }, function (newValue) {
+        vm.datepickerOptions.until.minDate = newValue;
+      });
+
+      $scope.$watch(function () {
+        return vm.filterParamsHolder.dateRange.until;
+      }, function (newValue) {
+        vm.datepickerOptions.from.maxDate = newValue;
+      });
+    }
+
+    /**
+     * Initiates a watcher on the due filtering state.
+     * If "Overdue", "Next Fortnight" or "90 Days" state is selected,
+     * it ensures no "Approved" or "Rejected" statuses appear in
+     * neither documents lists, nor counters or allowed filter options.
+     */
+    function initDueStateWatcher () {
+      $scope.$watch(function () {
+        return vm.filterParams.due;
+      }, function (filterType) {
+        var allStatuses = $rootScope.cache.documentStatus.arr;
+        var allowOnlyPendingStatuses =
+          _.includes(['overdue', 'dueInNextFortnight', 'dueInNinetyDays'], filterType);
+
+        vm.filterParams.documentStatus = allowOnlyPendingStatuses
+          ? onlyPendingStatuses : [];
+
+        vm.filterParams.allowedStatuses = allowOnlyPendingStatuses
+          ? _.filter(allStatuses, function (status) {
+            return _.includes(onlyPendingStatuses, status.key);
+          })
+          : allStatuses;
+
+        if (allowOnlyPendingStatuses) {
+          vm.filterParamsHolder.documentStatus =
+            _.intersection(vm.filterParamsHolder.documentStatus, onlyPendingStatuses);
+        }
+      });
+    }
+
+    /**
+     * Subscribes to event listeners
+     */
     function initListeners () {
-      // Updates document with given list of documents
+      listenToAssignmentFormSuccess();
+      listenToDocumentFormSuccess();
+      listenToCRMFormSuccess();
+    }
+
+    /**
+     * Initiates all watchers
+     */
+    function initWatchers () {
+      initDateRangeWatchers();
+      initDueStateWatcher();
+    }
+
+    /**
+     * Creates the date range label using from and until dates in
+     * format 'dd/MM/yyyy'
+     *
+     * @param {String} from
+     * @param {String} until
+     */
+    function labelDateRange () {
+      var filterDateTimeFrom = $filter('date')(vm.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
+      var filterDateTimeUntil = $filter('date')(vm.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
+
+      if (filterDateTimeUntil) {
+        filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
+      }
+
+      if (filterDateTimeFrom) {
+        filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
+      }
+
+      vm.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
+    }
+
+    /**
+     * Creates a collection of assignees names
+     *
+     * @param  {Array} assigneesIds
+     * @return {Object}
+     */
+    function listAssignees (assigneesIds) {
+      var assigneeList = {};
+
+      if (assigneesIds.length) {
+        _.each(assigneesIds, function (assigneeId) {
+          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
+
+          if (assignee) {
+            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
+          }
+        });
+      }
+
+      return assigneeList;
+    }
+
+    /**
+     * Listens to assignment form success and
+     * updates document with given list of documents.
+     */
+    function listenToAssignmentFormSuccess () {
       $scope.$on('assignmentFormSuccess', function (e, output) {
         Array.prototype.push.apply(vm.list, output.documentList);
       });
+    }
 
-      // Adds new document in list or updates the existing document
-      $scope.$on('documentFormSuccess', function (e, newData, existingData) {
-        if (angular.equals({}, existingData)) {
-          vm.list.push(newData);
-        } else {
-          angular.extend(existingData, newData);
-        }
-      });
-
-      // For data with success status, if the pattern of messages matchses
-      // assignment cache is cleared and the current state is reloaded.
+    /**
+     * Listens to CRM form successful submission.
+     * For data with success status, if the pattern of messages matches,
+     * the assignment cache is cleared and the current state is reloaded.
+     */
+    function listenToCRMFormSuccess () {
       $scope.$on('crmFormSuccess', function (e, data) {
         if (data.status === 'success') {
           var pattern = /case|activity|assignment/i;
@@ -320,78 +446,35 @@ define([
       });
     }
 
-    // Execute watchers for the changes
-    function initWatchers () {
-      // Whenever the date filters will change, their corrispondent
-      // datepickers will have the minDate or maxDate setting updated
-      // accordingly
-      $scope.$watch('filterParamsHolder.dateRange.from', function (newValue) {
-        vm.datepickerOptions.until.minDate = newValue;
-      });
-
-      $scope.$watch('filterParamsHolder.dateRange.until', function (newValue) {
-        vm.datepickerOptions.from.maxDate = newValue;
-      });
-    }
-
     /**
-     * Creates the date range label using from and until dates in
-     * format 'dd/MM/yyyy'
-     *
-     * @param {string} from
-     * @param {string} until
+     * Listens to document form success and
+     * adds a new document in the list or updates the existing document
      */
-    function labelDateRange () {
-      var filterDateTimeFrom = $filter('date')(vm.filterParams.dateRange.from, 'dd/MM/yyyy') || '';
-      var filterDateTimeUntil = $filter('date')(vm.filterParams.dateRange.until, 'dd/MM/yyyy') || '';
-
-      if (filterDateTimeUntil) {
-        filterDateTimeUntil = !filterDateTimeFrom ? 'Until: ' + filterDateTimeUntil : ' - ' + filterDateTimeUntil;
-      }
-
-      if (filterDateTimeFrom) {
-        filterDateTimeFrom = !filterDateTimeUntil ? 'From: ' + filterDateTimeFrom : filterDateTimeFrom;
-      }
-
-      vm.label.dateRange = filterDateTimeFrom + filterDateTimeUntil;
+    function listenToDocumentFormSuccess () {
+      $scope.$on('documentFormSuccess', function (e, newData, existingData) {
+        if (angular.equals({}, existingData)) {
+          vm.list.push(newData);
+        } else {
+          angular.extend(existingData, newData);
+        }
+      });
     }
 
     /**
-     * Creates the list of contact name as  object
-     * @param  {array} assigneesIds
-     * @return {object}
-     */
-    function listAssignees (assigneesIds) {
-      var assigneeList = {};
-
-      if (assigneesIds.length) {
-        _.each(assigneesIds, function (assigneeId) {
-          var assignee = _.find($rootScope.cache.contact.obj, {'contact_id': assigneeId});
-
-          if (assignee) {
-            assigneeList[assigneeId] = assignee.sort_name.replace(',', '');
-          }
-        });
-      }
-
-      return assigneeList;
-    }
-
-    /**
-     * Check the CRM message title to match the given pattern
+     * Checks the CRM message title to match the given pattern
      *
-     * @param  {string} pattern
-     * @param  {object} data
-     * @return {boolean}
+     * @param  {String} pattern
+     * @param  {Object} data
+     * @return {Boolean}
      */
     function matchMessageTitle (pattern, data) {
       return (data.crmMessages && data.crmMessages.length) && pattern.test(data.crmMessages[0].title);
     }
 
     /**
-     * Sort the document list based on the property type
-     * @param  {string} propertyName
-     * @return {array}
+     * Sorts the document list based on the property name
+     *
+     * @param  {String} propertyName
      */
     function sortBy (propertyName) {
       vm.reverse = (vm.propertyName === propertyName) ? !vm.reverse : false;
@@ -432,9 +515,9 @@ define([
     }
 
     /**
-     * Navigates to calander view
+     * Navigates to the calander view
      *
-     * @param {string} view
+     * @param {String} view
      */
     function viewInCalendar (view) {
       $state.go('calendar.mwl.' + view);

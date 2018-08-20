@@ -11,7 +11,7 @@ define([
     $httpBackend.whenGET(/views.*/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
-    $httpBackend.whenGET(/action=get&entity=CaseType/).respond({});
+    $httpBackend.whenGET(/action=get&entity=CaseType/).respond({ values: [ jasmine.any(Object) ] });
     $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
   };
 
