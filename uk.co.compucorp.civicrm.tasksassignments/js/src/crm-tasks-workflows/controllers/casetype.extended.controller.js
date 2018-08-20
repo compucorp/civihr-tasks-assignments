@@ -8,11 +8,11 @@
 
   CaseTypeExtendedController.$inject = [
     '$controller', '$log', '$scope', 'crmApi', 'apiCalls', 'activityOptionsTask', 'activityOptionsDocument',
-    'customFieldIds'
+    'customFieldIds', 'defaultCaseTypeCategory'
   ];
 
   function CaseTypeExtendedController ($controller, $log, $scope, crmApi, apiCalls, activityOptionsTask, activityOptionsDocument,
-    customFieldIds) {
+    customFieldIds, defaultCaseTypeCategory) {
     $log.debug('Controller: CaseTypeExtendedController');
 
     var parentMethods = {};
@@ -129,14 +129,13 @@
     }
 
     /**
-     * Sets the default category for the case type. In this case the default
-     * category is Workflow.
+     * Sets the default category for the case type. The default case type category
+     * is the one selected as default on the API.
      */
     function setCaseTypeDefaultCategory () {
       var categoryFieldname = 'custom_' + customFieldIds['caseType.category'];
-      var DEFAULT_CATEGORY = 'Workflow';
 
-      $scope.caseType[categoryFieldname] = DEFAULT_CATEGORY;
+      $scope.caseType[categoryFieldname] = defaultCaseTypeCategory;
     }
   }
 })(angular);

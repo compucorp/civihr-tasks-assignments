@@ -65,8 +65,10 @@
           expectedRelationshipOptions = getExpectedRelationshipOptions(mockRelationships);
 
           initController($scope, {
-            relTypes: {
-              values: mockRelationships
+            apiCalls: {
+              relTypes: {
+                values: mockRelationships
+              }
             }
           });
         });
@@ -121,7 +123,8 @@
       });
 
       describe('default case type category value', function () {
-        var CATEGORY_FIELD = 'custom_' + CASE_TYPE_CATEGORY_FIELD_ID;
+        var categoryField = 'custom_' + CASE_TYPE_CATEGORY_FIELD_ID;
+        var expectedCategory = 'Vacancy';
 
         describe('when creating a new case type', function () {
           beforeEach(function () {
@@ -129,31 +132,31 @@
             $scope = $rootScope.$new();
 
             initController($scope, {
-              caseType: caseType
+              apiCalls: { caseType: caseType },
+              defaultCaseTypeCategory: expectedCategory
             });
           });
 
           it('sets the default case type category equal to Workflow', function () {
-            expect($scope.caseType[CATEGORY_FIELD]).toEqual('Workflow');
+            expect($scope.caseType[categoryField]).toEqual(expectedCategory);
           });
         });
 
         describe('when updating an existing case type', function () {
-          var expectedCategory = 'Vacancy';
-
           beforeEach(function () {
             var caseType = getMockCaseType();
             $scope = $rootScope.$new();
             caseType.id = 100;
-            caseType[CATEGORY_FIELD] = expectedCategory;
+            caseType[categoryField] = expectedCategory;
 
             initController($scope, {
-              caseType: caseType
+              apiCalls: { caseType: caseType },
+              defaultCaseTypeCategory: expectedCategory
             });
           });
 
           it('does not override their current category', function () {
-            expect($scope.caseType[CATEGORY_FIELD]).toEqual(expectedCategory);
+            expect($scope.caseType[categoryField]).toEqual(expectedCategory);
           });
         });
       });
@@ -179,7 +182,7 @@
         caseType.id = 100;
 
         initController($scope, {
-          caseType: caseType
+          apiCalls: { caseType: caseType }
         });
       });
 
@@ -217,23 +220,27 @@
      * Initialise the controller
      *
      * @param {Object} scope - an optional custom $scope to pass to the controller.
-     * @param {Object} apiCalls - an optional apiCalls mock object to pass to the controller.
+     * @param {Object} dependencies - allows overriding any dependency required by the controller.
      */
-    function initController (scope, apiCalls) {
-      var defaultApiCalls = {
-        relTypes: { values: [] }
-      };
+    function initController (scope, dependencies) {
+      var defaultApiCalls, defaultDependencies;
 
       $scope = scope || $rootScope.$new();
-      apiCalls = angular.extend(defaultApiCalls, apiCalls);
-
-      $controller('CaseTypeExtendedController', {
+      defaultApiCalls = {
+        relTypes: { values: [] }
+      };
+      defaultDependencies = {
         $scope: $scope,
         crmApi: {},
-        apiCalls: apiCalls,
+        defaultCaseTypeCategory: 'Workflow',
         activityOptionsTask: { values: angular.copy(TaskActivityOptionsData) },
         activityOptionsDocument: { values: angular.copy(DocumentActivityOptionsData) }
-      });
+      };
+
+      dependencies = angular.extend(defaultDependencies, dependencies);
+      dependencies.apiCalls = angular.extend(defaultApiCalls, dependencies.apiCalls);
+
+      $controller('CaseTypeExtendedController', dependencies);
 
       $scope.$digest();
     }
