@@ -483,7 +483,7 @@ define([
                 relationship_type_id: mockedRelationshipType.id,
                 contact_id_a: contact.id,
                 options: { limit: 1 }
-              }, null, null, true);
+              }, null, null, false);
             });
 
             it('assigns the contact that belongs to the relationship', function () {
@@ -506,7 +506,7 @@ define([
                 relationship_type_id: mockedRelationshipType.id,
                 contact_id_b: contact.id,
                 options: { limit: 1 }
-              }, null, null, true);
+              }, null, null, false);
             });
 
             it('assigns the contact that belongs to the relationship', function () {
@@ -542,7 +542,7 @@ define([
                   or: [['contact_id_a', 'contact_id_b']],
                   limit: 1
                 }
-              }, null, null, true);
+              }, null, null, false);
             });
           });
 

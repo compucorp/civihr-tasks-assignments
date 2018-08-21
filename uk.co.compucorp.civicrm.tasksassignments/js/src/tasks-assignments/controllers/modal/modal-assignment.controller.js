@@ -22,7 +22,6 @@ define([
     $log.debug('Controller: ModalAssignmentController');
 
     var defaultAssigneeOptionsIndex;
-    var canCacheRelationshipRequests = true;
     var relationshipTypesCache = {};
     var activityModel = {
       activity_type_id: null,
@@ -274,8 +273,6 @@ define([
           // $timeout will execute the code in the next digest.
           // this is done because CRM.loadForm works outside of Angular:
           $timeout(function () {
-            canCacheRelationshipRequests = false;
-
             initDefaultAssigneesForActivities()
               .then(loadAndCacheContactForActivities);
           });
@@ -411,10 +408,8 @@ define([
       relationshipTypeDetails = getRelationshipTypeDetails(activityType.default_assignee_relationship);
       filters = getDefaultAssigneeFiltersForRelationshipType(relationshipTypeDetails);
 
-      return Relationship.allValid(filters, null, null, canCacheRelationshipRequests)
+      return Relationship.allValid(filters, null, null, false)
         .then(function (result) {
-          canCacheRelationshipRequests = true;
-
           return result.list.map(function (relationship) {
             if (relationshipTypeDetails.isBidirectional) {
               return relationship.contact_id_a === vm.assignment.client_id
