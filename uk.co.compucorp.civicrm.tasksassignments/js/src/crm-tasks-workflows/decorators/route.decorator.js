@@ -18,7 +18,6 @@
       caseTypeEditRoute.controller = 'CaseTypeExtendedController';
       caseTypeEditRoute.resolve.activityOptionsTask = getResolverForActivityTypeComponent('CiviTask');
       caseTypeEditRoute.resolve.activityOptionsDocument = getResolverForActivityTypeComponent('CiviDocument');
-      caseTypeEditRoute.resolve.defaultCaseTypeCategory = getResolverForDefaultCaseTypeCategory();
 
       caseTypeListRoute.resolve.caseTypes = getResolverForWorkflowTypes();
     })();
@@ -55,29 +54,6 @@
         filters[ caseTypeCategoryField ] = 'Workflow';
 
         return crmApi('CaseType', 'get', filters);
-      }];
-    }
-
-    /**
-     * Returns a resolver for the default case type category. The default category
-     * is the one selected as such on the API.
-     *
-     * @return {Array} An array containing the dependencies and function that will
-     * resolve the default case type category value.
-     */
-    function getResolverForDefaultCaseTypeCategory () {
-      return ['crmApi', function defaultCaseTypeCategoryResolver (crmApi) {
-        return crmApi('OptionValue', 'get', {
-          sequential: 1,
-          option_group_id: 'case_type_category',
-          is_default: 1,
-          options: { limit: 1 }
-        })
-          .then(function (defaultCaseTypeCategoryResponse) {
-            var defaultCaseTypeCategory = defaultCaseTypeCategoryResponse.values[0] || {};
-
-            return defaultCaseTypeCategory.value;
-          });
       }];
     }
 

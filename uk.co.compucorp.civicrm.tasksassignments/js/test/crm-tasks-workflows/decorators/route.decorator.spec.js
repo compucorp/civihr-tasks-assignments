@@ -4,7 +4,7 @@
   'use strict';
 
   describe('RouteDecorator', function () {
-    var $injector, $q, $rootScope, $route, crmApiSpy, customFieldIds;
+    var $injector, $route, crmApiSpy, customFieldIds;
 
     beforeEach(module('ngRoute', 'crm-tasks-workflows.decorators', function ($routeProvider, $provide) {
       crmApiSpy = jasmine.createSpy('crmApi');
@@ -34,10 +34,8 @@
       function resolverToBeReplaced () {}
     }));
 
-    beforeEach(inject(function (_$injector_, _$q_, _$rootScope_, _$route_, _customFieldIds_) {
+    beforeEach(inject(function (_$injector_, _$route_, _customFieldIds_) {
       $injector = _$injector_;
-      $q = _$q_;
-      $rootScope = _$rootScope_;
       $route = _$route_;
       customFieldIds = _customFieldIds_;
     }));
@@ -71,40 +69,6 @@
           component_id: 'CiviDocument',
           sequential: 1,
           options: { sort: 'name', limit: 0 }
-        });
-      });
-
-      describe('when the default case type category is resolved', function () {
-        var returnedDefaultCaseTypeCategory;
-        var expectedDefaultCaseTypeCategory = 'Workflow';
-
-        beforeEach(function () {
-          var defaultCategoryResponse = {
-            count: 1,
-            values: [{
-              value: expectedDefaultCaseTypeCategory
-            }]
-          };
-
-          crmApiSpy.and.returnValue($q.resolve(defaultCategoryResponse));
-          $injector.invoke(caseTypeRoute.resolve.defaultCaseTypeCategory)
-            .then(function (defaultCaseTypeCategory) {
-              returnedDefaultCaseTypeCategory = defaultCaseTypeCategory;
-            });
-          $rootScope.$digest();
-        });
-
-        it('requests the default case type category', function () {
-          expect(crmApiSpy).toHaveBeenCalledWith('OptionValue', 'get', {
-            sequential: 1,
-            option_group_id: 'case_type_category',
-            is_default: 1,
-            options: { limit: 1 }
-          });
-        });
-
-        it('returns the value of the default case type category', function () {
-          expect(returnedDefaultCaseTypeCategory).toEqual(expectedDefaultCaseTypeCategory);
         });
       });
     });
