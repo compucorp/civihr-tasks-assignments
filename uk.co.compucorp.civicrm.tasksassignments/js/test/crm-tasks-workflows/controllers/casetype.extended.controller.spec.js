@@ -109,15 +109,14 @@
 
       describe('default case type category value', function () {
         var categoryField = 'custom_' + CASE_TYPE_CATEGORY_FIELD_ID;
-        var expectedCategory = 'Vacancy';
+        var expectedCategory = 'Workflow';
 
         describe('when creating a new case type', function () {
           beforeEach(function () {
             var caseType = getMockCaseType();
 
             initController($scope, {
-              apiCalls: { caseType: caseType },
-              defaultCaseTypeCategory: expectedCategory
+              apiCalls: { caseType: caseType }
             });
           });
 
@@ -133,8 +132,7 @@
             caseType[categoryField] = expectedCategory;
 
             initController($scope, {
-              apiCalls: { caseType: caseType },
-              defaultCaseTypeCategory: expectedCategory
+              apiCalls: { caseType: caseType }
             });
           });
 
