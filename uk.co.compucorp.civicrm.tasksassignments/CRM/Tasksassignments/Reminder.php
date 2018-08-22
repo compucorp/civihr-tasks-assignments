@@ -213,7 +213,7 @@ class CRM_Tasksassignments_Reminder {
     $recipients = self::_reminderRecipients($activityContacts, $previousAssignee);
 
     foreach ($recipients as $recipient) {
-      $isTask = isset($activityResult['subject']);
+      $isTask = self::_checkIfActivityTypeBelongsToComponent($activityResult['activity_type_id'], 'CiviTask');
       $contactId = $emailToContactId[$recipient];
       $activityName = implode(', ', $activityContacts['targets']['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
 
@@ -588,7 +588,7 @@ class CRM_Tasksassignments_Reminder {
 
         // Fill the $reminderData array:
         if ($reminderKey) {
-          $isTask = isset($activityResult->subject);
+          $isTask = self::_checkIfActivityTypeBelongsToComponent($activityResult->activity_type_id, 'CiviTask');
           $reminderData[$reminderKey][] = array(
             'id' => $activityResult->id,
             'activityUrl' => self::createActivityURL($contactId, $activityResult->id),
@@ -1034,7 +1034,7 @@ class CRM_Tasksassignments_Reminder {
    * Returns Activity Types IDs for a given component name,
    * for example, "CiviTask" or "CiviDocument"
    *
-   * @param string $componentName eg
+   * @param string $componentName
    * @return array
    */
   private static function _getTypesIdsForComponent($componentName) {
@@ -1065,6 +1065,20 @@ class CRM_Tasksassignments_Reminder {
     }
 
     return $taskIncompleteStatuses;
+  }
+
+  /**
+   * Checks if an Activity Type belongs to a given component,
+   * for example, "CiviTask" or "CiviDocument"
+   *
+   * @param int $activityTypeId
+   * @param string $componentName
+   * @return boolean
+   */
+  private static function _checkIfActivityTypeBelongsToComponent($activityTypeId, $componentName) {
+    $types = self::_getTypesIdsForComponent($componentName);
+
+    return in_array($activityTypeId, $types);
   }
 
 }
