@@ -529,6 +529,8 @@ define([
     function initAssignmentTypesWatcher () {
       var assignmentTypesListener = $rootScope.$watch('cache.assignmentType.obj', function (cache) {
         if (!_.isEmpty(cache)) {
+          vm.workflowActivityTypes = getWorkflowActivityTypes();
+
           setData();
           assignmentTypesListener();
         }
