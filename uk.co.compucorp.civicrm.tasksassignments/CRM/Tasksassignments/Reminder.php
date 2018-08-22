@@ -1,5 +1,7 @@
 <?php
 
+use CRM_Activity_Service_ActivityService as ActivityService;
+
 class CRM_Tasksassignments_Reminder {
 
   const ACTIVITY_CONTACT_ASSIGNEE = 1;
@@ -377,25 +379,6 @@ class CRM_Tasksassignments_Reminder {
   }
 
   /**
-   * Obtains list of task statuses that correspond to incomplete tasks.
-   *
-   * @return array
-   *   List of statuses that denote an incomplete task
-   */
-  private static function _getTaskIncompleteStatuses() {
-    $incompleteStatuses = array();
-    $incompleteStatusesResult = civicrm_api3('Task', 'getstatuses', array(
-      'sequential' => 1,
-      'grouping' => array('IS NULL' => 1),
-    ));
-    foreach ($incompleteStatusesResult['values'] as $value) {
-      $incompleteStatuses[] = $value['value'];
-    }
-
-    return $incompleteStatuses;
-  }
-
-  /**
    * Given a date in 'yyyy-mm-dd' format, calculates the date of next sunday.
    *
    * @param string $now
@@ -463,7 +446,7 @@ class CRM_Tasksassignments_Reminder {
    */
   private static function _buildTaskAssigneeCreatorQuery($to) {
     $components = self::_getReminderComponents();
-    $incompleteStatuses = self::_getTaskIncompleteStatuses();
+    $excludeCompletedActivities = self::getCompletedActivitiesExclusionQuery();
 
     return "
       SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
@@ -473,7 +456,7 @@ class CRM_Tasksassignments_Reminder {
       LEFT JOIN civicrm_location_type lt ON e.location_type_id = lt.id
       WHERE (
         activity_date_time <= '$to'
-        AND a.status_id IN (" . implode(', ', $incompleteStatuses) . ")
+        AND $excludeCompletedActivities
         AND ac.record_type_id IN ( 1, 2 )
         AND e.is_primary = 1
         AND lt.name = 'Work'
@@ -524,7 +507,7 @@ class CRM_Tasksassignments_Reminder {
         LEFT JOIN civicrm_location_type lt
         ON e.location_type_id = lt.id
         WHERE (
-          e.contact_id IN (' . implode(',', $contacts) . ') 
+          e.contact_id IN (' . implode(',', $contacts) . ')
           AND e.is_primary = 1
           AND lt.name = "Work"
         )
@@ -556,19 +539,20 @@ class CRM_Tasksassignments_Reminder {
     $now = date('Y-m-d');
 
     if (!empty($activityIds)) {
-      $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id, DATE(a.activity_date_time) AS activity_date, DATE(acf.expire_date) AS expire_date,
-            GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.display_name SEPARATOR  '|') AS activity_contact,
-            ca.case_id,
-            case_type.title AS case_type
-            FROM `civicrm_activity` a
-            LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
-            LEFT JOIN civicrm_case_activity ca ON ca.activity_id = a.id
-            LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
-            LEFT JOIN civicrm_case tcase ON tcase.id = ca.case_id
-            LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
-            LEFT JOIN civicrm_value_activity_custom_fields_11 acf ON acf.entity_id = a.id
-            WHERE a.id IN (" . implode(',', $activityIds) . ")
-            GROUP BY a.id";
+      $activityQuery = "SELECT a.id, a.activity_type_id, a.status_id,
+        DATE(a.activity_date_time) AS activity_date,
+        DATE(acf.expire_date) AS expire_date,
+        GROUP_CONCAT(ac.record_type_id,  ':', ac.contact_id,  ':', contact.display_name SEPARATOR  '|') AS activity_contact,
+        ca.case_id, case_type.title AS case_type
+        FROM `civicrm_activity` a
+        LEFT JOIN civicrm_activity_contact ac ON ac.activity_id = a.id
+        LEFT JOIN civicrm_case_activity ca ON ca.activity_id = a.id
+        LEFT JOIN civicrm_contact contact ON contact.id = ac.contact_id
+        LEFT JOIN civicrm_case tcase ON tcase.id = ca.case_id
+        LEFT JOIN civicrm_case_type case_type ON case_type.id = tcase.case_type_id
+        LEFT JOIN civicrm_value_activity_custom_fields_11 acf ON acf.entity_id = a.id
+        WHERE a.id IN (" . implode(',', $activityIds) . ")
+        GROUP BY a.id";
 
       $activityResult = CRM_Core_DAO::executeQuery($activityQuery);
       while ($activityResult->fetch()) {
@@ -1007,6 +991,79 @@ class CRM_Tasksassignments_Reminder {
     $uf_match_data = array_shift($res['values']);
 
     return $uf_match_data;
+  }
+
+  /**
+   * Constructs a query condition that excludes "completed" activities.
+   *
+   * @return string
+   */
+  private static function getCompletedActivitiesExclusionQuery() {
+    $documentIncompleteStatuses = implode(',', self::_getDocumentIncompleteStatuses());
+    $documentTypesIds = implode(',', self::_getTypesIdsForComponent('CiviDocument'));
+    $taskIncompleteStatuses = implode(',', self::_getTaskIncompleteStatuses());
+    $taskTypesIds = implode(',', self::_getTypesIdsForComponent('CiviTask'));
+
+    return "(
+      (
+        a.status_id IN ($documentIncompleteStatuses)
+        AND a.activity_type_id IN ($documentTypesIds)
+      )
+      OR
+      (
+        a.status_id IN ($taskIncompleteStatuses)
+        AND a.activity_type_id IN ($taskTypesIds)
+      )
+    )";
+  }
+
+  /**
+   * Returns incomplete statuses for Documents
+   *
+   * @return array
+   */
+  private static function _getDocumentIncompleteStatuses() {
+    return [
+      CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
+      CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_APPROVAL
+    ];
+  }
+
+  /**
+   * Returns Activity Types IDs for a given component name,
+   * for example, "CiviTask" or "CiviDocument"
+   *
+   * @param string $componentName eg
+   * @return array
+   */
+  private static function _getTypesIdsForComponent($componentName) {
+    $taskTypesIds = [];
+    $taskTypes = ActivityService::findByComponent($componentName);
+
+    foreach ($taskTypes as $taskType) {
+      $taskTypesIds[] = $taskType['value'];
+    }
+
+    return $taskTypesIds;
+  }
+
+  /**
+   * Returns incomplete statuses for Tasks
+   *
+   * @return array
+   */
+  private static function _getTaskIncompleteStatuses() {
+    $taskIncompleteStatuses = [];
+    $taskIncompleteStatusesResult = civicrm_api3('Task', 'getstatuses', [
+      'sequential' => 1,
+      'grouping' => ['IS NULL' => 1]
+    ]);
+
+    foreach ($taskIncompleteStatusesResult['values'] as $value) {
+      $taskIncompleteStatuses[] = $value['value'];
+    }
+
+    return $taskIncompleteStatuses;
   }
 
 }
