@@ -588,13 +588,14 @@ class CRM_Tasksassignments_Reminder {
 
         // Fill the $reminderData array:
         if ($reminderKey) {
+          $isTask = isset($activityResult->subject);
           $reminderData[$reminderKey][] = array(
             'id' => $activityResult->id,
             'activityUrl' => self::createActivityURL($contactId, $activityResult->id),
             'typeId' => $activityResult->activity_type_id,
             'type' => self::$_activityOptions['type'][$activityResult->activity_type_id],
             'statusId' => $activityResult->status_id,
-            'status' => self::$_activityOptions['status'][$activityResult->status_id],
+            'status' => ucfirst(self::$_activityOptions[$isTask ? 'status' : 'document_status'][$activityResult->status_id]),
             'targets' => $activityContact[self::ACTIVITY_CONTACT_TARGET],
             'assignee' => $activityContact[self::ACTIVITY_CONTACT_ASSIGNEE],
             'caseId' => $activityResult->case_id,
