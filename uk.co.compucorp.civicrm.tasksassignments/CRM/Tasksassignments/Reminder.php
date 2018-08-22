@@ -446,7 +446,7 @@ class CRM_Tasksassignments_Reminder {
    */
   private static function _buildTaskAssigneeCreatorQuery($to) {
     $components = self::_getReminderComponents();
-    $excludeCompletedActivities = self::getCompletedActivitiesExclusionQuery();
+    $excludeCompletedActivities = self::_getCompletedActivitiesExclusionQuery();
 
     return "
       SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
@@ -999,7 +999,7 @@ class CRM_Tasksassignments_Reminder {
    *
    * @return string
    */
-  private static function getCompletedActivitiesExclusionQuery() {
+  private static function _getCompletedActivitiesExclusionQuery() {
     $documentIncompleteStatuses = implode(',', self::_getDocumentIncompleteStatuses());
     $documentTypesIds = implode(',', self::_getTypesIdsForComponent('CiviDocument'));
     $taskIncompleteStatuses = implode(',', self::_getTaskIncompleteStatuses());
