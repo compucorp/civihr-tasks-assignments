@@ -218,7 +218,7 @@ class CRM_Tasksassignments_Reminder {
     $recipients = self::reminderRecipients($activityContacts, $previousAssignee);
 
     foreach ($recipients as $recipient) {
-      $isTask = self::isTaskComponent($activityResult['activity_type_id']);
+      $isTask = ActivityService::isTaskComponent($activityResult['activity_type_id']);
       $contactId = $emailToContactId[$recipient];
       $activityName = implode(', ', $activityContacts['targets']['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
 
@@ -593,7 +593,7 @@ class CRM_Tasksassignments_Reminder {
 
         // Fill the $reminderData array:
         if ($reminderKey) {
-          $isTask = self::isTaskComponent($activityResult->activity_type_id);
+          $isTask = ActivityService::isTaskComponent($activityResult->activity_type_id);
           $reminderData[$reminderKey][] = array(
             'id' => $activityResult->id,
             'activityUrl' => self::createActivityURL($contactId, $activityResult->id),
@@ -1006,9 +1006,9 @@ class CRM_Tasksassignments_Reminder {
    */
   private static function getCompletedActivitiesExclusionQuery() {
     $documentIncompleteStatuses = implode(',', Document::getIncompleteStatuses());
-    $documentTypesIds = implode(',', self::getTypesIdsForComponent('CiviDocument'));
+    $documentTypesIds = implode(',', ActivityService::getTypesIdsForComponent('CiviDocument'));
     $taskIncompleteStatuses = implode(',', Task::getIncompleteStatuses());
-    $taskTypesIds = implode(',', self::getTypesIdsForComponent('CiviTask'));
+    $taskTypesIds = implode(',', ActivityService::getTypesIdsForComponent('CiviTask'));
 
     return "(
       (
@@ -1021,51 +1021,6 @@ class CRM_Tasksassignments_Reminder {
         AND a.activity_type_id IN ($taskTypesIds)
       )
     )";
-  }
-
-  /**
-   * Returns Activity Types IDs for a given component name,
-   * for example, "CiviTask" or "CiviDocument"
-   *
-   * @param string $componentName
-   *
-   * @return array
-   */
-  private static function getTypesIdsForComponent($componentName) {
-    $taskTypesIds = [];
-    $taskTypes = ActivityService::findByComponent($componentName);
-
-    foreach ($taskTypes as $taskType) {
-      $taskTypesIds[] = $taskType['value'];
-    }
-
-    return $taskTypesIds;
-  }
-
-  /**
-   * Checks if an Activity Type belongs to a given component,
-   * for example, "CiviTask" or "CiviDocument"
-   *
-   * @param int $activityTypeId
-   * @param string $componentName
-   *
-   * @return boolean
-   */
-  private static function checkIfActivityTypeBelongsToComponent($activityTypeId, $componentName) {
-    $types = self::getTypesIdsForComponent($componentName);
-
-    return in_array($activityTypeId, $types);
-  }
-
-  /**
-   * Checks if an activity is a Task component
-   *
-   * @param int $activityTypeId
-   *
-   * @return boolean
-   */
-  private static function isTaskComponent($activityTypeId) {
-    return self::checkIfActivityTypeBelongsToComponent($activityTypeId, 'CiviTask');
   }
 
 }

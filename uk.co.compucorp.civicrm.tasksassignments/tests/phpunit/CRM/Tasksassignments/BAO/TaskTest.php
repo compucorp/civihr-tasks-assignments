@@ -15,9 +15,9 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $upgrader->install();
 
     // Pick one of Task types.
-    $taskTypes = civicrm_api3('Task', 'getoptions', array(
-      'field' => 'activity_type_id',
-    ));
+    $taskTypes = civicrm_api3('Task', 'getoptions', [
+      'field' => 'activity_type_id'
+    ]);
     $this->_taskTypeId = array_shift($taskTypes['values']);
   }
 
@@ -25,9 +25,8 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
    * @expectedException CRM_Exception
    */
   function testCreateTaskWithNoContacts() {
-    $params = array(
-      'activity_type_id' => $this->_taskTypeId,
-    );
+    $params = ['activity_type_id' => $this->_taskTypeId];
+
     Task::create($params);
   }
 
@@ -35,20 +34,20 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
    * @expectedException CRM_Exception
    */
   function testCreateTaskWithNoSource() {
-    $params = array(
+    $params = [
       'activity_type_id' => $this->_taskTypeId,
       'assignee_contact_id' => 1,
-      'target_contact_id' => 2,
-    );
+      'target_contact_id' => 2
+    ];
     Task::create($params);
   }
 
   function testCreateTaskWithNoAssignee() {
-    $params = array(
+    $params = [
       'activity_type_id' => $this->_taskTypeId,
       'source_contact_id' => 1,
-      'target_contact_id' => 2,
-    );
+      'target_contact_id' => 2
+    ];
     $result = Task::create($params);
 
     $this->assertTrue($result instanceof CRM_Activity_DAO_Activity);
@@ -59,11 +58,11 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
    * @expectedException CRM_Exception
    */
   function testCreateTaskWithNoTarget() {
-    $params = array(
+    $params = [
       'activity_type_id' => $this->_taskTypeId,
       'source_contact_id' => 1,
-      'assignee_contact_id' => 2,
-    );
+      'assignee_contact_id' => 2
+    ];
     Task::create($params);
   }
 
