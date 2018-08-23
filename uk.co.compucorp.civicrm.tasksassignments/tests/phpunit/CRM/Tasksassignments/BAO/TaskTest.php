@@ -69,7 +69,15 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
 
   function testGetIncompletedStatuses() {
     $incompleteStatuses = Task::getIncompleteStatuses();
+    $allStatuses = array_flip(civicrm_api3('Activity', 'getoptions',
+      ['field' => "activity_status_id"])['values']);
+    $expectedStatuses = [
+      $allStatuses['Scheduled'],
+      $allStatuses['Left Message'],
+      $allStatuses['Unreachable'],
+      $allStatuses['Available']
+    ];
 
-    $this->assertEquals($incompleteStatuses, [1, 4, 5, 7]);
+    $this->assertEquals($incompleteStatuses, $expectedStatuses);
   }
 }
