@@ -46,38 +46,38 @@ class CRM_Activity_Service_ActivityServiceTest extends BaseHeadlessTest {
   }
 
   public function testIsTaskComponentReturnsTrueForTaskTypeIds() {
-    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviTask');
+    $activityTypesIds = ActivityService::getTypesIdsForComponent('CiviTask');
 
-    foreach($documentTypesIds as $documentTypeId) {
+    foreach($activityTypesIds as $activityTypeId) {
       $this->assertTrue(ActivityService::isTaskComponent(
-        $documentTypeId, 'CiviTask'));
+        $activityTypeId, 'CiviTask'));
     }
   }
 
   public function testIsTaskComponentReturnsFalseForDocumentTypeIds() {
-    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
+    $activityTypesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
 
-    foreach($documentTypesIds as $documentTypeId) {
+    foreach($activityTypesIds as $activityTypeId) {
       $this->assertFalse(ActivityService::isTaskComponent(
-        $documentTypeId, 'CiviTask'));
+        $activityTypeId, 'CiviTask'));
     }
   }
 
   public function testIsDocumentComponentReturnsTrueForDocumentTypeIds() {
-    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
+    $activityTypesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
 
-    foreach($documentTypesIds as $documentTypeId) {
+    foreach($activityTypesIds as $activityTypeId) {
       $this->assertTrue(ActivityService::isDocumentComponent(
-        $documentTypeId, 'CiviDocument'));
+        $activityTypeId, 'CiviDocument'));
     }
   }
 
   public function testIsDocumentComponentReturnsFalseForTaskTypeIds() {
-    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviTask');
+    $activityTypesIds = ActivityService::getTypesIdsForComponent('CiviTask');
 
-    foreach($documentTypesIds as $documentTypeId) {
+    foreach($activityTypesIds as $activityTypeId) {
       $this->assertFalse(ActivityService::isDocumentComponent(
-        $documentTypeId, 'CiviDocument'));
+        $activityTypeId, 'CiviDocument'));
     }
   }
 
