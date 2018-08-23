@@ -8,23 +8,23 @@ use CRM_Activity_Service_ActivityService as ActivityService;
  */
 class CRM_Activity_Service_ActivityServiceTest extends BaseHeadlessTest {
 
-  function testFindByComponentFetchingDocuments() {
+  public function testFindByComponentForDocumentsReturnsDocumentActivityTypes() {
     $activities = ActivityService::findByComponent('CiviDocument');
 
     foreach($activities as $activity) {
-      $this->assertFalse(ActivityService::isTaskComponent($activity['activity_type_id']));
+      $this->assertTrue(ActivityService::isDocumentComponent($activity['value']));
     }
   }
 
-  function testFindByComponentFetchingTasks() {
+  public function testFindByComponentForTasksReturnsTasksActivityTypes() {
     $activities = ActivityService::findByComponent('CiviTask');
 
     foreach($activities as $activity) {
-      $this->assertTrue(ActivityService::isTaskComponent($activity['activity_type_id']));
+      $this->assertTrue(ActivityService::isTaskComponent($activity['value']));
     }
   }
 
-  function testFindByComponentLimitingResultsAmount() {
+  public function testFindByComponentLimitingResultsAmount() {
     $activities = ActivityService::findByComponent('CiviDocument', 1);
 
     $this->assertEquals(count($activities), 1);
@@ -33,40 +33,50 @@ class CRM_Activity_Service_ActivityServiceTest extends BaseHeadlessTest {
   /**
    * @expectedException CiviCRM_API3_Exception
    */
-  function testFindByComponentFetchingByInvalidComponent() {
+  public function testFindByComponentByInvalidComponentThrowsError() {
     $activities = ActivityService::findByComponent('NonExistingComponent');
   }
 
-  function testCheckIfActivityTypeBelongsToComponent() {
-    $activityTypeId = array_keys(civicrm_api3('Document', 'getoptions', [
-      'field' => 'activity_type_id'
-    ])['values'])[0];
-
-    $activityBelongsToDocumentComponent =
-      ActivityService::checkIfActivityTypeBelongsToComponent(
-        $activityTypeId, 'CiviDocument');
-    $activityBelongsToTaskComponent =
-      ActivityService::checkIfActivityTypeBelongsToComponent(
-        $activityTypeId, 'CiviTask');
-
-    $this->assertTrue($activityBelongsToDocumentComponent);
-    $this->assertFalse($activityBelongsToTaskComponent);
-  }
-
-  function testGetTypesIdsForComponent() {
+  public function testGetTypesIdsForComponent() {
     $typesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
 
     foreach($typesIds as $typeId) {
-      $this->assertTrue(ActivityService::checkIfActivityTypeBelongsToComponent(
-        $typeId, 'CiviDocument'));
+      $this->assertTrue(ActivityService::isDocumentComponent($typeId));
     }
   }
 
-  function testIsTaskComponent() {
+  public function testIsTaskComponentReturnsTrueForTaskTypeIds() {
+    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviTask');
+
+    foreach($documentTypesIds as $documentTypeId) {
+      $this->assertTrue(ActivityService::isTaskComponent(
+        $documentTypeId, 'CiviTask'));
+    }
+  }
+
+  public function testIsTaskComponentReturnsFalseForDocumentTypeIds() {
     $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
 
     foreach($documentTypesIds as $documentTypeId) {
       $this->assertFalse(ActivityService::isTaskComponent(
+        $documentTypeId, 'CiviTask'));
+    }
+  }
+
+  public function testIsDocumentComponentReturnsTrueForDocumentTypeIds() {
+    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviDocument');
+
+    foreach($documentTypesIds as $documentTypeId) {
+      $this->assertTrue(ActivityService::isDocumentComponent(
+        $documentTypeId, 'CiviDocument'));
+    }
+  }
+
+  public function testIsDocumentComponentReturnsFalseForTaskTypeIds() {
+    $documentTypesIds = ActivityService::getTypesIdsForComponent('CiviTask');
+
+    foreach($documentTypesIds as $documentTypeId) {
+      $this->assertFalse(ActivityService::isDocumentComponent(
         $documentTypeId, 'CiviDocument'));
     }
   }

@@ -29,21 +29,6 @@ class CRM_Activity_Service_ActivityService {
   }
 
   /**
-   * Checks if an Activity Type belongs to a given component,
-   * for example, "CiviTask" or "CiviDocument"
-   *
-   * @param int $activityTypeId
-   * @param string $componentName
-   *
-   * @return boolean
-   */
-  public static function checkIfActivityTypeBelongsToComponent($activityTypeId, $componentName) {
-    $types = self::getTypesIdsForComponent($componentName);
-
-    return in_array($activityTypeId, $types);
-  }
-
-  /**
    * Returns Activity Types IDs for a given component name,
    * for example, "CiviTask" or "CiviDocument"
    *
@@ -63,6 +48,17 @@ class CRM_Activity_Service_ActivityService {
   }
 
   /**
+   * Checks if an activity is a Document component
+   *
+   * @param int $activityTypeId
+   *
+   * @return boolean
+   */
+  public static function isDocumentComponent($activityTypeId) {
+    return self::checkIfActivityTypeBelongsToComponent($activityTypeId, 'CiviDocument');
+  }
+
+  /**
    * Checks if an activity is a Task component
    *
    * @param int $activityTypeId
@@ -71,6 +67,21 @@ class CRM_Activity_Service_ActivityService {
    */
   public static function isTaskComponent($activityTypeId) {
     return self::checkIfActivityTypeBelongsToComponent($activityTypeId, 'CiviTask');
+  }
+
+  /**
+   * Checks if an Activity Type belongs to a given component,
+   * for example, "CiviTask" or "CiviDocument"
+   *
+   * @param int $activityTypeId
+   * @param string $componentName
+   *
+   * @return boolean
+   */
+  private static function checkIfActivityTypeBelongsToComponent($activityTypeId, $componentName) {
+    $types = self::getTypesIdsForComponent($componentName);
+
+    return in_array($activityTypeId, $types);
   }
 
 }
