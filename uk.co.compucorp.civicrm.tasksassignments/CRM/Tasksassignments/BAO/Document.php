@@ -39,6 +39,18 @@ class CRM_Tasksassignments_BAO_Document extends CRM_Tasksassignments_DAO_Documen
   }
 
   /**
+   * Returns incomplete statuses for documents
+   *
+   * @return array
+   */
+  public static function getIncompleteStatuses() {
+    return [
+      CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
+      CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_APPROVAL
+    ];
+  }
+
+  /**
    * Clone all approved documents if there are 'days_to_create_a_document_clone'
    * days or less before their expire date.
    *

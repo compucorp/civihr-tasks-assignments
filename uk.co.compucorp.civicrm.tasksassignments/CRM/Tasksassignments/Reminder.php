@@ -1,6 +1,8 @@
 <?php
 
 use CRM_Activity_Service_ActivityService as ActivityService;
+use CRM_Tasksassignments_BAO_Document as Document;
+use CRM_Tasksassignments_BAO_Task as Task;
 
 class CRM_Tasksassignments_Reminder {
 
@@ -15,7 +17,7 @@ class CRM_Tasksassignments_Reminder {
   );
   private static $_reminderSettings = [];
 
-  private static function _setActivityOptions() {
+  private static function setActivityOptions() {
     if (empty(self::$_activityOptions)) {
       $typeResult = civicrm_api3('Activity', 'getoptions', array(
         'field' => "activity_type_id",
@@ -32,7 +34,7 @@ class CRM_Tasksassignments_Reminder {
     }
   }
 
-  private static function _checkRelatedExtensions() {
+  private static function checkRelatedExtensions() {
     $isAppraisalEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.appraisals', 'is_active', 'full_name');
     $isJobContractEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'org.civicrm.hrjobcontract', 'is_active', 'full_name');
     if ($isAppraisalEnabled) {
@@ -50,9 +52,10 @@ class CRM_Tasksassignments_Reminder {
    * the 'email' property
    *
    * @param array $contactIds
+   *
    * @return array
    */
-  private static function _getContactsWithEmail($contactIds) {
+  private static function getContactsWithEmail($contactIds) {
     $contacts = civicrm_api3('Contact', 'get', array(
       'return' => 'display_name',
       'id' => array('IN' => $contactIds),
@@ -78,11 +81,12 @@ class CRM_Tasksassignments_Reminder {
    *
    * @param array $contactIds
    * @param array $emailToContactId (by reference) Mapping between emails and contact ids
+   *
    * @return array
    */
-  private static function _getActivityContactsDetails($contactIds, &$emailToContactId) {
+  private static function getActivityContactsDetails($contactIds, &$emailToContactId) {
     $details = array('ids' => array(), 'links' => array(), 'names' => array(), 'emails' => array());
-    $contacts = self::_getContactsWithEmail($contactIds);
+    $contacts = self::getContactsWithEmail($contactIds);
 
     foreach ($contacts as $id => $contact) {
       $url = self::createContactURL($id);
@@ -105,9 +109,10 @@ class CRM_Tasksassignments_Reminder {
    *
    * @param array $assignees
    * @param int $previousAssigneeId
+   *
    * @return array consists of id, link, email and name of the previous assignee
    */
-  private static function _extractPreviousAssignee(&$assignees, $previousAssigneeId) {
+  private static function extractPreviousAssignee(&$assignees, $previousAssigneeId) {
     $index = null;
 
     foreach ($assignees['ids'] as $i => $assigneeId) {
@@ -145,7 +150,7 @@ class CRM_Tasksassignments_Reminder {
    *
    * @return array
    */
-  private static function _reminderRecipients($contacts, $previousAssignee) {
+  private static function reminderRecipients($contacts, $previousAssignee) {
     $hasSources = !empty($contacts['source']['emails']);
     $hasAssignees = !empty($contacts['assignees']['emails']);
 
@@ -159,7 +164,7 @@ class CRM_Tasksassignments_Reminder {
   }
 
   public static function sendReminder($activityId, $notes = null, $isReminder = false, $previousAssigneeId = null, $isDelete = false) {
-    self::_setActivityOptions();
+    self::setActivityOptions();
 
     $contactTypeToLabel = array(1 => 'assignees', 2 => 'source', 3 => 'targets');
     $activityContacts = array();
@@ -197,7 +202,7 @@ class CRM_Tasksassignments_Reminder {
         continue;
       }
 
-      $details = self::_getActivityContactsDetails($contacts['ids'], $emailToContactId);
+      $details = self::getActivityContactsDetails($contacts['ids'], $emailToContactId);
 
       $activityContacts[$type]['ids'] = $details['ids'];
       $activityContacts[$type]['links'] = $details['links'];
@@ -206,14 +211,14 @@ class CRM_Tasksassignments_Reminder {
     }
 
     if ($previousAssigneeId !== null) {
-      $previousAssignee = self::_extractPreviousAssignee($activityContacts['assignees'], $previousAssigneeId);
+      $previousAssignee = self::extractPreviousAssignee($activityContacts['assignees'], $previousAssigneeId);
     }
 
     $template = &CRM_Core_Smarty::singleton();
-    $recipients = self::_reminderRecipients($activityContacts, $previousAssignee);
+    $recipients = self::reminderRecipients($activityContacts, $previousAssignee);
 
     foreach ($recipients as $recipient) {
-      $isTask = self::_checkIfActivityTypeBelongsToComponent($activityResult['activity_type_id'], 'CiviTask');
+      $isTask = self::isTaskComponent($activityResult['activity_type_id']);
       $contactId = $emailToContactId[$recipient];
       $activityName = implode(', ', $activityContacts['targets']['names']) . ' - ' . self::$_activityOptions['type'][$activityResult['activity_type_id']];
 
@@ -248,7 +253,7 @@ class CRM_Tasksassignments_Reminder {
       } else {
         $subject = $activityName;
       }
-      self::_send($contactId, $recipient, $subject, $templateBodyHTML);
+      self::send($contactId, $recipient, $subject, $templateBodyHTML);
     }
 
     return true;
@@ -261,14 +266,14 @@ class CRM_Tasksassignments_Reminder {
    *   True on completion
    */
   public static function sendDailyReminder() {
-    self::_setActivityOptions();
-    self::_checkRelatedExtensions();
+    self::setActivityOptions();
+    self::checkRelatedExtensions();
 
     $now = date('Y-m-d');
-    $to = self::_getNextSunday($now);
+    $to = self::getNextSunday($now);
 
-    $assigneeQuery = self::_buildTaskAssigneeCreatorQuery($to);
-    $otherContactsQuery = self::_buildAdminsKeyDatesAndAppraisalsQuery($now, $to);
+    $assigneeQuery = self::buildTaskAssigneeCreatorQuery($to);
+    $otherContactsQuery = self::buildAdminsKeyDatesAndAppraisalsQuery($now, $to);
 
     if (!empty($otherContactsQuery)) {
       $otherContactsQuery = "UNION $otherContactsQuery";
@@ -284,7 +289,7 @@ class CRM_Tasksassignments_Reminder {
     ";
     $contactsResult = CRM_Core_DAO::executeQuery($contactsQuery);
 
-    $settings = self::_getReminderSettings();
+    $settings = self::getReminderSettings();
     $contactsData = [];
 
     while ($contactsResult->fetch()) {
@@ -301,7 +306,7 @@ class CRM_Tasksassignments_Reminder {
         continue;
       }
 
-      $reminderData = self::_getContactDailyReminderData(
+      $reminderData = self::getContactDailyReminderData(
         $contactData['contact_id'],
         $contactData['activity_ids'],
         $to,
@@ -320,7 +325,7 @@ class CRM_Tasksassignments_Reminder {
         'settings' => $settings,
       ]);
 
-      self::_send($contactData['contact_id'], $contactData['email'], 'Daily Reminder', $templateBodyHTML);
+      self::send($contactData['contact_id'], $contactData['email'], 'Daily Reminder', $templateBodyHTML);
     }
 
     return true;
@@ -353,7 +358,7 @@ class CRM_Tasksassignments_Reminder {
    * @return array
    *   Values in TASettings entity
    */
-  private static function _getReminderSettings() {
+  private static function getReminderSettings() {
     if (empty(self::$_reminderSettings)) {
       self::$_reminderSettings = civicrm_api3('TASettings', 'get');
     }
@@ -367,8 +372,8 @@ class CRM_Tasksassignments_Reminder {
    * @return array
    *   List of components
    */
-  private static function _getReminderComponents() {
-    $settings = self::_getReminderSettings();
+  private static function getReminderComponents() {
+    $settings = self::getReminderSettings();
 
     $components = array("'CiviTask'");
     if ($settings['documents_tab']['value']) {
@@ -387,7 +392,7 @@ class CRM_Tasksassignments_Reminder {
    * @return string
    *   Date in 'yyyy-mm-dd' format of next sunday, as calculated from $now
    */
-  private static function _getNextSunday($now) {
+  private static function getNextSunday($now) {
     $nbDay = date('N', strtotime($now));
     $sunday = new DateTime($now);
     $sunday->modify('+' . (7 - $nbDay) . ' days');
@@ -402,7 +407,7 @@ class CRM_Tasksassignments_Reminder {
    * @return array
    *   List of contact ID's
    */
-  private static function _getAdminContactIds() {
+  private static function getAdminContactIds() {
     $adminRole = user_role_load_by_name('administrator');
     $civihrAdminRole = user_role_load_by_name('HR Admin');
 
@@ -444,9 +449,9 @@ class CRM_Tasksassignments_Reminder {
    * @return string
    *   Query to obtain task assignees and creators.
    */
-  private static function _buildTaskAssigneeCreatorQuery($to) {
-    $components = self::_getReminderComponents();
-    $excludeCompletedActivities = self::_getCompletedActivitiesExclusionQuery();
+  private static function buildTaskAssigneeCreatorQuery($to) {
+    $components = self::getReminderComponents();
+    $excludeCompletedActivities = self::getCompletedActivitiesExclusionQuery();
 
     return "
       SELECT GROUP_CONCAT( a.id ) AS activity_ids, ac.contact_id, e.email
@@ -491,8 +496,8 @@ class CRM_Tasksassignments_Reminder {
    *   Query to obtain contact ID's for admins and contacts involved in key
    *   dates and appraisals
    */
-  private static function _buildAdminsKeyDatesAndAppraisalsQuery($now, $to) {
-    $adminContacts = self::_getAdminContactIds();
+  private static function buildAdminsKeyDatesAndAppraisalsQuery($now, $to) {
+    $adminContacts = self::getAdminContactIds();
     $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
     $appraisalsContacts = self::$_relatedExtensions['appraisals']
       ? CRM_Appraisals_Reminder::getContactIds($now, $to)
@@ -518,8 +523,8 @@ class CRM_Tasksassignments_Reminder {
     return '';
   }
 
-  private static function _getContactDailyReminderData($contactId, array $activityIds, $to, array $settings) {
-    self::_checkRelatedExtensions();
+  private static function getContactDailyReminderData($contactId, array $activityIds, $to, array $settings) {
+    self::checkRelatedExtensions();
 
     $reminderData = array(
       'overdue' => array(),
@@ -588,7 +593,7 @@ class CRM_Tasksassignments_Reminder {
 
         // Fill the $reminderData array:
         if ($reminderKey) {
-          $isTask = self::_checkIfActivityTypeBelongsToComponent($activityResult->activity_type_id, 'CiviTask');
+          $isTask = self::isTaskComponent($activityResult->activity_type_id);
           $reminderData[$reminderKey][] = array(
             'id' => $activityResult->id,
             'activityUrl' => self::createActivityURL($contactId, $activityResult->id),
@@ -724,7 +729,7 @@ class CRM_Tasksassignments_Reminder {
    * @return int
    */
   public static function sendDocumentsNotifications() {
-    self::_setActivityOptions();
+    self::setActivityOptions();
     $count = 0;
     $taSettings = civicrm_api3('TASettings', 'get');
     $settings = $taSettings['values'];
@@ -740,7 +745,7 @@ class CRM_Tasksassignments_Reminder {
         'myDocumentsUrl' => $myDocumentsUrl,
         'settings' => $settings,
       ));
-      if (self::_send($assigneeId, $assigneeEmail, ts('Documents Notification'), $templateBodyHTML)) {
+      if (self::send($assigneeId, $assigneeEmail, ts('Documents Notification'), $templateBodyHTML)) {
         $count++;
       }
     }
@@ -877,7 +882,7 @@ class CRM_Tasksassignments_Reminder {
    *
    * @return bool
    */
-  private static function _send($contactId, $email, $body_subject, $body_html) {
+  private static function send($contactId, $email, $body_subject, $body_html) {
     $domain = CRM_Core_BAO_Domain::getDomain();
     $result = false;
     $hookTokens = array();
@@ -999,11 +1004,11 @@ class CRM_Tasksassignments_Reminder {
    *
    * @return string
    */
-  private static function _getCompletedActivitiesExclusionQuery() {
-    $documentIncompleteStatuses = implode(',', self::_getDocumentIncompleteStatuses());
-    $documentTypesIds = implode(',', self::_getTypesIdsForComponent('CiviDocument'));
-    $taskIncompleteStatuses = implode(',', self::_getTaskIncompleteStatuses());
-    $taskTypesIds = implode(',', self::_getTypesIdsForComponent('CiviTask'));
+  private static function getCompletedActivitiesExclusionQuery() {
+    $documentIncompleteStatuses = implode(',', Document::getIncompleteStatuses());
+    $documentTypesIds = implode(',', self::getTypesIdsForComponent('CiviDocument'));
+    $taskIncompleteStatuses = implode(',', Task::getIncompleteStatuses());
+    $taskTypesIds = implode(',', self::getTypesIdsForComponent('CiviTask'));
 
     return "(
       (
@@ -1019,25 +1024,14 @@ class CRM_Tasksassignments_Reminder {
   }
 
   /**
-   * Returns incomplete statuses for Documents
-   *
-   * @return array
-   */
-  private static function _getDocumentIncompleteStatuses() {
-    return [
-      CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_UPLOAD,
-      CRM_Tasksassignments_BAO_Document::STATUS_AWAITING_APPROVAL
-    ];
-  }
-
-  /**
    * Returns Activity Types IDs for a given component name,
    * for example, "CiviTask" or "CiviDocument"
    *
    * @param string $componentName
+   *
    * @return array
    */
-  private static function _getTypesIdsForComponent($componentName) {
+  private static function getTypesIdsForComponent($componentName) {
     $taskTypesIds = [];
     $taskTypes = ActivityService::findByComponent($componentName);
 
@@ -1049,36 +1043,29 @@ class CRM_Tasksassignments_Reminder {
   }
 
   /**
-   * Returns incomplete statuses for Tasks
-   *
-   * @return array
-   */
-  private static function _getTaskIncompleteStatuses() {
-    $taskIncompleteStatuses = [];
-    $taskIncompleteStatusesResult = civicrm_api3('Task', 'getstatuses', [
-      'sequential' => 1,
-      'grouping' => ['IS NULL' => 1]
-    ]);
-
-    foreach ($taskIncompleteStatusesResult['values'] as $value) {
-      $taskIncompleteStatuses[] = $value['value'];
-    }
-
-    return $taskIncompleteStatuses;
-  }
-
-  /**
    * Checks if an Activity Type belongs to a given component,
    * for example, "CiviTask" or "CiviDocument"
    *
    * @param int $activityTypeId
    * @param string $componentName
+   *
    * @return boolean
    */
-  private static function _checkIfActivityTypeBelongsToComponent($activityTypeId, $componentName) {
-    $types = self::_getTypesIdsForComponent($componentName);
+  private static function checkIfActivityTypeBelongsToComponent($activityTypeId, $componentName) {
+    $types = self::getTypesIdsForComponent($componentName);
 
     return in_array($activityTypeId, $types);
+  }
+
+  /**
+   * Checks if an activity is a Task component
+   *
+   * @param int $activityTypeId
+   *
+   * @return boolean
+   */
+  private static function isTaskComponent($activityTypeId) {
+    return self::checkIfActivityTypeBelongsToComponent($activityTypeId, 'CiviTask');
   }
 
 }
