@@ -377,7 +377,7 @@ define([
     });
 
     describe('filter tabs', function () {
-      var allDocumentStatuses = _.pluck(documentFabricator.documentStatus(), 'key');
+      var allDocumentStatuses = _.map(documentFabricator.documentStatus(), 'key');
       var onlyPendingDocumentStatuses = getDocumentStatusesIds(
         ['awaiting upload', 'awaiting approval']);
       var sampleDocumentStatuses = getDocumentStatusesIds(
@@ -408,7 +408,7 @@ define([
           });
 
           it('allows to select only pending statuses for further filtering', function () {
-            expect(_.pluck(controller.filterParams.allowedStatuses, 'key'))
+            expect(_.map(controller.filterParams.allowedStatuses, 'key'))
               .toEqual(onlyPendingDocumentStatuses);
           });
 
@@ -432,7 +432,7 @@ define([
         });
 
         it('allows to select any statuses for further filtering', function () {
-          expect(_.pluck(controller.filterParams.allowedStatuses, 'key'))
+          expect(_.map(controller.filterParams.allowedStatuses, 'key'))
             .toEqual(allDocumentStatuses);
         });
 
