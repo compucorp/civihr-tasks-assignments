@@ -10,6 +10,7 @@ define([
     CLASS_NAME_PREFIX: 'ct-',
     CONTACT_ID: CRM.contactId || null,
     LOGGED_IN_CONTACT_ID: CRM.adminId || null,
+    customFieldIds: CRM.vars.customFieldIds,
     path: {
       EXT: CRM.tasksAssignments.extensionPath,
       TPL: CRM.tasksAssignments.extensionPath + 'views/'
