@@ -1,6 +1,7 @@
 <?php
 
 use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
+use CRM_Tasksassignments_BAO_Document as Document;
 
 /**
  * @group headless
@@ -28,7 +29,7 @@ class CRM_Tasksassignments_BAO_DocumentTest extends BaseHeadlessTest {
     $params = array(
       'activity_type_id' => $this->_documentTypeId,
     );
-    CRM_Tasksassignments_BAO_Document::create($params);
+    Document::create($params);
   }
 
   /**
@@ -40,7 +41,7 @@ class CRM_Tasksassignments_BAO_DocumentTest extends BaseHeadlessTest {
       'assignee_contact_id' => 1,
       'target_contact_id' => 2,
     );
-    CRM_Tasksassignments_BAO_Document::create($params);
+    Document::create($params);
   }
 
   function testCreateDocumentWithNoAssignee() {
@@ -49,7 +50,7 @@ class CRM_Tasksassignments_BAO_DocumentTest extends BaseHeadlessTest {
       'source_contact_id' => 1,
       'target_contact_id' => 2,
     );
-    $result = CRM_Tasksassignments_BAO_Document::create($params);
+    $result = Document::create($params);
 
     $this->assertTrue($result instanceof CRM_Activity_DAO_Activity);
     $this->assertEquals($this->_documentTypeId, $result->activity_type_id);
@@ -64,6 +65,12 @@ class CRM_Tasksassignments_BAO_DocumentTest extends BaseHeadlessTest {
       'source_contact_id' => 1,
       'assignee_contact_id' => 2,
     );
-    CRM_Tasksassignments_BAO_Document::create($params);
+    Document::create($params);
+  }
+
+  function testGetIncompletedStatuses() {
+    $incompleteStatuses = Document::getIncompleteStatuses();
+
+    $this->assertEquals($incompleteStatuses, [1, 2]);
   }
 }

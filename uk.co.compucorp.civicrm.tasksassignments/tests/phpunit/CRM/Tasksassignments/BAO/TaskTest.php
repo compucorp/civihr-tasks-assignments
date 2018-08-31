@@ -5,8 +5,7 @@ use CRM_Tasksassignments_Test_Fabricator_Case as CaseFabricator;
 use CRM_Tasksassignments_Test_Fabricator_CaseType as CaseTypeFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Task as TaskFabricator;
-use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
-use CRM_Tasksassignments_Test_Fabricator_OptionGroup as OptionGroupFabricator;
+use CRM_Tasksassignments_BAO_Task as Task;
 
 /**
  * @group headless
@@ -23,7 +22,11 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
 
-    $this->_taskType = OptionValueFabricator::fabricateTaskType();
+    // Pick one of Task types.
+    $taskTypes = civicrm_api3('Task', 'getoptions', [
+      'field' => 'activity_type_id'
+    ]);
+    $this->_taskTypeId = array_shift($taskTypes['values']);
   }
 
   /**
@@ -45,7 +48,7 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
         'case_id' => $this->_case['id'],
         'source_contact_id' => $contact['id'],
         'target_contact_id' => $contact['id'],
-        'activity_type_id' => $this->_taskType['value'],
+        'activity_type_id' => $this->_taskTypeId,
         'status_id' => 'Scheduled'
       ]);
     }
@@ -65,46 +68,62 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
    * @expectedException CRM_Exception
    */
   public function testCreateTaskWithNoContacts() {
-    $params = array(
-      'activity_type_id' => $this->_taskType['value'],
-    );
-    CRM_Tasksassignments_BAO_Task::create($params);
+    $params = ['activity_type_id' => $this->_taskTypeId];
+
+    Task::create($params);
   }
 
   /**
    * @expectedException CRM_Exception
    */
   public function testCreateTaskWithNoSource() {
-    $params = array(
-      'activity_type_id' => $this->_taskType['value'],
+    $params = [
+      'activity_type_id' => $this->_taskTypeId,
       'assignee_contact_id' => 1,
-      'target_contact_id' => 2,
-    );
-    CRM_Tasksassignments_BAO_Task::create($params);
+      'target_contact_id' => 2
+    ];
+
+    Task::create($params);
   }
 
   public function testCreateTaskWithNoAssignee() {
-    $params = array(
-      'activity_type_id' => $this->_taskType['value'],
+    $params = [
+      'activity_type_id' => $this->_taskTypeId,
       'source_contact_id' => 1,
-      'target_contact_id' => 2,
-    );
-    $result = CRM_Tasksassignments_BAO_Task::create($params);
+      'target_contact_id' => 2
+    ];
+    $result = Task::create($params);
 
     $this->assertTrue($result instanceof CRM_Activity_DAO_Activity);
-    $this->assertEquals($this->_taskType['value'], $result->activity_type_id);
+    $this->assertEquals($this->_taskTypeId, $result->activity_type_id);
   }
 
   /**
    * @expectedException CRM_Exception
    */
   public function testCreateTaskWithNoTarget() {
-    $params = array(
-      'activity_type_id' => $this->_taskType['value'],
+    $params = [
+      'activity_type_id' => $this->_taskTypeId,
       'source_contact_id' => 1,
-      'assignee_contact_id' => 2,
-    );
-    CRM_Tasksassignments_BAO_Task::create($params);
+      'assignee_contact_id' => 2
+    ];
+
+    Task::create($params);
+  }
+
+  public function testGetIncompletedStatuses() {
+    $incompleteStatuses = Task::getIncompleteStatuses();
+    $expectedStatuses = [];
+    $allStatuses = civicrm_api3('Task', 'getstatuses', [
+      'sequential' => 1,
+      'grouping' => ['IS NULL' => 1]
+    ]);
+
+    foreach ($allStatuses['values'] as $value) {
+      $expectedStatuses[] = $value['value'];
+    }
+
+    $this->assertEquals($incompleteStatuses, $expectedStatuses);
   }
 
   public function testClosingTheCaseWhenAllTasksAreCompleted() {

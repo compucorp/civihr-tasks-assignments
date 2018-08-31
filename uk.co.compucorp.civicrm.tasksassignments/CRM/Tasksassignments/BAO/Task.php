@@ -87,6 +87,25 @@ class CRM_Tasksassignments_BAO_Task extends CRM_Tasksassignments_DAO_Task {
   }
 
   /**
+   * Returns incomplete statuses for tasks
+   *
+   * @return array
+   */
+  public static function getIncompleteStatuses() {
+    $taskIncompleteStatuses = [];
+    $taskIncompleteStatusesResult = civicrm_api3('Task', 'getstatuses', [
+      'sequential' => 1,
+      'grouping' => ['IS NULL' => 1]
+    ]);
+
+    foreach ($taskIncompleteStatusesResult['values'] as $value) {
+      $taskIncompleteStatuses[] = $value['value'];
+    }
+
+    return $taskIncompleteStatuses;
+  }
+
+  /**
    * Gets the first previous assignee (if she exists) of the task with the given id
    *
    * @param {int} $taskId
