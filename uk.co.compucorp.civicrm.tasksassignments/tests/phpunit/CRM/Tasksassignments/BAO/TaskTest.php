@@ -4,6 +4,7 @@ use CRM_Tasksassignments_Test_BaseHeadlessTest as BaseHeadlessTest;
 use CRM_Tasksassignments_Test_Fabricator_Case as CaseFabricator;
 use CRM_Tasksassignments_Test_Fabricator_CaseType as CaseTypeFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Contact as ContactFabricator;
+use CRM_Tasksassignments_Test_Fabricator_OptionValue as OptionValueFabricator;
 use CRM_Tasksassignments_Test_Fabricator_Task as TaskFabricator;
 use CRM_Tasksassignments_BAO_Task as Task;
 
@@ -22,11 +23,9 @@ class CRM_Tasksassignments_BAO_TaskTest extends BaseHeadlessTest {
     $upgrader = CRM_Tasksassignments_Upgrader::instance();
     $upgrader->install();
 
-    // Pick one of Task types.
-    $taskTypes = civicrm_api3('Task', 'getoptions', [
-      'field' => 'activity_type_id'
-    ]);
-    $this->_taskTypeId = array_shift($taskTypes['values']);
+    // Fabricates a Task type.
+    $taskType = OptionValueFabricator::fabricateTaskType();
+    $this->_taskTypeId = $taskType['value'];
   }
 
   /**

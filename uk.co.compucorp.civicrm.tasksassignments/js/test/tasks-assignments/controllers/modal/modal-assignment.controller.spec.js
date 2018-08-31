@@ -82,26 +82,50 @@ define([
     });
 
     describe('workflow activity types', function () {
-      var expectedWorkflowActivityTypes;
+      var caseTypes, expectedWorkflowActivityTypes;
+      var CATEGORY_FIELD = 'custom_100';
+      var WORKFLOW_TYPE = 'Workflow';
 
       beforeEach(function () {
-        var caseTypes = assignmentFabricator.assignmentTypes();
-        var CATEGORY_FIELD = 'custom_100';
-        var WORKFLOW_TYPE = 'Workflow';
-
+        caseTypes = assignmentFabricator.assignmentTypes();
         $rootScope.cache.assignmentType.obj = caseTypes;
         $rootScope.cache.assignmentType.arr = _.values(caseTypes);
         expectedWorkflowActivityTypes = _.values(caseTypes).filter(function (caseType) {
           return caseType[CATEGORY_FIELD] === WORKFLOW_TYPE;
         });
+      });
 
-        initController({
-          config: { customFieldIds: { 'caseType.category': 100 } }
+      describe('when the component is initialized', function () {
+        beforeEach(function () {
+          initController({
+            config: { customFieldIds: { 'caseType.category': 100 } }
+          });
+        });
+
+        it('stores a list of workflow activity types only', function () {
+          expect(scope.workflowActivityTypes).toEqual(expectedWorkflowActivityTypes);
         });
       });
 
-      it('stores a list of workflow activity types only', function () {
-        expect(scope.workflowActivityTypes).toEqual(expectedWorkflowActivityTypes);
+      describe('when the assignment types cache is updated', function () {
+        beforeEach(function () {
+          // start the cache as empty:
+          $rootScope.cache.assignmentType = { obj: {}, arr: [] };
+
+          initController({
+            config: { customFieldIds: { 'caseType.category': 100 } }
+          });
+
+          // populate the cache after the controller has been initialized:
+          $rootScope.cache.assignmentType.obj = caseTypes;
+          $rootScope.cache.assignmentType.arr = _.values(caseTypes);
+
+          $rootScope.$digest();
+        });
+
+        it('updates the list of workflow activity types', function () {
+          expect(scope.workflowActivityTypes).toEqual(expectedWorkflowActivityTypes);
+        });
       });
     });
 
