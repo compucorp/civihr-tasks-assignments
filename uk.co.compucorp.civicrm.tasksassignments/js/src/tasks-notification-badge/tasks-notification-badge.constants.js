@@ -8,7 +8,7 @@
 
     angular.module('tasks-notification-badge.constants', []).constant('settings', {
       debug: +CRM.debug,
-      pathTpl: CRM.tasksAssignments.extensionPath + '/views/tasks-notification-badge/'
+      baseUrl: CRM.tasksAssignments.extensionPath + '/js/src/tasks-notification-badge/'
     });
   });
 })(CRM);

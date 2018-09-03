@@ -28,7 +28,7 @@ define([
   return {
     tasksNotificationBadge: {
       templateUrl: ['settings', function (settings) {
-        return settings.pathTpl + 'components/tasks-notification-badge.html';
+        return settings.baseUrl + 'components/tasks-notification-badge.html';
       }],
       controllerAs: 'tasksNotificationBadge',
       controller: TasksNotificationBadgeController
