@@ -88,7 +88,7 @@ define([
     function modalTaskMigrate () {
       $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/taskMigrate.html?v=1',
+        templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-task-migrate.html',
         controller: 'ModalTaskMigrateController',
         resolve: {
           activityType: function () {

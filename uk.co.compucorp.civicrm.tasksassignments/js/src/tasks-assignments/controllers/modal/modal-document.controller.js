@@ -249,7 +249,7 @@ define([
         if (vm.uploader.queue.length) {
           var modalInstance = $modal.open({
             appendTo: $rootElement.find('div').eq(0),
-            templateUrl: config.path.TPL + '/modal/progress.html?v=1',
+            templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-progress.html',
             size: 'sm',
             controller: 'ModalProgressController',
             resolve: {

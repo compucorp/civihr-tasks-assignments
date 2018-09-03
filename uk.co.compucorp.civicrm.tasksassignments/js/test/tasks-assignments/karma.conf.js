@@ -44,8 +44,7 @@ module.exports = function (config) {
       { pattern: extPath + '/js/test/tasks-assignments/**/*.spec.js', included: false },
 
       // angular templates
-      extPath + '/views/**/*.html',
-      extPath + '/js/src/**/*.html',
+      extPath + '/js/src/tasks-assignments/**/*.html',
 
       // the requireJS config file that bootstraps the whole test suite
       extPath + '/js/test/tasks-assignments/test-main.js'
@@ -55,8 +54,7 @@ module.exports = function (config) {
     ],
     // Used to transform angular templates in JS strings
     preprocessors: (function (obj) {
-      obj[extPath + '/views/**/*.html'] = ['ng-html2js'];
-      obj[extPath + '/js/src/**/*.html'] = ['ng-html2js'];
+      obj[extPath + '/js/src/tasks-assignments/**/*.html'] = ['ng-html2js'];
       return obj;
     })({}),
     ngHtml2JsPreprocessor: {
