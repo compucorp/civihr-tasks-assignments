@@ -6,7 +6,6 @@ define([
 ], function (angular, moment) {
   'use strict';
 
-  CalendarController.__name = 'CalendarController';
   CalendarController.$inject = [
     '$filter', '$log', '$rootScope', '$scope', '$timeout', '$state', '$stateParams',
     'settings', 'documentList', 'taskList'
@@ -168,5 +167,5 @@ define([
     }
   }
 
-  return CalendarController;
+  return { CalendarController: CalendarController };
 });

@@ -11,7 +11,6 @@ define([
 ], function (_, angular, moment) {
   'use strict';
 
-  ModalAssignmentActivityController.__name = 'ModalAssignmentActivityController';
   ModalAssignmentActivityController.$inject = ['$log', '$scope'];
 
   function ModalAssignmentActivityController ($log, $scope) {
@@ -39,5 +38,5 @@ define([
     }
   }
 
-  return ModalAssignmentActivityController;
+  return { ModalAssignmentActivityController: ModalAssignmentActivityController };
 });

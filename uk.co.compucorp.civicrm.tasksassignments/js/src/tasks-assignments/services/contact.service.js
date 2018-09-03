@@ -6,7 +6,6 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  contactService.__name = 'contactService';
   contactService.$inject = [
     'Contact', '$resource', 'config', '$q', '$filter', '$rootScope', 'utilsService',
     '$log'
@@ -123,5 +122,5 @@ define([
     }
   }
 
-  return contactService;
+  return { contactService: contactService };
 });

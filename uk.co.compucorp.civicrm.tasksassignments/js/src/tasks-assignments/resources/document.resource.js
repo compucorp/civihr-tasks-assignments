@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  Document.__name = 'Document';
   Document.$inject = ['$resource', '$httpParamSerializer', 'config', '$log'];
 
   function Document ($resource, $httpParamSerializer, config, $log) {
@@ -26,5 +25,5 @@ define(function () {
     });
   }
 
-  return Document;
+  return { Document: Document };
 });

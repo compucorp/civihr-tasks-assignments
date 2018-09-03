@@ -11,9 +11,9 @@ define([
   'use strict';
 
   return angular.module('tasks-assignments.directives', [])
-    .directive(ctCiviEvents.__name, ctCiviEvents)
-    .directive(taIframe.__name, taIframe)
-    .directive(sidebarFilters.__name, sidebarFilters)
-    .directive(ctSpinner.__name, ctSpinner)
-    .directive(taValidate.__name, taValidate);
+    .directive(ctCiviEvents)
+    .directive(taIframe)
+    .directive(sidebarFilters)
+    .directive(ctSpinner)
+    .directive(taValidate);
 });

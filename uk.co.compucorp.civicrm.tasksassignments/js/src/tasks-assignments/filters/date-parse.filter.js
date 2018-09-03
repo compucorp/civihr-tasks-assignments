@@ -5,7 +5,6 @@ define([
 ], function (moment) {
   'use strict';
 
-  dateParse.__name = 'dateParse';
   dateParse.$inject = ['$filter', '$log'];
 
   function dateParse ($filter, $log) {
@@ -16,5 +15,5 @@ define([
     };
   }
 
-  return dateParse;
+  return { dateParse: dateParse };
 });

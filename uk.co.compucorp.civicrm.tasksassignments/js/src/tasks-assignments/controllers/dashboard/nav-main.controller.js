@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  NavMainController.__name = 'NavMainController';
   NavMainController.$inject = ['$log', '$scope', '$state'];
 
   function NavMainController ($log, $scope, $state) {
@@ -16,5 +15,5 @@ define(function () {
     }
   }
 
-  return NavMainController;
+  return { NavMainController: NavMainController };
 });

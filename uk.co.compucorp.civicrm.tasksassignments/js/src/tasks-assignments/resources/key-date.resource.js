@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  KeyDate.__name = 'KeyDate';
   KeyDate.$inject = ['$resource', 'config', '$log'];
 
   function KeyDate ($resource, config, $log) {
@@ -16,5 +15,5 @@ define(function () {
     });
   }
 
-  return KeyDate;
+  return { KeyDate: KeyDate };
 });

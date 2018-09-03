@@ -5,7 +5,6 @@ define([
 ], function (_) {
   'use strict';
 
-  MainController.__name = 'MainController';
   MainController.$inject = [
     '$log', '$q', '$rootElement', '$rootScope',
     '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA',
@@ -248,5 +247,5 @@ define([
     }
   }
 
-  return MainController;
+  return { MainController: MainController };
 });

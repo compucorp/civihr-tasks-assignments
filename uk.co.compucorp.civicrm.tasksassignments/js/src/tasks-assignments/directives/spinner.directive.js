@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  ctSpinner.__name = 'ctSpinner';
   ctSpinner.$inject = ['$log', '$rootScope'];
 
   function ctSpinner ($log, $rootScope) {
@@ -85,5 +84,5 @@ define(function () {
     }
   }
 
-  return ctSpinner;
+  return { ctSpinner: ctSpinner };
 });

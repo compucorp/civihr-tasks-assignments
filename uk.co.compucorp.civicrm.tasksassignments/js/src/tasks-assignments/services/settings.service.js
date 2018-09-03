@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  settingsService.__name = 'settingsService';
   settingsService.$inject = [
     'Settings', '$q', 'config', 'utilsService', '$log', 'settings'
   ];
@@ -72,5 +71,5 @@ define(function () {
     }
   }
 
-  return settingsService;
+  return { settingsService: settingsService };
 });

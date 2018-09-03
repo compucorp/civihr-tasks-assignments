@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  offset.__name = 'offset';
   offset.$inject = ['$log'];
 
   function offset ($log) {
@@ -15,5 +14,5 @@ define(function () {
     };
   }
 
-  return offset;
+  return { offset: offset };
 });

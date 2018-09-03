@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  appSettingsService.__name = 'appSettingsService';
   appSettingsService.$inject = [
     'AppSettings', '$q', 'config', 'utilsService', '$log'
   ];
@@ -40,5 +39,5 @@ define(function () {
     }
   }
 
-  return appSettingsService;
+  return { appSettingsService: appSettingsService };
 });

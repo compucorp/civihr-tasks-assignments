@@ -9,7 +9,6 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  ModalDocumentController.__name = 'ModalDocumentController';
   ModalDocumentController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
     '$window', '$dialog', '$uibModal', '$uibModalInstance', 'crmAngService', 'HR_settings', 'config',
@@ -613,5 +612,5 @@ define([
     }
   }
 
-  return ModalDocumentController;
+  return { ModalDocumentController: ModalDocumentController };
 });

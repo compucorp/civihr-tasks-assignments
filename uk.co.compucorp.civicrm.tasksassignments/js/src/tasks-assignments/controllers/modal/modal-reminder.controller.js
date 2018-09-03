@@ -5,7 +5,6 @@ define([
 ], function (angular) {
   'use strict';
 
-  ModalReminderController.__name = 'ModalReminderController';
   ModalReminderController.$inject = [
     '$filter', '$log', '$q', '$rootScope', '$scope', '$dialog', '$uibModalInstance',
     'documentService', 'taskService', 'config', 'data', 'type'
@@ -50,5 +49,5 @@ define([
     }
   }
 
-  return ModalReminderController;
+  return { ModalReminderController: ModalReminderController };
 });

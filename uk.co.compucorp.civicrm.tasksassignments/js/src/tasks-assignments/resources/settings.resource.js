@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  Settings.__name = 'Settings';
   Settings.$inject = ['$resource', 'config', '$log'];
 
   function Settings ($resource, config, $log) {
@@ -16,5 +15,5 @@ define(function () {
     });
   }
 
-  return Settings;
+  return { Settings: Settings };
 });

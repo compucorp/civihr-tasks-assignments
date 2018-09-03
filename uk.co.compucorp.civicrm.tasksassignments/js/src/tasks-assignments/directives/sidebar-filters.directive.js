@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  sidebarFilters.__name = 'sidebarFilters';
   sidebarFilters.$inject = ['$log', 'config'];
 
   function sidebarFilters ($log, config) {
@@ -17,5 +16,5 @@ define(function () {
     };
   }
 
-  return sidebarFilters;
+  return { sidebarFilters: sidebarFilters };
 });

@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  utilsService.__name = 'utilsService';
   utilsService.$inject = ['config', '$q', '$log', '$rootScope'];
 
   function utilsService (config, $q, $log) {
@@ -43,5 +42,5 @@ define(function () {
     }
   }
 
-  return utilsService;
+  return { utilsService: utilsService };
 });

@@ -16,13 +16,13 @@ define([
   'use strict';
 
   return angular.module('tasks-assignments.filters', [])
-    .filter(filterByAssignmentType.__name, filterByAssignmentType)
-    .filter(filterByContactId.__name, filterByContactId)
-    .filter(filterByDateField.__name, filterByDateField)
-    .filter(dateParse.__name, dateParse)
-    .filter(filterByDateType.__name, filterByDateType)
-    .filter(filterByDate.__name, filterByDate)
-    .filter(offset.__name, offset)
-    .filter(filterByOwnership.__name, filterByOwnership)
-    .filter(filterByStatus.__name, filterByStatus);
+    .filter(filterByAssignmentType)
+    .filter(filterByContactId)
+    .filter(filterByDateField)
+    .filter(dateParse)
+    .filter(filterByDateType)
+    .filter(filterByDate)
+    .filter(offset)
+    .filter(filterByOwnership)
+    .filter(filterByStatus);
 });

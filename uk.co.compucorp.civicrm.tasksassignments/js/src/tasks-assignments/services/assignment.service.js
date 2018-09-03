@@ -6,7 +6,6 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  assignmentService.__name = 'assignmentService';
   assignmentService.$inject = [
     'Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType',
     'contactService', '$q', 'config', 'utilsService', '$filter', '$location',
@@ -207,5 +206,5 @@ define([
     }
   }
 
-  return assignmentService;
+  return { assignmentService: assignmentService };
 });

@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  filterByStatus.__name = 'filterByStatus';
   filterByStatus.$inject = ['$filter', '$rootScope', '$log'];
 
   function filterByStatus ($filter, $rootScope, $log) {
@@ -31,5 +30,5 @@ define(function () {
     };
   }
 
-  return filterByStatus;
+  return { filterByStatus: filterByStatus };
 });

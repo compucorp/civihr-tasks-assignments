@@ -5,7 +5,6 @@ define([
 ], function (moment) {
   'use strict';
 
-  DocumentController.__name = 'DocumentController';
   DocumentController.$inject = ['$log', '$rootScope', '$scope', 'config'];
 
   function DocumentController ($log, $rootScope, $scope, config) {
@@ -35,5 +34,5 @@ define([
     }
   }
 
-  return DocumentController;
+  return { DocumentController: DocumentController };
 });

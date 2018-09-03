@@ -18,14 +18,14 @@ define([
   'use strict';
 
   return angular.module('tasks-assignments.resources', [])
-    .factory(AppSettings.__name, AppSettings)
-    .factory(AssignmentSearch.__name, AssignmentSearch)
-    .factory(AssignmentType.__name, AssignmentType)
-    .factory(Assignment.__name, Assignment)
-    .factory(Contact.__name, Contact)
-    .factory(Document.__name, Document)
-    .factory(KeyDate.__name, KeyDate)
-    .factory(Relationship.__name, Relationship)
-    .factory(Settings.__name, Settings)
-    .factory(Task.__name, Task);
+    .factory(AppSettings)
+    .factory(AssignmentSearch)
+    .factory(AssignmentType)
+    .factory(Assignment)
+    .factory(Contact)
+    .factory(Document)
+    .factory(KeyDate)
+    .factory(Relationship)
+    .factory(Settings)
+    .factory(Task);
 });

@@ -5,7 +5,6 @@ define([
 ], function (moment) {
   'use strict';
 
-  DateListController.__name = 'DateListController';
   DateListController.$inject = [
     '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
     '$uibModal', 'keyDateService', 'config', 'contactList'
@@ -91,11 +90,11 @@ define([
 
       if ($scope.filterParams.date === 'dateRange') {
         startDate = $scope.filterParams.dateRange.from
-        ? moment($scope.filterParams.dateRange.from).format('YYYY-MM-DD')
-        : '';
+          ? moment($scope.filterParams.dateRange.from).format('YYYY-MM-DD')
+          : '';
         endDate = $scope.filterParams.dateRange.until
-        ? moment($scope.filterParams.dateRange.until).format('YYYY-MM-DD')
-        : '';
+          ? moment($scope.filterParams.dateRange.until).format('YYYY-MM-DD')
+          : '';
       } else {
         startDate = moment().startOf($scope.filterParams.date).format('YYYY-MM-DD');
         endDate = moment().endOf($scope.filterParams.date).format('YYYY-MM-DD');
@@ -145,5 +144,5 @@ define([
     }
   }
 
-  return DateListController;
+  return { DateListController: DateListController };
 });

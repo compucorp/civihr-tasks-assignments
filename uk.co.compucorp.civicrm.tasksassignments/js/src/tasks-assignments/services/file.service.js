@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  fileServiceTA.__name = 'fileServiceTA';
   fileServiceTA.$inject = [
     '$resource', 'config', '$q', 'utilsService', 'FileUploader', '$log'
   ];
@@ -136,5 +135,5 @@ define(function () {
     }
   }
 
-  return fileServiceTA;
+  return { fileServiceTA: fileServiceTA };
 });

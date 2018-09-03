@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  Contact.__name = 'Contact';
   Contact.$inject = [
     '$resource', '$httpParamSerializer', 'config', '$log'
   ];
@@ -18,5 +17,5 @@ define(function () {
     });
   }
 
-  return Contact;
+  return { Contact: Contact };
 });

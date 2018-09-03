@@ -7,7 +7,6 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  taskService.__name = 'taskService';
   taskService.$inject = ['Task', '$q', 'config', 'utilsService', '$log'];
 
   function taskService (Task, $q, config, utilsService, $log) {
@@ -260,5 +259,5 @@ define([
     }
   }
 
-  return taskService;
+  return { taskService: taskService };
 });

@@ -5,7 +5,6 @@ define([
 ], function (moment, controllers) {
   'use strict';
 
-  TaskController.__name = 'TaskController';
   TaskController.$inject = ['$log', '$rootScope', '$scope'];
 
   function TaskController ($log, $rootScope, $scope) {
@@ -38,5 +37,5 @@ define([
     }
   }
 
-  return TaskController;
+  return { TaskController: TaskController };
 });

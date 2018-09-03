@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  filterByContactId.__name = 'filterByContactId';
   filterByContactId.$inject = ['$filter', 'config', '$log'];
 
   function filterByContactId ($filter, config, $log) {
@@ -29,5 +28,5 @@ define(function () {
     };
   }
 
-  return filterByContactId;
+  return { filterByContactId: filterByContactId };
 });

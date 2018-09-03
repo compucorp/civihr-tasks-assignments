@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  Task.__name = 'Task';
   Task.$inject = ['$resource', '$httpParamSerializer', 'config', '$log'];
 
   function Task ($resource, $httpParamSerializer, config, $log) {
@@ -26,5 +25,5 @@ define(function () {
     });
   }
 
-  return Task;
+  return { Task: Task };
 });

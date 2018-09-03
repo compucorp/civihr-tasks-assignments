@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  ExternalPageController.__name = 'ExternalPageController';
   ExternalPageController.$inject = [
     '$log', '$rootElement', '$rootScope', '$scope', '$state', '$uibModal', 'config'
   ];
@@ -30,5 +29,5 @@ define(function () {
     }
   }
 
-  return ExternalPageController;
+  return { ExternalPageController: ExternalPageController };
 });

@@ -5,7 +5,6 @@ define([
 ], function (moment) {
   'use strict';
 
-  filterByDate.__name = 'filterByDate';
   filterByDate.$inject = ['$filter', '$log'];
 
   function filterByDate ($filter, $log) {
@@ -37,5 +36,5 @@ define([
     };
   }
 
-  return filterByDate;
+  return { filterByDate: filterByDate };
 });

@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  Assignment.__name = 'Assignment';
   Assignment.$inject = ['$resource', 'config', '$log'];
 
   function Assignment ($resource, config, $log) {
@@ -16,5 +15,5 @@ define(function () {
     });
   }
 
-  return Assignment;
+  return { Assignment: Assignment };
 });

@@ -5,7 +5,6 @@ define([
 ], function (_) {
   'use strict';
 
-  filterByDateType.__name = 'filterByDateType';
   filterByDateType.$inject = ['$filter', '$rootScope', '$log'];
 
   function filterByDateType ($filter, $rootScope, $log) {
@@ -49,5 +48,5 @@ define([
     };
   }
 
-  return filterByDateType;
+  return { filterByDateType: filterByDateType };
 });

@@ -7,7 +7,6 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  DocumentListController.__name = 'DocumentListController';
   DocumentListController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
     '$dialog', '$uibModal', '$state', 'assignmentService', 'contactService',
@@ -524,5 +523,5 @@ define([
     }
   }
 
-  return DocumentListController;
+  return { DocumentListController: DocumentListController };
 });

@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  AssignmentType.__name = 'AssignmentType';
   AssignmentType.$inject = ['$resource', 'config', '$log'];
 
   function AssignmentType ($resource, config, $log) {
@@ -18,5 +17,5 @@ define(function () {
     });
   }
 
-  return AssignmentType;
+  return { AssignmentType: AssignmentType };
 });

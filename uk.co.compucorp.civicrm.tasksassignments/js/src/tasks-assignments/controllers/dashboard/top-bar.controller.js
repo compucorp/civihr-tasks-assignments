@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  TopBarController.__name = 'TopBarController';
   TopBarController.$inject = ['$log', '$rootScope', '$scope', '$state'];
 
   function TopBarController ($log, $rootScope, $scope, $state) {
@@ -18,5 +17,5 @@ define(function () {
     };
   }
 
-  return TopBarController;
+  return { TopBarController: TopBarController };
 });

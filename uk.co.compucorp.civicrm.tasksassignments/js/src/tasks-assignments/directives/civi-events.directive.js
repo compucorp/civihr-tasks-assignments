@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  ctCiviEvents.__name = 'ctCiviEvents';
   ctCiviEvents.$inject = ['$log', '$rootScope'];
 
   function ctCiviEvents ($log, $rootScope) {
@@ -37,5 +36,5 @@ define(function () {
     }
   }
 
-  return ctCiviEvents;
+  return { ctCiviEvents: ctCiviEvents };
 });

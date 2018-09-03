@@ -5,7 +5,6 @@ define([
 ], function (moment) {
   'use strict';
 
-  keyDateService.__name = 'keyDateService';
   keyDateService.$inject = ['KeyDate', '$q', 'config', 'utilsService', '$log'];
 
   function keyDateService (KeyDate, $q, config, utilsService, $log) {
@@ -38,5 +37,5 @@ define([
     }
   }
 
-  return keyDateService;
+  return { keyDateService: keyDateService };
 });

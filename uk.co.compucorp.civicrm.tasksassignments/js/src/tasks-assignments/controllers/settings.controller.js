@@ -5,7 +5,6 @@ define([
 ], function (angular) {
   'use strict';
 
-  SettingsController.__name = 'SettingsController';
   SettingsController.$inject = [
     '$location', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$dialog',
     '$state', '$uibModal', 'settingsService', 'Task', 'config', 'settings'
@@ -104,5 +103,5 @@ define([
     }
   }
 
-  return SettingsController;
+  return { SettingsController: SettingsController };
 });

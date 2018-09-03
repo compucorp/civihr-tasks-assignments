@@ -18,14 +18,14 @@ define([
   'use strict';
 
   return angular.module('tasks-assignments.services', [])
-    .factory(appSettingsService.__name, appSettingsService)
-    .factory(assignmentService.__name, assignmentService)
-    .factory(contactService.__name, contactService)
-    .factory($dialog.__name, $dialog)
-    .factory(documentService.__name, documentService)
-    .factory(fileServiceTA.__name, fileServiceTA)
-    .factory(keyDateService.__name, keyDateService)
-    .factory(settingsService.__name, settingsService)
-    .factory(taskService.__name, taskService)
-    .factory(utilsService.__name, utilsService);
+    .factory(appSettingsService)
+    .factory(assignmentService)
+    .factory(contactService)
+    .factory($dialog)
+    .factory(documentService)
+    .factory(fileServiceTA)
+    .factory(keyDateService)
+    .factory(settingsService)
+    .factory(taskService)
+    .factory(utilsService);
 });

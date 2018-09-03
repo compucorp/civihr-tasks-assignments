@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  AssignmentSearch.__name = 'AssignmentSearch';
   AssignmentSearch.$inject = ['$resource', 'config', '$log'];
 
   function AssignmentSearch ($resource, config, $log) {
@@ -12,5 +11,5 @@ define(function () {
     return $resource(config.url.ASSIGNMENTS + '/ajax/unclosed');
   }
 
-  return AssignmentSearch;
+  return { AssignmentSearch: AssignmentSearch };
 });

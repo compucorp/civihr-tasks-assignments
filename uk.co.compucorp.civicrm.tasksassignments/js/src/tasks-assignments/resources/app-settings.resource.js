@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  AppSettings.__name = 'AppSettings';
   AppSettings.$inject = ['$resource', 'config', '$log'];
 
   function AppSettings ($resource, config, $log) {
@@ -16,5 +15,5 @@ define(function () {
     });
   }
 
-  return AppSettings;
+  return { AppSettings: AppSettings };
 });

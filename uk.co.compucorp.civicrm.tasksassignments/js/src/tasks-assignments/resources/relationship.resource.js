@@ -3,7 +3,6 @@
 define(function (angular, _, services) {
   'use strict';
 
-  Relationship.__name = 'Relationship';
   Relationship.$inject = ['$resource', 'config', '$log'];
 
   function Relationship ($resource, config, $log) {
@@ -16,5 +15,5 @@ define(function (angular, _, services) {
     });
   }
 
-  return Relationship;
+  return { Relationship: Relationship };
 });

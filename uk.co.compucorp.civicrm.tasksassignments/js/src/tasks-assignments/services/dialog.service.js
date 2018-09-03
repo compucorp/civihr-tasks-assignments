@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  $dialog.__name = '$dialog';
   $dialog.$inject = ['$uibModal', 'config', '$rootElement', '$log'];
 
   function $dialog ($modal, config, $rootElement, $log) {
@@ -37,5 +36,5 @@ define(function () {
     }
   }
 
-  return $dialog;
+  return { $dialog: $dialog };
 });

@@ -6,7 +6,6 @@ define([
 ], function (angular, moment) {
   'use strict';
 
-  ModalTaskController.__name = 'ModalTaskController';
   ModalTaskController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
     '$uibModal', '$uibModalInstance', '$dialog', 'crmAngService', 'assignmentService', 'contactService',
@@ -275,5 +274,5 @@ define([
     }
   }
 
-  return ModalTaskController;
+  return { ModalTaskController: ModalTaskController };
 });

@@ -7,7 +7,6 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  TaskListController.__name = 'TaskListController';
   TaskListController.$inject = [
     '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
     '$dialog', '$state', '$uibModal', 'assignmentService', 'contactService',
@@ -403,5 +402,5 @@ define([
     }
   }
 
-  return TaskListController;
+  return { TaskListController: TaskListController };
 });
