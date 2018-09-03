@@ -485,8 +485,8 @@ define([
      */
     function initActivitySetWatcher () {
       var documentsTabIsVisible = !!settings.tabEnabled.documents;
-      var documentTypesIndexedByName = _.indexBy($rootScope.cache.documentType.arr, 'value');
-      var taskTypesIndexedByName = _.indexBy($rootScope.cache.taskType.arr, 'value');
+      var documentTypesIndexedByName = _.keyBy($rootScope.cache.documentType.arr, 'value');
+      var taskTypesIndexedByName = _.keyBy($rootScope.cache.taskType.arr, 'value');
 
       vm.$watch('activity.activitySet', function (activitySet) {
         if (!activitySet || !activitySet.activityTypes) {
@@ -575,7 +575,7 @@ define([
     function initRelationshipTypesCache () {
       return RelationshipType.all({ options: { limit: 0 } })
         .then(function (relationshipTypes) {
-          relationshipTypesCache = _.indexBy(relationshipTypes.list, 'id');
+          relationshipTypesCache = _.keyBy(relationshipTypes.list, 'id');
         });
     }
 
@@ -727,7 +727,7 @@ define([
             relationshipLabel: relationshipTypeDetails.label
           };
         })
-        .indexBy('activity_type_id')
+        .keyBy('activity_type_id')
         .mapValues('relationshipLabel')
         .value();
     }

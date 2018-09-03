@@ -20,7 +20,7 @@ define([
       HRSettings, mockedRelationshipType, taskService, RelationshipModel, relationshipTypeApiMock, scope,
       selectedAssignment;
     var defaultAssigneeOptions = optionValuesMockData.getDefaultAssigneeTypes().values;
-    var defaultAssigneeOptionsIndex = _.indexBy(defaultAssigneeOptions, 'name');
+    var defaultAssigneeOptionsIndex = _.keyBy(defaultAssigneeOptions, 'name');
     var sampleData = {
       date: '2013-01-01',
       contactName: 'Arya Stark'
@@ -890,13 +890,13 @@ define([
 
       // setup document type:
       $rootScope.cache.documentType = {
-        obj: _.indexBy(documentTypes, 'key'),
+        obj: _.keyBy(documentTypes, 'key'),
         arr: documentTypes
       };
 
       // setup task types:
       $rootScope.cache.taskType = {
-        obj: _.indexBy(taskTypes, 'key'),
+        obj: _.keyBy(taskTypes, 'key'),
         arr: taskTypes
       };
     }
