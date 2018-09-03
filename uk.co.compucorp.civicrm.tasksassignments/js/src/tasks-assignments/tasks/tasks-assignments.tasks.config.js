@@ -5,16 +5,20 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('tasks-assignments.tasks.config', ['tasks-assignments.constants']).config(tasksConfig);
+  angular.module('tasks-assignments.tasks.config', [
+    'tasks-assignments.constants',
+    'tasks-assignments.tasks.constants'
+  ]).config(tasksConfig);
 
   tasksConfig.$inject = [
     'config', '$urlRouterProvider', '$stateProvider', '$resourceProvider',
     '$httpProvider', '$analyticsProvider', 'uibDatepickerConfig', 'uiSelectConfig',
-    '$logProvider'
+    '$logProvider', 'tasks.settings'
   ];
 
   function tasksConfig (config, $urlRouterProvider, $stateProvider, $resourceProvider,
-    $httpProvider, $analyticsProvider, datepickerConfig, uiSelectConfig, $logProvider) {
+    $httpProvider, $analyticsProvider, datepickerConfig, uiSelectConfig, $logProvider,
+    tasksSettings) {
     $logProvider.debugEnabled(config.DEBUG);
 
     $urlRouterProvider.otherwise('/');
@@ -29,7 +33,7 @@ define([
         url: '/',
         controller: 'TaskListController',
         controllerAs: 'list',
-        templateUrl: config.path.TPL + 'contact/tasks.html?v=222',
+        templateUrl: tasksSettings.baseUrl + 'templates/tasks.html',
         resolve: {
           taskList: ['taskService', function (taskService) {
             return taskService.get({
