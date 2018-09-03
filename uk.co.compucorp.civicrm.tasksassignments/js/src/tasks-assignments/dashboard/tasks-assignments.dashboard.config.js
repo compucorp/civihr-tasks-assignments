@@ -7,12 +7,15 @@ define([
 ], function (angular, moment, _) {
   'use strict';
 
-  angular.module('tasks-assignments.dashboard.config', ['tasks-assignments.constants']).config(dashboardConfig);
+  angular.module('tasks-assignments.dashboard.config', [
+    'tasks-assignments.constants',
+    'tasks-assignments.dashboard.constants'
+  ]).config(dashboardConfig);
 
   dashboardConfig.$inject = [
     'config', '$resourceProvider', '$httpProvider', '$logProvider', '$urlRouterProvider',
     '$stateProvider', '$analyticsProvider', 'calendarConfigProvider', 'uibDatepickerConfig',
-    'uiSelectConfig'
+    'uiSelectConfig', 'dashboard.settings'
   ];
 
   /**
@@ -29,7 +32,7 @@ define([
 
   function dashboardConfig (config, $resourceProvider, $httpProvider, $logProvider,
     $urlRouterProvider, $stateProvider, $analyticsProvider, calendarConfigProvider,
-    datepickerConfig, uiSelectConfig) {
+    datepickerConfig, uiSelectConfig, dashboardSettings) {
     configureAnalytics($analyticsProvider);
     $logProvider.debugEnabled(config.DEBUG);
     $urlRouterProvider.otherwise('/tasks');
@@ -53,7 +56,7 @@ define([
         url: '/tasks',
         controller: 'TaskListController',
         controllerAs: 'list',
-        templateUrl: config.path.TPL + 'dashboard/tasks.html?v=' + (new Date().getTime()),
+        templateUrl: dashboardSettings.baseUrl + 'templates/tasks.html',
         resolve: {
           taskList: ['taskService', function (taskService) {
             return taskService.get({
@@ -78,7 +81,7 @@ define([
         url: '/documents',
         controller: 'DocumentListController',
         controllerAs: 'list',
-        templateUrl: config.path.TPL + 'dashboard/documents.html?v=8',
+        templateUrl: dashboardSettings.baseUrl + 'templates/documents.html',
         resolve: {
           documentList: ['documentService', function (documentService) {
             return documentService.get({});
@@ -100,12 +103,12 @@ define([
       .state('assignments', {
         url: '/assignments',
         controller: 'ExternalPageController',
-        templateUrl: config.path.TPL + 'dashboard/assignments.html?v=5'
+        templateUrl: dashboardSettings.baseUrl + 'controllers/external-page.assignments.html'
       })
       .state('calendar', {
         abstract: true,
         controller: 'CalendarController',
-        templateUrl: config.path.TPL + 'dashboard/calendar.html?v=3',
+        templateUrl: dashboardSettings.baseUrl + 'controllers/calendar.html',
         resolve: {
           documentList: ['$q', 'documentService', 'settings', function ($q, documentService, settings) {
             var deferred = $q.defer();
@@ -173,12 +176,12 @@ define([
           'documentList': {
             controller: 'DocumentListController',
             controllerAs: 'list',
-            templateUrl: config.path.TPL + 'dashboard/calendar.documentList.html?v=6'
+            templateUrl: dashboardSettings.baseUrl + 'controllers/calendar.document-list.html'
           },
           'taskList': {
             controller: 'TaskListController',
             controllerAs: 'list',
-            templateUrl: config.path.TPL + 'dashboard/calendar.taskList.html?v=5'
+            templateUrl: dashboardSettings.baseUrl + 'controllers/calendar.task-list.html'
           }
         }
       })
@@ -200,12 +203,12 @@ define([
       .state('reports', {
         url: '/reports',
         controller: 'ExternalPageController',
-        templateUrl: config.path.TPL + 'dashboard/reports.html?v=4'
+        templateUrl: dashboardSettings.baseUrl + 'controllers/external-page.reports.html'
       })
       .state('keyDates', {
         url: '/key-dates',
         controller: 'DateListController',
-        templateUrl: config.path.TPL + 'dashboard/key-dates.html?v=4',
+        templateUrl: dashboardSettings.baseUrl + 'controllers/date-list.html',
         resolve: {
           contactList: ['keyDateService', function (keyDateService) {
             return keyDateService.get(moment().startOf('month'), moment().endOf('month'));

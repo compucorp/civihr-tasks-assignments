@@ -3,12 +3,11 @@
 define([
   'common/lodash',
   'mocks/data/contact.data',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (_, contactMock) {
   'use strict';
 
   var mockBackendCalls = function ($httpBackend) {
-    $httpBackend.whenGET(/views.*/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Task/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
     $httpBackend.whenGET(/action=get&entity=CaseType/).respond({ values: [ jasmine.any(Object) ] });
@@ -18,7 +17,7 @@ define([
   describe('contactService', function () {
     var Contact, contactService, $httpBackend, promise, jsonData;
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard', 'tasks-assignments.templates'));
 
     beforeEach(inject(function (_Contact_, _contactService_, _$httpBackend_) {
       contactService = _contactService_;

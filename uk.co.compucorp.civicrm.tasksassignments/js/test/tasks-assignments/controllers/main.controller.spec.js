@@ -5,7 +5,7 @@ define([
   'common/angularMocks',
   'common/models/option-group',
   'common/models/session.model',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (_) {
   'use strict';
 

@@ -3,7 +3,7 @@
 define([
   'mocks/fabricators/task.fabricator',
   'mocks/data/task.data',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (taskFabricator, taskMock) {
   'use strict';
 
@@ -19,14 +19,13 @@ define([
     $httpBackend.whenGET(/action=get&entity=CaseType/).respond({ values: [ jasmine.any(Object) ] });
     $httpBackend.whenGET(/action=get&debug=true&entity=Task/).respond({});
     $httpBackend.whenGET(/action=getoptions&debug=true&entity=Document/).respond({});
-    $httpBackend.whenGET(/views.*/).respond({});
   };
 
   describe('Task', function () {
     var Task, $httpBackend, $httpParamSerializer, requestBody;
     var request = {};
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard', 'tasks-assignments.templates'));
 
     beforeEach(inject(function (_Task_, _$httpParamSerializer_, _$httpBackend_) {
       Task = _Task_;
@@ -78,7 +77,7 @@ define([
   describe('taskService', function () {
     var taskService, $httpBackend, $q, promise;
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard', 'tasks-assignments.templates'));
 
     beforeEach(inject(function (_taskService_, _$httpBackend_, _$q_) {
       taskService = _taskService_;

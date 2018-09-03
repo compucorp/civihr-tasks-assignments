@@ -12,13 +12,12 @@ define([
 
   run.$inject = [
     '$rootScope', '$rootElement', '$q', '$location', '$log', 'config', 'settings',
-    'documentService', 'taskService', 'assignmentService', 'keyDateService',
-    'contactService', 'editableOptions'
+    'documentService', 'taskService', 'assignmentService', 'contactService',
+    'editableOptions'
   ];
 
   function run ($rootScope, $rootElement, $q, $location, $log, config, settings,
-    documentService, taskService, assignmentService, keyDateService, contactService,
-    editableOptions) {
+    documentService, taskService, assignmentService, contactService, editableOptions) {
     $log.debug('tasks-assignments.run');
 
     var contactsToCache = [config.LOGGED_IN_CONTACT_ID];

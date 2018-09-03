@@ -15,7 +15,7 @@
 
   require([
     'common/angular',
-    'tasks-assignments/modules/tasks-assignments.dashboard.module',
+    'tasks-assignments/dashboard/tasks-assignments.dashboard.module',
     'tasks-assignments/modules/tasks-assignments.documents.module',
     'tasks-assignments/modules/tasks-assignments.tasks.module',
     'tasks-assignments/settings/tasks-assignments.settings.module'

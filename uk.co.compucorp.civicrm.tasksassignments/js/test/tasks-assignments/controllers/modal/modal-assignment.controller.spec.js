@@ -11,7 +11,7 @@ define([
   'common/models/relationship.model',
   'common/models/relationship-type.model',
   'common/mocks/services/api/relationship-type-mock',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (_, angular, moment, assignmentMockData, optionValuesMockData, assignmentFabricator) {
   'use strict';
 

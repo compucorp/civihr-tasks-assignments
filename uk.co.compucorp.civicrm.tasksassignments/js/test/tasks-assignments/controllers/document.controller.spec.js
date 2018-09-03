@@ -2,7 +2,7 @@
 
 define([
   'mocks/fabricators/document.fabricator',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (documentFabricator) {
   'use strict';
   describe('DocumentController', function () {
