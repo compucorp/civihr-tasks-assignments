@@ -9,7 +9,7 @@
   });
 
   require([
-    'tasks-notification-badge/app'
+    'tasks-notification-badge/tasks-notification-badge.module'
   ],
   function (angular) {
     angular.bootstrap(

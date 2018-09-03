@@ -1,17 +1,8 @@
 /* eslint-env amd */
 
 define([
-  'common/lodash',
-  'tasks-notification-badge/modules/components'
+  'common/lodash'
 ], function (_, components) {
-  components.component('tasksNotificationBadge', {
-    templateUrl: ['settings', function (settings) {
-      return settings.pathTpl + 'components/tasks-notification-badge.html';
-    }],
-    controllerAs: 'tasksNotificationBadge',
-    controller: TasksNotificationBadgeController
-  });
-
   TasksNotificationBadgeController.$inject = ['$log', 'Session'];
 
   function TasksNotificationBadgeController ($log, Session) {
@@ -33,4 +24,14 @@ define([
         });
     }
   }
+
+  return {
+    tasksNotificationBadge: {
+      templateUrl: ['settings', function (settings) {
+        return settings.pathTpl + 'components/tasks-notification-badge.html';
+      }],
+      controllerAs: 'tasksNotificationBadge',
+      controller: TasksNotificationBadgeController
+    }
+  };
 });

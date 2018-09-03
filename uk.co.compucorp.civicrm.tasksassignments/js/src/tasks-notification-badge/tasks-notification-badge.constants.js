@@ -4,8 +4,10 @@
   define([
     'common/angular'
   ], function (angular) {
-    return angular.module('tasks-notification-badge.settings', []).constant('settings', {
-      debug: CRM.debug,
+    'use strict';
+
+    angular.module('tasks-notification-badge.constants', []).constant('settings', {
+      debug: +CRM.debug,
       pathTpl: CRM.tasksAssignments.extensionPath + '/views/tasks-notification-badge/'
     });
   });
