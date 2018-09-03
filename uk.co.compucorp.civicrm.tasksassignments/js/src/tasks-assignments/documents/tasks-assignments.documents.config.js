@@ -5,16 +5,20 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('tasks-assignments.documents.config', ['tasks-assignments.constants']).config(documentsConfig);
+  angular.module('tasks-assignments.documents.config', [
+    'tasks-assignments.constants',
+    'tasks-assignments.documents.constants'
+  ]).config(documentsConfig);
 
   documentsConfig.$inject = [
     'config', '$urlRouterProvider', '$stateProvider', '$resourceProvider',
     '$httpProvider', '$analyticsProvider', 'uibDatepickerConfig', 'uiSelectConfig',
-    '$logProvider'
+    '$logProvider', 'documents.settings'
   ];
 
   function documentsConfig (config, $urlRouterProvider, $stateProvider, $resourceProvider,
-    $httpProvider, $analyticsProvider, datepickerConfig, uiSelectConfig, $logProvider) {
+    $httpProvider, $analyticsProvider, datepickerConfig, uiSelectConfig, $logProvider,
+    documentsSettings) {
     $logProvider.debugEnabled(config.DEBUG);
 
     $urlRouterProvider.otherwise('/');
@@ -29,7 +33,7 @@ define([
         url: '/',
         controller: 'DocumentListController',
         controllerAs: 'list',
-        templateUrl: config.path.TPL + 'contact/documents.html?v=4',
+        templateUrl: documentsSettings.baseUrl + 'templates/documents.html',
         resolve: {
           documentList: ['documentService', function (documentService) {
             return documentService.get({
