@@ -10,11 +10,9 @@ define([
   'tasks-assignments/resources/document.resource',
   'tasks-assignments/resources/key-date.resource',
   'tasks-assignments/resources/relationship.resource',
-  'tasks-assignments/resources/settings.resource',
   'tasks-assignments/resources/task.resource'
 ], function (angular, AppSettings, AssignmentSearch, AssignmentType,
-  Assignment, Contact, Document, KeyDate, Relationship,
-  Settings, Task) {
+  Assignment, Contact, Document, KeyDate, Relationship, Task) {
   'use strict';
 
   return angular.module('tasks-assignments.resources', [])
@@ -26,6 +24,5 @@ define([
     .factory(Document)
     .factory(KeyDate)
     .factory(Relationship)
-    .factory(Settings)
     .factory(Task);
 });

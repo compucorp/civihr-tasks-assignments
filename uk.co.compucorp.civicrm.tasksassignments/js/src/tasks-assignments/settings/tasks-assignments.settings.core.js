@@ -10,21 +10,18 @@ define([
   'tasks-assignments/modules/tasks-assignments.resources',
   'tasks-assignments/modules/tasks-assignments.run',
   'tasks-assignments/modules/tasks-assignments.services',
-  'tasks-assignments/modules/tasks-assignments.values',
-  'tasks-assignments/modules/tasks-assignments.settings.config'
+  'tasks-assignments/modules/tasks-assignments.values'
 ], function (angular) {
   'use strict';
 
-  angular.module('tasks-assignments.settings', [
+  angular.module('tasks-assignments.settings.core', [
     'tasks-assignments.core',
     'tasks-assignments.run',
     'tasks-assignments.constants',
     'tasks-assignments.values',
     'tasks-assignments.controllers',
     'tasks-assignments.directives',
-    'tasks-assignments.filters',
     'tasks-assignments.resources',
-    'tasks-assignments.services',
-    'tasks-assignments.settings.config'
+    'tasks-assignments.services'
   ]);
 });

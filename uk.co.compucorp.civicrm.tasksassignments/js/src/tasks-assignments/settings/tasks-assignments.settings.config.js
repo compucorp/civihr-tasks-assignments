@@ -43,7 +43,7 @@ define([
       .state('settings', {
         url: '/',
         controller: 'SettingsController',
-        templateUrl: config.path.TPL + 'settings.html?v=5'
+        templateUrl: config.path.EXT + '/js/src/tasks-assignments/settings/controllers/settings.html'
       });
   }
 });

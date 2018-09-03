@@ -17,8 +17,8 @@
     'common/angular',
     'tasks-assignments/modules/tasks-assignments.dashboard.module',
     'tasks-assignments/modules/tasks-assignments.documents.module',
-    'tasks-assignments/modules/tasks-assignments.settings.module',
-    'tasks-assignments/modules/tasks-assignments.tasks.module'
+    'tasks-assignments/modules/tasks-assignments.tasks.module',
+    'tasks-assignments/settings/tasks-assignments.settings.module'
   ], function (angular) {
     'use strict';
 

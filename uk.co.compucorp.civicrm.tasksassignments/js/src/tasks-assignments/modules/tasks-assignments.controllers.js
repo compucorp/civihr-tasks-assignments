@@ -9,7 +9,6 @@ define([
   'tasks-assignments/controllers/document.controller',
   'tasks-assignments/controllers/external-page.controller',
   'tasks-assignments/controllers/main.controller',
-  'tasks-assignments/controllers/settings.controller',
   'tasks-assignments/controllers/task-list.controller',
   'tasks-assignments/controllers/task.controller',
   'tasks-assignments/controllers/dashboard/nav-main.controller',
@@ -23,7 +22,7 @@ define([
   'tasks-assignments/controllers/modal/modal-task-migrate.controller',
   'tasks-assignments/controllers/modal/modal-task.controller'
 ], function (angular, AssignmentsController, CalendarController, DateListController, DocumentListController,
-  DocumentController, ExternalPageController, MainController, SettingsController, TaskListController,
+  DocumentController, ExternalPageController, MainController, TaskListController,
   TaskController, NavMainController, TopBarController, ModalAssignmentActivityController, ModalAssignmentController,
   ModalDialogController, ModalDocumentController, ModalProgressController, ModalReminderController,
   ModalTaskMigrateController, ModalTaskController) {
@@ -37,7 +36,6 @@ define([
     .controller(DocumentController)
     .controller(ExternalPageController)
     .controller(MainController)
-    .controller(SettingsController)
     .controller(TaskListController)
     .controller(TaskController)
     .controller(NavMainController)

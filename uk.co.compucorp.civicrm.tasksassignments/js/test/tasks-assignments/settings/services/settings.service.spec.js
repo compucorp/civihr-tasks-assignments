@@ -3,19 +3,18 @@
 define([
   'common/lodash',
   'mocks/data/app-settings.data',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/settings/tasks-assignments.settings.module'
 ], function (_, settingsMock) {
   'use strict';
 
   var mockBackendCalls = function ($httpBackend) {
-    $httpBackend.whenGET(/views.*/).respond({});
     $httpBackend.whenGET(/action=*/).respond({});
   };
 
   describe('appSettingsService', function () {
     var AppSettings, appSettingsService, $httpBackend, promiseResult;
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.settings', 'tasks-assignments.templates'));
 
     beforeEach(inject(function (_appSettingsService_, _AppSettings_, _$httpBackend_) {
       appSettingsService = _appSettingsService_;
