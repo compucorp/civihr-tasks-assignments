@@ -5,7 +5,8 @@ define([
 ], function (angular) {
   'use strict';
 
-  angular.module('tasks-assignments.dashboard.constants', []).constant('dashboard.settings', {
-    baseUrl: CRM.tasksAssignments.extensionPath + '/js/src/tasks-assignments/dashboard/'
-  });
+  angular.module('tasks-assignments.dashboard.constants', [])
+    .constant('dashboard.settings', {
+      baseUrl: CRM.tasksAssignments.extensionPath + '/js/src/tasks-assignments/dashboard/'
+    });
 });
