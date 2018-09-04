@@ -19,6 +19,8 @@ define([
   'common/services/angular-date/date-format',
   'common/services/before-hash-query-params.service',
   'common/services/crm-ang.service',
+  'common/services/file.service',
+  'common/services/notification.service',
   'tasks-assignments/vendor/angular-bootstrap-calendar',
   'tasks-assignments/vendor/angular-checklist-model'
 ], function (angular) {
@@ -40,6 +42,7 @@ define([
     'common.angularDate',
     'common.directives',
     'common.models',
+    'common.services',
     'compu.ui.router'
   ]);
 });

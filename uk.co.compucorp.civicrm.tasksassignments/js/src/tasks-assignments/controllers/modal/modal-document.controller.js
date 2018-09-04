@@ -3,22 +3,20 @@
 define([
   'common/angular',
   'common/lodash',
-  'common/moment',
-  'common/services/file.service',
-  'common/services/notification.service'
+  'common/moment'
 ], function (angular, _, moment) {
   'use strict';
 
   ModalDocumentController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$window', '$dialog', '$uibModal', '$uibModalInstance', 'crmAngService', 'HR_settings', 'config',
+    '$dialog', '$uibModal', '$uibModalInstance', 'crmAngService', 'HR_settings', 'config',
     'appSettingsService', 'assignmentService', 'contactService', 'documentService',
     'fileServiceTA', 'fileService', 'notificationService', 'modalMode', 'role',
     'data', 'files'
   ];
 
   function ModalDocumentController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $window, $dialog, $modal, $modalInstance, crmAngService, HRSettings, config,
+    $scope, $timeout, $dialog, $modal, $modalInstance, crmAngService, HRSettings, config,
     appSettingsService, assignmentService, contactService, documentService,
     fileServiceTA, fileService, notificationService, modalMode, role, data, files) {
     $log.debug('Controller: ModalDocumentController');
