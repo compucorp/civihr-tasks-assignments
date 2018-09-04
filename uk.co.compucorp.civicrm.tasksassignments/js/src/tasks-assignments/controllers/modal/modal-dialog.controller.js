@@ -3,11 +3,9 @@
 define(function () {
   'use strict';
 
-  ModalDialogController.$inject = [
-    '$log', '$scope', '$timeout', '$uibModalInstance', 'content'
-  ];
+  ModalDialogController.$inject = ['$log', '$scope', '$uibModalInstance', 'content'];
 
-  function ModalDialogController ($log, $scope, $timeout, $modalInstance, content) {
+  function ModalDialogController ($log, $scope, $modalInstance, content) {
     $log.debug('Controller: ModalDialogController');
 
     $scope.copyCancel = content.copyCancel || 'Cancel';

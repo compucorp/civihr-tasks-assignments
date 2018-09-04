@@ -8,14 +8,13 @@ define([
   'use strict';
 
   TaskListController.$inject = [
-    '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$dialog', '$state', '$uibModal', 'assignmentService', 'contactService',
-    'taskService', 'HR_settings', 'config', 'settings', 'taskList'
+    '$filter', '$log', '$rootScope', '$scope', '$dialog', '$state', 'assignmentService',
+    'contactService', 'taskService', 'HR_settings', 'config', 'settings', 'taskList'
   ];
 
-  function TaskListController ($filter, $log, $rootElement, $rootScope, $scope,
-    $timeout, $dialog, $state, $modal, assignmentService, contactService,
-    taskService, HRSettings, config, settings, taskList) {
+  function TaskListController ($filter, $log, $rootScope, $scope, $dialog, $state,
+    assignmentService, contactService, taskService, HRSettings, config, settings,
+    taskList) {
     $log.debug('Controller: TaskListController');
 
     var vm = this;

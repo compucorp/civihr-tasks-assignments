@@ -5,9 +5,9 @@ define([
 ], function (moment) {
   'use strict';
 
-  DocumentController.$inject = ['$log', '$rootScope', '$scope', 'config'];
+  DocumentController.$inject = ['$log', '$scope', 'config'];
 
-  function DocumentController ($log, $rootScope, $scope, config) {
+  function DocumentController ($log, $scope, config) {
     $log.debug('Controller: DocumentController');
 
     $scope.document.activity_date_time = $scope.document.activity_date_time ? moment($scope.document.activity_date_time).toDate() : null;

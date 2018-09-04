@@ -7,12 +7,11 @@ define([
   'use strict';
 
   CalendarController.$inject = [
-    '$filter', '$log', '$rootScope', '$scope', '$timeout', '$state', '$stateParams',
-    'settings', 'documentList', 'taskList'
+    '$log', '$rootScope', '$scope', '$state', 'settings', 'documentList', 'taskList'
   ];
 
-  function CalendarController ($filter, $log, $rootScope, $scope, $timeout, $state,
-    $stateParams, settings, documentList, taskList) {
+  function CalendarController ($log, $rootScope, $scope, $state, settings,
+    documentList, taskList) {
     $scope.calendarDay = new Date();
     $scope.calendarTitle = '';
     $scope.calendarView = $state.params.calendarView || 'month';

@@ -7,13 +7,13 @@ define([
   'use strict';
 
   ModalTaskController.$inject = [
-    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', '$uibModalInstance', '$dialog', 'crmAngService', 'assignmentService', 'contactService',
+    '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModal',
+    '$uibModalInstance', '$dialog', 'crmAngService', 'assignmentService', 'contactService',
     'taskService', 'HR_settings', 'data', 'config'
   ];
 
-  function ModalTaskController ($filter, $log, $q, $rootElement, $rootScope, $scope,
-    $timeout, $modal, $modalInstance, $dialog, crmAngService, assignmentService, contactService,
+  function ModalTaskController ($filter, $log, $q, $rootScope, $scope, $timeout,
+    $modal, $modalInstance, $dialog, crmAngService, assignmentService, contactService,
     taskService, hrSettings, data, config) {
     $log.debug('Controller: ModalTaskController');
 

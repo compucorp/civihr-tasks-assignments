@@ -6,12 +6,12 @@ define([
   'use strict';
 
   ModalReminderController.$inject = [
-    '$filter', '$log', '$q', '$rootScope', '$scope', '$dialog', '$uibModalInstance',
+    '$log', '$q', '$rootScope', '$scope', '$uibModalInstance',
     'documentService', 'taskService', 'config', 'data', 'type'
   ];
 
-  function ModalReminderController ($filter, $log, $q, $rootScope, $scope, $dialog,
-    $modalInstance, documentService, taskService, config, data, type) {
+  function ModalReminderController ($log, $q, $rootScope, $scope, $modalInstance,
+    documentService, taskService, config, data, type) {
     $log.debug('Controller: ModalReminderController');
 
     $scope.data = {};

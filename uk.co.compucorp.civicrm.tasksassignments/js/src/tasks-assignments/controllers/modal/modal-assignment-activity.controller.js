@@ -3,11 +3,7 @@
 define([
   'common/lodash',
   'common/angular',
-  'common/moment',
-  'tasks-assignments/services/contact.service',
-  'tasks-assignments/services/document.service',
-  'tasks-assignments/services/task.service',
-  'tasks-assignments/services/assignment.service'
+  'common/moment'
 ], function (_, angular, moment) {
   'use strict';
 

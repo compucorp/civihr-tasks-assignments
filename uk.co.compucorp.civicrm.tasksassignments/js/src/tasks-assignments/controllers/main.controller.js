@@ -6,14 +6,14 @@ define([
   'use strict';
 
   MainController.$inject = [
-    '$log', '$q', '$rootElement', '$rootScope',
-    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA',
-    'OptionGroup', 'Session', 'notificationService', 'taskService'
+    '$log', '$rootElement', '$rootScope', '$scope', '$uibModal', 'beforeHashQueryParams',
+    'config', 'fileServiceTA', 'OptionGroup', 'Session', 'notificationService',
+    'taskService'
   ];
 
-  function MainController ($log, $q, $rootElement,
-    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA,
-    OptionGroup, Session, notificationService, taskService) {
+  function MainController ($log, $rootElement, $rootScope, $scope, $modal,
+    beforeHashQueryParams, config, fileServiceTA, OptionGroup, Session,
+    notificationService, taskService) {
     var queryParams;
 
     $log.debug('Controller: MainController');

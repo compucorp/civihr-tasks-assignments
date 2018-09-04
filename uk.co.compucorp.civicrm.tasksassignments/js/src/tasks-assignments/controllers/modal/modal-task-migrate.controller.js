@@ -6,14 +6,12 @@ define([
   'use strict';
 
   ModalTaskMigrateController.$inject = [
-    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', '$uibModalInstance', '$dialog', 'assignmentService', 'contactService',
-    'taskService', 'utilsService', 'Task', 'activityType', 'settings'
+    '$filter', '$log', '$q', '$rootScope', '$scope', '$uibModal', '$uibModalInstance',
+    '$dialog', 'contactService', 'utilsService', 'Task', 'settings'
   ];
 
-  function ModalTaskMigrateController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $modal, $modalInstance, $dialog, assignmentService, contactService,
-    taskService, utilsService, Task, activityType, settings) {
+  function ModalTaskMigrateController ($filter, $log, $q, $rootScope, $scope,
+    $modal, $modalInstance, $dialog, contactService, utilsService, Task, settings) {
     $log.debug('Controller: ModalTaskMigrateController');
 
     $scope.contacts = $rootScope.cache.contact.arrSearch;

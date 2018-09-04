@@ -6,12 +6,11 @@ define([
   'use strict';
 
   DateListController.$inject = [
-    '$filter', '$log', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', 'keyDateService', 'config', 'contactList'
+    '$filter', '$log', '$rootScope', '$scope', 'keyDateService', 'config', 'contactList'
   ];
 
-  function DateListController ($filter, $log, $rootElement, $rootScope, $scope, $timeout,
-    $modal, keyDateService, config, contactList) {
+  function DateListController ($filter, $log, $rootScope, $scope, keyDateService,
+    config, contactList) {
     $log.debug('Controller: DateListController');
 
     $scope.dataLoading = true;

@@ -3,12 +3,9 @@
 define(function () {
   'use strict';
 
-  ExternalPageController.$inject = [
-    '$log', '$rootElement', '$rootScope', '$scope', '$state', '$uibModal', 'config'
-  ];
+  ExternalPageController.$inject = ['$log', '$rootScope', '$scope', '$state', 'config'];
 
-  function ExternalPageController ($log, $rootElement, $rootScope, $scope, $state,
-    $modal, config) {
+  function ExternalPageController ($log, $rootScope, $scope, $state, config) {
     $log.debug('Controller: ExternalPageController');
 
     $scope.assignmentsUrl = config.url.ASSIGNMENTS + '?reset=1';

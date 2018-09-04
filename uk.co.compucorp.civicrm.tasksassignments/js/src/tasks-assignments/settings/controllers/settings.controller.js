@@ -6,12 +6,12 @@ define([
   'use strict';
 
   SettingsController.$inject = [
-    '$location', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$dialog',
-    '$state', '$uibModal', 'settingsService', 'Task', 'config', 'settings'
+    '$log', '$q', '$rootElement', '$rootScope', '$scope', '$dialog', '$state',
+    '$uibModal', 'settingsService', 'Task', 'config', 'settings'
   ];
 
-  function SettingsController ($location, $log, $q, $rootElement, $rootScope,
-    $scope, $dialog, $state, $modal, settingsService, Task, config, settings) {
+  function SettingsController ($log, $q, $rootElement, $rootScope, $scope, $dialog,
+    $state, $modal, settingsService, Task, config, settings) {
     $log.debug('Controller: SettingsController');
 
     var promiseActivityTypes;
