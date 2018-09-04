@@ -7,14 +7,12 @@ define([
   'use strict';
 
   assignmentService.$inject = [
-    'Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType',
-    'contactService', '$q', 'config', 'utilsService', '$filter', '$location',
-    '$state', '$rootScope', '$log', '$timeout'
+    'Relationship', 'Assignment', 'AssignmentSearch', 'AssignmentType', '$q',
+    'config', 'utilsService', '$filter', '$location', '$state', '$rootScope', '$log'
   ];
 
   function assignmentService (Relationship, Assignment, AssignmentSearch, AssignmentType,
-    contactService, $q, config, utilsService, $filter, $location, $state, $rootScope,
-    $log, $timeout) {
+    $q, config, utilsService, $filter, $location, $state, $rootScope, $log) {
     $log.debug('Service: assignmentService');
 
     return {

@@ -5,9 +5,9 @@ define([
 ], function (moment) {
   'use strict';
 
-  keyDateService.$inject = ['KeyDate', '$q', 'config', 'utilsService', '$log'];
+  keyDateService.$inject = ['KeyDate', '$q', '$log'];
 
-  function keyDateService (KeyDate, $q, config, utilsService, $log) {
+  function keyDateService (KeyDate, $q, $log) {
     $log.debug('Service: keyDateService');
 
     return {

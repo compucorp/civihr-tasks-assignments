@@ -4,10 +4,10 @@ define(function () {
   'use strict';
 
   Contact.$inject = [
-    '$resource', '$httpParamSerializer', 'config', '$log'
+    '$resource', 'config', '$log'
   ];
 
-  function Contact ($resource, $httpParamSerializer, config, $log) {
+  function Contact ($resource, config, $log) {
     $log.debug('Resource: Contact');
 
     return $resource(config.url.REST, {

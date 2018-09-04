@@ -7,12 +7,10 @@ define([
   'use strict';
 
   contactService.$inject = [
-    'Contact', '$resource', 'config', '$q', '$filter', '$rootScope', 'utilsService',
-    '$log'
+    'Contact', '$q', '$filter', '$rootScope', 'utilsService', '$log'
   ];
 
-  function contactService (Contact, $resource, config, $q, $filter, $rootScope,
-    utilsService, $log) {
+  function contactService (Contact, $q, $filter, $rootScope, utilsService, $log) {
     $log.debug('Service: contactService');
 
     return {

@@ -7,9 +7,9 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  taskService.$inject = ['Task', '$q', 'config', 'utilsService', '$log'];
+  taskService.$inject = ['Task', '$q', 'utilsService', '$log'];
 
-  function taskService (Task, $q, config, utilsService, $log) {
+  function taskService (Task, $q, utilsService, $log) {
     $log.debug('Service: taskService');
 
     return {

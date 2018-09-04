@@ -4,10 +4,10 @@ define(function () {
   'use strict';
 
   appSettingsService.$inject = [
-    'AppSettings', '$q', 'config', 'utilsService', '$log'
+    'AppSettings', '$q', 'config', '$log'
   ];
 
-  function appSettingsService (AppSettings, $q, config, utilsService, $log) {
+  function appSettingsService (AppSettings, $q, config, $log) {
     $log.debug('Service: appSettingsService');
 
     return {
