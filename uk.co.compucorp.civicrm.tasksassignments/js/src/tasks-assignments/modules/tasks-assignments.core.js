@@ -20,9 +20,7 @@ define([
   'common/services/before-hash-query-params.service',
   'common/services/crm-ang.service',
   'tasks-assignments/vendor/angular-bootstrap-calendar',
-  'tasks-assignments/vendor/angular-checklist-model',
-  'tasks-assignments/modules/tasks-assignments.constants',
-  'tasks-assignments/modules/tasks-assignments.values'
+  'tasks-assignments/vendor/angular-checklist-model'
 ], function (angular) {
   'use strict';
 
