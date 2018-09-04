@@ -7,7 +7,6 @@ define([
   'tasks-assignments/tasks-assignments.core',
   'tasks-assignments/tasks-assignments.directives',
   'tasks-assignments/tasks-assignments.filters',
-  'tasks-assignments/tasks-assignments.resources',
   'tasks-assignments/tasks-assignments.run',
   'tasks-assignments/tasks-assignments.services',
   'tasks-assignments/tasks-assignments.values'
@@ -22,7 +21,6 @@ define([
     'tasks-assignments.controllers',
     'tasks-assignments.directives',
     'tasks-assignments.filters',
-    'tasks-assignments.resources',
     'tasks-assignments.services'
   ]);
 });
