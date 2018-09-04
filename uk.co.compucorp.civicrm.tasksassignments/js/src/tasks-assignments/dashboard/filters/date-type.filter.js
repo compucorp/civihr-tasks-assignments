@@ -5,9 +5,9 @@ define([
 ], function (_) {
   'use strict';
 
-  filterByDateType.$inject = ['$filter', '$rootScope', '$log'];
+  filterByDateType.$inject = ['$log'];
 
-  function filterByDateType ($filter, $rootScope, $log) {
+  function filterByDateType ($log) {
     $log.debug('Filter: filterBy.dateType');
 
     /**

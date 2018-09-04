@@ -3,9 +3,9 @@
 define(function () {
   'use strict';
 
-  filterByContactId.$inject = ['$filter', 'config', '$log'];
+  filterByContactId.$inject = ['$log'];
 
-  function filterByContactId ($filter, config, $log) {
+  function filterByContactId ($log) {
     $log.debug('Filter: filterByContactId');
 
     return function (inputArr, contactId) {

@@ -3,9 +3,9 @@
 define(function () {
   'use strict';
 
-  filterByStatus.$inject = ['$filter', '$rootScope', '$log'];
+  filterByStatus.$inject = ['$log'];
 
-  function filterByStatus ($filter, $rootScope, $log) {
+  function filterByStatus ($log) {
     $log.debug('Filter: filterByStatus');
 
     return function (inputArr, statusArr, equal) {

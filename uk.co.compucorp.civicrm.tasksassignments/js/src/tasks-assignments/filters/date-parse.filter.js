@@ -5,9 +5,9 @@ define([
 ], function (moment) {
   'use strict';
 
-  dateParse.$inject = ['$filter', '$log'];
+  dateParse.$inject = ['$log'];
 
-  function dateParse ($filter, $log) {
+  function dateParse ($log) {
     $log.debug('Filter: dateParse');
 
     return function (input) {

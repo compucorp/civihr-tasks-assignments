@@ -5,9 +5,9 @@ define([
 ], function (moment) {
   'use strict';
 
-  filterByDate.$inject = ['$filter', '$log'];
+  filterByDate.$inject = ['$log'];
 
-  function filterByDate ($filter, $log) {
+  function filterByDate ($log) {
     $log.debug('Filter: filterBy.date');
 
     return function (inputArr, type) {
