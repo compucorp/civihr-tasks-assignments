@@ -6,10 +6,13 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  angular.module('tasks-assignments.settings.config', ['tasks-assignments.constants']).config(settingsConfig);
+  angular.module('tasks-assignments.settings.config', [
+    'tasks-assignments.constants',
+    'tasks-assignments.settings.constants'
+  ]).config(settingsConfig);
 
   settingsConfig.$inject = [
-    'config', '$stateProvider', '$urlRouterProvider', '$resourceProvider',
+    'config', 'settings.settings', '$stateProvider', '$urlRouterProvider', '$resourceProvider',
     '$httpProvider', '$analyticsProvider', 'uibDatepickerConfig', 'uiSelectConfig',
     '$logProvider'
   ];
@@ -27,7 +30,7 @@ define([
     $analyticsProvider.withAutoBase(true);
   }
 
-  function settingsConfig (config, $stateProvider, $urlRouterProvider,
+  function settingsConfig (config, settings, $stateProvider, $urlRouterProvider,
     $resourceProvider, $httpProvider, $analyticsProvider, datepickerConfig,
     uiSelectConfig, $logProvider) {
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -43,7 +46,7 @@ define([
       .state('settings', {
         url: '/',
         controller: 'SettingsController',
-        templateUrl: config.path.EXT + '/js/src/tasks-assignments/settings/controllers/settings.html'
+        templateUrl: settings.baseUrl + 'controllers/settings.html'
       });
   }
 });
