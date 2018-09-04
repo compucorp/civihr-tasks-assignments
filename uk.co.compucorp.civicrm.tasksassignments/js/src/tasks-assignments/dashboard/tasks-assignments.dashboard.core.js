@@ -2,15 +2,15 @@
 
 define([
   'common/angular',
-  'tasks-assignments/modules/tasks-assignments.constants',
-  'tasks-assignments/modules/tasks-assignments.controllers',
-  'tasks-assignments/modules/tasks-assignments.core',
-  'tasks-assignments/modules/tasks-assignments.directives',
-  'tasks-assignments/modules/tasks-assignments.filters',
-  'tasks-assignments/modules/tasks-assignments.resources',
-  'tasks-assignments/modules/tasks-assignments.run',
-  'tasks-assignments/modules/tasks-assignments.services',
-  'tasks-assignments/modules/tasks-assignments.values'
+  'tasks-assignments/tasks-assignments.constants',
+  'tasks-assignments/tasks-assignments.controllers',
+  'tasks-assignments/tasks-assignments.core',
+  'tasks-assignments/tasks-assignments.directives',
+  'tasks-assignments/tasks-assignments.filters',
+  'tasks-assignments/tasks-assignments.resources',
+  'tasks-assignments/tasks-assignments.run',
+  'tasks-assignments/tasks-assignments.services',
+  'tasks-assignments/tasks-assignments.values'
 ], function (angular) {
   'use strict';
 
