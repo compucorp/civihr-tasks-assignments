@@ -3,9 +3,9 @@
 define(function () {
   'use strict';
 
-  ctCiviEvents.$inject = ['$log', '$rootScope'];
+  ctCiviEvents.$inject = ['$log'];
 
-  function ctCiviEvents ($log, $rootScope) {
+  function ctCiviEvents ($log) {
     $log.debug('Directive: ctCiviEvents');
 
     return {
