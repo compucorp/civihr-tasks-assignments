@@ -104,7 +104,6 @@ define([
 
           promisePrev = i ? this[i - 1] : {};
 
-          // fix DB deadlock issue
           $q.when(promisePrev).then(function () {
             Task.save({
               'entity': 'Activity',
