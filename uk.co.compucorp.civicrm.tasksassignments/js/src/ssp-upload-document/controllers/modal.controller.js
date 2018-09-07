@@ -21,7 +21,7 @@ define(function () {
     /**
      * Collect required contact and cache them for document modal
      *
-     * @return {promise}
+     * @return {Promise}
      */
     function cacheContacts (documents) {
       return documentService.cacheContactsAndAssignments(documents, 'contacts');
@@ -31,9 +31,9 @@ define(function () {
      * Gets Document for the given document id and
      * opens Modal with retrived document data
      *
-     * @param {integer} id
-     * @param {string} role
-     * @param {string} mode
+     * @param {Number} id
+     * @param {String} role
+     * @param {String} mode
      */
     function modalDocument (id, role, mode) {
       documentService.get({ id: id })
@@ -57,10 +57,10 @@ define(function () {
     /**
      * Opens Document Modal
      *
-     * @param {object} data
-     * @param {string} role
-     * @param {string} mode
-     * @param {promise}
+     * @param  {Object} data
+     * @param  {String} role
+     * @param  {String} mode
+     * @return {Promise}
      */
     function openModalDocument (data, role, mode) {
       var modalInstance = $modal.open({
