@@ -11,10 +11,7 @@ define([
     CONTACT_ID: CRM.contactId || null,
     LOGGED_IN_CONTACT_ID: CRM.adminId || null,
     customFieldIds: CRM.vars.customFieldIds,
-    path: {
-      EXT: CRM.tasksAssignments.extensionPath,
-      TPL: CRM.tasksAssignments.extensionPath + 'views/'
-    },
+    baseUrl: CRM.tasksAssignments.extensionPath,
     permissions: {
       allowDelete: CRM.tasksAssignments.permissions.delete_tasks_and_documents
     },

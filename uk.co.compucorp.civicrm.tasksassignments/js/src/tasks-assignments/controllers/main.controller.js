@@ -119,7 +119,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-assignment.html',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-assignment.html',
         controller: 'ModalAssignmentController',
         size: 'lg',
         resolve: {
@@ -159,7 +159,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-document.html',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-document.html',
         controller: 'ModalDocumentController',
         controllerAs: 'documentModal',
         resolve: {
@@ -202,7 +202,7 @@ define([
 
       $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-reminder.html',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-reminder.html',
         controller: 'ModalReminderController',
         resolve: {
           data: function () {
@@ -226,7 +226,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-task.html',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-task.html',
         controller: 'ModalTaskController',
         resolve: {
           data: function () {

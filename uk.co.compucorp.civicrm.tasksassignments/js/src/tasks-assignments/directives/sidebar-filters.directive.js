@@ -12,7 +12,7 @@ define(function () {
       restrict: 'E',
       scope: true,
       transclude: true,
-      templateUrl: config.path.EXT + 'js/src/tasks-assignments/directives/sidebar-filters.html'
+      templateUrl: config.baseUrl + 'js/src/tasks-assignments/directives/sidebar-filters.html'
     };
   }
 

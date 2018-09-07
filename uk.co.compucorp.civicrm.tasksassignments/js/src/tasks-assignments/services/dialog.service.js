@@ -19,7 +19,7 @@ define(function () {
 
       return $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.EXT + 'js/src/tasks-assignments/controllers/modal/modal-dialog.html',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-dialog.html',
         size: 'sm',
         controller: 'ModalDialogController',
         resolve: {
