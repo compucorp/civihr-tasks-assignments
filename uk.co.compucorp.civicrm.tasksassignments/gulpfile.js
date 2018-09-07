@@ -60,14 +60,26 @@ gulp.task('js-bundle:requirejs:badge', function (done) {
   });
 });
 
+gulp.task('js-bundle:requirejs:ssp-upload', function (done) {
+  exec('r.js -o js/ssp-upload-document.build.js', function (err, stdout, stderr) {
+    err && err.code && console.log(stdout);
+    done();
+  });
+});
+
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', gulp.parallel('sass'));
+  watchModule('ssp-upload-document', 'js-bundle:requirejs:ssp-upload');
   watchModule('tasks-notification-badge', 'js-bundle:requirejs');
   watchModule('tasks-assignments', 'js-bundle:requirejs');
   watchModule('crm-tasks-workflows', 'js-bundle:crm');
 });
 
-gulp.task('js-bundle:requirejs', gulp.parallel('js-bundle:requirejs:ta', 'js-bundle:requirejs:badge'));
+gulp.task('js-bundle:requirejs', gulp.parallel(
+  'js-bundle:requirejs:ta',
+  'js-bundle:requirejs:badge',
+  'js-bundle:requirejs:ssp-upload'
+));
 gulp.task('js-bundle', gulp.parallel('js-bundle:crm', 'js-bundle:requirejs'));
 
 var test = (function () {
