@@ -66,7 +66,6 @@ define([
       taskStatusResolve: config.status.resolve.TASK
     };
     $rootScope.location = $location;
-    $rootScope.pathTpl = config.path.TPL;
     $rootScope.permissions = config.permissions;
     $rootScope.prefix = config.CLASS_NAME_PREFIX;
     $rootScope.settings = settings;
