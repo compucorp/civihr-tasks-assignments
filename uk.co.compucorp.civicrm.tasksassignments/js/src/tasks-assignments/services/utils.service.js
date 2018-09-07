@@ -3,10 +3,9 @@
 define(function () {
   'use strict';
 
-  utilsService.__name = 'utilsService';
-  utilsService.$inject = ['config', '$q', '$log', '$rootScope'];
+  utilsService.$inject = ['$log'];
 
-  function utilsService (config, $q, $log) {
+  function utilsService ($log) {
     $log.debug('Service: utilsService');
     return {
       errorHandler: errorHandler
@@ -43,5 +42,5 @@ define(function () {
     }
   }
 
-  return utilsService;
+  return { utilsService: utilsService };
 });

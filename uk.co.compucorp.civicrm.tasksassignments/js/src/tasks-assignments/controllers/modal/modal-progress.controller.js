@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  ModalProgressController.__name = 'ModalProgressController';
   ModalProgressController.$inject = [
     '$log', '$q', '$scope', '$timeout', '$uibModalInstance', 'fileServiceTA',
     'uploader', 'entityId'
@@ -38,5 +37,5 @@ define(function () {
     }
   }
 
-  return ModalProgressController;
+  return { ModalProgressController: ModalProgressController };
 });

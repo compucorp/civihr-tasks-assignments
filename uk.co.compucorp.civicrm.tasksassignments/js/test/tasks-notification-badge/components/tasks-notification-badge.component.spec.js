@@ -2,7 +2,7 @@
 
 define([
   'common/angularMocks',
-  'tasks-notification-badge/app'
+  'tasks-notification-badge/tasks-notification-badge.module'
 ], function () {
   'use strict';
 

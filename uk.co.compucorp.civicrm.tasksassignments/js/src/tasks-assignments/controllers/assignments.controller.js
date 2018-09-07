@@ -3,15 +3,11 @@
 define(function () {
   'use strict';
 
-  AssignmentsController.__name = 'AssignmentsController';
-  AssignmentsController.$inject = [
-    '$log', '$rootElement', '$rootScope', '$scope', '$uibModal', '$state', 'config'
-  ];
+  AssignmentsController.$inject = ['$log'];
 
-  function AssignmentsController ($log, $rootElement, $rootScope, $scope, $modal,
-    $state, config) {
+  function AssignmentsController ($log) {
     $log.info('Controller: AssignmentsController');
   }
 
-  return AssignmentsController;
+  return { AssignmentsController: AssignmentsController };
 });

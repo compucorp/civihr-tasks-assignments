@@ -3,10 +3,9 @@
 define(function () {
   'use strict';
 
-  ctCiviEvents.__name = 'ctCiviEvents';
-  ctCiviEvents.$inject = ['$log', '$rootScope'];
+  ctCiviEvents.$inject = ['$log'];
 
-  function ctCiviEvents ($log, $rootScope) {
+  function ctCiviEvents ($log) {
     $log.debug('Directive: ctCiviEvents');
 
     return {
@@ -37,5 +36,5 @@ define(function () {
     }
   }
 
-  return ctCiviEvents;
+  return { ctCiviEvents: ctCiviEvents };
 });

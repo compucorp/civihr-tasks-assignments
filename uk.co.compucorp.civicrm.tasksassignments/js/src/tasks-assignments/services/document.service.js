@@ -6,7 +6,6 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  documentService.__name = 'documentService';
   documentService.$inject = [
     'Document', '$q', 'config', 'settings', 'utilsService', 'contactService',
     'assignmentService', '$log'
@@ -341,5 +340,5 @@ define([
     }
   }
 
-  return documentService;
+  return { documentService: documentService };
 });

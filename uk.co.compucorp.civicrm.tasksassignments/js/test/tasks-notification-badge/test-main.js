@@ -1,4 +1,4 @@
-var TEST_REGEXP = /(spec|test)\.js$/i;
+var TEST_REGEXP = /\.spec\.js$/i;
 var allTestFiles = [];
 var srcPath = CRM.tasksAssignments.extensionPath + '/js/src/tasks-notification-badge';
 

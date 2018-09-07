@@ -3,10 +3,9 @@
 define(function () {
   'use strict';
 
-  filterByStatus.__name = 'filterByStatus';
-  filterByStatus.$inject = ['$filter', '$rootScope', '$log'];
+  filterByStatus.$inject = ['$log'];
 
-  function filterByStatus ($filter, $rootScope, $log) {
+  function filterByStatus ($log) {
     $log.debug('Filter: filterByStatus');
 
     return function (inputArr, statusArr, equal) {
@@ -31,5 +30,5 @@ define(function () {
     };
   }
 
-  return filterByStatus;
+  return { filterByStatus: filterByStatus };
 });

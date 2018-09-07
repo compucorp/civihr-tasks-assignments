@@ -7,7 +7,6 @@ define([
 ], function (_, angular, moment) {
   'use strict';
 
-  ModalAssignmentController.__name = 'ModalAssignmentController';
   ModalAssignmentController.$inject = [
     '$filter', '$log', '$q', '$rootScope', '$scope', '$timeout', '$uibModalInstance',
     'HR_settings', 'config', 'settings', 'assignmentService', 'taskService',
@@ -785,5 +784,5 @@ define([
     }
   }
 
-  return ModalAssignmentController;
+  return { ModalAssignmentController: ModalAssignmentController };
 });

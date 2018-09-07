@@ -5,16 +5,15 @@ define([
 ], function (_) {
   'use strict';
 
-  MainController.__name = 'MainController';
   MainController.$inject = [
-    '$log', '$q', '$rootElement', '$rootScope',
-    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA',
-    'OptionGroup', 'Session', 'notificationService', 'taskService'
+    '$log', '$rootElement', '$rootScope', '$scope', '$uibModal', 'beforeHashQueryParams',
+    'config', 'fileServiceTA', 'OptionGroup', 'Session', 'notificationService',
+    'taskService'
   ];
 
-  function MainController ($log, $q, $rootElement,
-    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA,
-    OptionGroup, Session, notificationService, taskService) {
+  function MainController ($log, $rootElement, $rootScope, $scope, $modal,
+    beforeHashQueryParams, config, fileServiceTA, OptionGroup, Session,
+    notificationService, taskService) {
     var queryParams;
 
     $log.debug('Controller: MainController');
@@ -120,7 +119,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-assignment.html',
         controller: 'ModalAssignmentController',
         size: 'lg',
         resolve: {
@@ -160,7 +159,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/document.html?v=3',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-document.html',
         controller: 'ModalDocumentController',
         controllerAs: 'documentModal',
         resolve: {
@@ -203,7 +202,7 @@ define([
 
       $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-reminder.html',
         controller: 'ModalReminderController',
         resolve: {
           data: function () {
@@ -227,7 +226,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/task.html?v=5',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-task.html',
         controller: 'ModalTaskController',
         resolve: {
           data: function () {
@@ -248,5 +247,5 @@ define([
     }
   }
 
-  return MainController;
+  return { MainController: MainController };
 });

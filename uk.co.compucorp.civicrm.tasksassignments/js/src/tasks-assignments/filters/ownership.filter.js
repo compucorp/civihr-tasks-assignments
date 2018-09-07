@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  filterByOwnership.__name = 'filterByOwnership';
   filterByOwnership.$inject = ['$log', 'config'];
 
   function filterByOwnership ($log, config) {
@@ -28,5 +27,5 @@ define(function () {
     };
   }
 
-  return filterByOwnership;
+  return { filterByOwnership: filterByOwnership };
 });
