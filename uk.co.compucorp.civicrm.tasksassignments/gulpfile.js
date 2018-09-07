@@ -70,8 +70,8 @@ gulp.task('js-bundle:requirejs:ssp-upload', function (done) {
 gulp.task('watch', function () {
   gulp.watch('scss/**/*.scss', gulp.parallel('sass'));
   watchModule('ssp-upload-document', 'js-bundle:requirejs:ssp-upload');
-  watchModule('tasks-notification-badge', 'js-bundle:requirejs');
-  watchModule('tasks-assignments', 'js-bundle:requirejs');
+  watchModule('tasks-notification-badge', 'js-bundle:requirejs:badge');
+  watchModule('tasks-assignments', 'js-bundle:requirejs:ta');
   watchModule('crm-tasks-workflows', 'js-bundle:crm');
 });
 
