@@ -12,7 +12,6 @@ class CRM_Tasksassignments_Reminder {
 
   private static $_activityOptions = array();
   private static $_relatedExtensions = array(
-    'appraisals' => false,
     'hrjobcontract' => false
   );
   private static $_reminderSettings = [];
@@ -35,11 +34,8 @@ class CRM_Tasksassignments_Reminder {
   }
 
   private static function checkRelatedExtensions() {
-    $isAppraisalEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'uk.co.compucorp.civicrm.appraisals', 'is_active', 'full_name');
     $isJobContractEnabled = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Extension', 'org.civicrm.hrjobcontract', 'is_active', 'full_name');
-    if ($isAppraisalEnabled) {
-      self::$_relatedExtensions['appraisals'] = true;
-    }
+
     if ($isJobContractEnabled) {
       self::$_relatedExtensions['hrjobcontract'] = true;
     }
@@ -273,7 +269,7 @@ class CRM_Tasksassignments_Reminder {
     $to = self::getNextSunday($now);
 
     $assigneeQuery = self::buildTaskAssigneeCreatorQuery($to);
-    $otherContactsQuery = self::buildAdminsKeyDatesAndAppraisalsQuery($now, $to);
+    $otherContactsQuery = self::buildAdminsKeyDatesQuery($now, $to);
 
     if (!empty($otherContactsQuery)) {
       $otherContactsQuery = "UNION $otherContactsQuery";
@@ -485,25 +481,21 @@ class CRM_Tasksassignments_Reminder {
    *
    *   - Users with administrator or HR Admin roles
    *   - Contacts with key dates in given time period
-   *   - Appraisals due in the given timeframe
    *
    * @param string $now
-   *   Date from where key dates and appraisals should be searched, yyyy-mm-dd
+   *   Date from where key dates should be searched, yyyy-mm-dd
    * @param string $to
-   *   Date until where key dates and appraisals should be searched, yyyy-mm-dd
+   *   Date until where key dates should be searched, yyyy-mm-dd
    *
    * @return string
    *   Query to obtain contact ID's for admins and contacts involved in key
-   *   dates and appraisals
+   *   dates
    */
-  private static function buildAdminsKeyDatesAndAppraisalsQuery($now, $to) {
+  private static function buildAdminsKeyDatesQuery($now, $to) {
     $adminContacts = self::getAdminContactIds();
     $keyDatesContacts = CRM_Tasksassignments_KeyDates::getContactIds($now, $to);
-    $appraisalsContacts = self::$_relatedExtensions['appraisals']
-      ? CRM_Appraisals_Reminder::getContactIds($now, $to)
-      : [];
 
-    $contacts = array_merge($adminContacts, $keyDatesContacts, $appraisalsContacts);
+    $contacts = array_merge($adminContacts, $keyDatesContacts);
 
     if (!empty($contacts)) {
       return '
@@ -626,13 +618,6 @@ class CRM_Tasksassignments_Reminder {
       }
     }
     $reminderData['today_keydates_count'] = $todayKeydatesCount;
-
-    if (self::$_relatedExtensions['appraisals']) {
-      $appraisals = CRM_Appraisals_Reminder::get($now, $to, $contactId);
-      foreach ($appraisals as $appraisal) {
-        $reminderData['appraisals'][] = $appraisal;
-      }
-    }
 
     return $reminderData;
   }
