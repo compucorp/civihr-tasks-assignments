@@ -6,7 +6,6 @@ define([
 ], function (angular, _) {
   'use strict';
 
-  documentService.__name = 'documentService';
   documentService.$inject = [
     'Document', '$q', 'config', 'settings', 'utilsService', 'contactService',
     'assignmentService', '$log'
@@ -79,7 +78,7 @@ define([
 
       options = Array.isArray(options) ? options : [options];
 
-      if (_.contains(options, 'contacts')) {
+      if (_.includes(options, 'contacts')) {
         contactIds = collectContactIds(documents);
         config.CONTACT_ID && contactIds.push(config.CONTACT_ID);
         if (contactIds && contactIds.length) {
@@ -93,7 +92,7 @@ define([
         }
       }
 
-      if (_.contains(options, 'assignments')) {
+      if (_.includes(options, 'assignments')) {
         assignmentIds = collectAssignmentIds(documents);
         if (assignmentIds && assignmentIds.length && settings.extEnabled.assignments) {
           assignmentsPromise = assignmentService.get({
@@ -144,9 +143,9 @@ define([
       return documents.filter(function (document) {
         return !!document.case_id;
       })
-      .map(function (document) {
-        return document.case_id;
-      });
+        .map(function (document) {
+          return document.case_id;
+        });
     }
 
     function deleteDocument (documentId) {
@@ -341,5 +340,5 @@ define([
     }
   }
 
-  return documentService;
+  return { documentService: documentService };
 });

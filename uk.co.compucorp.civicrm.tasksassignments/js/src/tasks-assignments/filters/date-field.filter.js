@@ -3,10 +3,9 @@
 define(function () {
   'use strict';
 
-  filterByDateField.__name = 'filterByDateField';
-  filterByDateField.$inject = ['$filter', '$log'];
+  filterByDateField.$inject = ['$log'];
 
-  function filterByDateField ($filter, $log) {
+  function filterByDateField ($log) {
     $log.debug('Filter: filterByDateField');
 
     return function (inputArr, type, field, dateRange) {
@@ -130,5 +129,5 @@ define(function () {
     }
   }
 
-  return filterByDateField;
+  return { filterByDateField: filterByDateField };
 });

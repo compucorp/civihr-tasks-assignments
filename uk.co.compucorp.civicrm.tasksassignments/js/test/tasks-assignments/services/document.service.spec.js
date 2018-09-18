@@ -6,7 +6,7 @@ define([
   'mocks/data/assignment.data',
   'mocks/data/document.data',
   'common/angularMocks',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (documentMock, contactMock, assignmentMock, documentFabricator) {
   'use strict';
 
@@ -14,7 +14,7 @@ define([
     var Document, requestBody, $httpBackend, $httpParamSerializer;
     var request = {};
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard', 'tasks-assignments.templates'));
     beforeEach(inject(function (_Document_, _$httpBackend_, _$httpParamSerializer_) {
       $httpParamSerializer = _$httpParamSerializer_;
       Document = _Document_;
@@ -22,7 +22,6 @@ define([
     }));
 
     beforeEach(function () {
-      $httpBackend.whenGET(/views.*/).respond({});
       $httpBackend.whenGET(/action=get&debug=true&entity=contact/).respond({ values: [ jasmine.any(Object) ] });
       $httpBackend.whenGET(/action=get&entity=CaseType/).respond({ values: [ jasmine.any(Object) ] });
       $httpBackend.whenGET(/action=/).respond({});
@@ -68,7 +67,7 @@ define([
     var assignmentService, contactService, documentService, $q,
       deferred, config, promise, $httpBackend;
 
-    beforeEach(module('tasks-assignments.dashboard'));
+    beforeEach(module('tasks-assignments.dashboard', 'tasks-assignments.templates'));
     beforeEach(inject(function (_assignmentService_, _contactService_,
       _documentService_, _config_, _$q_, _$httpBackend_) {
       assignmentService = _assignmentService_;

@@ -5,7 +5,6 @@ define([
 ], function (angular) {
   'use strict';
 
-  taValidate.__name = 'taValidate';
   taValidate.$inject = ['$log'];
 
   function taValidate ($log) {
@@ -75,5 +74,5 @@ define([
     }
   }
 
-  return taValidate;
+  return { taValidate: taValidate };
 });

@@ -15,10 +15,10 @@
 
   require([
     'common/angular',
-    'tasks-assignments/modules/tasks-assignments.dashboard.module',
-    'tasks-assignments/modules/tasks-assignments.documents.module',
-    'tasks-assignments/modules/tasks-assignments.settings.module',
-    'tasks-assignments/modules/tasks-assignments.tasks.module'
+    'tasks-assignments/dashboard/tasks-assignments.dashboard.module',
+    'tasks-assignments/documents/tasks-assignments.documents.module',
+    'tasks-assignments/settings/tasks-assignments.settings.module',
+    'tasks-assignments/tasks/tasks-assignments.tasks.module'
   ], function (angular) {
     'use strict';
 

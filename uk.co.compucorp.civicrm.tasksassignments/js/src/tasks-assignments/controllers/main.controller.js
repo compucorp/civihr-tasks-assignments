@@ -5,14 +5,15 @@ define([
 ], function (_) {
   'use strict';
 
-  MainController.__name = 'MainController';
   MainController.$inject = [
-    '$log', '$q', '$rootElement', '$rootScope',
-    '$scope', '$uibModal', 'beforeHashQueryParams', 'config', 'fileServiceTA'
+    '$log', '$rootElement', '$rootScope', '$scope', '$uibModal', 'beforeHashQueryParams',
+    'config', 'fileServiceTA', 'OptionGroup', 'Session', 'notificationService',
+    'taskService'
   ];
 
-  function MainController ($log, $q, $rootElement,
-    $rootScope, $scope, $modal, beforeHashQueryParams, config, fileServiceTA) {
+  function MainController ($log, $rootElement, $rootScope, $scope, $modal,
+    beforeHashQueryParams, config, fileServiceTA, OptionGroup, Session,
+    notificationService, taskService) {
     var queryParams;
 
     $log.debug('Controller: MainController');
@@ -26,6 +27,7 @@ define([
       queryParams = beforeHashQueryParams.parse();
 
       queryParams.openModal && autoOpenModal(queryParams.openModal);
+      initWatchers();
     }());
 
     /**
@@ -44,6 +46,69 @@ define([
     }
 
     /**
+     * Displays a case closed success message given the provided case and client
+     * data.
+     *
+     * @param {String} caseTypeTitle - the case type title.
+     * @param {String} clientDisplayName - the display name of the case client.
+     */
+    function displayCaseClosedSuccessMessage (caseTypeTitle, clientDisplayName) {
+      var message = 'All tasks in the ' + caseTypeTitle + ' workflow for ' +
+        clientDisplayName + ' have been completed. Good work!';
+
+      notificationService.success('Success', message);
+    }
+
+    /**
+     * Returns the parent's case title and status for the given child task id.
+     *
+     * @param  {Number}  taskId - the child task id.
+     * @return {Promise} resolves to the parent case title and status.
+     */
+    function getCaseDataFromTask (taskId) {
+      return taskService.get({
+        id: taskId,
+        return: [
+          'case_id.case_type_id.title',
+          'case_id.status_id.name'
+        ]
+      }).then(function (listOfTasks) {
+        var task = listOfTasks[0];
+
+        if (!task) {
+          return;
+        }
+
+        return {
+          caseTypeTitle: task['case_id.case_type_id.title'],
+          statusName: task['case_id.status_id.name']
+        };
+      });
+    }
+
+    /**
+     * Initializes the taskFormSuccess watcher.
+     */
+    function initWatchers () {
+      $scope.$on('taskFormSuccess', function (event, localTaskData, task) {
+        var clientData = $rootScope.cache.contact.obj[task.target_contact_id[0]];
+
+        if (_.isEmpty(task.case_id)) {
+          return;
+        }
+
+        getCaseDataFromTask(task.id)
+          .then(function (caseData) {
+            if (caseData.statusName !== 'Closed') {
+              return;
+            }
+
+            displayCaseClosedSuccessMessage(caseData.caseTypeTitle, clientData.display_name);
+          });
+      });
+    }
+
+    /**
      * Opens the assignment modal
      *
      * @param {Object} data
@@ -54,12 +119,18 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/assignment.html?v=3',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-assignment.html',
         controller: 'ModalAssignmentController',
         size: 'lg',
         resolve: {
           data: function () {
             return data;
+          },
+          session: function () {
+            return Session.get();
+          },
+          defaultAssigneeOptions: function () {
+            return OptionGroup.valuesOf('activity_default_assignee');
           }
         }
       });
@@ -88,7 +159,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/document.html?v=3',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-document.html',
         controller: 'ModalDocumentController',
         controllerAs: 'documentModal',
         resolve: {
@@ -131,7 +202,7 @@ define([
 
       $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/reminder.html?v=1',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-reminder.html',
         controller: 'ModalReminderController',
         resolve: {
           data: function () {
@@ -155,7 +226,7 @@ define([
       data = data || {};
       modalInstance = $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/task.html?v=5',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-task.html',
         controller: 'ModalTaskController',
         resolve: {
           data: function () {
@@ -176,5 +247,5 @@ define([
     }
   }
 
-  return MainController;
+  return { MainController: MainController };
 });

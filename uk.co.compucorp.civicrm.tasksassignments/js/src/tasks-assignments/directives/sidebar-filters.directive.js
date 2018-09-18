@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  sidebarFilters.__name = 'sidebarFilters';
   sidebarFilters.$inject = ['$log', 'config'];
 
   function sidebarFilters ($log, config) {
@@ -13,9 +12,9 @@ define(function () {
       restrict: 'E',
       scope: true,
       transclude: true,
-      templateUrl: config.path.TPL + 'directives/sidebar-filters.html'
+      templateUrl: config.baseUrl + 'js/src/tasks-assignments/directives/sidebar-filters.html'
     };
   }
 
-  return sidebarFilters;
+  return { sidebarFilters: sidebarFilters };
 });

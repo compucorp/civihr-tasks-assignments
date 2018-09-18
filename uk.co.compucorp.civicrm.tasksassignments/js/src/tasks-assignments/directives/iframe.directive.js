@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  taIframe.__name = 'taIframe';
   taIframe.$inject = ['$log', '$rootScope'];
 
   function taIframe ($log, $rootScope) {
@@ -45,5 +44,5 @@ define(function () {
     }
   }
 
-  return taIframe;
+  return { taIframe: taIframe };
 });

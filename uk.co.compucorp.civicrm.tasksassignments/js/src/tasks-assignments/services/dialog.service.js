@@ -3,7 +3,6 @@
 define(function () {
   'use strict';
 
-  $dialog.__name = '$dialog';
   $dialog.$inject = ['$uibModal', 'config', '$rootElement', '$log'];
 
   function $dialog ($modal, config, $rootElement, $log) {
@@ -20,7 +19,7 @@ define(function () {
 
       return $modal.open({
         appendTo: $rootElement.find('div').eq(0),
-        templateUrl: config.path.TPL + 'modal/dialog.html',
+        templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-dialog.html',
         size: 'sm',
         controller: 'ModalDialogController',
         resolve: {
@@ -37,5 +36,5 @@ define(function () {
     }
   }
 
-  return $dialog;
+  return { $dialog: $dialog };
 });

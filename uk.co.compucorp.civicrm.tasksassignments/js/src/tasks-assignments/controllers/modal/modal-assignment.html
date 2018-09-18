@@ -1,0 +1,315 @@
+<form novalidate name="assignmentForm" class="form-assignment form-horizontal modal-inverted" role="form" ng-submit="confirm()" ct-spinner>
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()">
+      <span aria-hidden="true">&times;</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title">New Workflow</h4>
+  </div>
+  <div class="modal-body">
+    <crm-loading show="!loading.component">
+      <alert type="{{alert.type}}" close="alert.show = false;" ng-show="alert.show">{{alert.msg}}</alert>
+      <section class="container">
+        <div class="col-xs-12" ng-if="hasRelationshipWarnings()">
+          <p class="alert alert-warning">
+            <i class="fa fa-warning"></i>
+            This staff member does not have the required manager assigned for the system to automatically assign a task or document in this workflow.
+            You can either proceed and allocate the tasks manually or alternatively please add the required manager.
+          </p>
+        </div>
+        <div class="col-xs-12">
+          <div class="row separately">
+            <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Target Contact:</label>
+            <div ng-if="showCId" class="col-xs-12 col-sm-6">
+              <ui-select prevent-animations allow-clear name="contact" theme="civihr-ui-select" ng-model="assignment.contact_id" ng-change="onTargetContactChange()" on-select="cacheContact($item)" ng-required="true">
+                <ui-select-match prevent-animations class="ui-select-match" placeholder="Start typing a name or email...">
+                  {{$select.selected.label}}
+                </ui-select-match>
+                <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.target | filter: $select.search" refresh="refreshContacts($select.search, 'target')" refresh-delay="0">
+                  <div ng-bind="contact.label"></div>
+                  <small ng-bind="contact.description[0]"></small>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div ng-if="!showCId" class="col-xs-12 col-sm-6 display-only header">
+              <span ng-bind="cache.contact.obj[assignment.contact_id].sort_name || 'No target contact'"></span>
+            </div>
+          </div>
+          <div class="row separately">
+            <label class="col-xs-12 col-sm-3 control-label required-field-indicator">Workflow Type:</label>
+            <div class="col-xs-11 col-sm-6">
+              <div class="crm_custom-select crm_custom-select--full">
+                <select name="assignment" ng-class="{'has-error': assignmentForm.assignment.$invalid}" ng-required="true" class="form-control no-select2" ng-change="setData()" ng-model="assignment.case_type_id" ng-options="value.id as value.title for value in workflowActivityTypes;">
+                  <option value="">- select -</option>
+                </select>
+                <span class="crm_custom-select__arrow"></span>
+              </div>
+            </div>
+            <div class="col-xs-1 control-label">
+              <help-text title="Workflow Type">
+                <p>
+                  CiviHR allows you to create workflows for HR processes such as Joining or Leaving.
+                  Each workflow can include Tasks that can be assigned to different members of the team,
+                  and also Documents that staff are required to upload to the system.<br/>
+                  You can create and manage different workflows <a href="/civicrm/a/#/caseType" target="_blank">here</a>
+                </p>
+              </help-text>
+            </div>
+          </div>
+          <div class="row separately">
+            <label class="col-xs-12 col-sm-3 control-label no-wrap required-field-indicator" for="{{prefix}}assignment-due">
+              Key Date:
+            </label>
+            <div class="col-xs-12 col-sm-3">
+              <div class="input-group date-input-group form-group" ng-class="{'has-error': assignmentForm.submitted && assignmentForm.dueDate.$invalid}">
+                <input
+                  type="text"
+                  id="{{prefix}}assignment-due"
+                  ng-model="assignment.dueDate"
+                  name="dueDate"
+                  class="form-control"
+                  placeholder="{{ format }}"
+                  name="assignmentDue"
+                  ng-required="true"
+                  uib-datepicker-popup
+                  ng-model="assignment.dueDate"
+                  is-open="dpOpened.assignmentDue">
+              </div>
+            </div>
+          </div>
+
+          <hr ng-show="assignment.case_type_id" />
+
+          <div ng-show="assignment.case_type_id" class="row">
+            <label class="col-xs-12 col-sm-3 control-label">
+              Select Task List:
+            </label>
+            <div class="col-xs-12 col-sm-5">
+              <ui-select prevent-animations ng-model="activity.activitySet" theme="civihr-ui-select" ng-required="true" search-enabled="false" on-select="updateTimeline($item)">
+                <ui-select-match prevent-animations class="ui-select-match" placeholder="- select -">
+                  {{$select.selected.label}}
+                </ui-select-match>
+                <ui-select-choices prevent-animations class="ui-select-choices" repeat="value.id as value in cache.assignmentType.obj[assignment.case_type_id].definition.activitySets">
+                  <div ng-bind="value.label"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+
+          <hr class="separately" ng-show="assignment.case_type_id" />
+
+          <div ng-show="activity.activitySet.name" class="row">
+            <section class="col-xs-12">
+              <h2>Tasks:</h2>
+
+              <table class="table modal-table table-striped">
+                <thead>
+                  <tr>
+                    <th class="action-column"></th>
+                    <th class="title-column">Task Title</th>
+                    <th class="assignee-column">
+                      Assigned To
+                      <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyAssignee(taskList, 'task')">
+                        <i class="fa fa-files-o"></i>
+                      </span>
+                    </th>
+                    <th class="date-column  required-field-indicator">
+                      Due Date
+                      <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyDate(taskList)">
+                        <i class="fa fa-files-o"></i>
+                      </span>
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="activity in taskList" ng-controller="ModalAssignmentActivityController">
+                    <td ng-if="!activity.isAdded">
+                      <input type="checkbox" ng-model="activity.create" ng-change="!activity.create && (activity.assignee_contact_id = undefined) || (activity.activity_date_time = undefined);" ng-disabled="isDisabled">
+                    </td>
+                    <td ng-if="!activity.isAdded">
+                      {{activity.name}}
+                    </td>
+                    <td colspan="2" ng-if="activity.isAdded">
+                      <ui-select prevent-animations ng-model="activity.activity_type_id" ng-required="!isDisabled && activity.create" theme="civihr-ui-select" class="required-field-indicator">
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select task type">
+                          {{ ($select.selected.value.length > 30)? ($select.selected.value | limitTo:30) + '...' : $select.selected.value }}
+                        </ui-select-match>
+                        <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.taskType.arr | filter: $select.search">
+                          <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <td>
+                      <ui-select prevent-animations allow-clear theme="civihr-ui-select" ng-model="activity.assignee_contact_id[0]" ng-disabled="isDisabled || !activity.create" on-select="cacheContact($item)">
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="- select contact -">
+                          {{ ($select.selected.label.length > 25)? ($select.selected.label | limitTo:25) + '...' : $select.selected.label }}
+                        </ui-select-match>
+                        <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.task[$index] | filter: $select.search" refresh="refreshContacts($select.search, 'task', $index)" refresh-delay="0">
+                          <div ng-bind="contact.label"></div>
+                          <small ng-bind="contact.description[0]"></small>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <td>
+                      <div class="input-group date-input-group" ng-class="{'has-error': assignmentForm['assignmentDue-'+$index].$invalid}">
+                        <input
+                          type="text"
+                          id="{{prefix}}assignment-task-due-{{$index}}"
+                          name="assignmentDue-{{$index}}"
+                          class="form-control"
+                          placeholder="{{ format }}"
+                          ng-model="activity.activity_date_time"
+                          uib-datepicker-popup
+                          is-open="dpOpened['task' + $index]"
+                          ng-required="!isDisabled && activity.create"
+                          ng-disabled="isDisabled || !activity.create">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <button type="button"
+                        class="btn btn-small btn-secondary-outline"
+                        uib-tooltip-template="'missing-relationship-tooltip.html'"
+                        ng-if="relationshipMissingWarnings[activity.activity_type_id]"
+                        ng-click="createRelationshipForTargetContact()">
+                        <i class="fa fa-user-plus"></i>
+                      </button>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(taskList, $index)">
+                          <span class="fa fa-remove" aria-hidden="true"></span>
+                        </a>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <a href class="btn" ng-click="addActivity(taskList)">
+                        <span class="fa fa-plus" aria-hidden="true"></span> Add a task
+                      </a>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </section>
+          </div>
+
+          <hr class="separately" ng-show="activity.activitySet.name && +settings.tabEnabled.documents" />
+
+          <div ng-show="activity.activitySet.name && +settings.tabEnabled.documents" class="row">
+            <section class="col-xs-12">
+              <h2>Documents:</h2>
+
+              <table class="table modal-table table-striped">
+                <thead>
+                  <tr ng-hide="!documentList.length">
+                    <th class="action-column"></th>
+                    <th class="title-column">Document Title</th>
+                    <th class="assignee-column">
+                      Assigned To
+                      <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyAssignee(documentList, 'document')">
+                        <i class="fa fa-files-o"></i>
+                      </span>
+                    </th>
+                    <th class="date-column">
+                      Due Date
+                      <span class="pull-right btn" title="{{copyMessage}}" ng-click="copyDate(documentList)">
+                        <i class="fa fa-files-o"></i>
+                      </span>
+                    </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="activity in documentList" ng-controller="ModalAssignmentActivityController">
+                    <td ng-if="!activity.isAdded">
+                      <input type="checkbox" ng-model="activity.create" ng-change="!activity.create && (activity.assignee_contact_id = undefined) || (activity.activity_date_time = undefined);" ng-disabled="isDisabled">
+                    </td>
+                    <td ng-if="!activity.isAdded">
+                      {{activity.name}}
+                    </td>
+                    <td colspan="2" ng-if="activity.isAdded">
+                      <ui-select prevent-animations ng-model="activity.activity_type_id" ng-required="true" theme="civihr-ui-select" class="required-field-indicator">
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="Select document type">
+                          {{ ($select.selected.value.length > 30)? ($select.selected.value | limitTo:30) + '...' : $select.selected.value }}
+                        </ui-select-match>
+                        <ui-select-choices prevent-animations class="ui-select-choices" repeat="type.key as type in cache.documentType.arr | filter: $select.search">
+                          <div ng-bind="type.value"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <td>
+                      <ui-select prevent-animations allow-clear theme="civihr-ui-select" ng-model="activity.assignee_contact_id[0]" ng-disabled="isDisabled || !activity.create" ng-required="!isDisabled && activity.create" on-select="cacheContact($item)">
+                        <ui-select-match prevent-animations class="ui-select-match" placeholder="- select contact -">
+                          {{ ($select.selected.label.length > 25)? ($select.selected.label | limitTo:25) + '...' : $select.selected.label }}
+                        </ui-select-match>
+                        <ui-select-choices prevent-animations class="ui-select-choices" repeat="contact.id as contact in contacts.document[$index] | filter: $select.search" refresh="refreshContacts($select.search, 'document', $index)" refresh-delay="0">
+                          <div ng-bind="contact.label"></div>
+                          <small ng-bind="contact.description[0]"></small>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <td>
+                      <div class="input-group date-input-group">
+                        <input
+                          type="text"
+                          id="{{prefix}}assignment-doc-due-{{$index}}"
+                          class="form-control"
+                          name="assignmentDue"
+                          placeholder="{{ format }}"
+                          uib-datepicker-popup
+                          ng-model="activity.activity_date_time"
+                          ng-required="true"
+                          is-open="dpOpened['doc'+$index]"
+                          ng-disabled="isDisabled || !activity.create">
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <button type="button"
+                        class="btn btn-small btn-secondary-outline"
+                        uib-tooltip-template="'missing-relationship-tooltip.html'"
+                        ng-if="relationshipMissingWarnings[activity.activity_type_id]"
+                        ng-click="createRelationshipForTargetContact()">
+                        <i class="fa fa-user-plus"></i>
+                      </button>
+                    </td>
+                    <td class="text-center">
+                      <a class="btn btn-danger" ng-if="activity.isAdded" ng-click="removeActivity(documentList, $index)">
+                        <span class="fa fa-remove" aria-hidden="true"></span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <a href class="btn" ng-click="addActivity(documentList)">
+                        <span class="fa fa-plus" aria-hidden="true"></span> Add a document
+                      </a>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </section>
+          </div>
+        </div>
+      </section>
+    </crm-loading>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary-outline" ng-click="cancel()">
+      <span class="fa fa-remove" aria-hidden="true"></span> Cancel
+    </button>
+    <button type="submit" class="btn btn-primary">
+      <span class="fa fa-check" aria-hidden="true"></span> Save
+    </button>
+  </div>
+</form>
+
+<script type="text/ng-template" id="missing-relationship-tooltip.html">
+  <span>Missing relationship <strong>{{relationshipMissingWarnings[activity.activity_type_id]}}</strong>.
+  Click to add it.</span>
+</script>

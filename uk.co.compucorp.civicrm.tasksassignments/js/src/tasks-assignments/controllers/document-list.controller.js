@@ -7,16 +7,13 @@ define([
 ], function (angular, _, moment) {
   'use strict';
 
-  DocumentListController.__name = 'DocumentListController';
   DocumentListController.$inject = [
-    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$dialog', '$uibModal', '$state', 'assignmentService', 'contactService',
-    'documentService', 'fileServiceTA', 'config', 'settings', 'documentList'
+    '$filter', '$log', '$q', '$rootScope', '$scope', '$dialog', '$state',
+    'assignmentService', 'documentService', 'settings', 'documentList'
   ];
 
-  function DocumentListController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $dialog, $modal, $state, assignmentService, contactService,
-    documentService, fileServiceTA, config, settings, documentList) {
+  function DocumentListController ($filter, $log, $q, $rootScope, $scope,
+    $dialog, $state, assignmentService, documentService, settings, documentList) {
     $log.debug('Controller: DocumentListController');
 
     var vm = this;
@@ -524,5 +521,5 @@ define([
     }
   }
 
-  return DocumentListController;
+  return { DocumentListController: DocumentListController };
 });

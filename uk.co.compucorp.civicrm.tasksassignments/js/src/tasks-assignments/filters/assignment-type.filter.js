@@ -3,10 +3,9 @@
 define(function () {
   'use strict';
 
-  filterByAssignmentType.__name = 'filterByAssignmentType';
-  filterByAssignmentType.$inject = ['$filter', '$rootScope', '$log'];
+  filterByAssignmentType.$inject = ['$rootScope', '$log'];
 
-  function filterByAssignmentType ($filter, $rootScope, $log) {
+  function filterByAssignmentType ($rootScope, $log) {
     $log.debug('Filter: filterByAssignmentType');
 
     return function (inputArr, assignmentTypeArr) {
@@ -33,5 +32,5 @@ define(function () {
     };
   }
 
-  return filterByAssignmentType;
+  return { filterByAssignmentType: filterByAssignmentType };
 });

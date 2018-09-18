@@ -3,23 +3,20 @@
 define([
   'common/angular',
   'common/lodash',
-  'common/moment',
-  'common/services/file.service',
-  'common/services/notification.service'
+  'common/moment'
 ], function (angular, _, moment) {
   'use strict';
 
-  ModalDocumentController.__name = 'ModalDocumentController';
   ModalDocumentController.$inject = [
     '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$window', '$dialog', '$uibModal', '$uibModalInstance', 'crmAngService', 'HR_settings', 'config',
+    '$dialog', '$uibModal', '$uibModalInstance', 'crmAngService', 'HR_settings', 'config',
     'appSettingsService', 'assignmentService', 'contactService', 'documentService',
     'fileServiceTA', 'fileService', 'notificationService', 'modalMode', 'role',
     'data', 'files'
   ];
 
   function ModalDocumentController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $window, $dialog, $modal, $modalInstance, crmAngService, HRSettings, config,
+    $scope, $timeout, $dialog, $modal, $modalInstance, crmAngService, HRSettings, config,
     appSettingsService, assignmentService, contactService, documentService,
     fileServiceTA, fileService, notificationService, modalMode, role, data, files) {
     $log.debug('Controller: ModalDocumentController');
@@ -250,7 +247,7 @@ define([
         if (vm.uploader.queue.length) {
           var modalInstance = $modal.open({
             appendTo: $rootElement.find('div').eq(0),
-            templateUrl: config.path.TPL + '/modal/progress.html?v=1',
+            templateUrl: config.baseUrl + 'js/src/tasks-assignments/controllers/modal/modal-progress.html',
             size: 'sm',
             controller: 'ModalProgressController',
             resolve: {
@@ -613,5 +610,5 @@ define([
     }
   }
 
-  return ModalDocumentController;
+  return { ModalDocumentController: ModalDocumentController };
 });

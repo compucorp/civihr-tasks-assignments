@@ -5,16 +5,13 @@ define([
 ], function (angular) {
   'use strict';
 
-  ModalTaskMigrateController.__name = 'ModalTaskMigrateController';
   ModalTaskMigrateController.$inject = [
-    '$filter', '$log', '$q', '$rootElement', '$rootScope', '$scope', '$timeout',
-    '$uibModal', '$uibModalInstance', '$dialog', 'assignmentService', 'contactService',
-    'taskService', 'utilsService', 'Task', 'activityType', 'settings'
+    '$filter', '$log', '$q', '$rootScope', '$scope', '$uibModal', '$uibModalInstance',
+    '$dialog', 'contactService', 'utilsService', 'Task', 'settings'
   ];
 
-  function ModalTaskMigrateController ($filter, $log, $q, $rootElement, $rootScope,
-    $scope, $timeout, $modal, $modalInstance, $dialog, assignmentService, contactService,
-    taskService, utilsService, Task, activityType, settings) {
+  function ModalTaskMigrateController ($filter, $log, $q, $rootScope, $scope,
+    $modal, $modalInstance, $dialog, contactService, utilsService, Task, settings) {
     $log.debug('Controller: ModalTaskMigrateController');
 
     $scope.contacts = $rootScope.cache.contact.arrSearch;
@@ -107,7 +104,6 @@ define([
 
           promisePrev = i ? this[i - 1] : {};
 
-        // fix DB deadlock issue
           $q.when(promisePrev).then(function () {
             Task.save({
               'entity': 'Activity',
@@ -141,7 +137,7 @@ define([
           'Migrate Tasks', 'success');
         } else {
           CRM.alert('0 items re-assigned.',
-          'Migrate Tasks', 'warning');
+            'Migrate Tasks', 'warning');
         }
 
         $modalInstance.dismiss();
@@ -226,8 +222,8 @@ define([
 
               angular.forEach(data.values, function (activity) {
                 !documentTypeObj[activity.activity_type_id]
-                ? createStatusList('task', activity)
-                : createStatusList('document', activity);
+                  ? createStatusList('task', activity)
+                  : createStatusList('document', activity);
               });
             }
 
@@ -254,5 +250,5 @@ define([
     }
   }
 
-  return ModalTaskMigrateController;
+  return { ModalTaskMigrateController: ModalTaskMigrateController };
 });

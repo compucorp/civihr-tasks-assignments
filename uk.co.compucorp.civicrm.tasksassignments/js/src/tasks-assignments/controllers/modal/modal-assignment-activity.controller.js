@@ -3,15 +3,10 @@
 define([
   'common/lodash',
   'common/angular',
-  'common/moment',
-  'tasks-assignments/services/contact.service',
-  'tasks-assignments/services/document.service',
-  'tasks-assignments/services/task.service',
-  'tasks-assignments/services/assignment.service'
+  'common/moment'
 ], function (_, angular, moment) {
   'use strict';
 
-  ModalAssignmentActivityController.__name = 'ModalAssignmentActivityController';
   ModalAssignmentActivityController.$inject = ['$log', '$scope'];
 
   function ModalAssignmentActivityController ($log, $scope) {
@@ -39,5 +34,5 @@ define([
     }
   }
 
-  return ModalAssignmentActivityController;
+  return { ModalAssignmentActivityController: ModalAssignmentActivityController };
 });

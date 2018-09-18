@@ -9,7 +9,7 @@ define([
   'mocks/fabricators/contact.fabricator',
   'mocks/fabricators/document.fabricator',
   'mocks/fabricators/file.fabricator',
-  'tasks-assignments/modules/tasks-assignments.dashboard.module'
+  'tasks-assignments/dashboard/tasks-assignments.dashboard.module'
 ], function (angular, moment, _, ngMocks, assignmentFabricator, contactFabricator, documentFabricator, fileFabricator) {
   'use strict';
 
