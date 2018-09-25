@@ -86,10 +86,6 @@ function tasksassignments_civicrm_uninstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function tasksassignments_civicrm_enable() {
-  _tasksassignments_toggleMenuItems();
-  _tasksassignments_toggleCaseMenuItems(FALSE);
-
-  CRM_Core_BAO_Navigation::resetNavigation();
   _tasksassignments_civix_civicrm_enable();
 }
 
@@ -104,10 +100,6 @@ function tasksassignments_civicrm_disable() {
     tasksassignments_extensionsPageRedirect();
   }
 
-  _tasksassignments_toggleMenuItems(FALSE);
-  _tasksassignments_toggleCaseMenuItems();
-
-  CRM_Core_BAO_Navigation::resetNavigation();
   _tasksassignments_civix_civicrm_disable();
 }
 
@@ -269,14 +261,6 @@ function tasksassignments_civicrm_permission(&$permissions) {
   ];
 }
 
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu/
- */
-function tasksassignments_civicrm_navigationMenu(&$params) {
-  _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu($params);
-}
 
 /**
  * Implements the alterAngular hook so it can modify the template for the
@@ -309,123 +293,6 @@ function tasksAssignments_civicrm_angularModules(&$angularModules) {
     'ext' => 'civicrm',
     'js' => ['tools/extensions/civihr_tasks/uk.co.compucorp.civicrm.tasksassignments/js/dist/crm-tasks-workflows.min.js'],
   ];
-}
-
-/**
- * Moves some of the items of the "Administer > Civi Case" sub menu under the "Administer > Tasks" sub menu
- *
- * @param array $params
- */
-function _tasksassignments_moveCiviCaseAdminSubMenuItemsUnderTaskAdminSubMenu(&$params) {
-  $administerMenuItems = &_tasksassignments_getAdministerMenuItems($params);
-  $menuItemsToClone = _tasksassignments_filterMenuItemsOfAdministerSubMenu(
-    $administerMenuItems,
-    'CiviCase',
-    ['Case Types']
-  );
-
-  _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(
-    $administerMenuItems,
-    $menuItemsToClone,
-    'tasksassignments_administer',
-    ['Case Types' => 'Workflow Types']
-  );
-
-  _tasksassignments_deleteAdministerSubMenu($administerMenuItems, 'CiviCase');
-}
-
-/**
- * Gets the items of the Administer main menu
- *
- * @param array $params
- *
- * @return array
- */
-function &_tasksassignments_getAdministerMenuItems(&$params) {
-  $administerID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Administer', 'id', 'name');
-
-  return $params[$administerID]['child'];
-}
-
-/**
- * Filters the items (by name) of the Administer's sub menu of the given name
- *
- * @param array $administerMenuItems
- * @param string $subMenuName
- * @param array $namesFilter
- *
- * @return array
- */
-function _tasksassignments_filterMenuItemsOfAdministerSubMenu($administerMenuItems, $subMenuName, $namesFilter) {
-  $subMenuID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $subMenuName, 'id', 'name');
-
-  return array_filter($administerMenuItems[$subMenuID]['child'], function ($child) use ($namesFilter) {
-    $childName = $child['attributes']['name'];
-
-    return in_array($childName, $namesFilter);
-  });
-}
-
-/**
- * Clones the given set of menu items into the sub menu of the given name.
- * It also changes the label of the menu items by using a given mapping
- *
- * @param array $administerMenuItems
- * @param array $menuItems
- * @param string $subMenuName
- * @param array $labelsMapping
- */
-function _tasksassignments_cloneMenuItemsInAdministerSubMenuAndChangeLabels(&$administerMenuItems, $menuItems, $subMenuName, $labelsMapping) {
-  $subMenuTargetID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $subMenuName, 'id', 'name');
-
-  foreach ($menuItems as $item) {
-    $itemID = $item['attributes']['navID'];
-    $item['attributes']['parentID'] = $subMenuTargetID;
-
-    if ($labelsMapping[$item['attributes']['name']]) {
-      $item['attributes']['label'] = $labelsMapping[$item['attributes']['name']];
-    }
-
-    $administerMenuItems[$subMenuTargetID]['child'][$itemID] = $item;
-  }
-}
-
-/**
- * Deletes a sub menu of the given name from the Administer main menu
- *
- * @param array $administerMenuItems
- * @param string $subMenuName
- */
-function _tasksassignments_deleteAdministerSubMenu(&$administerMenuItems, $subMenuName) {
-  $subMenuID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', $subMenuName, 'id', 'name');
-
-  unset($administerMenuItems[$subMenuID]);
-}
-
-/**
- * Sets the is_state flag of its own menu items
- *
- * @param bool $activate
- * @return void
- */
-function _tasksassignments_toggleMenuItems($activate = TRUE) {
-  $is_active = $activate ? 1 : 0;
-  $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name IN ('tasksassignments', 'ta_dashboard', 'tasksassignments_administer', 'ta_settings')";
-
-  CRM_Core_DAO::executeQuery($sql);
-}
-
-/**
- * Sets the is_state flag of the Case extension menu items
- *
- * @param bool $activate
- * @return void
- */
-function _tasksassignments_toggleCaseMenuItems($activate = TRUE) {
-  $is_active = $activate ? 1 : 0;
-  $sql = "UPDATE civicrm_navigation SET is_active=$is_active WHERE name = 'Cases' AND parent_id IS NULL";
-
-  CRM_Core_DAO::executeQuery($sql);
 }
 
 /**
