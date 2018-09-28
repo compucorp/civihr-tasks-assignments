@@ -41,12 +41,4 @@ You have {math equation="x + y" x=$reminder.today_mine|@count y=$reminder.today_
         {include file='CRM/Tasksassignments/Reminder/DailyReminderKeyDate.tpl'}
     {/foreach}
 {/if}
-
-{if $reminder.appraisals}
-<span class="h4 dailyreminder appraisals" style="color:#202020;display:block;font-family:Arial;font-size:22px;font-weight:normal;line-height:100%;margin-bottom:10px;text-align:left;margin-top: 16px;margin-bottom: 16px;">Appraisals ({$reminder.appraisals|@count})</span>
-<hr style="height:0px;border:0px none;border-bottom:1px solid;border-color:#e0e0e0;margin:16px 0 10px;"/>
-    {foreach from=$reminder.appraisals item=row}
-        {include file='CRM/Tasksassignments/Reminder/DailyReminderAppraisal.tpl'}
-    {/foreach}
-{/if}
 {include file='CRM/Tasksassignments/Reminder/Footer.tpl'}
