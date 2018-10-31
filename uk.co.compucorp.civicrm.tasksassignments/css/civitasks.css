@@ -12377,14 +12377,14 @@ fieldset[disabled]
 #civitasks .civihr-ui-select.open, #cividocuments .civihr-ui-select.open, #civitasks .civihr-ui-select .select2-drop-active, #cividocuments .civihr-ui-select .select2-drop-active, #civitasks .civihr-ui-select.ui-select-multiple .select2-drop-active, #cividocuments .civihr-ui-select.ui-select-multiple .select2-drop-active {
   background: #fff !important;
 }
-#civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close, #civitasks .civihr-ui-select.open .select2-chosen, #cividocuments .civihr-ui-select.open .select2-chosen, #civitasks .civihr-ui-select:not(.open) .select2-arrow, #cividocuments .civihr-ui-select:not(.open) .select2-arrow, #civitasks .civihr-ui-select a.select2-choice, #cividocuments .civihr-ui-select a.select2-choice, #civitasks .civihr-ui-select .ui-select-search, #cividocuments .civihr-ui-select .ui-select-search, #civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
+#civitasks .civihr-ui-select.open .select2-chosen, #cividocuments .civihr-ui-select.open .select2-chosen, #civitasks .civihr-ui-select:not(.open) .select2-arrow, #cividocuments .civihr-ui-select:not(.open) .select2-arrow, #civitasks .civihr-ui-select a.select2-choice, #cividocuments .civihr-ui-select a.select2-choice, #civitasks .civihr-ui-select .ui-select-search, #cividocuments .civihr-ui-select .ui-select-search, #civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
   background: none !important;
 }
 #civitasks .civihr-ui-select.open .select2-chosen, #cividocuments .civihr-ui-select.open .select2-chosen, #civitasks .civihr-ui-select.open .ui-select-search, #cividocuments .civihr-ui-select.open .ui-select-search, #civitasks .civihr-ui-select.ui-select-multiple, #cividocuments .civihr-ui-select.ui-select-multiple, #civitasks .civihr-ui-select.ui-select-multiple .ui-select-match-item, #cividocuments .civihr-ui-select.ui-select-multiple .ui-select-match-item, #civitasks .civihr-ui-select .select2-drop-active, #cividocuments .civihr-ui-select .select2-drop-active {
   border-width: 1px !important;
   border-style: solid !important;
 }
-#civitasks .civihr-ui-select .select2-search-choice-close::before, #cividocuments .civihr-ui-select .select2-search-choice-close::before, #civitasks .civihr-ui-select.open .select2-search::after, #cividocuments .civihr-ui-select.open .select2-search::after, #civitasks .civihr-ui-select .select2-arrow::before, #cividocuments .civihr-ui-select .select2-arrow::before, #civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
+#civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
   font-family: 'FontAwesome';
   font-style: normal;
   text-rendering: auto;
@@ -12393,7 +12393,7 @@ fieldset[disabled]
 #civitasks .civihr-ui-select:not(.open) .select2-arrow, #cividocuments .civihr-ui-select:not(.open) .select2-arrow, #civitasks .civihr-ui-select:not(.open) .select2-chosen, #cividocuments .civihr-ui-select:not(.open) .select2-chosen, #civitasks .civihr-ui-select .select2-input, #cividocuments .civihr-ui-select .select2-input, #civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
   line-height: 28px !important;
 }
-#civitasks .civihr-ui-select .select2-search-choice-close::before, #cividocuments .civihr-ui-select .select2-search-choice-close::before, #civitasks .civihr-ui-select .select2-chosen, #cividocuments .civihr-ui-select .select2-chosen, #civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
+#civitasks .civihr-ui-select .select2-chosen, #cividocuments .civihr-ui-select .select2-chosen, #civitasks .civihr-ui-select.ui-select-multiple .select2-choices::before, #cividocuments .civihr-ui-select.ui-select-multiple .select2-choices::before {
   font-size: 13px !important;
 }
 #civitasks .civihr-ui-select.open .select2-arrow, #cividocuments .civihr-ui-select.open .select2-arrow, #civitasks .civihr-ui-select:not(.open) .select2-arrow, #cividocuments .civihr-ui-select:not(.open) .select2-arrow, #civitasks .civihr-ui-select .ui-select-choices, #cividocuments .civihr-ui-select .ui-select-choices, #civitasks .civihr-ui-select.ui-select-multiple.open .select2-search-field, #cividocuments .civihr-ui-select.ui-select-multiple.open .select2-search-field, #civitasks .civihr-ui-select:not(.open) .select2-choice, #cividocuments .civihr-ui-select:not(.open) .select2-choice {
@@ -12428,21 +12428,7 @@ fieldset[disabled]
   border-radius: 0 0 2px 2px !important;
 }
 #civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
-  height: 15px;
-  left: unset !important;
   right: 45px !important;
-  width: 15px !important;
-}
-#civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
-  background: none !important;
-  top: 2px !important;
-}
-#civitasks .civihr-ui-select .select2-search-choice-close::before, #cividocuments .civihr-ui-select .select2-search-choice-close::before {
-  content: '\f057';
-  line-height: inherit !important;
-  vertical-align: middle !important;
-  text-align: right;
-  display: block;
 }
 #civitasks .civihr-ui-select.open:not(.ng-invalid), #cividocuments .civihr-ui-select.open:not(.ng-invalid),
 #civitasks .civihr-ui-select.open:not(.ng-invalid) *,
@@ -12471,11 +12457,8 @@ fieldset[disabled]
 #civitasks .civihr-ui-select.open .select2-search-choice-close::before, #cividocuments .civihr-ui-select.open .select2-search-choice-close::before {
   display: none;
 }
-#civitasks .civihr-ui-select.open .select2-search::after, #cividocuments .civihr-ui-select.open .select2-search::after {
-  position: relative;
-  content: '\f002';
-  color: #586277 !important;
-  right: 30px;
+#civitasks .civihr-ui-select.open .select2-arrow::before, #cividocuments .civihr-ui-select.open .select2-arrow::before {
+  right: 2px;
 }
 #civitasks .civihr-ui-select:not(.open), #cividocuments .civihr-ui-select:not(.open) {
   border-color: #C2CFD8 !important;
@@ -12486,13 +12469,6 @@ fieldset[disabled]
 }
 #civitasks .civihr-ui-select:not(.open) .select2-arrow, #cividocuments .civihr-ui-select:not(.open) .select2-arrow {
   width: 31px !important;
-}
-#civitasks .civihr-ui-select:not(.open) .select2-arrow::before, #cividocuments .civihr-ui-select:not(.open) .select2-arrow::before {
-  width: 100%;
-  display: block;
-  text-align: center;
-  line-height: 30px;
-  content: '\f0d7';
 }
 .contact-lookup#civitasks .civihr-ui-select:not(.open) .select2-arrow::before, .contact-lookup#cividocuments .civihr-ui-select:not(.open) .select2-arrow::before {
   content: '\f002' !important;
@@ -12519,10 +12495,6 @@ fieldset[disabled]
   cursor: pointer !important;
   right: 0 !important;
   top: 0 !important;
-}
-#civitasks .civihr-ui-select .select2-arrow::before, #cividocuments .civihr-ui-select .select2-arrow::before {
-  color: #4D4D69;
-  content: '\f0d8';
 }
 #civitasks .civihr-ui-select .select2-chosen, #cividocuments .civihr-ui-select .select2-chosen {
   color: #4D4D69 !important;
@@ -12723,10 +12695,6 @@ fieldset[disabled]
 #civitasks .civihr-ui-select .select2-search-choice, #cividocuments .civihr-ui-select .select2-search-choice {
   font-size: 13px;
 }
-#civitasks .civihr-ui-select .select2-search-choice-close, #cividocuments .civihr-ui-select .select2-search-choice-close {
-  background: none !important;
-  top: 3px !important;
-}
 #civitasks .civihr-ui-select a.select2-search-choice-close, #cividocuments .civihr-ui-select a.select2-search-choice-close {
   /* stylelint-disable-line selector-no-qualifying-type */
   top: 0 !important;
@@ -12735,9 +12703,6 @@ fieldset[disabled]
   border: 1px solid #C2CFD8 !important;
   border-bottom: 0 !important;
   padding-left: 12px !important;
-}
-#civitasks .civihr-ui-select.open .select2-arrow, #cividocuments .civihr-ui-select.open .select2-arrow {
-  line-height: 31px;
 }
 #civitasks .civihr-ui-select .select2-drop-active, #cividocuments .civihr-ui-select .select2-drop-active {
   border-top: 0 !important;
