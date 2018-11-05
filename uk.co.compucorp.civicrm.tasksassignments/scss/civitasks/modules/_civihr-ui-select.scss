@@ -15,11 +15,6 @@
     font-size: 13px;
   }
 
-  .select2-search-choice-close {
-    background: none !important;
-    top: 3px !important;
-  }
-
   a.select2-search-choice-close { /* stylelint-disable-line selector-no-qualifying-type */
     top: 0 !important;
   }
@@ -29,10 +24,6 @@
       border: 1px solid $dropdown-border !important;
       border-bottom: 0 !important;
       padding-left: 12px !important;
-    }
-
-    .select2-arrow {
-      line-height: 31px;
     }
   }
 
