@@ -2,7 +2,7 @@
 
 class CRM_Tasksassignments_DashboardSwitcher {
   public static function switchToTasksAndAssignments() {
-    $dashboardUrl = 'civicrm/tasksassignments/dashboard#/tasks';
+    $dashboardUrl = 'civicrm/tasksassignments/dashboard#!/tasks';
 
     CRM_Core_DAO::executeQuery("UPDATE civicrm_navigation SET url=%1 WHERE name='Home'", array(
       1 => array(

@@ -63,7 +63,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       'domain_id'  => CRM_Core_Config::domainID(),
       'label'      => ts('Tasks and Assignments'),
       'name'       => 'tasksassignments',
-      'url'        => 'civicrm/tasksassignments/dashboard#/tasks',
+      'url'        => 'civicrm/tasksassignments/dashboard#!/tasks',
       'parent_id'  => NULL,
       'weight'     => $weight + 1,
       'permission' => 'access Tasks and Assignments',
@@ -239,7 +239,7 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
         array(
           'label' => ts('Dashboard'),
           'name' => 'ta_dashboard',
-          'url' => 'civicrm/tasksassignments/dashboard#/tasks',
+          'url' => 'civicrm/tasksassignments/dashboard#!/tasks',
         ),
         array(
           'label' => ts('Settings'),
@@ -516,22 +516,22 @@ class CRM_Tasksassignments_Upgrader extends CRM_Tasksassignments_Upgrader_Base {
       [
         'label' => ts('Tasks'),
         'name' => 'ta_dashboard_tasks',
-        'url' => 'civicrm/tasksassignments/dashboard#/tasks',
+        'url' => 'civicrm/tasksassignments/dashboard#!/tasks',
       ],
       [
         'label' => ts('Documents'),
         'name' => 'ta_dashboard_documents',
-        'url' => 'civicrm/tasksassignments/dashboard#/documents',
+        'url' => 'civicrm/tasksassignments/dashboard#!/documents',
       ],
       [
         'label' => ts('Calendar'),
         'name' => 'ta_dashboard_calendar',
-        'url' => 'civicrm/tasksassignments/dashboard#/calendar',
+        'url' => 'civicrm/tasksassignments/dashboard#!/calendar',
       ],
       [
         'label' => ts('Key Dates'),
         'name' => 'ta_dashboard_keydates',
-        'url' => 'civicrm/tasksassignments/dashboard#/key-dates',
+        'url' => 'civicrm/tasksassignments/dashboard#!/key-dates',
       ]
     ];
 

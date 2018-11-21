@@ -316,8 +316,8 @@ class CRM_Tasksassignments_Reminder {
       $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', [
         'reminder' => $reminderData,
         'baseUrl' => CIVICRM_UF_BASEURL,
-        'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my',
-        'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my',
+        'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/tasks/my',
+        'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/documents/my',
         'settings' => $settings,
       ]);
 
@@ -719,8 +719,8 @@ class CRM_Tasksassignments_Reminder {
     $taSettings = civicrm_api3('TASettings', 'get');
     $settings = $taSettings['values'];
     $notifications = self::getDocumentNotificationsData();
-    $myTasksUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/tasks/my';
-    $myDocumentsUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#/documents/my';
+    $myTasksUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/tasks/my';
+    $myDocumentsUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/documents/my';
     foreach ($notifications as $assignee => $documentsSet) {
       list($assigneeId, $assigneeEmail) = explode(':', $assignee);
       $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyDocumentsNotification.tpl', array(
