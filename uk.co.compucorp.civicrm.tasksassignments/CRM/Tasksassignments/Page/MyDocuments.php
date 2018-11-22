@@ -12,7 +12,7 @@ class CRM_Tasksassignments_Page_MyDocuments extends CRM_Core_Page {
       CRM_Utils_System::redirect('/dashboard#documents');
     }
     else {
-      CRM_Utils_System::redirect('/civicrm/tasksassignments/dashboard#/documents/my');
+      CRM_Utils_System::redirect('/civicrm/tasksassignments/dashboard#!/documents/my');
     }
   }
 }

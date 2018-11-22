@@ -13,7 +13,7 @@ class CRM_Tasksassignments_Page_MyTasks extends CRM_Core_Page
       CRM_Utils_System::redirect('/dashboard#tasks');
     }
     else {
-      CRM_Utils_System::redirect('/civicrm/tasksassignments/dashboard#/tasks/my');
+      CRM_Utils_System::redirect('/civicrm/tasksassignments/dashboard#!/tasks/my');
     }
 
     return FALSE;
