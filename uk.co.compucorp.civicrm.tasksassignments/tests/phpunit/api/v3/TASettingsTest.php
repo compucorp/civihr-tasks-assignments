@@ -95,7 +95,7 @@ class api_v3_TASettingsTest extends BaseHeadlessTest {
       ]
     ]);
 
-    $this->assertEquals('civicrm/tasksassignments/dashboard#/tasks', $this->getHomeNavigationUrl());
+    $this->assertEquals('civicrm/tasksassignments/dashboard#!/tasks', $this->getHomeNavigationUrl());
   }
 
   public function testSetUpdatesDashboardUrlToDefaultCiviDashboardWhenIsTaskDashboardIsNot1() {
