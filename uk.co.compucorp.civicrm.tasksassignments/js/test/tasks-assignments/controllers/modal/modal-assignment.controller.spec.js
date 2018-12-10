@@ -156,6 +156,7 @@ define([
 
       beforeEach(function () {
         prepAssignment();
+        spyOn(assignmentService, 'assignCoordinator');
 
         expectedDocumentsParameters = getActivitiesToBeSentToAPI(scope.documentList);
         expectedTasksParameters = getActivitiesToBeSentToAPI(scope.taskList);
@@ -169,6 +170,10 @@ define([
 
       it('saves every task', function () {
         expect(taskService.saveMultiple).toHaveBeenCalledWith(expectedTasksParameters);
+      });
+
+      it('does *not* create a Coordinator relationship', function () {
+        expect(assignmentService.assignCoordinator).not.toHaveBeenCalled();
       });
 
       /**

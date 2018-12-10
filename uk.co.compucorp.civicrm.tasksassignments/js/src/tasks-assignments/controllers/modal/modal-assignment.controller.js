@@ -153,7 +153,6 @@ define([
         });
 
         $q.all({
-          relationship: assignmentService.assignCoordinator(vm.assignment.contact_id, resultAssignment.id),
           document: documentService.saveMultiple(documentListAssignment.map(function (doc) {
             return angular.copy(doc);
           })),
