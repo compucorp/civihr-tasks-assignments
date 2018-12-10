@@ -34,6 +34,7 @@ define([
       offset: 0
     };
 
+    vm.$onInit = $onInit;
     vm.assignment = angular.copy(data);
     vm.assignment.status_id = '1';
     vm.assignment.contact_id = config.CONTACT_ID;
@@ -79,7 +80,7 @@ define([
     vm.setData = setData;
     vm.updateTimeline = updateTimeline;
 
-    (function init () {
+    function $onInit () {
       vm.loading.component = true;
 
       initRelationshipTypesCache()
@@ -88,8 +89,13 @@ define([
         .finally(function () {
           vm.loading.component = false;
         });
-    }());
+    }
 
+    /**
+     * Adds the activity into the activities collection
+     *
+     * @param {Array} activityArr
+     */
     function addActivity (activityArr) {
       if (!activityArr) {
         return;
@@ -98,6 +104,11 @@ define([
       activityArr.push(angular.extend(angular.copy(activityModel), { isAdded: true }));
     }
 
+    /**
+     * Caches a contact item
+     *
+     * @param {jQuery} $item
+     */
     function cacheContact ($item) {
       var obj = {};
 
@@ -112,10 +123,16 @@ define([
       contactService.updateCache(obj);
     }
 
+    /**
+     * Dismisses the modal
+     */
     function cancel () {
       $modalInstance.dismiss('cancel');
     }
 
+    /**
+     * Saves the assignment
+     */
     function confirm () {
       if (
         !($filter('filter')(vm.taskList, { create: true })).length &&
@@ -123,6 +140,7 @@ define([
       ) {
         vm.alert.msg = 'Please add at least one task.';
         vm.alert.show = true;
+
         return;
       }
 
@@ -222,7 +240,7 @@ define([
     }
 
     /**
-     * Copy assignee id and contacts collection from the first
+     * Copies assignee id and contacts collection from the first
      * enabled item of the list to the rest of the items
      *
      * @param {Array} list
@@ -243,7 +261,7 @@ define([
     }
 
     /**
-     * Copy date from the first enabled item of the list
+     * Copies date from the first enabled item of the list
      * to the rest of the items
      *
      * @param {Array} list

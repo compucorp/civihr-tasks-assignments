@@ -860,6 +860,7 @@ define([
           }
         }
       });
+      scope.$onInit();
       $rootScope.$digest();
     }
 
