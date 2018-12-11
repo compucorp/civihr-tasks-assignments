@@ -34,7 +34,6 @@ define([
       offset: 0
     };
 
-    vm.$onInit = $onInit;
     vm.assignment = angular.copy(data);
     vm.assignment.status_id = '1';
     vm.assignment.contact_id = config.CONTACT_ID;
@@ -80,7 +79,7 @@ define([
     vm.setData = setData;
     vm.updateTimeline = updateTimeline;
 
-    function $onInit () {
+    (function init () {
       vm.loading.component = true;
 
       initRelationshipTypesCache()
@@ -89,7 +88,7 @@ define([
         .finally(function () {
           vm.loading.component = false;
         });
-    }
+    }());
 
     /**
      * Adds the activity into the activities collection
