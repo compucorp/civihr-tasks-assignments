@@ -223,7 +223,19 @@ class CRM_Tasksassignments_Reminder {
         $activityDueDate = substr($activityResult['activity_date_time'], 0, 10);
       }
 
-      $assigneeContacts = CRM_Utils_Array::value('assignee', $activityContacts, []);
+      $isAssignee = array_search($contactId, $activityContacts['assignees']['ids']) !== FALSE;
+      $tasksButtonUrl = $isAssignee
+        ? '/tasks-and-documents'
+        : '/civicrm/tasksassignments/dashboard#!/tasks/all';
+      $tasksButtonLabel = $isAssignee
+        ? ts('See my tasks')
+        : ts('See all tasks');
+      $documentsButtonUrl = $isAssignee
+        ? '/tasks-and-documents'
+        : '/civicrm/tasksassignments/dashboard#!/documents/all';
+      $documentsButtonLabel = $isAssignee
+        ? ts('See my documents')
+        : ts('See all documents');
 
       $templateBodyHTML = $template->fetchWith('CRM/Tasksassignments/Reminder/Reminder.tpl', array(
         'isReminder' => $isReminder,
@@ -240,8 +252,10 @@ class CRM_Tasksassignments_Reminder {
         'activitySubject' => isset($activityResult['subject']) ? $activityResult['subject'] : '',
         'activityDetails' => isset($activityResult['details']) ? $activityResult['details'] : '',
         'baseUrl' => CIVICRM_UF_BASEURL,
-        'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-tasks',
-        'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/my-documents',
+        'tasksButtonUrl' => CIVICRM_UF_BASEURL . $tasksButtonUrl,
+        'tasksButtonLabel' => $tasksButtonLabel,
+        'documentsButtonUrl' => CIVICRM_UF_BASEURL . $documentsButtonUrl,
+        'documentsButtonLabel' => $documentsButtonLabel,
       ));
 
       if ($isDelete) {
@@ -257,6 +271,13 @@ class CRM_Tasksassignments_Reminder {
 
   /**
    * Sends daily digest to administrators, task creators and assignees.
+   *
+   * @TODO the flag `isDelete` is *not* passed as `FALSE` in this case,
+   * thus the footer with buttons will never show,
+   * thus there is no need to send buttons URLs or labels.
+   * @SEE https://github.com/compucorp/civihr-tasks-assignments/blame/master/uk.co.compucorp.civicrm.tasksassignments/templates/CRM/Tasksassignments/Reminder/Footer.tpl#L1
+   * @SEE https://github.com/compucorp/civihr-tasks-assignments/pull/17/files#diff-7145990a7ff076d1f0d966d0db9a0cffR1
+   * Seems like a regression and may need to be fixed.
    *
    * @return boolean
    *   True on completion
@@ -316,8 +337,6 @@ class CRM_Tasksassignments_Reminder {
       $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyReminder.tpl', [
         'reminder' => $reminderData,
         'baseUrl' => CIVICRM_UF_BASEURL,
-        'myTasksUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/tasks/my',
-        'myDocumentsUrl' => CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/documents/my',
         'settings' => $settings,
       ]);
 
@@ -672,7 +691,7 @@ class CRM_Tasksassignments_Reminder {
     return '';
   }
 
-   /**
+  /**
    * Check if given Contact ID has access to required permission to create
    * contactURL.
    *
@@ -719,17 +738,20 @@ class CRM_Tasksassignments_Reminder {
     $taSettings = civicrm_api3('TASettings', 'get');
     $settings = $taSettings['values'];
     $notifications = self::getDocumentNotificationsData();
-    $myTasksUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/tasks/my';
-    $myDocumentsUrl = CIVICRM_UF_BASEURL . '/civicrm/tasksassignments/dashboard#!/documents/my';
+    $tasksAndDocumentsButtonUrl = CIVICRM_UF_BASEURL . '/tasks-and-documents';
+
     foreach ($notifications as $assignee => $documentsSet) {
       list($assigneeId, $assigneeEmail) = explode(':', $assignee);
       $templateBodyHTML = CRM_Core_Smarty::singleton()->fetchWith('CRM/Tasksassignments/Reminder/DailyDocumentsNotification.tpl', array(
         'notification' => $documentsSet,
         'baseUrl' => CIVICRM_UF_BASEURL,
-        'myTasksUrl' => $myTasksUrl,
-        'myDocumentsUrl' => $myDocumentsUrl,
+        'tasksButtonUrl' => $tasksAndDocumentsButtonUrl,
+        'tasksButtonLabel' => ts('See my tasks'),
+        'documentsButtonUrl' => $tasksAndDocumentsButtonUrl,
+        'documentsButtonLabel' => ts('See my documents'),
         'settings' => $settings,
       ));
+
       if (self::send($assigneeId, $assigneeEmail, ts('Documents Notification'), $templateBodyHTML)) {
         $count++;
       }
