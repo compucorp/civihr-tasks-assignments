@@ -224,6 +224,11 @@ class CRM_Tasksassignments_Reminder {
       }
 
       $isAssignee = array_search($contactId, $activityContacts['assignees']['ids']) !== FALSE;
+      $activityUrl = $isAssignee
+        ? '/tasks-and-documents'
+        : '/civicrm/activity/view?action=view&reset=1&id=' .
+          $activityId .
+          '&cid=&context=activity&searchContext=activity';
       $tasksButtonUrl = $isAssignee
         ? '/tasks-and-documents'
         : '/civicrm/tasksassignments/dashboard#!/tasks/all';
@@ -241,7 +246,7 @@ class CRM_Tasksassignments_Reminder {
         'isReminder' => $isReminder,
         'isDelete' => $isDelete,
         'notes' => $notes,
-        'activityUrl' => CIVICRM_UF_BASEURL . '/civicrm/activity/view?action=view&reset=1&id=' . $activityId . '&cid=&context=activity&searchContext=activity',
+        'activityUrl' => CIVICRM_UF_BASEURL . $activityUrl,
         'activityName' => $activityName,
         'activityType' => self::$_activityOptions['type'][$activityResult['activity_type_id']],
         'activityTargets' => implode(', ', $activityContacts['targets']['links']),
