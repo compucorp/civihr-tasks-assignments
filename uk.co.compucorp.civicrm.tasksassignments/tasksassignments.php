@@ -238,7 +238,7 @@ function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
           'id'        => 'cividocuments',
           'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
           'title'     => ts('Documents'),
-          'weight'    => 50,
+          'weight'    => 75,
         );
       }
     }
