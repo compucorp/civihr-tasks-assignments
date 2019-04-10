@@ -228,7 +228,7 @@ function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
         'id'        => 'civitasks',
         'url'       => CRM_Utils_System::url('civicrm/contact/view/tasks'),
         'title'     => ts('Tasks'),
-        'icon'      => 'fa fa-list',
+        'icon'      => 'crm-i fa-list',
         'weight'    => 40,
       );
       $documentsTab = civicrm_api3('TASettings', 'get', array(
@@ -239,7 +239,7 @@ function tasksassignments_civicrm_tabset($tabsetName, &$tabs, $context) {
           'id'        => 'cividocuments',
           'url'       => CRM_Utils_System::url('civicrm/contact/view/documents'),
           'title'     => ts('Documents'),
-          'icon'      => 'fa fa-copy',
+          'icon'      => 'crm-i fa-copy',
           'weight'    => 75,
         );
       }
