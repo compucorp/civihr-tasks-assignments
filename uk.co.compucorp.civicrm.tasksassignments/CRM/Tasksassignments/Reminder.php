@@ -223,7 +223,8 @@ class CRM_Tasksassignments_Reminder {
         $activityDueDate = substr($activityResult['activity_date_time'], 0, 10);
       }
 
-      $isAssignee = array_search($contactId, $activityContacts['assignees']['ids']) !== FALSE;
+      $assigneeContacts = CRM_Utils_Array::value('assigness', $activityContacts);
+      $isAssignee = array_search($contactId, CRM_Utils_Array::value('ids', $assigneeContacts, [])) !== FALSE;
       $activityUrl = $isAssignee
         ? '/tasks-and-documents'
         : '/civicrm/activity/view?action=view&reset=1&id=' .
