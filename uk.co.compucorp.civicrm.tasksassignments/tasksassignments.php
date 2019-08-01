@@ -161,6 +161,7 @@ function tasksassignments_civicrm_alterAPIPermissions($entity, $action, &$params
     'task',
     'assignment',
     'activity',
+    'activity_contact',
     'case_type'
   ];
 
@@ -260,6 +261,8 @@ function tasksassignments_civicrm_permission(&$permissions) {
     'delete Tasks and Documents' => $prefix . ts('delete Tasks and Documents'),
     'access Tasks and Assignments' => $prefix . ts('access Tasks and Assignments'),
     'access Tasks and Assignments Files' => $prefix . ts('access Tasks and Assignments Files'),
+    'access CiviDocument' => $prefix . ('access CiviDocument'),
+    'access CiviTask' => $prefix . ('access CiviTask')
   ];
 }
 
