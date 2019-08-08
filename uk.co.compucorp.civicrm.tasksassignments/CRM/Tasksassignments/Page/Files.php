@@ -41,6 +41,8 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
         $postParams = $_GET;
         $return = false;
     }
+    self::exitIfLoggedInUserDoesNotHaveAccessToDocument($postParams['entityID']);
+
     $fileId = $postParams['fileID'];
     $result = 0;
 
@@ -60,9 +62,11 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
   }
 
   public static function fileUpload() {
-    $config = CRM_Core_Config::singleton();
     $postParams = $_POST;
+    self::exitIfLoggedInUserDoesNotHaveAccessToDocument($postParams['entityID']);
+
     $result = 0;
+    $config = CRM_Core_Config::singleton();
     $dest = $config->customFileUploadDir;
     if ($dest != ''  && substr($dest, -1) != '/') {
       $dest .= '/';
@@ -98,11 +102,6 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
           }
         }
       }
-      /*civicrm_api3('Document', 'create', array(
-          'sequential' => 1,
-          'id' => $postParams['entityID'],
-          'status_id' => 2,
-      ));*/
     }
 
     echo html_entity_decode(stripcslashes(json_encode(array('values' => array(array('result' => $result))), true)));
@@ -110,10 +109,13 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
   }
 
   static function fileZip() {
-      $config = CRM_Core_Config::singleton();
-      $dest = $config->customFileUploadDir;
-      $params = $_GET;
-      $files = array();
+    $params = $_GET;
+    self::exitIfLoggedInUserDoesNotHaveAccessToDocument($params['entityID']);
+
+    $config = CRM_Core_Config::singleton();
+    $dest = $config->customFileUploadDir;
+
+    $files = array();
       $mimeType = 'application/zip';
       $ext = 'zip';
       $entityFiles = CRM_Core_BAO_File::getEntityFile( $params['entityTable'], $params['entityID'] );
@@ -205,5 +207,27 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     }
 
     return $newFilename;
+  }
+
+  /**
+   * Helper method to easily end a request in case the current logged in user
+   * doesn't have access to the document with the given ID
+   *
+   * @param int $documentID
+   *
+   * @throws \CiviCRM_API3_Exception
+   */
+  private static function exitIfLoggedInUserDoesNotHaveAccessToDocument($documentID) {
+    $document = civicrm_api3('Document', 'get', [
+      'id' => $documentID,
+      'check_permissions' => true,
+    ]);
+
+    // If the API doesn't return any values it means that either
+    // the Document doesn't exist or the user doesn't have access
+    // to it. In either case, we should simply return an empty response
+    if (empty($document['values'])) {
+      CRM_Utils_System::civiExit();
+    }
   }
 }
