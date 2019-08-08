@@ -70,12 +70,6 @@
     <access_arguments>access Tasks and Assignments Files</access_arguments>
   </item>
   <item>
-    <path>civicrm/tasksassignments/file/display</path>
-    <page_callback>CRM_Tasksassignments_Page_Files::fileDisplay</page_callback>
-    <title>FileDisplay</title>
-    <access_arguments>access Tasks and Assignments Files</access_arguments>
-  </item>
-  <item>
     <path>civicrm/tasksassignments/file/delete</path>
     <page_callback>CRM_Tasksassignments_Page_Files::fileDelete</page_callback>
     <title>FileDelete</title>

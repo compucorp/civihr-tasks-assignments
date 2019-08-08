@@ -3,103 +3,35 @@
 require_once 'CRM/Core/Page.php';
 
 class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
+
   public static function fileList($postParams = null) {
-    $config = CRM_Core_Config::singleton();
     $return = true;
     if (empty($postParams)) {
         $postParams = $_GET;
         $return = false;
     }
-    $result = array();
-    $fileID = CRM_Core_BAO_File::getEntityFile( $postParams['entityTable'], $postParams['entityID'] );
+    $result = [];
+    $entityFiles = CRM_Core_BAO_File::getEntityFile( $postParams['entityTable'], $postParams['entityID'] );
 
-    if($fileID) {
-      foreach($fileID as $k => $v) {
-        $fileType = $v['mime_type'];
-        $fid = $v['fileID'];
-        $eid = $postParams['entityID'];
-        $url = null;
-        $uri = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_File', $fid, 'uri');
+    if($entityFiles) {
+      foreach($entityFiles as $k => $file) {
 
-        if ($fileType == 'image/jpeg' ||
-          $fileType == 'image/pjpeg' ||
-          $fileType == 'image/gif' ||
-          $fileType == 'image/x-png' ||
-          $fileType == 'image/png'
-        ) {
-          $url = CRM_Utils_System::url('civicrm/file',
-                 "reset=1&id=$fid&eid=$eid",
-                 FALSE, NULL, TRUE, TRUE
-          );
-        } else {
-          $url = CRM_Utils_System::url('civicrm/file', "reset=1&id=$fid&eid=$eid");
-        }
-
-        list($sql, $params) = CRM_Core_BAO_File::sql($postParams['entityTable'], $postParams['entityID'], NULL, $v['fileID']);
-        $dao = CRM_Core_DAO::executeQuery($sql, $params);
-
-        $fileSize = 0;
-        if ($dao->fetch()) {
-          $fileSize = filesize($config->customFileUploadDir . DIRECTORY_SEPARATOR . $dao->uri);
-        }
-
-        $result[] = array(
+        $result[] = [
           'entityTable' => $postParams['entityTable'],
-          'entityID' => $eid,
-          'fileID' => $fid,
-          'fileType' => $fileType,
-          'fileSize' => $fileSize,
-          'name' => $uri,
-          'url' => $url,
-        );
+          'entityID' => $postParams['entityID'],
+          'fileID' => $file['fileID'],
+          'fileType' => $file['mime_type'],
+          'fileSize' => filesize($file['fullPath']),
+          'name' => $file['fileName'],
+          'url' => $file['url'],
+        ];
       }
     }
 
     if ($return) {
         return $result;
     }
-    echo html_entity_decode(stripcslashes(json_encode(array('values' => $result))));
-    CRM_Utils_System::civiExit( );
-  }
-  public static function fileDisplay() {// Display evidence file
-    $postParams = $_POST;
-    $fileID = CRM_Core_BAO_File::getEntityFile( $postParams['entityTable'], $postParams['entityID'] );
-
-    if($fileID) {
-      foreach($fileID as $k => $v) {
-        $fileType = $v['mime_type'];
-        $fid = $v['fileID'];
-        $eid = $postParams['entityID'];
-        if ($fileType == 'image/jpeg' ||
-          $fileType == 'image/pjpeg' ||
-          $fileType == 'image/gif' ||
-          $fileType == 'image/x-png' ||
-          $fileType == 'image/png'
-        ) {
-          list($path) = CRM_Core_BAO_File::path($fid, $eid, NULL, NULL);
-          list($imageWidth, $imageHeight) = getimagesize($path);
-          list($imageThumbWidth, $imageThumbHeight) = CRM_Contact_BAO_Contact::getThumbSize($imageWidth, $imageHeight);
-          $url = CRM_Utils_System::url('civicrm/file',
-                 "reset=1&id=$fid&eid=$eid",
-                 FALSE, NULL, TRUE, TRUE
-          );
-          $file_url = "
-              <a href=\"$url\" class='crm-image-popup'>
-              <img src=\"$url\" width=$imageThumbWidth height=$imageThumbHeight/>
-              </a>";
-          // for non image files
-        }
-        else {
-          $uri = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_File', $fid, 'uri');
-          $url = CRM_Utils_System::url('civicrm/file', "reset=1&id=$fid&eid=$eid");
-          $file_url = "<a href=\"$url\">{$uri}</a>";
-        }
-        if(isset($fid)) {
-          $deleteurl = "<div class=file-delete><a class='action-item crm-hover-button' href='javascript:void(0)' id=file_{$fid}>Delete Attached File</a></div>";
-          echo "<div id='del_{$fid}'>{$file_url}{$deleteurl}</div>";
-        }
-      }
-    }
+    echo html_entity_decode(stripcslashes(json_encode(['values' => $result])));
     CRM_Utils_System::civiExit( );
   }
 
