@@ -116,65 +116,65 @@ class CRM_Tasksassignments_Page_Files extends CRM_Core_Page {
     $dest = $config->customFileUploadDir;
 
     $files = array();
-      $mimeType = 'application/zip';
-      $ext = 'zip';
-      $entityFiles = CRM_Core_BAO_File::getEntityFile( $params['entityTable'], $params['entityID'] );
+    $mimeType = 'application/zip';
+    $ext = 'zip';
+    $entityFiles = CRM_Core_BAO_File::getEntityFile( $params['entityTable'], $params['entityID'] );
 
-      if (empty($entityFiles)) {
+    if (empty($entityFiles)) {
+        CRM_Utils_System::civiExit();
+    }
+
+    $zipname = 'document_' . (int)$params['entityID'] . '_files';
+    $contactQuery = 'SELECT c.sort_name, ov.label FROM civicrm_activity a
+      LEFT JOIN civicrm_activity_contact ac ON a.id = ac.activity_id
+      LEFT JOIN civicrm_contact c ON ac.contact_id = c.id
+      LEFT JOIN civicrm_option_group og ON og.name = "activity_type"
+      LEFT JOIN civicrm_option_value ov ON og.id = ov.option_group_id
+      WHERE a.id = %1 AND ac.record_type_id = 3 AND ov.value = a.activity_type_id';
+    $contactParams = array(
+        1 => array($params['entityID'], 'Integer'),
+    );
+    $contactResult = CRM_Core_DAO::executeQuery($contactQuery, $contactParams);
+    if ($contactResult->fetch()) {
+        $zipname = CRM_Utils_String::munge($contactResult->sort_name) . '-' . CRM_Utils_String::munge($contactResult->label);
+    }
+
+    if (count($entityFiles) > 1) {
+      foreach ($entityFiles as $entityFile) {
+          if (!empty($entityFile['fullPath'])) {
+            $files[] = $entityFile['fullPath'];
+          }
+      }
+
+      if (empty($files)) {
           CRM_Utils_System::civiExit();
       }
 
-      $zipname = 'document_' . (int)$params['entityID'] . '_files';
-      $contactQuery = 'SELECT c.sort_name, ov.label FROM civicrm_activity a
-        LEFT JOIN civicrm_activity_contact ac ON a.id = ac.activity_id
-        LEFT JOIN civicrm_contact c ON ac.contact_id = c.id
-        LEFT JOIN civicrm_option_group og ON og.name = "activity_type"
-        LEFT JOIN civicrm_option_value ov ON og.id = ov.option_group_id
-        WHERE a.id = %1 AND ac.record_type_id = 3 AND ov.value = a.activity_type_id';
-      $contactParams = array(
-          1 => array($params['entityID'], 'Integer'),
-      );
-      $contactResult = CRM_Core_DAO::executeQuery($contactQuery, $contactParams);
-      if ($contactResult->fetch()) {
-          $zipname = CRM_Utils_String::munge($contactResult->sort_name) . '-' . CRM_Utils_String::munge($contactResult->label);
+      $zipname .= '.' . $ext;
+      $zipfullpath = $dest . '/' . $zipname;
+      $zip = new ZipArchive();
+      // @see https://bugs.php.net/bug.php?id=71064
+      $mode = ZipArchive::CREATE | ZipArchive::OVERWRITE;
+      $zip->open($zipfullpath, $mode);
+      foreach ($files as $file) {
+        $zip->addFile($file, substr($file, strrpos($file, '/') + 1));
       }
+      $zip->close();
+    } else {
+      $firstFile = CRM_Utils_Array::first($entityFiles);
+      $zipfullpath = $firstFile['fullPath'];
+      $mimeType = $firstFile['mime_type'];
+      $parts = explode('.', $zipfullpath);
+      $ext = end($parts);
+      $zipname .= '.' . $ext;
+    }
 
-      if (count($entityFiles) > 1) {
-        foreach ($entityFiles as $entityFile) {
-            if (!empty($entityFile['fullPath'])) {
-              $files[] = $entityFile['fullPath'];
-            }
-        }
+    header('Content-Type: ' . $mimeType);
+    header('Content-disposition: attachment; filename='.$zipname);
+    header('Content-Length: ' . filesize($zipfullpath));
+    readfile($zipfullpath);
 
-        if (empty($files)) {
-            CRM_Utils_System::civiExit();
-        }
-
-        $zipname .= '.' . $ext;
-        $zipfullpath = $dest . '/' . $zipname;
-        $zip = new ZipArchive();
-        // @see https://bugs.php.net/bug.php?id=71064
-        $mode = ZipArchive::CREATE | ZipArchive::OVERWRITE;
-        $zip->open($zipfullpath, $mode);
-        foreach ($files as $file) {
-          $zip->addFile($file, substr($file, strrpos($file, '/') + 1));
-        }
-        $zip->close();
-      } else {
-        $firstFile = CRM_Utils_Array::first($entityFiles);
-        $zipfullpath = $firstFile['fullPath'];
-        $mimeType = $firstFile['mime_type'];
-        $parts = explode('.', $zipfullpath);
-        $ext = end($parts);
-        $zipname .= '.' . $ext;
-      }
-
-      header('Content-Type: ' . $mimeType);
-      header('Content-disposition: attachment; filename='.$zipname);
-      header('Content-Length: ' . filesize($zipfullpath));
-      readfile($zipfullpath);
-
-      CRM_Utils_System::civiExit();
+    CRM_Utils_System::civiExit();
   }
 
   /**
